@@ -1,0 +1,51 @@
+import mongoose,{Schema} from "mongoose";
+import { InterfaceUser } from "../../../domain/interfaces/user/InterfaceUser";
+const userSchema:mongoose.Schema=new Schema<InterfaceUser>({
+name:{
+    type:String,
+    required:true
+},
+email:{
+    type:String,
+    required:true
+},
+password:{
+    type:String,
+    required:true
+},
+imageUrl:{
+    type:String,
+    // default: 'https://res.cloudinary.com/demo/image/upload/v1690000000/default-profile.jpg',
+    required:false
+},
+CompanyId:{
+    type:String,
+    default:null,
+    required:false
+},
+bio:{
+    type:String,
+    required:false
+},
+CompanyRole:{
+    type:String,
+    required:false,
+    default:null,
+},
+KeyBoardLayout:{
+    type:String,
+    required:true,
+    default:"QWERTY"
+},
+status:{
+    type:String,
+    required:false,
+    default:"Active"
+},
+role:{
+    type:String,
+    required:false,
+}
+
+})
+export const User= mongoose.model<InterfaceUser>('user',userSchema)

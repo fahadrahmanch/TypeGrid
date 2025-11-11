@@ -1,5 +1,35 @@
-import  express  from "express";
-const app=express()
-app.listen(3000,()=>{
-    console.log("server is running")
-})
+import express, { Application } from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import { connectDB } from './config/db'
+import { userRouter } from './presentation/routes/userRoutes'
+import { userRepository } from './infrastructure/db/repositories/user/userRepository'
+import { registerController } from './presentation/controllers/user/register/userRegisterController'
+dotenv.config()
+export class app{
+    public app:Application
+    constructor(){
+        this.app=express()
+        this.setMiddleWares()
+        this.setUserRoutes()
+    }
+      setMiddleWares(){
+        this.app.use(cors({
+            origin:"http://localhost:5173",
+            credentials: true
+        })); 
+        this.app.use(express.json())
+        
+    }
+ 
+    private setUserRoutes(){
+        const routerUser=new userRouter()
+        this.app.use("/",routerUser.getRouter())
+
+    }
+    public async connectDatabase(){
+        const db=new connectDB()
+        await db.connectDatabase()
+    }
+
+}
