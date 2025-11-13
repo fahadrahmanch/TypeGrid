@@ -8,5 +8,5 @@ export class userRepository implements IUserRepostory{
     async findByEmail(email:string):Promise<InterfaceUser|null>{
         return await User.findOne({email});
     }
- 
+    
 }

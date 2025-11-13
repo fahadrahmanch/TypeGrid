@@ -1,4 +1,4 @@
 export interface ICompleteSignupUseCase{
-    otp(otp:string,email:string):Promise<void>
+    otp(otp:string,name:string,email:string,password:string):Promise<void>
 
 }

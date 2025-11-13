@@ -28,9 +28,9 @@ export class registerController{
     }
     async verifyOtp(req:Request,res:Response):Promise<void>{
         try{
-            const {otp,email}=req.body;
-            logger.info(otp);
-            await this._completeSignupUseCase.otp(otp,email);
+            const {otp,name,email,password}=req.body;
+            logger.info(req.body);
+            await this._completeSignupUseCase.otp(otp,name,email,password);
 
            
         }
