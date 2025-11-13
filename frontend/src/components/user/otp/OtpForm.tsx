@@ -3,19 +3,40 @@ import lines from "../../../assets/images/auth/login/lines.png";
 import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
 import { verifyOtp } from "../../../api/user/authServices";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 const OtpForm: React.FC = () => {
-    const [otp,setOtp]=useState<string>("");
-    const location=useLocation();
-    const email=location.state?.email;
-    const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
+    const [otp, setOtp] = useState<string>("");
+    const location = useLocation();
+    const name = location.state?.name;
+    const email = location.state?.email;
+    const password = location.state?.password
+    const [expire,setExpire]=useState<number>(10)
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOtp(e.target.value);
     };
-    async function handleSubmit(e:any){
+    useEffect(()=>{
+        let id:any;
+        if(expire>0){
+            id=setInterval(()=>{
+            setExpire(prev=>prev-1)
+            },1000)
+        }
+        return ()=>clearInterval(id)
+    })
+    async function handleSubmit(e: any) {
         e.preventDefault();
-        const response=await verifyOtp(otp,email);
-        console.log(response.data);
+        try {
+            const response = await verifyOtp(otp, name, email, password);
+            toast.success(response.data.message)
+        }
+        catch (error: any) {
+            const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
+            toast.error(msg);
+        }
     }
+
     return (
         <>
             {/* Container */}
@@ -38,7 +59,6 @@ const OtpForm: React.FC = () => {
                     {/* Form */}
                     <form className="flex flex-col gap-3 ">
 
-
                         <input
                             type="text"
                             inputMode="numeric"
@@ -46,33 +66,29 @@ const OtpForm: React.FC = () => {
                             maxLength={6}
                             value={otp}
                             name="otp"
-                            placeholder="Enter your OTP"
+                            placeholder="Enter your 6 digits OTP"
                             onInput={(e) => {
                                 const input = e.target as HTMLInputElement;
                                 input.value = input.value.replace(/[^0-9]/g, "");
                             }}
-                            onChange={(e)=>handleChange(e)}
+                            onChange={(e) => handleChange(e)}
                             className="text-center appearance-none rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
                         />
                         <button
                             type="submit"
-                            className="w-full bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
+                            className={`w-full ${otp.length !== 6||expire==0? 'bg-gray-200': 'bg-gray-900'} text-white rounded-md py-2 mt-2`}
                             onClick={handleSubmit}
+                            disabled={otp.length !== 6||expire==0}
+
                         >
                             Confirm
                         </button>
                         <div className="flex justify-between g">
                             <button
-                                type="submit"
-                                className="w-52 bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
+                                className="w-full bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
+                                disabled={expire>0}
                             >
-                                Resend Otp
-                            </button>
-                            <button
-                                type="submit"
-                                className="w-52 bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
-                            >
-                                expires
+                              {expire==0?"Resent otp":`expire after ${expire} s`}
                             </button>
                         </div>
                     </form>

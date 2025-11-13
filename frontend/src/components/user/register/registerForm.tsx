@@ -3,34 +3,67 @@ import kidImage from "../../../assets/images/auth/login/kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
 import { signup } from "../../../api/user/authServices";
 import { useNavigate } from "react-router-dom";
-const Register:React.FC=()=>{
-    const [values,setValues]=useState({name:"",email:"",password:"",confirmPassword:""});
-    const navigate = useNavigate();
-    const handleSubmit=async(e:any)=>{
-      e.preventDefault();
-      try{
-        const response=await signup(values);
-        console.log("cz<",response);
-        navigate("/otp", { state: { email:values.email } });
+import { toast } from "react-toastify";
+import { nameValidation, emailValidation, passwordValidation, confirmPasswordValidation } from "../../../validations/authValidations";
+const Register: React.FC = () => {
+  const [values, setValues] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [error, setError] = useState({ name: "", email: "", password: "", confirmPassword: "" })
+  const navigate = useNavigate();
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const nameErr = nameValidation(values.name);
+    const emailErr = emailValidation(values.email);
+    const passErr = passwordValidation(values.password);
+    const confirmErr = confirmPasswordValidation(values.password, values.confirmPassword);
 
-      }
-      catch(error){
-        console.log(error);
-      }
-    };
-    const handleChange=async(e:any)=>{
-      setValues({...values,[e.target.name]:e.target.value});
-    };
-    return(
+    setError({
+      name: nameErr,
+      email: emailErr,
+      password: passErr,
+      confirmPassword: confirmErr,
+    });
+
+    if (nameErr || emailErr || passErr || confirmErr) return; 
+
+    try {
+      const response = await signup(values);
+      navigate("/otp", { state: { name: values.name, email: values.email, password: values.password } });
+      toast.success(response.data.message)
+    }
+    catch (error: any) {
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
+      toast.error(msg)
+    }
+  };
+  const handleChange = async (e: any) => {
+    const { name, value } = e.target
+    setValues({ ...values, [e.target.name]: e.target.value });
+    if (name === "name") {
+      setError({ ...error, name: nameValidation(value) });
+    }
+
+    if (name === "email") {
+      setError({ ...error, email: emailValidation(value) });
+    }
+
+    if (name === "password") {
+      setError({ ...error, password: passwordValidation(value) });
+    }
+
+    if (name === "confirmPassword") {
+      const err = confirmPasswordValidation(values.password, value);
+      setError({ ...error, confirmPassword: err });
+    }
+  };
+  return (
     <>
-    
       {/* Container */}
       <div className="h-screen flex justify-center items-center flex-1 w-full relative  sm:w-4/4 md:w-full lg:w-full  ">
-         <div className="w-36 mt-[2rem] hidden sm:block">
+        <div className="w-36 mt-[2rem] hidden sm:block">
           <img
-            src={lines}          
+            src={lines}
             alt="draw"
-            className="w-64 mb-10  " 
+            className="w-64 mb-10  "
           />
         </div>
         {/* Signup Box */}
@@ -63,6 +96,7 @@ const Register:React.FC=()=>{
               onChange={handleChange}
               className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
+            <p className="text-left text-red-500 text-sm">{error.name}</p>
             <input
               type="email"
               placeholder="Email"
@@ -70,6 +104,7 @@ const Register:React.FC=()=>{
               onChange={handleChange}
               className=" rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
+            <p className=" text-left text-red-500 text-sm">{error.email}</p>
             <input
               type="password"
               placeholder="Password"
@@ -77,6 +112,7 @@ const Register:React.FC=()=>{
               onChange={handleChange}
               className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
+            <p className="text-left text-red-500 text-sm">{error.password}</p>
             <input
               type="password"
               placeholder="Confirm password"
@@ -84,6 +120,7 @@ const Register:React.FC=()=>{
               onChange={handleChange}
               className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
+            <p className="text-left text-red-500 text-sm">{error.confirmPassword}</p>
             <button
               type="submit"
               onClick={handleSubmit}
@@ -100,19 +137,18 @@ const Register:React.FC=()=>{
             </a>
           </p>
         </div>
-
         {/* Illustration */}
         <div className="w-36 mt-[2rem] hidden sm:block">
           <img
-            src={kidImage}          
+            src={kidImage}
             alt="kid"
             className="w-64"
           />
         </div>
-         
+
       </div>
-   
+
     </>
-    );
+  );
 };
 export default Register;
