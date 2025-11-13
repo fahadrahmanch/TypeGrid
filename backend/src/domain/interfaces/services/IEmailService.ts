@@ -1,3 +1,4 @@
+import { IEmailTemplate } from "../emailTemplates/IEmailTemplate";
 export interface IEmailService{
-    sentOtp():Promise<void>
+    sentOtp(template:IEmailTemplate):Promise<void>
 }

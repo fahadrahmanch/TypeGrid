@@ -47,5 +47,5 @@ role:{
     required:false,
 }
 
-})
-export const User= mongoose.model<InterfaceUser>('user',userSchema)
+});
+export const User= mongoose.model<InterfaceUser>("user",userSchema);

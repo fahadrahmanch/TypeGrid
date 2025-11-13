@@ -1,4 +1,4 @@
-import Logo from '../../../assets/Icon/logo.png'
+import Logo from "../../../assets/Icon/logo.png";
 const LoginNavbar:React.FC=()=>{
     return (
       <>
@@ -7,6 +7,6 @@ const LoginNavbar:React.FC=()=>{
         <img src={Logo} className='h-12 left-3 top-3 relative'/>
     </nav>
       </>
-    )
-}
-export default LoginNavbar
+    );
+};
+export default LoginNavbar;

@@ -1,3 +1,5 @@
 export interface IOtpService{
-    createOtp():Promise<string>
+    createOtp(email:String):string
+    storeOtp(otp:String,email:String):void
+    verifyOtp(otp:string,email:string):Boolean
 }

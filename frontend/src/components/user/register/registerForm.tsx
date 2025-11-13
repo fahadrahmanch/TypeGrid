@@ -1,26 +1,26 @@
 import { useState } from "react";
-import API from "../../../api/axios/axios";
 import kidImage from "../../../assets/images/auth/login/kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
-
+import { signup } from "../../../api/user/authServices";
+import { useNavigate } from "react-router-dom";
 const Register:React.FC=()=>{
-    const [values,setValues]=useState({name:'',email:'',password:'',confirmPassword:''})
-
+    const [values,setValues]=useState({name:"",email:"",password:"",confirmPassword:""});
+    const navigate = useNavigate();
     const handleSubmit=async(e:any)=>{
-      e.preventDefault()
-      await API.post("/signup",{
-        name:values.name,
-        email:values.email,
-        password:values.password
-      },{
-        headers:{
-          "Content-Type":"application/json",
-        }
-      })
-    }
+      e.preventDefault();
+      try{
+        const response=await signup(values);
+        console.log("cz<",response);
+        navigate("/otp", { state: { email:values.email } });
+
+      }
+      catch(error){
+        console.log(error);
+      }
+    };
     const handleChange=async(e:any)=>{
-      setValues({...values,[e.target.name]:e.target.value})
-    }
+      setValues({...values,[e.target.name]:e.target.value});
+    };
     return(
     <>
     
@@ -113,6 +113,6 @@ const Register:React.FC=()=>{
       </div>
    
     </>
-    )
-}
-export default Register
+    );
+};
+export default Register;
