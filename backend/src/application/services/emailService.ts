@@ -1,5 +1,5 @@
 import { IEmailService } from "../../domain/interfaces/services/IEmailService";
-import nodemailer , { Transporter }from "nodemailer";
+import nodemailer from "nodemailer";
 import { IEmailTemplate } from "../../domain/interfaces/emailTemplates/IEmailTemplate";
 import { HtmlforOtp } from "../../domain/constants/otpMailHtml";
 import dotenv from "dotenv";

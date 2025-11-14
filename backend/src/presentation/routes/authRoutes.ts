@@ -1,6 +1,6 @@
 import express,{Request,Response} from "express";
 import { Routes } from "../../domain/constants/routes";
-import { injectRegisterController } from "../DI/auth";
+import { injectAuthController } from "../DI/auth";
 export class userRouter{
     private router:express.Router;
     constructor(){
@@ -9,11 +9,14 @@ export class userRouter{
     }
     initializeRoutes(){
     this.router.post(Routes.AUTH.SIGNUP,(req:Request,res:Response)=>{
-        injectRegisterController.register(req,res);
+        injectAuthController.register(req,res);
     });
     this.router.post(Routes.AUTH.VERIFY_OTP,(req:Request,res:Response)=>{
-        injectRegisterController.verifyOtp(req,res);
+        injectAuthController.verifyOtp(req,res);
     });
+    this.router.post(Routes.AUTH.RESENT_OTP,(req:Request,res:Response)=>{
+        injectAuthController.resentOtp(req,res)
+    })
     }
     getRouter(){
         return this.router;

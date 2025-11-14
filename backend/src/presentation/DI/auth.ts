@@ -1,16 +1,18 @@
-import { registerController } from "../controllers/auth/RegisterController";
+import { authController } from "../controllers/auth/authController";
 import { registerUser } from "../../application/use-cases/auth/signup/signupUseCase";
-import { userRepository } from "../../infrastructure/db/repositories/user/userRepository";
+import { authRepository } from "../../infrastructure/db/repositories/auth/authRepository";
 import { OtpService } from "../../application/services/otpServices";
 import { EmailService } from "../../application/services/emailService";
 import { Caching } from "../../application/services/CachingService";
-import { completeSignupUseCase } from "../../application/use-cases/auth/otp/completeSignupUseCase";
+import { completeSignupUseCase } from "../../application/use-cases/auth/signup/completeSignupUseCase";
 import { HashService } from "../../application/services/hashService";
-const UserRepository=new userRepository();
+import { resentOtpUseCase } from "../../application/use-cases/auth/otp/resentOtpUsecase";
+const AuthRepository=new authRepository();
 const _EmailServive=new EmailService();
 const caching=new Caching();
-const hashService=new HashService()
+const hashService=new HashService();
 const otpService=new OtpService(caching);
-const completeSignup=new completeSignupUseCase(otpService,hashService);
-const RegisterUser=new registerUser(UserRepository,otpService,_EmailServive);
-export const injectRegisterController=new registerController(RegisterUser,completeSignup);
+const ResentOtpUseCase=new resentOtpUseCase(otpService,_EmailServive,AuthRepository)
+const completeSignup=new completeSignupUseCase(otpService,hashService,AuthRepository);
+const RegisterUser=new registerUser(AuthRepository,otpService,_EmailServive);
+export const injectAuthController=new authController(RegisterUser,completeSignup,ResentOtpUseCase);

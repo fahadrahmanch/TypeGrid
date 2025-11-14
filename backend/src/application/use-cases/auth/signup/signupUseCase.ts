@@ -1,13 +1,13 @@
 import { InterfaceUser } from "../../../../domain/interfaces/user/InterfaceUser";
 import { userEntity } from "../../../../domain/entities/userEntity";
-import { IRegisterUseCase } from "../../../../domain/interfaces/usecases/auth/IRegisterUseCase";
-import { IUserRepostory } from "../../../../domain/interfaces/repository/user/IUserRepository";
+import { IAuthUseCase } from "../../../../domain/interfaces/usecases/auth/IAuthUseCase";
+import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
 import { IEmailService } from "../../../../domain/interfaces/services/IEmailService";
 import { IEmailTemplate } from "../../../../domain/interfaces/emailTemplates/IEmailTemplate";
-export class registerUser implements IRegisterUseCase{
+export class registerUser implements IAuthUseCase{
     constructor(
-        private userRepository:IUserRepostory,
+        private userRepository:IAuthRepostory,
         private otpService:IOtpService,
         private _EmailService:IEmailService
     ){

@@ -2,8 +2,8 @@ import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db";
-import { userRouter } from "./presentation/routes/userRoutes";
-import { userRepository } from "./infrastructure/db/repositories/user/userRepository";
+import { userRouter } from "./presentation/routes/authRoutes";
+import { authRepository } from "./infrastructure/db/repositories/auth/authRepository";
 dotenv.config();
 export class app{
     public app:Application;

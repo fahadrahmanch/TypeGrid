@@ -1,6 +1,6 @@
 import mongoose,{Schema} from "mongoose";
-import { InterfaceUser } from "../../../domain/interfaces/user/InterfaceUser";
-const userSchema:mongoose.Schema=new Schema<InterfaceUser>({
+import { AuthUserEntity } from "../../../domain/entities";
+const userSchema:mongoose.Schema=new Schema<AuthUserEntity>({
 name:{
     type:String,
     required:true
@@ -48,4 +48,4 @@ role:{
 }
 
 });
-export const User= mongoose.model<InterfaceUser>("user",userSchema);
+export const User= mongoose.model<AuthUserEntity>("user",userSchema);
