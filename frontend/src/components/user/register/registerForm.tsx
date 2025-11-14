@@ -1,7 +1,7 @@
 import { useState } from "react";
 import kidImage from "../../../assets/images/auth/login/kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
-import { signup } from "../../../api/user/authServices";
+import { signup } from "../../../api/auth/authServices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { nameValidation, emailValidation, passwordValidation, confirmPasswordValidation } from "../../../validations/authValidations";

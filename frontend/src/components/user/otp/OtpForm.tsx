@@ -1,7 +1,7 @@
 import OtpKid from "../../../assets/images/auth/otp/otp-kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
 import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
-import { verifyOtp } from "../../../api/user/authServices";
+import { verifyOtp, resentOtp } from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -11,20 +11,34 @@ const OtpForm: React.FC = () => {
     const name = location.state?.name;
     const email = location.state?.email;
     const password = location.state?.password
-    const [expire,setExpire]=useState<number>(10)
-
+    const [expire, setExpire] = useState<number>(30)
+    useEffect(() => {
+        let id: any;
+        if (expire > 0) {
+            id = setInterval(() => {
+                setExpire(prev => prev - 1)
+            }, 1000)
+        } 
+            return () => clearInterval(id)
+     
+    })
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOtp(e.target.value);
     };
-    useEffect(()=>{
-        let id:any;
-        if(expire>0){
-            id=setInterval(()=>{
-            setExpire(prev=>prev-1)
-            },1000)
+    async function otpResent(e: any) {
+        e.preventDefault();
+        try {
+            const response = await resentOtp(name, email)
+            console.log(response)
+            toast.success(response.data.message)
+            setExpire(30)
+
         }
-        return ()=>clearInterval(id)
-    })
+        catch (error: any) {
+            const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
+            toast.error(msg);
+        }
+    }
     async function handleSubmit(e: any) {
         e.preventDefault();
         try {
@@ -76,9 +90,9 @@ const OtpForm: React.FC = () => {
                         />
                         <button
                             type="submit"
-                            className={`w-full ${otp.length !== 6||expire==0? 'bg-gray-200': 'bg-gray-900'} text-white rounded-md py-2 mt-2`}
+                            className={`w-full ${otp.length !== 6 || expire == 0 ? 'bg-gray-200' : 'bg-gray-900'} text-white rounded-md py-2 mt-2`}
                             onClick={handleSubmit}
-                            disabled={otp.length !== 6||expire==0}
+                            disabled={otp.length !== 6 || expire == 0}
 
                         >
                             Confirm
@@ -86,9 +100,10 @@ const OtpForm: React.FC = () => {
                         <div className="flex justify-between g">
                             <button
                                 className="w-full bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
-                                disabled={expire>0}
+                                disabled={expire > 0}
+                                onClick={otpResent}
                             >
-                              {expire==0?"Resent otp":`expire after ${expire} s`}
+                                {expire == 0 ? "Resent otp" : `expire after ${expire} s`}
                             </button>
                         </div>
                     </form>
