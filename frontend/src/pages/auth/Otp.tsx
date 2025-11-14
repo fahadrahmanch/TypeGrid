@@ -1,5 +1,5 @@
-import LoginNavbar from "../../components/user/navbar/loginPageNav";
-import OtpForm from "../../components/user/otp/OtpForm";
+import LoginNavbar from "../../components/auth/navbar/loginPageNav";
+import OtpForm from "../../components/auth/otp/OtpForm";
 const Otp:React.FC=()=>{
     return(
         <>
