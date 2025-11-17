@@ -1,6 +1,7 @@
 import { Entity } from "./entity";
 import { ObjectId } from "mongoose";
 export class userEntity extends Entity<userEntity>{
+    _id?:ObjectId
     name!:string;
     email!: string;
     imageUrl?:string;

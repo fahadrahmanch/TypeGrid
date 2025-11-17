@@ -17,6 +17,9 @@ export class userRouter{
     this.router.post(Routes.AUTH.RESENT_OTP,(req:Request,res:Response)=>{
         injectAuthController.resentOtp(req,res)
     })
+    this.router.post(Routes.AUTH.SIGNIN,(req:Request,res:Response)=>{
+        injectAuthController.signin(req,res)
+    })
     }
     getRouter(){
         return this.router;

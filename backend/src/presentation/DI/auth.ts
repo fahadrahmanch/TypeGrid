@@ -7,6 +7,8 @@ import { Caching } from "../../application/services/CachingService";
 import { completeSignupUseCase } from "../../application/use-cases/auth/signup/completeSignupUseCase";
 import { HashService } from "../../application/services/hashService";
 import { resentOtpUseCase } from "../../application/use-cases/auth/otp/resentOtpUsecase";
+import { loginUseCase } from "../../application/use-cases/auth/login/loginUseCase";
+import { TokenService } from "../../application/services/tokenService";
 const AuthRepository=new authRepository();
 const _EmailServive=new EmailService();
 const caching=new Caching();
@@ -15,4 +17,6 @@ const otpService=new OtpService(caching);
 const ResentOtpUseCase=new resentOtpUseCase(otpService,_EmailServive,AuthRepository)
 const completeSignup=new completeSignupUseCase(otpService,hashService,AuthRepository);
 const RegisterUser=new registerUser(AuthRepository,otpService,_EmailServive);
-export const injectAuthController=new authController(RegisterUser,completeSignup,ResentOtpUseCase);
+const LoginUserCase=new loginUseCase(AuthRepository,hashService)
+const tokenService=new TokenService()
+export const injectAuthController=new authController(RegisterUser,completeSignup,ResentOtpUseCase,LoginUserCase,tokenService);
