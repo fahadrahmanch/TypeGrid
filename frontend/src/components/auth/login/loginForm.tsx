@@ -2,11 +2,16 @@ import { emailValidation, passwordValidation } from "../../../validations/authVa
 import { useState } from "react";
 import lines from "../../../assets/images/auth/login/lines.png";
 import kid2 from "../../../assets/images/auth/login/Kid2.png";
-
+import { signIn } from "../../../api/auth/authServices";
+import { toast } from "react-toastify";
+import { setAccessToken } from "../../../store/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 export const SignInForm: React.FC = () => {
     const [values, setValues] = useState({ email: "", password: "" });
-
     const [error, setError] = useState({ email: "", password: "" })
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -20,12 +25,24 @@ export const SignInForm: React.FC = () => {
 
         if (emailErr || passErr) return;
 
-        try {
 
+        try {
+            const response = await signIn(values);
+            console.log(response.data)
+            const accesssToken = response?.data?.accessToken
+            const user = response?.data?.UserDeepCopy
+            if (!accesssToken || !user) {
+                throw new Error('Something went wrong. Please try again')
+            }
+            dispatch(setAccessToken({ user, accesssToken }))
+            navigate("/")
+            toast.success(response.data.message)
         }
         catch (error: any) {
-
+            const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
+            toast.error(msg);
         }
+
     };
     const handleChange = async (e: any) => {
         const { name, value } = e.target
@@ -115,9 +132,9 @@ export const SignInForm: React.FC = () => {
                         <img
                             src={kid2}
                             alt="kid"
-                            
+
                             className="w-60 "
-                            
+
                         />
                     </div>
 
