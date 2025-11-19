@@ -11,7 +11,7 @@ email:{
 },
 password:{
     type:String,
-    required:true
+    required:false
 },
 imageUrl:{
     type:String,
@@ -41,6 +41,11 @@ status:{
     type:String,
     required:false,
     default:"Active"
+},
+googleId: {
+    type: String,
+    required: false,
+    default: null,
 },
 role:{
     type:String,

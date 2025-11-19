@@ -1,7 +1,6 @@
-import { ObjectId } from "mongoose";
 import { ITokenService } from "../../domain/interfaces/services/ITokenService";
 import jwt from "jsonwebtoken";
-export class TokenService implements ITokenService{
+export class TokenService implements ITokenService {
 
     private accessSecret: string;
     private refreshSecret: string;
@@ -9,19 +8,25 @@ export class TokenService implements ITokenService{
         this.accessSecret = process.env.ACCESS_SECRET || "";
         this.refreshSecret = process.env.REFRESH_SECRET || "";
     }
-    async generateAccessToken(_id: ObjectId): Promise<string> {
+    async generateAccessToken(email: string): Promise<string> {
         return jwt.sign(
-            { userId: _id },
+            { email: email },
             this.accessSecret,
-            { expiresIn: "15m" }
+            { expiresIn: "1h" }
         );
     }
 
-    async generateRefreshToken(_id: ObjectId): Promise<string> {
+    async generateRefreshToken(email: string): Promise<string> {
         return jwt.sign(
-            { userId: _id },
+            { email: email },
             this.refreshSecret,
             { expiresIn: "7d" }
         );
+    }
+    async verifyAccessToken(token: string) {
+        return jwt.verify(token, this.accessSecret);
+    }
+    async verifyRefreshToken(token: string) {
+        return jwt.verify(token, this.refreshSecret) ;
     }
 }

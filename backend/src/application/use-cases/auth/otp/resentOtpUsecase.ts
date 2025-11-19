@@ -9,11 +9,11 @@ export class resentOtpUseCase {
         private _authRepository: IAuthRepostory
     ) { }
     async execute(name: string, email: string): Promise<void> {
-        const exitsUser = await this._authRepository.findByEmail(email)
+        const exitsUser = await this._authRepository.findByEmail(email);
         if (exitsUser) {
             throw new Error("User already exists with this email");
         }
-        const otp = await this._otpService.createOtp(email)
+        const otp = await this._otpService.createOtp(email);
         const emailOptions: IEmailTemplate = {
             name,
             email,
@@ -22,7 +22,6 @@ export class resentOtpUseCase {
 
         };
         await this._emailService.sentOtp(emailOptions);
-        console.log("hello")
     }
 
 }

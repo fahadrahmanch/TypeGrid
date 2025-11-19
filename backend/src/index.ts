@@ -3,12 +3,16 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db";
 import { userRouter } from "./presentation/routes/authRoutes";
-import { authRepository } from "./infrastructure/db/repositories/auth/authRepository";
+import cookieParser from "cookie-parser";
+
+
+
 dotenv.config();
 export class app{
     public app:Application;
     constructor(){
         this.app=express();
+        
         this.setMiddleWares();
         this.setUserRoutes();
     }
@@ -17,6 +21,7 @@ export class app{
             origin:"http://localhost:5173",
             credentials: true
         })); 
+        this.app.use(cookieParser());
         this.app.use(express.json());
         
     }

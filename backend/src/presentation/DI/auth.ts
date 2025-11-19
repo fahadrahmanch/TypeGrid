@@ -9,14 +9,18 @@ import { HashService } from "../../application/services/hashService";
 import { resentOtpUseCase } from "../../application/use-cases/auth/otp/resentOtpUsecase";
 import { loginUseCase } from "../../application/use-cases/auth/login/loginUseCase";
 import { TokenService } from "../../application/services/tokenService";
+import { googleAuthUseCase } from "../../application/use-cases/auth/googleAuth/googleAuthUseCase";
+import { FindUserByIdEmailCase } from "../../application/use-cases/auth/findUserByEmailUseCase";
 const AuthRepository=new authRepository();
 const _EmailServive=new EmailService();
 const caching=new Caching();
 const hashService=new HashService();
 const otpService=new OtpService(caching);
-const ResentOtpUseCase=new resentOtpUseCase(otpService,_EmailServive,AuthRepository)
+const ResentOtpUseCase=new resentOtpUseCase(otpService,_EmailServive,AuthRepository);
 const completeSignup=new completeSignupUseCase(otpService,hashService,AuthRepository);
 const RegisterUser=new registerUser(AuthRepository,otpService,_EmailServive);
-const LoginUserCase=new loginUseCase(AuthRepository,hashService)
-const tokenService=new TokenService()
-export const injectAuthController=new authController(RegisterUser,completeSignup,ResentOtpUseCase,LoginUserCase,tokenService);
+const LoginUserCase=new loginUseCase(AuthRepository,hashService);
+const tokenService=new TokenService();
+const GoogleAuthUseCase=new googleAuthUseCase(AuthRepository);
+const findUserByIdEmailCase=new FindUserByIdEmailCase(AuthRepository);
+export const injectAuthController=new authController(RegisterUser,completeSignup,ResentOtpUseCase,LoginUserCase,tokenService,GoogleAuthUseCase,findUserByIdEmailCase);

@@ -4,5 +4,5 @@ const store = configureStore({
     reducer: {
         auth: authSlice,
     }
-})
-export default store
+});
+export default store;

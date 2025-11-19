@@ -1,7 +1,7 @@
 import { Entity } from "./entity";
 import { ObjectId } from "mongoose";
 export class userEntity extends Entity<userEntity>{
-    _id?:ObjectId
+    _id?:ObjectId;
     name!:string;
     email!: string;
     imageUrl?:string;
@@ -12,7 +12,6 @@ export class userEntity extends Entity<userEntity>{
     KeyBoardLayout!:"QWERTY"|"AZERTY"|"DVORAK";
     status?: "active" | "block";
     contactNumber?:number; 
+    googleId?:string|null;
     role!:"user"|"admin"|"companyUser"|"companyAdmin";
-
-   
 }

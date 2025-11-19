@@ -4,15 +4,19 @@ import { ICompleteSignupUseCase } from "../../../domain/interfaces/usecases/auth
 import { IResentOtpUseCase } from "../../../domain/interfaces/usecases/auth/IResentOtpUsecase";
 import logger from "../../../utils/logger";
 import { ILoginUseCase } from "../../../domain/interfaces/usecases/auth/ILoginUseCase";
-import { AuthUserEntity } from "../../../domain/entities";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
+import { IGoogleAuthUseCase } from "../../../domain/interfaces/usecases/auth/IGoogleAuthUseCase";
+import { IFindUserByemailUseCase } from "../../../domain/interfaces/usecases/auth/IFindUserByEmailUseCase";
+
 export class authController {
     constructor(
         private _RegisterUser: IAuthUseCase,
         private _completeSignupUseCase: ICompleteSignupUseCase,
         private _resentOtpUseCase: IResentOtpUseCase,
         private _loginUseCase: ILoginUseCase,
-        private _tokenServie: ITokenService
+        private _tokenServie: ITokenService,
+        private _googleAuthUseCase: IGoogleAuthUseCase,
+        private _findUserByEmailUseCase: IFindUserByemailUseCase
     ) {
     }
     async register(req: Request, res: Response): Promise<any> {
@@ -27,6 +31,7 @@ export class authController {
             res.status(200).json({ message: "Otp sent successfully" });
         }
         catch (error) {
+            logger.error(error);
             res.status(500).json({ message: "Something went wrong" });
         }
     }
@@ -35,21 +40,20 @@ export class authController {
             const { otp, name, email, password } = req.body;
             logger.info(req.body);
             await this._completeSignupUseCase.otp(otp, name, email, password);
-            res.status(200).json({ message: "user register successfull" })
+            res.status(200).json({ message: "user register successfull" });
         }
         catch (error: any) {
 
-            res.status(400).json({ message: error?.message })
+            res.status(400).json({ message: error?.message });
         }
     }
     async resentOtp(req: Request, res: Response): Promise<void> {
         try {
-            const { name, email } = req.body
-            console.log(req.body)
+            const { name, email } = req.body;
             if (!name || !email) {
-                throw new Error("Name and Email are required")
+                throw new Error("Name and Email are required");
             }
-            await this._resentOtpUseCase.execute(name, email)
+            await this._resentOtpUseCase.execute(name, email);
             res.json({
                 success: true,
                 message: "OTP resent successfully."
@@ -64,19 +68,19 @@ export class authController {
     }
     async signin(req: Request, res: Response): Promise<void> {
         try {
-            const { email, password } = req.body.data
-            const user = await this._loginUseCase.execute(email, password)
+            const { email, password } = req.body.data;
+            const user = await this._loginUseCase.execute(email, password);
 
             if (!user || !user._id) {
                 throw new Error("User not found or missing id");
             }
-            const accessToken = await this._tokenServie.generateAccessToken(user?._id)
-            const refreshToken = await this._tokenServie.generateRefreshToken(user?._id)
+            const accessToken = await this._tokenServie.generateAccessToken(user?.email);
+            const refreshToken = await this._tokenServie.generateRefreshToken(user?.email);
             if (!accessToken || !refreshToken) {
-                throw new Error("something went wrong")
+                throw new Error("something went wrong");
             }
             const UserDeepCopy = JSON.parse(JSON.stringify(user));
-            delete UserDeepCopy.password
+            delete UserDeepCopy.password;
             res.cookie("refreshToken", refreshToken, {
                 httpOnly: true,
                 secure: true,
@@ -87,14 +91,90 @@ export class authController {
                 message: "Login successfull",
                 accessToken,
                 UserDeepCopy
-            })
+            });
         }
         catch (error: any) {
-            logger.error(error)
+            logger.error(error);
             res.status(400).json({
                 success: false,
                 message: error.message || "Something went wrong",
             });
         }
     }
+
+    async refreshToken(req: Request, res: Response): Promise<void> {
+        try {
+            const token = req.cookies.refreshToken;
+            const decoded = await this._tokenServie.verifyRefreshToken(token);
+            const user = await this._findUserByEmailUseCase.execute(decoded?.email);
+            if (!user) {
+                throw new Error("user not exists");
+            }
+            if (user.status == "block") {
+                throw new Error("Access denied. This account is blocked");
+            }
+            const accessToken = await this._tokenServie.generateAccessToken(decoded?.userId);
+            res.json({
+                success: true,
+                accessToken,
+            });
+        }
+        catch (error) {
+            logger.info(error);
+            res.status(400).json({
+                success: false,
+                message: "Refresh token expired or invalid",
+            });
+        }
+    }
+    async googleAuth(req: Request, res: Response): Promise<void> {
+        try {
+            const { name, email, googleId } = req.body;
+            if (!name || !email || !googleId || Object.keys(req.body).length === 0) {
+                throw new Error("Request body is missing");
+            }
+            const user = await this._googleAuthUseCase.gooogleAuth(name, email, googleId);
+            const accessToken = await this._tokenServie.generateAccessToken(email);
+            const refreshToken = await this._tokenServie.generateRefreshToken(email);
+            if (!accessToken || !refreshToken) {
+                throw new Error("something went wrong");
+            }
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "strict",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+            res.status(200).json({
+                success: true,
+                message: "Google login successful",
+                user,
+                accessToken
+            });
+
+        }
+        catch (error: any) {
+            res.status(500).json({
+                success: false,
+                message: error.message || "Something went wrong during Google authentication"
+            });
+        }
+    }
+
+    async logout(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("hello")
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: true,
+                sameSite: "strict",
+            });
+            res.status(200).json({ message: "Logout successful" });
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
 }

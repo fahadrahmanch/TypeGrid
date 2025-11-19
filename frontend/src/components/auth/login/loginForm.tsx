@@ -7,10 +7,13 @@ import { toast } from "react-toastify";
 import { setAccessToken } from "../../../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleAuth } from "../../../hooks/useGoogleAuth";
 export const SignInForm: React.FC = () => {
     const [values, setValues] = useState({ email: "", password: "" });
-    const [error, setError] = useState({ email: "", password: "" })
-    const dispatch = useDispatch()
+    const [error, setError] = useState({ email: "", password: "" });
+    const { handleGoogleSuccess,handleGoogleError } = useGoogleAuth();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: any) => {
@@ -28,15 +31,14 @@ export const SignInForm: React.FC = () => {
 
         try {
             const response = await signIn(values);
-            console.log(response.data)
-            const accesssToken = response?.data?.accessToken
-            const user = response?.data?.UserDeepCopy
-            if (!accesssToken || !user) {
-                throw new Error('Something went wrong. Please try again')
+            const accessToken = response?.data?.accessToken;
+            const user = response?.data?.UserDeepCopy;
+            if (!accessToken || !user) {
+                throw new Error("Something went wrong. Please try again");
             }
-            dispatch(setAccessToken({ user, accesssToken }))
-            navigate("/")
-            toast.success(response.data.message)
+            dispatch(setAccessToken({ user, accessToken }));
+            navigate("/");
+            toast.success(response.data.message);
         }
         catch (error: any) {
             const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
@@ -44,21 +46,18 @@ export const SignInForm: React.FC = () => {
         }
 
     };
+
     const handleChange = async (e: any) => {
-        const { name, value } = e.target
+        const { name, value } = e.target;
         setValues({ ...values, [e.target.name]: e.target.value });
-
-
         if (name === "email") {
             setError({ ...error, email: emailValidation(value) });
         }
-
         if (name === "password") {
             setError({ ...error, password: passwordValidation(value) });
         }
-
-
     };
+
     return (
         <>
             <>
@@ -76,14 +75,11 @@ export const SignInForm: React.FC = () => {
                         <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">Welcome back</h2>
                         <p className="text-sm pb-8">Sign in to your account to continue</p>
                         {/* Google Button */}
-                        <button className="flex items-center justify-center gap-2 w-full bg-[#FFF8EA] drop-shadow-sm  rounded-md py-2 mb-4 hover:bg-gray-100 transition">
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
-                                alt="Google icon"
-                                className="w-5 h-5"
-                            />
-                            <span className="text-gray-700 text-sm font-medium">Sign up with Google</span>
-                        </button>
+
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={handleGoogleError}
+                        />
 
                         {/* Divider */}
                         <div className="flex items-center my-4">
@@ -142,5 +138,5 @@ export const SignInForm: React.FC = () => {
 
             </>
         </>
-    )
-}
+    );
+};

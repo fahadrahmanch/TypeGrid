@@ -8,11 +8,9 @@ export class loginUseCase implements ILoginUseCase {
         private _hashService: IHashService
     ) { }
     async execute(email: string, password: string): Promise<AuthUserEntity | void> {
-        console.log(email, password)
         const user = await this._AuthRepository.findByEmail(email);
-        console.log(user)
         if (!user) {
-            throw new Error("We couldn’t find a user with the provided details")
+            throw new Error("We couldn’t find a user with the provided details");
         };
         if (user.status != "block") {
             const verified = await this._hashService.compare(
@@ -21,18 +19,18 @@ export class loginUseCase implements ILoginUseCase {
             );
             if (verified) {
                 return new AuthUserEntity({
-                    _id:user._id,
+                    _id: user._id,
                     name: user.name,
                     email: user.email,
-                    password:user.password,
+                    password: user.password,
                     status: user.status,
                     role: user.role,
                 });
             } else {
-                throw new Error("The password you entered is incorrect.")
+                throw new Error("The password you entered is incorrect.");
             }
         } else {
-            throw new Error("Access denied. This account is blocked.")
+            throw new Error("Access denied. This account is blocked.");
         }
     }
 }

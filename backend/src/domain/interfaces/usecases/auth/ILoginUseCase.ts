@@ -1,4 +1,4 @@
-import { AuthUserEntity } from "../../../entities"
+import { AuthUserEntity } from "../../../entities";
 export interface ILoginUseCase{
     execute(email:string,password:string):Promise<AuthUserEntity|void>
 }

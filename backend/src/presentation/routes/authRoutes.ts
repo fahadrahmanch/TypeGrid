@@ -15,10 +15,19 @@ export class userRouter{
         injectAuthController.verifyOtp(req,res);
     });
     this.router.post(Routes.AUTH.RESENT_OTP,(req:Request,res:Response)=>{
-        injectAuthController.resentOtp(req,res)
-    })
+        injectAuthController.resentOtp(req,res);
+    });
     this.router.post(Routes.AUTH.SIGNIN,(req:Request,res:Response)=>{
-        injectAuthController.signin(req,res)
+        injectAuthController.signin(req,res);
+    });
+    this.router.post(Routes.AUTH.REFRESH_TOKEN,(req:Request,res:Response)=>{
+        injectAuthController.refreshToken(req,res);
+    });
+    this.router.post(Routes.AUTH.GOOGLE_AUTH,(req:Request,res:Response)=>{
+        injectAuthController.googleAuth(req,res);
+    });
+    this.router.post(Routes.AUTH.LOGOUT,(req:Request,res:Response)=>{
+        injectAuthController.logout(req,res)
     })
     }
     getRouter(){

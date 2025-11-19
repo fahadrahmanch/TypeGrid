@@ -5,10 +5,14 @@ import { signup } from "../../../api/auth/authServices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { nameValidation, emailValidation, passwordValidation, confirmPasswordValidation } from "../../../validations/authValidations";
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleAuth } from "../../../hooks/useGoogleAuth";
+
 const Register: React.FC = () => {
   const [values, setValues] = useState({ name: "", email: "", password: "", confirmPassword: "" });
-  const [error, setError] = useState({ name: "", email: "", password: "", confirmPassword: "" })
+  const [error, setError] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const navigate = useNavigate();
+  const { handleGoogleSuccess, handleGoogleError } = useGoogleAuth();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const nameErr = nameValidation(values.name);
@@ -23,20 +27,20 @@ const Register: React.FC = () => {
       confirmPassword: confirmErr,
     });
 
-    if (nameErr || emailErr || passErr || confirmErr) return; 
+    if (nameErr || emailErr || passErr || confirmErr) return;
 
     try {
       const response = await signup(values);
       navigate("/otp", { state: { name: values.name, email: values.email, password: values.password } });
-      toast.success(response.data.message)
+      toast.success(response.data.message);
     }
     catch (error: any) {
       const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
-      toast.error(msg)
+      toast.error(msg);
     }
   };
   const handleChange = async (e: any) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setValues({ ...values, [e.target.name]: e.target.value });
     if (name === "name") {
       setError({ ...error, name: nameValidation(value) });
@@ -71,14 +75,10 @@ const Register: React.FC = () => {
           <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center">Sign up</h2>
 
           {/* Google Button */}
-          <button className="flex items-center justify-center gap-2 w-full bg-[#FFF8EA] drop-shadow-sm  rounded-md py-2 mb-4 hover:bg-gray-100 transition">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
-              alt="Google icon"
-              className="w-5 h-5"
-            />
-            <span className="text-gray-700 text-sm font-medium">Sign up with Google</span>
-          </button>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+          />
 
           {/* Divider */}
           <div className="flex items-center my-4">

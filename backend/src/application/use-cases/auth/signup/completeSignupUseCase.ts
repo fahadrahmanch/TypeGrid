@@ -3,7 +3,6 @@ import { IOtpService } from "../../../../domain/interfaces/services/IOtpService"
 import { AuthUserEntity } from "../../../../domain/entities";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { IHashService } from "../../../../domain/interfaces/services/IHashService";
-import logger from "../../../../utils/logger";
 export class completeSignupUseCase implements ICompleteSignupUseCase{
     constructor(
         private _otpservice:IOtpService,
@@ -24,7 +23,7 @@ export class completeSignupUseCase implements ICompleteSignupUseCase{
         KeyBoardLayout: "QWERTY",
         status: "active"
     });
-    await this._authRepository.create(newUser)
+    await this._authRepository.create(newUser);
     }
 
 }

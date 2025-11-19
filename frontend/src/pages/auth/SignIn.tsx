@@ -6,6 +6,6 @@ const SignIn: React.FC = () => {
             <LoginNavbar />
             <SignInForm />
         </>
-    )
-}
-export default SignIn
+    );
+};
+export default SignIn;

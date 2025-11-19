@@ -5,33 +5,34 @@ import { verifyOtp, resentOtp } from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const OtpForm: React.FC = () => {
     const [otp, setOtp] = useState<string>("");
     const location = useLocation();
     const name = location.state?.name;
     const email = location.state?.email;
-    const password = location.state?.password
-    const [expire, setExpire] = useState<number>(30)
+    const password = location.state?.password;
+    const navigate = useNavigate()
+    const [expire, setExpire] = useState<number>(30);
     useEffect(() => {
         let id: any;
         if (expire > 0) {
             id = setInterval(() => {
-                setExpire(prev => prev - 1)
-            }, 1000)
-        } 
-            return () => clearInterval(id)
-     
-    })
+                setExpire(prev => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(id);
+
+    });
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOtp(e.target.value);
     };
     async function otpResent(e: any) {
         e.preventDefault();
         try {
-            const response = await resentOtp(name, email)
-            console.log(response)
-            toast.success(response.data.message)
-            setExpire(30)
+            const response = await resentOtp(name, email);
+            toast.success(response.data.message);
+            setExpire(30);
 
         }
         catch (error: any) {
@@ -43,7 +44,8 @@ const OtpForm: React.FC = () => {
         e.preventDefault();
         try {
             const response = await verifyOtp(otp, name, email, password);
-            toast.success(response.data.message)
+            navigate('/signin')
+            toast.success(response.data.message);
         }
         catch (error: any) {
             const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
@@ -90,7 +92,7 @@ const OtpForm: React.FC = () => {
                         />
                         <button
                             type="submit"
-                            className={`w-full ${otp.length !== 6 || expire == 0 ? 'bg-gray-200' : 'bg-gray-900'} text-white rounded-md py-2 mt-2`}
+                            className={`w-full ${otp.length !== 6 || expire == 0 ? "bg-gray-200" : "bg-gray-900"} text-white rounded-md py-2 mt-2`}
                             onClick={handleSubmit}
                             disabled={otp.length !== 6 || expire == 0}
 
