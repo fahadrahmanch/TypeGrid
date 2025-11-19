@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Signup from "./pages/auth/signUp";
 import Otp from "./pages/auth/Otp";
 import SignIn from "./pages/auth/SignIn";
+import ForgotPassword from "./pages/auth/ForgotPassWordPage";
+
 import Home from "./pages/user/home";
 
 import { refreshAPI } from "./api/auth/authServices";
@@ -47,7 +49,7 @@ function App() {
           <Route path='/signup' element={<Islogged><Signup /></Islogged>} />
           <Route path='/Signin' element={<Islogged><SignIn /></Islogged>} />
           <Route path='/otp' element={<Islogged><Otp /></Islogged>} />
-
+          <Route path='/forgot/password' element={<Islogged><ForgotPassword /></Islogged>} />
           {/* user */}
           <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
 
