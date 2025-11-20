@@ -5,18 +5,34 @@ import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
 import { emailValidation } from "../../../validations/authValidations";
 import { useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
+import { forgotPasswordApi } from "../../../api/auth/authServices";
+import { toast } from "react-toastify";
 
 const ForgotPassWordForm: React.FC = () => {
     const [email, setEmail] = useState('')
     const [error, setError] = useState({ email: "" });
-
+    const navigate = useNavigate()
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const emailErr = emailValidation(email);
         setError({
             email: emailErr,
         });
+        try {
+            const res = await forgotPasswordApi(email)
+            if (res?.data?.success) {
+                toast.success(res.data.message || "OTP sent successfully");
+                      navigate("/forgot/password/otp", { state: { email:email,name:res.data.name } });
 
+            }
+        }
+        catch (error:any) {
+            console.log(error)
+            toast.error(error.response?.data?.message || "Something went wrong");
+
+        }
 
     };
     const handleChange = async (e: any) => {

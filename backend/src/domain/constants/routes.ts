@@ -6,6 +6,9 @@ export const Routes={
         SIGNIN:"/signin",
         REFRESH_TOKEN:"/refresh-token",
         GOOGLE_AUTH:"/google-login",
-        LOGOUT:'/logout'
+        LOGOUT:'/logout',
+        FORGOT_PASSWORD:'/forgot/password',
+        FORGOT_PASSWORD_OTP_VERIFY:'/forgot/password/verify/otp',
+        CREATE_NEW_PASSWORD:'/create/new/password'
     }
 };

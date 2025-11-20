@@ -14,5 +14,11 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   async findById(id: string): Promise<T | null> {
     return this.model.findById(id);
   }
+    async update(user: any): Promise<void> {
+        await this.model.updateOne(
+            { _id: user._id },
+            { $set: user }
+        );
+    }
 
 }

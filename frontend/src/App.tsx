@@ -1,4 +1,4 @@
-import {  Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
@@ -8,52 +8,57 @@ import Signup from "./pages/auth/signUp";
 import Otp from "./pages/auth/Otp";
 import SignIn from "./pages/auth/SignIn";
 import ForgotPassword from "./pages/auth/ForgotPassWordPage";
+import OtpForgotPassword from "./components/auth/otp/OtpForgotPassword";
+import NewPasswordForm from "./components/auth/password/NewPassword";
 
 import Home from "./pages/user/home";
 
 import { refreshAPI } from "./api/auth/authServices";
 import { useDispatch } from "react-redux";
-import { logout, setAccessToken ,setAuthLoaded} from "./store/slices/authSlice";
+import { logout, setAccessToken, setAuthLoaded } from "./store/slices/authSlice";
 
 import ProtectRoute from "./components/protectRoute";
-import  {Islogged } from "./components/protectRoute";
+import { Islogged } from "./components/protectRoute";
 function App() {
   const dispatch = useDispatch();
-    
+
 
   useEffect(() => {
     const load = async () => {
       try {
         const res = await refreshAPI();
         const accessToken = res?.data?.accessToken;
-        if(accessToken){
-          dispatch(setAccessToken({accessToken}));
+        if (accessToken) {
+          dispatch(setAccessToken({ accessToken }));
         }
       }
       catch (error) {
         dispatch(logout());
         console.log(error);
-      }finally {
+      } finally {
         dispatch(setAuthLoaded(true));
       }
     };
     load();
-  },[]);
-  
+  }, []);
+
   return (
     <>
       <ToastContainer />
-     
-        <Routes>
-          {/* Auth */}
-          <Route path='/signup' element={<Islogged><Signup /></Islogged>} />
-          <Route path='/Signin' element={<Islogged><SignIn /></Islogged>} />
-          <Route path='/otp' element={<Islogged><Otp /></Islogged>} />
-          <Route path='/forgot/password' element={<Islogged><ForgotPassword /></Islogged>} />
-          {/* user */}
-          <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
 
-        </Routes>
+      <Routes>
+        {/* Auth */}
+        <Route path='/signup' element={<Islogged><Signup /></Islogged>} />
+        <Route path='/Signin' element={<Islogged><SignIn /></Islogged>} />
+        <Route path='/otp' element={<Islogged><Otp /></Islogged>} />
+        <Route path='/forgot/password' element={<Islogged><ForgotPassword /></Islogged>} />
+        <Route path="/forgot/password/otp" element={<Islogged><OtpForgotPassword /></Islogged>} />
+        <Route path="/create/new/password" element={<Islogged><NewPasswordForm /></Islogged>} />
+
+        {/* user */}
+        <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
+
+      </Routes>
     </>
   );
 }

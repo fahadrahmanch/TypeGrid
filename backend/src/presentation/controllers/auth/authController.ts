@@ -7,7 +7,9 @@ import { ILoginUseCase } from "../../../domain/interfaces/usecases/auth/ILoginUs
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
 import { IGoogleAuthUseCase } from "../../../domain/interfaces/usecases/auth/IGoogleAuthUseCase";
 import { IFindUserByemailUseCase } from "../../../domain/interfaces/usecases/auth/IFindUserByEmailUseCase";
-
+import { IForgotPasswordUseCase } from "../../../domain/interfaces/usecases/auth/IForgotPasswordUseCase";
+import { IForgotPasswordOtpVerify } from "../../../domain/interfaces/usecases/auth/IForgotPasswordOtpVerify";
+import { ICreateNewPasswordUseCase } from "../../../domain/interfaces/usecases/auth/ICreateNewPasswordUseCase";
 export class authController {
     constructor(
         private _RegisterUser: IAuthUseCase,
@@ -16,7 +18,10 @@ export class authController {
         private _loginUseCase: ILoginUseCase,
         private _tokenServie: ITokenService,
         private _googleAuthUseCase: IGoogleAuthUseCase,
-        private _findUserByEmailUseCase: IFindUserByemailUseCase
+        private _findUserByEmailUseCase: IFindUserByemailUseCase,
+        private _forgotPassword: IForgotPasswordUseCase,
+        private _ForgotPasswordOtpVerify: IForgotPasswordOtpVerify,
+        private _createNewPasswordUseCase: ICreateNewPasswordUseCase
     ) {
     }
     async register(req: Request, res: Response): Promise<any> {
@@ -50,8 +55,8 @@ export class authController {
     async resentOtp(req: Request, res: Response): Promise<void> {
         try {
             const { name, email } = req.body;
-            if (!name || !email) {
-                throw new Error("Name and Email are required");
+            if (!email) {
+                throw new Error(" Email are required");
             }
             await this._resentOtpUseCase.execute(name, email);
             res.json({
@@ -162,9 +167,63 @@ export class authController {
         }
     }
 
+    async forgotPassword(req: Request, res: Response): Promise<void> {
+        try {
+            const { email } = req.body
+            if (!email) {
+                throw new Error("email is required")
+            }
+            const user = await this._findUserByEmailUseCase.execute(email)
+            if (!user) {
+                throw new Error("No user found with this email");
+            }
+            if (user?.googleId) {
+                throw new Error("This account is registered using Google Sign-In. Password reset is not applicable.");
+            }
+            await this._forgotPassword.execute(email)
+            res.status(200).json({
+                success: true,
+                message: "OTP has been sent to your email",
+            });
+
+
+        } catch (error: any) {
+            console.error(error)
+            res.status(400).json({ success: false, message: error.message });
+        }
+    }
+
+    async verifyForgotPasswordOtp(req: Request, res: Response): Promise<void> {
+        try {
+            const { otp, email } = req.body
+            await this._ForgotPasswordOtpVerify.verify(otp, email)
+            res.status(200).json({ message: "otp verify successfull" });
+        }
+        catch (error: any) {
+            console.log(error)
+            res.status(400).json({ message: error?.message });
+        }
+    }
+    async createNewPassword(req: Request, res: Response): Promise<void> {
+        try {
+            const { email, password } = req.body
+            await this._createNewPasswordUseCase.execute(email, password)
+            res.status(200).json({
+                success: true,
+                message: "Password updated successfully."
+            });
+        }
+        catch (error: any) {
+            res.status(400).json({
+                success: false,
+                message: error.message || "Something went wrong."
+            });
+        }
+    }
+
     async logout(req: Request, res: Response): Promise<void> {
         try {
-            console.log("hello")
+
             res.clearCookie("refreshToken", {
                 httpOnly: true,
                 secure: true,

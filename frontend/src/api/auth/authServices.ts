@@ -25,3 +25,12 @@ export async function googleAuthApi(data: any) {
 export async function LogoutApi(){
     return API.post('/logout')
 }
+export async function forgotPasswordApi(email:string){
+    return API.post("/forgot/password",{email})
+}
+export async function forgotPasswordOtpVerifiction(otp:string,email:string){
+    return API.post('/forgot/password/verify/otp',{otp,email})
+}
+export async function createNewpasswordApi(email:string,password:string){
+    return API.post('/create/new/password',{email,password})
+}

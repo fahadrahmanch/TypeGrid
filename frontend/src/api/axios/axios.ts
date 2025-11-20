@@ -23,7 +23,7 @@ API.interceptors.response.use(
             return Promise.reject(error);
         }
         // if (error.config?.url.includes("/refresh-token")) {
-        //     console.log("logout immediatly")
+        //      .log("logout immediatly")
         //     store.dispatch(logout());
         //     return Promise.reject(error);
         // }
