@@ -11,7 +11,12 @@ import ForgotPassword from "./pages/auth/ForgotPassWordPage";
 import OtpForgotPassword from "./components/auth/otp/OtpForgotPassword";
 import NewPasswordForm from "./components/auth/password/NewPassword";
 
+
 import Home from "./pages/user/home";
+
+
+import Users from "./pages/admin/Users";
+import Company from "./pages/admin/Company";
 
 import { refreshAPI } from "./api/auth/authServices";
 import { useDispatch } from "react-redux";
@@ -58,6 +63,10 @@ function App() {
         {/* user */}
         <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
 
+
+        {/* admin  */}
+        <Route path='/admin/users' element={<Users />} />
+        <Route path='/admin/company' element={<Company/>}/>
       </Routes>
     </>
   );

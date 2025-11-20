@@ -1,6 +1,7 @@
 import { logout } from "../../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { LogoutApi } from "../../api/auth/authServices";
+import Navbar from "../../components/user/Navbar";
 const Home: React.FC = () => {
     const dispatch = useDispatch()
     async function handleLogout() {
@@ -13,6 +14,7 @@ const Home: React.FC = () => {
     }
     return (
         <>
+        <Navbar/>
             <button onClick={() => handleLogout()}>
                 Logout
             </button>
