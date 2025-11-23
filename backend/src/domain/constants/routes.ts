@@ -10,5 +10,9 @@ export const Routes={
         FORGOT_PASSWORD:'/forgot/password',
         FORGOT_PASSWORD_OTP_VERIFY:'/forgot/password/verify/otp',
         CREATE_NEW_PASSWORD:'/create/new/password'
+    },
+
+    ADMIN:{
+        GET_USERS:'/users'
     }
 };

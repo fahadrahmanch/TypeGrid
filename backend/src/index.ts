@@ -2,11 +2,9 @@ import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db";
-import { userRouter } from "./presentation/routes/authRoutes";
+import { authRouter } from "./presentation/routes/authRoutes";
 import cookieParser from "cookie-parser";
-
-
-
+import { adminRouter } from "./presentation/routes/adminRoutes";
 dotenv.config();
 export class app{
     public app:Application;
@@ -14,7 +12,8 @@ export class app{
         this.app=express();
         
         this.setMiddleWares();
-        this.setUserRoutes();
+        this.setAuthRoutes();
+        this.setAdminRoutes()
     }
       setMiddleWares(){
         this.app.use(cors({
@@ -27,10 +26,14 @@ export class app{
         
     }
  
-    private setUserRoutes(){
-        const routerUser=new userRouter();
+    private setAuthRoutes(){
+        const routerUser=new authRouter();
         this.app.use("/",routerUser.getRouter());
 
+    }
+    private setAdminRoutes(){
+        const routerAdmin=new adminRouter()
+        this.app.use("/admin",routerAdmin.getRouter())
     }
     public async connectDatabase(){
         const db=new connectDB();

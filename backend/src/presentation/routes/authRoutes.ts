@@ -1,7 +1,7 @@
 import express,{Request,Response} from "express";
 import { Routes } from "../../domain/constants/routes";
 import { injectAuthController } from "../DI/auth";
-export class userRouter{
+export class authRouter{
     private router:express.Router;
     constructor(){
     this.router=express.Router();

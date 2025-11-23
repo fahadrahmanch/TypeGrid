@@ -52,5 +52,5 @@ role:{
     required:false,
 }
 
-});
+}); 
 export const User= mongoose.model<AuthUserEntity>("user",userSchema);

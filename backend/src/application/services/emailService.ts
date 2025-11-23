@@ -22,6 +22,7 @@ export class EmailService implements IEmailService{
       .then(() => console.log(" Mail transporter connected successfully"))
       .catch(err => console.error(" Mail transporter connection failed:", err));
   }
+  
   async sentOtp(template:IEmailTemplate): Promise<void> {
      
       const html=await HtmlforOtp(template.name,template.otp,template.body??"");
@@ -35,3 +36,7 @@ export class EmailService implements IEmailService{
       await this._transporter.sendMail(mailOptions);
     }
 }
+
+
+
+

@@ -14,6 +14,9 @@ import { FindUserByIdEmailCase } from "../../application/use-cases/auth/findUser
 import { forgotPassword } from "../../application/use-cases/auth/forgotPassword/forgotPasswordUseCase";
 import { ForgotPasswordOtpVerify } from "../../application/use-cases/auth/forgotPassword/ForgotPasswordOtpVerify";
 import { createNewPassword } from "../../application/use-cases/auth/forgotPassword/createNewPasswordUseCase";
+import { userManageController } from "../controllers/admin/userManageController";
+import { getUsersUseCase } from "../../application/use-cases/admin/getUsersUseCase";
+//auth
 const AuthRepository=new authRepository();
 const EmailServive=new EmailService();
 const caching=new Caching();
@@ -31,3 +34,4 @@ const ForgotPassword=new forgotPassword(otpService,EmailServive,AuthRepository)
 const CreateNewPassword=new createNewPassword(AuthRepository,hashService)
 
 export const injectAuthController=new authController(RegisterUser,completeSignup,ResentOtpUseCase,LoginUserCase,tokenService,GoogleAuthUseCase,findUserByIdEmailCase,ForgotPassword,forgotPasswordOtpVerify,CreateNewPassword);
+    

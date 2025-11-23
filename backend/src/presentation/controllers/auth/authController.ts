@@ -24,6 +24,7 @@ export class authController {
         private _createNewPasswordUseCase: ICreateNewPasswordUseCase
     ) {
     }
+
     async register(req: Request, res: Response): Promise<any> {
         try {
             const { name, email, password } = req.body;
