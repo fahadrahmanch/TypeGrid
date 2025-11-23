@@ -3,7 +3,7 @@ import SideNavbar from "../../components/admin/layout/Navbar/SideNabar"
 const Users: React.FC = () => {
     return (
         <>
-        <SideNavbar/>
+            <SideNavbar />
             <UserList />
         </>
     )

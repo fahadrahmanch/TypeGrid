@@ -13,7 +13,8 @@ import NewPasswordForm from "./components/auth/password/NewPassword";
 
 
 import Home from "./pages/user/home";
-
+import Profile from "./pages/user/profile";
+import EditProfile from "./pages/user/editProfile";
 
 import Users from "./pages/admin/Users";
 import Company from "./pages/admin/Company";
@@ -62,8 +63,8 @@ function App() {
 
         {/* user */}
         <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
-
-
+        <Route path='/profile' element={<ProtectRoute><Profile/></ProtectRoute>}/>
+        <Route path='/profile/edit' element={<ProtectRoute><EditProfile/></ProtectRoute>}/>
         {/* admin  */}
         <Route path='/admin/users' element={<Users />} />
         <Route path='/admin/company' element={<Company/>}/>
