@@ -15,9 +15,12 @@ import NewPasswordForm from "./components/auth/password/NewPassword";
 import Home from "./pages/user/home";
 import Profile from "./pages/user/profile";
 import EditProfile from "./pages/user/editProfile";
-
+import CompanySubscription from "./pages/user/Subscription/companySubscription";
+import CompanyVerification from "./pages/user/Subscription/CompanyVerification";
+import CompanyVerificationStatus from "./pages/user/Subscription/CompanyVerificationStatus";
 import Users from "./pages/admin/Users";
 import Company from "./pages/admin/Company";
+
 
 import { refreshAPI } from "./api/auth/authServices";
 import { useDispatch } from "react-redux";
@@ -63,11 +66,17 @@ function App() {
 
         {/* user */}
         <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
-        <Route path='/profile' element={<ProtectRoute><Profile/></ProtectRoute>}/>
-        <Route path='/profile/edit' element={<ProtectRoute><EditProfile/></ProtectRoute>}/>
+        <Route path='/profile' element={<ProtectRoute><Profile /></ProtectRoute>} />
+        <Route path='/profile/edit' element={<ProtectRoute><EditProfile /></ProtectRoute>} />
+
+        {/* subscription */}
+        <Route path="/company/subscription" element={<ProtectRoute><CompanySubscription /></ProtectRoute>} />
+        <Route path='/company/subscription/verify' element={<ProtectRoute><CompanyVerification/></ProtectRoute>}/>
+        <Route path='/company/subscription/verify/status' element={<ProtectRoute><CompanyVerificationStatus/></ProtectRoute>}/>
+
         {/* admin  */}
         <Route path='/admin/users' element={<Users />} />
-        <Route path='/admin/company' element={<Company/>}/>
+        <Route path='/admin/company' element={<Company />} />
       </Routes>
     </>
   );
