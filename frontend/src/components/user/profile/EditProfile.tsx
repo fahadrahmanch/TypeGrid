@@ -1,7 +1,7 @@
 const EditProfileDiv1: React.FC = () => {
     return (
         <>
-            <div className="min-h-screen  p-4 md:p-8 pt-24 flex flex-col items-center">
+            <div className="min-h-screen  p-4 md:p-8 pt-24 flex flex-col items-center mt-12">
 
                 <div className="w-full max-w-5xl">
                     <h1 className="text-3xl font-bold text-[#2D2D2D] mb-8 text-left">Edit Profile</h1>
@@ -9,7 +9,7 @@ const EditProfileDiv1: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                         {/* LEFT COLUMN: Profile Pic & Status */}
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 ">
                             {/* Profile Picture Card */}
                             <div className="bg-[#FAF3E6] rounded-2xl p-8 flex flex-col items-center justify-center shadow-sm border border-[#F5EBD8]">
                                 <h2 className="text-lg font-bold text-[#4A4A4A] w-full text-left mb-6">Profile Picture</h2>
@@ -49,13 +49,13 @@ const EditProfileDiv1: React.FC = () => {
 
                         {/* RIGHT COLUMN: Basic Information */}
                         <div className="lg:col-span-2 bg-[#FAF3E6] rounded-2xl p-8 shadow-sm border border-[#F5EBD8]">
-                            <h2 className="text-lg font-bold text-[#4A4A4A] mb-6">Basic Information</h2>
+                            <h2 className="text-lg font-bold text-[#4A4A4A] mb-6 text-start">Basic Information</h2>
 
                             <div className="space-y-5">
                                 {/* Row 1: Name & Email */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-600 mb-2">Full Name</label>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">Full Name</label>
                                         <input
                                             type="text"
                                             defaultValue="Alex Johnson"
@@ -63,7 +63,7 @@ const EditProfileDiv1: React.FC = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-600 mb-2">Email Address</label>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">Email Address</label>
                                         <input
                                             type="email"
                                             defaultValue="alex.johnson@email.com"
@@ -74,7 +74,7 @@ const EditProfileDiv1: React.FC = () => {
 
                                 {/* Row 2: Bio */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-600 mb-2">Bio</label>
+                                    <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">Bio</label>
                                     <textarea
                                         rows={3}
                                         defaultValue="Passionate typist working to improve speed and accuracy. Love competing in typing challenges!"
@@ -85,7 +85,7 @@ const EditProfileDiv1: React.FC = () => {
                                 {/* Row 3: Age & Gender */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-600 mb-2">Age</label>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">Age</label>
                                         <input
                                             type="number"
                                             defaultValue="18"
@@ -93,7 +93,7 @@ const EditProfileDiv1: React.FC = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-600 mb-2">Gender</label>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">Gender</label>
                                         <select
                                             className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none appearance-none"
                                         >

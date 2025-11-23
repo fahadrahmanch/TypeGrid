@@ -2,7 +2,7 @@ const ProfileDiv1: React.FC = () => {
     
     return (
         <>
-            <div className="w-full mt-16 max-w-6xl bg-[#FAF3E6] rounded-2xl p-8 flex flex-col md:flex-row items-start justify-between gap-6 shadow-sm  border border-[#F5EBD8]">
+            <div className="w-full mt-16 max-w-6xl bg-[#FAF3E6] rounded-2xl p-8 flex flex-col md:flex-row items-start justify-between gap-6 shadow-sm  border border-[#F5EBD8] ">
                 {/* Left Side: Avatar & Info */}
                 <div className="flex flex-col md:flex-row gap-6 w-full">
                     {/* Avatar Placeholder */}
