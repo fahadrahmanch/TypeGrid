@@ -8,7 +8,7 @@ export class TokenService implements ITokenService {
         this.accessSecret = process.env.ACCESS_SECRET || "";
         this.refreshSecret = process.env.REFRESH_SECRET || "";
     }
-    async generateAccessToken(email: string): Promise<string> {
+    async generateAccessToken(email: string,role:string): Promise<string> {
         return jwt.sign(
             { email: email },
             this.accessSecret,
@@ -16,7 +16,7 @@ export class TokenService implements ITokenService {
         );
     }
 
-    async generateRefreshToken(email: string): Promise<string> {
+    async generateRefreshToken(email: string,role:string): Promise<string> {
         return jwt.sign(
             { email: email },
             this.refreshSecret,

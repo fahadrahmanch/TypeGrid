@@ -74,20 +74,25 @@ export class authController {
     }
     async signin(req: Request, res: Response): Promise<void> {
         try {
-            const { email, password } = req.body.data;
+            const { email, password, role } = req.body.data;
             const user = await this._loginUseCase.execute(email, password);
 
             if (!user || !user._id) {
                 throw new Error("User not found or missing id");
             }
-            const accessToken = await this._tokenServie.generateAccessToken(user?.email);
-            const refreshToken = await this._tokenServie.generateRefreshToken(user?.email);
+            if (user.role !== role) {
+                throw new Error(`You are not authorized to login from ${role} portal`)
+
+            };
+
+            const accessToken = await this._tokenServie.generateAccessToken(user?.email, user?.role);
+            const refreshToken = await this._tokenServie.generateRefreshToken(user?.email, user?.role);
             if (!accessToken || !refreshToken) {
                 throw new Error("something went wrong");
             }
             const UserDeepCopy = JSON.parse(JSON.stringify(user));
             delete UserDeepCopy.password;
-            res.cookie("refreshToken", refreshToken, {
+            res.cookie("refresh_user", refreshToken, {
                 httpOnly: true,
                 secure: true,
                 sameSite: "strict",
@@ -110,7 +115,25 @@ export class authController {
 
     async refreshToken(req: Request, res: Response): Promise<void> {
         try {
-            const token = req.cookies.refreshToken;
+            const path = req.path;
+            let tokenName = "";
+            let role = "";
+
+            if (path.startsWith("/admin")) {
+                tokenName = "refresh_admin";
+                role = "admin";
+            } else if (path.startsWith("/company/admin")) {
+                tokenName = "refresh_company_admin";
+                role = "companyAdmin";
+            } else if (path.startsWith("/company")) {
+                tokenName = "refresh_company";
+                role = "companyUser";
+            } else {
+                tokenName = "refresh_user";
+                role = "user";
+            }
+            const token = req.cookies[tokenName];
+            if (!token) throw new Error("No refresh token found");
             const decoded = await this._tokenServie.verifyRefreshToken(token);
             const user = await this._findUserByEmailUseCase.execute(decoded?.email);
             if (!user) {
@@ -119,7 +142,7 @@ export class authController {
             if (user.status == "block") {
                 throw new Error("Access denied. This account is blocked");
             }
-            const accessToken = await this._tokenServie.generateAccessToken(decoded?.userId);
+            const accessToken = await this._tokenServie.generateAccessToken(decoded?.userId, decoded?.role);
             res.json({
                 success: true,
                 accessToken,
@@ -140,8 +163,8 @@ export class authController {
                 throw new Error("Request body is missing");
             }
             const user = await this._googleAuthUseCase.gooogleAuth(name, email, googleId);
-            const accessToken = await this._tokenServie.generateAccessToken(email);
-            const refreshToken = await this._tokenServie.generateRefreshToken(email);
+            const accessToken = await this._tokenServie.generateAccessToken(email, 'user');
+            const refreshToken = await this._tokenServie.generateRefreshToken(email, 'user');
             if (!accessToken || !refreshToken) {
                 throw new Error("something went wrong");
             }
@@ -237,4 +260,50 @@ export class authController {
         }
     }
 
+    //admin
+    async AdminSignIn(req: Request, res: Response): Promise<void> {
+        try {
+            const { email, password, role } = req.body.data;
+            console.log("email,password", email, password)
+            const admin = await this._loginUseCase.execute(email, password);
+
+            if (!admin || !admin._id) {
+                throw new Error("Admin not found or missing id");
+            }
+            if (admin.role !== role) {
+                throw new Error(`You are not authorized to login from ${role} portal`)
+
+            };
+
+            const accessToken = await this._tokenServie.generateAccessToken(admin?.email, admin?.role);
+            const refreshToken = await this._tokenServie.generateRefreshToken(admin?.email, admin?.role);
+          
+            if (!accessToken || !refreshToken) {
+                throw new Error("something went wrong");
+            }
+            const adminDeepCopy = JSON.parse(JSON.stringify(admin));
+            delete adminDeepCopy.password;
+            res.cookie("refresh_admin", refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "strict",
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+                path: "/admin"
+            });
+            res.json({
+                message: "Login successfull",
+                accessToken,
+                adminDeepCopy
+            });
+        }
+        catch (error: any) {
+            console.log(error)
+            res.status(400).json({
+                success: false,
+                message: error.message || "Something went wrong."
+            });
+        }
+
+
+    }
 }

@@ -5,6 +5,7 @@ import { connectDB } from "./config/db";
 import { authRouter } from "./presentation/routes/authRoutes";
 import cookieParser from "cookie-parser";
 import { adminRouter } from "./presentation/routes/adminRoutes";
+import { UserRoutes } from "./presentation/routes/userRoutes";
 dotenv.config();
 export class app{
     public app:Application;
@@ -14,6 +15,7 @@ export class app{
         this.setMiddleWares();
         this.setAuthRoutes();
         this.setAdminRoutes()
+        this.setUserRoutes()
     }
       setMiddleWares(){
         this.app.use(cors({
@@ -23,6 +25,12 @@ export class app{
         this.app.use(cookieParser());
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+              this.app.use((req, res, next) => {
+            res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+            res.setHeader("Pragma", "no-cache");
+            res.setHeader("Expires", "0");
+            next();
+        });
         
     }
  
@@ -34,6 +42,10 @@ export class app{
     private setAdminRoutes(){
         const routerAdmin=new adminRouter()
         this.app.use("/admin",routerAdmin.getRouter())
+    }
+    private setUserRoutes(){
+        const routerUser=new UserRoutes()
+        this.app.use('/',routerUser.getRouter())
     }
     public async connectDatabase(){
         const db=new connectDB();

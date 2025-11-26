@@ -8,6 +8,9 @@ export class authRouter{
     this.initializeRoutes();
     }
     initializeRoutes(){
+
+    //user
+
     this.router.post(Routes.AUTH.SIGNUP,(req:Request,res:Response)=>{
         injectAuthController.register(req,res);
     });
@@ -38,6 +41,14 @@ export class authRouter{
     this.router.post(Routes.AUTH.CREATE_NEW_PASSWORD,(req:Request,res:Response)=>{
         injectAuthController.createNewPassword(req,res)
     })
+    
+    //admin
+
+    this.router.post(Routes.AUTH.ADMIN_SIGNIN,(req:Request,res:Response)=>{
+        console.log("hy there")
+        injectAuthController.AdminSignIn(req,res)
+    })
+
     }
     getRouter(){
         return this.router;
