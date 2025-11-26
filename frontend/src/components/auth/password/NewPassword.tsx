@@ -12,8 +12,8 @@ const NewPasswordForm: React.FC = () => {
     const [values, setValues] = useState({ password: "", confirmPassword: "" });
     const [error, setError] = useState({ password: "", confirmPassword: "" });
     const location = useLocation();
-    const email = location.state?.email
-    const navigate = useNavigate()
+    const email = location.state?.email;
+    const navigate = useNavigate();
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const passErr = passwordValidation(values.password);
@@ -27,10 +27,10 @@ const NewPasswordForm: React.FC = () => {
         if (passErr || confirmErr) return;
 
         try {
-            const res = await createNewpasswordApi(email, values.password)
+            const res = await createNewpasswordApi(email, values.password);
             if (res.data.success) {
                 toast.success("Password updated successfully");
-                navigate('/signin')
+                navigate("/signin");
             } else {
                 toast.error(res.data.message || "Something went wrong");
             }
@@ -120,6 +120,6 @@ const NewPasswordForm: React.FC = () => {
             </div>
 
         </>
-    )
-}
-export default NewPasswordForm
+    );
+};
+export default NewPasswordForm;

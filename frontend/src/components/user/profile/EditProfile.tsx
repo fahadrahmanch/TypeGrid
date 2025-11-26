@@ -130,6 +130,6 @@ const EditProfileDiv1: React.FC = () => {
                 </div>
             </div>
         </>
-    )
-}
-export default EditProfileDiv1
+    );
+};
+export default EditProfileDiv1;

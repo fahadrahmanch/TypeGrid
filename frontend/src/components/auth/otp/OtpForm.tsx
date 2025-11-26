@@ -12,7 +12,7 @@ const OtpForm: React.FC = () => {
     const name = location.state?.name;
     const email = location.state?.email;
     const password = location.state?.password;
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [expire, setExpire] = useState<number>(30);
     useEffect(() => {
         let id: any;
@@ -44,7 +44,7 @@ const OtpForm: React.FC = () => {
         e.preventDefault();
         try {
             const response = await verifyOtp(otp, name, email, password);
-            navigate('/signin')
+            navigate("/signin");
             toast.success(response.data.message);
         }
         catch (error: any) {

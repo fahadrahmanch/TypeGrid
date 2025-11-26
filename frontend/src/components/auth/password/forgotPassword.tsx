@@ -11,9 +11,9 @@ import { forgotPasswordApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 
 const ForgotPassWordForm: React.FC = () => {
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState("");
     const [error, setError] = useState({ email: "" });
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const emailErr = emailValidation(email);
@@ -21,7 +21,7 @@ const ForgotPassWordForm: React.FC = () => {
             email: emailErr,
         });
         try {
-            const res = await forgotPasswordApi(email)
+            const res = await forgotPasswordApi(email);
             if (res?.data?.success) {
                 toast.success(res.data.message || "OTP sent successfully");
                       navigate("/forgot/password/otp", { state: { email:email,name:res.data.name } });
@@ -29,7 +29,7 @@ const ForgotPassWordForm: React.FC = () => {
             }
         }
         catch (error:any) {
-            console.log(error)
+            console.log(error);
             toast.error(error.response?.data?.message || "Something went wrong");
 
         }
@@ -37,7 +37,7 @@ const ForgotPassWordForm: React.FC = () => {
     };
     const handleChange = async (e: any) => {
         const { name, value } = e.target;
-        console.log(email)
+        console.log(email);
         setEmail(e.target.value);
         if (name === "email") {
             setError({ ...error, email: emailValidation(value) });
@@ -102,6 +102,6 @@ const ForgotPassWordForm: React.FC = () => {
             </div>
 
         </>
-    )
-}
-export default ForgotPassWordForm
+    );
+};
+export default ForgotPassWordForm;

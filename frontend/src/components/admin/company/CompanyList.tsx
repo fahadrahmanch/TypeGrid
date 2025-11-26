@@ -2,7 +2,7 @@ import { useState } from "react";
 import CompanyDetailsModal from "./CompanyDetailsModal";
 const CompanyList: React.FC = () => {
     const [status, setStatus] = useState("All");
-    const [isOpen,setOpen]=useState(false)
+    const [isOpen,setOpen]=useState(false);
     return (
         <>
             <div className="bg-[#FFF3DB] w-[85rem] ml-10 pl-10 pt-6 pb-6 rounded-md shadow-sm">
@@ -71,6 +71,6 @@ const CompanyList: React.FC = () => {
             }
             
         </>
-    )
-}
-export default CompanyList
+    );
+};
+export default CompanyList;

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-const authSlice = createSlice({
-    name: "auth",
+const userAuthSlice = createSlice({
+    name: "userAuth",
     initialState: {
         accessToken: null,
         authLoaded:false
@@ -18,5 +18,5 @@ const authSlice = createSlice({
         }
     }
 });
-export const { setAccessToken, logout,setAuthLoaded } = authSlice.actions;
-export default authSlice.reducer;
+export const { setAccessToken, logout,setAuthLoaded } = userAuthSlice.actions;
+export default userAuthSlice.reducer;

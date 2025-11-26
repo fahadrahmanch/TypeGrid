@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
 import { googleAuthApi } from "../api/auth/authServices";
-import { setAccessToken } from "../store/slices/authSlice";
+import { setAccessToken } from "../store/slices/auth/userAuthSlice";
 import { GoogleJwtPayload } from "../types/auth";
 
 export const useGoogleAuth = () => {

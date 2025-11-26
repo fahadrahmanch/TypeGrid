@@ -11,6 +11,7 @@ import ForgotPassword from "./pages/auth/ForgotPassWordPage";
 import OtpForgotPassword from "./components/auth/otp/OtpForgotPassword";
 import NewPasswordForm from "./components/auth/password/NewPassword";
 
+import AdminSignIn from "./pages/auth/AdminSignIn";
 
 import Home from "./pages/user/home";
 import Profile from "./pages/user/profile";
@@ -24,7 +25,7 @@ import Company from "./pages/admin/Company";
 
 import { refreshAPI } from "./api/auth/authServices";
 import { useDispatch } from "react-redux";
-import { logout, setAccessToken, setAuthLoaded } from "./store/slices/authSlice";
+import { logout, setAccessToken, setAuthLoaded } from "./store/slices/auth/userAuthSlice";
 
 import ProtectRoute from "./components/protectRoute";
 import { Islogged } from "./components/protectRoute";
@@ -64,15 +65,19 @@ function App() {
         <Route path="/forgot/password/otp" element={<Islogged><OtpForgotPassword /></Islogged>} />
         <Route path="/create/new/password" element={<Islogged><NewPasswordForm /></Islogged>} />
 
+        <Route path='/admin/signin' element={<AdminSignIn/>}/> 
+
+
+
         {/* user */}
         <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
         <Route path='/profile' element={<ProtectRoute><Profile /></ProtectRoute>} />
         <Route path='/profile/edit' element={<ProtectRoute><EditProfile /></ProtectRoute>} />
 
         {/* subscription */}
-        <Route path="/company/subscription" element={<ProtectRoute><CompanySubscription /></ProtectRoute>} />
-        <Route path='/company/subscription/verify' element={<ProtectRoute><CompanyVerification/></ProtectRoute>}/>
-        <Route path='/company/subscription/verify/status' element={<ProtectRoute><CompanyVerificationStatus/></ProtectRoute>}/>
+        <Route path="/subscription/company" element={<ProtectRoute><CompanySubscription /></ProtectRoute>} />
+        <Route path='/subscription/company/verify' element={<ProtectRoute><CompanyVerification/></ProtectRoute>}/>
+        <Route path='/subscription/company/verify/status' element={<ProtectRoute><CompanyVerificationStatus/></ProtectRoute>}/>
 
         {/* admin  */}
         <Route path='/admin/users' element={<Users />} />

@@ -1,21 +1,21 @@
 import axios from "axios";
 import store from "../../store/store";
-import { setAccessToken, logout } from "../../store/slices/authSlice";
+import { setAccessToken, logout } from "../../store/slices/auth/userAuthSlice"
 import { refreshAPI } from "../auth/authServices";
-const API = axios.create({
+export const userAPI = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     withCredentials: true,
 });
 
-API.interceptors.request.use((config: any) => {
-    const token = store.getState().auth.accessToken;
+userAPI.interceptors.request.use((config: any) => {
+    const token = store.getState().userAuth.accessToken;
     if (token) {
         config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 });
-API.interceptors.response.use(
+userAPI.interceptors.response.use(
     (res) => res,
     async (error) => {
         const orginalRequest = error.config;
@@ -34,7 +34,7 @@ API.interceptors.response.use(
                 const accessToken = await res.data.accessToken;
                 store.dispatch(setAccessToken(accessToken));
                 orginalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-                return API(orginalRequest);
+                return userAPI(orginalRequest);
             }
             catch (refreshError) {
                 store.dispatch(logout());
@@ -44,4 +44,3 @@ API.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-export default API;

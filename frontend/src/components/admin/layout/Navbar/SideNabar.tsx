@@ -57,6 +57,6 @@ const SideNavbar: React.FC = () => {
 </div>
 
 
-    )
-}
-export default SideNavbar
+    );
+};
+export default SideNavbar;

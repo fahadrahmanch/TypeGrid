@@ -59,6 +59,6 @@ const CompanyDetailsModal:React.FC<CompanyDetailsModalProps>=({setOpen})=>{
       </div>
     </div>
         </>
-    )
-}
-export default CompanyDetailsModal
+    );
+};
+export default CompanyDetailsModal;

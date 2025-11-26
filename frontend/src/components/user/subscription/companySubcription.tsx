@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const CompanySubcriptionDiv1:React.FC=()=>{
     return (
         <>
@@ -77,9 +79,11 @@ const CompanySubcriptionDiv1:React.FC=()=>{
            </li>
           ))}
         </ul>
+        <Link to='/subscription/company/verify'>
         <button className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold rounded-xl transition-colors">
           Select Plan
         </button>
+          </Link>
       </div>
 
       {/* CARD 3: ENTERPRISE */}
@@ -140,6 +144,6 @@ const CompanySubcriptionDiv1:React.FC=()=>{
   </div>
 </div>
         </>
-    )
-}
-export default CompanySubcriptionDiv1
+    );
+};
+export default CompanySubcriptionDiv1;

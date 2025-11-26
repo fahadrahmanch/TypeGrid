@@ -1,5 +1,5 @@
-import SideNavbar from "../../components/admin/layout/Navbar/SideNabar"
-import CompanyList from "../../components/admin/company/CompanyList"
+import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
+import CompanyList from "../../components/admin/company/CompanyList";
 const Company:React.FC=()=>{
     return(
         <>
@@ -7,6 +7,6 @@ const Company:React.FC=()=>{
         <CompanyList/>
         
         </>
-    )
-}
-export default Company
+    );
+};
+export default Company;

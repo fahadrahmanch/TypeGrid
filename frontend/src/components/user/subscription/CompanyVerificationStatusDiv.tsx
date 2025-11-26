@@ -65,7 +65,7 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
                 </div>
             </div>
         </>
-    )
+    );
     
-}
-export default CompanyVerificationStatusDiv1
+};
+export default CompanyVerificationStatusDiv1;

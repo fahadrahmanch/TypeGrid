@@ -6,8 +6,8 @@ interface Props {
 }
 
 export default function ProtectRoute({ children }: Props) {
-  const accessToken = useSelector((state: any) => state?.auth.accessToken);
-  const authLoaded = useSelector((state: any) => state?.auth.authLoaded);
+  const accessToken = useSelector((state: any) => state?.userAuth.accessToken);
+  const authLoaded = useSelector((state: any) => state?.userAuth.authLoaded);
   if (!authLoaded) {
     return <div>Loading...</div>;
   }
@@ -17,8 +17,8 @@ export default function ProtectRoute({ children }: Props) {
   return children;
 }
 export function Islogged({ children }: Props) {
-  const accessToken = useSelector((state: any) => state?.auth.accessToken);
-  const authLoaded = useSelector((state: any) => state?.auth.authLoaded);
+  const accessToken = useSelector((state: any) => state?.userAuth.accessToken);
+  const authLoaded = useSelector((state: any) => state?.userAuth.authLoaded);
   if (!authLoaded) {
     return <div>Loading...</div>;
   }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllUsers } from "../../../api/admin/users";
 const UserList: React.FC = () => {
    const [status, setStatus] = useState("All");
-   const [users, setUsers] = useState([])
+   const [users, setUsers] = useState([]);
 
    useEffect(() => {
       async function fetchUsers() {
@@ -95,6 +95,6 @@ const UserList: React.FC = () => {
          </div>
 
       </>
-   )
-}
-export default UserList
+   );
+};
+export default UserList;

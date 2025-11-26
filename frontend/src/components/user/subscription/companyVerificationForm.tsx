@@ -1,4 +1,19 @@
+import { useState } from "react";
+import { CompanyDetailsApi } from "../../../api/user/userService";
 const CompanyVerificationFormDiv: React.FC = () => {
+    const [values, setValues] = useState({ companyName: "", address: "", contactNumber: "", email: "" });
+    function handleChange(e: any) {
+        setValues({ ...values, [e.target.name]: e.target.value });
+    }
+    async function handleSubmit(e:any){
+      e.preventDefault(); 
+      try{
+      const response=await CompanyDetailsApi(values);
+       console.log(response);
+      }catch(error){
+        console.log(error);
+      }
+    }
     return (
         <>
             <div className="min-h-screen  flex items-center justify-center p-4">
@@ -18,6 +33,8 @@ const CompanyVerificationFormDiv: React.FC = () => {
                             </label>
                             <input
                                 type="text"
+                                name="companyName"
+                                 onChange={handleChange}
                                 placeholder="Your company name"
                                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
                             />
@@ -29,21 +46,13 @@ const CompanyVerificationFormDiv: React.FC = () => {
                             </label>
                             <input
                                 type="text"
+                                name="address"
+                                 onChange={handleChange}
                                 placeholder="Street address, city, state, zip"
                                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
                             />
                         </div>
-                        {/* Contact Person Name */}
-                        <div>
-                            <label className="block text-sm font-bold text-gray-900 mb-2 text-start">
-                                Contact Person Name *
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Full name"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
-                            />
-                        </div>
+
                         {/* Contact Email */}
                         <div>
                             <label className="block text-sm font-bold text-gray-900 mb-2 text-start">
@@ -51,6 +60,8 @@ const CompanyVerificationFormDiv: React.FC = () => {
                             </label>
                             <input
                                 type="email"
+                                name='email'
+                                 onChange={handleChange}
                                 placeholder="email@company.com"
                                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
                             />
@@ -62,24 +73,29 @@ const CompanyVerificationFormDiv: React.FC = () => {
                             </label>
                             <input
                                 type="tel"
+                                name='contactNumber'
+                                 onChange={handleChange}
                                 placeholder="+1 (555) 123-4567"
                                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
                             />
                         </div>
                         {/* Submit Button */}
                         <div className="pt-4">
+                            
                             <button
                                 type="button"
+                                onClick={handleSubmit}
                                 className="w-full bg-[#1C5CE5] hover:bg-blue-700 text-white font-semibold py-3.5 rounded-lg transition-colors duration-200 shadow-sm"
-                            >
+                                >
                                 Submit for Verification
                             </button>
+                                
                         </div>
 
                     </form>
                 </div>
             </div>
         </>
-    )
-}
-export default CompanyVerificationFormDiv
+    );
+};
+export default CompanyVerificationFormDiv;

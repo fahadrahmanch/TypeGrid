@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Logo from "../../assets/Icon/logo.png";
 const Navbar: React.FC = () => {
     return (
@@ -7,18 +8,24 @@ const Navbar: React.FC = () => {
                 <div className="flex gap-14 ">
                     <img src={Logo} className='h-12 left-3 top-3 relative' />
                     <div className="flex gap-16 pl-10 pt-3 text-[20px] font-jaini">
+                        <Link to='/'>
                         <p>Home</p>
+                        </Link>
                         <p>Discuss</p>
                         <p>Badges</p>
                         <p>Highscores</p>
                     </div>
                 </div>
-                <img
-                    src={Logo}
-                    alt="User"
-                    className="w-14 h-14 rounded-full object-cover shadow cursor-pointer "/>
+                <Link to="/profile">
+                    <img
+                        src={Logo}
+                        alt="User"
+                        className="w-14 h-14 rounded-full object-cover shadow cursor-pointer"
+                    />
+                </Link>
+
             </nav>
         </>
-    )
-}
-export default Navbar
+    );
+};
+export default Navbar;

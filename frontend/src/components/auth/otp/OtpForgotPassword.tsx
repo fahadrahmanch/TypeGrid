@@ -13,7 +13,7 @@ const OtpForgotPassword: React.FC = () => {
     const name = location.state?.name;
     const email = location.state?.email;
  
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [expire, setExpire] = useState<number>(30);
     useEffect(() => {
         let id: any;
@@ -45,7 +45,7 @@ const OtpForgotPassword: React.FC = () => {
         e.preventDefault();
         try {
             const response = await forgotPasswordOtpVerifiction(otp,email);
-            navigate("/create/new/password",{state:{email}})
+            navigate("/create/new/password",{state:{email}});
             toast.success(response.data.message);
         }
         catch (error: any) {

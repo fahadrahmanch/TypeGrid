@@ -4,7 +4,7 @@ import lines from "../../../assets/images/auth/login/lines.png";
 import kid2 from "../../../assets/images/auth/login/Kid2.png";
 import { signIn } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
-import { setAccessToken } from "../../../store/slices/authSlice";
+import { setAccessToken } from "../../../store/slices/auth/userAuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
@@ -12,7 +12,7 @@ import { useGoogleAuth } from "../../../hooks/useGoogleAuth";
 export const SignInForm: React.FC = () => {
     const [values, setValues] = useState({ email: "", password: "" });
     const [error, setError] = useState({ email: "", password: "" });
-    const { handleGoogleSuccess,handleGoogleError } = useGoogleAuth();
+    const { handleGoogleSuccess, handleGoogleError } = useGoogleAuth();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -30,7 +30,12 @@ export const SignInForm: React.FC = () => {
 
 
         try {
-            const response = await signIn(values);
+            const response = await signIn({
+                email: values.email,
+                password: values.password,
+                role: "user"
+            });
+
             const accessToken = response?.data?.accessToken;
             const user = response?.data?.UserDeepCopy;
             if (!accessToken || !user) {
@@ -118,19 +123,22 @@ export const SignInForm: React.FC = () => {
 
                         <p className="text-center text-gray-600 text-sm mt-4">
                             Don t have an account ?
-                            <a href="#" className="text-gray-900 font-medium hover:underline">
+                            <a href="/signup" className="text-gray-900 font-medium hover:underline">
                                 Sign Up
                             </a>
                         </p>
+
+                        <a href="/forgot/password" className="text-gray-900 font-sans  hover:underline">
+                            forgot password
+                        </a>
+
                     </div>
                     {/* Illustration */}
                     <div className="w-48 ml-[-17px] mt-[6rem] hidden sm:block ">
                         <img
                             src={kid2}
                             alt="kid"
-
-                            className="w-60 "
-
+                            className="w-60"
                         />
                     </div>
 
