@@ -10,7 +10,7 @@ export class TokenService implements ITokenService {
     }
     async generateAccessToken(email: string,role:string): Promise<string> {
         return jwt.sign(
-            { email: email },
+            { email: email,role:role },
             this.accessSecret,
             { expiresIn: "1h" }
         );
@@ -18,7 +18,7 @@ export class TokenService implements ITokenService {
 
     async generateRefreshToken(email: string,role:string): Promise<string> {
         return jwt.sign(
-            { email: email },
+            { email: email,role:role },
             this.refreshSecret,
             { expiresIn: "7d" }
         );

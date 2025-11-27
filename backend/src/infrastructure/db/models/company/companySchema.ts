@@ -23,6 +23,14 @@ const companySchema = new Schema(
       type: String,
       trim: true,
     },
+    address:{
+      type:String,
+      require:true
+    },
+    number:{
+      type:String,
+      require:true
+    },
     status: {
       type: String,
       enum: ["active", "inactive"],

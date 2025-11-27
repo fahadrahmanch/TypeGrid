@@ -3,22 +3,20 @@ import { IEmailService } from "../../../../domain/interfaces/services/IEmailServ
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
 import { IEmailTemplate } from "../../../../domain/interfaces/emailTemplates/IEmailTemplate";
 export class resentOtpUseCase {
-    constructor(
-        private _otpService: IOtpService,
-        private _emailService: IEmailService,
-        private _authRepository: IAuthRepostory
-    ) { }
-    async execute(name: string, email: string): Promise<void> {
-        const exitsUser = await this._authRepository.findByEmail(email);
-        const otp = await this._otpService.createOtp(email);
-        const emailOptions: IEmailTemplate = {
-            name,
-            email,
-            otp,
-            subject: "Type Grid Sign Up Otp",
-
-        };
-        await this._emailService.sentOtp(emailOptions);
-    }
-
+  constructor(
+    private _otpService: IOtpService,
+    private _emailService: IEmailService,
+    private _authRepository: IAuthRepostory
+  ) {}
+  async execute(name: string, email: string): Promise<void> {
+    await this._authRepository.findByEmail(email);
+    const otp = await this._otpService.createOtp(email);
+    const emailOptions: IEmailTemplate = {
+      name,
+      email,
+      otp,
+      subject: "Type Grid Sign Up Otp",
+    };
+    await this._emailService.sentOtp(emailOptions);
+  }
 }

@@ -19,9 +19,10 @@ imageUrl:{
     required:false
 },
 CompanyId:{
-    type:String,
-    default:null,
-    required:false
+    type: Schema.Types.ObjectId,
+      ref: "Company",   
+      required: false,
+      default:null
 },
 bio:{
     type:String,

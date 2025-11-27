@@ -24,6 +24,7 @@ export class loginUseCase implements ILoginUseCase {
                     email: user.email,
                     password: user.password,
                     status: user.status,
+                    CompanyId:user?.CompanyId,
                     role: user.role,
                 });
             } else {

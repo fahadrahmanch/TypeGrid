@@ -8,17 +8,17 @@ export class createNewPassword implements ICreateNewPasswordUseCase{
     ){}
     async execute(email:string,password:string):Promise<void>{
     if(!email){
-        throw new Error("something went wrong")
+        throw new Error("something went wrong");
     }
     if(!password){
-        throw new Error("password is required")
+        throw new Error("password is required");
     }
-    const user=await this._authRepository.findByEmail(email)
+    const user=await this._authRepository.findByEmail(email);
     if(!user){
-        throw new Error("user not found")
+        throw new Error("user not found");
     }
-    const hashedPassword=await this._hashServie.hash(password)
-    user.password=hashedPassword
+    const hashedPassword=await this._hashServie.hash(password);
+    user.password=hashedPassword;
     await this._authRepository.update(user);
     }
 }

@@ -9,7 +9,7 @@ export class UserRoutes {
     }
     initializeRoutes() {
         this.router.post(Routes.USERS.verifyCompany, (req: Request, res: Response) => {
-            injectCompanyRequestController.companyDetails(req,res)
+            injectCompanyRequestController.companyDetails(req,res);
         });
         
     }
