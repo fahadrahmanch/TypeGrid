@@ -1,48 +1,66 @@
 import { userAPI } from "../axios/userAPI";
 import { SignupData } from "../../types/auth";
+import { adminAPI } from "../axios/adminAPI";
+import { companyAPI } from "../axios/companyAPI";
 interface signInData {
-    email: string;
-    password: string;
-    role:string;
+  email: string;
+  password: string;
+  role: string;
 }
-
 
 //user
 
 export async function signup(data: SignupData) {
-    return userAPI.post("/signup", data);
+  return userAPI.post("/auth/signup", data);
 }
-export async function verifyOtp(otp: string, name: string, email: string, password: string) {
-    return userAPI.post("/verify-otp", { otp, name, email, password });
+export async function verifyOtp(
+  otp: string,
+  name: string,
+  email: string,
+  password: string,
+) {
+  return userAPI.post("/auth/verify-otp", { otp, name, email, password });
 }
 export async function resentOtp(name: string, email: string) {
-    return userAPI.post("/resent-otp", { name, email });
+  return userAPI.post("/auth/resent-otp", { name, email });
 }
 export async function signIn(data: signInData) {
-    return userAPI.post("/signin", { data });
+  return userAPI.post("/auth/signin", { data });
 }
-export async function refreshAPI() {
-    return userAPI.post("/refresh-token");
+export async function userRefreshAPI() {
+  return userAPI.post("/auth/refresh-token");
 }
 export async function googleAuthApi(data: any) {
-    return userAPI.post("/google-login",data);
+  return userAPI.post("/auth/google-login", data);
 }
-export async function LogoutApi(){
-    return userAPI.post("/logout");
+export async function LogoutApi() {
+  return userAPI.post("/auth/logout");
 }
-export async function forgotPasswordApi(email:string){
-    return userAPI.post("/forgot/password",{email});
+export async function forgotPasswordApi(email: string) {
+  return userAPI.post("/auth/forgot/password", { email });
 }
-export async function forgotPasswordOtpVerifiction(otp:string,email:string){
-    return userAPI.post("/forgot/password/verify/otp",{otp,email});
+export async function forgotPasswordOtpVerifiction(otp: string, email: string) {
+  return userAPI.post("/auth/forgot/password/verify/otp", { otp, email });
 }
-export async function createNewpasswordApi(email:string,password:string){
-    return userAPI.post("/create/new/password",{email,password});
+export async function createNewpasswordApi(email: string, password: string) {
+  return userAPI.post("/auth/create/new/password", { email, password });
 }
-
 
 //admin
 
-export async function adminSiginApi(data:signInData){
-    // return API.post("/admin/signin",{data});
+export async function adminSigninApi(data: signInData) {
+  return adminAPI.post("/auth/signin", { data });
+}
+
+export async function adminRefreshAPI() {
+  return adminAPI.post("/auth/refresh-token");
+}
+
+//company
+export async function companySignIn(data: any) {
+  return companyAPI.post("/auth/signin", { data });
+}
+
+export async function companyRefreshAPI() {
+  return companyAPI.post("/auth/refresh-token");
 }

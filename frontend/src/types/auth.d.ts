@@ -7,5 +7,5 @@ export interface SignupData {
 interface GoogleJwtPayload {
   name: string;
   email: string;
-  sub: string
+  sub: string;
 }

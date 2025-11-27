@@ -1,52 +1,64 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import UserRoutes from "./routes/userRoutes";
+import AdminRoutes from "./routes/AdminRoutes";
+import CompanyRoutes from "./routes/CompanyRoutes";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import Signup from "./pages/auth/signUp";
-import Otp from "./pages/auth/Otp";
-import SignIn from "./pages/auth/SignIn";
-import ForgotPassword from "./pages/auth/ForgotPassWordPage";
-import OtpForgotPassword from "./components/auth/otp/OtpForgotPassword";
-import NewPasswordForm from "./components/auth/password/NewPassword";
-
-import AdminSignIn from "./pages/auth/AdminSignIn";
-
-import Home from "./pages/user/home";
-import Profile from "./pages/user/profile";
-import EditProfile from "./pages/user/editProfile";
-import CompanySubscription from "./pages/user/Subscription/companySubscription";
-import CompanyVerification from "./pages/user/Subscription/CompanyVerification";
-import CompanyVerificationStatus from "./pages/user/Subscription/CompanyVerificationStatus";
-import Users from "./pages/admin/Users";
-import Company from "./pages/admin/Company";
-
-
-import { refreshAPI } from "./api/auth/authServices";
+import { userRefreshAPI } from "./api/auth/authServices";
 import { useDispatch } from "react-redux";
-import { logout, setAccessToken, setAuthLoaded } from "./store/slices/auth/userAuthSlice";
+import {  logout,setuserAccessToken,setUserAuthLoaded} from "./store/slices/auth/userAuthSlice";
+import { adminRefreshAPI } from "./api/auth/authServices";
+import {setAdminAccessToken,setAdminAuthLoaded,} from "./store/slices/auth/adminAuthSlice";
+import { companyRefreshAPI } from "./api/auth/authServices";
+import {setcompanyAccessToken,setCompanyAuthLoaded} from "./store/slices/auth/companyAuthSlice";
 
-import ProtectRoute from "./components/protectRoute";
-import { Islogged } from "./components/protectRoute";
 function App() {
   const dispatch = useDispatch();
-
-
+  const location = useLocation();
   useEffect(() => {
+    const path = location.pathname;
     const load = async () => {
       try {
-        const res = await refreshAPI();
-        const accessToken = res?.data?.accessToken;
-        if (accessToken) {
-          dispatch(setAccessToken({ accessToken }));
+        if (path.startsWith("/admin")) {
+          const res = await adminRefreshAPI();
+          const accessToken = res?.data?.accessToken;
+          if (accessToken) {
+            dispatch(setAdminAccessToken({ accessToken }));
+          }
+        } else if (path.startsWith("/company")) {
+          const res = await companyRefreshAPI();
+          const accessToken = res?.data?.accessToken;
+          if (accessToken) {
+            dispatch(setcompanyAccessToken({ accessToken }));
+          }
+        } else {
+          const res = await userRefreshAPI();
+          const accessToken = res?.data?.accessToken;
+          if (accessToken) {
+            dispatch(setuserAccessToken({ accessToken }));
+          }
         }
-      }
-      catch (error) {
+      } catch (error) {
         dispatch(logout());
         console.log(error);
       } finally {
-        dispatch(setAuthLoaded(true));
+        const segment = path.split("/")[1];
+        switch (segment) {
+          case "admin":
+            dispatch(setAdminAuthLoaded(true));
+            break;
+
+          case "company":
+            dispatch(setCompanyAuthLoaded(true));
+            break;
+
+          default:
+            dispatch(setUserAuthLoaded(true));
+            break;
+        }
       }
     };
     load();
@@ -55,33 +67,10 @@ function App() {
   return (
     <>
       <ToastContainer />
-
       <Routes>
-        {/* Auth */}
-        <Route path='/signup' element={<Islogged><Signup /></Islogged>} />
-        <Route path='/Signin' element={<Islogged><SignIn /></Islogged>} />
-        <Route path='/otp' element={<Islogged><Otp /></Islogged>} />
-        <Route path='/forgot/password' element={<Islogged><ForgotPassword /></Islogged>} />
-        <Route path="/forgot/password/otp" element={<Islogged><OtpForgotPassword /></Islogged>} />
-        <Route path="/create/new/password" element={<Islogged><NewPasswordForm /></Islogged>} />
-
-        <Route path='/admin/signin' element={<AdminSignIn/>}/> 
-
-
-
-        {/* user */}
-        <Route path="/" element={<ProtectRoute><Home /></ProtectRoute>} />
-        <Route path='/profile' element={<ProtectRoute><Profile /></ProtectRoute>} />
-        <Route path='/profile/edit' element={<ProtectRoute><EditProfile /></ProtectRoute>} />
-
-        {/* subscription */}
-        <Route path="/subscription/company" element={<ProtectRoute><CompanySubscription /></ProtectRoute>} />
-        <Route path='/subscription/company/verify' element={<ProtectRoute><CompanyVerification/></ProtectRoute>}/>
-        <Route path='/subscription/company/verify/status' element={<ProtectRoute><CompanyVerificationStatus/></ProtectRoute>}/>
-
-        {/* admin  */}
-        <Route path='/admin/users' element={<Users />} />
-        <Route path='/admin/company' element={<Company />} />
+        <Route path="/*" element={<UserRoutes />} />
+        <Route path="/admin/*" element={<AdminRoutes />} />
+        <Route path="/company/*" element={<CompanyRoutes />} />
       </Routes>
     </>
   );

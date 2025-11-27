@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
 }
 
-export default function ProtectRoute({ children }: Props) {
+export default function ProtectRouteUser({ children }: Props) {
   const accessToken = useSelector((state: any) => state?.userAuth.accessToken);
   const authLoaded = useSelector((state: any) => state?.userAuth.authLoaded);
   if (!authLoaded) {
@@ -16,7 +16,7 @@ export default function ProtectRoute({ children }: Props) {
   }
   return children;
 }
-export function Islogged({ children }: Props) {
+export function IsloggedUser({ children }: Props) {
   const accessToken = useSelector((state: any) => state?.userAuth.accessToken);
   const authLoaded = useSelector((state: any) => state?.userAuth.authLoaded);
   if (!authLoaded) {

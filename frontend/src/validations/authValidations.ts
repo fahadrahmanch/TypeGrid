@@ -17,7 +17,10 @@ export function passwordValidation(password: string) {
   return "";
 }
 
-export function confirmPasswordValidation(password: string, confirmPassword: string) {
+export function confirmPasswordValidation(
+  password: string,
+  confirmPassword: string,
+) {
   if (!confirmPassword.trim()) return "Confirm Password is required";
   if (password !== confirmPassword) return "Passwords do not match";
   return "";

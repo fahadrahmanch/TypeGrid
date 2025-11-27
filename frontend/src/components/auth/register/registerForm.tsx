@@ -4,13 +4,28 @@ import lines from "../../../assets/images/auth/login/lines.png";
 import { signup } from "../../../api/auth/authServices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { nameValidation, emailValidation, passwordValidation, confirmPasswordValidation } from "../../../validations/authValidations";
+import {
+  nameValidation,
+  emailValidation,
+  passwordValidation,
+  confirmPasswordValidation,
+} from "../../../validations/authValidations";
 import { GoogleLogin } from "@react-oauth/google";
 import { useGoogleAuth } from "../../../hooks/useGoogleAuth";
 
 const Register: React.FC = () => {
-  const [values, setValues] = useState({ name: "", email: "", password: "", confirmPassword: "" });
-  const [error, setError] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const navigate = useNavigate();
   const { handleGoogleSuccess, handleGoogleError } = useGoogleAuth();
   const handleSubmit = async (e: any) => {
@@ -18,7 +33,10 @@ const Register: React.FC = () => {
     const nameErr = nameValidation(values.name);
     const emailErr = emailValidation(values.email);
     const passErr = passwordValidation(values.password);
-    const confirmErr = confirmPasswordValidation(values.password, values.confirmPassword);
+    const confirmErr = confirmPasswordValidation(
+      values.password,
+      values.confirmPassword,
+    );
 
     setError({
       name: nameErr,
@@ -31,11 +49,18 @@ const Register: React.FC = () => {
 
     try {
       const response = await signup(values);
-      navigate("/otp", { state: { name: values.name, email: values.email, password: values.password } });
+      navigate("/otp", {
+        state: {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        },
+      });
       toast.success(response.data.message);
-    }
-    catch (error: any) {
-      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.message ||
+        "Something went wrong. Please try again.";
       toast.error(msg);
     }
   };
@@ -64,15 +89,13 @@ const Register: React.FC = () => {
       {/* Container */}
       <div className="h-screen flex justify-center items-center flex-1 w-full relative  sm:w-4/4 md:w-full lg:w-full  ">
         <div className="w-36 mt-[2rem] hidden sm:block">
-          <img
-            src={lines}
-            alt="draw"
-            className="w-64 mb-10  "
-          />
+          <img src={lines} alt="draw" className="w-64 mb-10  " />
         </div>
         {/* Signup Box */}
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center">Sign up</h2>
+          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center">
+            Sign up
+          </h2>
 
           {/* Google Button */}
           <GoogleLogin
@@ -120,7 +143,9 @@ const Register: React.FC = () => {
               onChange={handleChange}
               className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
-            <p className="text-left text-red-500 text-sm">{error.confirmPassword}</p>
+            <p className="text-left text-red-500 text-sm">
+              {error.confirmPassword}
+            </p>
             <button
               type="submit"
               onClick={handleSubmit}
@@ -132,22 +157,19 @@ const Register: React.FC = () => {
 
           <p className="text-center text-gray-600 text-sm mt-4">
             Already have an account?{" "}
-            <a href="/signin" className="text-gray-900 font-medium hover:underline">
+            <a
+              href="/signin"
+              className="text-gray-900 font-medium hover:underline"
+            >
               Log in
             </a>
           </p>
         </div>
         {/* Illustration */}
         <div className="w-36 mt-[2rem] hidden sm:block">
-          <img
-            src={kidImage}
-            alt="kid"
-            className="w-64"
-          />
+          <img src={kidImage} alt="kid" className="w-64" />
         </div>
-
       </div>
-
     </>
   );
 };

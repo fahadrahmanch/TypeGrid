@@ -1,9 +1,9 @@
 import AdminLoginForm from "../../components/auth/login/adminLoginForm";
 const AdminSignIn: React.FC = () => {
-    return (
-        <>
-            <AdminLoginForm />
-        </>
-    );
+  return (
+    <>
+      <AdminLoginForm />
+    </>
+  );
 };
 export default AdminSignIn;

@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Jaini&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Jaini&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 html {
-  overflow: hidden; 
+  overflow: hidden;
   /* width: 100%; */
 }
-body{
-  background-color: #FFF8EA;
+body {
+  background-color: #fff8ea;
   margin: 0;
   overflow: hidden;
   /* width: 100%; */

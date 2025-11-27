@@ -1,5 +1,4 @@
-import API from "../axios/userAPI";
-export async function getAllUsers(){
-    console.log("hello");
-    return API.get("/admin/users");
+import { adminAPI } from "../axios/adminAPI";
+export async function getAllUsers() {
+  return adminAPI.get("/users");
 }

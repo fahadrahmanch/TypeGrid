@@ -1,5 +1,4 @@
-import API from "../axios/userAPI";
+import { userAPI } from "../axios/userAPI";
 export async function CompanyDetailsApi(data: any) {
-    console.log("here",data);
-    return API.post("/subscription/company/verify", data);
+  return userAPI.post("/subscription/company/verify", data);
 }

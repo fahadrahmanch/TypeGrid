@@ -12,14 +12,14 @@ export default [
       ecmaVersion: "latest",
       sourceType: "module",
       parserOptions: {
-        ecmaFeatures: { jsx: true }
-      }
+        ecmaFeatures: { jsx: true },
+      },
     },
     plugins: {
       "@typescript-eslint": tsPlugin,
       react: reactPlugin,
       "react-hooks": reactHooks,
-      "jsx-a11y": jsxA11y
+      "jsx-a11y": jsxA11y,
     },
     rules: {
       semi: ["error", "always"],
@@ -34,7 +34,7 @@ export default [
       "react-hooks/exhaustive-deps": "warn",
 
       // TS rules
-      "@typescript-eslint/no-unused-vars": "warn"
-    }
-  }
+      "@typescript-eslint/no-unused-vars": "warn",
+    },
+  },
 ];

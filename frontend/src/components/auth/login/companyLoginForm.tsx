@@ -4,13 +4,16 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../../validations/authValidations";
-import { adminSigninApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { setAdminAccessToken } from "../../../store/slices/auth/adminAuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-const AdminLoginForm: React.FC = () => {
+import { companySignIn } from "../../../api/auth/authServices";
+import {
+//   setCompany,
+  setcompanyAccessToken,
+} from "../../../store/slices/auth/companyAuthSlice";
+const CompanyLoginForm: React.FC = () => {
   const [values, setValues] = useState({ email: "", password: "" });
   const [error, setError] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
@@ -40,20 +43,24 @@ const AdminLoginForm: React.FC = () => {
     if (emailErr || passErr) return;
 
     try {
-      const response: any = await adminSigninApi({
+      const response: any = await companySignIn({
         email: values.email,
         password: values.password,
-        role: "admin",
       });
       const accessToken = response?.data?.accessToken;
-      const admin = response?.data?.adminDeepCopy;
-      if (!accessToken || !admin) {
+      const user = response?.data?.UserDeepCopy;
+      if (!accessToken || !user) {
         throw new Error("Something went wrong. Please try again");
       }
-      dispatch(setAdminAccessToken({ admin, accessToken }));
-      navigate("/admin/users");
+      dispatch(setcompanyAccessToken({ user, accessToken }));
+      if (user.role == "companyUser") {
+        navigate("/company/user/dashboard");
+      } else if (user.role == "companyAdmin") {
+        navigate("/company/admin/dashboard");
+      }
       toast.success(response.data.message);
     } catch (error: any) {
+        console.log("error",error)
       const msg =
         error?.response?.data?.message ||
         "Something went wrong. Please try again.";
@@ -74,7 +81,7 @@ const AdminLoginForm: React.FC = () => {
         {/* SignIn Box */}
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
           <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">
-            Admin Login
+            Company Login
           </h2>
           <p className="text-sm pb-8">Sign in to your account to continue</p>
 
@@ -115,4 +122,4 @@ const AdminLoginForm: React.FC = () => {
     </>
   );
 };
-export default AdminLoginForm;
+export default CompanyLoginForm;

@@ -7,10 +7,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-       
-        jaini: ['Jaini', 'cursive'],
+        jaini: ["Jaini", "cursive"],
       },
     },
   },
   plugins: [],
-}
+};
