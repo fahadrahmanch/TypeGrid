@@ -113,6 +113,12 @@ const CompanyLoginForm: React.FC = () => {
               Sign In
             </button>
           </form>
+             <a
+              href="/company/forgot/password"
+              className="text-gray-900 font-sans  hover:underline"
+            >
+              forgot password
+            </a>
         </div>
         {/* Illustration */}
         <div className="w-38 ml-[-17px] mt-[6rem] hidden sm:block ">

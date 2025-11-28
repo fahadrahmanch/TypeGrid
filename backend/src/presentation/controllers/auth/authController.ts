@@ -23,10 +23,9 @@ export class authController {
         private _forgotPassword: IForgotPasswordUseCase,
         private _ForgotPasswordOtpVerify: IForgotPasswordOtpVerify,
         private _createNewPasswordUseCase: ICreateNewPasswordUseCase,
-        private _companyFindUseCase: IcompanyFindUseCase
+        private _companyFindUseCase: IcompanyFindUseCase,
     ) {
     }
-
     async register(req: Request, res: Response): Promise<any> {
         try {
             const { name, email, password } = req.body;
@@ -194,6 +193,7 @@ export class authController {
 
     async forgotPassword(req: Request, res: Response): Promise<void> {
         try {
+            const base = req.baseUrl;
             const { email } = req.body;
             if (!email) {
                 throw new Error("email is required");
@@ -202,6 +202,11 @@ export class authController {
             if (!user) {
                 throw new Error("No user found with this email");
             }
+
+            if (base.startsWith("/company")&& !['companyUser', 'companyAdmin'].includes(user.role)){
+               throw new Error("Access denied: Not a company account");
+            } 
+
             if (user?.googleId) {
                 throw new Error("This account is registered using Google Sign-In. Password reset is not applicable.");
             }
@@ -232,6 +237,7 @@ export class authController {
     async createNewPassword(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body;
+            console.log(email,password)
             await this._createNewPasswordUseCase.execute(email, password);
             res.status(200).json({
                 success: true,

@@ -1,4 +1,12 @@
+import { useEffect } from "react";
+
 const EditProfileDiv1: React.FC = () => {
+
+  useEffect(()=>{
+    
+  })
+ 
+
   return (
     <>
       <div className="min-h-screen  p-4 md:p-8 pt-24 flex flex-col items-center mt-12">

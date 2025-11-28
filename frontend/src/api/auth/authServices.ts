@@ -13,6 +13,7 @@ interface signInData {
 export async function signup(data: SignupData) {
   return userAPI.post("/auth/signup", data);
 }
+
 export async function verifyOtp(
   otp: string,
   name: string,
@@ -64,3 +65,16 @@ export async function companySignIn(data: any) {
 export async function companyRefreshAPI() {
   return companyAPI.post("/auth/refresh-token");
 }
+
+export async function companyForgotPasswordApi(email: string) {
+  return companyAPI.post("/auth/forgot/password", { email });
+}
+
+export async function companyForgotPasswordOtpVerifiction(otp: string, email: string) {
+  return companyAPI.post("/auth/forgot/password/verify/otp", { otp, email });
+}
+export async function companyCreateNewpasswordApi(email: string, password: string) {
+  return companyAPI.post("/auth/create/new/password", { email, password });
+}
+
+
