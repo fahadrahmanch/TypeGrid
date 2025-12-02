@@ -6,7 +6,8 @@ export interface InterfaceUser {
     imageUrl?: string;
     password?: string;
     bio?: string;
-    age?: number;
+    age?: string;
+    number?:string;
     CompanyId?: string | ObjectId;  
     CompanyRole?: string;
     KeyBoardLayout?: string;

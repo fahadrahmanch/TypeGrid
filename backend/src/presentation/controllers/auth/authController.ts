@@ -131,7 +131,7 @@ export class authController {
                 role = "user";
             }
             const token = req.cookies[tokenName];
-
+            console.log("token here",token)
             if (!token) throw new Error("No refresh token found");
             const decoded = await this._tokenServie.verifyRefreshToken(token);
             const user = await this._findUserByEmailUseCase.execute(decoded?.email);
@@ -148,7 +148,7 @@ export class authController {
             });
         }
         catch (error) {
-            logger.info(error);
+            console.log(error)
             res.status(400).json({
                 success: false,
                 message: "Refresh token expired or invalid",
@@ -168,7 +168,7 @@ export class authController {
                 throw new Error("something went wrong");
             }
 
-            res.cookie("refreshToken", refreshToken, {
+            res.cookie("refresh_user", refreshToken, {
                 httpOnly: true,
                 secure: true,
                 sameSite: "strict",
@@ -361,4 +361,6 @@ export class authController {
             });
         }
     }
+
+    
 }

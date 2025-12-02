@@ -15,8 +15,13 @@ password:{
 },
 imageUrl:{
     type:String,
-    // default: 'https://res.cloudinary.com/demo/image/upload/v1690000000/default-profile.jpg',
+    default: 'https://res.cloudinary.com/demo/image/upload/v1690000000/default-profile.jpg',
     required:false
+},
+number:{
+    type:String,
+    required:false,
+    default:null
 },
 CompanyId:{
     type: Schema.Types.ObjectId,
@@ -26,12 +31,23 @@ CompanyId:{
 },
 bio:{
     type:String,
-    required:false
+    required:false,
+    default:null,
+},
+age:{
+    type:String,
+    require:false,
+    default:null
 },
 CompanyRole:{
     type:String,
     required:false,
     default:null,
+},
+gender:{
+    type:String,
+    require:false,
+    default:null
 },
 KeyBoardLayout:{
     type:String,

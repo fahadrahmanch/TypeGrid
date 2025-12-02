@@ -5,12 +5,12 @@ export class companyRequestUseCase implements ICompanyRequestUseCase {
     constructor(
         private _baseRepository: IBaseRepository<any>
     ) { }
-    async execute(companyName: string, address: string, email: string, number: string): Promise<void> {
-
+    async execute(OwnerId:string,companyName: string, address: string, email: string, number: string): Promise<void> {
         const company = new companyEntity({
             companyName,
             address,
             email,
+            OwnerId,
             number,
             status: "pending",
         });

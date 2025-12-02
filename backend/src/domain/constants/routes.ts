@@ -18,10 +18,29 @@ export const Routes = {
   },
 
   ADMIN: {
+    //get
     GET_USERS: "/users",
+    GET_COMPANYS:'/company',
+
+    //post
+    APPROVE_COMPANY:'/approve/company',
+    REJECT_COMPANY:"/reject/company"
   },
 
   USERS: {
+    // GET 
+    getUserData:'/data',
+   
+    //Edit
+    updateUser:'/update',
+  
     verifyCompany: "/subscription/company/verify",
+
+    //get company status
+    GETCOMPANYSTATUS:'/subscription/company/status'
+  
+
   },
+
+
 };

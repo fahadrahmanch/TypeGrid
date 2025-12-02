@@ -16,10 +16,19 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   async findById(id: string): Promise<T | null> {
     return this.model.findById(id);
   }
-  async update(user: any): Promise<void> {
-    await this.model.updateOne(
-      { _id: user._id },
-      { $set: user }
+  async FindByEmail(email: string): Promise<T | null> {
+    const userDoc = await this.model.findOne({ email });
+    if (!userDoc) return null;
+    const obj = userDoc.toObject();
+    return obj;
+  }
+  async update(data: any): Promise<void> {
+    const { _id, ...updateFields } = data;
+
+    await this.model.findByIdAndUpdate(
+      _id,
+      { $set: updateFields },
+      { new: true }
     );
   }
 }

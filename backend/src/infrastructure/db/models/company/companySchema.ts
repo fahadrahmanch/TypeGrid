@@ -17,7 +17,7 @@ const companySchema = new Schema(
     OwnerId: {
       type: Schema.Types.ObjectId,
       ref: "User",   
-      required: true,
+      required: false,
     },
     description: {
       type: String,
@@ -33,7 +33,7 @@ const companySchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["active", "inactive"],
+      enum: ["active", "inactive","pending","reject"],
       default: "active",
     },
   },
