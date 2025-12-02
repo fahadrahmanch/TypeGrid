@@ -1,4 +1,21 @@
+import { useEffect, useState } from "react";
+import { getCompanyStatus } from "../../../api/user/userService";
+
 const CompanyVerificationStatusDiv1: React.FC = () => {
+  const [company,setCompany]=useState()
+  useEffect(()=>{
+    async function fetchCompanyDetails(){
+      try{
+        const response=await getCompanyStatus() 
+        console.log(response)
+
+      }catch(error){
+
+      }
+    
+    }
+    fetchCompanyDetails()
+  })
   return (
     <>
       <div className="min-h-screen mt-12 flex flex-col items-center pt-10 px-4">

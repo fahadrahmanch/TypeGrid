@@ -1,11 +1,97 @@
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { GetUserDataApi } from "../../../api/user/userService";
+import { UpdateUserDataApi } from "../../../api/user/userService";
+import { useRef } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 const EditProfileDiv1: React.FC = () => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    bio: "",
+    age: "",
+    number: "",
+    gender: "",
+    imageUrl: "",
+  });
 
-  useEffect(()=>{
-    
-  })
- 
+  useEffect(() => {
+    async function getUserData() {
+      const res = await GetUserDataApi();
+      if (res?.data) {
+        setUser({
+          name: res.data.name,
+          email: res.data.email,
+          bio: res.data.bio,
+          age: res.data.age,
+          number: res.data.number,
+          gender: res.data.gender || "",
+          imageUrl: res.data.imageUrl || "",
+        });
+      }
+    }
+    getUserData();
+  }, []);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const res = await UpdateUserDataApi(user);
+
+      if (res.data.success) {
+        toast.success("Profile updated successfully! ");
+      } else {
+        toast.error(res.data.message || "Update failed!");
+      }
+
+    } catch (error: any) {
+      console.log("Error:", error);
+      toast.error(error.response?.data?.message || "Something went wrong!");
+    }
+  };
+
+  const handleChange = async (e: any) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [e.target.name]: e.target.value });
+    // if (name === "email") {
+    //   setError({ ...error, email: emailValidation(value) });
+    // }
+    // if (name === "password") {
+    //   setError({ ...error, password: passwordValidation(value) });
+    // }
+  };
+  const handleImageChange = async (e: any) => {
+    const file = e.target.files?.[0];
+    console.log("file", file);
+    if (!file) return;
+    let imageUrl = user?.imageUrl;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "UMS-MERN");
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dbo7vvi5z/image/upload",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: false,
+        }
+      );
+      const data = res.data;
+      imageUrl = data.secure_url;
+      setUser((prev: any) => ({
+        ...prev,
+        imageUrl,
+      }));
+    } catch (err) {
+      console.log("fail uploading error", err);
+    }
+  };
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
 
   return (
     <>
@@ -25,10 +111,29 @@ const EditProfileDiv1: React.FC = () => {
                 </h2>
 
                 <div className="relative mb-6">
-                  <div className="w-32 h-32 rounded-full border-4 border-[#F0E4D4] bg-[#FFEFE5]"></div>
+                  <img
+                    src={
+                      user.imageUrl
+                        ? user.imageUrl
+                        : "https://via.placeholder.com/150"
+                    }
+                    alt="Profile"
+                    className="w-32 h-32 rounded-full border-4 border-[#F0E4D4] object-cover"
+                  />
                 </div>
 
-                <button className="flex items-center gap-2 px-4 py-2 border border-[#D1C4B6] rounded-lg text-[#6B6B6B] font-medium hover:bg-[#EDE4D6] transition bg-transparent">
+                <button
+                  className="flex items-center gap-2 px-4 py-2 border border-[#D1C4B6] rounded-lg text-[#6B6B6B] font-medium hover:bg-[#EDE4D6] transition bg-transparent"
+                  onClick={handleClick}
+                >
+                  <input
+                    name="image"
+                    type="file"
+                    className="mx-auto"
+                    ref={inputRef}
+                    onChange={handleImageChange}
+                    hidden
+                  ></input>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -111,20 +216,44 @@ const EditProfileDiv1: React.FC = () => {
                     </label>
                     <input
                       type="text"
-                      defaultValue="Alex Johnson"
+                      name="name"
+                      onChange={handleChange}
+                      defaultValue={user?.name}
                       className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">
+                      Number
+                    </label>
+                    <input
+                      type="number"
+                      name="number"
+                      onChange={handleChange}
+                      defaultValue={user?.number}
+                      className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
+                    />
+                  </div>
+                  {/* <div>
+                    <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">
                       Email Address
                     </label>
                     <input
                       type="email"
-                      defaultValue="alex.johnson@email.com"
+                      defaultValue={user?.email}
                       className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
                     />
-                  </div>
+                  </div> */}
+                  {/* <div>
+                    <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      defaultValue={user?.email}
+                      className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
+                    />
+                  </div> */}
                 </div>
 
                 {/* Row 2: Bio */}
@@ -134,7 +263,9 @@ const EditProfileDiv1: React.FC = () => {
                   </label>
                   <textarea
                     rows={3}
-                    defaultValue="Passionate typist working to improve speed and accuracy. Love competing in typing challenges!"
+                    name="bio"
+                    onChange={handleChange}
+                    defaultValue={user?.bio ? user?.bio : "Add bio"}
                     className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none resize-none"
                   ></textarea>
                 </div>
@@ -147,7 +278,9 @@ const EditProfileDiv1: React.FC = () => {
                     </label>
                     <input
                       type="number"
-                      defaultValue="18"
+                      name="age"
+                      onChange={handleChange}
+                      value={user?.age}
                       className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
                     />
                   </div>
@@ -155,19 +288,25 @@ const EditProfileDiv1: React.FC = () => {
                     <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">
                       Gender
                     </label>
-                    <select className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none appearance-none">
-                      <option>Male</option>
-                      <option>Female</option>
-                      <option>Other</option>
+                    <select
+                      name="gender"
+                      className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none appearance-none"
+                      value={user.gender}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Change Password Button */}
                 <div className="pt-2 flex justify-end">
-                  <button className="w-full md:w-auto px-6 py-3 bg-[#FFFBF2] border border-transparent hover:border-[#D1C4B6] rounded-lg text-gray-700 font-medium transition">
+                  {/* <button className="w-full md:w-auto px-6 py-3 bg-[#FFFBF2] border border-transparent hover:border-[#D1C4B6] rounded-lg text-gray-700 font-medium transition">
                     Change password
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -175,7 +314,10 @@ const EditProfileDiv1: React.FC = () => {
 
           {/* BOTTOM ACTION BUTTONS */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-12 pb-10">
-            <button className="flex items-center gap-2 px-8 py-3 bg-[#96705B] rounded-lg text-white font-semibold hover:bg-[#7D5A46] shadow-md transition w-full md:w-auto justify-center">
+            <button
+              onClick={handleSubmit}
+              className="flex items-center gap-2 px-8 py-3 bg-[#96705B] rounded-lg text-white font-semibold hover:bg-[#7D5A46] shadow-md transition w-full md:w-auto justify-center"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

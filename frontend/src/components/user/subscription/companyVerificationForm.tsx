@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { CompanyDetailsApi } from "../../../api/user/userService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 const CompanyVerificationFormDiv: React.FC = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     companyName: "",
     address: "",
     contactNumber: "",
     email: "",
+    number:""
   });
   function handleChange(e: any) {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -14,6 +19,11 @@ const CompanyVerificationFormDiv: React.FC = () => {
     e.preventDefault();
     try {
       const response = await CompanyDetailsApi(values);
+
+    toast.success(response?.data?.message || "Company details submitted!");
+
+    
+    navigate("/subscription/company/verify/status");
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -82,7 +92,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
               </label>
               <input
                 type="tel"
-                name="contactNumber"
+                name="number"
                 onChange={handleChange}
                 placeholder="+1 (555) 123-4567"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"

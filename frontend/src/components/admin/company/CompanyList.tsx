@@ -1,8 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CompanyDetailsModal from "./CompanyDetailsModal";
+import { getAllcompanies } from "../../../api/admin/company";
 const CompanyList: React.FC = () => {
   const [status, setStatus] = useState("All");
   const [isOpen, setOpen] = useState(false);
+  const [company, setCompany] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState<any | null>(null);
+
+  useEffect(() => {
+    async function fetchCompanies() {
+      try {
+        const res = await getAllcompanies();
+        setCompany(res?.data?.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    }
+
+    fetchCompanies();
+  }, []);
   return (
     <>
       <div className="bg-[#FFF3DB] w-[85rem] ml-10 pl-10 pt-6 pb-6 rounded-md shadow-sm">
@@ -45,34 +61,47 @@ const CompanyList: React.FC = () => {
           </thead>
 
           <tbody className="bg-[#FCF8F0]">
-            <tr className="border-b text-start">
-              <td className="px-4 py-2">
-                <p className="font-medium">Fahad</p>
-                <p className="text-sm text-gray-600">fahad@example.com</p>
-              </td>
+            {company &&
+              company.map((item: any) => (
+                <tr key={item?._id} className="border-b text-start">
+                  <td className="px-4 py-2">
+                    <p className="font-medium">{item?.companyName}</p>
+                  </td>
+                  <td className="px-4 py-2">
+                    <p className="font-medium">{item?.email}</p>
+                  </td>
+                  <td className="px-4 py-2">
+                    <p className="font-medium">{item?.createdAt}</p>
+                  </td>
+                  <td className="px-4 py-2">
+                    <span
+                      className={`px-2 py-1 text-sm rounded ${
+                        item?.status === "pending"||item.status==='reject'
+                          ? "bg-red-100 text-red-700"
+                          : "bg-green-100 text-green-700"
+                      }`}
+                    >
+                      {item?.status}
+                    </span>
+                  </td>
 
-              <td className="px-4 py-2">
-                <span className="px-2 py-1 text-sm rounded bg-green-100 text-green-700">
-                  Active
-                </span>
-              </td>
-
-              <td className="px-4 py-2">—</td>
-
-              <td className="px-4 py-2">10</td>
-              <td className="px-4 py-2 flex items-center gap-2">
-                <button
-                  onClick={() => setOpen(true)}
-                  className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition"
-                >
-                  View Details
-                </button>
-              </td>
-            </tr>
+                  <td className="px-4 py-2 flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setSelectedCompany(item); 
+                        setOpen(true); 
+                      }}
+                      className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                    >
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
-      {isOpen && <CompanyDetailsModal setOpen={setOpen} />}
+      {isOpen && <CompanyDetailsModal setOpen={setOpen} company={selectedCompany} setCompany={setCompany} />}
     </>
   );
 };
