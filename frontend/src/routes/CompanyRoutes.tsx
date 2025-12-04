@@ -6,6 +6,7 @@ import { IsloggedCompany } from "../components/ProtectRoutes/protectRouteCompany
 import CompanyForgotPasswordPage from "../pages/auth/CompanyForgotPasswordPage";
 import OtpCompanyForgotPasswordPage from "../pages/auth/OtpCompanyForgotPasswordPage";
 import CompanyNewPasswordPage from "../pages/auth/companyNewPasswordPage";
+import CompanyUsers from "../pages/companyAdmin/companyUsers";
 export default function CompanyRoutes() {
   return (
     <Routes>
@@ -14,9 +15,9 @@ export default function CompanyRoutes() {
       <Route path="forgot/password" element={<IsloggedCompany><CompanyForgotPasswordPage /></IsloggedCompany>} />
       <Route path="forgot/password/otp" element={<IsloggedCompany><OtpCompanyForgotPasswordPage /></IsloggedCompany>} />
       <Route path="create/new/password" element={<IsloggedCompany><CompanyNewPasswordPage /></IsloggedCompany>} />
-
-
       <Route path="admin/dashboard" element={<ProtectRouteCompany><CompanyAdminDashboard /></ProtectRouteCompany>} />
+      <Route path="admin/users" element={<ProtectRouteCompany><CompanyUsers /></ProtectRouteCompany>} />
+
     </Routes>
   );
 }

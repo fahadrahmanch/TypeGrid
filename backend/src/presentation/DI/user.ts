@@ -8,11 +8,13 @@ import { findUserUseCase } from "../../application/use-cases/user/findUserUseCas
 import { User } from "../../infrastructure/db/models/userSchema";
 import { AuthUserEntity } from "../../domain/entities";
 import { updateUserUseCase } from "../../application/use-cases/user/updateUserUseCase";
-const baseRepo=new BaseRepository(Company);
-const CompanyRequestUseCase=new companyRequestUseCase(baseRepo);
-const tokenService=new TokenService()
+import { getCompanyUseCase } from "../../application/use-cases/user/getCompanyUseCase";
+const baseRepoCompany=new BaseRepository(Company);
 const baseRepoUser=new BaseRepository<AuthUserEntity>(User)
+const CompanyRequestUseCase=new companyRequestUseCase(baseRepoCompany,baseRepoUser);
+const tokenService=new TokenService()
 const FindUserUseCase=new findUserUseCase(baseRepoUser)
-export const injectCompanyRequestController=new companyRequestController(CompanyRequestUseCase,tokenService,FindUserUseCase);
+const GetCompanyUseCase=new getCompanyUseCase(baseRepoCompany)
+export const injectCompanyRequestController=new companyRequestController(CompanyRequestUseCase,tokenService,FindUserUseCase,GetCompanyUseCase);
 const UpdateUserUseCase=new updateUserUseCase(baseRepoUser)
 export const injectUserController =new userController(tokenService,FindUserUseCase,UpdateUserUseCase)

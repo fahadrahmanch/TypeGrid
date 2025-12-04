@@ -10,7 +10,7 @@ import { IFindUserByemailUseCase } from "../../../domain/interfaces/usecases/aut
 import { IForgotPasswordUseCase } from "../../../domain/interfaces/usecases/auth/IForgotPasswordUseCase";
 import { IForgotPasswordOtpVerify } from "../../../domain/interfaces/usecases/auth/IForgotPasswordOtpVerify";
 import { ICreateNewPasswordUseCase } from "../../../domain/interfaces/usecases/auth/ICreateNewPasswordUseCase";
-import { IcompanyFindUseCase } from "../../../domain/interfaces/usecases/company/ICompanyFindUseCase";
+import { IcompanyFindUseCase } from "../../../domain/interfaces/usecases/auth/ICompanyFindUseCase";
 export class authController {
     constructor(
         private _RegisterUser: IAuthUseCase,

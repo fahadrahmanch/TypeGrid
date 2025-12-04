@@ -3,7 +3,8 @@ import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBas
 import { companyEntity } from "../../../domain/entities/CompanyEntiriy";
 export class companyRequestUseCase implements ICompanyRequestUseCase {
     constructor(
-        private _baseRepository: IBaseRepository<any>
+        private _baseRepositoryCompany: IBaseRepository<any>,
+        private _baseRepositoryUser:IBaseRepository<any>
     ) { }
     async execute(OwnerId:string,companyName: string, address: string, email: string, number: string): Promise<void> {
         const company = new companyEntity({
@@ -14,8 +15,10 @@ export class companyRequestUseCase implements ICompanyRequestUseCase {
             number,
             status: "pending",
         });
-         await this._baseRepository.create(company);
-
+        const user=await this._baseRepositoryUser.findById(OwnerId)
+        const companyDoc= await this._baseRepositoryCompany.create(company);
+        user.CompanyId=companyDoc._id
+        await this._baseRepositoryUser.update(user) 
     }
 
 }

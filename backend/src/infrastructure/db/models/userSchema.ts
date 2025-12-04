@@ -66,7 +66,8 @@ googleId: {
 },
 role:{
     type:String,
-    required:false,
+    required:true,
+    default:'user'
 }
 
 }); 

@@ -1,5 +1,5 @@
 import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/usecases/admin/ICompanyApproveRejectUsecase";
-import { IGetCompanysUseCase } from "../../../domain/interfaces/usecases/company/IGetCompanysUseCase";
+import { IGetCompanysUseCase } from "../../../domain/interfaces/usecases/admin/IGetCompanysUseCase";
 import { Request, Response } from "express";
 export class companyManageController {
   constructor(
@@ -10,7 +10,6 @@ export class companyManageController {
   async getCompanys(req: Request, res: Response): Promise<void> {
     try {
       const companies = await this._getCompanysUseCase.execute();
-      console.log("companies", companies);
       res.status(200).json({
         success: true,
         message: "Companies fetched successfully",

@@ -15,6 +15,7 @@ export const Routes = {
 
     //admin
     ADMIN_SIGNIN: "/signin",
+
   },
 
   ADMIN: {
@@ -30,7 +31,7 @@ export const Routes = {
   USERS: {
     // GET 
     getUserData:'/data',
-   
+
     //Edit
     updateUser:'/update',
   
@@ -38,9 +39,13 @@ export const Routes = {
 
     //get company status
     GETCOMPANYSTATUS:'/subscription/company/status'
-  
-
+    
   },
 
+  COMPANY_ADMIN:{
+    //admin
+    ADD_USER:'/company-admin/add/user',
+    GET_COMPANY_USERS:'/company-admin/users'
+  }
 
 };

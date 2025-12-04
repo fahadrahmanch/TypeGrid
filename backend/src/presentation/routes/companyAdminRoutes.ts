@@ -1,0 +1,21 @@
+import express, { Request, Response } from "express";
+import { Routes } from "../../domain/constants/routes";
+import { injectCompanyUserController } from "../DI/CompanyAdmin";
+export class companyAdminRouter {
+  private router: express.Router;
+  constructor() {
+    this.router = express.Router();
+    this.initializeRoutes();
+  }
+  initializeRoutes() {
+    this.router.post(Routes.COMPANY_ADMIN.ADD_USER,(req:Request,res:Response)=>{
+        injectCompanyUserController.addUser(req,res)
+    })
+    this.router.get(Routes.COMPANY_ADMIN.GET_COMPANY_USERS,(req:Request,res:Response)=>{
+      injectCompanyUserController.getUsers(req,res)
+    })
+  }
+  getRouter() {
+    return this.router;
+  }
+}

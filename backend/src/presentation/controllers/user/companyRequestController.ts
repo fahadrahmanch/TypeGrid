@@ -2,15 +2,18 @@ import { Request, Response } from "express";
 import { ICompanyRequestUseCase } from "../../../domain/interfaces/user/ICompanyRequestUseCase";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
 import { IFindUserUseCase } from "../../../domain/interfaces/user/IFindUserUseCase";
+import { IGetCompanyUseCase } from "../../../domain/interfaces/user/IGetCompanyUseCase";
 export class companyRequestController {
   constructor(
     private _companyRequestUseCase: ICompanyRequestUseCase,
     private _tokenService: ITokenService,
-    private _findUserUseCase: IFindUserUseCase
+    private _findUserUseCase: IFindUserUseCase,
+    private _GetCompanyStatusUseCase: IGetCompanyUseCase
   ) {}
   async companyDetails(req: Request, res: Response): Promise<void> {
     try {
-      const token = req.cookies.refreshToken;
+      const token = req.cookies.refresh_user;
+      console.log("token companyDetails",token)
 
       if (!token) {
         throw new Error("Unauthorized - Token missing");
@@ -30,7 +33,6 @@ export class companyRequestController {
       const { companyName, address, email, number } = req.body;
 
       if (!companyName || !address || !email || !number) {
-        
         throw new Error("All fields are required");
       }
 
@@ -41,7 +43,6 @@ export class companyRequestController {
         email,
         number
       );
-
       res.status(201).json({
         success: true,
         message: "Company request submitted successfully",
@@ -57,9 +58,9 @@ export class companyRequestController {
     }
   }
 
-  async getCompanyStatus(req:Request,res:Response):Promise<void>{
-    try{
-     const token = req.cookies.refreshToken;
+  async getCompanyStatus(req: Request, res: Response): Promise<void> {
+    try {
+      const token = req.cookies.refreshToken;
       if (!token) {
         throw new Error("something went wrong");
       }
@@ -68,17 +69,20 @@ export class companyRequestController {
       if (!user) {
         throw new Error("something went wrong");
       }
-       if (!user.CompanyId) {
+      if (!user.CompanyId) {
         throw new Error("Access denied. Company not assigned to this user.");
       }
-      // const company=await this.
-      
-    }
-    catch(error:any){
-
+      const company = await this._GetCompanyStatusUseCase.execute(
+        user.CompanyId
+      );
+      res.status(200).json({
+        message: "Company status fetched successfully",
+        company,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        message: error.message || "Internal server error",
+      });
     }
   }
-  
- 
-
 }

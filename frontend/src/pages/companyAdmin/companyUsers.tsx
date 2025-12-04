@@ -1,10 +1,12 @@
+
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
-const CompanyAdminDashboard: React.FC = () => {
+import UsersTable from "../../components/companyAdmin/users/users";
+const CompanyUsers: React.FC = () => {
   return (
     <>
     <CompanyAdminSidebar/>
-      <h1>Dashboar</h1>
+    <UsersTable/>
     </>
   );
 };
-export default CompanyAdminDashboard;
+export default CompanyUsers;

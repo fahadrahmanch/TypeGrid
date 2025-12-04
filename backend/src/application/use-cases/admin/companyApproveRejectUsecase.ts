@@ -13,8 +13,9 @@ export class companyApproveRejectUsecase
     if (!company) {
       throw new Error("Company does not exist or has been removed.");
     }
-    const ownerId=company.ownerId
-    const user=await this._baseRepositoryUser.findById(ownerId)
+    const OwnerId=company.OwnerId
+    
+    const user=await this._baseRepositoryUser.findById(OwnerId)
     user.role='companyAdmin'
     company.status = "active";
     await this._baseRepositoryUser.update(user)

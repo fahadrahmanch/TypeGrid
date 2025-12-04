@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { ReactNode } from "react";
+
 interface Props {
   children: ReactNode;
 }
@@ -11,6 +12,7 @@ export default function ProtectRouteAdmin({ children }: Props) {
   if (!authLoaded) {
     return <div>Loading...</div>;
   }
+
   if (!accessToken) {
     return <Navigate to="/admin/signin" replace />;
   }
