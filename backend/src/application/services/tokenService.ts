@@ -24,6 +24,7 @@ export class TokenService implements ITokenService {
         );
     }
     async verifyAccessToken(token: string) {
+        console.log("token in verify",token)
         return jwt.verify(token, this.accessSecret);
     }
     async verifyRefreshToken(token: string) {

@@ -7,8 +7,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   constructor(model: Model<T>) {
     this.model = model;
   }
-  async find(): Promise<T[]> {
-    return this.model.find().lean<T[]>().exec();
+  async find(filter: any = {}): Promise<T[]> {
+    return this.model.find(filter).lean<T[]>().exec();
   }
   async create(data: Partial<T>): Promise<T> {
     return this.model.create(data);
@@ -31,4 +31,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
       { new: true }
     );
   }
+  async delete(_id:string):Promise<T|null>{
+    return this.model.findByIdAndDelete(_id)
+  }
+
 }

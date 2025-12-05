@@ -23,6 +23,12 @@ export class companyAuthRouter {
     this.router.post(Routes.AUTH.CREATE_NEW_PASSWORD,(req: Request, res: Response) => {
         injectAuthController.createNewPassword(req, res);
     });
+      this.router.post(
+          Routes.AUTH.REFRESH_TOKEN,
+          (req: Request, res: Response) => {
+            injectAuthController.refreshToken(req, res);
+          }
+        );
   }
   getRouter() {
     return this.router;

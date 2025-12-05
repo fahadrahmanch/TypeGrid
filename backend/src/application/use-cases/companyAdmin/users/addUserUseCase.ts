@@ -4,12 +4,13 @@ import { User } from "../../../../infrastructure/db/models/userSchema";
 import { AuthUserEntity } from "../../../../domain/entities";
 import { IHashService } from "../../../../domain/interfaces/services/IHashService";
 
+
 export class addUserUseCase implements IAddUserUseCase{
     constructor(
         private _baseRepository:IBaseRepository<any>,
         private _hashService:IHashService,
     ){}
-    async addUser(data:any):Promise<void>{
+    async addUser(data:any):Promise<AuthUserEntity>{
      const exists = await this._baseRepository.FindByEmail(data.email);
         if (exists) {
             throw new Error("User already exists with this email");
@@ -24,6 +25,6 @@ export class addUserUseCase implements IAddUserUseCase{
           KeyBoardLayout: "QWERTY",
           status: "active",
         });
-        await this._baseRepository.create(newUser);
+        return  await this._baseRepository.create(newUser);
     }
 }

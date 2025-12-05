@@ -21,6 +21,9 @@ export class adminRouter {
     this.router.post(Routes.ADMIN.REJECT_COMPANY,(req:Request,res:Response)=>{
       injectCompanyManageController.reject(req,res)
     })
+    this.router.post(Routes.ADMIN.BLOCK_USER,(req:Request,res:Response)=>{
+      injectUserManageController.blockUser(req,res)
+    })
     
   }
   getRouter() {

@@ -8,18 +8,19 @@ export class adminAuthRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.post(
-      Routes.AUTH.ADMIN_SIGNIN,
-      (req: Request, res: Response) => {
+    this.router.post(Routes.AUTH.ADMIN_SIGNIN,(req: Request, res: Response) => {
         injectAuthController.AdminSignIn(req, res);
       }
     );
-    this.router.post(
-      Routes.AUTH.REFRESH_TOKEN,
-      (req: Request, res: Response) => {
+    this.router.post(Routes.AUTH.REFRESH_TOKEN,(req: Request, res: Response) => {
         injectAuthController.refreshToken(req, res);
       }
     );
+    this.router.post(Routes.AUTH.REFRESH_TOKEN,(req: Request, res: Response) => {
+            injectAuthController.refreshToken(req, res);
+          }
+    );
+   
   }
   getRouter() {
     return this.router;

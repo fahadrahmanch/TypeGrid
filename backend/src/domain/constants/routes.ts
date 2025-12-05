@@ -25,7 +25,10 @@ export const Routes = {
 
     //post
     APPROVE_COMPANY:'/approve/company',
-    REJECT_COMPANY:"/reject/company"
+    REJECT_COMPANY:"/reject/company",
+
+    //patch
+    BLOCK_USER:"/block/user"
   },
 
   USERS: {
@@ -45,7 +48,10 @@ export const Routes = {
   COMPANY_ADMIN:{
     //admin
     ADD_USER:'/company-admin/add/user',
-    GET_COMPANY_USERS:'/company-admin/users'
+    GET_COMPANY_USERS:'/company-admin/users',
+
+    //delete
+    DELETE_COMPANY_USER:'/company-admin/delete'
   }
 
 };

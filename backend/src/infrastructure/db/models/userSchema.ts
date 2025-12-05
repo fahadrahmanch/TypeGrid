@@ -57,7 +57,7 @@ KeyBoardLayout:{
 status:{
     type:String,
     required:false,
-    default:"Active"
+    default:"active"
 },
 googleId: {
     type: String,

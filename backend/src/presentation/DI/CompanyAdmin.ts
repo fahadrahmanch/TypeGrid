@@ -5,9 +5,17 @@ import { BaseRepository } from "../../infrastructure/db/base/BaseRepository";
 import { HashService } from "../../application/services/hashService";
 import { TokenService } from "../../application/services/tokenService";
 import { findUserUseCase } from "../../application/use-cases/user/findUserUseCase";
+import { getCompanyUsersUseCase } from "../../application/use-cases/companyAdmin/users/getCompanyUsersUseCase";
+import { Company } from "../../infrastructure/db/models/company/companySchema";
+import { deleteCompanyUserUseCase } from "../../application/use-cases/companyAdmin/users/deleteUserUseCase";
+getCompanyUsersUseCase
 const baseRepoUser=new BaseRepository(User)
+// const baseRepeCompany =new BaseRepository(Company)
 const tokenService=new TokenService()
 const hashService = new HashService();
 const FindUserUseCase=new findUserUseCase(baseRepoUser)
 const AddUserUseCase=new addUserUseCase(baseRepoUser,hashService)
-export const injectCompanyUserController=new CompanyUserController(AddUserUseCase,tokenService,FindUserUseCase)
+const GetCompanyUsersUseCase=new getCompanyUsersUseCase(baseRepoUser)
+const DeleteCompanyUserUseCase=new deleteCompanyUserUseCase(baseRepoUser)
+
+export const injectCompanyUserController=new CompanyUserController(AddUserUseCase,tokenService,FindUserUseCase,GetCompanyUsersUseCase,DeleteCompanyUserUseCase)
