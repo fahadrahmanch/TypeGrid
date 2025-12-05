@@ -2,21 +2,40 @@ import { useState } from "react";
 import { CompanyDetailsApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { nameValidation,emailValidation,addressValidation,numberValidation } from "../../../validations/companyRequestFormValidations";
 const CompanyVerificationFormDiv: React.FC = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     companyName: "",
     address: "",
-    contactNumber: "",
     email: "",
     number:""
+  });
+
+    const [error, setError] = useState({
+    companyName: "",
+    email: "",
+    number: "",
+    address: "",
   });
   function handleChange(e: any) {
     setValues({ ...values, [e.target.name]: e.target.value });
   }
   async function handleSubmit(e: any) {
     e.preventDefault();
+        const nameErr = nameValidation(values.companyName);
+        const emailErr = emailValidation(values.email);
+        const addressErr = addressValidation(values.address);
+        const numberErr = numberValidation(values.number)
+    
+        setError({
+          companyName: nameErr,
+          email: emailErr,
+          address: addressErr,
+          number: numberErr,
+        });
+    
+        if (nameErr || emailErr || addressErr || numberErr) return;
     try {
       const response = await CompanyDetailsApi(values);
 
@@ -57,6 +76,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
                 placeholder="Your company name"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
               />
+              <p className="text-left text-red-500 text-sm">{error.companyName}</p>
             </div>
             {/* Address */}
             <div>
@@ -70,6 +90,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
                 placeholder="Street address, city, state, zip"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
               />
+              <p className="text-left text-red-500 text-sm">{error.address}</p>
             </div>
 
             {/* Contact Email */}
@@ -84,6 +105,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
                 placeholder="email@company.com"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
               />
+              <p className="text-left text-red-500 text-sm">{error.email}</p>
             </div>
             {/* Contact Phone */}
             <div>
@@ -97,6 +119,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
                 placeholder="+1 (555) 123-4567"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
               />
+              <p className="text-left text-red-500 text-sm">{error.number}</p>
             </div>
             {/* Submit Button */}
             <div className="pt-4">

@@ -1,17 +1,16 @@
 
 import {nameValidation,emailValidation,passwordValidation,} from "../../../validations/authValidations";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { companyAddUser } from "../../../api/companyAdmin/companyAdminService";
 interface AddUserProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setUsers:any
 }
 
-const AddUser:React.FC<AddUserProps>=({setOpen})=>{
+const AddUser:React.FC<AddUserProps>=({setOpen,setUsers})=>{
       const [values, setValues] = useState({ name:"",email: "", password: "TypeGrid123@@@" });
       const [error, setError] = useState({name:"", email: "", password: "" });
-      const navigate = useNavigate();
         const handleChange = async (e: any) => {
           const { name, value } = e.target;
           setValues({ ...values, [e.target.name]: e.target.value });
@@ -46,14 +45,9 @@ const AddUser:React.FC<AddUserProps>=({setOpen})=>{
                 password: values.password,
                 role: "companyUser",
               });
-        
-            //   const accessToken = response?.data?.accessToken;
-            //   const user = response?.data?.UserDeepCopy;
-            //   if (!accessToken || !user) {
-            //     throw new Error("Something went wrong. Please try again");
-            //   }
-            //   dispatch(setuserAccessToken({ user, accessToken }));
-            //   navigate("/");
+              console.log(response.data.data)
+              setUsers((prev:any[]) => [...prev, response.data.data]);
+              setOpen(false)
               toast.success(response.data.message);
             } catch (error: any) {
               const msg =

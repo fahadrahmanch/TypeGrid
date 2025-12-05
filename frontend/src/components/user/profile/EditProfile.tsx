@@ -4,8 +4,21 @@ import { UpdateUserDataApi } from "../../../api/user/userService";
 import { useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {
+  nameValidation,
+  numberValidation,
+  bioValidation,
+  ageValidation,
+} from "../../../validations/profilevalidations";
 const EditProfileDiv1: React.FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [error, setError] = useState({
+    name: "",
+    bio: "",
+    number: "",
+    age: "",
+  });
+
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -36,6 +49,20 @@ const EditProfileDiv1: React.FC = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const nameErr = nameValidation(user.name);
+    const numberErr = numberValidation(user.number);
+    const ageErr = ageValidation(user.age);
+    const bioErr = bioValidation(user.bio);
+
+    setError({
+      name: nameErr,
+      number: numberErr,
+      age: ageErr,
+      bio: bioErr,
+    });
+
+    if (nameErr || numberErr || ageErr || bioErr) return;
+
     try {
       const res = await UpdateUserDataApi(user);
 
@@ -44,7 +71,6 @@ const EditProfileDiv1: React.FC = () => {
       } else {
         toast.error(res.data.message || "Update failed!");
       }
-
     } catch (error: any) {
       console.log("Error:", error);
       toast.error(error.response?.data?.message || "Something went wrong!");
@@ -54,12 +80,18 @@ const EditProfileDiv1: React.FC = () => {
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
     setUser({ ...user, [e.target.name]: e.target.value });
-    // if (name === "email") {
-    //   setError({ ...error, email: emailValidation(value) });
-    // }
-    // if (name === "password") {
-    //   setError({ ...error, password: passwordValidation(value) });
-    // }
+    if (name === "name") {
+      setError({ ...error, name: nameValidation(value) });
+    }
+    if (name === "number") {
+      setError({ ...error, number: numberValidation(value) });
+    }
+    if (name === "age") {
+      setError({ ...error, age: ageValidation(value) });
+    }
+    if (name === "bio") {
+      setError({ ...error, bio: bioValidation(value) });
+    }
   };
   const handleImageChange = async (e: any) => {
     const file = e.target.files?.[0];
@@ -221,6 +253,9 @@ const EditProfileDiv1: React.FC = () => {
                       defaultValue={user?.name}
                       className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
                     />
+                    <p className="text-left text-red-500 text-sm">
+                      {error.name}
+                    </p>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">
@@ -233,6 +268,9 @@ const EditProfileDiv1: React.FC = () => {
                       defaultValue={user?.number}
                       className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
                     />
+                    <p className="text-left text-red-500 text-sm">
+                      {error.number}
+                    </p>
                   </div>
                   {/* <div>
                     <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">
@@ -268,6 +306,7 @@ const EditProfileDiv1: React.FC = () => {
                     defaultValue={user?.bio ? user?.bio : "Add bio"}
                     className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none resize-none"
                   ></textarea>
+                  <p className="text-left text-red-500 text-sm">{error.bio}</p>
                 </div>
 
                 {/* Row 3: Age & Gender */}
@@ -283,6 +322,9 @@ const EditProfileDiv1: React.FC = () => {
                       value={user?.age}
                       className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none"
                     />
+                    <p className="text-left text-red-500 text-sm">
+                      {error.age}
+                    </p>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-600 mb-2 text-start">

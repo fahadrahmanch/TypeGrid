@@ -4,14 +4,17 @@ import { getAllcompanies } from "../../../api/admin/company";
 const CompanyList: React.FC = () => {
   const [status, setStatus] = useState("All");
   const [isOpen, setOpen] = useState(false);
-  const [company, setCompany] = useState([]);
+  const [company, setCompany] = useState<any[]>([]);
+  const [filterCompany,setFilterCompany]=useState<any[]>([])
   const [selectedCompany, setSelectedCompany] = useState<any | null>(null);
+  const [searchText,setSearchText]=useState('')
 
   useEffect(() => {
     async function fetchCompanies() {
       try {
         const res = await getAllcompanies();
         setCompany(res?.data?.data);
+        setFilterCompany(res?.data?.data)
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -19,6 +22,31 @@ const CompanyList: React.FC = () => {
 
     fetchCompanies();
   }, []);
+  
+  useEffect(() => {
+  let filtered = [...company];
+
+ if (searchText.trim()) {
+  const lower = searchText.toLowerCase();
+  filtered = filtered.filter(u =>
+    u.companyName.toLowerCase().startsWith(lower) ||
+    u.email.toLowerCase().startsWith(lower)
+  );
+}
+  if (status !== "All") {
+    filtered = filtered.filter((u)=>{
+      if(status==='Accepted'){
+        return u.status=='active'
+      }else if(status==="Pending"){
+        return u.status=='pending'
+      }else if(status=='Rejected'){
+        return u.status==='reject'
+      }
+    });
+  }
+
+  setFilterCompany(filtered);
+}, [searchText, status, company]);
   return (
     <>
       <div className="bg-[#FFF3DB] w-[85rem] ml-10 pl-10 pt-6 pb-6 rounded-md shadow-sm">
@@ -34,6 +62,8 @@ const CompanyList: React.FC = () => {
                  focus:ring-2 focus:ring-[#B99F8D] focus:ring-offset-1
                  transition-all duration-200"
             placeholder="Search users by name or email"
+            value={searchText}
+            onChange={(e)=>setSearchText(e.target.value)}
           />
           <select
             value={status}
@@ -61,8 +91,8 @@ const CompanyList: React.FC = () => {
           </thead>
 
           <tbody className="bg-[#FCF8F0]">
-            {company &&
-              company.map((item: any) => (
+            {filterCompany &&
+              filterCompany.map((item: any) => (
                 <tr key={item?._id} className="border-b text-start">
                   <td className="px-4 py-2">
                     <p className="font-medium">{item?.companyName}</p>

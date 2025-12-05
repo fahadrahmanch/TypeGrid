@@ -25,11 +25,6 @@ userAPI.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(error);
     }
-    // if (error.config?.url.includes("/refresh-token")) {
-    //      .log("logout immediatly")
-    //     store.dispatch(logout());
-    //     return Promise.reject(error);
-    // }
     if (error.response?.status == 401 && !orginalRequest._retry) {
       orginalRequest._retry = true;
       try {

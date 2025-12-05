@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { getAllUsers } from "../../../api/admin/users";
+import { blockUser } from "../../../api/admin/users";
 const UserList: React.FC = () => {
   const [status, setStatus] = useState("All");
-  const [users, setUsers] = useState([]);
-
+  const [users, setUsers] = useState<any[]>([]);
+  const [filterUsers,setFilterUsers]=useState<any[]>([])
+  const [searchText,setSearchText]=useState("")
   useEffect(() => {
     async function fetchUsers() {
       try {
         const res = await getAllUsers();
         setUsers(res?.data?.data);
+        setFilterUsers(res?.data?.data)
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -16,6 +19,35 @@ const UserList: React.FC = () => {
 
     fetchUsers();
   }, []);
+  useEffect(() => {
+  let filtered = [...users];
+
+ if (searchText.trim()) {
+  const lower = searchText.toLowerCase();
+  filtered = filtered.filter(u =>
+    u.name.toLowerCase().startsWith(lower) ||
+    u.email.toLowerCase().startsWith(lower)
+  );
+}
+  if (status !== "All") {
+    filtered = filtered.filter(u =>
+      status === "Active"
+        ? u.status === "active"
+        : u.status === "block"
+    );
+  }
+
+  setFilterUsers(filtered);
+}, [searchText, status, users]);
+
+  async function handleBlock(userId:string){
+    const res=await blockUser(userId)
+    
+  if (res.data.success) {
+    setUsers(prev =>prev.map(u =>u._id ===userId?{ ...u, status: u.status === "active" ? "blocked" : "active" }: u));
+  }
+  }
+
   return (
     <>
       <div className="bg-[#FFF3DB] w-[85rem] ml-10 pl-10 pt-6 pb-6 rounded-md shadow-sm">
@@ -32,6 +64,9 @@ const UserList: React.FC = () => {
                  focus:ring-2 focus:ring-[#B99F8D] focus:ring-offset-1
                  transition-all duration-200"
             placeholder="Search users by name or email"
+             value={searchText}
+             onChange={(e) => setSearchText(e.target.value)}
+
           />
 
           <select
@@ -61,17 +96,22 @@ const UserList: React.FC = () => {
           </thead>
 
           <tbody className="bg-[#FCF8F0]">
-            {users &&
-              users?.map((user: any) => (
+            {filterUsers &&
+              filterUsers?.map((user: any) => (
                 <tr key={user._id} className="border-b text-start">
                   <td className="px-4 py-2">
                     <p className="font-medium">{user?.name}</p>
                     <p className="text-sm text-gray-600">{user?.email}</p>
                   </td>
-
                   <td className="px-4 py-2">
-                    <span className="px-2 py-1 text-sm rounded bg-green-100 text-green-700">
-                      {user?.status}
+                    <span
+                      className={`px-2 py-1 text-sm rounded font-semibold ${
+                        user?.status === "active"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {user?.status === "active" ? "Active" : "Blocked"}
                     </span>
                   </td>
 
@@ -82,11 +122,18 @@ const UserList: React.FC = () => {
                   <td className="px-4 py-2">-</td>
 
                   <td className="px-4 py-2 flex items-center gap-2">
-                    <button className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition">
+                    {/* <button className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition">
                       View
-                    </button>
-                    <button className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition">
-                      Block
+                    </button> */}
+                    <button
+                      onClick={() => handleBlock(user._id)}
+                      className={`px-3 py-1 text-sm rounded transition ${
+                        user?.status === "active"
+                          ? "bg-red-500 text-white hover:bg-red-600" // Show red Block button
+                          : "bg-green-500 text-white hover:bg-green-600" // Show green Unblock button
+                      }`}
+                    >
+                      {user?.status === "active" ? "Block" : "Unblock"}
                     </button>
                   </td>
                 </tr>

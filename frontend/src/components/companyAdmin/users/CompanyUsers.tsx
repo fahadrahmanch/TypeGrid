@@ -1,40 +1,45 @@
 import { useEffect, useState } from "react";
 import AddUser from "./addUser";
+import { Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
+import { deleteCompanyUser, fetchCompanyUsers } from "../../../api/companyAdmin/companyAdminService";
 const UsersTable: React.FC = () => {
+  const [users, setUsers] = useState<any[]>([]);
   const [isOpen, setOpen] = useState(false);
-  useEffect(()=>{
-   async function fetchUsers(){
-  //  const res=await r 
-   }
-   fetchUsers()
-  },[])
+  useEffect(() => {
+  async function fetchUsers() {
+    try {
+      const res = await fetchCompanyUsers();
+      if (res?.data?.success) {
+        setUsers(res.data.data);
+      } else {
+        console.error("Failed to fetch company users:", res?.data?.message);
+      }
+    } catch (error) {
+      console.error("Error fetching company users:", error);
+    }
+  }
+  fetchUsers();
+}, []);
 
-  const teamMembers = [
-    {
-      id: 1,
-      name: "John Smith",
-      email: "john.smith@company.com",
-      joined: "2024-01-15",
-      wpm: "72 WPM",
-      accuracy: "94%",
-    },
-    {
-      id: 2,
-      name: "Sarah Johnson",
-      email: "sarah.j@company.com",
-      joined: "2024-01-20",
-      wpm: "85 WPM",
-      accuracy: "97%",
-    },
-    {
-      id: 3,
-      name: "Michael Brown",
-      email: "mbrown@company.com",
-      joined: "2024-02-01",
-      wpm: "68 WPM",
-      accuracy: "91%",
-    },
-  ];
+async function handleDelete(userID:string){
+  try{
+  const response = await deleteCompanyUser(userID);
+  console.log(response);
+  if(response.data.success){
+    setUsers(prev=>prev.filter((item)=>item._id!=userID))
+    toast.success(response.data.message);
+  }
+  }
+  catch(error:any){
+    console.log(error)
+      const msg =
+        error?.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      toast.error(msg);
+  }
+
+}
 
   return (
     <>
@@ -75,9 +80,9 @@ const UsersTable: React.FC = () => {
                 <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Email
                 </th>
-                <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                {/* <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Joined
-                </th>
+                </th> */}
                 <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Avg WPM
                 </th>
@@ -92,7 +97,7 @@ const UsersTable: React.FC = () => {
 
             {/* Table Body */}
             <tbody>
-              {teamMembers.map((member) => (
+              {users.map((member:any) => (
                 <tr
                   key={member.id}
                   className="group border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
@@ -112,11 +117,11 @@ const UsersTable: React.FC = () => {
                   </td>
 
                   {/* Joined Date */}
-                  <td className="py-6 px-4">
+                  {/* <td className="py-6 px-4">
                     <span className="text-gray-400 text-sm font-medium">
                       {member.joined}
                     </span>
-                  </td>
+                  </td> */}
 
                   {/* WPM */}
                   <td className="py-6 px-4">
@@ -134,8 +139,9 @@ const UsersTable: React.FC = () => {
 
                   {/* Actions (Delete Icon) */}
                   <td className="py-6 px-4 text-right">
-                    <button className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-all">
-                      <i className="fa-regular fa-trash-can text-lg"></i>
+                    <button  onClick={()=>handleDelete(member._id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-all">
+                     <Trash2 size={22} className="text-red-500 cursor-pointer" />
+
                     </button>
                   </td>
                 </tr>
@@ -144,7 +150,7 @@ const UsersTable: React.FC = () => {
           </table>
         </div>
       </div>
-      {isOpen && <AddUser setOpen={setOpen} />}
+      {isOpen && <AddUser setOpen={setOpen} setUsers={setUsers} />}
     </>
   );
 };
