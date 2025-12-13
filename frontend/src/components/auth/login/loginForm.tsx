@@ -2,6 +2,7 @@ import {
   emailValidation,
   passwordValidation,
 } from "../../../validations/authValidations";
+import { useEffect } from "react";
 import { useState } from "react";
 import lines from "../../../assets/images/auth/login/lines.png";
 import kid2 from "../../../assets/images/auth/login/Kid2.png";
@@ -9,15 +10,34 @@ import { signIn } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 import { setuserAccessToken } from "../../../store/slices/auth/userAuthSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { useGoogleAuth } from "../../../hooks/useGoogleAuth";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 export const SignInForm: React.FC = () => {
   const [values, setValues] = useState({ email: "", password: "" });
   const [error, setError] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const { handleGoogleSuccess, handleGoogleError } = useGoogleAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  useEffect(() => {
+  // 1. CLEAR HISTORY STATE (The fix from before)
+  // Ensure we don't have messy history state
+  if (window.history.state === null) {
+     // Do nothing or basic init
+  }
+
+  // 2. DISABLE CHROME BFCache FOR THIS PAGE
+  // This dummy listener forces Chrome to NOT cache this page in memory
+  const handleUnload = () => {};
+  window.addEventListener("unload", handleUnload);
+
+  return () => {
+    window.removeEventListener("unload", handleUnload);
+  };
+}, []);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -30,7 +50,7 @@ export const SignInForm: React.FC = () => {
     });
 
     if (emailErr || passErr) return;
-
+setLoading(true);
     try {
       const response = await signIn({
         email: values.email,
@@ -44,14 +64,16 @@ export const SignInForm: React.FC = () => {
         throw new Error("Something went wrong. Please try again");
       }
       dispatch(setuserAccessToken({ user, accessToken }));
-      navigate("/");
+      navigate("/",{ replace: true });
       toast.success(response.data.message);
     } catch (error: any) {
       const msg =
         error?.response?.data?.message ||
         "Something went wrong. Please try again.";
       toast.error(msg);
-    }
+    }finally {
+    setLoading(false);
+  }
   };
 
   const handleChange = async (e: any) => {
@@ -103,20 +125,39 @@ export const SignInForm: React.FC = () => {
                 className=" rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
               />
               <p className=" text-left text-red-500 text-sm">{error.email}</p>
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                onChange={handleChange}
-                className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-              />
+             <div className="relative">
+      <input
+        type={showPassword ? "text" : "password"}
+        placeholder="Password"
+        name="password"
+        onChange={handleChange}
+        className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
+      />
+
+      <span
+        onClick={() => setShowPassword(!showPassword)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+      >
+        {showPassword ? (
+          <AiOutlineEyeInvisible size={20} />
+        ) : (
+          <AiOutlineEye size={20} />
+        )}
+      </span>
+    </div>
               <p className="text-left text-red-500 text-sm">{error.password}</p>
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="w-full bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
+                disabled={loading}
+                className={`w-full text-white rounded-md py-2 mt-2 transition 
+               ${
+               loading
+                ? "bg-gray-700 cursor-not-allowed"
+               : "bg-gray-900 hover:bg-gray-800"
+               }`}
               >
-                Sign In
+                {loading ? "Signing in..." : "Sign In"}
               </button>
             </form>
 

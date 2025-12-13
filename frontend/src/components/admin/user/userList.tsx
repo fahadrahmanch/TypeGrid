@@ -4,14 +4,18 @@ import { blockUser } from "../../../api/admin/users";
 const UserList: React.FC = () => {
   const [status, setStatus] = useState("All");
   const [users, setUsers] = useState<any[]>([]);
-  const [filterUsers,setFilterUsers]=useState<any[]>([])
-  const [searchText,setSearchText]=useState("")
+  const [filterUsers,setFilterUsers]=useState<any[]>([]);
+  const [searchText,setSearchText]=useState("");
+  const [limit] = useState(8); 
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
     async function fetchUsers() {
       try {
         const res = await getAllUsers();
         setUsers(res?.data?.data);
-        setFilterUsers(res?.data?.data)
+        setFilterUsers(res?.data?.data);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -36,12 +40,18 @@ const UserList: React.FC = () => {
         : u.status === "block"
     );
   }
+  const total = Math.ceil(filtered.length / limit);
+  setTotalPages(total);
 
-  setFilterUsers(filtered);
-}, [searchText, status, users]);
+  const start = (page - 1) * limit;
+  const paginated = filtered.slice(start, start + limit);
+
+  setFilterUsers(paginated);
+  // setFilterUsers(filtered);
+}, [searchText, status, users,page]);
 
   async function handleBlock(userId:string){
-    const res=await blockUser(userId)
+    const res=await blockUser(userId);
     
   if (res.data.success) {
     setUsers(prev =>prev.map(u =>u._id ===userId?{ ...u, status: u.status === "active" ? "blocked" : "active" }: u));
@@ -141,6 +151,26 @@ const UserList: React.FC = () => {
           </tbody>
         </table>
       </div>
+      <div className="flex justify-center items-center gap-4 mt-4">
+  <button
+    disabled={page === 1}
+    onClick={() => setPage(prev => prev - 1)}
+    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+  >
+    Prev
+  </button>
+
+  <span>Page {page} of {totalPages}</span>
+
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage(prev => prev + 1)}
+    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
+
     </>
   );
 };

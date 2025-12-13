@@ -8,19 +8,18 @@ interface Props {
 export default function ProtectRouteUser({ children }: Props) {
   const accessToken = useSelector((state: any) => state?.userAuth.accessToken);
   const authLoaded = useSelector((state: any) => state?.userAuth.authLoaded);
-  console.log("accessToken",accessToken)
   if (!authLoaded) {
     return <div>Loading...</div>;
   }
   if (!accessToken) {
-    return <Navigate to="/signin" replace />;
+    return <Navigate to="/Signin" replace />;
   }
   return children;
 }
 export function IsloggedUser({ children }: Props) {
   const accessToken = useSelector((state: any) => state?.userAuth.accessToken);
   const authLoaded = useSelector((state: any) => state?.userAuth.authLoaded);
-  console.log("accessToken",accessToken)
+  
   if (!authLoaded) {
     return <div>Loading...</div>;
   }

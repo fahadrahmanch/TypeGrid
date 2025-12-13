@@ -35,7 +35,9 @@ const CompanyNewPasswordForm: React.FC = () => {
       const res = await companyCreateNewpasswordApi(email, values.password);
       if (res.data.success) {
         toast.success("Password updated successfully");
-        navigate("/company/signin");
+        localStorage.setItem("otpRequestedTime", Date.now().toString());
+
+        navigate("/company/signin",{replace: true, });
       } else {
         toast.error(res.data.message || "Something went wrong");
       }

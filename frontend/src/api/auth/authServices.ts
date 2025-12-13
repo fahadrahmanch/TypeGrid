@@ -14,12 +14,7 @@ export async function signup(data: SignupData) {
   return userAPI.post("/auth/signup", data);
 }
 
-export async function verifyOtp(
-  otp: string,
-  name: string,
-  email: string,
-  password: string,
-) {
+export async function verifyOtp(otp: string,name: string,email: string,password: string) {
   return userAPI.post("/auth/verify-otp", { otp, name, email, password });
 }
 export async function resentOtp(name: string, email: string) {
@@ -57,6 +52,9 @@ export async function adminRefreshAPI() {
   return adminAPI.post("/auth/refresh-token");
 }
 
+export async function AdminLogoutApi() {
+  return adminAPI.post("/auth/logout");
+}
 
 //company
 export async function companySignIn(data: any) {
@@ -77,5 +75,7 @@ export async function companyForgotPasswordOtpVerifiction(otp: string, email: st
 export async function companyCreateNewpasswordApi(email: string, password: string) {
   return companyAPI.post("/auth/create/new/password", { email, password });
 }
-
+export async function companyLogoutApi() {
+  return companyAPI.post("/auth/logout");
+}
 

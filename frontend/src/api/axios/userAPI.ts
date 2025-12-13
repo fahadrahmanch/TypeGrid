@@ -1,9 +1,6 @@
 import axios from "axios";
 import store from "../../store/store";
-import {
-  setuserAccessToken,
-  logout,
-} from "../../store/slices/auth/userAuthSlice";
+import {setuserAccessToken,logout} from "../../store/slices/auth/userAuthSlice";
 import { userRefreshAPI } from "../auth/authServices";
 export const userAPI = axios.create({
   baseURL: import.meta.env.VITE_API_URL + "/user",

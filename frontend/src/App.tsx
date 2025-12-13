@@ -18,6 +18,7 @@ import {setcompanyAccessToken,setCompanyAuthLoaded} from "./store/slices/auth/co
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
+  
   useEffect(() => {
     const path = location.pathname;
     const load = async () => {
@@ -31,9 +32,12 @@ function App() {
         } else if (path.startsWith("/company")) {
           const res = await companyRefreshAPI();
           const accessToken = res?.data?.accessToken;
+          const user=res.data.user;
           if (accessToken) {
-            dispatch(setcompanyAccessToken({ accessToken }));
+            dispatch(setcompanyAccessToken({ accessToken ,user}));
+          
           }
+          
         } else {
           const res = await userRefreshAPI();
           const accessToken = res?.data?.accessToken;

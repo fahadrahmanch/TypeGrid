@@ -1,6 +1,20 @@
 import { NavLink } from "react-router-dom";
-import Logo from "../../../assets/Icon/logo.png"
+import Logo from "../../../assets/Icon/logo.png";
+import {  companyLogoutApi } from "../../../api/auth/authServices";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../store/slices/auth/companyAuthSlice";
 const CompanyAdminSidebar:React.FC = () => {
+  
+  const dispatch = useDispatch();
+  async function handleLogout() {
+    try {
+
+      await companyLogoutApi();
+      dispatch(logout());
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div className="w-64 h-screen bg-[#FFF3DB] flex flex-col pl-5 pt-4 fixed left-0 top-0 shadow-md">
       {/* Logo + Title */}
@@ -41,6 +55,9 @@ const CompanyAdminSidebar:React.FC = () => {
         >
           Settings
         </NavLink>
+          <button className="text-start pl-3" onClick={() => handleLogout()}>
+        Logout
+      </button>
       </nav>
     </div>
   );

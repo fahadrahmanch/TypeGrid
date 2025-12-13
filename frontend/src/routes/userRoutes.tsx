@@ -13,12 +13,14 @@ import EditProfile from "../pages/user/editProfile";
 import CompanySubscription from "../pages/user/Subscription/companySubscription";
 import CompanyVerification from "../pages/user/Subscription/CompanyVerification";
 import CompanyVerificationStatus from "../pages/user/Subscription/CompanyVerificationStatus";
+import {  useLocation } from "react-router-dom";
 export default function UserRoutes() {
+  const location = useLocation();
   return (
-    <Routes>
+    <Routes location={location} key={location.pathname}>
       {/* User Auth */}
       <Route path="signup" element={<IsloggedUser><Signup /></IsloggedUser>} />
-      <Route path="signin" element={<IsloggedUser><SignIn /></IsloggedUser>} />
+      <Route path="Signin" element={<IsloggedUser><SignIn /></IsloggedUser>} />
       <Route path="otp" element={<IsloggedUser><Otp /></IsloggedUser>} />
       <Route path="forgot/password" element={<IsloggedUser><ForgotPassword /></IsloggedUser>} />
       <Route path="forgot/password/otp" element={<IsloggedUser><OtpForgotPassword /></IsloggedUser>} />

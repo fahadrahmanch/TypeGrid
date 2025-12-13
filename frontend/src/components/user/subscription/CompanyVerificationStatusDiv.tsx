@@ -2,33 +2,31 @@ import { useEffect, useState } from "react";
 import { getCompanyStatus } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 const CompanyVerificationStatusDiv1: React.FC = () => {
-  const [company,setCompany]=useState<any>()
+  const [company,setCompany]=useState<any>();
   const navigate = useNavigate();
   useEffect(()=>{
     async function fetchCompanyDetails(){
       try{
-        const response=await getCompanyStatus() 
-        console.log(response.data)
+        const response=await getCompanyStatus(); 
         if(!response.data){
-          return navigate('/')
+          return navigate("/");
         }
-        setCompany(response.data.company)
+        setCompany(response.data.company);
 
       }catch(error){
-       console.log(error)
-       navigate('/')
+       console.log(error);
+       navigate("/");
 
       }
     
     }
-    fetchCompanyDetails()
-  },[])
+    fetchCompanyDetails();
+  },[]);
   return (
     <>
       <div className="min-h-screen mt-12 flex flex-col items-center pt-10 px-4">
         <div className="w-full max-w-2xl space-y-6">
           {/* 1. Yellow Status Banner */}
-
           {company?.status === "pending" && (
             <div className="bg-[#FFFBEB] border-2 border-[#FEF3C7] rounded-xl p-6 flex items-start gap-5 shadow-sm">
               <div className="text-4xl">⏳</div>
@@ -57,7 +55,7 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
               </div>
             </div>
           )}
-          {company?.status === "rejected" && (
+          {company?.status === "reject" && (
             <div className="bg-[#FEF2F2] border-2 border-[#FECACA] rounded-xl p-6 flex items-start gap-5 shadow-sm">
               <div className="text-4xl">⚠️</div>
               <div>

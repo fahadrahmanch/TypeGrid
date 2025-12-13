@@ -9,6 +9,8 @@ import { companyForgotPasswordApi } from "../../../api/auth/authServices";
 const CompanyForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState({ email: "" });
+      const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
 
@@ -18,18 +20,24 @@ const CompanyForgotPassword: React.FC = () => {
       setError({
         email: emailErr,
       });
+       if (loading) return;
+setLoading(true);
       try {
         const res = await companyForgotPasswordApi(email);
-        console.log(res.data)
         if (res?.data?.success) {
           toast.success(res.data.message || "OTP sent successfully");
+          localStorage.setItem("otpRequestedTime", Date.now().toString());
+
           navigate("/company/forgot/password/otp", {
             state: { email: email, name: res.data.name },
+            
           });
         }
       } catch (error: any) {
         console.log(error);
         toast.error(error.response?.data?.message || "Something went wrong");
+              setLoading(false);
+
       }
     };
 
@@ -65,13 +73,19 @@ const CompanyForgotPassword: React.FC = () => {
               />
               <p className=" text-left text-red-500 text-sm">{error.email}</p>
 
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="w-full  bg-gray-900 text-white rounded-md py-2 mt-2"
-              >
-                SUBMIT
-              </button>
+                <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={loading}
+              className={`w-full text-white rounded-md py-2 mt-2 transition 
+    ${
+      loading
+        ? "bg-gray-700 cursor-not-allowed"
+        : "bg-gray-900 hover:bg-gray-800"
+    }`}
+            >
+              {loading ? "Sending..." : "Submit"}
+            </button>
             </form>
           </div>
 

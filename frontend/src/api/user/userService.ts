@@ -5,12 +5,12 @@ export async function CompanyDetailsApi(data: any) {
 }
 
 export async function GetUserDataApi(){
-  return userAPI.get('/data')
+  return userAPI.get("/data");
 }
 export async function UpdateUserDataApi(user:any){
-  return userAPI.post('/update',user)
+  return userAPI.post("/update",user);
 }
 
 export async function getCompanyStatus(){
-  return userAPI.get('/subscription/company/status')
+  return userAPI.get("/subscription/company/status");
 }

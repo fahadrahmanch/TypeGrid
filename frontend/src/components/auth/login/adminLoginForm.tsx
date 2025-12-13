@@ -10,11 +10,14 @@ import { useState } from "react";
 import { setAdminAccessToken } from "../../../store/slices/auth/adminAuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 const AdminLoginForm: React.FC = () => {
   const [values, setValues] = useState({ email: "", password: "" });
   const [error, setError] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
@@ -90,13 +93,25 @@ const AdminLoginForm: React.FC = () => {
               className=" rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
             <p className=" text-left text-red-500 text-sm">{error.email}</p>
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              onChange={handleChange}
-              className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-            />
+          <div className="relative">
+                 <input
+                   type={showPassword ? "text" : "password"}
+                   placeholder="Password"
+                   name="password"
+                   onChange={handleChange}
+                   className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
+                 />
+                 <span
+                   onClick={() => setShowPassword(!showPassword)}
+                   className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+                 >
+                   {showPassword ? (
+                     <AiOutlineEyeInvisible size={20} />
+                   ) : (
+                     <AiOutlineEye size={20} />
+                   )}
+                 </span>
+               </div>
             <p className="text-left text-red-500 text-sm">{error.password}</p>
             <button
               type="submit"

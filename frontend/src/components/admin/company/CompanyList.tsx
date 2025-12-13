@@ -5,16 +5,19 @@ const CompanyList: React.FC = () => {
   const [status, setStatus] = useState("All");
   const [isOpen, setOpen] = useState(false);
   const [company, setCompany] = useState<any[]>([]);
-  const [filterCompany,setFilterCompany]=useState<any[]>([])
+  const [filterCompany,setFilterCompany]=useState<any[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<any | null>(null);
-  const [searchText,setSearchText]=useState('')
+  const [searchText,setSearchText]=useState("");
+  const [limit] = useState(8); 
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     async function fetchCompanies() {
       try {
         const res = await getAllcompanies();
         setCompany(res?.data?.data);
-        setFilterCompany(res?.data?.data)
+        setFilterCompany(res?.data?.data);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -35,18 +38,23 @@ const CompanyList: React.FC = () => {
 }
   if (status !== "All") {
     filtered = filtered.filter((u)=>{
-      if(status==='Accepted'){
-        return u.status=='active'
+      if(status==="Accepted"){
+        return u.status=="active";
       }else if(status==="Pending"){
-        return u.status=='pending'
-      }else if(status=='Rejected'){
-        return u.status==='reject'
+        return u.status=="pending";
+      }else if(status=="Rejected"){
+        return u.status==="reject";
       }
     });
   }
+  const total = Math.ceil(filtered.length / limit);
+  setTotalPages(total);
 
-  setFilterCompany(filtered);
-}, [searchText, status, company]);
+  const start = (page - 1) * limit;
+  const paginated = filtered.slice(start, start + limit);
+
+  setFilterCompany(paginated);
+},[searchText, status, company,page]);
   return (
     <>
       <div className="bg-[#FFF3DB] w-[85rem] ml-10 pl-10 pt-6 pb-6 rounded-md shadow-sm">
@@ -83,7 +91,7 @@ const CompanyList: React.FC = () => {
           <thead>
             <tr className="bg-[#FFEFCE] border-b shadow-sm">
               <th className="px-4 py-2 text-left">Company Name</th>
-              <th className="px-4 py-2 text-left">Email</th>
+              <th className="px-4 py-2 text-left">Contact Email</th>
               <th className="px-4 py-2 text-left">Created At</th>
               <th className="px-4 py-2 text-left">Status</th>
               <th className="px-4 py-2 text-left">Actions</th>
@@ -101,12 +109,12 @@ const CompanyList: React.FC = () => {
                     <p className="font-medium">{item?.email}</p>
                   </td>
                   <td className="px-4 py-2">
-                    <p className="font-medium">{item?.createdAt}</p>
+                    <p className="font-medium">{new Date(item?.createdAt).toLocaleDateString()}</p>
                   </td>
                   <td className="px-4 py-2">
                     <span
                       className={`px-2 py-1 text-sm rounded ${
-                        item?.status === "pending"||item.status==='reject'
+                        item?.status === "pending"||item.status==="reject"
                           ? "bg-red-100 text-red-700"
                           : "bg-green-100 text-green-700"
                       }`}
@@ -132,6 +140,25 @@ const CompanyList: React.FC = () => {
         </table>
       </div>
       {isOpen && <CompanyDetailsModal setOpen={setOpen} company={selectedCompany} setCompany={setCompany} />}
+          <div className="flex justify-center items-center gap-4 mt-4">
+  <button
+    disabled={page === 1}
+    onClick={() => setPage(prev => prev - 1)}
+    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+  >
+    Prev
+  </button>
+
+  <span>Page {page} of {totalPages}</span>
+
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage(prev => prev + 1)}
+    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
     </>
   );
 };

@@ -6,4 +6,4 @@ const CompanyForgotPasswordPage: React.FC = () => {
     </>
   );
 };
-export default CompanyForgotPasswordPage
+export default CompanyForgotPasswordPage;

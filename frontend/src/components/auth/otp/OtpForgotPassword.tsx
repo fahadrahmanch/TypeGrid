@@ -6,27 +6,55 @@ import {
   resentOtp,
 } from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const OtpForgotPassword: React.FC = () => {
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [otp, setOtp] = useState<string>("");
   const location = useLocation();
   const name = location.state?.name;
   const email = location.state?.email;
-
+  const OTP_VALID_TIME = 30;
   const navigate = useNavigate();
   const [expire, setExpire] = useState<number>(30);
+ useEffect(() => {
+    const savedTime = localStorage.getItem("otpRequestedTime");
+    if (savedTime) {
+      const elapsed = Math.floor((Date.now() - Number(savedTime)) / 1000);
+      const remaining = OTP_VALID_TIME - elapsed;
+      if (remaining > 0) setExpire(remaining);
+      else {
+        setExpire(0);
+        localStorage.removeItem("otpRequestedTime");
+      }
+    } else {
+      localStorage.setItem("otpRequestedTime", Date.now().toString());
+    }
+  }, []);
+
+  // Timer countdown
   useEffect(() => {
-    let id: any;
     if (expire > 0) {
-      id = setInterval(() => {
+      timerRef.current = setInterval(() => {
         setExpire((prev) => prev - 1);
       }, 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+      localStorage.removeItem("otpRequestedTime");
     }
-    return () => clearInterval(id);
-  });
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [expire]);
+  useEffect(() => {
+  if (!email) {
+    navigate("/forgot/password", { replace: true });
+  }
+}, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOtp(e.target.value);
   };
@@ -35,6 +63,7 @@ const OtpForgotPassword: React.FC = () => {
     try {
       const response = await resentOtp(name, email);
       toast.success(response.data.message);
+      localStorage.setItem("otpRequestedTime", Date.now().toString()); 
       setExpire(30);
     } catch (error: any) {
       const msg =
@@ -47,7 +76,10 @@ const OtpForgotPassword: React.FC = () => {
     e.preventDefault();
     try {
       const response = await forgotPasswordOtpVerifiction(otp, email);
-      navigate("/create/new/password", { state: { email } });
+       navigate("/create/new/password", {
+      state: { email },
+      replace: true, 
+    });
       toast.success(response.data.message);
     } catch (error: any) {
       const msg =

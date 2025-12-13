@@ -26,7 +26,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
         const nameErr = nameValidation(values.companyName);
         const emailErr = emailValidation(values.email);
         const addressErr = addressValidation(values.address);
-        const numberErr = numberValidation(values.number)
+        const numberErr = numberValidation(values.number);
     
         setError({
           companyName: nameErr,
@@ -38,13 +38,10 @@ const CompanyVerificationFormDiv: React.FC = () => {
         if (nameErr || emailErr || addressErr || numberErr) return;
     try {
       const response = await CompanyDetailsApi(values);
-
     toast.success(response?.data?.message || "Company details submitted!");
-
-    
     navigate("/subscription/company/verify/status");
-      console.log(response);
-    } catch (error) {
+    } catch (error:any) {
+      toast.error(error.response?.data?.message)
       console.log(error);
     }
   }

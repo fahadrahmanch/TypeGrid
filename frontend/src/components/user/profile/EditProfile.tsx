@@ -32,6 +32,7 @@ const EditProfileDiv1: React.FC = () => {
   useEffect(() => {
     async function getUserData() {
       const res = await GetUserDataApi();
+      console.log("res data",res.data)
       if (res?.data) {
         setUser({
           name: res.data.name,
@@ -45,6 +46,7 @@ const EditProfileDiv1: React.FC = () => {
       }
     }
     getUserData();
+    console.log(user.bio)
   }, []);
 
   const handleSubmit = async (e: any) => {
@@ -95,7 +97,6 @@ const EditProfileDiv1: React.FC = () => {
   };
   const handleImageChange = async (e: any) => {
     const file = e.target.files?.[0];
-    console.log("file", file);
     if (!file) return;
     let imageUrl = user?.imageUrl;
 
@@ -302,8 +303,9 @@ const EditProfileDiv1: React.FC = () => {
                   <textarea
                     rows={3}
                     name="bio"
+                     value={user?.bio || ""}
                     onChange={handleChange}
-                    defaultValue={user?.bio ? user?.bio : "Add bio"}
+                    // defaultValue={user?.bio ? user?.bio : "Add bio"}
                     className="w-full bg-[#FFFBF2] border-none rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none resize-none"
                   ></textarea>
                   <p className="text-left text-red-500 text-sm">{error.bio}</p>

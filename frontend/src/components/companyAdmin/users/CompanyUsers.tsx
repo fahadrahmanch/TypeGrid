@@ -6,12 +6,19 @@ import { deleteCompanyUser, fetchCompanyUsers } from "../../../api/companyAdmin/
 const UsersTable: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [isOpen, setOpen] = useState(false);
+  const [filterUsers,setFilterUsers]=useState<any[]>([]);
+  const [searchText,setSearchText]=useState("");
+   const [limit] = useState(8); 
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
   async function fetchUsers() {
     try {
       const res = await fetchCompanyUsers();
       if (res?.data?.success) {
         setUsers(res.data.data);
+        setFilterUsers(res?.data?.data);
       } else {
         console.error("Failed to fetch company users:", res?.data?.message);
       }
@@ -21,18 +28,37 @@ const UsersTable: React.FC = () => {
   }
   fetchUsers();
 }, []);
+  useEffect(() => {
+  let filtered = [...users];
+
+ if (searchText.trim()) {
+  const lower = searchText.toLowerCase();
+  filtered = filtered.filter(u =>
+    u.name.toLowerCase().startsWith(lower) ||
+    u.email.toLowerCase().startsWith(lower)
+  );
+}
+  const total = Math.ceil(filtered.length / limit);
+  setTotalPages(total);
+
+  const start = (page - 1) * limit;
+  const paginated = filtered.slice(start, start + limit);
+
+  setFilterUsers(paginated);
+
+  // setFilterUsers(filtered);
+}, [searchText, users,page]);
 
 async function handleDelete(userID:string){
   try{
   const response = await deleteCompanyUser(userID);
-  console.log(response);
   if(response.data.success){
-    setUsers(prev=>prev.filter((item)=>item._id!=userID))
+    setUsers(prev=>prev.filter((item)=>item._id!=userID));
     toast.success(response.data.message);
   }
   }
   catch(error:any){
-    console.log(error)
+    console.log(error);
       const msg =
         error?.response?.data?.message ||
         "Something went wrong. Please try again.";
@@ -63,6 +89,7 @@ async function handleDelete(userID:string){
             <input
               type="text"
               placeholder="Search by name or email..."
+              onChange={(e) => setSearchText(e.target.value)}
               className="w-full py-2 text-gray-700 placeholder-gray-300 focus:outline-none focus:border-b focus:border-[#B99F8D] bg-transparent"
             />
           </div>
@@ -97,7 +124,7 @@ async function handleDelete(userID:string){
 
             {/* Table Body */}
             <tbody>
-              {users.map((member:any) => (
+              {filterUsers.map((member:any) => (
                 <tr
                   key={member.id}
                   className="group border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
@@ -151,6 +178,25 @@ async function handleDelete(userID:string){
         </div>
       </div>
       {isOpen && <AddUser setOpen={setOpen} setUsers={setUsers} />}
+          <div className="flex justify-center items-center gap-4 mt-4">
+  <button
+    disabled={page === 1}
+    onClick={() => setPage(prev => prev - 1)}
+    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+  >
+    Prev
+  </button>
+
+  <span>Page {page} of {totalPages}</span>
+
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage(prev => prev + 1)}
+    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
     </>
   );
 };

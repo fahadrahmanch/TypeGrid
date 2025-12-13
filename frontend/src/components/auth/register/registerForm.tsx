@@ -12,14 +12,19 @@ import {
 } from "../../../validations/authValidations";
 import { GoogleLogin } from "@react-oauth/google";
 import { useGoogleAuth } from "../../../hooks/useGoogleAuth";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const Register: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [values, setValues] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+
   const [error, setError] = useState({
     name: "",
     email: "",
@@ -46,7 +51,8 @@ const Register: React.FC = () => {
     });
 
     if (nameErr || emailErr || passErr || confirmErr) return;
-
+if (loading) return;
+setLoading(true);
     try {
       const response = await signup(values);
       navigate("/otp", {
@@ -57,11 +63,14 @@ const Register: React.FC = () => {
         },
       });
       toast.success(response.data.message);
+      localStorage.setItem("otpRequestedTime", Date.now().toString());
+
     } catch (error: any) {
       const msg =
         error?.response?.data?.message ||
         "Something went wrong. Please try again.";
       toast.error(msg);
+      setLoading(false); 
     }
   };
   const handleChange = async (e: any) => {
@@ -128,37 +137,67 @@ const Register: React.FC = () => {
               className=" rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
             <p className=" text-left text-red-500 text-sm">{error.email}</p>
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              onChange={handleChange}
-              className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-            />
+          <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          name="password"
+          onChange={handleChange}
+          className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
+        />
+        <span
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+        >
+          {showPassword ? (
+            <AiOutlineEyeInvisible size={20} />
+          ) : (
+            <AiOutlineEye size={20} />
+          )}
+        </span>
+      </div>
             <p className="text-left text-red-500 text-sm">{error.password}</p>
-            <input
-              type="password"
-              placeholder="Confirm password"
-              name="confirmPassword"
-              onChange={handleChange}
-              className="rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-            />
+              <div className="relative mt-2">
+        <input
+          type={showConfirm ? "text" : "password"}
+          placeholder="Confirm password"
+          name="confirmPassword"
+          onChange={handleChange}
+          className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
+        />
+        <span
+          onClick={() => setShowConfirm(!showConfirm)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+        >
+          {showConfirm ? (
+            <AiOutlineEyeInvisible size={20} />
+          ) : (
+            <AiOutlineEye size={20} />
+          )}
+        </span>
+      </div>
             <p className="text-left text-red-500 text-sm">
               {error.confirmPassword}
             </p>
             <button
               type="submit"
               onClick={handleSubmit}
-              className="w-full bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
+              disabled={loading}
+              className={`w-full text-white rounded-md py-2 mt-2 transition 
+    ${
+      loading
+        ? "bg-gray-700 cursor-not-allowed"
+        : "bg-gray-900 hover:bg-gray-800"
+    }`}
             >
-              Sign up
+              {loading ? "Creating account..." : "Sign Up"}
             </button>
           </form>
 
           <p className="text-center text-gray-600 text-sm mt-4">
             Already have an account?{" "}
             <a
-              href="/signin"
+              href="/Signin"
               className="text-gray-900 font-medium hover:underline"
             >
               Log in

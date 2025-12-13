@@ -26,7 +26,7 @@ const AddUser:React.FC<AddUserProps>=({setOpen,setUsers})=>{
         };
           const handleSubmit = async (e: any) => {
             e.preventDefault();
-            const nameErr= nameValidation(values.name)
+            const nameErr= nameValidation(values.name);
             const emailErr = emailValidation(values.email);
             const passErr = passwordValidation(values.password);
         
@@ -45,9 +45,8 @@ const AddUser:React.FC<AddUserProps>=({setOpen,setUsers})=>{
                 password: values.password,
                 role: "companyUser",
               });
-              console.log(response.data.data)
               setUsers((prev:any[]) => [...prev, response.data.data]);
-              setOpen(false)
+              setOpen(false);
               toast.success(response.data.message);
             } catch (error: any) {
               const msg =
@@ -162,5 +161,5 @@ const AddUser:React.FC<AddUserProps>=({setOpen,setUsers})=>{
         </div>
       </>
     );
-}
-export default AddUser
+};
+export default AddUser;

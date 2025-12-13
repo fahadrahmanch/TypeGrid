@@ -1,6 +1,19 @@
 import Logo from "../../../../assets/Icon/logo.png";
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AdminLogoutApi } from "../../../../api/auth/authServices";
+import { logout } from "../../../../store/slices/auth/adminAuthSlice";
 const SideNavbar: React.FC = () => {
+    const dispatch = useDispatch();
+  async function handleLogout() {
+    try {
+
+      await AdminLogoutApi();
+      dispatch(logout());
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div className="w-64 h-screen bg-[#FFF3DB] flex flex-col pl-5 pt-4 fixed left-0 top-0 shadow-md">
       {/* Logo + Title */}
@@ -49,7 +62,12 @@ const SideNavbar: React.FC = () => {
           }
         >
           Settings
+          
         </NavLink>
+       
+         <button className="text-start pl-3" onClick={() => handleLogout()}>
+        Logout
+      </button>
       </nav>
     </div>
   );
