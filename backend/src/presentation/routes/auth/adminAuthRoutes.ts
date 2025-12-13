@@ -20,6 +20,9 @@ export class adminAuthRouter {
             injectAuthController.refreshToken(req, res);
           }
     );
+     this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response) => {
+      injectAuthController.logout(req, res);
+    });
    
   }
   getRouter() {

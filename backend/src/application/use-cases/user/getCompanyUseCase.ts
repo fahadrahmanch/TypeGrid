@@ -5,8 +5,8 @@ export class getCompanyUseCase implements IGetCompanyUseCase{
     private _baseRepository: IBaseRepository<any>    
     ){}
     async execute(companyId:string):Promise<any>{
-    const company=await this._baseRepository.findById(companyId)
-    return company
+    const company=await this._baseRepository.findById(companyId);
+    return company;
     }
-
+ 
 }

@@ -1,3 +1,4 @@
+import { MESSAGES } from "../../../domain/constants/messages";
 import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/usecases/admin/ICompanyApproveRejectUsecase";
 import { IGetCompanysUseCase } from "../../../domain/interfaces/usecases/admin/IGetCompanysUseCase";
 import { Request, Response } from "express";
@@ -12,7 +13,7 @@ export class companyManageController {
       const companies = await this._getCompanysUseCase.execute();
       res.status(200).json({
         success: true,
-        message: "Companies fetched successfully",
+        message: MESSAGES.COMPANIES_FETCHED_SUCCESS,
         data: companies,
       });
     } catch (error: any) {
@@ -28,16 +29,16 @@ export class companyManageController {
     try {
       const companyId = req.body._id;
       if (!companyId) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
       await this._companyApproveRejectUseCase.approve(companyId);
       res.status(200).json({
-        message: "Company approved successfully",
+        message: MESSAGES.COMPANY_APPROVED_SUCCESS,
       });
     } catch (error: any) {
       console.log(error);
       res.status(500).json({
-        message: "Internal server error while approving company",
+        message:  MESSAGES.COMPANY_APPROVAL_SERVER_ERROR,
         error: error.message,
       });
     }
@@ -47,17 +48,17 @@ export class companyManageController {
     try {
       const companyId = req.body._id;
       if (!companyId) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
         await this._companyApproveRejectUseCase.reject(companyId);
       res.status(200).json({
-        message: "Company rejected successfully",
+        message: MESSAGES.COMPANY_REJECTED_SUCCESS,
       });
 
     } catch (error: any) {
       console.log(error);
       res.status(500).json({
-        message: "Internal server error while approving company",
+        message: MESSAGES.INTERNAL_SERVER_ERROR,
         error: error.message,
       });
     }

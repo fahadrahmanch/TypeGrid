@@ -7,6 +7,6 @@ export class updateUserUseCase implements IUserUpdateUseCase{
         
     ){}
     async execute(data:any):Promise<void>{
-    await this._baseRepository.update(data)
+    await this._baseRepository.update(data);
     }
 }

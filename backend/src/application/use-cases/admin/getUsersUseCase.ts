@@ -4,7 +4,7 @@ import { IAuthRepostory } from "../../../domain/interfaces/repository/user/IAuth
 export class getUsersUseCase implements IGetUsersUseCase {
   constructor(private authRepository: IAuthRepostory) {}
   async execute(): Promise<InterfaceUser[]> {
-    const users = await this.authRepository.find();
+    const users = await this.authRepository.find({role:"user"});
     return users;
   }
 }

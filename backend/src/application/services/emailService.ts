@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import { IEmailTemplate } from "../../domain/interfaces/emailTemplates/IEmailTemplate";
 import { HtmlforOtp } from "../../domain/constants/otpMailHtml";
 import dotenv from "dotenv";
+import logger from "../../utils/logger";
 dotenv.config();
 export class EmailService implements IEmailService{
     private _transporter:nodemailer.Transporter;
@@ -19,8 +20,8 @@ export class EmailService implements IEmailService{
 
     });
      this._transporter.verify()
-      .then(() => console.log(" Mail transporter connected successfully"))
-      .catch(err => console.error(" Mail transporter connection failed:", err));
+      .then(() => logger.info(" Mail transporter connected successfully"))
+      .catch(err => logger.error(" Mail transporter connection failed:", err));
   }
   
   async sentOtp(template:IEmailTemplate): Promise<void> {

@@ -59,8 +59,8 @@ export class app {
     this.app.use("/user",authMiddleware(this.tokenService), routerUser.getRouter());
   }
   private setCompanyAdminRoutes(){
-    const routerCompanyAdmin=new companyAdminRouter()
-    this.app.use("/company",authMiddleware(this.tokenService),routerCompanyAdmin.getRouter())
+    const routerCompanyAdmin=new companyAdminRouter();
+    this.app.use("/company",authMiddleware(this.tokenService),routerCompanyAdmin.getRouter());
   }
   public async connectDatabase() {
     const db = new connectDB();

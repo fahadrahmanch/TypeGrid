@@ -15,8 +15,8 @@ export class companyAuthRouter {
         injectAuthController.refreshToken(req, res);
     });
     this.router.post(Routes.AUTH.FORGOT_PASSWORD,(req:Request,res:Response)=>{
-      injectAuthController.forgotPassword(req,res)
-    })
+      injectAuthController.forgotPassword(req,res);
+    });
     this.router.post(Routes.AUTH.FORGOT_PASSWORD_OTP_VERIFY,(req: Request, res: Response) => {
         injectAuthController.verifyForgotPasswordOtp(req, res);
     });
@@ -29,6 +29,9 @@ export class companyAuthRouter {
             injectAuthController.refreshToken(req, res);
           }
         );
+ this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response) => {
+      injectAuthController.logout(req, res);
+    });
   }
   getRouter() {
     return this.router;

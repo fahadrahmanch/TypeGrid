@@ -9,12 +9,12 @@ import { companyApproveRejectUsecase } from "../../application/use-cases/admin/c
 import { User } from "../../infrastructure/db/models/userSchema";
 import { blockUserUseCase } from "../../application/use-cases/admin/blockUserUseCase";
 const authRepo = new authRepository();
-const baseRepoUser=new BaseRepository(User)
-const BlockUserUseCase = new blockUserUseCase(baseRepoUser)
-const baseRepoCompany=new BaseRepository(Company)
+const baseRepoUser=new BaseRepository(User);
+const BlockUserUseCase = new blockUserUseCase(baseRepoUser);
+const baseRepoCompany=new BaseRepository(Company);
 const GetUsers = new getUsersUseCase(authRepo);
-const getCompanyUseCase=new getCompanysUseCase(baseRepoCompany)
-const CompanyApproveRejectUseCase=new companyApproveRejectUsecase(baseRepoCompany,baseRepoUser)
-export const injectCompanyManageController=new companyManageController(getCompanyUseCase,CompanyApproveRejectUseCase)
+const getCompanyUseCase=new getCompanysUseCase(baseRepoCompany);
+const CompanyApproveRejectUseCase=new companyApproveRejectUsecase(baseRepoCompany,baseRepoUser);
+export const injectCompanyManageController=new companyManageController(getCompanyUseCase,CompanyApproveRejectUseCase);
 export const injectUserManageController = new userManageController(GetUsers,BlockUserUseCase);
     

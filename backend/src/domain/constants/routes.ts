@@ -21,10 +21,10 @@ export const Routes = {
   ADMIN: {
     //get
     GET_USERS: "/users",
-    GET_COMPANYS:'/company',
+    GET_COMPANYS:"/company",
 
     //post
-    APPROVE_COMPANY:'/approve/company',
+    APPROVE_COMPANY:"/approve/company",
     REJECT_COMPANY:"/reject/company",
 
     //patch
@@ -33,25 +33,25 @@ export const Routes = {
 
   USERS: {
     // GET 
-    getUserData:'/data',
+    getUserData:"/data",
 
     //Edit
-    updateUser:'/update',
+    updateUser:"/update",
   
     verifyCompany: "/subscription/company/verify",
 
     //get company status
-    GETCOMPANYSTATUS:'/subscription/company/status'
+    GETCOMPANYSTATUS:"/subscription/company/status"
     
   },
 
   COMPANY_ADMIN:{
     //admin
-    ADD_USER:'/company-admin/add/user',
-    GET_COMPANY_USERS:'/company-admin/users',
+    ADD_USER:"/company-admin/add/user",
+    GET_COMPANY_USERS:"/company-admin/users",
 
     //delete
-    DELETE_COMPANY_USER:'/company-admin/delete'
+    DELETE_COMPANY_USER:"/company-admin/delete"
   }
 
 };

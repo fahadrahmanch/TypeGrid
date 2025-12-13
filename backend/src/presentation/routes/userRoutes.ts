@@ -13,14 +13,14 @@ export class UserRoutes {
             injectCompanyRequestController.companyDetails(req,res);
         });
         this.router.get(Routes.USERS.getUserData,(req:Request,res:Response)=>{
-            injectUserController.getUserData(req,res)
-        })
+            injectUserController.getUserData(req,res);
+        });
         this.router.post(Routes.USERS.updateUser,(req:Request,res:Response)=>{
-            injectUserController.updateUser(req,res)
-        })
+            injectUserController.updateUser(req,res);
+        });
         this.router.get(Routes.USERS.GETCOMPANYSTATUS,(req:Request,res:Response)=>{
-            injectCompanyRequestController.getCompanyStatus(req,res)
-        })
+            injectCompanyRequestController.getCompanyStatus(req,res);
+        });
     }
      getRouter(){
         return this.router;

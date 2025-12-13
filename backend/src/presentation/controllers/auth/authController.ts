@@ -11,6 +11,7 @@ import { IForgotPasswordUseCase } from "../../../domain/interfaces/usecases/auth
 import { IForgotPasswordOtpVerify } from "../../../domain/interfaces/usecases/auth/IForgotPasswordOtpVerify";
 import { ICreateNewPasswordUseCase } from "../../../domain/interfaces/usecases/auth/ICreateNewPasswordUseCase";
 import { IcompanyFindUseCase } from "../../../domain/interfaces/usecases/auth/ICompanyFindUseCase";
+import { MESSAGES } from "../../../domain/constants/messages";
 export class authController {
     constructor(
         private _RegisterUser: IAuthUseCase,
@@ -31,15 +32,15 @@ export class authController {
             const { name, email, password } = req.body;
             logger.info(req.body);
             if (!name || !email || !password) {
-                throw new Error("All fields are required");
+                throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
 
             }
             await this._RegisterUser.createUser({ name, email, password });
-            res.status(200).json({ message: "Otp sent successfully" });
+            res.status(200).json({ message: MESSAGES.OTP_SENT_SUCCESS });
         }
-        catch (error) {
-            logger.error(error);
-            res.status(500).json({ message: "Something went wrong" });
+        catch (error:any) {
+             console.error(error);
+            res.status(500).json({ message:error.message});
         }
     }
     async verifyOtp(req: Request, res: Response): Promise<void> {
@@ -47,7 +48,7 @@ export class authController {
             const { otp, name, email, password } = req.body;
             logger.info(req.body);
             await this._completeSignupUseCase.otp(otp, name, email, password);
-            res.status(200).json({ message: "user register successfull" });
+            res.status(200).json({ message: MESSAGES.AUTH_REGISTER_SUCCESS });
         }
         catch (error: any) {
 
@@ -58,12 +59,12 @@ export class authController {
         try {
             const { name, email } = req.body;
             if (!email) {
-                throw new Error(" Email are required");
+                throw new Error(MESSAGES.EMAIL_REQUIRED);
             }
             await this._resentOtpUseCase.execute(name, email);
             res.json({
                 success: true,
-                message: "OTP resent successfully."
+                message: MESSAGES.OTP_RESENT_SUCCESS
             });
         }
         catch (error: any) {
@@ -79,9 +80,9 @@ export class authController {
             const user = await this._loginUseCase.execute(email, password);
 
             if (!user || !user._id) {
-                throw new Error("User not found or missing id");
+                throw new Error(MESSAGES.USER_DETAILS_NOT_FOUND);
             }
-            if (user.role !== role) {
+            if (user.role !== role&&user.role!=="companyAdmin") {
                 throw new Error(`You are not authorized to login from ${role} portal`);
 
             };
@@ -89,7 +90,7 @@ export class authController {
             const accessToken = await this._tokenServie.generateAccessToken(user?.email, user?.role);
             const refreshToken = await this._tokenServie.generateRefreshToken(user?.email, user?.role);
             if (!accessToken || !refreshToken) {
-                throw new Error("something went wrong");
+                throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
             const UserDeepCopy = JSON.parse(JSON.stringify(user));
             delete UserDeepCopy.password;
@@ -101,7 +102,7 @@ export class authController {
                 path: "/user"
             });
             res.json({
-                message: "Login successfull",
+                message: MESSAGES.AUTH_LOGIN_SUCCESS,
                 accessToken,
                 UserDeepCopy
             });
@@ -131,27 +132,29 @@ export class authController {
                 role = "user";
             }
             const token = req.cookies[tokenName];
-            console.log("token here",token)
-            if (!token) throw new Error("No refresh token found");
+            
+            if (!token) throw new Error(MESSAGES.REFRESH_TOKEN_NOT_FOUND);
             const decoded = await this._tokenServie.verifyRefreshToken(token);
             const user = await this._findUserByEmailUseCase.execute(decoded?.email);
             if (!user) {
-                throw new Error("user not exists");
+                throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
             }
             if (user.status == "block") {
-                throw new Error("Access denied. This account is blocked");
+                throw new Error(MESSAGES.ACCOUNT_BLOCKED_ACCESS_DENIED);
+
             }
             const accessToken = await this._tokenServie.generateAccessToken(decoded?.userId, decoded?.role);
             res.json({
                 success: true,
                 accessToken,
+                user
             });
         }
         catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(400).json({
                 success: false,
-                message: "Refresh token expired or invalid",
+                message: MESSAGES.REFRESH_TOKEN_EXPIRED_OR_INVALID
             });
         }
     }
@@ -159,13 +162,13 @@ export class authController {
         try {
             const { name, email, googleId } = req.body;
             if (!name || !email || !googleId || Object.keys(req.body).length === 0) {
-                throw new Error("Request body is missing");
+                throw new Error(MESSAGES.REQUEST_BODY_MISSING);
             }
             const user = await this._googleAuthUseCase.gooogleAuth(name, email, googleId);
             const accessToken = await this._tokenServie.generateAccessToken(email, "user");
             const refreshToken = await this._tokenServie.generateRefreshToken(email, "user");
             if (!accessToken || !refreshToken) {
-                throw new Error("something went wrong");
+                throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
 
             res.cookie("refresh_user", refreshToken, {
@@ -177,7 +180,7 @@ export class authController {
             });
             res.status(200).json({
                 success: true,
-                message: "Google login successful",
+                message: MESSAGES.GOOGLE_LOGIN_SUCCESS,
                 user,
                 accessToken
             });
@@ -196,24 +199,24 @@ export class authController {
             const base = req.baseUrl;
             const { email } = req.body;
             if (!email) {
-                throw new Error("email is required");
+                throw new Error(MESSAGES.EMAIL_REQUIRED);
             }
             const user = await this._findUserByEmailUseCase.execute(email);
             if (!user) {
-                throw new Error("No user found with this email");
+                throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
             }
 
-            if (base.startsWith("/company")&& !['companyUser', 'companyAdmin'].includes(user.role)){
-               throw new Error("Access denied: Not a company account");
+            if (base.startsWith("/company")&& !["companyUser", "companyAdmin"].includes(user.role)){
+               throw new Error(MESSAGES.ACCESS_DENIED_NOT_COMPANY);
             } 
 
             if (user?.googleId) {
-                throw new Error("This account is registered using Google Sign-In. Password reset is not applicable.");
+               throw new Error(MESSAGES.GOOGLE_ACCOUNT_PASSWORD_RESET_NOT_ALLOWED);
             }
             await this._forgotPassword.execute(email);
             res.status(200).json({
                 success: true,
-                message: "OTP has been sent to your email",
+                message: MESSAGES.OTP_SENT_SUCCESS,
             });
 
 
@@ -227,7 +230,7 @@ export class authController {
         try {
             const { otp, email } = req.body;
             await this._ForgotPasswordOtpVerify.verify(otp, email);
-            res.status(200).json({ message: "otp verify successfull" });
+            res.status(200).json({ message: MESSAGES.OTP_VERIFIED_SUCCESS });
         }
         catch (error: any) {
             console.log(error);
@@ -237,11 +240,10 @@ export class authController {
     async createNewPassword(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body;
-            console.log(email,password)
             await this._createNewPasswordUseCase.execute(email, password);
             res.status(200).json({
                 success: true,
-                message: "Password updated successfully."
+                message: MESSAGES.PASSWORD_UPDATE_SUCCESS
             });
         }
         catch (error: any) {
@@ -254,14 +256,26 @@ export class authController {
 
     async logout(req: Request, res: Response): Promise<void> {
         try {
-
-            res.clearCookie("refresh_user", {
+    const base = req.baseUrl;
+            let tokenName = "";
+            let path = "/";
+            if (base.startsWith("/admin")) {
+                tokenName = "refresh_admin";
+                path = "/admin";
+            } else if (base.startsWith("/company")) {
+                tokenName = "refresh_company";
+                path = "/company";
+            } else if (base.startsWith("/user")) {
+                tokenName = "refresh_user";
+                path = "/user";
+            }
+            res.clearCookie(tokenName, {
                 httpOnly: true,
                 secure: true,
                 sameSite: "strict",
-                path: "/user"
+                path
             });
-            res.status(200).json({ message: "Logout successful" });
+            res.status(200).json({ message: MESSAGES.AUTH_LOGOUT_SUCCESS });
         }
         catch (error) {
             console.log(error);
@@ -275,7 +289,7 @@ export class authController {
             const admin = await this._loginUseCase.execute(email, password);
 
             if (!admin || !admin._id) {
-                throw new Error("Admin not found or missing id");
+                throw new Error(MESSAGES.ADMIN_NOT_FOUND);
             }
             if (admin.role !== role) {
                 throw new Error(`You are not authorized to login from ${role} portal`);
@@ -286,7 +300,7 @@ export class authController {
             const refreshToken = await this._tokenServie.generateRefreshToken(admin?.email, admin?.role);
 
             if (!accessToken || !refreshToken) {
-                throw new Error("something went wrong");
+                throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
             const adminDeepCopy = JSON.parse(JSON.stringify(admin));
             delete adminDeepCopy.password;
@@ -298,7 +312,7 @@ export class authController {
                 path: "/admin"
             });
             res.json({
-                message: "Login successfull",
+                message: MESSAGES.AUTH_LOGIN_SUCCESS,
                 accessToken,
                 adminDeepCopy
             });
@@ -319,24 +333,23 @@ export class authController {
     async companySignIn(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body.data;
-            logger.info("email password",email,password)
+            logger.info("email password",email,password);
             const user = await this._loginUseCase.execute(email, password);
 
             if (!user || !user._id) {
-                throw new Error("User not found or missing id");
+                throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
             }
-            if (user.role !== "companyAdmin") {
-                throw new Error("You are not authorized to login from company portal");
-
+            if (user.role !== "companyAdmin"&&user.role!=="companyUser") {
+                throw new Error(MESSAGES.UNAUTHORIZED_COMPANY_PORTAL_ACCESS);
             };
             if (!user.CompanyId) {
-                throw new Error("Access denied: Missing company association");
+                throw new Error(MESSAGES.MISSING_COMPANY_ASSOCIATION);
             }
             const company = await this._companyFindUseCase.execute(user?.CompanyId);
             const accessToken = await this._tokenServie.generateAccessToken(user?.email, user?.role);
             const refreshToken = await this._tokenServie.generateRefreshToken(user?.email, user?.role);
             if (!accessToken || !refreshToken) { 
-                throw new Error("something went wrong");
+                throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
             const UserDeepCopy = JSON.parse(JSON.stringify(user));
             delete UserDeepCopy.password;
@@ -348,13 +361,12 @@ export class authController {
                 path: "/company"
             });
             res.json({
-                message: "Login successfull",
+                message: MESSAGES.AUTH_LOGIN_SUCCESS,
                 accessToken,
                 UserDeepCopy,
                 company
             });
         }catch (error: any) {
-            console.log("eror", error);
              res.status(400).json({
                 success: false,
                 message: error.message || "Something went wrong."

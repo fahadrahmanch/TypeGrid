@@ -1,7 +1,7 @@
 import { IGoogleAuthUseCase } from "../../../../domain/interfaces/usecases/auth/IGoogleAuthUseCase";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { AuthUserEntity } from "../../../../domain/entities";
-
+import { MESSAGES } from "../../../../domain/constants/messages";
 export class googleAuthUseCase implements IGoogleAuthUseCase {
     constructor(
         private _authRepository: IAuthRepostory
@@ -18,7 +18,7 @@ export class googleAuthUseCase implements IGoogleAuthUseCase {
             return await this._authRepository.create(newUser);
         } else if (user) {
             if (user.status == "block") {
-                throw new Error("Access denied. This account is blocked.");
+                throw new Error(MESSAGES.AUTH_ACCOUNT_BLOCKED);
             }
            return await new AuthUserEntity({
                 name: name,

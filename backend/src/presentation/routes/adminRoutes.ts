@@ -13,17 +13,17 @@ export class adminRouter {
       injectUserManageController.getUsers(req, res);
     });
     this.router.get(Routes.ADMIN.GET_COMPANYS,(req:Request,res:Response)=>{
-      injectCompanyManageController.getCompanys(req,res)
-    })
+      injectCompanyManageController.getCompanys(req,res);
+    });
     this.router.post(Routes.ADMIN.APPROVE_COMPANY,(req:Request,res:Response)=>{
-      injectCompanyManageController.approve(req,res)
-    })
+      injectCompanyManageController.approve(req,res);
+    });
     this.router.post(Routes.ADMIN.REJECT_COMPANY,(req:Request,res:Response)=>{
-      injectCompanyManageController.reject(req,res)
-    })
+      injectCompanyManageController.reject(req,res);
+    });
     this.router.post(Routes.ADMIN.BLOCK_USER,(req:Request,res:Response)=>{
-      injectUserManageController.blockUser(req,res)
-    })
+      injectUserManageController.blockUser(req,res);
+    });
     
   }
   getRouter() {

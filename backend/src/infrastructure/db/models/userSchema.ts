@@ -15,7 +15,7 @@ password:{
 },
 imageUrl:{
     type:String,
-    default: 'https://res.cloudinary.com/demo/image/upload/v1690000000/default-profile.jpg',
+    default: "https://res.cloudinary.com/demo/image/upload/v1690000000/default-profile.jpg",
     required:false
 },
 number:{
@@ -67,7 +67,7 @@ googleId: {
 role:{
     type:String,
     required:true,
-    default:'user'
+    default:"user"
 }
 
 }); 

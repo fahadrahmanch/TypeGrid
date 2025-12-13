@@ -1,6 +1,7 @@
 import { IcompanyFindUseCase } from "../../../../domain/interfaces/usecases/auth/ICompanyFindUseCase";
 import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
 import { companyEntity } from "../../../../domain/entities/CompanyEntiriy";
+import { MESSAGES } from "../../../../domain/constants/messages";
 export class companyFindUseCase implements IcompanyFindUseCase {
     constructor(
         private _baseRepository: IBaseRepository<any>
@@ -10,10 +11,10 @@ export class companyFindUseCase implements IcompanyFindUseCase {
     async execute(companyID: string): Promise<companyEntity> {
         const company = await this._baseRepository.findById(companyID);
         if (!company) {
-            throw new Error("Invalid company reference\"");
+            throw new Error(MESSAGES.INVALID_COMPANY_REFERENCE);
         }
         if (company.status != "active") {
-            throw new Error("Company account is inactive");
+            throw new Error(MESSAGES.COMPANY_ACCOUNT_INACTIVE);
         }
        return new companyEntity({
                     companyName:company.companyName,
@@ -24,6 +25,5 @@ export class companyFindUseCase implements IcompanyFindUseCase {
                     OwnerId:company.OwnerId,
                     status: "active",
                 });
-
     }
 }

@@ -15,10 +15,15 @@ export class companyRequestUseCase implements ICompanyRequestUseCase {
             number,
             status: "pending",
         });
-        const user=await this._baseRepositoryUser.findById(OwnerId)
+        const exists=await this._baseRepositoryCompany.find({OwnerId})
+        
+if (exists.length > 0) {
+  throw new Error("You have already registered a company");
+}
+        const user=await this._baseRepositoryUser.findById(OwnerId);
         const companyDoc= await this._baseRepositoryCompany.create(company);
-        user.CompanyId=companyDoc._id
-        await this._baseRepositoryUser.update(user) 
+        user.CompanyId=companyDoc._id;
+        await this._baseRepositoryUser.update(user); 
     }
 
 }

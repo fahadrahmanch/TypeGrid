@@ -6,6 +6,6 @@ constructor(
 private _baseRepository:IBaseRepository< AuthUserEntity>
 ){}
 async execute(email: string): Promise<AuthUserEntity | null> {
-    return await this._baseRepository.FindByEmail(email)
+    return await this._baseRepository.FindByEmail(email);
 }
 }

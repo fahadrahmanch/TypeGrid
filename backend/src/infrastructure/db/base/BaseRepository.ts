@@ -32,7 +32,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     );
   }
   async delete(_id:string):Promise<T|null>{
-    return this.model.findByIdAndDelete(_id)
+    return this.model.findByIdAndDelete(_id);
   }
 
 }

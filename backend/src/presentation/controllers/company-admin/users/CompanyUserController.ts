@@ -3,8 +3,8 @@ import { IAddUserUseCase } from "../../../../domain/interfaces/usecases/companyA
 import { ITokenService } from "../../../../domain/interfaces/services/ITokenService";
 import { IFindUserUseCase } from "../../../../domain/interfaces/user/IFindUserUseCase";
 import { IGetCompanyUsersUseCase } from "../../../../domain/interfaces/usecases/companyAdmin/IGetCompanyUsersUseCase";
-import { Company } from "../../../../infrastructure/db/models/company/companySchema";
 import { IDeleteCompanyUserUseCase } from "../../../../domain/interfaces/usecases/companyAdmin/IDeleteCompanyUserUseCase";
+import { MESSAGES } from "../../../../domain/constants/messages";
 export class CompanyUserController {
   constructor(
     private _addUserUseCase: IAddUserUseCase,
@@ -17,25 +17,22 @@ export class CompanyUserController {
     try {
       const userData = req.body;
       if (!userData.name ||!userData.email ||!userData.password ||!userData.role) {
-        throw new Error("All fields are required");
+        throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
       }
       const token = req.cookies.refresh_company;
-      console.log("token",token)
       if (!token) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
       const { email } = await this._tokenService.verifyRefreshToken(token);
-      console.log("email",email)
       const user = await this._findUserUseCase.execute(email);
       if (!user) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
       if (!user.CompanyId) {
-        throw new Error("Access denied. Company not assigned to this user.");
+        throw new Error(MESSAGES.COMPANY_NOT_ASSIGNED_TO_USER);
       }
       userData.CompanyId=user.CompanyId;
-      console.log("userData",userData)
-      const data=await this._addUserUseCase.addUser(userData)
+      const data=await this._addUserUseCase.addUser(userData);
        const newUser = {
          name: data.name,
          email: data.email,
@@ -46,11 +43,11 @@ export class CompanyUserController {
        };
       res.status(201).json({
       success: true,
-      message: "User added successfully",
+      message: MESSAGES.USER_ADDED_SUCCESS,
       data:newUser
     });
     } catch (error: any) {
-        console.log(error)
+        console.log(error);
         res.status(500).json({
           success: false,
           message: error.message || "Internal Server Error",
@@ -61,28 +58,26 @@ export class CompanyUserController {
     try{
     const token=req.cookies.refresh_company;
     if (!token) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
       const { email } = await this._tokenService.verifyRefreshToken(token);
-      console.log("email",email)
       const user = await this._findUserUseCase.execute(email);
       if (!user) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
       if (!user.CompanyId) {
-        throw new Error("Access denied. Company not assigned to this user.");
+        throw new Error(MESSAGES.COMPANY_NOT_ASSIGNED_TO_USER);
       }
-      const companyUsers=await this._getCompanyUsersUseCase.execute(user.CompanyId)
-      console.log("companyUsers",companyUsers)
+      const companyUsers=await this._getCompanyUsersUseCase.execute(user.CompanyId);
       const SafecompanyUsers=companyUsers.map(({ password, ...rest }) => rest);
       res.status(200).json({
       success: true,
-      message: "Company users fetched successfully.",
+      message:  MESSAGES.COMPANY_USERS_FETCHED_SUCCESS,
       data: SafecompanyUsers
     });
     }
     catch(error:any){
-      console.log(error)
+      console.log(error);
       res.status(500).json({
       success: false,
       message: error?.message || "Something went wrong"
@@ -94,12 +89,12 @@ export class CompanyUserController {
     try{
     const companyUserId=req.body._id;
     if(!companyUserId){
-      throw new Error("something went wrong")
+      throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
     }
-    await this._deleteCompanyUserUseCase.deleteUser(companyUserId)
+    await this._deleteCompanyUserUseCase.deleteUser(companyUserId);
       res.status(200).json({
       success: true,
-      message: "User deleted successfully",
+      message: MESSAGES.USER_DELETED_SUCCESS,
     });
 
 
@@ -108,7 +103,7 @@ export class CompanyUserController {
       console.log(error);
       res.status(500).json({
         success: false,
-        message: "Internal server error",
+        message: MESSAGES.INTERNAL_SERVER_ERROR,
       });
 
     }

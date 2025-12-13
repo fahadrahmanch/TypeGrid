@@ -12,6 +12,7 @@ export class OtpService implements IOtpService{
             const randomIndex=Math.floor(Math.random()*9);
             otp+=randomIndex;
         }
+        console.log("otp",otp)
         this.storeOtp(otp,email);
         return otp;
     }

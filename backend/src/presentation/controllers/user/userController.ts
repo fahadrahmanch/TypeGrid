@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
 import { IFindUserUseCase } from "../../../domain/interfaces/user/IFindUserUseCase";
 import { IUserUpdateUseCase } from "../../../domain/interfaces/user/IUserUpdateUseCase";
+import { MESSAGES } from "../../../domain/constants/messages";
 export class userController {
   constructor(
     private _tokenService: ITokenService,
@@ -11,16 +12,16 @@ export class userController {
 
   async getUserData(req: Request, res: Response) {
     try {
-      const token = req.cookies.refreshToken;
+      const token = req.cookies.refresh_user;
       if (!token) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
       const { email } = await this._tokenService.verifyRefreshToken(token);
       const user = await this._findUserUseCase.execute(email);
       if (!user) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
-     
+      console.log("user",user)
       const userDoc = JSON.parse(JSON.stringify(user));
       delete userDoc.password;
       delete userDoc.CompanyId;
@@ -30,7 +31,7 @@ export class userController {
       console.log(error);
       res.status(500).json({
         success: false,
-        message: "Something went wrong while fetching users",
+        message: MESSAGES.USERS_FETCH_FAILED,
       });
     }
   }
@@ -40,13 +41,13 @@ export class userController {
       const data = req.body;
       const user = await this._findUserUseCase.execute(data?.email);
       if (!user) {
-        throw new Error("something went wrong");
+        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
       data._id = user._id;
       await this._updateUserUseCase.execute(data);
       res.status(200).json({
         success: true,
-        message: "User updated successfully",
+        message: MESSAGES.UPDATE_SUCCESS,
       });
     } catch (error) {
       console.log("error ", error);

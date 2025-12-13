@@ -3,6 +3,7 @@ import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IA
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
 import { IEmailService } from "../../../../domain/interfaces/services/IEmailService";
 import { IEmailTemplate } from "../../../../domain/interfaces/emailTemplates/IEmailTemplate";
+import { MESSAGES } from "../../../../domain/constants/messages";
 export class registerUser implements IAuthUseCase {
     constructor(
         private userRepository: IAuthRepostory,
@@ -12,11 +13,12 @@ export class registerUser implements IAuthUseCase {
     }
     async createUser({ name, email, password }: { name: string; email: string; password: string }): Promise<void> {
         if (!name || !email || !password) {
-            throw new Error("All fields are required");
+            throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
+
         }
         const exists = await this.userRepository.findByEmail(email);
         if (exists) {
-            throw new Error("User already exists with this email");
+            throw new Error(MESSAGES.AUTH_EMAIL_EXISTS);
         }
         const otp = await this.otpService.createOtp(email);
         const emailOptions: IEmailTemplate = {

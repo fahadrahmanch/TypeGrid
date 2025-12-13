@@ -9,14 +9,14 @@ export class companyAdminRouter {
   }
   initializeRoutes() {
     this.router.post(Routes.COMPANY_ADMIN.ADD_USER,(req:Request,res:Response)=>{
-        injectCompanyUserController.addUser(req,res)
-    })
+        injectCompanyUserController.addUser(req,res);
+    });
     this.router.get(Routes.COMPANY_ADMIN.GET_COMPANY_USERS,(req:Request,res:Response)=>{
-      injectCompanyUserController.getUsers(req,res)
-    })
+      injectCompanyUserController.getUsers(req,res);
+    });
     this.router.delete(Routes.COMPANY_ADMIN.DELETE_COMPANY_USER,(req:Request,res:Response)=>{
-      injectCompanyUserController.deleteCompanyUser(req,res)
-    })
+      injectCompanyUserController.deleteCompanyUser(req,res);
+    });
     
   }
   getRouter() {
