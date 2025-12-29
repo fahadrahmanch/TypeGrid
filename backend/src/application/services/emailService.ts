@@ -29,8 +29,8 @@ export class EmailService implements IEmailService{
   }
   
   async sentOtp(template:IEmailTemplate): Promise<void> {
-     
-      const html=await HtmlforOtp(template.name,template.otp,template.body??"");
+    
+    const html=await HtmlforOtp(template.name,template.otp,template.body??"");
       
       const mailOptions:nodemailer.SendMailOptions={
         from:process.env.EMAIL_USER,
@@ -41,6 +41,7 @@ export class EmailService implements IEmailService{
       await this._transporter.sendMail(mailOptions);
     }
 }
+
 
 
 
