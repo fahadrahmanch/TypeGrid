@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IAddUserUseCase } from "../../../../domain/interfaces/usecases/companyAdmin/IAddUserUseCase";
 import { ITokenService } from "../../../../domain/interfaces/services/ITokenService";
-import { IFindUserUseCase } from "../../../../domain/interfaces/user/IFindUserUseCase";
+import { IFindUserUseCase } from "../../../../domain/interfaces/usecases/user/IFindUserUseCase";
 import { IGetCompanyUsersUseCase } from "../../../../domain/interfaces/usecases/companyAdmin/IGetCompanyUsersUseCase";
 import { IDeleteCompanyUserUseCase } from "../../../../domain/interfaces/usecases/companyAdmin/IDeleteCompanyUserUseCase";
 import { MESSAGES } from "../../../../domain/constants/messages";

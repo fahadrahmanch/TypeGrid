@@ -1,3 +1,5 @@
+import { Verify } from "crypto"
+
 export const Routes = {
   AUTH: {
     //user
@@ -37,8 +39,12 @@ export const Routes = {
 
     //Edit
     updateUser:"/update",
-  
+    //post
     verifyCompany: "/subscription/company/verify",
+
+
+    // put
+    RE_VERIFY_COMPANY:'/subscription/company/re-verify',
 
     //get company status
     GETCOMPANYSTATUS:"/subscription/company/status"

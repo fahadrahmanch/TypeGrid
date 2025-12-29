@@ -1,5 +1,5 @@
 import { IGetUsersUseCase } from "../../../domain/interfaces/usecases/admin/IGetUsersUseCase";
-import { InterfaceUser } from "../../../domain/interfaces/user/InterfaceUser";
+import { InterfaceUser } from "../../../domain/interfaces/usecases/user/InterfaceUser";
 import { IAuthRepostory } from "../../../domain/interfaces/repository/user/IAuthRepository";
 export class getUsersUseCase implements IGetUsersUseCase {
   constructor(private authRepository: IAuthRepostory) {}

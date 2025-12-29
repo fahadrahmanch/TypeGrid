@@ -10,5 +10,6 @@ export class companyEntity extends Entity<companyEntity>{
     number?:string;
     OwnerId?:string;
     // subscriptionPlansId!: string;
+    rejectionReason?:string;
     status?: "active" | "inactive"|"pending"|"reject";
 }

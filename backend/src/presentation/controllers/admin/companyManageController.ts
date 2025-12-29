@@ -47,10 +47,11 @@ export class companyManageController {
   async reject(req: Request, res: Response): Promise<void> {
     try {
       const companyId = req.body._id;
+      const rejectionReason=req.body.reason
       if (!companyId) {
         throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
-        await this._companyApproveRejectUseCase.reject(companyId);
+      await this._companyApproveRejectUseCase.reject(companyId,rejectionReason);
       res.status(200).json({
         message: MESSAGES.COMPANY_REJECTED_SUCCESS,
       });

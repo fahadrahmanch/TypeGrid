@@ -23,6 +23,10 @@ export class EmailService implements IEmailService{
       .then(() => logger.info(" Mail transporter connected successfully"))
       .catch(err => logger.error(" Mail transporter connection failed:", err));
   }
+
+  async sendMail(mailOptions:nodemailer.SendMailOptions): Promise<void> {
+    await this._transporter.sendMail(mailOptions);
+  }
   
   async sentOtp(template:IEmailTemplate): Promise<void> {
      

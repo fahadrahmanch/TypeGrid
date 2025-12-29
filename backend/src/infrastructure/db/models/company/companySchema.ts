@@ -31,6 +31,10 @@ const companySchema = new Schema(
       type:String,
       require:true
     },
+    rejectionReason:{
+      type:String,
+      require:false
+    },
     status: {
       type: String,
       enum: ["active", "inactive","pending","reject"],

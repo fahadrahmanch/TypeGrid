@@ -1,4 +1,4 @@
-import { ICompanyRequestUseCase } from "../../../domain/interfaces/user/ICompanyRequestUseCase";
+import { ICompanyRequestUseCase } from "../../../domain/interfaces/usecases/user/ICompanyRequestUseCase";
 import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
 import { companyEntity } from "../../../domain/entities/CompanyEntiriy";
 export class companyRequestUseCase implements ICompanyRequestUseCase {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
-import { IFindUserUseCase } from "../../../domain/interfaces/user/IFindUserUseCase";
-import { IUserUpdateUseCase } from "../../../domain/interfaces/user/IUserUpdateUseCase";
+import { IFindUserUseCase } from "../../../domain/interfaces/usecases/user/IFindUserUseCase";
+import { IUserUpdateUseCase } from "../../../domain/interfaces/usecases/user/IUserUpdateUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 export class userController {
   constructor(
@@ -21,7 +21,6 @@ export class userController {
       if (!user) {
         throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
-      console.log("user",user)
       const userDoc = JSON.parse(JSON.stringify(user));
       delete userDoc.password;
       delete userDoc.CompanyId;
