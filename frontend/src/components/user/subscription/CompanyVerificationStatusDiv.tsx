@@ -22,6 +22,11 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
     }
     fetchCompanyDetails();
   },[]);
+
+  const handleReApply=()=>{
+    navigate("/subscription/company/re-verify");
+  }
+
   return (
     <>
       <div className="min-h-screen mt-12 flex flex-col items-center pt-10 px-4">
@@ -56,16 +61,42 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
             </div>
           )}
           {company?.status === "reject" && (
-            <div className="bg-[#FEF2F2] border-2 border-[#FECACA] rounded-xl p-6 flex items-start gap-5 shadow-sm">
-              <div className="text-4xl">⚠️</div>
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-6 flex gap-5 shadow-sm">
+              {/* <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-2xl">
+                ⚠️
+              </div> */}
+
+              <div className="flex-1">
+                <h2 className="text-lg font-semibold text-gray-900">
                   Verification Failed
                 </h2>
-                <p className="text-gray-600 mt-1">
-                  Your submission was rejected. Please review and resubmit your
-                  company details.
+
+                <p className="text-sm text-gray-600 mt-1">
+                  Your company verification was rejected. Please review the
+                  reason and re-apply after fixing the issues.
                 </p>
+
+                {company?.rejectionReason && (
+                  <div className="mt-4 bg-white border border-red-100 rounded-xl p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-red-600">
+                      Reason for rejection
+                    </p>
+                    <p className="text-sm text-gray-700 mt-1">
+                      {company.rejectionReason}
+                    </p>
+                  </div>
+                )}
+
+
+                {/* ACTIONS */}
+                <div className="mt-5  gap-3 flex justify-center">
+                  <button
+                    onClick={handleReApply}
+                    className="bg-[#B99F8D]  text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition shadow-sm"
+                  >
+                    Re-Apply
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -131,7 +162,7 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
           </div>
 
           {/* 3. Action Button */}
-          <button className="w-full bg-[#1C5CE5] hover:bg-blue-700 text-white font-semibold py-3.5 rounded-lg transition-colors shadow-sm">
+          <button className="w-full bg-[#B99F8D]  text-white font-semibold py-3.5 rounded-lg transition-colors shadow-sm">
             Back to Home
           </button>
         </div>

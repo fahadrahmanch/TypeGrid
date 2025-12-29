@@ -32,7 +32,6 @@ const EditProfileDiv1: React.FC = () => {
   useEffect(() => {
     async function getUserData() {
       const res = await GetUserDataApi();
-      console.log("res data",res.data)
       if (res?.data) {
         setUser({
           name: res.data.name,
@@ -46,7 +45,6 @@ const EditProfileDiv1: React.FC = () => {
       }
     }
     getUserData();
-    console.log(user.bio)
   }, []);
 
   const handleSubmit = async (e: any) => {

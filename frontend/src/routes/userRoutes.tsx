@@ -13,6 +13,7 @@ import EditProfile from "../pages/user/editProfile";
 import CompanySubscription from "../pages/user/Subscription/companySubscription";
 import CompanyVerification from "../pages/user/Subscription/CompanyVerification";
 import CompanyVerificationStatus from "../pages/user/Subscription/CompanyVerificationStatus";
+import CompanyVerificationReapply from "../pages/user/Subscription/companyVerificationReapply";
 import {  useLocation } from "react-router-dom";
 export default function UserRoutes() {
   const location = useLocation();
@@ -34,6 +35,7 @@ export default function UserRoutes() {
       <Route path="subscription/company" element={<ProtectRouteUser><CompanySubscription /></ProtectRouteUser>} />
       <Route path="subscription/company/verify" element={<ProtectRouteUser><CompanyVerification /></ProtectRouteUser>} />
       <Route path="subscription/company/verify/status" element={<ProtectRouteUser><CompanyVerificationStatus /></ProtectRouteUser>} />
+      <Route path="subscription/company/re-verify" element={<ProtectRouteUser><CompanyVerificationReapply/></ProtectRouteUser>}/>
     </Routes>
   );
 }

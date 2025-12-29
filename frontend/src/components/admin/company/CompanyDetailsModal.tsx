@@ -1,7 +1,7 @@
 import { approveCompanyRequest } from "../../../api/admin/company";
 import { rejectCompanyRequest } from "../../../api/admin/company";
 import { toast } from "react-toastify";
-
+import { useState } from "react";
 interface CompanyDetailsModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   company: any;
@@ -13,6 +13,8 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
   company,
   setCompany,
 }) => {
+const [showRejectModal, setShowRejectModal] = useState(false);
+const [rejectReason, setRejectReason] = useState("");
   async function handleApprove() {
     try {
       const response = await approveCompanyRequest(company?._id);
@@ -35,7 +37,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
   }
   async function handleReject() {
     try {
-      const response = await rejectCompanyRequest(company?._id);
+      const response = await rejectCompanyRequest(company?._id,rejectReason);
       if (response?.data?.message) {
         toast.success(response.data.message);
       } else {
@@ -258,7 +260,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
                   <p className="font-medium text-gray-900">Wandoor Main Road</p>
                   <p className="text-gray-500 mt-0.5">
                     Near Central Junction, Malappuram Dist, Kerala, 679328.
-                    (Full address details here...)
+                    {/* (Full address details here...) */}
                   </p>
                 </div>
               </div>
@@ -276,8 +278,8 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
             {company && company.status == "pending" && (
               <div className="flex gap-3">
                 <button
-                  onClick={handleReject}
-                  className="rounded-lg border border-red-200 bg-white text-red-600 px-5 py-2.5 text-sm font-medium hover:bg-red-50 hover:border-red-300 focus:ring-4 focus:ring-red-100 transition shadow-sm"
+                  onClick={() => setShowRejectModal(true)}
+                  className="rounded-lg border border-red-200 bg-white text-red-600 px-5 py-2.5 text-sm font-medium hover:bg-red-50"
                 >
                   Reject Request
                 </button>
@@ -305,6 +307,40 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
           </div>
         </div>
       </div>
+      {showRejectModal && (
+  <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+        Reject Company
+      </h3>
+
+      <textarea
+        rows={4}
+        placeholder="Enter reason for rejection"
+        value={rejectReason}
+        onChange={(e) => setRejectReason(e.target.value)}
+        className="w-full border rounded-md p-2 focus:ring-2 focus:ring-red-200"
+      />
+
+      <div className="flex justify-end gap-3 mt-4">
+        <button
+          onClick={() => setShowRejectModal(false)}
+          className="text-sm text-gray-500"
+        >
+          Cancel
+        </button>
+
+        <button
+          disabled={!rejectReason.trim()}
+          onClick={handleReject}
+          className="bg-red-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+        >
+          Confirm Reject
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 };

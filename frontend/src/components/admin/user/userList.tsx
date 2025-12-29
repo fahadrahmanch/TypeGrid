@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllUsers } from "../../../api/admin/users";
 import { blockUser } from "../../../api/admin/users";
+import ConfirmModal from "../../common/ConfirmModal";
 const UserList: React.FC = () => {
   const [status, setStatus] = useState("All");
   const [users, setUsers] = useState<any[]>([]);
@@ -9,6 +10,8 @@ const UserList: React.FC = () => {
   const [limit] = useState(8); 
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -50,13 +53,62 @@ const UserList: React.FC = () => {
   // setFilterUsers(filtered);
 }, [searchText, status, users,page]);
 
-  async function handleBlock(userId:string){
-    const res=await blockUser(userId);
-    
+function openConfirmModal(user: any) {
+  setSelectedUser(user);
+  setShowModal(true);
+}
+async function confirmBlockAction() {
+  if (!selectedUser) return;
+
+  const userId = selectedUser._id;
+  const res = await blockUser(userId);
+
   if (res.data.success) {
-    setUsers(prev =>prev.map(u =>u._id ===userId?{ ...u, status: u.status === "active" ? "blocked" : "active" }: u));
+    setUsers(prev =>
+      prev.map(u =>
+        u._id === userId
+          ? {
+              ...u,
+              status: u.status === "active" ? "blocked" : "active",
+            }
+          : u
+      )
+    );
   }
-  }
+
+  setShowModal(false);
+  setSelectedUser(null);
+}
+
+// async function handleBlock(userId: string) {
+//   const user = users.find(u => u._id === userId);
+//   if (!user) return;
+
+//   const action =
+//     user.status === "active" ? "block" : "unblock";
+
+//   const confirmed = window.confirm(
+//     `Are you sure you want to ${action} this user?`
+//   );
+
+//   if (!confirmed) return;
+
+//   const res = await blockUser(userId);
+
+//   if (res.data.success) {
+//     setUsers(prev =>
+//       prev.map(u =>
+//         u._id === userId
+//           ? {
+//               ...u,
+//               status: u.status === "active" ? "blocked" : "active",
+//             }
+//           : u
+//       )
+//     );
+//   }
+// }
+
 
   return (
     <>
@@ -136,7 +188,7 @@ const UserList: React.FC = () => {
                       View
                     </button> */}
                     <button
-                      onClick={() => handleBlock(user._id)}
+                      onClick={() => openConfirmModal(user)}
                       className={`px-3 py-1 text-sm rounded transition ${
                         user?.status === "active"
                           ? "bg-red-500 text-white hover:bg-red-600" // Show red Block button
@@ -170,6 +222,22 @@ const UserList: React.FC = () => {
     Next
   </button>
 </div>
+<ConfirmModal
+  isOpen={showModal}
+  title={
+    selectedUser?.status === "active"
+      ? "Block User"
+      : "Unblock User"
+  }
+  message={`Are you sure you want to ${
+    selectedUser?.status === "active" ? "block" : "unblock"
+  } this user?`}
+  confirmText={
+    selectedUser?.status === "active" ? "Block" : "Unblock"
+  }
+  onConfirm={confirmBlockAction}
+  onCancel={() => setShowModal(false)}
+/>
 
     </>
   );

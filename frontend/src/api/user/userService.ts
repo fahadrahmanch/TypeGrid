@@ -4,6 +4,10 @@ export async function CompanyDetailsApi(data: any) {
   return userAPI.post("/subscription/company/verify", data);
 }
 
+export async function reApplyCompanyDetails(data:any){
+  return userAPI.put("/subscription/company/re-verify",data)
+}
+
 export async function GetUserDataApi(){
   return userAPI.get("/data");
 }
@@ -14,3 +18,6 @@ export async function UpdateUserDataApi(user:any){
 export async function getCompanyStatus(){
   return userAPI.get("/subscription/company/status");
 }
+
+
+
