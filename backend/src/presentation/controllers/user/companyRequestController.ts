@@ -87,9 +87,17 @@ export class companyRequestController {
         throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
       }
       await this._companyReApplyUseCase.execute({userId:user._id,email,companyName,number,address})
+      res.status(200).json({
+      success: true,
+      message: "Company details re-applied successfully",
+    });
 
     } catch (error: any) {
       console.log(error);
+      res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
     }
   }
 
