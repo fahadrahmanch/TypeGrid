@@ -75,8 +75,9 @@ const CompanyVerificationReapply: React.FC = ({}) => {
 
     try {
       await reApplyCompanyDetails(values);
+      console.log("reApplied successfully");
       toast.success("Company details submitted for verification");
-      navigate("/company/status");
+      navigate("/subscription/company/verify/status");
     } catch (err) {
       toast.error("Something went wrong. Try again");
     }
