@@ -1,6 +1,6 @@
-import { IcompanyFindUseCase } from "../../../../domain/interfaces/usecases/auth/ICompanyFindUseCase";
+import { IcompanyFindUseCase } from "../../../../domain/interfaces/useCases/auth/ICompanyFindUseCase";
 import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
-import { companyEntity } from "../../../../domain/entities/CompanyEntiriy";
+import { companyEntity } from "../../../../domain/entities/user/CompanyEntiriy";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class companyFindUseCase implements IcompanyFindUseCase {
     constructor(

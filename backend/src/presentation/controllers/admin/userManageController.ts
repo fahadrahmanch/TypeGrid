@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { IGetUsersUseCase } from "../../../domain/interfaces/usecases/admin/IGetUsersUseCase";
-import { InterfaceUser } from "../../../domain/interfaces/usecases/user/InterfaceUser";
-import { IBlockUserUseCase } from "../../../domain/interfaces/usecases/admin/IBlockUserUseCase";
+import { IGetUsersUseCase } from "../../../domain/interfaces/useCases/admin/IGetUsersUseCase";
+import { InterfaceUser } from "../../../domain/interfaces/useCases/user/InterfaceUser";
+import { IBlockUserUseCase } from "../../../domain/interfaces/useCases/admin/IBlockUserUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 import logger from "../../../utils/logger";
 export class userManageController {

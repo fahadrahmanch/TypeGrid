@@ -1,4 +1,4 @@
-import { IAddUserUseCase } from "../../../../domain/interfaces/usecases/companyAdmin/IAddUserUseCase";
+import { IAddUserUseCase } from "../../../../domain/interfaces/useCases/companyAdmin/IAddUserUseCase";
 import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
 import { AuthUserEntity } from "../../../../domain/entities";
 import { IHashService } from "../../../../domain/interfaces/services/IHashService";

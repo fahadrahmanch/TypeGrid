@@ -10,13 +10,22 @@ import { AuthUserEntity } from "../../domain/entities";
 import { updateUserUseCase } from "../../application/use-cases/user/updateUserUseCase";
 import { getCompanyUseCase } from "../../application/use-cases/user/getCompanyUseCase";
 import { companyReApplyUseCase } from "../../application/use-cases/user/companyReApplyUseCase";
+import { typingPracticeController } from "../controllers/user/typingPracticeController";    
+import { getPracticeTypingContentUseCase } from "../../application/use-cases/user/TypingPractice/getPracticeTypingContentUseCase";
+import { Lesson } from "../../infrastructure/db/models/admin/lessonSchema";
 const baseRepoCompany=new BaseRepository(Company);
 const baseRepoUser=new BaseRepository<AuthUserEntity>(User);
 const CompanyRequestUseCase=new companyRequestUseCase(baseRepoCompany,baseRepoUser);
 const tokenService=new TokenService();
 const FindUserUseCase=new findUserUseCase(baseRepoUser);
 const GetCompanyUseCase=new getCompanyUseCase(baseRepoCompany);
-const CompanyReApplyUseCase=new companyReApplyUseCase(baseRepoCompany,baseRepoUser)
+const CompanyReApplyUseCase=new companyReApplyUseCase(baseRepoCompany,baseRepoUser);
+
+// typing practice  dependencies
+const baseRepoLesson=new BaseRepository(Lesson);
+const GetPracticeTypingContentUseCase=new getPracticeTypingContentUseCase(baseRepoLesson);
+
+export const injectTypingPracticeController=new typingPracticeController(GetPracticeTypingContentUseCase);
 export const injectCompanyRequestController=new companyRequestController(CompanyRequestUseCase,tokenService,FindUserUseCase,GetCompanyUseCase,CompanyReApplyUseCase);
 const UpdateUserUseCase=new updateUserUseCase(baseRepoUser);
 export const injectUserController =new userController(tokenService,FindUserUseCase,UpdateUserUseCase);

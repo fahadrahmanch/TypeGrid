@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { companyEntity } from "../../../../domain/entities/CompanyEntiriy";
+import { companyEntity } from "../../../../domain/entities/user/CompanyEntiriy";
 
 const companySchema = new Schema(
   {

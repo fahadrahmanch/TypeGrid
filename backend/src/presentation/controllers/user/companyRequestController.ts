@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { ICompanyRequestUseCase } from "../../../domain/interfaces/usecases/user/ICompanyRequestUseCase";
+import { ICompanyRequestUseCase } from "../../../domain/interfaces/useCases/user/ICompanyRequestUseCase";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
-import { IFindUserUseCase } from "../../../domain/interfaces/usecases/user/IFindUserUseCase";
-import { IGetCompanyUseCase } from "../../../domain/interfaces/usecases/user/IGetCompanyUseCase";
+import { IFindUserUseCase } from "../../../domain/interfaces/useCases/user/IFindUserUseCase";
+import { IGetCompanyUseCase } from "../../../domain/interfaces/useCases/user/IGetCompanyUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { CompanyReApplyDTO } from "../../../application/DTOs/user/CompanyReApplyDTO";
-import { ICompanyReApplyUseCase } from "../../../domain/interfaces/usecases/user/ICompanyReApplyUseCase";
+import { ICompanyReApplyUseCase } from "../../../domain/interfaces/useCases/user/ICompanyReApplyUseCase";
 
 export class companyRequestController {
   constructor(
@@ -82,11 +82,10 @@ export class companyRequestController {
         throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
       }
       const { companyName, address, email, number } = req.body;
-      console.log("req.body",req.body)
       if (!companyName || !address || !email || !number) {
         throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
       }
-      await this._companyReApplyUseCase.execute({userId:user._id,email,companyName,number,address})
+      await this._companyReApplyUseCase.execute({userId:user._id,email,companyName,number,address});
       res.status(200).json({
       success: true,
       message: "Company details re-applied successfully",

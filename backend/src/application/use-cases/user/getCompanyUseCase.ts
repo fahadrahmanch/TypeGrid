@@ -1,4 +1,4 @@
-import { IGetCompanyUseCase } from "../../../domain/interfaces/usecases/user/IGetCompanyUseCase";
+import { IGetCompanyUseCase } from "../../../domain/interfaces/useCases/user/IGetCompanyUseCase";
 import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
 export class getCompanyUseCase implements IGetCompanyUseCase{
     constructor(

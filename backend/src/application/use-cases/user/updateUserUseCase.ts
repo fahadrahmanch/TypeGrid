@@ -1,4 +1,4 @@
-import { IUserUpdateUseCase } from "../../../domain/interfaces/usecases/user/IUserUpdateUseCase";
+import { IUserUpdateUseCase } from "../../../domain/interfaces/useCases/user/IUserUpdateUseCase";
 import { AuthUserEntity } from "../../../domain/entities";
 import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
 export class updateUserUseCase implements IUserUpdateUseCase{

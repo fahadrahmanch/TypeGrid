@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { IAuthUseCase } from "../../../domain/interfaces/usecases/auth/IAuthUseCase";
-import { ICompleteSignupUseCase } from "../../../domain/interfaces/usecases/auth/ICompleteSignupUseCase";
-import { IResentOtpUseCase } from "../../../domain/interfaces/usecases/auth/IResentOtpUsecase";
+import { IAuthUseCase } from "../../../domain/interfaces/useCases/auth/IAuthUseCase";
+import { ICompleteSignupUseCase } from "../../../domain/interfaces/useCases/auth/ICompleteSignupUseCase";
+import { IResentOtpUseCase } from "../../../domain/interfaces/useCases/auth/IResentOtpUsecase";
 import logger from "../../../utils/logger";
-import { ILoginUseCase } from "../../../domain/interfaces/usecases/auth/ILoginUseCase";
+import { ILoginUseCase } from "../../../domain/interfaces/useCases/auth/ILoginUseCase";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
-import { IGoogleAuthUseCase } from "../../../domain/interfaces/usecases/auth/IGoogleAuthUseCase";
-import { IFindUserByemailUseCase } from "../../../domain/interfaces/usecases/auth/IFindUserByEmailUseCase";
-import { IForgotPasswordUseCase } from "../../../domain/interfaces/usecases/auth/IForgotPasswordUseCase";
-import { IForgotPasswordOtpVerify } from "../../../domain/interfaces/usecases/auth/IForgotPasswordOtpVerify";
-import { ICreateNewPasswordUseCase } from "../../../domain/interfaces/usecases/auth/ICreateNewPasswordUseCase";
-import { IcompanyFindUseCase } from "../../../domain/interfaces/usecases/auth/ICompanyFindUseCase";
+import { IGoogleAuthUseCase } from "../../../domain/interfaces/useCases/auth/IGoogleAuthUseCase";
+import { IFindUserByemailUseCase } from "../../../domain/interfaces/useCases/auth/IFindUserByEmailUseCase";
+import { IForgotPasswordUseCase } from "../../../domain/interfaces/useCases/auth/IForgotPasswordUseCase";
+import { IForgotPasswordOtpVerify } from "../../../domain/interfaces/useCases/auth/IForgotPasswordOtpVerify";
+import { ICreateNewPasswordUseCase } from "../../../domain/interfaces/useCases/auth/ICreateNewPasswordUseCase";
+import { IcompanyFindUseCase } from "../../../domain/interfaces/useCases/auth/ICompanyFindUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 export class authController {
     constructor(

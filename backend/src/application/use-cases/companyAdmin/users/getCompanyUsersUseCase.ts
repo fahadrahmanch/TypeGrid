@@ -1,6 +1,6 @@
 import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
-import { InterfaceUser } from "../../../../domain/interfaces/usecases/user/InterfaceUser";
-import { IGetCompanyUsersUseCase } from "../../../../domain/interfaces/usecases/companyAdmin/IGetCompanyUsersUseCase";
+import { InterfaceUser } from "../../../../domain/interfaces/useCases/user/InterfaceUser";
+import { IGetCompanyUsersUseCase } from "../../../../domain/interfaces/useCases/companyAdmin/IGetCompanyUsersUseCase";
 export class getCompanyUsersUseCase implements IGetCompanyUsersUseCase{
     constructor(
         private _baseRepository:IBaseRepository<any>

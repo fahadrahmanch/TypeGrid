@@ -1,4 +1,4 @@
-import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/usecases/admin/ICompanyApproveRejectUsecase";
+import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/useCases/admin/ICompanyApproveRejectUsecase";
 import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IEmailService } from "../../../domain/interfaces/services/IEmailService";
@@ -98,3 +98,4 @@ export class companyApproveRejectUsecase
   }
   
 }
+

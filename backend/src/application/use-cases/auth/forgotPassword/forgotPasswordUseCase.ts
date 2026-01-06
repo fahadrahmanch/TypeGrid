@@ -1,4 +1,4 @@
-import { IForgotPasswordUseCase } from "../../../../domain/interfaces/usecases/auth/IForgotPasswordUseCase";
+import { IForgotPasswordUseCase } from "../../../../domain/interfaces/useCases/auth/IForgotPasswordUseCase";
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
 import { IEmailService } from "../../../../domain/interfaces/services/IEmailService";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";

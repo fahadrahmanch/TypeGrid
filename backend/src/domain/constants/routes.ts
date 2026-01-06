@@ -1,4 +1,3 @@
-import { Verify } from "crypto"
 
 export const Routes = {
   AUTH: {
@@ -29,6 +28,8 @@ export const Routes = {
     APPROVE_COMPANY:"/approve/company",
     REJECT_COMPANY:"/reject/company",
 
+    CREATE_LESSON:"/create/lesson",
+
     //patch
     BLOCK_USER:"/block/user"
   },
@@ -44,10 +45,14 @@ export const Routes = {
 
 
     // put
-    RE_VERIFY_COMPANY:'/subscription/company/re-verify',
+    RE_VERIFY_COMPANY:"/subscription/company/re-verify",
 
     //get company status
-    GETCOMPANYSTATUS:"/subscription/company/status"
+    GETCOMPANYSTATUS:"/subscription/company/status",
+
+    // typing practice
+    START_TYPING_PRACTICE:"/practice/typing/content",
+    getLessonById:"/practice/typing/:lessonId"
     
   },
 

@@ -3,6 +3,7 @@ import { Routes } from "../../domain/constants/routes";
 import { injectUserManageController } from "../DI/admin";
 import { injectCompanyManageController } from "../DI/admin";
 import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddleware";
+import { injectLessonManageController } from "../DI/admin";
 export class adminRouter {
   private router: express.Router;
   constructor() {
@@ -10,9 +11,15 @@ export class adminRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.get(Routes.ADMIN.GET_USERS, checkRoleBasedMiddleware(["admin"]), (req: Request, res: Response) => {
+    //user management routes
+    this.router.get(Routes.ADMIN.GET_USERS, checkRoleBasedMiddleware(["admin"]), (req: Request, res: Response)=>{
       injectUserManageController.getUsers(req, res);
     });
+    this.router.patch(Routes.ADMIN.BLOCK_USER,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
+      injectUserManageController.blockUser(req,res);
+    });
+
+    //company management routes
     this.router.get(Routes.ADMIN.GET_COMPANYS,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
       injectCompanyManageController.getCompanys(req,res);
     });
@@ -22,9 +29,11 @@ export class adminRouter {
     this.router.patch(Routes.ADMIN.REJECT_COMPANY,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
       injectCompanyManageController.reject(req,res);
     });
-    this.router.patch(Routes.ADMIN.BLOCK_USER,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
-      injectUserManageController.blockUser(req,res);
+    //lesson management routes
+    this.router.post(Routes.ADMIN.CREATE_LESSON,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
+      injectLessonManageController.createLesson(req,res);
     });
+    
     
   }
   getRouter() {

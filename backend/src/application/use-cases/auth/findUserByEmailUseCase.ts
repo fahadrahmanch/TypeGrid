@@ -1,4 +1,4 @@
-import { IFindUserByemailUseCase } from "../../../domain/interfaces/usecases/auth/IFindUserByEmailUseCase";
+import { IFindUserByemailUseCase } from "../../../domain/interfaces/useCases/auth/IFindUserByEmailUseCase";
 import { IAuthRepostory } from "../../../domain/interfaces/repository/user/IAuthRepository";
 
 export class FindUserByIdEmailCase implements IFindUserByemailUseCase {

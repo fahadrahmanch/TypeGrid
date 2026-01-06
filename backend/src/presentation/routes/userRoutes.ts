@@ -3,6 +3,7 @@ import { Routes } from "../../domain/constants/routes";
 import { injectCompanyRequestController } from "../DI/user";
 import { injectUserController } from "../DI/user";
 import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddleware";
+import { injectTypingPracticeController } from "../DI/user";
 export class UserRoutes {
     private router:express.Router;
     constructor() {
@@ -10,7 +11,7 @@ export class UserRoutes {
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.post(Routes.USERS.verifyCompany, checkRoleBasedMiddleware(["user",'companyAdmin']), (req: Request, res: Response) => {
+        this.router.post(Routes.USERS.verifyCompany, checkRoleBasedMiddleware(["user","companyAdmin"]), (req: Request, res: Response) => {
             injectCompanyRequestController.companyDetails(req,res);
         });
         this.router.get(Routes.USERS.getUserData,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
@@ -23,8 +24,18 @@ export class UserRoutes {
             injectCompanyRequestController.getCompanyStatus(req,res);
         });
         this.router.put(Routes.USERS.RE_VERIFY_COMPANY,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
-            injectCompanyRequestController.reApplyCompanyDetails(req,res)
-        })
+            injectCompanyRequestController.reApplyCompanyDetails(req,res);
+        });
+
+        // typing practice routes
+        this.router.get(Routes.USERS.START_TYPING_PRACTICE,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
+            injectTypingPracticeController.startTypingPractice(req,res);
+
+        });
+        this.router.get(Routes.USERS.getLessonById,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
+            injectTypingPracticeController.getLessonById(req,res);
+        });
+
     }
      getRouter(){
         return this.router;

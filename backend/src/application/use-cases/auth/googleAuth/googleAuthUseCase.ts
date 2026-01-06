@@ -1,4 +1,4 @@
-import { IGoogleAuthUseCase } from "../../../../domain/interfaces/usecases/auth/IGoogleAuthUseCase";
+import { IGoogleAuthUseCase } from "../../../../domain/interfaces/useCases/auth/IGoogleAuthUseCase";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { AuthUserEntity } from "../../../../domain/entities";
 import { MESSAGES } from "../../../../domain/constants/messages";

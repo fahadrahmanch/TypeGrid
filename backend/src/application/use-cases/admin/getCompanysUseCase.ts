@@ -1,5 +1,5 @@
-import { companyEntity } from "../../../domain/entities/CompanyEntiriy";
-import { IGetCompanysUseCase } from "../../../domain/interfaces/usecases/admin/IGetCompanysUseCase";
+import { companyEntity } from "../../../domain/entities/user/CompanyEntiriy";
+import { IGetCompanysUseCase } from "../../../domain/interfaces/useCases/admin/IGetCompanysUseCase";
 import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
 export class getCompanysUseCase implements IGetCompanysUseCase{
     constructor(

@@ -1,6 +1,6 @@
-import { ICompanyReApplyUseCase } from "../../../domain/interfaces/usecases/user/ICompanyReApplyUseCase";
+import { ICompanyReApplyUseCase } from "../../../domain/interfaces/useCases/user/ICompanyReApplyUseCase";
 import { CompanyReApplyDTO } from "../../DTOs/user/CompanyReApplyDTO";
-import { companyEntity } from "../../../domain/entities/CompanyEntiriy";
+import { companyEntity } from "../../../domain/entities/user/CompanyEntiriy";
 import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
 export class companyReApplyUseCase implements ICompanyReApplyUseCase{
     constructor(
@@ -8,7 +8,6 @@ export class companyReApplyUseCase implements ICompanyReApplyUseCase{
         private _baseRepositoryUser:IBaseRepository<any>
     ){}
     async execute(data: CompanyReApplyDTO): Promise<void> {
-        console.log("data in useCase",data)
         const user=await this._baseRepositoryUser.findById(data.userId);
            const company = new companyEntity({
             _id:user.CompanyId,
@@ -20,6 +19,6 @@ export class companyReApplyUseCase implements ICompanyReApplyUseCase{
             status: "pending",
             rejectionReason:""
         });
-                await this._baseRepositoryCompany.update(company)
+            await this._baseRepositoryCompany.update(company);
     }
 }

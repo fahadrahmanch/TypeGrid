@@ -15,6 +15,7 @@ export class TokenService implements ITokenService {
             { expiresIn: "1h" }
         );
     }
+    
 
     async generateRefreshToken(email: string,role:string): Promise<string> {
         return jwt.sign(

@@ -1,6 +1,6 @@
-import { ICompanyRequestUseCase } from "../../../domain/interfaces/usecases/user/ICompanyRequestUseCase";
+import { ICompanyRequestUseCase } from "../../../domain/interfaces/useCases/user/ICompanyRequestUseCase";
 import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
-import { companyEntity } from "../../../domain/entities/CompanyEntiriy";
+import { companyEntity } from "../../../domain/entities/user/CompanyEntiriy";
 export class companyRequestUseCase implements ICompanyRequestUseCase {
     constructor(
         private _baseRepositoryCompany: IBaseRepository<any>,
@@ -15,7 +15,7 @@ export class companyRequestUseCase implements ICompanyRequestUseCase {
             number,
             status: "pending",
         });
-        const exists=await this._baseRepositoryCompany.find({OwnerId})
+        const exists=await this._baseRepositoryCompany.find({OwnerId});
         
 if (exists.length > 0) {
   throw new Error("You have already registered a company");

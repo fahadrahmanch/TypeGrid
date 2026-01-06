@@ -1,4 +1,4 @@
-import { ICreateNewPasswordUseCase } from "../../../../domain/interfaces/usecases/auth/ICreateNewPasswordUseCase";
+import { ICreateNewPasswordUseCase } from "../../../../domain/interfaces/useCases/auth/ICreateNewPasswordUseCase";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { IHashService } from "../../../../domain/interfaces/services/IHashService";
 import { MESSAGES } from "../../../../domain/constants/messages";

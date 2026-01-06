@@ -1,6 +1,6 @@
 import { MESSAGES } from "../../../domain/constants/messages";
-import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/usecases/admin/ICompanyApproveRejectUsecase";
-import { IGetCompanysUseCase } from "../../../domain/interfaces/usecases/admin/IGetCompanysUseCase";
+import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/useCases/admin/ICompanyApproveRejectUsecase";
+import { IGetCompanysUseCase } from "../../../domain/interfaces/useCases/admin/IGetCompanysUseCase";
 import { Request, Response } from "express";
 export class companyManageController {
   constructor(
@@ -47,7 +47,7 @@ export class companyManageController {
   async reject(req: Request, res: Response): Promise<void> {
     try {
       const companyId = req.body._id;
-      const rejectionReason=req.body.reason
+      const rejectionReason=req.body.reason;
       if (!companyId) {
         throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
