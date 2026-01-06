@@ -22,11 +22,11 @@ const CompanyVerificationReapply: React.FC = ({}) => {
      async function fetchCompanyDetails(){
        try{
          const response=await getCompanyStatus(); 
-         console.log("response",response)
+         console.log("response",response);
          if(!response.data){
            return navigate("/");
          }
-         const company=response.data.company
+         const company=response.data.company;
          setValues({
             companyName:company.companyName,
             address:company.address,

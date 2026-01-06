@@ -5,7 +5,7 @@ export async function CompanyDetailsApi(data: any) {
 }
 
 export async function reApplyCompanyDetails(data:any){
-  return userAPI.put("/subscription/company/re-verify",data)
+  return userAPI.put("/subscription/company/re-verify",data);
 }
 
 export async function GetUserDataApi(){
@@ -18,6 +18,10 @@ export async function UpdateUserDataApi(user:any){
 export async function getCompanyStatus(){
   return userAPI.get("/subscription/company/status");
 }
+
+// typing practice content fetcher
+
+
 
 
 

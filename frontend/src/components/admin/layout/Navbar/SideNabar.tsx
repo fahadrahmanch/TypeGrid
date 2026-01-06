@@ -66,7 +66,7 @@ const SideNavbar: React.FC = () => {
             { to: "/admin/dashboard", label: "Dashboard" },
             { to: "/admin/users", label: "Users" },
             { to: "/admin/company", label: "Company" },
-            { to: "/admin/settings", label: "Settings" },
+            { to: "/admin/lessons", label: "Lesson management" },
           ].map((item) => (
             <NavLink
               key={item.to}

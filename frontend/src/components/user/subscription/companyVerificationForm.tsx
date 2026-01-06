@@ -41,7 +41,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
     toast.success(response?.data?.message || "Company details submitted!");
     navigate("/subscription/company/verify/status");
     } catch (error:any) {
-      toast.error(error.response?.data?.message)
+      toast.error(error.response?.data?.message);
       console.log(error);
     }
   }

@@ -25,7 +25,7 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
 
   const handleReApply=()=>{
     navigate("/subscription/company/re-verify");
-  }
+  };
 
   return (
     <>
