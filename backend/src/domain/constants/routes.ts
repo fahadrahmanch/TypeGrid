@@ -1,68 +1,81 @@
 
 export const Routes = {
+  // AUTH: {
+  //   //user
+
+  //   SIGNUP: "/signup",
+  //   VERIFY_OTP: "/verify-otp",
+  //   RESENT_OTP: "/resent-otp",
+  //   SIGNIN: "/signin",
+  //   REFRESH_TOKEN: "/refresh-token",
+  //   GOOGLE_AUTH: "/google-login",
+  //   LOGOUT: "/logout",
+  //   FORGOT_PASSWORD: "/forgot/password",
+  //   FORGOT_PASSWORD_OTP_VERIFY: "/forgot/password/verify/otp",
+  //   CREATE_NEW_PASSWORD: "/create/new/password",
+
+  //   //admin
+  //   ADMIN_SIGNIN: "/signin",
+
+  // },
   AUTH: {
-    //user
+  // user & admin authentication (mounted under /admin or /user separately)
 
-    SIGNUP: "/signup",
-    VERIFY_OTP: "/verify-otp",
-    RESENT_OTP: "/resent-otp",
-    SIGNIN: "/signin",
-    REFRESH_TOKEN: "/refresh-token",
-    GOOGLE_AUTH: "/google-login",
-    LOGOUT: "/logout",
-    FORGOT_PASSWORD: "/forgot/password",
-    FORGOT_PASSWORD_OTP_VERIFY: "/forgot/password/verify/otp",
-    CREATE_NEW_PASSWORD: "/create/new/password",
+  SIGNUP: "/signup",
+  SIGNIN: "/signin",
+  LOGOUT: "/logout",
+  REFRESH_TOKEN: "/refresh-token",
 
-    //admin
-    ADMIN_SIGNIN: "/signin",
+  // OTP
+  VERIFY_OTP: "/otp/verify",
+  RESEND_OTP: "/otp/resend",
 
-  },
+  // Social login
+  GOOGLE_AUTH: "/google",
+
+  // Password recovery
+  FORGOT_PASSWORD: "/password/forgot",
+  VERIFY_FORGOT_PASSWORD_OTP: "/password/otp/verify",
+  RESET_PASSWORD: "/password/reset",
+},
 
   ADMIN: {
     //get
     GET_USERS: "/users",
-    GET_COMPANYS:"/company",
+    GET_COMPANYS:"/companies",
 
     //post
-    APPROVE_COMPANY:"/approve/company",
-    REJECT_COMPANY:"/reject/company",
+    // APPROVE_COMPANY:"/approve/company",
+    // REJECT_COMPANY:"/reject/company",
 
-    CREATE_LESSON:"/create/lesson",
+    UPDATE_COMPANY_STATUS: "/companies/:companyId/status", 
+
+    CREATE_LESSON:"/lessons",
+    FETCH_LESSONS:"/lessons",
 
     //patch
-    BLOCK_USER:"/block/user"
+    UPDATE_USER_STATUS: "/users/:userId/status",
   },
 
   USERS: {
-    // GET 
-    getUserData:"/data",
+    // profile
+    GET_PROFILE: "/me",
+    UPDATE_PROFILE: "/me",
 
-    //Edit
-    updateUser:"/update",
-    //post
-    verifyCompany: "/subscription/company/verify",
-
-
-    // put
-    RE_VERIFY_COMPANY:"/subscription/company/re-verify",
-
-    //get company status
-    GETCOMPANYSTATUS:"/subscription/company/status",
+    // company subscription
+    VERIFY_COMPANY: "/company/verification",
+    RE_VERIFY_COMPANY: "/company/verification/retry",
+    GET_COMPANY_STATUS: "/company/status",
 
     // typing practice
-    START_TYPING_PRACTICE:"/practice/typing/content",
-    getLessonById:"/practice/typing/:lessonId"
-    
+    START_TYPING_PRACTICE: "/typing/practice",
+    GET_LESSON_BY_ID: "/typing/practice/:lessonId",
   },
 
-  COMPANY_ADMIN:{
-    //admin
-    ADD_USER:"/company-admin/add/user",
-    GET_COMPANY_USERS:"/company-admin/users",
-
-    //delete
-    DELETE_COMPANY_USER:"/company-admin/delete"
-  }
-
+    COMPANY_ADMIN: {
+    ADD_USER: "/users",
+    GET_COMPANY_USERS: "/users",
+    DELETE_COMPANY_USER: "/users/:userId",
+  },
+  
 };

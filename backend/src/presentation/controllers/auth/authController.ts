@@ -30,8 +30,9 @@ export class authController {
     async register(req: Request, res: Response): Promise<any> {
         try {
             const { name, email, password } = req.body;
-            logger.info(req.body);
+            console.log("req.body:", req.body);
             if (!name || !email || !password) {
+                console.log("Missing fields:", { name, email, password });
                 throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
 
             }
@@ -237,9 +238,10 @@ export class authController {
             res.status(400).json({ message: error?.message });
         }
     }
-    async createNewPassword(req: Request, res: Response): Promise<void> {
+    async resetPassword(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body;
+            console.log("Reset password request:", req.body);
             await this._createNewPasswordUseCase.execute(email, password);
             res.status(200).json({
                 success: true,

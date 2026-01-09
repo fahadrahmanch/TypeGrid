@@ -13,6 +13,7 @@ export class companyApproveRejectUsecase
 
   async approve(companyId: string): Promise<void> {
     const company = await this._baseRepositoryCompany.findById(companyId);
+    console.log("Approving company with ID:", company);
     if (!company) {
       throw new Error(MESSAGES.COMPANY_NOT_FOUND_OR_REMOVED);
     }

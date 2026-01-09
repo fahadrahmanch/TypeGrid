@@ -24,44 +24,53 @@ export class companyManageController {
     }
   }
 
-  //approve
-  async approve(req: Request, res: Response): Promise<void> {
-    try {
-      const companyId = req.body._id;
-      if (!companyId) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
-      }
+ async updateCompanyRequestStatus(req: Request, res: Response): Promise<void> {
+  try {
+    const { companyId } = req.params;
+    const { status, reason } = req.body; 
+    console.log("Received status:", status);
+    // status: "approved" | "rejected"
+
+    if (!companyId || !status) {
+      res.status(400).json({
+        message: MESSAGES.SOMETHING_WENT_WRONG,
+      });
+      return;
+    }
+
+    if (status === "active") {
       await this._companyApproveRejectUseCase.approve(companyId);
+
       res.status(200).json({
         message: MESSAGES.COMPANY_APPROVED_SUCCESS,
       });
-    } catch (error: any) {
-      console.log(error);
-      res.status(500).json({
-        message:  MESSAGES.COMPANY_APPROVAL_SERVER_ERROR,
-        error: error.message,
-      });
+      return;
     }
-  }
 
-  async reject(req: Request, res: Response): Promise<void> {
-    try {
-      const companyId = req.body._id;
-      const rejectionReason=req.body.reason;
-      if (!companyId) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
-      }
-      await this._companyApproveRejectUseCase.reject(companyId,rejectionReason);
+    if (status === "reject") {
+      await this._companyApproveRejectUseCase.reject(
+        companyId,
+        reason
+      );
+
       res.status(200).json({
         message: MESSAGES.COMPANY_REJECTED_SUCCESS,
       });
-
-    } catch (error: any) {
-      console.log(error);
-      res.status(500).json({
-        message: MESSAGES.INTERNAL_SERVER_ERROR,
-        error: error.message,
-      });
+      return;
     }
+
+    // invalid status value
+    res.status(400).json({
+      message: "Invalid status value",
+    });
+
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({
+      message: MESSAGES.INTERNAL_SERVER_ERROR,
+      error: error.message,
+    });
   }
+}
+
 }

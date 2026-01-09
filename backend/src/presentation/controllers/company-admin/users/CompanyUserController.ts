@@ -87,7 +87,7 @@ export class CompanyUserController {
 
   async deleteCompanyUser(req:Request,res:Response):Promise<void>{
     try{
-    const companyUserId=req.body._id;
+    const companyUserId=req.params.userId;
     if(!companyUserId){
       throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
     }

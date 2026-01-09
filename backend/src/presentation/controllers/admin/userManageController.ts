@@ -30,9 +30,9 @@ export class userManageController {
     }
   }
 
-  async blockUser(req:Request,res:Response):Promise<void>{
+  async updateUserStatus(req:Request,res:Response):Promise<void>{
     try{
-    const userId=req.body.userId;
+    const userId= req.params.userId;
     if(!userId){
       throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
     }

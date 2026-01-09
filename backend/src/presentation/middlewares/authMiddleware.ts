@@ -19,6 +19,7 @@ export function authMiddleware(
                 return res.status(401).json({ message: "Invalid or expired token" });
             }
         } else {
+            console.log("No token provided");
             return res.status(403).json({ message: "Anauthorized" });
         }
 

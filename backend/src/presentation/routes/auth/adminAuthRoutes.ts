@@ -8,7 +8,7 @@ export class adminAuthRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.post(Routes.AUTH.ADMIN_SIGNIN,(req: Request, res: Response) => {
+    this.router.post(Routes.AUTH.SIGNIN,(req: Request, res: Response) => {
         injectAuthController.AdminSignIn(req, res);
       }
     );

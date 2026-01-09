@@ -40,10 +40,7 @@ const tokenService = new TokenService();
 const forgotPasswordOtpVerify = new ForgotPasswordOtpVerify(otpService);
 const GoogleAuthUseCase = new googleAuthUseCase(AuthRepository);
 const findUserByIdEmailCase = new FindUserByIdEmailCase(AuthRepository);
-const ForgotPassword = new forgotPassword(
-  otpService,
-  EmailServive,
-  AuthRepository
+const ForgotPassword = new forgotPassword(otpService,EmailServive,AuthRepository
 );
 const CreateNewPassword = new createNewPassword(AuthRepository, hashService);
 const CompanyFindUseCase = new companyFindUseCase(baseRepo);

@@ -12,7 +12,7 @@ export class TokenService implements ITokenService {
         return jwt.sign(
             { email: email,role:role },
             this.accessSecret,
-            { expiresIn: "1h" }
+            { expiresIn: "7h" }
         );
     }
     

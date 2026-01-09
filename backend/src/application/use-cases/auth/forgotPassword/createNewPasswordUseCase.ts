@@ -11,7 +11,10 @@ export class createNewPassword implements ICreateNewPasswordUseCase{
     if(!email){
         throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
     }
+    console.log("Email received:", email);
+    console.log("Password received:", password);
     if(!password){
+        console.log("Password is missing");
         throw new Error(MESSAGES.PASSWORD_REQUIRED);
     }
     const user=await this._authRepository.findByEmail(email);

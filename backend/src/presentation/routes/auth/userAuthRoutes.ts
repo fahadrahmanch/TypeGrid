@@ -10,12 +10,13 @@ export class userAuthRouter {
   initializeRoutes() {
     //user
     this.router.post(Routes.AUTH.SIGNUP, (req: Request, res: Response) => {
+      console.log("Reached here");
       injectAuthController.register(req, res);
     });
     this.router.post(Routes.AUTH.VERIFY_OTP, (req: Request, res: Response) => {
       injectAuthController.verifyOtp(req, res);
     });
-    this.router.post(Routes.AUTH.RESENT_OTP, (req: Request, res: Response) => {
+    this.router.post(Routes.AUTH.RESEND_OTP, (req: Request, res: Response) => {
       injectAuthController.resentOtp(req, res);
     });
     this.router.post(Routes.AUTH.SIGNIN, (req: Request, res: Response) => {
@@ -33,11 +34,11 @@ export class userAuthRouter {
     this.router.post(Routes.AUTH.FORGOT_PASSWORD,(req: Request, res: Response) => {
       injectAuthController.forgotPassword(req, res);
     });
-    this.router.post(Routes.AUTH.FORGOT_PASSWORD_OTP_VERIFY,(req: Request, res: Response) => {
+    this.router.post(Routes.AUTH.VERIFY_FORGOT_PASSWORD_OTP,(req: Request, res: Response) => {
       injectAuthController.verifyForgotPasswordOtp(req, res);
     });
-    this.router.post(Routes.AUTH.CREATE_NEW_PASSWORD,(req: Request, res: Response) => {
-      injectAuthController.createNewPassword(req, res);
+    this.router.post(Routes.AUTH.RESET_PASSWORD,(req: Request, res: Response) => {
+      injectAuthController.resetPassword(req, res);
     });
   }
   getRouter() {

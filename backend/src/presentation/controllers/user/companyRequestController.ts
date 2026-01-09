@@ -15,7 +15,7 @@ export class companyRequestController {
     private _GetCompanyStatusUseCase: IGetCompanyUseCase,
     private _companyReApplyUseCase:ICompanyReApplyUseCase
   ) {}
-  async companyDetails(req: Request, res: Response): Promise<void> {
+  async companyRequestDetails(req: Request, res: Response): Promise<void> {
     try {
       const token = req.cookies.refresh_user;
 
@@ -61,7 +61,7 @@ export class companyRequestController {
       });
     }
   }
-
+  
   async reApplyCompanyDetails(req: Request, res: Response): Promise<void> {
     try {
       const token = req.cookies.refresh_user;
@@ -99,7 +99,7 @@ export class companyRequestController {
     });
     }
   }
-
+  
   async getCompanyStatus(req: Request, res: Response): Promise<void> {
     try {
       const token = req.cookies.refresh_user;
@@ -129,3 +129,4 @@ export class companyRequestController {
     }
   }
 }
+

@@ -1,3 +1,4 @@
+import { create } from "domain";
 import { LessonCategory,LessonLevel } from "../../../domain/entities/admin/lesssonEntity";
 export interface LessonDTO {
   id: string;
@@ -8,6 +9,7 @@ export interface LessonDTO {
   wordCount: number;
   targetWpm?: number;
   targetAccuracy?: number;
+  createdAt: Date;
 }
 export const mapLessonToDTO = (lesson: any): LessonDTO => {
   return {
@@ -18,6 +20,7 @@ export const mapLessonToDTO = (lesson: any): LessonDTO => {
     charCount: lesson.charCount,
     wordCount: lesson.wordCount,
     targetWpm: lesson.targetWpm,
-    targetAccuracy: lesson.targetAccuracy
+    targetAccuracy: lesson.targetAccuracy,
+    createdAt: lesson.createdAt,
   };
 };

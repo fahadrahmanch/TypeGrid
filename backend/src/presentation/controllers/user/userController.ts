@@ -10,7 +10,7 @@ export class userController {
     private _updateUserUseCase: IUserUpdateUseCase
   ) {}
 
-  async getUserData(req: Request, res: Response) {
+  async getProfile(req: Request, res: Response) {
     try {
       const token = req.cookies.refresh_user;
       if (!token) {
@@ -35,7 +35,7 @@ export class userController {
     }
   }
 
-  async updateUser(req: Request, res: Response): Promise<void> {
+  async updateProfile(req: Request, res: Response): Promise<void> {
     try {
       const data = req.body;
       const user = await this._findUserUseCase.execute(data?.email);
