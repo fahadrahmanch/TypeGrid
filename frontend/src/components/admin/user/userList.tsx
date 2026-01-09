@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllUsers } from "../../../api/admin/users";
-import { blockUser } from "../../../api/admin/users";
+import { updateUserStatus } from "../../../api/admin/users";
 import ConfirmModal from "../../common/ConfirmModal";
 const UserList: React.FC = () => {
   const [status, setStatus] = useState("All");
@@ -61,7 +61,8 @@ async function confirmBlockAction() {
   if (!selectedUser) return;
 
   const userId = selectedUser._id;
-  const res = await blockUser(userId);
+ 
+   const res = await updateUserStatus(userId);
 
   if (res.data.success) {
     setUsers(prev =>

@@ -17,6 +17,7 @@ const TypingPracticeArea = () => {
     async function fetchLessonById() {
       if (lessonId) {
         const response = await getTypiingPracticeLessonById(lessonId);
+        console.log("response", response.data.lesson);
         setContent(response.data.lesson);
       }
     }
@@ -209,6 +210,53 @@ useEffect(() => {
           
         </div>
       </div>
+      {isFinished && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-[#FFF6E8] rounded-xl p-8 w-full max-w-md text-center shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        🎉 Practice Completed
+      </h2>
+      <p className="text-gray-600 mb-6">
+        Great job! Here’s how you performed
+      </p>
+
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="bg-[#FFF1D8] p-4 rounded-lg">
+          <p className="text-sm text-gray-600">Time</p>
+          <p className="text-xl font-semibold">{time}s</p>
+        </div>
+        <div className="bg-[#FFF1D8] p-4 rounded-lg">
+          <p className="text-sm text-gray-600">WPM</p>
+          <p className="text-xl font-semibold">{wpm}</p>
+        </div>
+        <div className="bg-[#FFF1D8] p-4 rounded-lg">
+          <p className="text-sm text-gray-600">Accuracy</p>
+          <p className="text-xl font-semibold">{accuracy}%</p>
+        </div>
+        <div className="bg-[#FFF1D8] p-4 rounded-lg">
+          <p className="text-sm text-gray-600">Errors</p>
+          <p className="text-xl font-semibold">{errors}</p>
+        </div>
+      </div>
+
+      <div className="flex gap-3 justify-center">
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-[#7A6A5D] text-white rounded-md text-sm"
+        >
+          Retry
+        </button>
+        <button
+          onClick={() => window.history.back()}
+          className="px-4 py-2 border border-gray-400 rounded-md text-sm"
+        >
+          Exit
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </>
   );
 };

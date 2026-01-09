@@ -1,11 +1,16 @@
 import { companyAPI } from "../axios/companyAPI";
 
+// add user to company
 export async function companyAddUser(data: any) {
-  return companyAPI.post("/company-admin/add/user", data);
+  return companyAPI.post("/users", data);
 }
-export async function fetchCompanyUsers(){
-  return companyAPI.get("/company-admin/users"  );
+
+// get all company users
+export async function fetchCompanyUsers() {
+  return companyAPI.get("/users");
 }
-export async function deleteCompanyUser(_id:string){
-  return companyAPI.delete("/company-admin/delete",{data: { _id }});
+
+// delete company user
+export async function deleteCompanyUser(userId: string) {
+  return companyAPI.delete(`/users/${userId}`);
 }

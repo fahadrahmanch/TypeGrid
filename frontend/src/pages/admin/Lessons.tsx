@@ -1,10 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { createLesson } from "../../api/admin/lessons";
-
+import { getAllLessons } from "../../api/admin/lessons";
 const Lessons:React.FC=()=>{
-    const [isOpen,setOpen]=useState(true);
+    const [isOpen,setOpen]=useState(false);
     const [values,setValues]=useState({title:"",level:"",category:"",wpm:"",accuracy:"",text:""});
+    const [lessons,setLessons]=useState<any[]>([]);
+
+
+    useEffect(()=>{
+      const fetchLessons=async()=>{
+        try{
+          const response=await getAllLessons();
+          if(response && response.data.lessons){
+            setLessons(response.data.lessons);
+          }
+        }catch(err){
+          console.log("Error fetching lessons:", err);
+        }
+      };
+      fetchLessons();
+    },[]);
 
     function handleChange(e:any){
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -12,6 +28,7 @@ const Lessons:React.FC=()=>{
 
     async function handleSubmit(){
         try{
+          alert("Creating lesson...");
             const response=await createLesson(values);
             console.log("Lesson created successfully:", response);
             setOpen(false);
@@ -62,7 +79,7 @@ const Lessons:React.FC=()=>{
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-3 gap-6 mb-6">
+            {/* <div className="grid grid-cols-3 gap-6 mb-6">
               <div className="bg-[#FFF1D6] p-5 rounded-lg">
                 <p className="text-sm text-gray-600">Total Texts</p>
                 <h3 className="text-2xl font-bold">4</h3>
@@ -77,7 +94,7 @@ const Lessons:React.FC=()=>{
                 <p className="text-sm text-gray-600">Paragraphs</p>
                 <h3 className="text-2xl font-bold">1</h3>
               </div>
-            </div>
+            </div> */}
 
             {/* Table */}
             <div className="bg-[#FFF1D6] rounded-lg p-6">
@@ -89,7 +106,7 @@ const Lessons:React.FC=()=>{
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-gray-600 border-b">
-                    <th className="pb-2">ID</th>
+                    {/* <th className="pb-2">ID</th> */}
                     <th>Difficulty</th>
                     <th>Category</th>
                     <th>Preview</th>
@@ -99,56 +116,30 @@ const Lessons:React.FC=()=>{
                 </thead>
 
                 <tbody className="text-gray-800">
-                  <tr className="border-b">
-                    <td className="py-3">#1</td>
-                    <td>
-                      <span className="px-2 py-1 bg-blue-100 rounded text-xs">
-                        easy
-                      </span>
-                    </td>
-                    <td>
-                      <span className="px-2 py-1 bg-yellow-100 rounded text-xs">
-                        Sentence
-                      </span>
-                    </td>
-                    <td>keyboard typing speed...</td>
-                    <td>2024-01-15</td>
-                    <td className="flex gap-3 py-3">✏️ 🗑️</td>
-                  </tr>
+                  {lessons&&lessons.map((lesson)=>(
+                    <tr key={lesson._id} className="border-b text-start">
+                      <td>
+                        <span className="px-2 py-1 bg-blue-100 rounded text-xs">
+                          {lesson.level}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="px-2 py-1 bg-yellow-100 rounded text-xs">
+                          {lesson.category}
+                        </span>
+                      </td>
+                      <td>{lesson.text.slice(0, 10)}...</td>
+                      <td>{new Date(lesson.createdAt).toLocaleDateString()}</td>
+                      <td className="flex gap-3 py-3">
+                        <button className="text-blue-600 hover:text-blue-800">✏️</button>
+                        <button className="text-red-600 hover:text-red-800">🗑️</button>
+                        {/* ✏️ 🗑️ */}
+                        </td>
 
-                  <tr className="border-b">
-                    <td className="py-3">#2</td>
-                    <td>
-                      <span className="px-2 py-1 bg-orange-100 rounded text-xs">
-                        medium
-                      </span>
-                    </td>
-                    <td>
-                      <span className="px-2 py-1 bg-yellow-100 rounded text-xs">
-                        Sentence
-                      </span>
-                    </td>
-                    <td>The quick brown fox...</td>
-                    <td>2024-01-14</td>
-                    <td className="flex gap-3 py-3">✏️ 🗑️</td>
-                  </tr>
+                    </tr>
+                  ))}
 
-                  <tr>
-                    <td className="py-3">#3</td>
-                    <td>
-                      <span className="px-2 py-1 bg-pink-100 rounded text-xs">
-                        hard
-                      </span>
-                    </td>
-                    <td>
-                      <span className="px-2 py-1 bg-pink-100 rounded text-xs">
-                        Paragraph
-                      </span>
-                    </td>
-                    <td>programming javascript...</td>
-                    <td>2024-01-12</td>
-                    <td className="flex gap-3 py-3">✏️ 🗑️</td>
-                  </tr>
+                
                 </tbody>
               </table>
             </div>

@@ -17,7 +17,7 @@ import CompanyVerificationReapply from "../pages/user/Subscription/companyVerifi
 import {  useLocation } from "react-router-dom";
 import PracticeTyping from "../pages/user/practiceTyping/practiceTyping";
 import TypingPracticeArea from "../pages/user/practiceTyping/typingPracticeArea";
-
+import GroupLobby from "../pages/user/group/GroupLobby";
 export default function UserRoutes() {
   const location = useLocation();
   return (
@@ -44,6 +44,11 @@ export default function UserRoutes() {
       {/* Typing Practice */}
       <Route path="/typing/practice" element={<ProtectRouteUser><PracticeTyping /></ProtectRouteUser>} />
       <Route path="/typing/practice/:lessonId" element={<ProtectRouteUser><TypingPracticeArea /></ProtectRouteUser>} />
+
+
+      {/* // Group  */}
+      <Route path="/group/lobby" element={<ProtectRouteUser><GroupLobby /></ProtectRouteUser>} />
+
     </Routes>
   );
 }

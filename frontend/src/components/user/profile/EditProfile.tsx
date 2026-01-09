@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { GetUserDataApi } from "../../../api/user/userService";
-import { UpdateUserDataApi } from "../../../api/user/userService";
+import { getUserDataApi } from "../../../api/user/userService";
+import { updateUserDataApi } from "../../../api/user/userService";
 import { useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -31,7 +31,7 @@ const EditProfileDiv1: React.FC = () => {
 
   useEffect(() => {
     async function getUserData() {
-      const res = await GetUserDataApi();
+      const res = await getUserDataApi();
       if (res?.data) {
         setUser({
           name: res.data.name,
@@ -64,15 +64,14 @@ const EditProfileDiv1: React.FC = () => {
     if (nameErr || numberErr || ageErr || bioErr) return;
 
     try {
-      const res = await UpdateUserDataApi(user);
-
+      const res = await updateUserDataApi(user);
       if (res.data.success) {
         toast.success("Profile updated successfully! ");
       } else {
         toast.error(res.data.message || "Update failed!");
       }
     } catch (error: any) {
-      console.log("Error:", error);
+      console.log("Response:", error.response);
       toast.error(error.response?.data?.message || "Something went wrong!");
     }
   };

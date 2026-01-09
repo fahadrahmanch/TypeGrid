@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import {GetUserDataApi } from "../../../api/user/userService";
+import {getUserDataApi } from "../../../api/user/userService";
 import {useState, useEffect } from "react";
 const ProfileDiv1: React.FC = () => {
   const [user, setUser] = useState({
@@ -14,7 +14,7 @@ const ProfileDiv1: React.FC = () => {
 
     useEffect(() => {
       async function getUserData() {
-        const res = await GetUserDataApi();
+        const res = await getUserDataApi();
         if (res?.data) {
           setUser({
             name: res.data.name,

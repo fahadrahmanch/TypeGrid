@@ -7,7 +7,7 @@ import {
   confirmPasswordValidation,
 } from "../../../validations/authValidations";
 import { useLocation } from "react-router-dom";
-import { createNewpasswordApi } from "../../../api/auth/authServices";
+import { resetPasswordApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +32,7 @@ const NewPasswordForm: React.FC = () => {
     if (passErr || confirmErr) return;
 
     try {
-      const res = await createNewpasswordApi(email, values.password);
+      const res = await resetPasswordApi(email, values.password);
       if (res.data.success) {
         toast.success("Password updated successfully");
         navigate("/Signin",{replace: true, });

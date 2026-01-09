@@ -2,8 +2,8 @@ import OtpKid from "../../../assets/images/auth/otp/otp-kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
 import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
 import {
-  forgotPasswordOtpVerifiction,
-  resentOtp,
+  forgotPasswordOtpVerification,
+  resendOtp,
 } from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState,useRef } from "react";
@@ -61,7 +61,7 @@ const OtpForgotPassword: React.FC = () => {
   async function otpResent(e: any) {
     e.preventDefault();
     try {
-      const response = await resentOtp(name, email);
+      const response = await resendOtp(name, email);
       toast.success(response.data.message);
       localStorage.setItem("otpRequestedTime", Date.now().toString()); 
       setExpire(30);
@@ -75,7 +75,7 @@ const OtpForgotPassword: React.FC = () => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     try {
-      const response = await forgotPasswordOtpVerifiction(otp, email);
+      const response = await forgotPasswordOtpVerification(otp, email);
        navigate("/create/new/password", {
       state: { email },
       replace: true, 

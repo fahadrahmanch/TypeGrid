@@ -7,7 +7,7 @@ import {
   confirmPasswordValidation,
 } from "../../../validations/authValidations";
 import { useLocation } from "react-router-dom";
-import { companyCreateNewpasswordApi } from "../../../api/auth/authServices";
+import { companyResetPasswordApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +32,7 @@ const CompanyNewPasswordForm: React.FC = () => {
     if (passErr || confirmErr) return;
 
     try {
-      const res = await companyCreateNewpasswordApi(email, values.password);
+      const res = await companyResetPasswordApi(email, values.password);
       if (res.data.success) {
         toast.success("Password updated successfully");
         localStorage.setItem("otpRequestedTime", Date.now().toString());

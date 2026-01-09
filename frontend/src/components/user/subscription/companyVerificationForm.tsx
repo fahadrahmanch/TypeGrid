@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CompanyDetailsApi } from "../../../api/user/userService";
+import { verifyCompanyApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { nameValidation,emailValidation,addressValidation,numberValidation } from "../../../validations/companyRequestFormValidations";
@@ -37,7 +37,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
     
         if (nameErr || emailErr || addressErr || numberErr) return;
     try {
-      const response = await CompanyDetailsApi(values);
+      const response = await verifyCompanyApi(values);
     toast.success(response?.data?.message || "Company details submitted!");
     navigate("/subscription/company/verify/status");
     } catch (error:any) {

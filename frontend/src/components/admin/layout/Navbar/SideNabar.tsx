@@ -1,7 +1,7 @@
 import Logo from "../../../../assets/Icon/logo.png";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AdminLogoutApi } from "../../../../api/auth/authServices";
+import { adminLogoutApi } from "../../../../api/auth/authServices";
 import { logout } from "../../../../store/slices/auth/adminAuthSlice";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -11,7 +11,7 @@ const SideNavbar: React.FC = () => {
   async function handleLogout() {
     try {
 
-      await AdminLogoutApi();
+      await adminLogoutApi();
       dispatch(logout());
     } catch (error) {
       console.log(error);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { reApplyCompanyDetails } from "../../../api/user/userService";
+import { reVerifyCompanyApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -8,7 +8,7 @@ import {
   addressValidation,
   numberValidation,
 } from "../../../validations/companyRequestFormValidations";
-import { getCompanyStatus } from "../../../api/user/userService";
+import { getCompanyStatusApi } from "../../../api/user/userService";
 const CompanyVerificationReapply: React.FC = ({}) => {
   const navigate = useNavigate();
    const [values, setValues] = useState<any>({
@@ -21,7 +21,7 @@ const CompanyVerificationReapply: React.FC = ({}) => {
    useEffect(()=>{
      async function fetchCompanyDetails(){
        try{
-         const response=await getCompanyStatus(); 
+         const response=await getCompanyStatusApi(); 
          console.log("response",response);
          if(!response.data){
            return navigate("/");
@@ -74,7 +74,7 @@ const CompanyVerificationReapply: React.FC = ({}) => {
     if (nameErr || emailErr || addressErr || numberErr) return;
 
     try {
-      await reApplyCompanyDetails(values);
+      await reVerifyCompanyApi(values);
       console.log("reApplied successfully");
       toast.success("Company details submitted for verification");
       navigate("/subscription/company/verify/status");

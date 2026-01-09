@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCompanyStatus } from "../../../api/user/userService";
+import { getCompanyStatusApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 const CompanyVerificationStatusDiv1: React.FC = () => {
   const [company,setCompany]=useState<any>();
@@ -7,7 +7,7 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
   useEffect(()=>{
     async function fetchCompanyDetails(){
       try{
-        const response=await getCompanyStatus(); 
+        const response=await getCompanyStatusApi(); 
         if(!response.data){
           return navigate("/");
         }

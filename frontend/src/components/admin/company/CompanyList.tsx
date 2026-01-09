@@ -16,8 +16,8 @@ const CompanyList: React.FC = () => {
     async function fetchCompanies() {
       try {
         const res = await getAllcompanies();
-        setCompany(res?.data?.data);
-        setFilterCompany(res?.data?.data);
+        setCompany(res?.data?.data.reverse());
+        setFilterCompany(res?.data?.data.reverse());
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -37,14 +37,15 @@ const CompanyList: React.FC = () => {
   );
 }
   if (status !== "All") {
-    filtered = filtered.filter((u)=>{
-      if(status==="Accepted"){
-        return u.status=="active";
-      }else if(status==="Pending"){
-        return u.status=="pending";
-      }else if(status=="Rejected"){
-        return u.status==="reject";
+    filtered = filtered.filter((u) => {
+      if (status === "Accepted") {
+        return u.status === "active" || u.status === "approved";
+      } else if (status === "Pending") {
+        return u.status === "pending";
+      } else if (status == "Rejected") {
+        return u.status === "reject" || u.status === "rejected";
       }
+      return true;
     });
   }
   const total = Math.ceil(filtered.length / limit);
@@ -53,7 +54,7 @@ const CompanyList: React.FC = () => {
   const start = (page - 1) * limit;
   const paginated = filtered.slice(start, start + limit);
 
-  setFilterCompany(paginated);
+  setFilterCompany(paginated.reverse());
 },[searchText, status, company,page]);
   return (
     <>
@@ -119,15 +120,29 @@ const CompanyList: React.FC = () => {
                     </p>
                   </td>
                   <td className="px-4 py-2">
-                    <span
-                      className={`px-2 py-1 text-sm rounded ${
-                        item?.status === "pending" || item?.status === "reject"
-                          ? "bg-red-100 text-red-700"
-                          : "bg-green-100 text-green-700"
-                      }`}
-                    >
-                      {item?.status}
-                    </span>
+                    {(() => {
+                      const st = item?.status;
+                      const isApproved = st === "approved" || st === "active";
+                      const isRejected = st === "rejected" || st === "reject";
+                      const badgeClass = isApproved
+                        ? "bg-green-100 text-green-700"
+                        : isRejected
+                        ? "bg-red-100 text-red-700"
+                        : "bg-yellow-100 text-yellow-700";
+                      const display = isApproved
+                        ? "Approved"
+                        : isRejected
+                        ? "Rejected"
+                        : st
+                        ? st
+                        : "Pending";
+
+                      return (
+                        <span className={`px-2 py-1 text-sm rounded ${badgeClass}`}>
+                          {display}
+                        </span>
+                      );
+                    })()}
                   </td>
 
                   <td className="px-4 py-2 flex flex-wrap gap-2">

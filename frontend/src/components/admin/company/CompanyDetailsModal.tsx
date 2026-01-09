@@ -1,11 +1,11 @@
-import { approveCompanyRequest } from "../../../api/admin/company";
-import { rejectCompanyRequest } from "../../../api/admin/company";
+import { updateCompanyStatus } from "../../../api/admin/company";
 import { toast } from "react-toastify";
 import { useState } from "react";
+
 interface CompanyDetailsModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   company: any;
-  setCompany: any;
+  setCompany: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
@@ -13,335 +13,161 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
   company,
   setCompany,
 }) => {
-const [showRejectModal, setShowRejectModal] = useState(false);
-const [rejectReason, setRejectReason] = useState("");
-  async function handleApprove() {
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  console.log(company,'company details modal');
+  async function handleCompanyStatus(
+    status: "active" | "reject"
+  ) {
     try {
-      const response = await approveCompanyRequest(company?._id);
-      if (response?.data?.message) {
-        toast.success(response.data.message);
-      } else {
-        toast.success("Company approved successfully");
-      }
-      setCompany((prev: any[]) =>
-        prev.map((c: any) =>
-          c._id === company._id ? { ...c, status: "active" } : c
-        )
+      if (!company?._id) return;
+
+      const response = await updateCompanyStatus(
+        company._id,
+        status,
+        status === "reject" ? rejectReason : undefined
       );
-      setOpen(false);
-    } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || "Something went wrong";
-      toast.error(errorMessage);
-    }
-  }
-  async function handleReject() {
-    try {
-      const response = await rejectCompanyRequest(company?._id,rejectReason);
-      if (response?.data?.message) {
-        toast.success(response.data.message);
-      } else {
-        toast.success("Company rejected successfully");
-      }
-      setCompany((prev: any[]) =>
-        prev.map((c: any) =>
-          c._id === company._id ? { ...c, status: "reject" } : c
+
+      // Prefer the server returned status; fall back to normalized local status
+      const updatedStatus =
+        response?.data?.data?.status ||
+        (status === "active" ? "approved" : "rejected");
+
+      toast.success(
+        response?.data?.message ||
+          `Company ${updatedStatus} successfully`
+      );
+
+      setCompany((prev) =>
+        prev.map((c) =>
+          c._id === company._id
+            ? { ...c, status: updatedStatus }
+            : c
         )
       );
 
+      setShowRejectModal(false);
       setOpen(false);
     } catch (error: any) {
       const errorMessage =
-        error?.response?.data?.message || "Failed to reject the company";
+        error?.response?.data?.message ||
+        "Something went wrong";
       toast.error(errorMessage);
-      console.error(error);
     }
   }
+
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-        {/* Modal Container */}
-        <div className="relative w-full max-w-2xl rounded-2xl bg-white shadow-2xl ring-1 ring-gray-200 overflow-hidden flex flex-col max-h-[90vh]">
-          {/* Header Section */}
-          <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-            {/* <div>
-            <h2 className="text-xl font-bold text-gray-900">Review Request</h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              Request ID: #REQ-2024-001
-            </p>
-          </div> */}
+      {/* Main Modal */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
+        <div className="relative w-full max-w-2xl rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
 
-            <button
-              onClick={() => setOpen(false)}
-              className="rounded-full p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
-              </svg>
-            </button>
+          {/* Header */}
+          <div className="px-6 py-5 border-b flex justify-between bg-gray-50">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Company Details
+            </h2>
+            <button onClick={() => setOpen(false)}>✕</button>
           </div>
 
-          {/* Scrollable Content */}
+          {/* Content */}
           <div className="p-6 overflow-y-auto">
-            {/* Company Identity & Status */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-              <div className="flex items-center gap-4">
-                {/* Avatar Placeholder */}
+            <div className="flex justify-between mb-6">
+              <h3 className="text-2xl font-bold">
+                {company.companyName}
+              </h3>
 
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900">
-                    {company.companyName}
-                  </h3>
-                  {/* <p className="text-sm text-gray-500">Software & Technology</p> */}
-                </div>
-              </div>
-
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border
-    ${
-      company.status === "approved"
-        ? "bg-green-50 text-green-700 border-green-200"
-        : company.status === "rejected"
-        ? "bg-red-50 text-red-700 border-red-200"
-        : "bg-amber-50 text-amber-700 border-amber-200"
-    }`}
-              >
-                <span
-                  className={`h-1.5 w-1.5 rounded-full ${
-                    company.status === "active"
-                      ? "bg-green-600"
-                      : company.status === "reject"
-                      ? "bg-red-600"
-                      : "bg-amber-500 animate-pulse"
-                  }`}
-                ></span>
-
-                {company.status === "active"
-                  ? "active"
-                  : company.status === "reject"
-                  ? "Rejected"
-                  : "Pending"}
-              </span>
+              {/* Status badge */}
+              {(() => {
+                const st = company?.status;
+                const isApproved = st === "approved" || st === "active";
+                const isRejected = st === "rejected" || st === "reject";
+                const badgeClass = isApproved
+                  ? "bg-green-100 text-green-700"
+                  : isRejected
+                  ? "bg-red-100 text-red-700"
+                  : "bg-yellow-100 text-yellow-700";
+                const display = isApproved ? "Approved" : isRejected ? "Rejected" : st || "Pending";
+                return (
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${badgeClass}`}>
+                    {display}
+                  </span>
+                );
+              })()}
             </div>
 
-            {/* Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Email */}
-              <div className="flex items-start gap-3">
-                <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs font-medium uppercase text-gray-500">
-                    Email Address
-                  </p>
-                  <p className="text-sm font-semibold text-gray-900 mt-0.5 break-all">
-                    {company.email}
-                  </p>
-                </div>
-              </div>
-
-              {/* Phone */}
-              {/* <div className="flex items-start gap-3">
-                <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-green-600">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                </div> */}
-              {/* <div>
-                  <p className="text-xs font-medium uppercase text-gray-500">
-                    Phone Number
-                  </p>
-                  <p className="text-sm font-semibold text-gray-900 mt-0.5">
-                    
-                  </p>
-                </div> */}
-              {/* </div> */}
-
-              {/* Date */}
-              <div className="flex items-start gap-3">
-                <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs font-medium uppercase text-gray-500">
-                    Registered On
-                  </p>
-                  <p className="text-sm font-semibold text-gray-900 mt-0.5">
-                    Oct 10, 2024
-                  </p>
-                </div>
-              </div>
-
-              {/* ID (Optional filler) */}
-              {/* <div className="flex items-start gap-3">
-              <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-600">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0c0 .667.333 1 1 1v1m2-2c0 .667-.333 1-1 1v1" /></svg>
-              </div>
-              <div>
-                <p className="text-xs font-medium uppercase text-gray-500">Business Type</p>
-                <p className="text-sm font-semibold text-gray-900 mt-0.5">Corporation</p>
-              </div>
-            </div> */}
-            </div>
-
-            {/* Address Section */}
-            <div className="mt-8">
-              <p className="text-xs font-medium uppercase text-gray-500 mb-3 ml-1">
-                Registered Address
-              </p>
-              <div className="flex gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-700 leading-relaxed">
-                <div className="shrink-0 mt-0.5">
-                  <svg
-                    className="w-5 h-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Wandoor Main Road</p>
-                  <p className="text-gray-500 mt-0.5">
-                    Near Central Junction, Malappuram Dist, Kerala, 679328.
-                    {/* (Full address details here...) */}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <p className="text-sm text-gray-600 mb-2">
+              <strong>Email:</strong> {company.email}
+            </p>
           </div>
 
-          {/* Footer Actions */}
-          <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex items-center justify-between gap-4">
+          {/* Footer */}
+          <div className="p-6 border-t bg-gray-50 flex justify-end gap-3">
             <button
               onClick={() => setOpen(false)}
-              className="text-sm font-medium text-gray-500 hover:text-gray-800 transition"
+              className="text-gray-500"
             >
               Cancel
             </button>
-            {company && company.status == "pending" && (
-              <div className="flex gap-3">
+
+            {company.status === "pending" && (
+              <>
                 <button
                   onClick={() => setShowRejectModal(true)}
-                  className="rounded-lg border border-red-200 bg-white text-red-600 px-5 py-2.5 text-sm font-medium hover:bg-red-50"
+                  className="border border-red-300 text-red-600 px-4 py-2 rounded-md"
                 >
-                  Reject Request
+                  Reject
                 </button>
+
                 <button
-                  onClick={handleApprove}
-                  className="rounded-lg bg-blue-600 text-white px-5 py-2.5 text-sm font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-100 transition shadow-md flex items-center gap-2"
+                  onClick={() => handleCompanyStatus("active")}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  Approve Company
+                  Approve
                 </button>
-              </div>
+              </>
             )}
           </div>
         </div>
       </div>
+
+      {/* Reject Modal */}
       {showRejectModal && (
-  <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40">
-    <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
-      <h3 className="text-lg font-semibold text-gray-900 mb-3">
-        Reject Company
-      </h3>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+            <h3 className="text-lg font-semibold mb-3">
+              Reject Company
+            </h3>
 
-      <textarea
-        rows={4}
-        placeholder="Enter reason for rejection"
-        value={rejectReason}
-        onChange={(e) => setRejectReason(e.target.value)}
-        className="w-full border rounded-md p-2 focus:ring-2 focus:ring-red-200"
-      />
+            <textarea
+              rows={4}
+              placeholder="Enter reason"
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              className="w-full border rounded-md p-2"
+            />
 
-      <div className="flex justify-end gap-3 mt-4">
-        <button
-          onClick={() => setShowRejectModal(false)}
-          className="text-sm text-gray-500"
-        >
-          Cancel
-        </button>
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                onClick={() => setShowRejectModal(false)}
+                className="text-gray-500"
+              >
+                Cancel
+              </button>
 
-        <button
-          disabled={!rejectReason.trim()}
-          onClick={handleReject}
-          className="bg-red-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
-        >
-          Confirm Reject
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              <button
+                disabled={!rejectReason.trim()}
+                onClick={() => handleCompanyStatus("reject")}
+                className="bg-red-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+              >
+                Confirm Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
+
 export default CompanyDetailsModal;

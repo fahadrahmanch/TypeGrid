@@ -1,7 +1,7 @@
 import OtpKid from "../../../assets/images/auth/otp/otp-kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
 import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
-import {companyForgotPasswordOtpVerifiction,resentOtp} from "../../../api/auth/authServices";
+import {companyForgotPasswordOtpVerification,resendOtp} from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState,useRef } from "react";
 import { toast } from "react-toastify";
@@ -61,7 +61,7 @@ const OtpCompanyForgotPassword: React.FC = () => {
   async function otpResent(e: any) {
     e.preventDefault();
     try {
-      const response = await resentOtp(name, email);
+      const response = await resendOtp(name, email);
       toast.success(response.data.message);
       localStorage.setItem("otpRequestedTime", Date.now().toString());
       setExpire(30);
@@ -75,7 +75,7 @@ const OtpCompanyForgotPassword: React.FC = () => {
   async function handleSubmit(e: any) {
     e.preventDefault();
     try {
-      const response = await companyForgotPasswordOtpVerifiction(otp, email);
+      const response = await companyForgotPasswordOtpVerification(otp, email);
       navigate("/company/create/new/password", { state: { email } ,replace: true, });
       toast.success(response.data.message);
     } catch (error: any) {

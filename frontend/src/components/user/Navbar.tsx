@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { GetUserDataApi } from "../../api/user/userService";
+import { getUserDataApi } from "../../api/user/userService";
 import {useState, useEffect } from "react";
 import Logo from "../../assets/Icon/logo.png";
 const Navbar: React.FC = () => {
@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
   
       useEffect(() => {
         async function getUserData() {
-          const res = await GetUserDataApi();
+          const res = await getUserDataApi();
           if (res?.data) {
             setImage({
               imageUrl: res.data.imageUrl || "",

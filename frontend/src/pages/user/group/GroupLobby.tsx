@@ -1,0 +1,176 @@
+import Navbar from "../../../components/user/Navbar";
+const GroupLobby: React.FC = () => {
+      const players = [
+    { name: "hiba", host: true },
+    { name: "hiba" },
+    { name: "hiba" },
+    { name: "hiba" },
+    { name: "hiba" },
+    { name: "hiba" },
+  ];
+  return (
+    <>
+      <Navbar />
+      <h1>Group Lobby Page</h1>
+      
+     <div className="mt-12 bg-[#FFF6E8] flex items-center justify-center p-10">
+      <div className="w-full max-w-[1600px] grid grid-cols-12 gap-8">
+
+        {/* LEFT – SETTINGS */}
+        <div className="col-span-3 bg-[#FFF1D8] rounded-2xl p-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            ⚙️ Settings
+          </h2>
+
+          {/* Difficulty */}
+          <div className="mb-8">
+            <p className="text-base font-medium mb-3">Difficulty</p>
+            <div className="grid grid-cols-3 gap-3 mb-3">
+              {["Easy", "Medium", "Hard"].map((d) => (
+                <button
+                  key={d}
+                  className={`text-base py-2 rounded-lg border ${
+                    d === "Medium"
+                      ? "bg-[#7A6A5D] text-white"
+                      : "bg-white text-gray-700"
+                  }`}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+            <button className="w-full text-base py-2 rounded-lg border bg-white">
+              Random
+            </button>
+          </div>
+
+          {/* Max Players */}
+          <div className="mb-8">
+            <p className="text-base font-medium mb-3">Maximum Players</p>
+            <div className="grid grid-cols-3 gap-3">
+              {[3, 5, 7, 9, 10].map((num) => (
+                <button
+                  key={num}
+                  className={`text-base py-2 rounded-lg border ${
+                    num === 5
+                      ? "bg-[#7A6A5D] text-white"
+                      : "bg-white"
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Start Time */}
+          <div>
+            <p className="text-base font-medium mb-2">Start Time</p>
+            <p className="text-sm text-gray-500 mb-3">
+              Time in seconds before the match starts (default: 10)
+            </p>
+            <input
+              type="number"
+              value={10}
+              className="w-full border rounded-lg px-4 py-3 text-base"
+            />
+          </div>
+        </div>
+
+        {/* CENTER */}
+        <div className="col-span-6 space-y-8">
+
+          {/* INVITE BOX */}
+          <div className="bg-[#FFF1D8] rounded-2xl p-10 text-center">
+            <p className="text-base text-gray-600 mb-5">
+              Share this link to invite players.
+              <br />
+              Click the link to copy!
+            </p>
+
+            <div className="bg-white border rounded-lg px-4 py-3 text-base mb-6 break-all">
+              https://game-lobby.example.com/join/abc123
+            </div>
+
+            <div className="flex justify-center gap-4 mb-6">
+              <button className="px-6 py-2.5 text-base rounded-lg bg-[#7A6A5D] text-white">
+                COPY
+              </button>
+              <button className="px-6 py-2.5 text-base rounded-lg border bg-white">
+                SHOW
+              </button>
+            </div>
+
+            <button className="px-8 py-3 rounded-xl bg-[#7A6A5D] text-white text-lg flex items-center gap-2 mx-auto">
+              ▶ START GAME
+            </button>
+          </div>
+
+          {/* CHAT */}
+          <div className="bg-[#FFF1D8] rounded-2xl p-8">
+            <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
+              💬 Chat
+            </h3>
+
+            <div className="bg-white rounded-lg border p-4 text-base text-gray-600 mb-4 h-32">
+              <span className="text-orange-500">spider man</span> has joined the
+              lobby.
+            </div>
+
+            <div className="flex gap-3">
+              <input
+                placeholder="Write a message..."
+                className="flex-1 border rounded-lg px-4 py-3 text-base"
+              />
+              <button className="px-6 py-3 rounded-lg bg-[#7A6A5D] text-white text-base">
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT – PLAYERS */}
+        <div className="col-span-3 bg-[#FFF1D8] rounded-2xl p-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+            Lobby (4 / 9 players)
+          </h2>
+
+          <div className="space-y-4">
+            {players.map((p, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between bg-[#FFF6E8] rounded-xl px-4 py-3"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-gray-300" />
+                  <span className="text-base">{p.name}</span>
+                  {p.host && (
+                    <span className="text-sm text-green-600 font-medium">
+                      host
+                    </span>
+                  )}
+                </div>
+
+                {!p.host && (
+                  <button className="w-6 h-6 rounded bg-red-500 text-white text-sm flex items-center justify-center">
+                    ✕
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center gap-2 mt-6">
+            <span className="w-3 h-3 bg-gray-400 rounded-full" />
+            <span className="w-3 h-3 bg-gray-300 rounded-full" />
+            <span className="w-3 h-3 bg-gray-300 rounded-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </>
+  );
+}
+export default GroupLobby;
