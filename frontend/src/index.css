@@ -1,14 +1,38 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Jaini&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #fff8ea;
+  margin: 0;
+   overflow-x: hidden;
+ 
+} */
+/* html {
+  max-width: 100%;
+  overflow-x: hidden;
+} */
 @import url("https://fonts.googleapis.com/css2?family=Jaini&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html {
-  overflow: hidden;
-  /* width: 100%; */
+
+/* Apply the hide logic directly to body and html */
+html, body {
+    background-color: #fff8ea;
+
+  overflow-x: hidden; 
+  /* Enable vertical scrolling */
+  overflow-y: scroll; 
+  
+  /* Hide scrollbar for Firefox */
+  scrollbar-width: none; 
+  /* Hide scrollbar for IE and Edge */
+  -ms-overflow-style: none;  
 }
-body {
-  background-color: #fff8ea;
-  margin: 0;
-  overflow: hidden;
-  /* width: 100%; */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
 }

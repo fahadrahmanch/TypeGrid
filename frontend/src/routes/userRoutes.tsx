@@ -47,7 +47,7 @@ export default function UserRoutes() {
 
 
       {/* // Group  */}
-      <Route path="/group/lobby" element={<ProtectRouteUser><GroupLobby /></ProtectRouteUser>} />
+     <Route path="/group-play/group/:joinLink" element={<ProtectRouteUser><GroupLobby /></ProtectRouteUser>} />
 
     </Routes>
   );
