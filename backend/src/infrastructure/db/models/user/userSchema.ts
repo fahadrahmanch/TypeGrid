@@ -1,5 +1,5 @@
 import mongoose,{Schema} from "mongoose";
-import { AuthUserEntity } from "../../../domain/entities";
+import { AuthUserEntity } from "../../../../domain/entities";
 const userSchema:mongoose.Schema=new Schema<AuthUserEntity>({
 name:{
     type:String,

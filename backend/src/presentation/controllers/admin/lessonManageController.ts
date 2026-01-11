@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateLessonUseCase } from "../../../domain/interfaces/useCases/admin/ICreateLessonUseCase";
+import { ICreateLessonUseCase } from "../../../application/use-cases/interfaces/admin/ICreateLessonUseCase";
 export class LessonManageController {
 constructor(
     private _createLessonUseCase: ICreateLessonUseCase

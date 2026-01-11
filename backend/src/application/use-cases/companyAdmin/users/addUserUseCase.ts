@@ -1,5 +1,5 @@
-import { IAddUserUseCase } from "../../../../domain/interfaces/useCases/companyAdmin/IAddUserUseCase";
-import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
+import { IAddUserUseCase } from "../../interfaces/companyAdmin/IAddUserUseCase";
+import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
 import { AuthUserEntity } from "../../../../domain/entities";
 import { IHashService } from "../../../../domain/interfaces/services/IHashService";
 import { MESSAGES } from "../../../../domain/constants/messages";

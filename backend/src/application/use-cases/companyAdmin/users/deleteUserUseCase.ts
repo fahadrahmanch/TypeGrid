@@ -1,5 +1,5 @@
-import { IDeleteCompanyUserUseCase } from "../../../../domain/interfaces/useCases/companyAdmin/IDeleteCompanyUserUseCase";
-import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
+import { IDeleteCompanyUserUseCase } from "../../interfaces/companyAdmin/IDeleteCompanyUserUseCase";
+import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class deleteCompanyUserUseCase implements IDeleteCompanyUserUseCase{
     constructor(

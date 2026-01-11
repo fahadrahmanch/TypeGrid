@@ -1,4 +1,4 @@
-import { Entity } from "../entity";
+import { Entity } from "./Entity";
 export class companyEntity extends Entity<companyEntity>{
       constructor(attrs?: Partial<companyEntity>) {
     super(attrs);

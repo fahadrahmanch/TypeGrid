@@ -11,6 +11,7 @@ export function authMiddleware(
             try {
                 const decoded = await tokenService.verifyAccessToken(token);
                 (req as any).user = decoded;
+            
                 next();
 
             }

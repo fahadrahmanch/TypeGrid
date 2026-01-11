@@ -1,5 +1,5 @@
-import { IFindUserUseCase } from "../../../domain/interfaces/useCases/user/IFindUserUseCase";
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
+import { IFindUserUseCase } from "../interfaces/user/IFindUserUseCase";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
 import { AuthUserEntity } from "../../../domain/entities";
 export class findUserUseCase implements IFindUserUseCase{
 constructor(

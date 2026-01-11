@@ -1,7 +1,7 @@
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { IEmailService } from "../../../../domain/interfaces/services/IEmailService";
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
-import { IEmailTemplate } from "../../../../domain/interfaces/emailTemplates/IEmailTemplate";
+import { IEmailTemplate } from "../../../DTOs/email/EmailTemplateDto";
 export class resentOtpUseCase {
   constructor(
     private _otpService: IOtpService,

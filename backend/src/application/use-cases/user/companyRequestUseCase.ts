@@ -1,6 +1,6 @@
-import { ICompanyRequestUseCase } from "../../../domain/interfaces/useCases/user/ICompanyRequestUseCase";
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
-import { companyEntity } from "../../../domain/entities/user/CompanyEntiriy";
+import { ICompanyRequestUseCase } from "../interfaces/user/ICompanyRequestUseCase";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
+import { companyEntity } from "../../../domain/entities";
 export class companyRequestUseCase implements ICompanyRequestUseCase {
     constructor(
         private _baseRepositoryCompany: IBaseRepository<any>,

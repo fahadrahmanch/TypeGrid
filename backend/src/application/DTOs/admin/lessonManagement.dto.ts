@@ -1,5 +1,5 @@
 import { create } from "domain";
-import { LessonCategory,LessonLevel } from "../../../domain/entities/admin/lesssonEntity";
+import { LessonCategory,LessonLevel } from "../../../domain/entities/LessonEntity";
 export interface LessonDTO {
   id: string;
   text: string;

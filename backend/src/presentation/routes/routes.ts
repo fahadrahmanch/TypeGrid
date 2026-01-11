@@ -70,6 +70,16 @@ export const Routes = {
     // typing practice
     START_TYPING_PRACTICE: "/typing/practice",
     GET_LESSON_BY_ID: "/typing/practice/:lessonId",
+
+
+    // group
+  GROUP_PLAY: {
+  CREATE_GROUP: "/group-play/groups",
+  GET_GROUP: "/group-play/groups/:joinLink",
+  EDIT_GROUP: "/group-play/groups/:groupId",
+  JOIN_GROUP: "/group-play/groups/:groupId/players",
+  START_GAME: "/group-play/groups/:groupId/start",
+}
   },
 
     COMPANY_ADMIN: {

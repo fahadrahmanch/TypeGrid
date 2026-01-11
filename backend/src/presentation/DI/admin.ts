@@ -6,7 +6,7 @@ import { BaseRepository } from "../../infrastructure/db/base/BaseRepository";
 import { Company } from "../../infrastructure/db/models/company/companySchema";
 import { companyManageController } from "../controllers/admin/companyManageController";
 import { companyApproveRejectUsecase } from "../../application/use-cases/admin/companyApproveRejectUsecase";
-import { User } from "../../infrastructure/db/models/userSchema";
+import { User } from "../../infrastructure/db/models/user/userSchema";
 import { blockUserUseCase } from "../../application/use-cases/admin/blockUserUseCase";
 import { EmailService } from "../../application/services/emailService";
 import { LessonManageController } from "../controllers/admin/lessonManageController";

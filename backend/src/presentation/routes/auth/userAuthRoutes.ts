@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Routes } from "../../../domain/constants/routes";
+import { Routes } from "../routes";
 import { injectAuthController } from "../../DI/auth";
 export class userAuthRouter {
   private router: express.Router;

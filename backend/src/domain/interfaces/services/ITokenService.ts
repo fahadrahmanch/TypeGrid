@@ -1,6 +1,6 @@
 export interface ITokenService{
-    generateAccessToken(email:string,role:string):Promise<string>
-    generateRefreshToken(email:string,role:string):Promise<string>
+    generateAccessToken(userId: string, email:string,role:string):Promise<string>
+    generateRefreshToken(userId: string, email:string,role:string):Promise<string>
     verifyAccessToken(token:string):Promise<any>
     verifyRefreshToken(refresToken:string):Promise<any>
 }

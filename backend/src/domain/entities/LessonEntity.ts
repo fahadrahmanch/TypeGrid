@@ -1,4 +1,4 @@
-import { Entity } from "../entity";
+import { Entity } from "./Entity";
 
 export type LessonCategory = "sentence" | "paragraph";
 export type LessonLevel = "easy" | "medium" | "hard";

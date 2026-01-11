@@ -1,6 +1,6 @@
 import { MESSAGES } from "../../../domain/constants/messages";
-import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/useCases/admin/ICompanyApproveRejectUsecase";
-import { IGetCompanysUseCase } from "../../../domain/interfaces/useCases/admin/IGetCompanysUseCase";
+import { ICompanyApproveRejectUsecase } from "../../../application/use-cases/interfaces/admin/ICompanyApproveRejectUsecase";
+import { IGetCompanysUseCase } from "../../../application/use-cases/interfaces/admin/IGetCompanysUseCase";
 import { Request, Response } from "express";
 export class companyManageController {
   constructor(

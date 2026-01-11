@@ -1,4 +1,4 @@
-import { ICompleteSignupUseCase } from "../../../../domain/interfaces/useCases/auth/ICompleteSignupUseCase";
+import { ICompleteSignupUseCase } from "../../interfaces/auth/ICompleteSignupUseCase";
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
 import { AuthUserEntity } from "../../../../domain/entities";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";

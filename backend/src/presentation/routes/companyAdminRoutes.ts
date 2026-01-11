@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Routes } from "../../domain/constants/routes";
+import { Routes } from "./routes";
 import { injectCompanyUserController } from "../DI/CompanyAdmin";
 import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddleware";
 export class companyAdminRouter {

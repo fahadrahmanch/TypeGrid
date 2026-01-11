@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected model: Model<T>;
@@ -9,6 +9,9 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   }
   async find(filter: any = {}): Promise<T[]> {
     return this.model.find(filter).lean<T[]>().exec();
+  }
+  async findOne(filter: any = {}): Promise<T | null> {
+    return this.model.findOne(filter).lean<T>().exec();
   }
   async create(data: Partial<T>): Promise<T> {
     return this.model.create(data);

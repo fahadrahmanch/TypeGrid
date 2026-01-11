@@ -1,5 +1,5 @@
-import { IGetPracticeTypingContentUseCase } from "../../../../domain/interfaces/useCases/user/TypingPracticeUseCases/IGetPracticeTypingContentUseCase";
-import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
+import { IGetPracticeTypingContentUseCase } from "../../interfaces/user/TypingPracticeUseCases/IGetPracticeTypingContentUseCase";
+import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
 import { PracticeTypingDTO } from "../../../DTOs/user/practiceTyping";
 import { mapPracticeTypingToDTO } from "../../../DTOs/user/practiceTyping";
 export class getPracticeTypingContentUseCase implements IGetPracticeTypingContentUseCase{

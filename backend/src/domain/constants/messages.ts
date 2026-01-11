@@ -15,6 +15,7 @@ export const MESSAGES = {
   GOOGLE_LOGIN_SUCCESS: "Google login successful",
   GOOGLE_ACCOUNT_PASSWORD_RESET_NOT_ALLOWED: "This account is registered using Google Sign-In. Password reset is not applicable.",
   PASSWORD_UPDATE_SUCCESS: "Password updated successfully.",
+  UNAUTHORIZED: "Unauthorized: user not authenticated",
 
   ADMIN_NOT_FOUND: "Admin not found",
 
@@ -83,4 +84,11 @@ export const MESSAGES = {
   OTP_SENT_SUCCESS: "OTP sent successfully",
   OTP_RESENT_SUCCESS: "OTP resent successfully.",
   OTP_VERIFIED_SUCCESS: "OTP verified successfully",
+
+
+  // ================= GROUP PLAY =================
+  GROUP_CREATED_SUCCESS: "Group play created successfully",
+  GROUP_UPDATED_SUCCESS: "Group play updated successfully",
+  
+
 };

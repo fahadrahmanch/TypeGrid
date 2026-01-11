@@ -1,5 +1,5 @@
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
-import { IBlockUserUseCase } from "../../../domain/interfaces/useCases/admin/IBlockUserUseCase";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
+import { IBlockUserUseCase } from "../interfaces/admin/IBlockUserUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 export class blockUserUseCase implements IBlockUserUseCase{
     constructor(

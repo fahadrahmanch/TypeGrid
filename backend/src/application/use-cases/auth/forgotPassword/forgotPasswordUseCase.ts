@@ -1,8 +1,8 @@
-import { IForgotPasswordUseCase } from "../../../../domain/interfaces/useCases/auth/IForgotPasswordUseCase";
+import { IForgotPasswordUseCase } from "../../interfaces/auth/IForgotPasswordUseCase";
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
 import { IEmailService } from "../../../../domain/interfaces/services/IEmailService";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
-import { IEmailTemplate } from "../../../../domain/interfaces/emailTemplates/IEmailTemplate";
+import { IEmailTemplate } from "../../../DTOs/email/EmailTemplateDto";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class forgotPassword implements IForgotPasswordUseCase{
     constructor(

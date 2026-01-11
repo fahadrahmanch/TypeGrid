@@ -1,6 +1,6 @@
 import { CompanyUserController } from "../controllers/company-admin/users/CompanyUserController";
 import { addUserUseCase } from "../../application/use-cases/companyAdmin/users/addUserUseCase";
-import { User } from "../../infrastructure/db/models/userSchema";
+import { User } from "../../infrastructure/db/models/user/userSchema";
 import { BaseRepository } from "../../infrastructure/db/base/BaseRepository";
 import { HashService } from "../../application/services/hashService";
 import { TokenService } from "../../application/services/tokenService";

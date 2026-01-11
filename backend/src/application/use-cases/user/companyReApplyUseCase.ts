@@ -1,7 +1,7 @@
-import { ICompanyReApplyUseCase } from "../../../domain/interfaces/useCases/user/ICompanyReApplyUseCase";
+import { ICompanyReApplyUseCase } from "../interfaces/user/ICompanyReApplyUseCase";
 import { CompanyReApplyDTO } from "../../DTOs/user/CompanyReApplyDTO";
-import { companyEntity } from "../../../domain/entities/user/CompanyEntiriy";
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
+import { companyEntity } from "../../../domain/entities";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
 export class companyReApplyUseCase implements ICompanyReApplyUseCase{
     constructor(
         private _baseRepositoryCompany: IBaseRepository<any>,

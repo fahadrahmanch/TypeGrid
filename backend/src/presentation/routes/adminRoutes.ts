@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Routes } from "../../domain/constants/routes";
+import { Routes } from "./routes";
 import { injectUserManageController } from "../DI/admin";
 import { injectCompanyManageController } from "../DI/admin";
 import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddleware";

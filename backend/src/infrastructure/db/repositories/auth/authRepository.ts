@@ -1,4 +1,4 @@
-import { User } from "../../models/userSchema";
+import { User } from "../../models/user/userSchema";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { BaseRepository } from "../../base/BaseRepository";
 import { AuthUserEntity } from "../../../../domain/entities";

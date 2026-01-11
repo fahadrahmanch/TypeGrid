@@ -1,4 +1,4 @@
-import { Entity } from "../entity";
+import { Entity } from "./Entity";
 export class userEntity extends Entity<userEntity>{
     _id?:string;
     name!:string;

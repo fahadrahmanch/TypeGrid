@@ -1,4 +1,4 @@
-import { ILoginUseCase } from "../../../../domain/interfaces/useCases/auth/ILoginUseCase";
+import { ILoginUseCase } from "../../interfaces/auth/ILoginUseCase";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { IHashService } from "../../../../domain/interfaces/services/IHashService";
 import { AuthUserEntity } from "../../../../domain/entities";
