@@ -1,43 +1,71 @@
 import { getGroupRoomDetails } from "../../../api/user/group";
 import Navbar from "../../../components/user/Navbar";
-import { useEffect ,useState} from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingPage from "../../../components/common/LoadingPage";
 import { editGroupAPI } from "../../../api/user/group";
+import { joinGroupAPI } from "../../../api/user/group";
+import { toast } from "react-toastify";
+import { removePlayerAPI } from "../../../api/user/group";
+import { useNavigate } from "react-router-dom";
 const GroupLobby: React.FC = () => {
   const { joinLink } = useParams<{ joinLink: string }>();
-  const [group,setGroup]=useState<any>({});
-  // const [maximumPlayers,setMaximumPlayes]
-  const [loading,setLoading]=useState(true)
-  const [players,setPlayers]=useState<any[]>([])
-  const [difficulty,setDifficulty]=useState<string>()
-   const [maximumPlayers,setMaximumPlayes]=useState<number>()
- useEffect(() => {
-  async function fetchGroupDetails() {
+  const [group, setGroup] = useState<any>({});
+  const [loading, setLoading] = useState(true)
+  const [players, setPlayers] = useState<any[]>([])
+  const [difficulty, setDifficulty] = useState<string>()
+  const [maximumPlayers, setMaximumPlayes] = useState<number>()
+  const navigate = useNavigate()
+  useEffect(() => {
+    async function fetchGroupDetails() {
+      try {
+        await joinGroupAPI(joinLink!);
+        const response = await getGroupRoomDetails(joinLink!);
+        const groupDetails = response?.data?.group;
+
+        setGroup(groupDetails);
+        setPlayers(groupDetails.members)
+        setDifficulty(groupDetails.difficulty)
+        setMaximumPlayes(groupDetails.maximumPlayers)
+      } catch (error: any) {
+        console.error(error);
+        navigate("/")
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchGroupDetails();
+  }, [joinLink]);
+
+  async function removePlayer(playerId: string) {
+
     try {
-      const response = await getGroupRoomDetails(joinLink!);
+      const response = await removePlayerAPI(group.id, playerId)
       const groupDetails = response?.data?.group;
       setGroup(groupDetails);
       setPlayers(groupDetails.members)
-      setDifficulty(groupDetails.difficulty)
-      setMaximumPlayes(groupDetails.maximumPlayers)
-    } catch (error) {
-      console.error(error);
-    } finally {
-      
-      setLoading(false);
+      console.log("players after remove player", groupDetails.members)
+    } catch (error: any) {
+      console.log(error)
     }
+
   }
 
-  fetchGroupDetails();
-}, [joinLink]);
+  async function editGroup(newDifficulty?: string, newMaxPlayers?: number) {
+    await editGroupAPI(group.id, newDifficulty ?? difficulty,
+      newMaxPlayers ?? maximumPlayers)
+  }
 
-async function editGroup(){
-await editGroupAPI(group._id,difficulty,maximumPlayers)
-}
+  async function startGame(){
+    
+  }
+
   if (loading) return <LoadingPage />;
-  console.log("GROUP STATE:", group);
-console.log("MAX PLAYERS TYPE:", typeof group?.maximumPlayers);
+
+  
+
 
   return (
     <>
@@ -58,18 +86,17 @@ console.log("MAX PLAYERS TYPE:", typeof group?.maximumPlayers);
                 {["Easy", "Medium", "Hard"].map((d) => (
                   <button
                     key={d}
-                    onClick={()=>{
-                      setGroup((prev:any)=>({...prev,difficulty:d}))
-                      setDifficulty(d==='Easy'?'beginner':d==='Medium'?"intermediate":"advanced")
-                      editGroup()
-                    }
-                  }
-                    
-                    className={`text-base py-2 rounded-lg border ${
-                      d.toLowerCase() === group.difficulty.toLowerCase()
+                    onClick={() => {
+                      const value = d.toLowerCase();
+                      setGroup((prev: any) => ({ ...prev, difficulty: value }));
+                      setDifficulty(value);
+                      editGroup(value, undefined);
+                    }}
+
+                    className={`text-base py-2 rounded-lg border ${d.toLowerCase() === group.difficulty.toLowerCase()
                         ? "bg-[#7A6A5D] text-white"
                         : "bg-white text-gray-700"
-                    }`}
+                      }`}
                   >
                     {d}
                   </button>
@@ -82,34 +109,33 @@ console.log("MAX PLAYERS TYPE:", typeof group?.maximumPlayers);
 
             {/* Max Players */}
             <div className="mb-8">
-  <p className="text-base font-medium mb-3">Maximum Players</p>
+              <p className="text-base font-medium mb-3">Maximum Players</p>
 
-  <div className="grid grid-cols-3 gap-3">
-    {[3, 5, 7, 9, 10].map((num) => (
-      <button
-        key={num}
-        type="button"
-        onClick={() => {
-          setGroup((prev: any) => ({
-            ...prev,
-            maximumPlayers: num,
-          }));
-          setMaximumPlayes(num);
-          editGroup()
-        }}
+              <div className="grid grid-cols-3 gap-3">
+                {[3, 5, 7, 9, 10].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => {
+                      setGroup((prev: any) => ({
+                        ...prev,
+                        maximumPlayers: num,
+                      }));
+                      setMaximumPlayes(num);
+                      editGroup(undefined, num);
+                    }}
 
-        className={`text-base py-2 rounded-lg border transition
-          ${
-            num === Number(group?.maximumPlayers)
-              ? "bg-[#7A6A5D] text-white"
-              : "bg-white"
-          }`}
-      >
-        {num}
-      </button>
-    ))}
-  </div>
-</div>
+                    className={`text-base py-2 rounded-lg border transition
+          ${num === Number(group?.maximumPlayers)
+                        ? "bg-[#7A6A5D] text-white"
+                        : "bg-white"
+                      }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+            </div>
 
 
             {/* Start Time */}
@@ -149,7 +175,9 @@ console.log("MAX PLAYERS TYPE:", typeof group?.maximumPlayers);
                 </button>
               </div>
 
-              <button className="px-8 py-3 rounded-xl bg-[#7A6A5D] text-white text-lg flex items-center gap-2 mx-auto">
+              <button 
+              onClick={startGame}
+              className="px-8 py-3 rounded-xl bg-[#7A6A5D] text-white text-lg flex items-center gap-2 mx-auto">
                 ▶ START GAME
               </button>
             </div>
@@ -179,54 +207,55 @@ console.log("MAX PLAYERS TYPE:", typeof group?.maximumPlayers);
 
           {/* RIGHT – PLAYERS */}
           <div className="col-span-3 bg-[#FFF1D8] rounded-2xl p-8">
-  <h2 className="text-xl font-semibold text-gray-800 mb-6">
-    Lobby ({players.length} / {group.maximumPlayers})
-  </h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">
+              Lobby ({players.length} / {group.maximumPlayers})
+            </h2>
 
-  <div className="space-y-4">
-    {players.map((p, i) => (
-      <div
-        key={i}
-        className="flex items-center justify-between bg-[#FFF6E8] rounded-xl px-4 py-3"
-      >
-        {/* LEFT SIDE */}
-        <div className="flex items-center gap-4 flex-1 min-w-0">
-          {/* Avatar */}
-          <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0" />
+            <div className="space-y-4">
+              {players.map((p, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between bg-[#FFF6E8] rounded-xl px-4 py-3"
+                >
+                  {/* LEFT SIDE */}
+                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                    {/* Avatar */}
+                    <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0" />
 
-          {/* Name + host */}
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="text-base truncate">
-              {p.name}
-            </span>
+                    {/* Name + host */}
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-base truncate">
+                        {p.name}
+                      </span>
 
-            {p.isHost && (
-              <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full flex-shrink-0">
-                Host
-              </span>
-            )}
+                      {p.isHost && (
+                        <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full flex-shrink-0">
+                          Host
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* RIGHT SIDE */}
+                  {!p.isHost && group.currentUserId === group.ownerId && (
+                    <button
+                      onClick={() => removePlayer(p.userId)}
+                      className="w-8 h-8 flex-shrink-0 rounded-full bg-red-500 text-white text-sm flex items-center justify-center hover:bg-red-600 transition"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center gap-2 mt-6">
+              <span className="w-3 h-3 bg-gray-400 rounded-full" />
+              <span className="w-3 h-3 bg-gray-300 rounded-full" />
+              <span className="w-3 h-3 bg-gray-300 rounded-full" />
+            </div>
           </div>
-        </div>
-
-        {/* RIGHT SIDE */}
-        {!p.isHost && (
-          <button
-            className="w-8 h-8 flex-shrink-0 rounded-full bg-red-500 text-white text-sm flex items-center justify-center hover:bg-red-600 transition"
-          >
-            ✕
-          </button>
-        )}
-      </div>
-    ))}
-  </div>
-
-  {/* Pagination */}
-  <div className="flex justify-center gap-2 mt-6">
-    <span className="w-3 h-3 bg-gray-400 rounded-full" />
-    <span className="w-3 h-3 bg-gray-300 rounded-full" />
-    <span className="w-3 h-3 bg-gray-300 rounded-full" />
-  </div>
-</div>
 
         </div>
       </div>

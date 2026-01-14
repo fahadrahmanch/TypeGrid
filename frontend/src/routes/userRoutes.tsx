@@ -18,6 +18,7 @@ import {  useLocation } from "react-router-dom";
 import PracticeTyping from "../pages/user/practiceTyping/practiceTyping";
 import TypingPracticeArea from "../pages/user/practiceTyping/typingPracticeArea";
 import GroupLobby from "../pages/user/group/GroupLobby";
+import GroupPlay from "../pages/user/group/groupPlay";
 export default function UserRoutes() {
   const location = useLocation();
   return (
@@ -48,6 +49,7 @@ export default function UserRoutes() {
 
       {/* // Group  */}
      <Route path="/group-play/group/:joinLink" element={<ProtectRouteUser><GroupLobby /></ProtectRouteUser>} />
+     <Route path="/group-play/game/:joinLink" element={<ProtectRouteUser><GroupPlay /></ProtectRouteUser>} />
 
     </Routes>
   );

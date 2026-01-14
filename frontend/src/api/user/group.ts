@@ -18,3 +18,10 @@ export async function editGroupAPI(
     maxPlayers,
   });
 }
+
+export function joinGroupAPI(joinLink: string) {
+  return userAPI.patch(`/group-play/groups/join/${joinLink}`);
+}
+export function removePlayerAPI(groupId:string,playerId:string){
+  return userAPI.delete(`/group-play/groups/${groupId}/players/${playerId}`)
+}
