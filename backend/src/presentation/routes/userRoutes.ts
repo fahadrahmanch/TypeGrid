@@ -53,6 +53,13 @@ export class UserRoutes {
         this.router.patch(Routes.USERS.GROUP_PLAY.EDIT_GROUP,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
             injectGroupPlayController.editGroup(req,res);
         })
+        this.router.patch(Routes.USERS.GROUP_PLAY.JOIN_GROUP,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+            injectGroupPlayController.joinGroup(req,res);
+        })
+        this.router.delete(Routes.USERS.GROUP_PLAY.REMOVE_MEMBER,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+            injectGroupPlayController.removeMember(req,res);
+        })
+
 
     }
      getRouter(){

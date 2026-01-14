@@ -1,3 +1,3 @@
 export interface IEditGroupPlayUseCase{
-    execute(difficulty:string,maxPlayers:number):Promise<void>
+    execute(groupId:string,difficulty:string,maxPlayers:number,userId:string):Promise<void>
 }

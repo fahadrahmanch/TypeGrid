@@ -51,6 +51,12 @@ const groupSchema = new Schema(
       enum: ["waiting", "started", "completed"],
       default: "waiting",
     },
+    kickedUsers: [
+  {
+    type: Types.ObjectId,
+    ref: "User",
+  },
+],
   },
   {
     timestamps: true,

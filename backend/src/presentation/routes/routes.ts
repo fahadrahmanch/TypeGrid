@@ -77,8 +77,9 @@ export const Routes = {
   CREATE_GROUP: "/group-play/groups",
   GET_GROUP: "/group-play/groups/:joinLink",
   EDIT_GROUP: "/group-play/groups/:groupId",
-  JOIN_GROUP: "/group-play/groups/:groupId/players",
+  JOIN_GROUP: "/group-play/groups/join/:joinLink",
   START_GAME: "/group-play/groups/:groupId/start",
+  REMOVE_MEMBER: "/group-play/groups/:groupId/players/:playerId"
 }
   },
 

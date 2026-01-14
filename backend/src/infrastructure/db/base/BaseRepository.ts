@@ -25,14 +25,14 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     const obj = userDoc.toObject();
     return obj;
   }
-  async update(data: any): Promise<void> {
-    const { _id, ...updateFields } = data;
+  async update(data: any): Promise<any> {
+        const { _id, ...updateFields } = data;
 
-    await this.model.findByIdAndUpdate(
+    return await this.model.findByIdAndUpdate(
       _id,
       { $set: updateFields },
       { new: true }
-    );
+    ).lean<T>().exec();
   }
   async delete(_id:string):Promise<T|null>{
     return this.model.findByIdAndDelete(_id);

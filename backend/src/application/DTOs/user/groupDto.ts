@@ -12,10 +12,14 @@ export interface groupDTO{
   difficulty: string;
   ownerId: string;
   members:groupMembers[];
-  maximumPlayers:number
+  maximumPlayers:number;
+  currentUserId:string;
+  kickedUsers: string[]
+
 }
 
 export function mapGroupToDTO(doc:any):groupDTO{
+  console.log("doc in dto",doc)
   return {
     id: doc._id.toString(),
     name: doc.name,
@@ -23,6 +27,8 @@ export function mapGroupToDTO(doc:any):groupDTO{
     difficulty: doc.difficulty,
     ownerId: doc.ownerId,
     members:doc.members,
-    maximumPlayers:doc.maximumPlayers
+    maximumPlayers:doc.maximumPlayers,
+    currentUserId:doc.currentUserId,
+    kickedUsers:doc.kickedUsers
   }
 }
