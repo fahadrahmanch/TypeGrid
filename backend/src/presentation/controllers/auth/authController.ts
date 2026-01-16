@@ -30,9 +30,7 @@ export class authController {
     async register(req: Request, res: Response): Promise<any> {
         try {
             const { name, email, password } = req.body;
-            console.log("req.body:", req.body);
             if (!name || !email || !password) {
-                console.log("Missing fields:", { name, email, password });
                 throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
 
             }
@@ -166,7 +164,6 @@ export class authController {
                 throw new Error(MESSAGES.REQUEST_BODY_MISSING);
             }
             const user = await this._googleAuthUseCase.gooogleAuth(name, email, googleId);
-            console.log("Google Authenticated User:", user);
             if (!user || !user._id) {
                 throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
@@ -246,7 +243,6 @@ export class authController {
     async resetPassword(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body;
-            console.log("Reset password request:", req.body);
             await this._createNewPasswordUseCase.execute(email, password);
             res.status(200).json({
                 success: true,

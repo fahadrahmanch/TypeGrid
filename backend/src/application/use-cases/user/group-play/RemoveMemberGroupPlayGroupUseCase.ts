@@ -13,7 +13,6 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
         throw new Error("Group not found")
       }
       const user=await this._baseRepoUser.findById(userId)
-     console.log("userID here ",user)
       if(!user){
         throw new Error("User not found")
       }
@@ -34,10 +33,11 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
           imageUrl: member.imageUrl,
           isHost:
           member._id?.toString() === updatedGroup.ownerId?.toString(),
+          
         };
       })
     );
-    console.log("kicked users in removeUseCase",kickedUsers)
+    console.log("updated user",updatedGroup)
     return mapGroupToDTO({
       ...updatedGroup,
       members,

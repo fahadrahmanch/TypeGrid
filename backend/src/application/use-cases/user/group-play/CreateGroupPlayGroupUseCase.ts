@@ -19,7 +19,6 @@ async execute(hostUserId: string): Promise<groupDTO> {
         throw new Error("Host user ID is required to create a group play room.");
     }
     const joinCode=await generateJoinCode()
-    console.log("join code",joinCode)
     const group = new GroupEntity({
         name: "Group Play Room",
         ownerId: hostUserId,
@@ -31,7 +30,6 @@ async execute(hostUserId: string): Promise<groupDTO> {
       groupCreated.members.map(async(item: any) =>{
           const memberId=item.toString()
           const member= await  this._baseRepoUser.findById(memberId)
-          console.log("boolen",member._id==groupCreated.ownerId.toString())
           return{
             userId:member._id,
             name:member.name,

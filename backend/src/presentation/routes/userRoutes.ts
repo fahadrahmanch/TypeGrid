@@ -59,6 +59,9 @@ export class UserRoutes {
         this.router.delete(Routes.USERS.GROUP_PLAY.REMOVE_MEMBER,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
             injectGroupPlayController.removeMember(req,res);
         })
+        this.router.post(Routes.USERS.GROUP_PLAY.START_GAME,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+            injectGroupPlayController.startGame(req,res);
+        })
 
 
     }

@@ -15,11 +15,13 @@ import { getPracticeTypingContentUseCase } from "../../application/use-cases/use
 import { Lesson } from "../../infrastructure/db/models/admin/lessonSchema";
 import { groupPlayController } from "../controllers/user/groupPlayController";
 import { CreateGroupPlayRoomUseCase } from "../../application/use-cases/user/group-play/CreateGroupPlayGroupUseCase";
-import { Group } from "../../infrastructure/db/models/groupSchema";
+import { Group } from "../../infrastructure/db/models/user/groupSchema";
 import { getGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/GetGroupPlayGroupUseCase";
 import { editGroupUseCase } from "../../application/use-cases/user/group-play/editGroupUseCase";
 import { joinGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/JoinGroupPlayGroupUseCase";
 import { RemoveMemberGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/RemoveMemberGroupPlayGroupUseCase";
+import { StartGameGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/StartGameGroupPlayGroupUseCase";
+import { Competition } from "../../infrastructure/db/models/user/competitionSchema";
 const baseRepoCompany=new BaseRepository(Company);
 const baseRepoUser=new BaseRepository<AuthUserEntity>(User);
 const CompanyRequestUseCase=new companyRequestUseCase(baseRepoCompany,baseRepoUser);
@@ -35,12 +37,14 @@ const GetPracticeTypingContentUseCase=new getPracticeTypingContentUseCase(baseRe
 
 // group play
 const baseRepoGroup=new BaseRepository(Group);
+const baseRepoCompetion=new BaseRepository(Competition);
 const createGroupPlayRoomUseCase =new CreateGroupPlayRoomUseCase(baseRepoGroup,baseRepoUser);
 const GetGroupPlayGroupUseCase=new getGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser);
 const EditGroupUseCase=new editGroupUseCase(baseRepoGroup)
 const JoinGroupPlayGroupUseCase=new joinGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser)
 const removeMemberGroupPlayGroupUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser)
-export const injectGroupPlayController=new groupPlayController(createGroupPlayRoomUseCase, GetGroupPlayGroupUseCase,EditGroupUseCase,JoinGroupPlayGroupUseCase,removeMemberGroupPlayGroupUseCase);
+const startGameGroupPlayGroupUseCase=new StartGameGroupPlayGroupUseCase(baseRepoCompetion,baseRepoGroup,baseRepoLesson,baseRepoUser)
+export const injectGroupPlayController=new groupPlayController(createGroupPlayRoomUseCase, GetGroupPlayGroupUseCase,EditGroupUseCase,JoinGroupPlayGroupUseCase,removeMemberGroupPlayGroupUseCase,startGameGroupPlayGroupUseCase);
 
 export const injectTypingPracticeController=new typingPracticeController(GetPracticeTypingContentUseCase);
 export const injectCompanyRequestController=new companyRequestController(CompanyRequestUseCase,tokenService,FindUserUseCase,GetCompanyUseCase,CompanyReApplyUseCase);

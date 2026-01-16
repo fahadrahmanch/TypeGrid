@@ -34,7 +34,6 @@ export class adminRouter {
       injectLessonManageController.createLesson(req,res);
     });
     this.router.get(Routes.ADMIN.FETCH_LESSONS,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
-      console.log("Fetching lessons for admin");
       injectLessonManageController.getLessons(req,res);
     });
     

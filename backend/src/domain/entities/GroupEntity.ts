@@ -50,8 +50,7 @@ export class GroupEntity {
     this.maximumPlayers = max;
   }
   addMember(memberId: string) {
-    console.log("memeber id add memner",memberId)
-    console.log("kicked usersin add membwe",this.kickedUsers)
+
     if (this.members.length >= this.maximumPlayers) {
       throw new Error("Group is full");
     }
@@ -69,12 +68,9 @@ export class GroupEntity {
     }
   }
   removeMember(memberId: string) {
-    console.log("staart remove member")
     this.members = this.members.filter((member) => member.toString() !== memberId.toString());
-    console.log("end remove member")
     this.kickedUsers.push(memberId.toString());
-    console.log("kicked users",this.kickedUsers)
-    console.log("end remove member")
+
     
   }
   getId() {
@@ -111,4 +107,18 @@ export class GroupEntity {
   getKickedUsers() {
     return this.kickedUsers;
   }
+  toObject() {
+  return {
+    _id: this._id,
+    name: this.name,
+    ownerId: this.ownerId,
+    members: [...this.members],
+    maximumPlayers: this.maximumPlayers,
+    difficulty: this.difficulty,
+    joinLink: this.joinLink,
+    status: this.status,
+    kickedUsers: [...this.kickedUsers],
+  };
+}
+
 }

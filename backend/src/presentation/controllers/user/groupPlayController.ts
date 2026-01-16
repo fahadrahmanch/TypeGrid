@@ -1,5 +1,8 @@
 import { join } from "path";
 import { Request, Response } from "express";
+import { getIO } from "../../../socket"; 
+
+
 import { ICreateGroupPlayRoomUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/ICreateGroupPlayRoomUseCase";
 import { IGetGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IGetGroupPlayGroupUseCase";
 import { AuthRequest } from "../../../types/AuthRequest";
@@ -7,14 +10,16 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { IEditGroupPlayUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IEditGroupPlayUseCase";
 import { IJoinGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IIJoinGroupPlayGroupUseCase";
 import { IRemoveMemberGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IRemoveMemberGroupPlayGroupUseCase";
-import { Console } from "console";
+import { IStartGameGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IStartGameGroupPlayGroupUseCase";
+
 export class groupPlayController{
     constructor(
         private _createGroupPlayRoomUseCase: ICreateGroupPlayRoomUseCase,
         private _getGroupPlayGroupUseCase:IGetGroupPlayGroupUseCase,
         private _editGroupPlayGroupUseCase:IEditGroupPlayUseCase, 
         private _joinGroupPlayGroupUseCase:IJoinGroupPlayGroupUseCase,
-        private _removeMemberGroupPlayGroupUseCase:IRemoveMemberGroupPlayGroupUseCase
+        private _removeMemberGroupPlayGroupUseCase:IRemoveMemberGroupPlayGroupUseCase,
+        private _startGameGroupPlayGroupUseCase:IStartGameGroupPlayGroupUseCase
     ){}
 
     async createGroup(req:AuthRequest,res:Response):Promise<void>{
@@ -52,11 +57,10 @@ export class groupPlayController{
                 throw new Error("Join ID is required to fetch group details.");
             }
             const group=await this._getGroupPlayGroupUseCase.execute(joinLink,userId);
-            console.log("group here",group)
             if(!group){
                 throw new Error("Group not found with the provided join ID.");
             }
-
+           
             res.status(200).json({
                 success:true,
                 message:"Group fetched successfully",
@@ -85,7 +89,14 @@ export class groupPlayController{
         if(!userId){
             throw new Error(MESSAGES.UNAUTHORIZED)
         }
-        await this._editGroupPlayGroupUseCase.execute(groupId,difficulty,maxPlayers,userId)
+       const group= await this._editGroupPlayGroupUseCase.execute(groupId,difficulty,maxPlayers,userId)
+       console.log("group edited",group)
+       
+            getIO().to(group.id).emit("change-difficulty", {
+             
+              difficulty: group.difficulty,
+              maximumPlayers: group.maximumPlayers,
+            });
          res.status(200).json({
              success:true,
              message:"Group edited successfully"
@@ -103,14 +114,17 @@ export class groupPlayController{
         try{
             const joinLink=req.params.joinLink;
             const userId=req.user?.userId
-            console.log("userId",userId)
             if(!joinLink){
                 throw new Error("Join ID is required to join group.");
             }
             if(!userId){
                 throw new Error(MESSAGES.UNAUTHORIZED)
             }
-            await this._joinGroupPlayGroupUseCase.execute(joinLink,userId)
+            const group=await this._joinGroupPlayGroupUseCase.execute(joinLink,userId)
+            getIO().to(group.id).emit("fetchGroupDetails", {
+                group
+            })
+            console.log("group here in join group function",group)
             res.status(200).json({
                 success:true,
                 message:"Joined group successfully"
@@ -136,6 +150,9 @@ export class groupPlayController{
                 throw new Error(MESSAGES.UNAUTHORIZED)
             }
             const group=await this._removeMemberGroupPlayGroupUseCase.execute(groupId,userId)
+            getIO().to(groupId).emit("remove-player", {
+                group
+            })
             res.status(200).json({
                 success:true,
                 message:"Member removed successfully",
@@ -150,5 +167,36 @@ export class groupPlayController{
             });
         }
     }
+
+    async startGame(req:AuthRequest,res:Response):Promise<void>{
+        try{
+            const groupId=req.params.groupId;
+            const { startTime } = req.body;
+            if(!groupId){
+                throw new Error("Group ID is required to start game.");
+            }
+            const startCompetition=await this._startGameGroupPlayGroupUseCase.execute(groupId,startTime)
+
+            if(!startCompetition){
+                throw new Error("something went wrong")
+            }
+             
+               getIO().to(groupId).emit("game-started", {
+  competition: startCompetition,
+});
+  
+            res.status(200).json({
+                success:true,
+                message:"Game started successfully",
+            })
+        }
+        catch(error:any){
+            console.log(error)
+            res.status(500).json({
+                success:false,
+                message:error.message || "Internal Server Error"
+            });
+        }
+    }   
 
 }

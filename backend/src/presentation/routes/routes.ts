@@ -72,14 +72,18 @@ export const Routes = {
     GET_LESSON_BY_ID: "/typing/practice/:lessonId",
 
 
+
     // group
   GROUP_PLAY: {
   CREATE_GROUP: "/group-play/groups",
   GET_GROUP: "/group-play/groups/:joinLink",
   EDIT_GROUP: "/group-play/groups/:groupId",
   JOIN_GROUP: "/group-play/groups/join/:joinLink",
+  REMOVE_MEMBER: "/group-play/groups/:groupId/players/:playerId",
+  
+  //play
   START_GAME: "/group-play/groups/:groupId/start",
-  REMOVE_MEMBER: "/group-play/groups/:groupId/players/:playerId"
+  
 }
   },
 

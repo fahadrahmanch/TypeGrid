@@ -28,7 +28,6 @@ export class companyManageController {
   try {
     const { companyId } = req.params;
     const { status, reason } = req.body; 
-    console.log("Received status:", status);
     // status: "approved" | "rejected"
 
     if (!companyId || !status) {

@@ -39,13 +39,15 @@ const competitionSchema = new Schema(
       required: true,
     },
 
-    countdown: {
-      type: Number, // seconds
-      required: true,
-    },
+    // countdown: {
+    //   type: Number, // seconds
+    //   default:60,
+    //   required: true,
+    // },
 
     duration: {
       type: Number, // seconds
+      default:300,
       required: true,
     },
 
@@ -55,6 +57,16 @@ const competitionSchema = new Schema(
         prize: String,
       },
     ],
+     startTime: {
+      type: Number, // seconds
+      required: true,
+      default: 10,
+    },
+    
+    startedAt: {
+  type: Date,
+  default: Date.now,
+}
   },
   {
     timestamps: true, // createdAt & updatedAt

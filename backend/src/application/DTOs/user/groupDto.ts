@@ -19,16 +19,15 @@ export interface groupDTO{
 }
 
 export function mapGroupToDTO(doc:any):groupDTO{
-  console.log("doc in dto",doc)
   return {
     id: doc._id.toString(),
     name: doc.name,
     joinLink: doc.joinLink,
     difficulty: doc.difficulty,
-    ownerId: doc.ownerId,
+    ownerId: doc.ownerId.toString(),
     members:doc.members,
     maximumPlayers:doc.maximumPlayers,
     currentUserId:doc.currentUserId,
-    kickedUsers:doc.kickedUsers
+    kickedUsers:doc.kickedUsers 
   }
 }
