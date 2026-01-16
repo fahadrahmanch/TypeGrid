@@ -28,9 +28,7 @@ const Lessons:React.FC=()=>{
 
     async function handleSubmit(){
         try{
-          alert("Creating lesson...");
             const response=await createLesson(values);
-            console.log("Lesson created successfully:", response);
             setOpen(false);
         }
         catch(err){

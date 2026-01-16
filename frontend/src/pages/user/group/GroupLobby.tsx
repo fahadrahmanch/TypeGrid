@@ -8,14 +8,136 @@ import { joinGroupAPI } from "../../../api/user/group";
 import { toast } from "react-toastify";
 import { removePlayerAPI } from "../../../api/user/group";
 import { useNavigate } from "react-router-dom";
+import { startGroupPlayAPI } from "../../../api/user/group";
+import { socket } from "../../../socket";
+import { useSelector } from "react-redux";
+type Player = {
+  userId: string;
+  name: string;
+  isHost: boolean;
+  imageUrl?: string;
+};
+
+type Group = {
+  id: string;
+  ownerId: string;
+  currentUserId: string;
+  members: Player[];
+  difficulty: string;
+  maximumPlayers: number;
+  joinLink: string;
+
+};
+
+
+
 const GroupLobby: React.FC = () => {
   const { joinLink } = useParams<{ joinLink: string }>();
-  const [group, setGroup] = useState<any>({});
+  const [group, setGroup] = useState<Group | null>(null);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true)
-  const [players, setPlayers] = useState<any[]>([])
   const [difficulty, setDifficulty] = useState<string>()
   const [maximumPlayers, setMaximumPlayes] = useState<number>()
+  const isHost = group?.currentUserId === group?.ownerId;
+  const inviteLink = `http://localhost:5173/group-play/group/${group?.joinLink}`;
+  const [isBlurred, setIsBlurred] = useState(true);
+  const user = useSelector((state: any) => state.userAuth.user);
+  const [startTime, setStartTime] = useState<string>();
+
   const navigate = useNavigate()
+  useEffect(() => {
+    if (!group?.id) return;
+
+    socket.emit("join-room", group.id);
+    
+
+
+  }, [group?.id]);
+
+  useEffect(() => {
+    socket.on("game-started", (data) => {
+      navigate(`/group-play/game/${joinLink}`, {
+        state: { gameData: data.competition },
+      });
+    });
+
+    return () => {
+      socket.off("game-started");
+    };
+  }, [navigate, joinLink]);
+
+
+  useEffect(() => {
+    if (!group?.id) return;
+
+    const handler = (data: any) => {
+      setDifficulty(data.difficulty);
+      setMaximumPlayes(data.maximumPlayers);
+      setGroup((prev) =>
+        prev
+          ? { ...prev, difficulty: data.difficulty, maximumPlayers: data.maximumPlayers }
+          : prev
+      );
+    };
+
+    socket.on("change-difficulty", handler);
+
+    return () => {
+      socket.off("change-difficulty", handler);
+    };
+  }, [group?.id]);
+
+  useEffect(() => {
+    if (!group?.id) return;
+
+    const handler = (data: any) => {
+      
+      const isRemoved = data.group.kickedUsers.find((m: any) => {
+      
+        return m.toString() === user?._id
+    })
+      
+
+      if (isRemoved) {
+        toast.info("You have been removed from the group");
+        navigate('/');
+      } else {
+        setGroup((prev: any) => ({
+          ...prev,
+          currentUserId: prev.currentUserId,
+          members: data.group.members,
+        }));
+        setPlayers(data.group.members)
+        setDifficulty(data.group.difficulty)
+        setMaximumPlayes(data.group.maximumPlayers)
+      }
+    };
+
+    socket.on("remove-player", handler);
+
+    return () => {
+      socket.off("remove-player", handler);
+    };
+  }, [group?.id]);
+
+  useEffect(() => {
+    const handleFetchGroupDetails = (data: any) => {
+      setGroup((prev) => ({
+        ...data.group,
+        currentUserId: prev?.currentUserId,
+      }));
+      setPlayers(data.group.members);
+      setDifficulty(data.group.difficulty);
+      setMaximumPlayes(data.group.maximumPlayers);
+    };
+
+    socket.on("fetchGroupDetails", handleFetchGroupDetails);
+
+    return () => {
+      socket.off("fetchGroupDetails", handleFetchGroupDetails);
+    };
+  }, []);
+
   useEffect(() => {
     async function fetchGroupDetails() {
       try {
@@ -42,11 +164,13 @@ const GroupLobby: React.FC = () => {
   async function removePlayer(playerId: string) {
 
     try {
-      const response = await removePlayerAPI(group.id, playerId)
+      const response = await removePlayerAPI(group?.id, playerId)
       const groupDetails = response?.data?.group;
-      setGroup(groupDetails);
+      setGroup((prev) => ({
+        ...groupDetails,
+        currentUserId: prev?.currentUserId
+      }));
       setPlayers(groupDetails.members)
-      console.log("players after remove player", groupDetails.members)
     } catch (error: any) {
       console.log(error)
     }
@@ -54,17 +178,26 @@ const GroupLobby: React.FC = () => {
   }
 
   async function editGroup(newDifficulty?: string, newMaxPlayers?: number) {
+    if (!group?.id) return;
     await editGroupAPI(group.id, newDifficulty ?? difficulty,
       newMaxPlayers ?? maximumPlayers)
   }
 
-  async function startGame(){
-    
+  async function startGame() {
+    try {
+      if (!group?.id) return;
+      await startGroupPlayAPI(group?.id,Number(startTime))
+
+    }
+    catch (error: any) {
+      console.log(error)
+    }
+
   }
 
   if (loading) return <LoadingPage />;
 
-  
+
 
 
   return (
@@ -82,30 +215,47 @@ const GroupLobby: React.FC = () => {
             {/* Difficulty */}
             <div className="mb-8">
               <p className="text-base font-medium mb-3">Difficulty</p>
-              <div className="grid grid-cols-3 gap-3 mb-3">
-                {["Easy", "Medium", "Hard"].map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => {
-                      const value = d.toLowerCase();
-                      setGroup((prev: any) => ({ ...prev, difficulty: value }));
-                      setDifficulty(value);
-                      editGroup(value, undefined);
-                    }}
 
-                    className={`text-base py-2 rounded-lg border ${d.toLowerCase() === group.difficulty.toLowerCase()
-                        ? "bg-[#7A6A5D] text-white"
-                        : "bg-white text-gray-700"
-                      }`}
-                  >
-                    {d}
-                  </button>
-                ))}
+              <div className="grid grid-cols-3 gap-3 mb-3">
+                {["Easy", "Medium", "Hard"].map((d) => {
+                  const value = d.toLowerCase();
+
+                  return (
+                    <button
+                      key={d}
+                      type="button"
+                      disabled={!isHost}
+                      onClick={() => {
+                        if (!isHost) return;
+
+                        setGroup((prev: any) => ({ ...prev, difficulty: value }));
+                        setDifficulty(value);
+                        editGroup(value, undefined);
+                      }}
+                      className={`text-base py-2 rounded-lg border transition
+            ${value === group?.difficulty
+                          ? "bg-[#7A6A5D] text-white"
+                          : "bg-white text-gray-700"
+                        }
+            ${!isHost
+                          ? "cursor-not-allowed opacity-50"
+                          : "hover:bg-[#7A6A5D] hover:text-white"
+                        }
+          `}
+                    >
+                      {d}
+                    </button>
+                  );
+                })}
               </div>
-              {/* <button className="w-full text-base py-2 rounded-lg border bg-white">
-                Random
-              </button> */}
+
+              {!isHost && (
+                <p className="text-xs text-gray-500">
+                  Only the host can change difficulty
+                </p>
+              )}
             </div>
+
 
             {/* Max Players */}
             <div className="mb-8">
@@ -116,7 +266,10 @@ const GroupLobby: React.FC = () => {
                   <button
                     key={num}
                     type="button"
+                    disabled={!isHost}
                     onClick={() => {
+                      if (!isHost) return;
+
                       setGroup((prev: any) => ({
                         ...prev,
                         maximumPlayers: num,
@@ -124,18 +277,29 @@ const GroupLobby: React.FC = () => {
                       setMaximumPlayes(num);
                       editGroup(undefined, num);
                     }}
-
                     className={`text-base py-2 rounded-lg border transition
           ${num === Number(group?.maximumPlayers)
                         ? "bg-[#7A6A5D] text-white"
                         : "bg-white"
-                      }`}
+                      }
+          ${!isHost
+                        ? "cursor-not-allowed opacity-50"
+                        : "hover:bg-[#7A6A5D] hover:text-white"
+                      }
+        `}
                   >
                     {num}
                   </button>
                 ))}
               </div>
+
+              {!isHost && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Only the host can change lobby settings
+                </p>
+              )}
             </div>
+
 
 
             {/* Start Time */}
@@ -144,12 +308,26 @@ const GroupLobby: React.FC = () => {
               <p className="text-sm text-gray-500 mb-3">
                 Time in seconds before the match starts (default: 10)
               </p>
-              <input
-                type="number"
-                value={10}
-                className="w-full border rounded-lg px-4 py-3 text-base"
-              />
+
+            <input
+  type="text"
+  value={startTime}
+  disabled={!isHost}
+  onChange={(e) => {
+    if (!isHost) return;
+    setStartTime(e.target.value);
+  }}
+  className="w-full border rounded-lg px-4 py-3"
+/>
+
+
+              {!isHost && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Only the host can change start time
+                </p>
+              )}
             </div>
+
           </div>
 
           {/* CENTER */}
@@ -162,24 +340,47 @@ const GroupLobby: React.FC = () => {
                 Click the link to copy!
               </p>
 
-              <div className="bg-white border rounded-lg px-4 py-3 text-base mb-6 break-all">
-                http://localhost:5173/group-play/group/{group?.joinLink}
+              <div
+                className={`bg-white border rounded-lg px-4 py-3 text-base mb-6 break-all transition
+    ${isBlurred ? "blur-sm select-none" : "blur-0 select-text"}
+  `}
+              >
+                {inviteLink}
               </div>
-
               <div className="flex justify-center gap-4 mb-6">
-                <button className="px-6 py-2.5 text-base rounded-lg bg-[#7A6A5D] text-white">
+                {/* COPY */}
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(inviteLink);
+                    toast.success("Invite link copied!");
+                  }}
+                  className="px-6 py-2.5 text-base rounded-lg bg-[#7A6A5D] text-white"
+                >
                   COPY
                 </button>
-                <button className="px-6 py-2.5 text-base rounded-lg border bg-white">
-                  SHOW
+
+                {/* BLUR / UNBLUR */}
+                <button
+                  onClick={() => setIsBlurred((prev) => !prev)}
+                  className="px-6 py-2.5 text-base rounded-lg border bg-white"
+                >
+                  {isBlurred ? "SHOW" : "HIDE"}
                 </button>
               </div>
 
-              <button 
-              onClick={startGame}
-              className="px-8 py-3 rounded-xl bg-[#7A6A5D] text-white text-lg flex items-center gap-2 mx-auto">
-                ▶ START GAME
-              </button>
+              {group?.currentUserId === group?.ownerId ? (
+                <button
+                  onClick={startGame}
+                  className="px-8 py-3 rounded-xl bg-[#7A6A5D] text-white text-lg flex items-center gap-2 mx-auto"
+                >
+                  ▶ START GAME
+                </button>
+              ) : (
+                <p className="text-sm text-gray-500 text-center mt-4">
+                  ⏳ Waiting for host to start the game…
+                </p>
+              )}
+
             </div>
 
             {/* CHAT */}
@@ -208,7 +409,7 @@ const GroupLobby: React.FC = () => {
           {/* RIGHT – PLAYERS */}
           <div className="col-span-3 bg-[#FFF1D8] rounded-2xl p-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">
-              Lobby ({players.length} / {group.maximumPlayers})
+              Lobby ({players.length} / {group?.maximumPlayers})
             </h2>
 
             <div className="space-y-4">
@@ -220,7 +421,15 @@ const GroupLobby: React.FC = () => {
                   {/* LEFT SIDE */}
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     {/* Avatar */}
-                    <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0" />
+                    {p.imageUrl ? (
+                      <img
+                        src={p.imageUrl}
+                        // alt={p.name}
+                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0" />
+                    )}
 
                     {/* Name + host */}
                     <div className="flex items-center gap-2 min-w-0">
@@ -237,7 +446,7 @@ const GroupLobby: React.FC = () => {
                   </div>
 
                   {/* RIGHT SIDE */}
-                  {!p.isHost && group.currentUserId === group.ownerId && (
+                  {!p.isHost && isHost && (
                     <button
                       onClick={() => removePlayer(p.userId)}
                       className="w-8 h-8 flex-shrink-0 rounded-full bg-red-500 text-white text-sm flex items-center justify-center hover:bg-red-600 transition"

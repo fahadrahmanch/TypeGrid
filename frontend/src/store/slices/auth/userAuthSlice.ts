@@ -4,10 +4,12 @@ const userAuthSlice = createSlice({
   initialState: {
     accessToken: null,
     authLoaded: false,
+    user: null,
   },
   reducers: {
     setuserAccessToken(state, action) {
       state.accessToken = action.payload.accessToken;
+      state.user = action.payload.user;
     },
     setUserAuthLoaded(state, action) {
       state.authLoaded = action.payload;
