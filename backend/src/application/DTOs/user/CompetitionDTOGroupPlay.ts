@@ -28,7 +28,6 @@ export const mapCompetitionToDTOGroupPlay = (
   
   hostUserId: string
 ): CompetitionDTOGroupPlay => {
-  console.log("competition in dto",competition)
   return {
     _id: competition._id.toString(),
     mode: competition.mode,

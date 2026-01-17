@@ -34,6 +34,7 @@ export class GroupEntity {
     }
   }
     changeDifficulty(difficulty: "easy" | "medium" | "hard") {
+      console.log("status",this.status)
     if (this.status !== "waiting") {
       throw new Error("Cannot change difficulty after game has started");
     }
@@ -67,10 +68,14 @@ export class GroupEntity {
       this.members.push(memberId);
     }
   }
+
+
+  setOwner(ownerId: string) {
+    this.ownerId = ownerId;
+  }
+  
   removeMember(memberId: string) {
     this.members = this.members.filter((member) => member.toString() !== memberId.toString());
-    this.kickedUsers.push(memberId.toString());
-
     
   }
   getId() {
@@ -106,6 +111,10 @@ export class GroupEntity {
   }
   getKickedUsers() {
     return this.kickedUsers;
+  }
+  kickUser(memberId: string) {
+    this.members = this.members.filter((member) => member.toString() !== memberId.toString());
+    this.kickedUsers.push(memberId.toString());
   }
   toObject() {
   return {

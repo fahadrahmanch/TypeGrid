@@ -14,17 +14,14 @@ export class googleAuthUseCase implements IGoogleAuthUseCase {
                 email: email,
                 googleId: googleId
             });
-           
             return await this._authRepository.create(newUser);
+
         } else if (user) {
             if (user.status == "block") {
                 throw new Error(MESSAGES.AUTH_ACCOUNT_BLOCKED);
             }
-           return await new AuthUserEntity({
-                name: name,
-                email: email,
-                googleId: googleId
-            });
+           
+           return user;
         }
     }
 }

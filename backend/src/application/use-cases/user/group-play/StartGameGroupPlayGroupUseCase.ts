@@ -4,6 +4,7 @@ import { CompetitionEntity } from "../../../../domain/entities/CompetitionEntity
 import { mapLessonDTOforGroupPlay } from "../../../DTOs/admin/lessonManagement.dto";
 import { mapCompetitionToDTOGroupPlay } from "../../../DTOs/user/CompetitionDTOGroupPlay";
 import { CompetitionDTOGroupPlay } from "../../../DTOs/user/CompetitionDTOGroupPlay";
+import { Console } from "console";
 export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupUseCase{
     constructor(
        private _baseRepoCompetion:IBaseRepository<any>,
@@ -18,9 +19,16 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
         throw new Error("Group not found")
      }
      const participants=group.members.map((item:any)=>item.toString())
-     const level=group.difficulty=='easy'?'beginner':group.difficulty==='medium'?'intermediate':'advanced';
+       const difficultyToLevelMap: Record<string, string> = {
+    easy: "beginner",
+    medium: "intermediate",
+    hard: "advanced",
+  };
+     const level=difficultyToLevelMap[group.difficulty];
+    
+     console.log("level",level)
      const lessons=await this._baseRepoLesson.find({level,createdBy:"admin"})
-
+     console.log("lessons",lessons)
     if (!lessons.length) {
       throw new Error("No lessons found for this level");
     }
@@ -32,10 +40,11 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       textId: selectedLesson.id,
       participants,
       groupId:group._id.toString(),
-      duration: 300,
+      duration: 3000,
       status:'ongoing',
       startTime,
      })
+     console.log("startey",competitionEntity)
      const competitionObject=await competitionEntity.toObject()
      const competition=await this._baseRepoCompetion.create(competitionObject)
      const populatedParticipants = await Promise.all(

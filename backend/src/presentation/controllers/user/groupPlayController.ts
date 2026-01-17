@@ -1,6 +1,6 @@
 import { join } from "path";
 import { Request, Response } from "express";
-import { getIO } from "../../../socket"; 
+import { getIO } from "../../../infrastructure/socket/socket"; 
 
 
 import { ICreateGroupPlayRoomUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/ICreateGroupPlayRoomUseCase";
@@ -11,7 +11,7 @@ import { IEditGroupPlayUseCase } from "../../../application/use-cases/interfaces
 import { IJoinGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IIJoinGroupPlayGroupUseCase";
 import { IRemoveMemberGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IRemoveMemberGroupPlayGroupUseCase";
 import { IStartGameGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IStartGameGroupPlayGroupUseCase";
-
+import { IChangeGroupStatusUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IChangeGroupStatusUseCase";
 export class groupPlayController{
     constructor(
         private _createGroupPlayRoomUseCase: ICreateGroupPlayRoomUseCase,
@@ -19,7 +19,8 @@ export class groupPlayController{
         private _editGroupPlayGroupUseCase:IEditGroupPlayUseCase, 
         private _joinGroupPlayGroupUseCase:IJoinGroupPlayGroupUseCase,
         private _removeMemberGroupPlayGroupUseCase:IRemoveMemberGroupPlayGroupUseCase,
-        private _startGameGroupPlayGroupUseCase:IStartGameGroupPlayGroupUseCase
+        private _startGameGroupPlayGroupUseCase:IStartGameGroupPlayGroupUseCase,
+        private _changeGroupStatusUseCase:IChangeGroupStatusUseCase
     ){}
 
     async createGroup(req:AuthRequest,res:Response):Promise<void>{
@@ -77,8 +78,9 @@ export class groupPlayController{
     
     async editGroup(req:AuthRequest,res:Response):Promise<void>{
         try{
-        const {difficulty,maxPlayers}=req.body
-        const groupId=req.params.groupId
+        const {difficulty,maxPlayers}=req.body;
+        console.log("editGroup",difficulty,maxPlayers)
+        const groupId=req.params.groupId;
         if(!groupId){
             throw new Error("Group ID is required to edit group details.")
         }
@@ -90,7 +92,6 @@ export class groupPlayController{
             throw new Error(MESSAGES.UNAUTHORIZED)
         }
        const group= await this._editGroupPlayGroupUseCase.execute(groupId,difficulty,maxPlayers,userId)
-       console.log("group edited",group)
        
             getIO().to(group.id).emit("change-difficulty", {
              
@@ -124,7 +125,6 @@ export class groupPlayController{
             getIO().to(group.id).emit("fetchGroupDetails", {
                 group
             })
-            console.log("group here in join group function",group)
             res.status(200).json({
                 success:true,
                 message:"Joined group successfully"
@@ -149,7 +149,7 @@ export class groupPlayController{
             if(!userId){
                 throw new Error(MESSAGES.UNAUTHORIZED)
             }
-            const group=await this._removeMemberGroupPlayGroupUseCase.execute(groupId,userId)
+            const group=await this._removeMemberGroupPlayGroupUseCase.execute(groupId,userId,"KICK")
             getIO().to(groupId).emit("remove-player", {
                 group
             })
@@ -176,15 +176,15 @@ export class groupPlayController{
                 throw new Error("Group ID is required to start game.");
             }
             const startCompetition=await this._startGameGroupPlayGroupUseCase.execute(groupId,startTime)
+            await this._changeGroupStatusUseCase.changeGroupStatus(groupId,"started")
 
             if(!startCompetition){
                 throw new Error("something went wrong")
             }
-             
                getIO().to(groupId).emit("game-started", {
-  competition: startCompetition,
-});
-  
+               competition: startCompetition,
+            });
+
             res.status(200).json({
                 success:true,
                 message:"Game started successfully",

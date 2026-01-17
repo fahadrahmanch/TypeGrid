@@ -1,5 +1,5 @@
 import { app } from ".";
-import { initSocket } from "./socket";
+import { initSocket } from "./infrastructure/socket/socket";
 import http from "http";
 
 const application=new app();

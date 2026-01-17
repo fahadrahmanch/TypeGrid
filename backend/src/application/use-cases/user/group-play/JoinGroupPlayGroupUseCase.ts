@@ -44,6 +44,7 @@ export class joinGroupPlayGroupUseCase implements IJoinGroupPlayGroupUseCase {
       }
     )
 );
+
     return mapGroupToDTO({
         ...updatedGroup,
         // currentUserId:userId

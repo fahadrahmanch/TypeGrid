@@ -22,6 +22,7 @@ import { joinGroupPlayGroupUseCase } from "../../application/use-cases/user/grou
 import { RemoveMemberGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/RemoveMemberGroupPlayGroupUseCase";
 import { StartGameGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/StartGameGroupPlayGroupUseCase";
 import { Competition } from "../../infrastructure/db/models/user/competitionSchema";
+import { ChangeGroupStatusUseCase } from "../../application/use-cases/user/group-play/ChangeGroupStatusUseCase";
 const baseRepoCompany=new BaseRepository(Company);
 const baseRepoUser=new BaseRepository<AuthUserEntity>(User);
 const CompanyRequestUseCase=new companyRequestUseCase(baseRepoCompany,baseRepoUser);
@@ -44,7 +45,8 @@ const EditGroupUseCase=new editGroupUseCase(baseRepoGroup)
 const JoinGroupPlayGroupUseCase=new joinGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser)
 const removeMemberGroupPlayGroupUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser)
 const startGameGroupPlayGroupUseCase=new StartGameGroupPlayGroupUseCase(baseRepoCompetion,baseRepoGroup,baseRepoLesson,baseRepoUser)
-export const injectGroupPlayController=new groupPlayController(createGroupPlayRoomUseCase, GetGroupPlayGroupUseCase,EditGroupUseCase,JoinGroupPlayGroupUseCase,removeMemberGroupPlayGroupUseCase,startGameGroupPlayGroupUseCase);
+const changeGroupStatusUseCase=new ChangeGroupStatusUseCase(baseRepoGroup)
+export const injectGroupPlayController=new groupPlayController(createGroupPlayRoomUseCase, GetGroupPlayGroupUseCase,EditGroupUseCase,JoinGroupPlayGroupUseCase,removeMemberGroupPlayGroupUseCase,startGameGroupPlayGroupUseCase,changeGroupStatusUseCase);
 
 export const injectTypingPracticeController=new typingPracticeController(GetPracticeTypingContentUseCase);
 export const injectCompanyRequestController=new companyRequestController(CompanyRequestUseCase,tokenService,FindUserUseCase,GetCompanyUseCase,CompanyReApplyUseCase);
