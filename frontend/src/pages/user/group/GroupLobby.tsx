@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { startGroupPlayAPI } from "../../../api/user/group";
 import { socket } from "../../../socket";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 type Player = {
   userId: string;
   name: string;
@@ -43,16 +44,28 @@ const GroupLobby: React.FC = () => {
   const [isBlurred, setIsBlurred] = useState(true);
   const user = useSelector((state: any) => state.userAuth.user);
   const [startTime, setStartTime] = useState<string>();
+  const location=useLocation()
+  console.log('location',location)
 
   const navigate = useNavigate()
   useEffect(() => {
     if (!group?.id) return;
 
-    socket.emit("join-room", group.id);
-    
+    socket.emit("join-room", {groupId: group.id, userId: user._id});
+     return () => {
+    console.log("LEAVE EMIT", group.id, user._id);
+    socket.emit("leave-group", {
+      groupId: group.id,
+      userId: user._id,
+    });
+  };
 
 
   }, [group?.id]);
+
+
+
+
 
   useEffect(() => {
     socket.on("game-started", (data) => {
@@ -152,7 +165,7 @@ const GroupLobby: React.FC = () => {
       } catch (error: any) {
         console.error(error);
         navigate("/")
-        toast.error(error.message);
+        // toast.error(error.message);
       } finally {
         setLoading(false);
       }
