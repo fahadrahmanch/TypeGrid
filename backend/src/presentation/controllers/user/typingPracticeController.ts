@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { IGetPracticeTypingContentUseCase } from "../../../domain/interfaces/useCases/user/TypingPracticeUseCases/IGetPracticeTypingContentUseCase";
+import { IGetPracticeTypingContentUseCase } from "../../../application/use-cases/interfaces/user/TypingPracticeUseCases/IGetPracticeTypingContentUseCase";
 export class typingPracticeController {
   constructor(
     private _getPracticeTypingContentUseCase: IGetPracticeTypingContentUseCase

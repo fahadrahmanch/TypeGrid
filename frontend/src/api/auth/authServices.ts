@@ -87,7 +87,6 @@ export async function adminSigninApi(data: signInData) {
 
 // admin refresh token
 export async function adminRefreshAPI() {
-  console.log("called admin refresh");
   return adminAPI.post("/auth/refresh-token");
 }
 

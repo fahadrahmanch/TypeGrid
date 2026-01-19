@@ -11,7 +11,6 @@ const CompanyVerificationFormDiv: React.FC = () => {
     email: "",
     number:""
   });
-
     const [error, setError] = useState({
     companyName: "",
     email: "",

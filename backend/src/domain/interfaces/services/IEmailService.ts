@@ -1,4 +1,4 @@
-import { IEmailTemplate } from "../emailTemplates/IEmailTemplate";
+import { IEmailTemplate } from "../../../application/DTOs/email/EmailTemplateDto";
 import nodemailer from "nodemailer";
 export interface IEmailService{
     sentOtp(template:IEmailTemplate):Promise<void>

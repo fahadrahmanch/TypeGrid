@@ -1,8 +1,8 @@
-import { IAuthUseCase } from "../../../../domain/interfaces/useCases/auth/IAuthUseCase";
+import { IAuthUseCase } from "../../interfaces/auth/IAuthUseCase";
 import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/IAuthRepository";
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
 import { IEmailService } from "../../../../domain/interfaces/services/IEmailService";
-import { IEmailTemplate } from "../../../../domain/interfaces/emailTemplates/IEmailTemplate";
+import { IEmailTemplate } from "../../../DTOs/email/EmailTemplateDto";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class registerUser implements IAuthUseCase {
     constructor(

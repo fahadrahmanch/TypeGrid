@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Routes } from "../../../domain/constants/routes";
+import { Routes } from "../routes";
 import { injectAuthController } from "../../DI/auth";
 export class userAuthRouter {
   private router: express.Router;
@@ -10,7 +10,6 @@ export class userAuthRouter {
   initializeRoutes() {
     //user
     this.router.post(Routes.AUTH.SIGNUP, (req: Request, res: Response) => {
-      console.log("Reached here");
       injectAuthController.register(req, res);
     });
     this.router.post(Routes.AUTH.VERIFY_OTP, (req: Request, res: Response) => {

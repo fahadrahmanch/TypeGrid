@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { IAuthUseCase } from "../../../domain/interfaces/useCases/auth/IAuthUseCase";
-import { ICompleteSignupUseCase } from "../../../domain/interfaces/useCases/auth/ICompleteSignupUseCase";
-import { IResentOtpUseCase } from "../../../domain/interfaces/useCases/auth/IResentOtpUsecase";
+import { IAuthUseCase } from "../../../application/use-cases/interfaces/auth/IAuthUseCase";
+import { ICompleteSignupUseCase } from "../../../application/use-cases/interfaces/auth/ICompleteSignupUseCase";
+import { IResentOtpUseCase } from "../../../application/use-cases/interfaces/auth/IResentOtpUsecase";
 import logger from "../../../utils/logger";
-import { ILoginUseCase } from "../../../domain/interfaces/useCases/auth/ILoginUseCase";
+import { ILoginUseCase } from "../../../application/use-cases/interfaces/auth/ILoginUseCase";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
-import { IGoogleAuthUseCase } from "../../../domain/interfaces/useCases/auth/IGoogleAuthUseCase";
-import { IFindUserByemailUseCase } from "../../../domain/interfaces/useCases/auth/IFindUserByEmailUseCase";
-import { IForgotPasswordUseCase } from "../../../domain/interfaces/useCases/auth/IForgotPasswordUseCase";
-import { IForgotPasswordOtpVerify } from "../../../domain/interfaces/useCases/auth/IForgotPasswordOtpVerify";
-import { ICreateNewPasswordUseCase } from "../../../domain/interfaces/useCases/auth/ICreateNewPasswordUseCase";
-import { IcompanyFindUseCase } from "../../../domain/interfaces/useCases/auth/ICompanyFindUseCase";
+import { IGoogleAuthUseCase } from "../../../application/use-cases/interfaces/auth/IGoogleAuthUseCase";
+import { IFindUserByemailUseCase } from "../../../application/use-cases/interfaces/auth/IFindUserByEmailUseCase";
+import { IForgotPasswordUseCase } from "../../../application/use-cases/interfaces/auth/IForgotPasswordUseCase";
+import { IForgotPasswordOtpVerify } from "../../../application/use-cases/interfaces/auth/IForgotPasswordOtpVerify";
+import { ICreateNewPasswordUseCase } from "../../../application/use-cases/interfaces/auth/ICreateNewPasswordUseCase";
+import { IcompanyFindUseCase } from "../../../application/use-cases/interfaces/auth/ICompanyFindUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 export class authController {
     constructor(
@@ -30,9 +30,7 @@ export class authController {
     async register(req: Request, res: Response): Promise<any> {
         try {
             const { name, email, password } = req.body;
-            console.log("req.body:", req.body);
             if (!name || !email || !password) {
-                console.log("Missing fields:", { name, email, password });
                 throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
 
             }
@@ -88,8 +86,8 @@ export class authController {
 
             };
 
-            const accessToken = await this._tokenServie.generateAccessToken(user?.email, user?.role);
-            const refreshToken = await this._tokenServie.generateRefreshToken(user?.email, user?.role);
+            const accessToken = await this._tokenServie.generateAccessToken(user._id,user?.email, user?.role);
+            const refreshToken = await this._tokenServie.generateRefreshToken(user._id,user?.email, user?.role);
             if (!accessToken || !refreshToken) {
                 throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
@@ -144,7 +142,7 @@ export class authController {
                 throw new Error(MESSAGES.ACCOUNT_BLOCKED_ACCESS_DENIED);
 
             }
-            const accessToken = await this._tokenServie.generateAccessToken(decoded?.userId, decoded?.role);
+            const accessToken = await this._tokenServie.generateAccessToken(decoded?.userId, decoded?.email, decoded?.role);
             res.json({
                 success: true,
                 accessToken,
@@ -166,11 +164,17 @@ export class authController {
                 throw new Error(MESSAGES.REQUEST_BODY_MISSING);
             }
             const user = await this._googleAuthUseCase.gooogleAuth(name, email, googleId);
-            const accessToken = await this._tokenServie.generateAccessToken(email, "user");
-            const refreshToken = await this._tokenServie.generateRefreshToken(email, "user");
+            if (!user || !user._id) {
+                throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+            }
+            const accessToken = await this._tokenServie.generateAccessToken(user._id.toString(), email, "user");
+            const refreshToken = await this._tokenServie.generateRefreshToken(user._id.toString(), email, "user");
+            
             if (!accessToken || !refreshToken) {
                 throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
+            const UserDeepCopy = JSON.parse(JSON.stringify(user));
+            delete UserDeepCopy.password;
 
             res.cookie("refresh_user", refreshToken, {
                 httpOnly: true,
@@ -182,12 +186,13 @@ export class authController {
             res.status(200).json({
                 success: true,
                 message: MESSAGES.GOOGLE_LOGIN_SUCCESS,
-                user,
+                user: UserDeepCopy,
                 accessToken
             });
 
         }
         catch (error: any) {
+            console.log("Google Auth Error:", error);
             res.status(500).json({
                 success: false,
                 message: error.message || "Something went wrong during Google authentication"
@@ -241,7 +246,6 @@ export class authController {
     async resetPassword(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body;
-            console.log("Reset password request:", req.body);
             await this._createNewPasswordUseCase.execute(email, password);
             res.status(200).json({
                 success: true,
@@ -298,8 +302,8 @@ export class authController {
 
             };
 
-            const accessToken = await this._tokenServie.generateAccessToken(admin?.email, admin?.role);
-            const refreshToken = await this._tokenServie.generateRefreshToken(admin?.email, admin?.role);
+            const accessToken = await this._tokenServie.generateAccessToken(admin?._id.toString(), admin?.email, admin?.role);
+            const refreshToken = await this._tokenServie.generateRefreshToken(admin?._id.toString(), admin?.email, admin?.role);
 
             if (!accessToken || !refreshToken) {
                 throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
@@ -348,8 +352,8 @@ export class authController {
                 throw new Error(MESSAGES.MISSING_COMPANY_ASSOCIATION);
             }
             const company = await this._companyFindUseCase.execute(user?.CompanyId);
-            const accessToken = await this._tokenServie.generateAccessToken(user?.email, user?.role);
-            const refreshToken = await this._tokenServie.generateRefreshToken(user?.email, user?.role);
+            const accessToken = await this._tokenServie.generateAccessToken(user?._id.toString(), user?.email, user?.role);
+            const refreshToken = await this._tokenServie.generateRefreshToken(user?._id.toString(), user?.email, user?.role);
             if (!accessToken || !refreshToken) { 
                 throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }

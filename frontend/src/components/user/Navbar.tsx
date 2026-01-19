@@ -7,7 +7,6 @@ const Navbar: React.FC = () => {
     
       imageUrl: "",
     });
-  
       useEffect(() => {
         async function getUserData() {
           const res = await getUserDataApi();

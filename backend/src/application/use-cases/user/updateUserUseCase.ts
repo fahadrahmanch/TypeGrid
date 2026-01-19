@@ -1,6 +1,6 @@
-import { IUserUpdateUseCase } from "../../../domain/interfaces/useCases/user/IUserUpdateUseCase";
+import { IUserUpdateUseCase } from "../interfaces/user/IUserUpdateUseCase";
 import { AuthUserEntity } from "../../../domain/entities";
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
 export class updateUserUseCase implements IUserUpdateUseCase{
     constructor(
         private _baseRepository:IBaseRepository< AuthUserEntity>

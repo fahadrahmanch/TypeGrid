@@ -1,15 +1,15 @@
 import { create } from "domain";
-import { LessonCategory,LessonLevel } from "../../../domain/entities/admin/lesssonEntity";
+import { LessonCategory,LessonLevel } from "../../../domain/entities/LessonEntity";
 export interface LessonDTO {
   id: string;
   text: string;
   category: LessonCategory;
   level: LessonLevel;
-  charCount: number;
-  wordCount: number;
+  charCount?: number;
+  wordCount?: number;
   targetWpm?: number;
   targetAccuracy?: number;
-  createdAt: Date;
+  createdAt?: Date;
 }
 export const mapLessonToDTO = (lesson: any): LessonDTO => {
   return {
@@ -24,3 +24,11 @@ export const mapLessonToDTO = (lesson: any): LessonDTO => {
     createdAt: lesson.createdAt,
   };
 };
+export const mapLessonDTOforGroupPlay=(lesson:any):LessonDTO=>{
+  return{
+    id: lesson._id.toString(),
+    text: lesson.text,
+    category: lesson.category,
+    level: lesson.level,
+  }
+}

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
-import { IFindUserUseCase } from "../../../domain/interfaces/useCases/user/IFindUserUseCase";
-import { IUserUpdateUseCase } from "../../../domain/interfaces/useCases/user/IUserUpdateUseCase";
+import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/IFindUserUseCase";
+import { IUserUpdateUseCase } from "../../../application/use-cases/interfaces/user/IUserUpdateUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 export class userController {
   constructor(

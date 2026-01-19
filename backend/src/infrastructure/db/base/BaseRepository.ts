@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
   protected model: Model<T>;
@@ -10,8 +10,12 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   async find(filter: any = {}): Promise<T[]> {
     return this.model.find(filter).lean<T[]>().exec();
   }
+  async findOne(filter: any = {}): Promise<T | null> {
+    return this.model.findOne(filter).lean<T>().exec();
+  }
   async create(data: Partial<T>): Promise<T> {
-    return this.model.create(data);
+    const res = await this.model.create(data);
+    return res.toObject() as T;
   }
   async findById(id: string): Promise<T | null> {
     return this.model.findById(id);
@@ -22,14 +26,14 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     const obj = userDoc.toObject();
     return obj;
   }
-  async update(data: any): Promise<void> {
-    const { _id, ...updateFields } = data;
+  async update(data: any): Promise<any> {
+        const { _id, ...updateFields } = data;
 
-    await this.model.findByIdAndUpdate(
+    return await this.model.findByIdAndUpdate(
       _id,
       { $set: updateFields },
       { new: true }
-    );
+    ).lean<T>().exec();
   }
   async delete(_id:string):Promise<T|null>{
     return this.model.findByIdAndDelete(_id);

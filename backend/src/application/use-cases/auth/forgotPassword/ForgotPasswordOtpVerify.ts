@@ -1,5 +1,5 @@
 import { IOtpService } from "../../../../domain/interfaces/services/IOtpService";
-import { IForgotPasswordOtpVerify } from "../../../../domain/interfaces/useCases/auth/IForgotPasswordOtpVerify";
+import { IForgotPasswordOtpVerify } from "../../interfaces/auth/IForgotPasswordOtpVerify";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class ForgotPasswordOtpVerify implements IForgotPasswordOtpVerify {
     constructor(

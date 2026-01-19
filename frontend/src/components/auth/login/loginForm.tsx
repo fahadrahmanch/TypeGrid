@@ -60,6 +60,7 @@ setLoading(true);
 
       const accessToken = response?.data?.accessToken;
       const user = response?.data?.UserDeepCopy;
+      
       if (!accessToken || !user) {
         throw new Error("Something went wrong. Please try again");
       }

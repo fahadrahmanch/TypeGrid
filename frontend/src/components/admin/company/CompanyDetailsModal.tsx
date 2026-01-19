@@ -15,7 +15,6 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
 }) => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
-  console.log(company,'company details modal');
   async function handleCompanyStatus(
     status: "active" | "reject"
   ) {

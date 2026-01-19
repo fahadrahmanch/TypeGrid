@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { IGetUsersUseCase } from "../../../domain/interfaces/useCases/admin/IGetUsersUseCase";
-import { InterfaceUser } from "../../../domain/interfaces/useCases/user/InterfaceUser";
-import { IBlockUserUseCase } from "../../../domain/interfaces/useCases/admin/IBlockUserUseCase";
+import { IGetUsersUseCase } from "../../../application/use-cases/interfaces/admin/IGetUsersUseCase";
+import { IBlockUserUseCase } from "../../../application/use-cases/interfaces/admin/IBlockUserUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 import logger from "../../../utils/logger";
 export class userManageController {
@@ -12,7 +11,7 @@ export class userManageController {
   async getUsers(req: Request, res: Response): Promise<void> {
     try {
       const users = await this._getUsersUseCase.execute();
-      const safeUsers = users.map((user: InterfaceUser) => {
+      const safeUsers = users.map((user) => {
         const { password, ...rest } = user;
         return rest;
       });

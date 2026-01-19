@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { createLesson } from "../../api/admin/lessons";
 import { getAllLessons } from "../../api/admin/lessons";
+import { fetchLesson } from "../../api/admin/lessons";
+import { updateLesson } from "../../api/admin/lessons";
 const Lessons:React.FC=()=>{
     const [isOpen,setOpen]=useState(false);
     const [values,setValues]=useState({title:"",level:"",category:"",wpm:"",accuracy:"",text:""});
-    const [lessons,setLessons]=useState<any[]>([]);
+    const [editValues,setEditValues]=useState({id:"",title:"",level:"",category:"",wpm:"",accuracy:"",text:""});
 
+    const [lessons,setLessons]=useState<any[]>([]);
+    const [isEditOpen,setEditOpen]=useState(false)
 
     useEffect(()=>{
       const fetchLessons=async()=>{
@@ -25,17 +29,50 @@ const Lessons:React.FC=()=>{
     function handleChange(e:any){
         setValues({ ...values, [e.target.name]: e.target.value });
     }
+     function handleEdiChange(e:any){
+        setEditValues({ ...editValues, [e.target.name]: e.target.value });
+    }
 
     async function handleSubmit(){
         try{
-          alert("Creating lesson...");
             const response=await createLesson(values);
-            console.log("Lesson created successfully:", response);
             setOpen(false);
+            setValues({title:"",level:"",category:"",wpm:"",accuracy:"",text:""})
         }
         catch(err){
             console.log("Error creating lesson:", err);
         }
+    }
+
+    async function fetch(lessonId:string){
+      try{
+        const response=await fetchLesson(lessonId)
+        if(!response)return
+      
+        setEditValues(response?.data?.data)
+
+      }
+      catch(error){
+        console.log(error)
+      }
+      
+      setEditOpen(true)
+    }
+
+    async function handleEditSubmit(lessonId:string){
+      try{
+        const response=await updateLesson(lessonId,editValues)
+         setLessons((prev) =>
+      prev.map((lesson) =>
+        lesson.id === lessonId ? response.data.data : lesson
+      )
+      
+    );
+        setEditOpen(false)
+      
+      }catch(error){
+        console.log(error)
+      }
     }
 
     return (
@@ -117,7 +154,7 @@ const Lessons:React.FC=()=>{
 
                 <tbody className="text-gray-800">
                   {lessons&&lessons.map((lesson)=>(
-                    <tr key={lesson._id} className="border-b text-start">
+                    <tr key={lesson.id} className="border-b text-start">
                       <td>
                         <span className="px-2 py-1 bg-blue-100 rounded text-xs">
                           {lesson.level}
@@ -131,9 +168,9 @@ const Lessons:React.FC=()=>{
                       <td>{lesson.text.slice(0, 10)}...</td>
                       <td>{new Date(lesson.createdAt).toLocaleDateString()}</td>
                       <td className="flex gap-3 py-3">
-                        <button className="text-blue-600 hover:text-blue-800">✏️</button>
+                        <button onClick={()=>fetch(lesson.id)} className="text-blue-600 hover:text-blue-800">✏️</button>
                         <button className="text-red-600 hover:text-red-800">🗑️</button>
-                        {/* ✏️ 🗑️ */}
+                        
                         </td>
 
                     </tr>
@@ -273,6 +310,140 @@ const Lessons:React.FC=()=>{
                   className="px-8 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700"
                 >
                   Create Lesson
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* edit lesson */}
+        {isEditOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            {/* Modal Container */}
+            <div className="w-full max-w-3xl bg-[#FBF7EF] rounded-xl shadow-xl p-8">
+              {/* Header */}
+              <h2 className="text-xl font-bold mb-6">Edit Lesson</h2>
+              {/* Title */}
+              <div className="mb-5">
+                <label className="text-sm font-medium block mb-2">Title</label>
+                <input
+                  type="text"
+                  value={editValues.title}
+                  name="title"
+                  onChange={handleEdiChange}
+                  className="w-full px-4 py-2 rounded-md border outline-none focus:ring-2 focus:ring-[#D6B98C]"
+                />
+              </div>
+
+              {/* Description */}
+              {/* <div className="mb-5">
+                <label className="text-sm font-medium block mb-2">
+                  Description
+                </label>
+                <textarea
+                  value={values.Description}
+                  rows={3}
+                  name="Description"
+                    onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
+                />
+              </div> */}
+
+              {/* Level & Category */}
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="text-sm font-medium block mb-2">
+                    Level
+                  </label>
+                  <select
+                    value={editValues.level}
+                    onChange={handleEdiChange}
+                    name="level"
+                    className="w-full px-4 py-2 rounded-md border outline-none bg-white"
+                  >
+                    <option value="">Select level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium block mb-2">
+                    Category
+                  </label>
+                  <select
+                    value={editValues.category}
+                    name="category"
+                    onChange={handleEdiChange}
+                    className="w-full px-4 py-2 rounded-md border outline-none bg-[#FFF3DB] text-gray-600"
+                  >
+                    <option value="" disabled>
+                      Select category
+                    </option>
+                    <option value="sentence">Sentence</option>
+                    <option value="paragraph">Paragraph</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* WPM & Accuracy */}
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="text-sm font-medium block mb-2">WPM</label>
+                  <input
+                    type="number"
+                    value={editValues.wpm}
+                    name="wpm"
+                    onChange={handleEdiChange}
+                    placeholder="e.g. 60"
+                    className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium block mb-2">
+                    Accuracy
+                  </label>
+                  <input
+                    type="number"
+                    name="accuracy"
+                    onChange={handleEdiChange}
+                    value={editValues.accuracy}
+                    placeholder="e.g. 90"
+                    className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Practice Text */}
+              <div className="mb-8">
+                <label className="text-sm font-medium block mb-2">
+                  Practice Text
+                </label>
+                <textarea
+                  rows={5}
+                  value={editValues.text}
+                  name="text"
+                  onChange={handleEdiChange}
+                  placeholder="Enter the text students will practice..."
+                  className="w-full px-4 py-3 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
+                />
+              </div>
+
+              {/* Footer Buttons */}
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => setEditOpen(false)}
+                  className="px-6 py-2 rounded-md text-gray-600 hover:text-black"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={()=>handleEditSubmit(editValues.id)}
+                  className="px-8 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700"
+                >
+                  Edit Lesson
                 </button>
               </div>
             </div>

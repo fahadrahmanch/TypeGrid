@@ -8,22 +8,23 @@ export class TokenService implements ITokenService {
         this.accessSecret = process.env.ACCESS_SECRET || "";
         this.refreshSecret = process.env.REFRESH_SECRET || "";
     }
-    async generateAccessToken(email: string,role:string): Promise<string> {
+
+    async generateAccessToken(userId: string, email: string, role: string): Promise<string> {
         return jwt.sign(
-            { email: email,role:role },
+            { userId: userId, email: email, role: role },
             this.accessSecret,
             { expiresIn: "7h" }
         );
     }
-    
 
-    async generateRefreshToken(email: string,role:string): Promise<string> {
+    async generateRefreshToken(userId: string, email: string, role: string): Promise<string> {
         return jwt.sign(
-            { email: email,role:role },
+            { userId: userId, email: email, role: role },
             this.refreshSecret,
             { expiresIn: "7d" }
         );
     }
+
     async verifyAccessToken(token: string) {
         return jwt.verify(token, this.accessSecret);
     }

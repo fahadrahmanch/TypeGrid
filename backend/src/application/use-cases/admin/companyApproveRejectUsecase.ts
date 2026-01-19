@@ -1,5 +1,5 @@
-import { ICompanyApproveRejectUsecase } from "../../../domain/interfaces/useCases/admin/ICompanyApproveRejectUsecase";
-import { IBaseRepository } from "../../../domain/interfaces/repository/user/IBaseRepository";
+import { ICompanyApproveRejectUsecase } from "../interfaces/admin/ICompanyApproveRejectUsecase";
+import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IEmailService } from "../../../domain/interfaces/services/IEmailService";
 export class companyApproveRejectUsecase
@@ -13,7 +13,6 @@ export class companyApproveRejectUsecase
 
   async approve(companyId: string): Promise<void> {
     const company = await this._baseRepositoryCompany.findById(companyId);
-    console.log("Approving company with ID:", company);
     if (!company) {
       throw new Error(MESSAGES.COMPANY_NOT_FOUND_OR_REMOVED);
     }

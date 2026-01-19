@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { ICompanyRequestUseCase } from "../../../domain/interfaces/useCases/user/ICompanyRequestUseCase";
+import { ICompanyRequestUseCase } from "../../../application/use-cases/interfaces/user/ICompanyRequestUseCase";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
-import { IFindUserUseCase } from "../../../domain/interfaces/useCases/user/IFindUserUseCase";
-import { IGetCompanyUseCase } from "../../../domain/interfaces/useCases/user/IGetCompanyUseCase";
+import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/IFindUserUseCase";
+import { IGetCompanyUseCase } from "../../../application/use-cases/interfaces/user/IGetCompanyUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { CompanyReApplyDTO } from "../../../application/DTOs/user/CompanyReApplyDTO";
-import { ICompanyReApplyUseCase } from "../../../domain/interfaces/useCases/user/ICompanyReApplyUseCase";
+import { ICompanyReApplyUseCase } from "../../../application/use-cases/interfaces/user/ICompanyReApplyUseCase";
 
 export class companyRequestController {
   constructor(

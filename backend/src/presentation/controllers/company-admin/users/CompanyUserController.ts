@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { IAddUserUseCase } from "../../../../domain/interfaces/useCases/companyAdmin/IAddUserUseCase";
+import { IAddUserUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/IAddUserUseCase";
 import { ITokenService } from "../../../../domain/interfaces/services/ITokenService";
-import { IFindUserUseCase } from "../../../../domain/interfaces/useCases/user/IFindUserUseCase";
-import { IGetCompanyUsersUseCase } from "../../../../domain/interfaces/useCases/companyAdmin/IGetCompanyUsersUseCase";
-import { IDeleteCompanyUserUseCase } from "../../../../domain/interfaces/useCases/companyAdmin/IDeleteCompanyUserUseCase";
+import { IFindUserUseCase } from "../../../../application/use-cases/interfaces/user/IFindUserUseCase";
+import { IGetCompanyUsersUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/IGetCompanyUsersUseCase";
+import { IDeleteCompanyUserUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/IDeleteCompanyUserUseCase";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class CompanyUserController {
   constructor(

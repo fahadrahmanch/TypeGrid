@@ -71,7 +71,6 @@ const EditProfileDiv1: React.FC = () => {
         toast.error(res.data.message || "Update failed!");
       }
     } catch (error: any) {
-      console.log("Response:", error.response);
       toast.error(error.response?.data?.message || "Something went wrong!");
     }
   };

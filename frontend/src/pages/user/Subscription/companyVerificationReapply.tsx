@@ -22,7 +22,6 @@ const CompanyVerificationReapply: React.FC = ({}) => {
      async function fetchCompanyDetails(){
        try{
          const response=await getCompanyStatusApi(); 
-         console.log("response",response);
          if(!response.data){
            return navigate("/");
          }
@@ -75,7 +74,6 @@ const CompanyVerificationReapply: React.FC = ({}) => {
 
     try {
       await reVerifyCompanyApi(values);
-      console.log("reApplied successfully");
       toast.success("Company details submitted for verification");
       navigate("/subscription/company/verify/status");
     } catch (err) {

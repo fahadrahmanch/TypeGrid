@@ -27,7 +27,9 @@ userAPI.interceptors.response.use(
       try {
         const res = await userRefreshAPI();
         const accessToken = await res.data.accessToken;
-        store.dispatch(setuserAccessToken(accessToken));
+        const user = res.data.user ;
+        
+        store.dispatch(setuserAccessToken({ accessToken, user }));
         orginalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
         return userAPI(orginalRequest);
       } catch (refreshError) {

@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Routes } from "../../domain/constants/routes";
+import { Routes } from "./routes";
 import { injectUserManageController } from "../DI/admin";
 import { injectCompanyManageController } from "../DI/admin";
 import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddleware";
@@ -34,10 +34,14 @@ export class adminRouter {
       injectLessonManageController.createLesson(req,res);
     });
     this.router.get(Routes.ADMIN.FETCH_LESSONS,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
-      console.log("Fetching lessons for admin");
       injectLessonManageController.getLessons(req,res);
     });
-    
+  this.router.get(Routes.ADMIN.FETCH_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
+    injectLessonManageController.fetchLesson(req,res)
+  })
+  this.router.put(Routes.ADMIN.UPDATE_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
+    injectLessonManageController.updateLesson(req,res)
+  })
     
   }
   getRouter() {

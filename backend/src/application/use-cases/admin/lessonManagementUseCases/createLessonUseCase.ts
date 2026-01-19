@@ -1,7 +1,7 @@
 import { LessonDTO } from "../../../DTOs/admin/lessonManagement.dto";
-import { ICreateLessonUseCase } from "../../../../domain/interfaces/useCases/admin/ICreateLessonUseCase";
-import { IBaseRepository } from "../../../../domain/interfaces/repository/user/IBaseRepository";
-import { LessonEntity } from "../../../../domain/entities/admin/lesssonEntity";
+import { ICreateLessonUseCase } from "../../interfaces/admin/ICreateLessonUseCase";
+import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
+import { LessonEntity } from "../../../../domain/entities/LessonEntity";
 import { mapLessonToDTO } from "../../../DTOs/admin/lessonManagement.dto";
 export class createLessonUseCase implements ICreateLessonUseCase {
     constructor(
@@ -16,7 +16,7 @@ export class createLessonUseCase implements ICreateLessonUseCase {
         let lessons= await this._baseRepositoryLesson.find();
         return lessons.map((item)=>{
             return mapLessonToDTO(item);    
-        })
+        });
         
     }   
 }
