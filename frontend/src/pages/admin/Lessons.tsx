@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
-import { createLesson } from "../../api/admin/lessons";
-import { getAllLessons } from "../../api/admin/lessons";
-import { fetchLesson } from "../../api/admin/lessons";
-import { updateLesson } from "../../api/admin/lessons";
+import { createLesson, getAllLessons, fetchLesson, updateLesson, deleteLesson } from "../../api/admin/lessons";
 const Lessons:React.FC=()=>{
     const [isOpen,setOpen]=useState(false);
     const [values,setValues]=useState({title:"",level:"",category:"",wpm:"",accuracy:"",text:""});
@@ -42,6 +39,19 @@ const Lessons:React.FC=()=>{
         catch(err){
             console.log("Error creating lesson:", err);
         }
+    }
+    
+    async function handleDeleteLesson(lessonId:string){
+      try{
+        const response=await deleteLesson(lessonId)
+        if(!response)return
+        setLessons((prev) =>
+          prev.filter((lesson) => lesson.id !== lessonId)
+        )
+      }
+      catch(error){
+        console.log(error)
+      }
     }
 
     async function fetch(lessonId:string){
@@ -169,7 +179,7 @@ const Lessons:React.FC=()=>{
                       <td>{new Date(lesson.createdAt).toLocaleDateString()}</td>
                       <td className="flex gap-3 py-3">
                         <button onClick={()=>fetch(lesson.id)} className="text-blue-600 hover:text-blue-800">✏️</button>
-                        <button className="text-red-600 hover:text-red-800">🗑️</button>
+                        <button onClick={()=>handleDeleteLesson(lesson.id)} className="text-red-600 hover:text-red-800">🗑️</button>
                         
                         </td>
 
