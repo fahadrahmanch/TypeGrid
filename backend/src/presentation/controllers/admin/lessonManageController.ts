@@ -83,7 +83,6 @@ async updateLesson(req: Request, res: Response): Promise<void> {
 async  deleteLesson(req: Request, res: Response): Promise<void> {
   try {
     const lessonId = req.params.id;
-    console.log("lesson id here",lessonId)
     await this._deleteLessonUseCase.execute(lessonId);
     res.status(200).json({ success: true, message: "Lesson deleted successfully" });
   } catch (error: any) {
