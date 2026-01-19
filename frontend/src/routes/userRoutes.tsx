@@ -14,11 +14,12 @@ import CompanySubscription from "../pages/user/Subscription/companySubscription"
 import CompanyVerification from "../pages/user/Subscription/CompanyVerification";
 import CompanyVerificationStatus from "../pages/user/Subscription/CompanyVerificationStatus";
 import CompanyVerificationReapply from "../pages/user/Subscription/companyVerificationReapply";
-import {  useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import PracticeTyping from "../pages/user/practiceTyping/practiceTyping";
 import TypingPracticeArea from "../pages/user/practiceTyping/typingPracticeArea";
 import GroupLobby from "../pages/user/group/GroupLobby";
 import GroupPlay from "../pages/user/group/groupPlay";
+import SoloPlay from "../pages/user/solo/SoloPlay";
 export default function UserRoutes() {
   const location = useLocation();
   return (
@@ -39,7 +40,7 @@ export default function UserRoutes() {
       <Route path="subscription/company" element={<ProtectRouteUser><CompanySubscription /></ProtectRouteUser>} />
       <Route path="subscription/company/verify" element={<ProtectRouteUser><CompanyVerification /></ProtectRouteUser>} />
       <Route path="subscription/company/verify/status" element={<ProtectRouteUser><CompanyVerificationStatus /></ProtectRouteUser>} />
-      <Route path="subscription/company/re-verify" element={<ProtectRouteUser><CompanyVerificationReapply/></ProtectRouteUser>}/>
+      <Route path="subscription/company/re-verify" element={<ProtectRouteUser><CompanyVerificationReapply /></ProtectRouteUser>} />
 
 
       {/* Typing Practice */}
@@ -48,8 +49,10 @@ export default function UserRoutes() {
 
 
       {/* // Group  */}
-     <Route path="/group-play/group/:joinLink" element={<ProtectRouteUser><GroupLobby /></ProtectRouteUser>} />
-     <Route path="/group-play/game/:joinLink" element={<ProtectRouteUser><GroupPlay /></ProtectRouteUser>} />
+      <Route path="/group-play/group/:joinLink" element={<ProtectRouteUser><GroupLobby /></ProtectRouteUser>} />
+      <Route path="/group-play/game/:joinLink" element={<ProtectRouteUser><GroupPlay /></ProtectRouteUser>} />
+
+      <Route path="/solo-play/:soloId" element={<ProtectRouteUser><SoloPlay /></ProtectRouteUser>} />
 
     </Routes>
   );

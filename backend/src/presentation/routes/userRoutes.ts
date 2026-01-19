@@ -5,6 +5,8 @@ import { injectUserController } from "../DI/user";
 import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddleware";
 import { injectTypingPracticeController } from "../DI/user";
 import { injectGroupPlayController } from "../DI/user"; 
+import { injectSoloPlayController } from "../DI/user";
+import { request } from "http";
 export class UserRoutes {
     private router:express.Router;
     constructor() {
@@ -63,6 +65,14 @@ export class UserRoutes {
             injectGroupPlayController.startGame(req,res);
         })
 
+
+        //solo
+        this.router.post(Routes.USERS.SOLO_PLAY.SOLO_CREATE,checkRoleBasedMiddleware(["user","companyAdmin"]), (req: Request, res: Response) => {
+            injectSoloPlayController.createSoloPlay(req,res);
+        });
+        this.router.post(Routes.USERS.SOLO_PLAY.RESULT_SOLO_PLAY,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
+            injectSoloPlayController.result(req,res)
+    })
 
     }
      getRouter(){

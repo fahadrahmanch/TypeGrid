@@ -89,6 +89,13 @@ export const MESSAGES = {
   // ================= GROUP PLAY =================
   GROUP_CREATED_SUCCESS: "Group play created successfully",
   GROUP_UPDATED_SUCCESS: "Group play updated successfully",
+
+  LESSON_NOT_FOUND: "Lesson not found",
+
+  // ================= SOLO PLAY =================
+  SOLO_CREATED_SUCCESS: "Solo play created successfully",
+  SOLO_UPDATED_SUCCESS: "Solo play updated successfully",
   
+  GAME_ID_NOT_FOUND: "Game ID not found",
 
 };

@@ -17,7 +17,6 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
         throw new Error("User not found")
       }
       const groupEntity=new GroupEntity(group)
-      console.log("group members",groupEntity.getMembers())
       groupEntity.removeMember(userId)
       if(group.ownerId.toString()==userId){
         const pickOnehoster=groupEntity.getMembers().find((memberId:string)=>memberId!=userId)

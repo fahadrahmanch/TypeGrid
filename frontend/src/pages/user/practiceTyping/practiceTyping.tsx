@@ -16,7 +16,6 @@ const PracticeTyping: React.FC = () => {
     try{
       const fetchLesson=await getTypingPracticeContent(difficulty,category);
       const lesson=fetchLesson.data.lesson;
-      console.log("lesson",lesson);
       if(!lesson){
         toast.error("No lesson found for the selected options.");
         return;

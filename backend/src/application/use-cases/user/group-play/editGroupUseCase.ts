@@ -9,7 +9,6 @@ export class editGroupUseCase implements IEditGroupPlayUseCase{
         private _baseRepoGroup:IBaseRepository<any>
     ){}
     async execute(groupId:string,difficulty:Difficulty,maxPlayers:number,userId:string):Promise<groupDTO>{
-        console.log("editGroupUseCase",groupId,difficulty,maxPlayers,userId)
         const group=await this._baseRepoGroup.findById(groupId)
         if(!group){
             throw new Error("Group not found with the provided group ID.")

@@ -14,7 +14,8 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     return this.model.findOne(filter).lean<T>().exec();
   }
   async create(data: Partial<T>): Promise<T> {
-    return this.model.create(data);
+    const res = await this.model.create(data);
+    return res.toObject() as T;
   }
   async findById(id: string): Promise<T | null> {
     return this.model.findById(id);

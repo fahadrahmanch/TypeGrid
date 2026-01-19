@@ -12,6 +12,8 @@ import { EmailService } from "../../application/services/emailService";
 import { LessonManageController } from "../controllers/admin/lessonManageController";
 import { createLessonUseCase } from "../../application/use-cases/admin/lessonManagementUseCases/createLessonUseCase";
 import { Lesson } from "../../infrastructure/db/models/admin/lessonSchema";
+import { getLessonUseCase } from "../../application/use-cases/admin/lessonManagementUseCases/getLessonUseCase";
+import { updateLessonUseCase } from "../../application/use-cases/admin/lessonManagementUseCases/updateLessonUseCase";
 const authRepo = new authRepository();
 const baseRepoUser=new BaseRepository(User);
 const BlockUserUseCase = new blockUserUseCase(baseRepoUser);
@@ -22,6 +24,8 @@ const emailService=new EmailService();
 const CompanyApproveRejectUseCase=new companyApproveRejectUsecase(baseRepoCompany,baseRepoUser,emailService);
 const baseRepoLesson=new BaseRepository(Lesson);
 const lessonCreateUseCase=new createLessonUseCase(baseRepoLesson);
+const GetLessonUseCase=new getLessonUseCase(baseRepoLesson)
+const UpdateLessonUseCase=new updateLessonUseCase(baseRepoLesson);
 export const injectCompanyManageController=new companyManageController(getCompanyUseCase,CompanyApproveRejectUseCase);
 export const injectUserManageController = new userManageController(GetUsers,BlockUserUseCase);
-export const injectLessonManageController=new LessonManageController(lessonCreateUseCase,);
+export const injectLessonManageController=new LessonManageController(lessonCreateUseCase,GetLessonUseCase,UpdateLessonUseCase);

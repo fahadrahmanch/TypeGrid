@@ -26,9 +26,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
   };
      const level=difficultyToLevelMap[group.difficulty];
     
-     console.log("level",level)
      const lessons=await this._baseRepoLesson.find({level,createdBy:"admin"})
-     console.log("lessons",lessons)
     if (!lessons.length) {
       throw new Error("No lessons found for this level");
     }
@@ -44,7 +42,6 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       status:'ongoing',
       startTime,
      })
-     console.log("startey",competitionEntity)
      const competitionObject=await competitionEntity.toObject()
      const competition=await this._baseRepoCompetion.create(competitionObject)
      const populatedParticipants = await Promise.all(

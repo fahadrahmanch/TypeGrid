@@ -7,7 +7,7 @@ const competitionSchema = new Schema(
       enum: ["quick", "solo", "group", "oneToOne", "company"],
       required: true,
     },
-
+   
     mode: {
       type: String,
       enum: ["global", "company"],
@@ -26,7 +26,7 @@ const competitionSchema = new Schema(
       ref: "Group",
       default: null,
     },
-
+    
     status: {
       type: String,
       enum: ["pending", "ongoing", "completed"],

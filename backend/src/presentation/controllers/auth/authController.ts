@@ -160,24 +160,19 @@ export class authController {
     async googleAuth(req: Request, res: Response): Promise<void> {
         try {
             const { name, email, googleId } = req.body;
-            console.log("here body of google auth",req.body)
             if (!name || !email || !googleId || Object.keys(req.body).length === 0) {
                 throw new Error(MESSAGES.REQUEST_BODY_MISSING);
             }
             const user = await this._googleAuthUseCase.gooogleAuth(name, email, googleId);
-            console.log("usernnnnnnnnnnnnn",user)
             if (!user || !user._id) {
                 throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
-            console.log("here in crate access token")
             const accessToken = await this._tokenServie.generateAccessToken(user._id.toString(), email, "user");
             const refreshToken = await this._tokenServie.generateRefreshToken(user._id.toString(), email, "user");
-            console.log("accessToken",accessToken)
-            console.log("refreshToken",refreshToken)
+            
             if (!accessToken || !refreshToken) {
                 throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
             }
-          console.log("here in auth")
             const UserDeepCopy = JSON.parse(JSON.stringify(user));
             delete UserDeepCopy.password;
 

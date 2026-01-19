@@ -36,7 +36,12 @@ export class adminRouter {
     this.router.get(Routes.ADMIN.FETCH_LESSONS,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
       injectLessonManageController.getLessons(req,res);
     });
-    
+  this.router.get(Routes.ADMIN.FETCH_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
+    injectLessonManageController.fetchLesson(req,res)
+  })
+  this.router.put(Routes.ADMIN.UPDATE_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
+    injectLessonManageController.updateLesson(req,res)
+  })
     
   }
   getRouter() {

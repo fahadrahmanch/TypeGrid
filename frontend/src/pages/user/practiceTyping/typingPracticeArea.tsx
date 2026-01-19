@@ -34,7 +34,6 @@ const TypingPracticeArea = () => {
       if (lessonId) {
         try {
           const response = await getTypiingPracticeLessonById(lessonId);
-          console.log("response", response.data.lesson);
           setContent(response.data.lesson);
         } catch (error) {
           console.error("Failed to load lesson", error);

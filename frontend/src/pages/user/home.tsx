@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 // import RecentPosts from "../../components/user/home/RecentPosts";
 import { createGroupRoom } from "../../api/user/group";
 import { toast } from "react-toastify";
+import { createSoloRoom } from "../../api/user/solo";
+
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
@@ -24,12 +26,10 @@ const Home: React.FC = () => {
   }
 
   async function handleGameModeClick(mode: string) {
-    console.log(`Game mode clicked: ${mode}`);
     // Implement navigation or other actions based on the selected game mode;
     if(mode==='group'){
       try{
         const response=await createGroupRoom()
-        console.log(response,'create group room response');
         if(response){
           const joinLink=response?.data?.group?.joinLink
           navigate(`/group-play/group/${joinLink}`);
@@ -37,6 +37,25 @@ const Home: React.FC = () => {
       }
       catch(error){
         toast.error("Failed to create group room. Please try again.");
+        console.log(error)
+      }
+    }else if(mode==='solo'){
+      try{
+      const response=await createSoloRoom()
+      const data=response?.data
+       if (!data?._id) {
+      throw new Error("Solo room ID missing");
+    }
+
+      const soloId=data?._id
+      if(response){
+        navigate( `/solo-play/${soloId}`,{
+          state: { gameData: data },
+        } )
+      }
+      }
+      catch(error){
+        toast.error("Failed to create solo room. Please try again.");
         console.log(error)
       }
     }
@@ -52,7 +71,7 @@ const Home: React.FC = () => {
 
         <WelcomeSection />
         
-        <GameModes onGameModeClick={handleGameModeClick} />
+      <GameModes onGameModeClick={handleGameModeClick} />
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-12">
 

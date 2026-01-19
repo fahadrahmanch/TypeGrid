@@ -83,6 +83,12 @@ export class CompetitionEntity {
     }
     this.status = "ongoing";
   }
+  endCompetition(){
+    if (this.status !== "ongoing") {
+      throw new Error("Competition is not running");
+    }
+    this.status = "completed";
+  }
 
   completeCompetition() {
     if (this.status !== "ongoing") {

@@ -52,9 +52,12 @@ export const Routes = {
 
     CREATE_LESSON:"/lessons",
     FETCH_LESSONS:"/lessons",
-
+    FETCH_LESSON:'/lesson/:id',
+    UPDATE_LESSON:'/lesson/:id',
     //patch
     UPDATE_USER_STATUS: "/users/:userId/status",
+    
+
   },
 
   USERS: {
@@ -84,7 +87,13 @@ export const Routes = {
   //play
   START_GAME: "/group-play/groups/:groupId/start",
   
+},
+SOLO_PLAY:{
+SOLO_CREATE:'/solo-play',
+RESULT_SOLO_PLAY:'/solo-result:gameId'
+
 }
+
   },
 
     COMPANY_ADMIN: {

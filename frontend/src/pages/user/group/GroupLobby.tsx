@@ -44,8 +44,6 @@ const GroupLobby: React.FC = () => {
   const [isBlurred, setIsBlurred] = useState(true);
   const user = useSelector((state: any) => state.userAuth.user);
   const [startTime, setStartTime] = useState<string>();
-  const location=useLocation()
-  console.log('location',location)
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -53,7 +51,6 @@ const GroupLobby: React.FC = () => {
 
     socket.emit("join-room", {groupId: group.id, userId: user._id});
      return () => {
-    console.log("LEAVE EMIT", group.id, user._id);
     socket.emit("leave-group", {
       groupId: group.id,
       userId: user._id,
