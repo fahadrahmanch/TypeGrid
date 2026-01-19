@@ -3,11 +3,13 @@ import { ICreateLessonUseCase } from "../../../application/use-cases/interfaces/
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IGetLessonUseCase } from "../../../application/use-cases/interfaces/admin/IGetLessonUseCase";
 import { IUpdateLessonUseCase } from "../../../application/use-cases/interfaces/admin/IUpdateLessonUseCase";
+import { IDeleteLessonUseCase } from "../../../application/use-cases/interfaces/admin/IDeleteLessonUseCase";
 export class LessonManageController {
 constructor(
     private _createLessonUseCase: ICreateLessonUseCase,
     private _getLessonUseCase:IGetLessonUseCase,
-    private _updateLessonUseCase:IUpdateLessonUseCase
+    private _updateLessonUseCase:IUpdateLessonUseCase,
+    private _deleteLessonUseCase:IDeleteLessonUseCase
 ) {}
 
 async createLesson(req: Request, res: Response): Promise<void> {
@@ -78,4 +80,19 @@ async updateLesson(req: Request, res: Response): Promise<void> {
 }
 
 
+async  deleteLesson(req: Request, res: Response): Promise<void> {
+  try {
+    const lessonId = req.params.id;
+    console.log("lesson id here",lessonId)
+    await this._deleteLessonUseCase.execute(lessonId);
+    res.status(200).json({ success: true, message: "Lesson deleted successfully" });
+  } catch (error: any) {
+    console.log("error", error);
+    res.status(500).json({ success: false, message: error.message || MESSAGES.SOMETHING_WENT_WRONG });
+  }
 }
+
+
+
+}
+

@@ -43,6 +43,9 @@ export class adminRouter {
     injectLessonManageController.updateLesson(req,res)
   })
     
+  this.router.delete(Routes.ADMIN.DELETE_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
+    injectLessonManageController.deleteLesson(req,res)
+  })
   }
   getRouter() {
     return this.router;

@@ -14,6 +14,7 @@ import { createLessonUseCase } from "../../application/use-cases/admin/lessonMan
 import { Lesson } from "../../infrastructure/db/models/admin/lessonSchema";
 import { getLessonUseCase } from "../../application/use-cases/admin/lessonManagementUseCases/getLessonUseCase";
 import { updateLessonUseCase } from "../../application/use-cases/admin/lessonManagementUseCases/updateLessonUseCase";
+import { deleteLessonUseCase } from "../../application/use-cases/admin/lessonManagementUseCases/deleteLessonUseCase";
 const authRepo = new authRepository();
 const baseRepoUser=new BaseRepository(User);
 const BlockUserUseCase = new blockUserUseCase(baseRepoUser);
@@ -26,6 +27,7 @@ const baseRepoLesson=new BaseRepository(Lesson);
 const lessonCreateUseCase=new createLessonUseCase(baseRepoLesson);
 const GetLessonUseCase=new getLessonUseCase(baseRepoLesson)
 const UpdateLessonUseCase=new updateLessonUseCase(baseRepoLesson);
+const DeleteLessonUseCase=new deleteLessonUseCase(baseRepoLesson);
 export const injectCompanyManageController=new companyManageController(getCompanyUseCase,CompanyApproveRejectUseCase);
 export const injectUserManageController = new userManageController(GetUsers,BlockUserUseCase);
-export const injectLessonManageController=new LessonManageController(lessonCreateUseCase,GetLessonUseCase,UpdateLessonUseCase);
+export const injectLessonManageController=new LessonManageController(lessonCreateUseCase,GetLessonUseCase,UpdateLessonUseCase,DeleteLessonUseCase);

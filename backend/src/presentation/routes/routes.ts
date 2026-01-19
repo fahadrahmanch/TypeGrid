@@ -54,6 +54,7 @@ export const Routes = {
     FETCH_LESSONS:"/lessons",
     FETCH_LESSON:'/lesson/:id',
     UPDATE_LESSON:'/lesson/:id',
+    DELETE_LESSON:'/lesson/:id',
     //patch
     UPDATE_USER_STATUS: "/users/:userId/status",
     
