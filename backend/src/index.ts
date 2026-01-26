@@ -60,6 +60,7 @@ export class app {
   }
   private setCompanyAdminRoutes(){
     const routerCompanyAdmin=new companyAdminRouter();
+    
     this.app.use("/company",authMiddleware(this.tokenService),routerCompanyAdmin.getRouter());
   }
   public async connectDatabase() {

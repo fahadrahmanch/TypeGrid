@@ -2,6 +2,11 @@ import mongoose, { Schema } from "mongoose";
 
 const lessonSchema = new Schema(
   {
+    title:{
+      type: String,
+      required: false,
+      trim: true
+    },
     text: {
       type: String,
       required: true,
@@ -19,22 +24,13 @@ const lessonSchema = new Schema(
       enum: ["beginner", "intermediate", "advanced"],
       required: true
     },
-    charCount: {
+ 
+    wpm: {
       type: Number,
       required: false
     },
 
-    wordCount: {
-      type: Number,
-      required: false
-    },
-    
-    targetWpm: {
-      type: Number,
-      required: false
-    },
-
-    targetAccuracy: {
+    accuracy: {
       type: Number,
       required: false
     },
@@ -47,27 +43,28 @@ const lessonSchema = new Schema(
 
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref:"Company",
       default: null
     },
 
-    assignments: [
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId
-        },
-        assignedAt: {
-          type: Date
-        },
-        expiresAt: {
-          type: Date
-        },
-        status: {
-          type: String,
-          enum: ["active", "completed", "expired"],
-          default: "active"
-        }
-      }
-    ]
+    // assignments: [
+    //   {
+    //     userId: {
+    //       type: mongoose.Schema.Types.ObjectId
+    //     },
+    //     assignedAt: {
+    //       type: Date
+    //     },
+    //     expiresAt: {
+    //       type: Date
+    //     },
+    //     status: {
+    //       type: String,
+    //       enum: ["active", "completed", "expired"],
+    //       default: "active"
+    //     }
+    //   }
+    // ]
   },
   {
     timestamps: true

@@ -91,7 +91,5 @@ async  deleteLesson(req: Request, res: Response): Promise<void> {
   }
 }
 
-
-
 }
 

@@ -18,7 +18,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     return res.toObject() as T;
   }
   async findById(id: string): Promise<T | null> {
-    return this.model.findById(id);
+    return this.model.findById(id).lean().exec() as T|null;
   }
   async FindByEmail(email: string): Promise<T | null> {
     const userDoc = await this.model.findOne({ email });

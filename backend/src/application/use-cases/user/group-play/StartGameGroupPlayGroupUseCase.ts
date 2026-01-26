@@ -49,11 +49,12 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       )
     );
      const responseCompetition = {
-    ...competition.toObject(),
+    ...competition,
     participants: populatedParticipants,
     lesson: selectedLesson,
     
   };
+  console.log("responseCompetition",responseCompetition)
   return mapCompetitionToDTOGroupPlay(responseCompetition, group.ownerId);
     }
 

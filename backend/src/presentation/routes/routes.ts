@@ -101,6 +101,17 @@ RESULT_SOLO_PLAY:'/solo-result:gameId'
     ADD_USER: "/users",
     GET_COMPANY_USERS: "/users",
     DELETE_COMPANY_USER: "/users/:userId",
+
+
+   //lesson
+   CREATE_LESSON:"/lesson",
+   FETCH_LESSONS:"/lessons",
+   FETCH_LESSON:'/lesson/:id',
+   UPDATE_LESSON:'/lesson/:id',
+   DELETE_LESSON:'/lesson/:id',
+   FETCH_LESSON_BY_ID:'/lesson/:id',
+   GET_ADMIN_LESSONS:'/admin-lessons',
+   ASSIGN_LESSON:"/lesson-assignments"
   },
   
 };

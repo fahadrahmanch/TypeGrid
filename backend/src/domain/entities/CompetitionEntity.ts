@@ -22,7 +22,7 @@ type CompetitionProps = {
   participants?: string[];
   groupId?: string | null;
   status?: CompetitionStatus;
-  textId: string;
+  textId?: string;
   duration: number;
   reward?: Reward[];
   startTime:number
@@ -36,7 +36,7 @@ export class CompetitionEntity {
   private participants!: string[];
   private groupId!: string | null;
   private status!: CompetitionStatus;
-  private textId!: string;
+  private textId?: string;
   private duration!: number;
   private reward!: Reward[];
   private startTime!:number

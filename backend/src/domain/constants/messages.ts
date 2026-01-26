@@ -98,4 +98,9 @@ export const MESSAGES = {
   
   GAME_ID_NOT_FOUND: "Game ID not found",
 
+  // company lesson
+  COMPANY_LESSON_NOT_FOUND: "Company lesson not found",
+  COMPANY_LESSON_UPDATED_SUCCESS: "Company lesson updated successfully",
+ 
+
 };
