@@ -7,6 +7,7 @@ import CompanyForgotPasswordPage from "../pages/auth/CompanyForgotPasswordPage";
 import OtpCompanyForgotPasswordPage from "../pages/auth/OtpCompanyForgotPasswordPage";
 import CompanyNewPasswordPage from "../pages/auth/companyNewPasswordPage";
 import CompanyUsers from "../pages/companyAdmin/companyUsers";
+import Lessons from "../pages/companyAdmin/Lessons";
 import CompanyUserDashboard from "../pages/companyUser/companyUserDashboard";
 export default function CompanyRoutes() {
   return (
@@ -21,6 +22,8 @@ export default function CompanyRoutes() {
 
       {/* user  */}
       <Route path="user/dashboard" element={<ProtectRouteCompany allowedRoles={["companyUser","companyAdmin"]}><CompanyUserDashboard /></ProtectRouteCompany>} />
+
+      <Route path="admin/lessons" element={<ProtectRouteCompany allowedRoles={["companyAdmin"]}><Lessons /></ProtectRouteCompany>} />
     </Routes>
   );
 }

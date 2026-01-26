@@ -47,6 +47,15 @@ const CompanyAdminSidebar:React.FC = () => {
 
 
         <NavLink
+          to="/company/admin/lessons"
+          className={({ isActive }) =>
+            `p-2 rounded-md font-medium transition 
+         ${isActive ? "bg-[#B99F8D] text-white" : "hover:bg-gray-300"}`
+          }
+        >
+          Lessons
+        </NavLink>
+        <NavLink
           to="/company/admin/settings"
           className={({ isActive }) =>
             `p-2 rounded-md font-medium transition 

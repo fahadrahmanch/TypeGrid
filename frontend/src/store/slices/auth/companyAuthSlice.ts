@@ -13,6 +13,7 @@ const companyAuthSlice = createSlice({
       state.user = action.payload.user;
     },
     setCompany(state, action) {
+      
       state.company = action.payload.company;
     },
     setCompanyAuthLoaded(state, action) {
