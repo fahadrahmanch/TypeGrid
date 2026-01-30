@@ -22,7 +22,7 @@ export class companyAdminRouter {
     
     //lessons
     this.router.post(Routes.COMPANY_ADMIN.CREATE_LESSON,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
-      console.log("in routet")
+      console.log("in routet")  
       injectCompanyLessonManageController.createLesson(req,res);
     } )
     

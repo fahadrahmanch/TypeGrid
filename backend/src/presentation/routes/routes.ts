@@ -113,5 +113,11 @@ RESULT_SOLO_PLAY:'/solo-result:gameId'
    GET_ADMIN_LESSONS:'/admin-lessons',
    ASSIGN_LESSON:"/lesson-assignments"
   },
+
+  COMPANY_USER:{
+    MY_LESSONS:'/my-lessons',
+    ASSIGNED_LESSON_BY_ID: '/my-lessons/:assignmentId',
+    SAVE_LESSON_RESULT:'/lesson/:id/result',
+  }
   
 };

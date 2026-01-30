@@ -11,6 +11,7 @@ import { companyAuthRouter } from "./presentation/routes/auth/companyAuthRoutes"
 import { companyAdminRouter } from "./presentation/routes/companyAdminRoutes";
 import { TokenService } from "./application/services/tokenService";
 import { authMiddleware } from "./presentation/middlewares/authMiddleware";
+import { companyUserRoutes } from "./presentation/routes/companyUserRoutes";
 dotenv.config();
 export class app {
   public app: Application;
@@ -23,6 +24,7 @@ export class app {
     this.setAdminRoutes();
     this.setUserRoutes();
     this.setCompanyAdminRoutes();
+    this.setCompanyUserRoutes()
   }
   setMiddleWares() {
     this.app.use(
@@ -62,6 +64,11 @@ export class app {
     const routerCompanyAdmin=new companyAdminRouter();
     
     this.app.use("/company",authMiddleware(this.tokenService),routerCompanyAdmin.getRouter());
+  }
+
+  private setCompanyUserRoutes(){
+    const routerCompanyUser= new companyUserRoutes()
+    this.app.use('/company',authMiddleware(this.tokenService),routerCompanyUser.getRouter())
   }
   public async connectDatabase() {
     const db = new connectDB();

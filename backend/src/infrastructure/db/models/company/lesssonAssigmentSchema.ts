@@ -17,7 +17,7 @@ const lessonAssignmentSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["assigned", "completed", "expired"],
+      enum: ["assigned", "progress", "completed", "expired"],
       default: "assigned",
     },
 

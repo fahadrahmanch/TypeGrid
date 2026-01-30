@@ -7,9 +7,25 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   constructor(model: Model<T>) {
     this.model = model;
   }
-  async find(filter: any = {}): Promise<T[]> {
-    return this.model.find(filter).lean<T[]>().exec();
+ async find(
+  filter: any = {},
+  options?: {
+    populate?: { path: string; select?: string };
   }
+): Promise<T[]> {
+
+  let query = this.model.find(filter);
+
+  if (options?.populate) {
+    query = query.populate(
+      options.populate.path,
+      options.populate.select
+    );
+  }
+
+  return query.lean<T[]>().exec();
+}
+
   async findOne(filter: any = {}): Promise<T | null> {
     return this.model.findOne(filter).lean<T>().exec();
   }
@@ -17,9 +33,27 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     const res = await this.model.create(data);
     return res.toObject() as T;
   }
-  async findById(id: string): Promise<T | null> {
-    return this.model.findById(id).lean().exec() as T|null;
+async findById(
+  id: string,
+  options?: {
+    populate?: { path: string; select?: string };
   }
+): Promise<T | null> {
+
+  let query = this.model.findById(id);
+
+  if (options?.populate) {
+    query = query.populate(
+      options.populate.path,
+      options.populate.select
+    );
+  }
+
+  return query.lean<T>().exec();
+}
+
+
+
   async FindByEmail(email: string): Promise<T | null> {
     const userDoc = await this.model.findOne({ email });
     if (!userDoc) return null;
@@ -28,7 +62,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
   }
   async update(data: any): Promise<any> {
         const { _id, ...updateFields } = data;
-
+      
     return await this.model.findByIdAndUpdate(
       _id,
       { $set: updateFields },
