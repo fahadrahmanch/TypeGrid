@@ -43,6 +43,11 @@ const TypingPracticeArea = () => {
     fetchLessonById();
   }, [lessonId]);
 
+
+
+
+
+
   useEffect(() => {
     if (!startTime || isFinished) return;
 

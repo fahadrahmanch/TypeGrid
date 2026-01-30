@@ -26,6 +26,10 @@ export async function getCompanyUsers(){
 export async function getAdminLessons(){
     return companyAPI.get('/admin-lessons')
 }
+
+export async function saveLessonResult(id:string,resultData:any){
+    return companyAPI.post(`/lesson/${id}/result`,resultData)
+}
 export async function assignLesson(selectedUsers:string[],selectedLessons:string[],deadline:string){
 return companyAPI.post("/lesson-assignments", {
     users: selectedUsers,

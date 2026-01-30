@@ -9,6 +9,8 @@ import CompanyNewPasswordPage from "../pages/auth/companyNewPasswordPage";
 import CompanyUsers from "../pages/companyAdmin/companyUsers";
 import Lessons from "../pages/companyAdmin/Lessons";
 import CompanyUserDashboard from "../pages/companyUser/companyUserDashboard";
+import MyLessons from "../pages/companyUser/myLessons";
+import AssignedLessonTypingArea from "../pages/companyUser/AssignedLessonTypingArea";
 export default function CompanyRoutes() {
   return (
     <Routes>
@@ -22,6 +24,17 @@ export default function CompanyRoutes() {
 
       {/* user  */}
       <Route path="user/dashboard" element={<ProtectRouteCompany allowedRoles={["companyUser","companyAdmin"]}><CompanyUserDashboard /></ProtectRouteCompany>} />
+      <Route path="user/lessons" element={<ProtectRouteCompany allowedRoles={["companyUser","companyAdmin"]}><MyLessons /></ProtectRouteCompany>} />
+<Route
+  path="user/assigned-lessons/:assignedLessonId"
+  element={
+    <ProtectRouteCompany allowedRoles={["companyUser"]}>
+      <AssignedLessonTypingArea />
+    </ProtectRouteCompany>
+  }
+/>
+
+
 
       <Route path="admin/lessons" element={<ProtectRouteCompany allowedRoles={["companyAdmin"]}><Lessons /></ProtectRouteCompany>} />
     </Routes>
