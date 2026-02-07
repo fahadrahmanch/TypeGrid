@@ -28,7 +28,7 @@ const DeleteCompanyUserUseCase=new deleteCompanyUserUseCase(baseRepoUser);
 
 //lesson
 const baseRepoLesson=new BaseRepository(Lesson);
-const baseRepoAssignLesson=new BaseRepository(LessonAssignment)
+const baseRepoAssignLesson=new BaseRepository(LessonAssignment);
 
 const createCompanyLessonUseCase=new CreateCompanyLessonUseCase(baseRepoLesson,baseRepoUser);
 const GetLessonUseCase=new getLessonUseCase(baseRepoLesson);
@@ -37,7 +37,7 @@ const UpdateCompanyLessonUseCase=new updateCompanyLessonUseCase(baseRepoLesson);
 const DeleteCompanyLessonUseCase=new deleteCompanyLessonUseCase(baseRepoLesson);
 const GetAdminLessonsUseCase=new getAdminLessonsUseCase(baseRepoLesson);
 
-const AssignLessonUseCase=new assignLessonUseCase(baseRepoAssignLesson,baseRepoUser,baseRepoLesson)
+const AssignLessonUseCase=new assignLessonUseCase(baseRepoAssignLesson,baseRepoUser,baseRepoLesson);
 export const injectCompanyLessonManageController=new CompanyLessonManageController(createCompanyLessonUseCase,GetCompanyLessonUseCase,GetLessonUseCase,UpdateCompanyLessonUseCase,DeleteCompanyLessonUseCase,GetAdminLessonsUseCase,AssignLessonUseCase);
 
 export const injectCompanyUserController=new CompanyUserController(AddUserUseCase,tokenService,FindUserUseCase,GetCompanyUsersUseCase,DeleteCompanyUserUseCase);

@@ -7,7 +7,7 @@ const Lessons:React.FC=()=>{
     const [editValues,setEditValues]=useState({id:"",title:"",level:"",category:"",wpm:"",accuracy:"",text:""});
 
     const [lessons,setLessons]=useState<any[]>([]);
-    const [isEditOpen,setEditOpen]=useState(false)
+    const [isEditOpen,setEditOpen]=useState(false);
 
     useEffect(()=>{
       const fetchLessons=async()=>{
@@ -34,7 +34,7 @@ const Lessons:React.FC=()=>{
         try{
             const response=await createLesson(values);
             setOpen(false);
-            setValues({title:"",level:"",category:"",wpm:"",accuracy:"",text:""})
+            setValues({title:"",level:"",category:"",wpm:"",accuracy:"",text:""});
         }
         catch(err){
             console.log("Error creating lesson:", err);
@@ -43,45 +43,45 @@ const Lessons:React.FC=()=>{
     
     async function handleDeleteLesson(lessonId:string){
       try{
-        const response=await deleteLesson(lessonId)
-        if(!response)return
+        const response=await deleteLesson(lessonId);
+        if(!response)return;
         setLessons((prev) =>
           prev.filter((lesson) => lesson.id !== lessonId)
-        )
+        );
       }
       catch(error){
-        console.log(error)
+        console.log(error);
       }
     }
 
     async function fetch(lessonId:string){
       try{
-        const response=await fetchLesson(lessonId)
-        if(!response)return
+        const response=await fetchLesson(lessonId);
+        if(!response)return;
       
-        setEditValues(response?.data?.data)
+        setEditValues(response?.data?.data);
 
       }
       catch(error){
-        console.log(error)
+        console.log(error);
       }
       
-      setEditOpen(true)
+      setEditOpen(true);
     }
 
     async function handleEditSubmit(lessonId:string){
       try{
-        const response=await updateLesson(lessonId,editValues)
+        const response=await updateLesson(lessonId,editValues);
          setLessons((prev) =>
       prev.map((lesson) =>
         lesson.id === lessonId ? response.data.data : lesson
       )
       
     );
-        setEditOpen(false)
+        setEditOpen(false);
       
       }catch(error){
-        console.log(error)
+        console.log(error);
       }
     }
 

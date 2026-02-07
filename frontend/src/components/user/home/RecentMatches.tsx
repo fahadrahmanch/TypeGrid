@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 const RecentMatches: React.FC = () => {
     // Mock data
     const matches = [
-        { rank: 1, user: 'Fahad', time: 'Just now', wpm: 24.26 },
-        { rank: 2, user: 'Shakebu', time: 'Just now', wpm: 24.76 },
-        { rank: 3, user: 'raid', time: 'Just now', wpm: 10.61 },
-        { rank: 4, user: 'Master', time: 'Just now', wpm: 83.89 },
-        { rank: 5, user: 'Navigator', time: 'Just now', wpm: 31.01 },
-        { rank: 6, user: 'ujonta', time: 'Just now', wpm: 70.29 },
+        { rank: 1, user: "Fahad", time: "Just now", wpm: 24.26 },
+        { rank: 2, user: "Shakebu", time: "Just now", wpm: 24.76 },
+        { rank: 3, user: "raid", time: "Just now", wpm: 10.61 },
+        { rank: 4, user: "Master", time: "Just now", wpm: 83.89 },
+        { rank: 5, user: "Navigator", time: "Just now", wpm: 31.01 },
+        { rank: 6, user: "ujonta", time: "Just now", wpm: 70.29 },
     ];
 
     return (

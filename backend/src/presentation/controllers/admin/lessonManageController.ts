@@ -70,11 +70,11 @@ async updateLesson(req: Request, res: Response): Promise<void> {
     const values = req.body;
     const updatedLesson=await this._updateLessonUseCase.execute(lessonId, values);
     if(!updatedLesson){
-      throw new Error(MESSAGES.SOMETHING_WENT_WRONG)
+      throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
     }
     res.status(200).json({ success: true, message: "Lesson updated successfully", data:updatedLesson });
   } catch (error: any) {
-    console.log("error",error)
+    console.log("error",error);
     res.status(500).json({ success: false, message: error.message || MESSAGES.SOMETHING_WENT_WRONG });
   }
 }

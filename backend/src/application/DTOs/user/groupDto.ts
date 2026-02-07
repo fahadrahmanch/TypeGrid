@@ -29,5 +29,5 @@ export function mapGroupToDTO(doc:any):groupDTO{
     maximumPlayers:doc.maximumPlayers,
     currentUserId:doc.currentUserId,
     kickedUsers:doc.kickedUsers 
-  }
+  };
 }

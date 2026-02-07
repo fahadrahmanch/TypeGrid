@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Edit3, Trash2 } from 'lucide-react';
-import EditLessonModal from './EditLessonModal';
-import { deleteLesson } from '../../../api/companyAdmin/lessons';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import { Edit3, Trash2 } from "lucide-react";
+import EditLessonModal from "./EditLessonModal";
+import { deleteLesson } from "../../../api/companyAdmin/lessons";
+import { toast } from "react-toastify";
 export interface Lesson {
     id: string;
     title: string;
@@ -18,10 +18,10 @@ export interface Lesson {
 
 const getDifficultyColor = (level: string) => {
     switch (level.toLowerCase()) {
-        case 'beginner': return 'bg-green-100 text-green-700';
-        case 'intermediate': return 'bg-yellow-100 text-yellow-700';
-        case 'advanced': return 'bg-red-100 text-red-700';
-        default: return 'bg-gray-100 text-gray-700';
+        case "beginner": return "bg-green-100 text-green-700";
+        case "intermediate": return "bg-yellow-100 text-yellow-700";
+        case "advanced": return "bg-red-100 text-red-700";
+        default: return "bg-gray-100 text-gray-700";
     }
 };
 
@@ -47,18 +47,18 @@ const LessonTable: React.FC<{ lessons: Partial<Lesson>[],setLessons:any }> = ({ 
     }, [page, lessons]);
     async function handleDeleteLesson(id:string){
         try {
-            const response = await deleteLesson(id)
+            const response = await deleteLesson(id);
             if(response){
                 setLessons((prev: any) =>
   prev.filter((lesson: any) => lesson.id !== id)
 );
-            toast.success("Lesson deleted successfully")
+            toast.success("Lesson deleted successfully");
             }
             
             
         } catch (error) {
-            console.log("error",error)
-            toast.error("Failed to delete lesson")
+            console.log("error",error);
+            toast.error("Failed to delete lesson");
         }
     }       
     return (
@@ -82,7 +82,7 @@ const LessonTable: React.FC<{ lessons: Partial<Lesson>[],setLessons:any }> = ({ 
                             <tr key={lesson.id} className="hover:bg-gray-50 transition-colors group">
                                 <td className="py-4 text-sm font-medium text-gray-900">{lesson.title}</td>
                                 <td className="py-4">
-                                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(lesson?.level || '')}`}>
+                                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getDifficultyColor(lesson?.level || "")}`}>
                                         {lesson?.level}
                                     </span>
                                 </td>

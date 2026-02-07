@@ -10,13 +10,13 @@ export class assignLessonUseCase implements IAssignLessonUseCase{
 
     ){}
 async execute(userId: string, users: string[], lessons: string[],deadline:string): Promise<void> {
-    const user=await this._baseRepoUser.findById(userId)
+    const user=await this._baseRepoUser.findById(userId);
     if(!user){
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND)
+        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
     }
     const companyId=user.CompanyId;
     if(!companyId){
-        throw new Error(MESSAGES.COMPANY_NOT_FOUND)
+        throw new Error(MESSAGES.COMPANY_NOT_FOUND);
     }
     for(let i =0;i<users.length;i++){
         for(let j=0;j<lessons.length;j++){
@@ -26,8 +26,8 @@ async execute(userId: string, users: string[], lessons: string[],deadline:string
                 status:"assigned",
                 companyId:companyId,
                 deadlineAt:deadline
-            })
-            await this._baseRepoAssignLesson.create(assigned)
+            });
+            await this._baseRepoAssignLesson.create(assigned);
         }
     }
     

@@ -12,6 +12,7 @@ import { startGroupPlayAPI } from "../../../api/user/group";
 import { socket } from "../../../socket";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { useRef } from "react";
 type Player = {
   userId: string;
   name: string;
@@ -36,45 +37,89 @@ const GroupLobby: React.FC = () => {
   const { joinLink } = useParams<{ joinLink: string }>();
   const [group, setGroup] = useState<Group | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
-  const [loading, setLoading] = useState(true)
-  const [difficulty, setDifficulty] = useState<string>()
-  const [maximumPlayers, setMaximumPlayes] = useState<number>()
+  const [loading, setLoading] = useState(true);
+  const [difficulty, setDifficulty] = useState<string>();
+  const [maximumPlayers, setMaximumPlayes] = useState<number>();
   const isHost = group?.currentUserId === group?.ownerId;
   const inviteLink = `http://localhost:5173/group-play/group/${group?.joinLink}`;
   const [isBlurred, setIsBlurred] = useState(true);
   const user = useSelector((state: any) => state.userAuth.user);
   const [startTime, setStartTime] = useState<string>();
+  const isStartingGameRef = useRef(false);
 
-  const navigate = useNavigate()
-  useEffect(() => {
+  const navigate = useNavigate();
+useEffect(() => {
     if (!group?.id) return;
-
-    socket.emit("join-room", {groupId: group.id, userId: user._id});
-     return () => {
-    socket.emit("leave-group", {
+    
+    socket.emit("join-room", {
       groupId: group.id,
       userId: user._id,
     });
-  };
-
-
-  }, [group?.id]);
-
-
-
-
-
-  useEffect(() => {
-    socket.on("game-started", (data) => {
-      navigate(`/group-play/game/${joinLink}`, {
-        state: { gameData: data.competition },
-      });
-    });
 
     return () => {
-      socket.off("game-started");
+         if (isStartingGameRef.current) {
+      return;
+    }
+     
+      socket.emit("leave-group", {
+        groupId: group.id,
+        userId: user._id,
+      });
+      
     };
-  }, [navigate, joinLink]);
+  }, [group?.id, user._id]);
+
+
+
+useEffect(() => {
+  const handleUserLeave = ({
+    members,
+    newHostId,
+  }: {
+    members: Player[];
+    newHostId: string;
+  }) => {
+
+    const updatedMembers = [...members];
+
+    setPlayers(updatedMembers);
+
+    setGroup((prev) =>
+      prev
+        ? {
+            ...prev,
+            ownerId: newHostId,
+            members: updatedMembers,
+          }
+        : prev
+    );
+  };
+
+  socket.on("player-left", handleUserLeave);
+
+  return () => {
+    socket.off("player-left", handleUserLeave);
+  };
+}, []);
+
+
+useEffect(() => {
+  const handler = (data: any) => {
+    isStartingGameRef.current = true; 
+
+    navigate(`/group-play/game/${joinLink}`, {
+      state: { gameData: data.competition },
+      replace: true,
+    });
+  };
+
+  socket.on("game-started", handler);
+
+  return () => {
+    socket.off("game-started", handler);
+  };
+}, [navigate, joinLink]);
+
 
 
   useEffect(() => {
@@ -101,25 +146,26 @@ const GroupLobby: React.FC = () => {
     if (!group?.id) return;
 
     const handler = (data: any) => {
-      
+
       const isRemoved = data.group.kickedUsers.find((m: any) => {
-      
-        return m.toString() === user?._id
-    })
-      
+
+        return m.toString() === user?._id;
+      });
+
 
       if (isRemoved) {
         toast.info("You have been removed from the group");
-        navigate('/');
+        navigate("/",{ replace: true, });
+        
       } else {
         setGroup((prev: any) => ({
           ...prev,
           currentUserId: prev.currentUserId,
           members: data.group.members,
         }));
-        setPlayers(data.group.members)
-        setDifficulty(data.group.difficulty)
-        setMaximumPlayes(data.group.maximumPlayers)
+        setPlayers(data.group.members);
+        setDifficulty(data.group.difficulty);
+        setMaximumPlayes(data.group.maximumPlayers);
       }
     };
 
@@ -150,18 +196,20 @@ const GroupLobby: React.FC = () => {
 
   useEffect(() => {
     async function fetchGroupDetails() {
+ 
+
       try {
         await joinGroupAPI(joinLink!);
         const response = await getGroupRoomDetails(joinLink!);
         const groupDetails = response?.data?.group;
 
         setGroup(groupDetails);
-        setPlayers(groupDetails.members)
-        setDifficulty(groupDetails.difficulty)
-        setMaximumPlayes(groupDetails.maximumPlayers)
+        setPlayers(groupDetails.members);
+        setDifficulty(groupDetails.difficulty);
+        setMaximumPlayes(groupDetails.maximumPlayers);
       } catch (error: any) {
         console.error(error);
-        navigate("/")
+        navigate("/");
         // toast.error(error.message);
       } finally {
         setLoading(false);
@@ -174,15 +222,15 @@ const GroupLobby: React.FC = () => {
   async function removePlayer(playerId: string) {
 
     try {
-      const response = await removePlayerAPI(group?.id, playerId)
+      const response = await removePlayerAPI(group?.id, playerId);
       const groupDetails = response?.data?.group;
       setGroup((prev) => ({
         ...groupDetails,
         currentUserId: prev?.currentUserId
       }));
-      setPlayers(groupDetails.members)
+      setPlayers(groupDetails.members);
     } catch (error: any) {
-      console.log(error)
+      console.log(error);
     }
 
   }
@@ -190,17 +238,18 @@ const GroupLobby: React.FC = () => {
   async function editGroup(newDifficulty?: string, newMaxPlayers?: number) {
     if (!group?.id) return;
     await editGroupAPI(group.id, newDifficulty ?? difficulty,
-      newMaxPlayers ?? maximumPlayers)
+      newMaxPlayers ?? maximumPlayers);
   }
 
   async function startGame() {
     try {
       if (!group?.id) return;
-      await startGroupPlayAPI(group?.id,Number(startTime))
+       isStartingGameRef.current = true; 
+      await startGroupPlayAPI(group?.id, Number(startTime));
 
     }
     catch (error: any) {
-      console.log(error)
+      console.log(error);
     }
 
   }
@@ -319,16 +368,16 @@ const GroupLobby: React.FC = () => {
                 Time in seconds before the match starts (default: 10)
               </p>
 
-            <input
-  type="text"
-  value={startTime}
-  disabled={!isHost}
-  onChange={(e) => {
-    if (!isHost) return;
-    setStartTime(e.target.value);
-  }}
-  className="w-full border rounded-lg px-4 py-3"
-/>
+              <input
+                type="text"
+                value={startTime}
+                disabled={!isHost}
+                onChange={(e) => {
+                  if (!isHost) return;
+                  setStartTime(e.target.value);
+                }}
+                className="w-full border rounded-lg px-4 py-3"
+              />
 
 
               {!isHost && (
@@ -480,5 +529,5 @@ const GroupLobby: React.FC = () => {
       </div>
     </>
   );
-}
+};
 export default GroupLobby;

@@ -3,6 +3,8 @@ type Result = {
   accuracy: number;
   errors: number;
   time: number;
+  rank?:number;
+
 };
 
 type CompetitionType = "solo" | "group" | "quick";
@@ -13,6 +15,7 @@ type ResultProps = {
   type: CompetitionType;
   competitionId: string;
   result: Result;
+ 
 };
 
 export class ResultEntity {
@@ -30,6 +33,7 @@ export class ResultEntity {
     this.type = attrs.type;
     this.competitionId = attrs.competitionId;
     this.result = attrs.result;
+  
   }
 getWpm(): number {
   return this.result.wpm;
@@ -55,8 +59,9 @@ toObject(){
         competitionId:this.competitionId,
         result:this.result,
         createdAt:this.createdAt,
+  
         updatedAt:this.updatedAt
-    }
+    };
 }
 
 

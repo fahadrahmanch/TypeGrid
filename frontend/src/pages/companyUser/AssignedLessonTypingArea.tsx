@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAssignedLessonByAssignmentId } from '../../api/companyUser/lessons';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAssignedLessonByAssignmentId } from "../../api/companyUser/lessons";
 import {
     ArrowLeft,
     Clock,
@@ -11,9 +11,9 @@ import {
     Activity,
     CheckCircle2,
     Trophy
-} from 'lucide-react';
-import { useParams } from 'react-router-dom';
-import { saveLessonResult } from '../../api/companyAdmin/lessons';
+} from "lucide-react";
+import { useParams } from "react-router-dom";
+import { saveLessonResult } from "../../api/companyAdmin/lessons";
 const AssignedLessonTypingArea: React.FC = () => {
     const navigate = useNavigate();
 
@@ -49,59 +49,62 @@ const AssignedLessonTypingArea: React.FC = () => {
     const [totalTyped, setTotalTyped] = useState(0);
     // const assignedData
     const inputRef = useRef<HTMLInputElement>(null);
-    const { assignedLessonId } = useParams()
+    const { assignedLessonId } = useParams();
     const hasSavedRef = useRef(false);
+    const [isTimeUp, setIsTimeUp] = useState(false);
 
-
-    // // Focus input on load and click
-    // useEffect(() => {
-    //     if (inputRef.current) inputRef.current.focus();
-    // }, []);
-
-    //fetch assignedLesson
+  
     useEffect(() => {
         async function fectchAssignLesson() {
-            const response = await getAssignedLessonByAssignmentId(assignedLessonId!)
-            setAssignedLesson(response.data.data)
+            const response = await getAssignedLessonByAssignmentId(assignedLessonId!);
+            setAssignedLesson(response.data.data);
         }
-        fectchAssignLesson()
-    }, [])
+        fectchAssignLesson();
+    }, []);
 
     //wpm calculation
-useEffect(() => {
-  if (!isActive || !startTime) return;
+    useEffect(() => {
+        if (!isActive || !startTime) return;
 
-  const timeElapsedMin = (Date.now() - startTime) / 60000;
-  const correctChars = Math.max(0, totalTyped - errors);
+        const timeElapsedMin = (Date.now() - startTime) / 60000;
+        const correctChars = Math.max(0, totalTyped - errors);
 
-  const calculatedWpm =
-    timeElapsedMin > 0
-      ? Math.round((correctChars / 5) / timeElapsedMin)
-      : 0;
+        const calculatedWpm =
+            timeElapsedMin > 0
+                ? Math.round((correctChars / 5) / timeElapsedMin)
+                : 0;
 
-  setWpm(calculatedWpm);
-}, [totalTyped, errors, isActive, startTime]);
+        setWpm(calculatedWpm);
+    }, [totalTyped, errors, isActive, startTime]);
 
 
-  useEffect(() => {
-  if (!isActive || !startTime || isFinished) return;
+    useEffect(() => {
+        if (!isActive || !startTime || isFinished) return;
 
-  const interval = setInterval(() => {
-    setTimeLeft(prev => prev - 1);
-  }, 1000);
+        const interval = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    setIsTimeUp(true);
+                    setIsActive(false);
+                    setIsFinished(true);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
 
-  return () => clearInterval(interval);
-}, [isActive, startTime, isFinished]);
+        return () => clearInterval(interval);
+    }, [isActive, startTime, isFinished]);
 
 
     // Finish Condition
     useEffect(() => {
         if (!assignedLesson) return;
-        if (typedText.length === assignedLesson?.lesson.text.length) {
+        if (typedText.length === assignedLesson?.lesson.text.length || isTimeUp) {
             setIsFinished(true);
             setIsActive(false);
         }
-    }, [typedText, assignedLesson?.lesson.text.length]);
+    }, [typedText, assignedLesson?.lesson.text.length, isTimeUp]);
 
     // Start on Space key
     useEffect(() => {
@@ -122,7 +125,7 @@ useEffect(() => {
 
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (isFinished || !assignedLesson || !isActive) return;
+        if (isFinished || !assignedLesson || !isActive || isTimeUp) return;
 
         const value = e.target.value;
 
@@ -156,6 +159,7 @@ useEffect(() => {
         setWpm(0);
         setAccuracy(100);
         setErrors(0);
+        setIsTimeUp(false);
         setTotalTyped(0);
         setStartTime(null);
         hasSavedRef.current = false;
@@ -170,19 +174,19 @@ useEffect(() => {
 
 
     useEffect(() => {
-  const keepFocus = (e: MouseEvent) => {
-    if (!isActive || isFinished) return;    
-    const target = e.target as HTMLElement;
+        const keepFocus = (e: MouseEvent) => {
+            if (!isActive || isFinished) return;
+            const target = e.target as HTMLElement;
 
-    if (target.closest('button') || target.closest('a')) {
-      return;
-    }
-    e.preventDefault();
-    inputRef.current?.focus();
-  };
-  document.addEventListener('mousedown', keepFocus);
-//   return () => document.removeEventListener('mousedown', keepFocus);
-}, [isActive, isFinished]);
+            if (target.closest("button") || target.closest("a")) {
+                return;
+            }
+            e.preventDefault();
+            inputRef.current?.focus();
+        };
+        document.addEventListener("mousedown", keepFocus);
+        return () => document.removeEventListener("mousedown", keepFocus);
+    }, [isActive, isFinished]);
 
 
 
@@ -202,20 +206,24 @@ useEffect(() => {
         if (!isFinished) return;
         if (!assignedLesson) return;
         if (hasSavedRef.current) return;
-
+        if (isTimeUp) {
+            return;
+        }
         hasSavedRef.current = true;
         async function saveResult() {
-            let status: AssignmentStatus = "completed";
+            let status: AssignmentStatus = "progress";
 
             if (
                 wpm < assignedLesson?.lesson.wpm! ||
                 accuracy < assignedLesson?.lesson.accuracy!
             ) {
                 status = "progress";
+            } else if (wpm >= assignedLesson?.lesson.wpm! && accuracy >= assignedLesson?.lesson.accuracy!) {
+                status = "completed";
             }
 
             try {
-                const response = await saveLessonResult(
+                await saveLessonResult(
                     assignedLesson?.id!,
                     {
                         wpm,
@@ -233,18 +241,18 @@ useEffect(() => {
 
         saveResult();
     }, [isFinished]);
-    
+
 
     return (
         <div
-        onClick={() => isActive && inputRef.current?.focus()}
-         className="select-none min-h-screen bg-[#FFF8EA] pt-24 pb-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-orange-200">
+            onClick={() => isActive && inputRef.current?.focus()}
+            className="select-none min-h-screen bg-[#FFF8EA] pt-24 pb-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-orange-200">
             <div className="max-w-6xl mx-auto space-y-8">
 
                 {/* Header Section */}
                 <div className="relative">
                     <button
-                        onClick={() => navigate('/company/user/lessons')}
+                        onClick={() => navigate("/company/user/lessons")}
                         className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center gap-2 text-gray-500 hover:text-gray-800 transition-colors px-4 py-2 rounded-lg hover:bg-black/5"
                     >
                         <ArrowLeft className="w-4 h-4" />
@@ -275,7 +283,7 @@ useEffect(() => {
                     <StatCard
                         icon={<Clock className="w-5 h-5" />}
                         label="Time Left"
-                        value={`${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`}
+                        value={`${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, "0")}`}
                         color="text-blue-600"
                         bgColor="bg-blue-50"
                     />
@@ -334,9 +342,9 @@ useEffect(() => {
                         {/* Text Content */}
                         <div
                             className="relative font-mono text-xl md:text-2xl leading-relaxed tracking-wide text-gray-400 select-none outline-none"
-                            style={{ whiteSpace: 'pre-wrap' }}
+                            style={{ whiteSpace: "pre-wrap" }}
                         >
-                            {assignedLesson?.lesson.text.split('').map((char, index) => {
+                            {assignedLesson?.lesson.text.split("").map((char, index) => {
                                 const isCurrent = index === typedText.length;
                                 return (
                                     <span
@@ -344,7 +352,7 @@ useEffect(() => {
                                         className={`
                                     relative transition-colors duration-100 
                                     ${getCharClass(index)} 
-                                    ${isCurrent ? 'bg-orange-200/50 text-gray-800' : ''}
+                                    ${isCurrent ? "bg-orange-200/50 text-gray-800" : ""}
                                 `}
                                     >
                                         {/* Cursor Caret */}
@@ -383,11 +391,11 @@ useEffect(() => {
                         {isFinished && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm z-30 transition-all duration-500 animate-in fade-in">
                                 {(() => {
-                                    const isPassed = wpm >= (assignedLesson?.lesson.wpm || 0) && accuracy >= (assignedLesson?.lesson.accuracy || 0);
+                                    const isPassed = !isTimeUp && wpm >= (assignedLesson?.lesson.wpm || 0) && accuracy >= (assignedLesson?.lesson.accuracy || 0);
 
                                     return (
                                         <>
-                                            <div className={`mb-6 p-4 rounded-full ${isPassed ? 'bg-green-100' : 'bg-red-100'}`}>
+                                            <div className={`mb-6 p-4 rounded-full ${isPassed ? "bg-green-100" : "bg-red-100"}`}>
                                                 {isPassed ? (
                                                     <Trophy className="w-12 h-12 text-green-600" />
                                                 ) : (
@@ -395,14 +403,16 @@ useEffect(() => {
                                                 )}
                                             </div>
 
-                                            <h2 className={`text-3xl font-bold mb-2 ${isPassed ? 'text-gray-800' : 'text-red-600'}`}>
-                                                {isPassed ? 'Lesson Passed!' : 'Lesson Failed'}
+                                            <h2 className={`text-3xl font-bold mb-2 ${isPassed ? "text-gray-800" : "text-red-600"}`}>
+                                                {isPassed ? "Lesson Passed!" : isTimeUp ? "Time's Up!" : "Lesson Failed"}
                                             </h2>
 
                                             <p className="text-gray-600 mb-8 text-center max-w-md">
                                                 {isPassed
-                                                    ? "Great job! You've met the required targets."
-                                                    : `You didn't meet the targets. Required: ${assignedLesson?.lesson.wpm} WPM & ${assignedLesson?.lesson.accuracy}% Accuracy.`
+                                                    ? "Congratulations! You have completed the text."
+                                                    : isTimeUp
+                                                        ? "You ran out of time. Please try again."
+                                                        : "You failed to meet the targets. Please try again."
                                                 }
                                             </p>
 
@@ -410,16 +420,16 @@ useEffect(() => {
                                                 <button
                                                     onClick={resetTest}
                                                     className={`px-6 py-2.5 rounded-xl border-2 font-bold transition-all ${isPassed
-                                                        ? 'border-gray-200 text-gray-600 hover:bg-gray-50'
-                                                        : 'bg-red-500 text-white hover:bg-red-600 border-transparent shadow-lg shadow-red-200'
+                                                        ? "border-gray-200 text-gray-600 hover:bg-gray-50"
+                                                        : "bg-red-500 text-white hover:bg-red-600 border-transparent shadow-lg shadow-red-200"
                                                         }`}
                                                 >
-                                                    {isPassed ? 'Try Again' : 'Try Again'}
+                                                    {isPassed ? "Try Again" : "Try Again"}
                                                 </button>
 
                                                 {isPassed && (
                                                     <button
-                                                        onClick={() => navigate('/company/user/lessons')}
+                                                        onClick={() => navigate("/company/user/lessons")}
                                                         className="px-6 py-2.5 rounded-xl bg-green-500 text-white font-bold hover:bg-green-600 shadow-lg shadow-green-200 hover:shadow-green-300 transition-all hover:-translate-y-0.5"
                                                     >
                                                         Continue
@@ -428,7 +438,7 @@ useEffect(() => {
 
                                                 {!isPassed && (
                                                     <button
-                                                        onClick={() => navigate('/company/user/lessons')}
+                                                        onClick={() => navigate("/company/user/lessons")}
                                                         className="px-6 py-2.5 rounded-xl border-2 border-gray-200 text-gray-400 font-bold hover:bg-gray-50 hover:text-gray-600 transition-all"
                                                     >
                                                         Exit
@@ -460,7 +470,7 @@ const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string |
                 {icon}
             </div>
             <div className="text-center">
-                <div className={`text-2xl font-bold text-gray-800 group-hover:scale-110 transition-transform duration-300 origin-bottom`}>{value}</div>
+                <div className={"text-2xl font-bold text-gray-800 group-hover:scale-110 transition-transform duration-300 origin-bottom"}>{value}</div>
                 <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-1">{label}</div>
             </div>
         </div>

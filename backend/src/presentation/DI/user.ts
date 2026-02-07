@@ -27,6 +27,7 @@ import { SoloPlayController } from "../controllers/user/soloPlayController";
 import { CreateSoloPlayUseCase } from "../../application/use-cases/user/Solo-play/createSoloPlayUseCase";
 import { SoloPlayResultUseCase } from "../../application/use-cases/user/Solo-play/soloPlayResultUsecase";
 import { Result } from "../../infrastructure/db/models/user/resultSchema";
+import { newGroupPlayUseCase } from "../../application/use-cases/user/group-play/newGroupPlayUseCase";
 const baseRepoCompany=new BaseRepository(Company);
 const baseRepoUser=new BaseRepository<AuthUserEntity>(User);
 const CompanyRequestUseCase=new companyRequestUseCase(baseRepoCompany,baseRepoUser);
@@ -45,19 +46,20 @@ const baseRepoGroup=new BaseRepository(Group);
 const baseRepoCompetion=new BaseRepository(Competition);
 const createGroupPlayRoomUseCase =new CreateGroupPlayRoomUseCase(baseRepoGroup,baseRepoUser);
 const GetGroupPlayGroupUseCase=new getGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser);
-const EditGroupUseCase=new editGroupUseCase(baseRepoGroup)
-const JoinGroupPlayGroupUseCase=new joinGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser)
-const removeMemberGroupPlayGroupUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser)
-const startGameGroupPlayGroupUseCase=new StartGameGroupPlayGroupUseCase(baseRepoCompetion,baseRepoGroup,baseRepoLesson,baseRepoUser)
-const changeGroupStatusUseCase=new ChangeGroupStatusUseCase(baseRepoGroup)
+const EditGroupUseCase=new editGroupUseCase(baseRepoGroup);
+const JoinGroupPlayGroupUseCase=new joinGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser);
+const removeMemberGroupPlayGroupUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser);
+const startGameGroupPlayGroupUseCase=new StartGameGroupPlayGroupUseCase(baseRepoCompetion,baseRepoGroup,baseRepoLesson,baseRepoUser);
+const changeGroupStatusUseCase=new ChangeGroupStatusUseCase(baseRepoGroup);
+const newGroupPlayUsecase=new newGroupPlayUseCase(baseRepoGroup,baseRepoUser,baseRepoCompetion,baseRepoLesson);
 
 // solo play
-const baseRepoResult=new BaseRepository(Result)
-const createSoloPlayUseCase=new CreateSoloPlayUseCase(baseRepoLesson,baseRepoCompetion,baseRepoUser)
-const soloPlayResultUseCase=new SoloPlayResultUseCase(baseRepoCompetion,baseRepoUser,baseRepoResult)
+const baseRepoResult=new BaseRepository(Result);
+const createSoloPlayUseCase=new CreateSoloPlayUseCase(baseRepoLesson,baseRepoCompetion,baseRepoUser);
+const soloPlayResultUseCase=new SoloPlayResultUseCase(baseRepoCompetion,baseRepoUser,baseRepoResult);
 export const injectSoloPlayController=new SoloPlayController(createSoloPlayUseCase,soloPlayResultUseCase);
 
-export const injectGroupPlayController=new groupPlayController(createGroupPlayRoomUseCase, GetGroupPlayGroupUseCase,EditGroupUseCase,JoinGroupPlayGroupUseCase,removeMemberGroupPlayGroupUseCase,startGameGroupPlayGroupUseCase,changeGroupStatusUseCase);
+export const injectGroupPlayController=new groupPlayController(createGroupPlayRoomUseCase, GetGroupPlayGroupUseCase,EditGroupUseCase,JoinGroupPlayGroupUseCase,removeMemberGroupPlayGroupUseCase,startGameGroupPlayGroupUseCase,changeGroupStatusUseCase,newGroupPlayUsecase);
 
 export const injectTypingPracticeController=new typingPracticeController(GetPracticeTypingContentUseCase);
 export const injectCompanyRequestController=new companyRequestController(CompanyRequestUseCase,tokenService,FindUserUseCase,GetCompanyUseCase,CompanyReApplyUseCase);

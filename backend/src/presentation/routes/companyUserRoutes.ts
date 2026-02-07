@@ -11,15 +11,15 @@ export class companyUserRoutes {
 
   initializeRoutes() {
    this.router.get(Routes.COMPANY_USER.MY_LESSONS,checkRoleBasedMiddleware(["companyAdmin","companyUser"]),(req:Request,res:Response)=>{
-    injectMyLessonsController.myLessons(req,res)
-   })
- this.router.get( Routes.COMPANY_USER.ASSIGNED_LESSON_BY_ID, checkRoleBasedMiddleware(['companyAdmin', 'companyUser']), (req: Request, res: Response) => {
+    injectMyLessonsController.myLessons(req,res);
+   });
+ this.router.get( Routes.COMPANY_USER.ASSIGNED_LESSON_BY_ID, checkRoleBasedMiddleware(["companyAdmin", "companyUser"]), (req: Request, res: Response) => {
     injectMyLessonsController.getAssignedLessonById(req, res);
   }
 );
-this.router.post(Routes.COMPANY_USER.SAVE_LESSON_RESULT,checkRoleBasedMiddleware(["companyUser",'companyAdmin']),(req:Request,res:Response)=>{
-  injectMyLessonsController.saveLessonResult(req,res)
-})
+this.router.post(Routes.COMPANY_USER.SAVE_LESSON_RESULT,checkRoleBasedMiddleware(["companyUser","companyAdmin"]),(req:Request,res:Response)=>{
+  injectMyLessonsController.saveLessonResult(req,res);
+});
 
   }
 

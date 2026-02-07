@@ -34,7 +34,6 @@ export class GroupEntity {
     }
   }
     changeDifficulty(difficulty: "easy" | "medium" | "hard") {
-      console.log("status",this.status)
     if (this.status !== "waiting") {
       throw new Error("Cannot change difficulty after game has started");
     }
@@ -58,12 +57,12 @@ export class GroupEntity {
     if(this.status!="waiting"){
         throw new Error("Cannot join group after game has started");
     }
-    const kikedUser=this.kickedUsers.find((user)=>user.toString()===memberId)
+    const kikedUser=this.kickedUsers.find((user)=>user.toString()===memberId);
     if(kikedUser){
       throw new Error("User is kicked from group");
     }
 
-    const alreadyMember=this.members.find((member)=>member.toString()===memberId)
+    const alreadyMember=this.members.find((member)=>member.toString()===memberId);
     if(!alreadyMember){
       this.members.push(memberId);
     }
@@ -76,7 +75,7 @@ export class GroupEntity {
   
   removeMember(memberId: string) {
     this.members = this.members.filter((member) => member.toString() !== memberId.toString());
-    
+
   }
   getId() {
     return this._id;
@@ -98,9 +97,7 @@ export class GroupEntity {
     return this.maximumPlayers;
   }
 
-  getDifficulty() {
-    return this.difficulty;
-  }
+  
 
   getJoinLink() {
     return this.joinLink;
@@ -115,6 +112,15 @@ export class GroupEntity {
   kickUser(memberId: string) {
     this.members = this.members.filter((member) => member.toString() !== memberId.toString());
     this.kickedUsers.push(memberId.toString());
+  }
+  setStatus(status:string){
+    this.status=status as "waiting" | "started" | "completed";
+  }
+  setGroupMembers(members:string[]){
+    this.members=[...members];
+  }
+  getDifficulty(){
+    return this.difficulty;
   }
   toObject() {
   return {

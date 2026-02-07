@@ -1,5 +1,4 @@
-import { join } from "path";
-import { Request, Response } from "express";
+import {  Response } from "express";
 import { getIO } from "../../../infrastructure/socket/socket"; 
 
 
@@ -12,6 +11,7 @@ import { IJoinGroupPlayGroupUseCase } from "../../../application/use-cases/inter
 import { IRemoveMemberGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IRemoveMemberGroupPlayGroupUseCase";
 import { IStartGameGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IStartGameGroupPlayGroupUseCase";
 import { IChangeGroupStatusUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/IChangeGroupStatusUseCase";
+import { INewGroupPlayUseCase } from "../../../application/use-cases/interfaces/user/groupplayUseCases/INewGroupPlayUseCase";
 export class groupPlayController{
     constructor(
         private _createGroupPlayRoomUseCase: ICreateGroupPlayRoomUseCase,
@@ -20,14 +20,15 @@ export class groupPlayController{
         private _joinGroupPlayGroupUseCase:IJoinGroupPlayGroupUseCase,
         private _removeMemberGroupPlayGroupUseCase:IRemoveMemberGroupPlayGroupUseCase,
         private _startGameGroupPlayGroupUseCase:IStartGameGroupPlayGroupUseCase,
-        private _changeGroupStatusUseCase:IChangeGroupStatusUseCase
+        private _changeGroupStatusUseCase:IChangeGroupStatusUseCase,
+        private _newGroupPlayUseCase:INewGroupPlayUseCase,
     ){}
 
     async createGroup(req:AuthRequest,res:Response):Promise<void>{
         try{
             const hostUserId = req.user?.userId;
             if(!hostUserId){
-                throw new Error(MESSAGES.UNAUTHORIZED)
+                throw new Error(MESSAGES.UNAUTHORIZED);
 
             }
             const group=await this._createGroupPlayRoomUseCase.execute(hostUserId);
@@ -52,8 +53,8 @@ export class groupPlayController{
     async getGroup(req:AuthRequest,res:Response):Promise<void>{
         try{
             const joinLink=req.params.joinLink;
-            const userId=req.user?.userId
-            if(!userId)return
+            const userId=req.user?.userId;
+            if(!userId)return;
             if(!joinLink){
                 throw new Error("Join ID is required to fetch group details.");
             }
@@ -79,19 +80,18 @@ export class groupPlayController{
     async editGroup(req:AuthRequest,res:Response):Promise<void>{
         try{
         const {difficulty,maxPlayers}=req.body;
-        console.log("editGroup",difficulty,maxPlayers)
         const groupId=req.params.groupId;
         if(!groupId){
-            throw new Error("Group ID is required to edit group details.")
+            throw new Error("Group ID is required to edit group details.");
         }
-        const userId=req.user?.userId
+        const userId=req.user?.userId;
         if(!difficulty&&!maxPlayers){
             throw new Error("Difficulty and max players are required");
         }
         if(!userId){
-            throw new Error(MESSAGES.UNAUTHORIZED)
+            throw new Error(MESSAGES.UNAUTHORIZED);
         }
-       const group= await this._editGroupPlayGroupUseCase.execute(groupId,difficulty,maxPlayers,userId)
+       const group= await this._editGroupPlayGroupUseCase.execute(groupId,difficulty,maxPlayers,userId);
        
             getIO().to(group.id).emit("change-difficulty", {
              
@@ -101,10 +101,10 @@ export class groupPlayController{
          res.status(200).json({
              success:true,
              message:"Group edited successfully"
-         })
+         });
         }
         catch(error:any){
-            console.log(error)
+            console.log(error);
             res.status(500).json({
                 success:false,
                 message:error.message || "Internal Server Error"
@@ -114,24 +114,24 @@ export class groupPlayController{
     async joinGroup(req:AuthRequest,res:Response):Promise<void>{
         try{
             const joinLink=req.params.joinLink;
-            const userId=req.user?.userId
+            const userId=req.user?.userId;
             if(!joinLink){
                 throw new Error("Join ID is required to join group.");
             }
             if(!userId){
-                throw new Error(MESSAGES.UNAUTHORIZED)
+                throw new Error(MESSAGES.UNAUTHORIZED);
             }
-            const group=await this._joinGroupPlayGroupUseCase.execute(joinLink,userId)
+            const group=await this._joinGroupPlayGroupUseCase.execute(joinLink,userId);
             getIO().to(group.id).emit("fetchGroupDetails", {
                 group
-            })
+            });
             res.status(200).json({
                 success:true,
                 message:"Joined group successfully"
-            })
+            });
         }
         catch(error:any){
-            console.log(error)
+            console.log(error);
             res.status(500).json({
                 success:false,
                 message:error.message || "Internal Server Error"
@@ -142,25 +142,25 @@ export class groupPlayController{
     async removeMember(req:AuthRequest,res:Response):Promise<void>{
         try{
             const groupId=req.params.groupId;
-            const userId=req.params.playerId
+            const userId=req.params.playerId;
             if(!groupId){
                 throw new Error("Group ID is required to remove member.");
             }
             if(!userId){
-                throw new Error(MESSAGES.UNAUTHORIZED)
+                throw new Error(MESSAGES.UNAUTHORIZED);
             }
-            const group=await this._removeMemberGroupPlayGroupUseCase.execute(groupId,userId,"KICK")
+            const group=await this._removeMemberGroupPlayGroupUseCase.execute(groupId,userId,"KICK");
             getIO().to(groupId).emit("remove-player", {
                 group
-            })
+            });
             res.status(200).json({
                 success:true,
                 message:"Member removed successfully",
                 group,
-            })
+            });
         }
         catch(error:any){
-            console.log(error)
+            console.log(error);
             res.status(500).json({
                 success:false,
                 message:error.message || "Internal Server Error"
@@ -175,11 +175,11 @@ export class groupPlayController{
             if(!groupId){
                 throw new Error("Group ID is required to start game.");
             }
-            const startCompetition=await this._startGameGroupPlayGroupUseCase.execute(groupId,startTime)
-            await this._changeGroupStatusUseCase.changeGroupStatus(groupId,"started")
+            const startCompetition=await this._startGameGroupPlayGroupUseCase.execute(groupId,startTime);
+            await this._changeGroupStatusUseCase.changeGroupStatus(groupId,"started");
 
             if(!startCompetition){
-                throw new Error("something went wrong")
+                throw new Error("something went wrong");
             }
                getIO().to(groupId).emit("game-started", {
                competition: startCompetition,
@@ -188,15 +188,47 @@ export class groupPlayController{
             res.status(200).json({
                 success:true,
                 message:"Game started successfully",
-            })
+            });
         }
         catch(error:any){
-            console.log(error)
+            console.log(error);
             res.status(500).json({
                 success:false,
                 message:error.message || "Internal Server Error"
             });
         }
     }   
+
+    async newGame(req:AuthRequest,res:Response):Promise<void>{
+        try{
+            const gameId=req.params.gameId;
+            const users=req.body.currentUsers;
+            if(!gameId){
+                throw new Error("Game ID is required to start new game.");
+            }
+            if(users.length===0){
+                throw new Error("At least one user is required to start new game.");
+            }
+            const startCompetition=await this._newGroupPlayUseCase.execute(gameId,users);
+            if(!startCompetition){
+                throw new Error("something went wrong");
+            }
+               getIO().to(startCompetition.groupId!).emit("new-game-started", {
+               competition: startCompetition,
+            });
+
+            res.status(200).json({
+                success:true,
+                message:"New Game started successfully",
+            });
+        }
+        catch(error:any){
+            console.log(error);
+            res.status(500).json({
+                success:false,
+                message:error.message || "Internal Server Error"
+            });
+        }   
+    }
 
 }

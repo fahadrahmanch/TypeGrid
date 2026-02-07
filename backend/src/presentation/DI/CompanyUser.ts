@@ -7,11 +7,11 @@ import { Lesson } from "../../infrastructure/db/models/admin/lessonSchema";
 import { getAssignLessonUseCase } from "../../application/use-cases/companyUser/getAssignLessonUseCase";
 import { saveLessonResultUseCase } from "../../application/use-cases/companyAdmin/companyLessonUseCases/saveLessonResultUseCase";
 import { LessonResult } from "../../infrastructure/db/models/company/LessonResultSchema";
-const BaseAssignmentLessonRepository=new BaseRepository(LessonAssignment)
-const BaseRepoUser=new BaseRepository(User)
-const BaseRepoLesson=new BaseRepository(Lesson)
-const BaseRepoLessonResult=new BaseRepository(LessonResult)
-const GetAssignLessonUseCase=new getAssignLessonUseCase(BaseAssignmentLessonRepository)
-const GetMyLessonsUseCase=new getMyLessonsUseCase(BaseAssignmentLessonRepository,BaseRepoUser,BaseRepoLesson)
-const SaveLessonResultUseCase=new saveLessonResultUseCase(BaseRepoLessonResult,BaseAssignmentLessonRepository)
-export const injectMyLessonsController= new MyLessonsController(GetMyLessonsUseCase,GetAssignLessonUseCase,SaveLessonResultUseCase) 
+const BaseAssignmentLessonRepository=new BaseRepository(LessonAssignment);
+const BaseRepoUser=new BaseRepository(User);
+const BaseRepoLesson=new BaseRepository(Lesson);
+const BaseRepoLessonResult=new BaseRepository(LessonResult);
+const GetAssignLessonUseCase=new getAssignLessonUseCase(BaseAssignmentLessonRepository);
+const GetMyLessonsUseCase=new getMyLessonsUseCase(BaseAssignmentLessonRepository,BaseRepoUser,BaseRepoLesson);
+const SaveLessonResultUseCase=new saveLessonResultUseCase(BaseRepoLessonResult,BaseAssignmentLessonRepository);
+export const injectMyLessonsController= new MyLessonsController(GetMyLessonsUseCase,GetAssignLessonUseCase,SaveLessonResultUseCase); 

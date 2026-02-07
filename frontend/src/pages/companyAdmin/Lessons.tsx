@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
-import { Plus } from 'lucide-react';
-import LessonTable, { Lesson } from '../../components/companyAdmin/lessons/LessonTable';
-import UserSelectionList, { User } from '../../components/companyAdmin/lessons/UserSelectionList';
-import AssignmentSummary from '../../components/companyAdmin/lessons/AssignmentSummary';
-import LessonSelectionGrid from '../../components/companyAdmin/lessons/LessonSelectionGrid';
-import CreateLessonModal from '../../components/companyAdmin/lessons/CreateLessonModal';
-import { getLesson } from '../../api/companyAdmin/lessons';
-import { useEffect } from 'react';
-import { getCompanyUsers } from '../../api/companyAdmin/lessons';
-import { getAdminLessons } from '../../api/companyAdmin/lessons';
-import { assignLesson } from '../../api/companyAdmin/lessons';
-import { toast } from 'react-toastify';
+import { Plus } from "lucide-react";
+import LessonTable, { Lesson } from "../../components/companyAdmin/lessons/LessonTable";
+import UserSelectionList, { User } from "../../components/companyAdmin/lessons/UserSelectionList";
+import AssignmentSummary from "../../components/companyAdmin/lessons/AssignmentSummary";
+import LessonSelectionGrid from "../../components/companyAdmin/lessons/LessonSelectionGrid";
+import CreateLessonModal from "../../components/companyAdmin/lessons/CreateLessonModal";
+import { getLesson } from "../../api/companyAdmin/lessons";
+import { useEffect } from "react";
+import { getCompanyUsers } from "../../api/companyAdmin/lessons";
+import { getAdminLessons } from "../../api/companyAdmin/lessons";
+import { assignLesson } from "../../api/companyAdmin/lessons";
+import { toast } from "react-toastify";
 
 
 const Lessons: React.FC = () => {
@@ -27,13 +27,13 @@ const Lessons: React.FC = () => {
         async function fetchCompanyUsers(){
             try{
                 const response = await getCompanyUsers();
-                setCompanyUsers(response.data.data)
+                setCompanyUsers(response.data.data);
             }catch(error){
-                console.log(error)
+                console.log(error);
             }
         }
-        fetchCompanyUsers()
-    },[])
+        fetchCompanyUsers();
+    },[]);
     const toggleUserSelection = (userId: string) => {
         setSelectedUsers((prev:any) =>
             prev.includes(userId) ? prev.filter((id:string) => id !== userId) : [...prev, userId]
@@ -49,11 +49,11 @@ const Lessons: React.FC = () => {
     const handleAssign = async () => {
         
         try{
-        const response=await assignLesson(selectedUsers,selectedLessons,deadlineAt)
-        toast.success(response.data.message)
+        const response=await assignLesson(selectedUsers,selectedLessons,deadlineAt);
+        toast.success(response.data.message);
         }
         catch(error:any){
-            toast.error(error.data.message)
+            toast.error(error.data.message);
         }
     };
 
@@ -65,8 +65,8 @@ const Lessons: React.FC = () => {
         (async () => {
             try {
                 const response = await getLesson();
-                const lessonsData = response.data.lessons
-                setLessons(lessonsData)
+                const lessonsData = response.data.lessons;
+                setLessons(lessonsData);
             } catch (error) {
                 console.log(error);
             }
@@ -80,14 +80,14 @@ const Lessons: React.FC = () => {
         async function fetchAdminLessons(){
             try{
                 const response = await getAdminLessons();
-                const adminLessonsData = response.data.lessons
-                setAdminLessons(adminLessonsData)
+                const adminLessonsData = response.data.lessons;
+                setAdminLessons(adminLessonsData);
             }catch(error){
-                console.log(error)
+                console.log(error);
             }
         }
-        fetchAdminLessons()
-    },[])
+        fetchAdminLessons();
+    },[]);
     
     return (
         <div className="flex min-h-screen bg-[#fff8ea]">

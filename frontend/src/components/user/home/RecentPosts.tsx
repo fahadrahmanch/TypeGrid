@@ -1,27 +1,27 @@
-import React from 'react';
+import React from "react";
 
 
 const RecentPosts: React.FC = () => {
   const posts = [
     {
-      title: 'I have a batter everyone😅',
-      author: 'Boom',
-      time: '1 week ago',
-      content: 'So I was just typing on typer.io like I always do and some random dude comes into the match as my name...',
+      title: "I have a batter everyone😅",
+      author: "Boom",
+      time: "1 week ago",
+      content: "So I was just typing on typer.io like I always do and some random dude comes into the match as my name...",
       comments: 5
     },
     {
-      title: 'I have a batter everyone😅',
-      author: 'Boom',
-      time: '1 week ago',
-      content: 'So I was just typing on typer.io like I always do and some random dude comes into the match as my name...',
+      title: "I have a batter everyone😅",
+      author: "Boom",
+      time: "1 week ago",
+      content: "So I was just typing on typer.io like I always do and some random dude comes into the match as my name...",
       comments: 5
     },
     {
-      title: 'I have a batter everyone😅',
-      author: 'Boom',
-      time: '1 week ago',
-      content: 'So I was just typing on typer.io like I always do and some random dude comes into the match as my name...',
+      title: "I have a batter everyone😅",
+      author: "Boom",
+      time: "1 week ago",
+      content: "So I was just typing on typer.io like I always do and some random dude comes into the match as my name...",
       comments: 5
     }
   ];

@@ -16,6 +16,6 @@ export class updateLessonUseCase implements IUpdateLessonUseCase {
 
 
 const updatedLesson=await this._baseRepositoryLesson.update({_id:lessonId,...values});
-  return mapLessonToDTO(updatedLesson)
+  return mapLessonToDTO(updatedLesson);
   }
 }

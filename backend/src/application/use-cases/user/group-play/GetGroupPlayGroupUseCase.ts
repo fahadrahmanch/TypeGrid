@@ -15,19 +15,19 @@ export class getGroupPlayGroupUseCase implements IGetGroupPlayGroupUseCase{
         
       group.members=await Promise.all(
       group.members.map(async(item: any) =>{
-          const memberId=item.toString()
-          const member= await  this._baseRepoUser.findById(memberId)
+          const memberId=item.toString();
+          const member= await  this._baseRepoUser.findById(memberId);
           return{
             userId:member._id,
             name:member.name,
             imageUrl:member.imageUrl,
             isHost:member._id.toString()===group.ownerId.toString(),
             
-          }
+          };
       }
     )
 );
-        group.currentUserId=userId
+        group.currentUserId=userId;
         return mapGroupToDTO(group);
     }
 } 

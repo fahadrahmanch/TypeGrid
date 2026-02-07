@@ -101,7 +101,7 @@ const TypingPracticeArea = () => {
 
       // Keep cursor in middle-ish of view
       if (relativeBottom > containerRect.height / 2 || relativeTop < containerRect.height / 3) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
   }, [typedText]);
@@ -186,7 +186,7 @@ const TypingPracticeArea = () => {
     setWpm(0);
     setAccuracy(100);
     setIsfinished(false);
-  }
+  };
 
   return (
     <div className="min-h-screen bg-[#FFF6E8] font-sans selection:bg-orange-200 selection:text-orange-900">
@@ -229,9 +229,9 @@ const TypingPracticeArea = () => {
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Difficulty</span>
                   <span className={`
                                 px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border
-                                ${Content?.level === 'beginner' ? 'bg-green-50 text-green-600 border-green-100' :
-                      Content?.level === 'intermediate' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                        'bg-red-50 text-red-600 border-red-100'}
+                                ${Content?.level === "beginner" ? "bg-green-50 text-green-600 border-green-100" :
+                      Content?.level === "intermediate" ? "bg-amber-50 text-amber-600 border-amber-100" :
+                        "bg-red-50 text-red-600 border-red-100"}
                              `}>
                     {Content?.level || "Loading..."}
                   </span>
@@ -334,7 +334,7 @@ const TypingPracticeArea = () => {
               className="bg-[#F8F9FA] p-8 md:p-10 rounded-2xl flex-1 overflow-y-auto custom-scrollbar border-2 border-transparent focus-within:border-orange-200 focus-within:bg-white transition-colors duration-300 shadow-inner relative scroll-smooth"
               onClick={() => document.body.focus()}
             >
-              <div className="font-mono leading-relaxed tracking-wide select-none break-words whitespace-pre-wrap outline-none" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+              <div className="font-mono leading-relaxed tracking-wide select-none break-words whitespace-pre-wrap outline-none" style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
                 {renderTextWithHighlight()}
               </div>
             </div>

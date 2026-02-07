@@ -7,7 +7,6 @@ export class getLessonUseCase implements IGetLessonUseCase{
         private BaseRepoLessonL:IBaseRepository<any>
     ){}
     async execute(lessonId: string): Promise<CompanyLessonDTO> {
-        console.log("lesson id here",lessonId)
         if(!lessonId){
             throw new Error("Lesson ID is required");
         }
@@ -15,7 +14,6 @@ export class getLessonUseCase implements IGetLessonUseCase{
         if (!lesson) {
           throw new Error("Lesson not found");
         }
-        console.log("lesson",lesson)
         return mapLessonDTOforCompanyLesson(lesson);
     }
 

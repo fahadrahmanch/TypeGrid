@@ -47,32 +47,34 @@ export class UserRoutes {
         // group 
         this.router.post(Routes.USERS.GROUP_PLAY.CREATE_GROUP,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectGroupPlayController.createGroup(req,res);
-        })
+        });
 
         this.router.get(Routes.USERS.GROUP_PLAY.GET_GROUP,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectGroupPlayController.getGroup(req,res);
-        })
-        this.router.patch(Routes.USERS.GROUP_PLAY.EDIT_GROUP,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+        });
+        this.router.patch(Routes.USERS.GROUP_PLAY.EDIT_GROUP,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectGroupPlayController.editGroup(req,res);
-        })
-        this.router.patch(Routes.USERS.GROUP_PLAY.JOIN_GROUP,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+        });
+        this.router.patch(Routes.USERS.GROUP_PLAY.JOIN_GROUP,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectGroupPlayController.joinGroup(req,res);
-        })
-        this.router.delete(Routes.USERS.GROUP_PLAY.REMOVE_MEMBER,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+        });
+        this.router.delete(Routes.USERS.GROUP_PLAY.REMOVE_MEMBER,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectGroupPlayController.removeMember(req,res);
-        })
-        this.router.post(Routes.USERS.GROUP_PLAY.START_GAME,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+        });
+        this.router.post(Routes.USERS.GROUP_PLAY.START_GAME,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectGroupPlayController.startGame(req,res);
-        })
-
+        });
+        this.router.post(Routes.USERS.GROUP_PLAY.NEW_GAME,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
+            injectGroupPlayController.newGame(req,res);
+        });  
 
         //solo
         this.router.post(Routes.USERS.SOLO_PLAY.SOLO_CREATE,checkRoleBasedMiddleware(["user","companyAdmin"]), (req: Request, res: Response) => {
             injectSoloPlayController.createSoloPlay(req,res);
         });
         this.router.post(Routes.USERS.SOLO_PLAY.RESULT_SOLO_PLAY,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
-            injectSoloPlayController.result(req,res)
-    })
+            injectSoloPlayController.result(req,res);
+    });
 
     }
      getRouter(){

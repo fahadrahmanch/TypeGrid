@@ -6,8 +6,8 @@ import { FaS } from "react-icons/fa6";
 import { Clock, Zap, Target, AlertCircle } from "lucide-react";
 import { saveSoloPlayResult } from "../../../api/user/solo";
 const SoloPlay: React.FC = () => {
-    const location = useLocation()
-    const navigate = useNavigate()
+    const location = useLocation();
+    const navigate = useNavigate();
     const gameData = location.state?.gameData;
     const lesson = gameData?.lesson;
     const [countdown, setCountdown] = useState<number>(gameData?.startTime || 10);
@@ -17,12 +17,12 @@ const SoloPlay: React.FC = () => {
     const [errors, setErrors] = useState(0);
     const [wpm, setWpm] = useState(0);
     const [accuracy, setAccuracy] = useState(100);
-    const [startTypingTime, setStartTypingTime] = useState(0)
+    const [startTypingTime, setStartTypingTime] = useState(0);
     const [elapsedTime, setElapsedTime] = useState(0);
     const activeCharRef = useRef<HTMLSpanElement>(null);
     const [typedText, setTypedText] = useState("");
     const [isFinished, setIsfinished] = useState(false);
-    const [space, setSpace] = useState(false)
+    const [space, setSpace] = useState(false);
     const startTimeRef = useRef<number | null>(null);
     const playStartRef = useRef<number | null>(null);
 
@@ -61,42 +61,42 @@ useEffect(() => {
     }, [gameData, navigate]);
 
     useEffect(() => {
-        if (!gameData?.startedAt || !gameData?.duration || isFinished) return
+        if (!gameData?.startedAt || !gameData?.duration || isFinished) return;
         if (!space || !startTimeRef.current) return;
         
         const startTime = startTimeRef.current;
         
         const interval = setInterval(() => {
-            const now = Date.now()
-            const elapsed = Math.floor((now - startTime) / 1000)
-            setElapsedTime(elapsed)
+            const now = Date.now();
+            const elapsed = Math.floor((now - startTime) / 1000);
+            setElapsedTime(elapsed);
             if (elapsed < gameData.startTime) {
-                setPhase("COUNTDOWN")
-                setCountdown(gameData.startTime - elapsed)
+                setPhase("COUNTDOWN");
+                setCountdown(gameData.startTime - elapsed);
             }
             else if (elapsed < gameData.startTime + gameData.duration) {
-                setPhase('PLAY')
+                setPhase("PLAY");
                  if (playStartRef.current === null) {
     playStartRef.current = Date.now();
   }
-                setRemainingTime(gameData.startTime + gameData.duration - elapsed)
+                setRemainingTime(gameData.startTime + gameData.duration - elapsed);
 
                 setElapsedTime(elapsed - gameData.startTime);
             }
             else {
-                setPhase('PLAY')
-                setRemainingTime(0)
-                setIsfinished(true)
-                clearInterval(interval)
+                setPhase("PLAY");
+                setRemainingTime(0);
+                setIsfinished(true);
+                clearInterval(interval);
             }
-        }, 1000)
-        return () => clearInterval(interval)
-    }, [gameData?.startedAt, gameData?.duration, gameData?.startTime, isFinished, space])
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [gameData?.startedAt, gameData?.duration, gameData?.startTime, isFinished, space]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key == " "&&!space) {
-                setSpace(true)
+                setSpace(true);
                 startTimeRef.current = Date.now();
             }
             
@@ -104,7 +104,7 @@ useEffect(() => {
              
            
             if (e.key === "Backspace") {
-                setHasError(false)
+                setHasError(false);
                 setTypedText((prev) => prev.slice(0, -1));
                 return;
             }
@@ -112,15 +112,15 @@ useEffect(() => {
             if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
                 e.preventDefault();
 
-                if (hasError) return
+                if (hasError) return;
 
                 const expectedChar = lesson.text[typedText.length];
 
                 if (e.key !== expectedChar) {
-                    setErrors((prev) => prev + 1)
-                    setHasError(true)
-                    setTypedText((prev) => prev + e.key)
-                    return
+                    setErrors((prev) => prev + 1);
+                    setHasError(true);
+                    setTypedText((prev) => prev + e.key);
+                    return;
                 }
                 const nextText = typedText + e.key;
                 setTypedText(nextText);
@@ -211,17 +211,16 @@ useEffect(() => {
     async function endGameHandler(){
         try{
             if(isFinished&&typedText.length===lesson?.text.length){
-               const response=await saveSoloPlayResult(gameData._id,{wpm,accuracy,errors,time:elapsedTime})
-               console.log(response)
+              await saveSoloPlayResult(gameData._id,{wpm,accuracy,errors,time:elapsedTime});
             }
 
         }catch(err){
-            console.log(err)
+            console.log(err);
         }
 
     }
-    endGameHandler()
-  },[isFinished])
+    endGameHandler();
+  },[isFinished]);
 
 
     return (

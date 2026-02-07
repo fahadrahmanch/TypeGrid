@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import { BookOpen, Calendar, Clock, Trophy, ChevronDown, CheckCircle2, PlayCircle, Circle } from 'lucide-react';
-import StreakModal from '../../components/companyUser/lessons/StreakModal';
-import { toast } from 'react-toastify';
-import { myLessons } from '../../api/companyUser/lessons';
-import { useNavigate } from 'react-router-dom';
+import { BookOpen, Calendar, Clock, Trophy, ChevronDown, CheckCircle2, PlayCircle, Circle } from "lucide-react";
+import StreakModal from "../../components/companyUser/lessons/StreakModal";
+import { toast } from "react-toastify";
+import { myLessons } from "../../api/companyUser/lessons";
+import { useNavigate } from "react-router-dom";
 interface Lesson {
   id: string;
   title: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced';
+  level: "Beginner" | "Intermediate" | "Advanced";
   assignedDate: string;
   targetWpm: number;
   time: string;
-  status: 'Completed' | 'In Progress' | 'Not Started';
+  status: "Completed" | "In Progress" | "Not Started";
 }
 
 // types/MyLessons.ts
@@ -28,10 +28,10 @@ const MyLessons: React.FC = () => {
     lessons: [],
     completed: 0,
     total: 0,
-  })
+  });
   const [filteredLessons, setFilteredLessons] = useState<Lesson[]>([]);
-  const [selectedLevel, setSelectedLevel] = useState('All');
-  const [selectedStatus, setSelectedStatus] = useState('All');
+  const [selectedLevel, setSelectedLevel] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const navigate = useNavigate();
 
   // Mock Data
@@ -45,18 +45,18 @@ const MyLessons: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'Completed': return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-      case 'In Progress': return <PlayCircle className="w-5 h-5 text-blue-500" />;
+      case "Completed": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+      case "In Progress": return <PlayCircle className="w-5 h-5 text-blue-500" />;
       default: return <Circle className="w-5 h-5 text-gray-400" />;
     }
   };
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case 'Beginner': return 'bg-emerald-100 text-emerald-700';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-700';
-      case 'Advanced': return 'bg-pink-100 text-pink-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case "Beginner": return "bg-emerald-100 text-emerald-700";
+      case "Intermediate": return "bg-yellow-100 text-yellow-700";
+      case "Advanced": return "bg-pink-100 text-pink-700";
+      default: return "bg-gray-100 text-gray-700";
     }
   };
 
@@ -66,34 +66,33 @@ const MyLessons: React.FC = () => {
       try {
         const response = await myLessons();
         const data = response.data.data;
-        console.log("data here",data)
 
         const mappedLessons: Lesson[] = data.lessons.map((item: any) => ({
           id: item._id,
           title: item.lessonId.title,
           level:
-            item.lessonId.level === 'beginner'
-              ? 'Beginner'
-              : item.lessonId.level === 'intermediate'
-                ? 'Intermediate'
-                : 'Advanced',
+            item.lessonId.level === "beginner"
+              ? "Beginner"
+              : item.lessonId.level === "intermediate"
+                ? "Intermediate"
+                : "Advanced",
           assignedDate: new Date(item.assignedAt).toLocaleDateString(),
           targetWpm: item.lessonId.wpm,
-          time: '5 min', // you can calculate later
+          time: "5 min", // you can calculate later
           status:
-            item.status === 'completed'
-              ? 'Completed'
-              : item.status === 'progress'
-                ? 'In Progress'
-                : 'Not Started',
+            item.status === "completed"
+              ? "Completed"
+              : item.status === "progress"
+                ? "In Progress"
+                : "Not Started",
         }));
 
         const filtered = mappedLessons.filter((lesson) => {
           const levelOk =
-            selectedLevel === 'All' || lesson.level.toLowerCase() === selectedLevel.toLowerCase();
+            selectedLevel === "All" || lesson.level.toLowerCase() === selectedLevel.toLowerCase();
 
           const statusOk =
-            selectedStatus === 'All' || lesson.status.toLowerCase() === selectedStatus.toLowerCase();
+            selectedStatus === "All" || lesson.status.toLowerCase() === selectedStatus.toLowerCase();
 
           return levelOk && statusOk;
         });
@@ -107,7 +106,7 @@ const MyLessons: React.FC = () => {
 
         setFilteredLessons(filtered);
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || 'Something went wrong');
+        toast.error(error?.response?.data?.message || "Something went wrong");
       }
     }
 
@@ -117,7 +116,7 @@ const MyLessons: React.FC = () => {
 
 
 async function handleLessonClick(assignedId: string) {
- navigate(`/company/user/assigned-lessons/${assignedId}`)
+ navigate(`/company/user/assigned-lessons/${assignedId}`);
  
 }
 
@@ -208,7 +207,7 @@ async function handleLessonClick(assignedId: string) {
             <select
               value={selectedLevel}
               onChange={(e) =>
-                setSelectedLevel(e.target.value as 'All' | 'Beginner' | 'Intermediate' | 'Advanced')
+                setSelectedLevel(e.target.value as "All" | "Beginner" | "Intermediate" | "Advanced")
               }
               className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
             >
@@ -224,7 +223,7 @@ async function handleLessonClick(assignedId: string) {
             <select
               value={selectedStatus}
               onChange={(e) =>
-                setSelectedStatus(e.target.value as 'All' | 'Completed' | 'In Progress' | 'Not Started')
+                setSelectedStatus(e.target.value as "All" | "Completed" | "In Progress" | "Not Started")
               }
               className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
             >
@@ -278,11 +277,11 @@ async function handleLessonClick(assignedId: string) {
               <div className="flex items-center gap-2">
                 {getStatusIcon(lesson.status)}
                 <span
-                  className={`text-xs font-semibold ${lesson.status === 'Completed'
-                      ? 'text-emerald-600'
-                      : lesson.status === 'In Progress'
-                        ? 'text-blue-600'
-                        : 'text-gray-500'
+                  className={`text-xs font-semibold ${lesson.status === "Completed"
+                      ? "text-emerald-600"
+                      : lesson.status === "In Progress"
+                        ? "text-blue-600"
+                        : "text-gray-500"
                     }`}
                 >
                   {lesson.status}

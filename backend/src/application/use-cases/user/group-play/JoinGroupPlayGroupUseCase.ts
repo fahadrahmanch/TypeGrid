@@ -32,15 +32,15 @@ export class joinGroupPlayGroupUseCase implements IJoinGroupPlayGroupUseCase {
     });
          updatedGroup.members=await Promise.all(
       updatedGroup.members.map(async(item: any) =>{
-          const memberId=item.toString()
-          const member= await  this._baseRepoUser.findById(memberId)
+          const memberId=item.toString();
+          const member= await  this._baseRepoUser.findById(memberId);
           return{
             userId:member._id,
             name:member.name,
             imageUrl:member.imageUrl,
             isHost:member._id.toString()===group.ownerId.toString(),
             
-          }
+          };
       }
     )
 );
@@ -48,6 +48,6 @@ export class joinGroupPlayGroupUseCase implements IJoinGroupPlayGroupUseCase {
     return mapGroupToDTO({
         ...updatedGroup,
         // currentUserId:userId
-    })
+    });
     }
 }

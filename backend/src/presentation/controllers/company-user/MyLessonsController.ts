@@ -80,26 +80,24 @@ async saveLessonResult(req:AuthRequest,res:Response):Promise<void>{
     const userId=req.user?.userId;
     const assignmentId=req.params.id;
     const result=req.body;
-    
     if(!userId){
-      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND)
+      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
     }
-    console.log("result in here",result)
     if(!assignmentId){
       res.status(400).json({
       success: false,
       message: "assignmentId is required",
-     })
+     });
      return;
     }
-    await this._saveLessonResultUseCase.execute(userId,assignmentId,result)
+    await this._saveLessonResultUseCase.execute(userId,assignmentId,result);
     res.status(200).json({
       success: true,
       message: "Lesson result saved successfully",
     });
   }
   catch(error:any){
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message,

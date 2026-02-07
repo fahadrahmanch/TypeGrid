@@ -11,7 +11,7 @@ export class getCompanyLessonUseCase implements IGetCompanyLessonsUseCase{
                 throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
             }
             const companyId=user.CompanyId;
-            const lessons=await this._baseRepositoryLesson.find({companyId})
+            const lessons=await this._baseRepositoryLesson.find({companyId});
             if(!lessons.length){
                 throw new Error(MESSAGES.LESSON_NOT_FOUND);
             }

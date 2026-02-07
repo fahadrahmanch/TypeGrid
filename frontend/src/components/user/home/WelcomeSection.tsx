@@ -1,5 +1,5 @@
-import React from 'react';
-import WelcomeIllustration from './../../../assets/images/cartoonMan.png';
+import React from "react";
+import WelcomeIllustration from "./../../../assets/images/cartoonMan.png";
 
 const WelcomeSection: React.FC = () => {
   return (

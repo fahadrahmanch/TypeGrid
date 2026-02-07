@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Flame, CheckCircle2 } from 'lucide-react';
+import React from "react";
+import { X, Flame, CheckCircle2 } from "lucide-react";
 
 interface StreakModalProps {
     isOpen: boolean;
@@ -26,11 +26,11 @@ const StreakModal: React.FC<StreakModalProps> = ({ isOpen, onClose }) => {
 
     const getBgColor = (intensity: number) => {
         switch (intensity) {
-            case 4: return 'bg-emerald-600';
-            case 3: return 'bg-emerald-500';
-            case 2: return 'bg-emerald-300';
-            case 1: return 'bg-emerald-100';
-            default: return 'bg-gray-100'; // Day not played or skipped
+            case 4: return "bg-emerald-600";
+            case 3: return "bg-emerald-500";
+            case 2: return "bg-emerald-300";
+            case 1: return "bg-emerald-100";
+            default: return "bg-gray-100"; // Day not played or skipped
         }
     };
 
@@ -81,7 +81,7 @@ const StreakModal: React.FC<StreakModalProps> = ({ isOpen, onClose }) => {
 
                     {/* Weekday Headers */}
                     <div className="grid grid-cols-7 gap-3 mb-3 text-center">
-                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(day => (
                             <span key={day} className="text-xs text-gray-500 font-medium">{day}</span>
                         ))}
                     </div>
@@ -100,12 +100,12 @@ const StreakModal: React.FC<StreakModalProps> = ({ isOpen, onClose }) => {
                                     className={`
                                         aspect-square rounded-lg flex items-center justify-center text-sm font-medium transition-transform hover:scale-105 cursor-pointer
                                         ${getBgColor(intensity)}
-                                        ${intensity > 2 ? 'text-white' : 'text-gray-600'}
+                                        ${intensity > 2 ? "text-white" : "text-gray-600"}
                                     `}
                                 >
                                     {day}
                                 </div>
-                            )
+                            );
                         })}
                     </div>
                 </div>

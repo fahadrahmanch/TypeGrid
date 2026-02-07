@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 export type CompetitionType =
   | "quick"
   | "solo"
@@ -39,8 +38,8 @@ export class CompetitionEntity {
   private textId?: string;
   private duration!: number;
   private reward!: Reward[];
-  private startTime!:number
-  private startedAt?:Date
+  private startTime!:number;
+  private startedAt?:Date;
 
   constructor(props: CompetitionProps) {
     this.id = props.id;
@@ -67,6 +66,9 @@ export class CompetitionEntity {
 
   getParticipants() {
     return this.participants;
+  }
+  getGroupId(){
+    return this.groupId;
   }
 
 
@@ -95,6 +97,9 @@ export class CompetitionEntity {
       throw new Error("Competition is not running");
     }
     this.status = "completed";
+  }
+  setStatus(status:string){
+    this.status=status as CompetitionStatus;
   }
 
 

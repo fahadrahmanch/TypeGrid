@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
     House,
     BookOpen,
@@ -9,27 +9,27 @@ import {
     Bell,
     User,
     // Gamepad2
-} from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import logo from '../../../assets/Icon/logo.png';
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../../../assets/Icon/logo.png";
 const CompanyUserNavbar: React.FC = () => {
     const location = useLocation();
 
     // Mapping for navigation items
     const navItems = [
-        { name: 'Dashboard', icon: House, path: '/company/user/dashboard' },
-        { name: 'Lessons', icon: BookOpen, path: '/company/user/lessons' },
-        { name: 'Contests', icon: Trophy, path: '/company/user/my-contests' },
-        { name: 'Challenges', icon: Swords, path: '/company/user/my-challenges', badge: true },
-        { name: 'Keyboard', icon: Keyboard, path: '/company/user/my-keyboard' },
-        { name: 'Practice', icon: Sparkles, path: '/company/user/my-practice' },
-        { name: 'Notifications', icon: Bell, path: '/company/user/my-notifications' },
-        { name: 'Profile', icon: User, path: '/company-user/profile' },
+        { name: "Dashboard", icon: House, path: "/company/user/dashboard" },
+        { name: "Lessons", icon: BookOpen, path: "/company/user/lessons" },
+        { name: "Contests", icon: Trophy, path: "/company/user/my-contests" },
+        { name: "Challenges", icon: Swords, path: "/company/user/my-challenges", badge: true },
+        { name: "Keyboard", icon: Keyboard, path: "/company/user/my-keyboard" },
+        { name: "Practice", icon: Sparkles, path: "/company/user/my-practice" },
+        { name: "Notifications", icon: Bell, path: "/company/user/my-notifications" },
+        { name: "Profile", icon: User, path: "/company-user/profile" },
     ];
 
     const handleLogout = () => {
         // Implement logout logic here
-        console.log('User logged out');
+        console.log("User logged out");
     };
 
     return (
@@ -45,7 +45,7 @@ const CompanyUserNavbar: React.FC = () => {
                 <div className="flex flex-col">
                     <p
                         className="text-2xl font-bold text-gray-900 tracking-wide leading-none"
-                        style={{ fontFamily: 'Jaini, sans-serif' }}
+                        style={{ fontFamily: "Jaini, sans-serif" }}
                     >
                         TypeGrid
                     </p>

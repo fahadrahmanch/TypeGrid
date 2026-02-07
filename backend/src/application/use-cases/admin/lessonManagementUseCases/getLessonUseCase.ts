@@ -1,6 +1,5 @@
 import { IGetLessonUseCase } from "../../interfaces/admin/IGetLessonUseCase";
 import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
-import { LessonEntity } from "../../../../domain/entities/LessonEntity";
 import { LessonDTO, mapLessonToDTO } from "../../../DTOs/admin/lessonManagement.dto";
 
 export class getLessonUseCase implements IGetLessonUseCase {

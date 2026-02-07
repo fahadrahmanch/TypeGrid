@@ -3,7 +3,15 @@ import { RemoveMemberGroupPlayGroupUseCase } from "../../application/use-cases/u
 import { BaseRepository } from "../../infrastructure/db/base/BaseRepository";
 import { Group } from "../../infrastructure/db/models/user/groupSchema";
 import { User } from "../../infrastructure/db/models/user/userSchema";
-const baseRepoGroup=new BaseRepository(Group)
-const baseRepoUser=new BaseRepository(User)
-const removeMemberUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser)
-export const injectGroupSocketController =new GroupSocketController(removeMemberUseCase);
+import { ValidateGroupPlayMemberUseCase } from "../../application/use-cases/user/group-play/ValidateGroupPlayMemberUseCase";
+import { Competition } from "../../infrastructure/db/models/user/competitionSchema";
+import { finishGroupPlayUseCase } from "../../application/use-cases/user/group-play/finishGroupPlayUseCase";
+import { Result } from "../../infrastructure/db/models/user/resultSchema";
+const baseRepoCompetion=new BaseRepository(Competition);
+const baseRepoGroup=new BaseRepository(Group);
+const baseRepoUser=new BaseRepository(User);
+const baseRepoResult=new BaseRepository(Result);
+const removeMemberUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser);
+const validateGroupPlayMemberUseCase=new ValidateGroupPlayMemberUseCase(baseRepoGroup,baseRepoCompetion);
+const FinishGroupPlayUseCase=new finishGroupPlayUseCase(baseRepoCompetion,baseRepoGroup,baseRepoResult);
+export const injectGroupSocketController =new GroupSocketController(removeMemberUseCase,validateGroupPlayMemberUseCase,FinishGroupPlayUseCase);

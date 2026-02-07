@@ -22,24 +22,22 @@ export class companyAdminRouter {
     
     //lessons
     this.router.post(Routes.COMPANY_ADMIN.CREATE_LESSON,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
-      console.log("in routet")  
       injectCompanyLessonManageController.createLesson(req,res);
-    } )
+    } );
     
     this.router.get(Routes.COMPANY_ADMIN.FETCH_LESSONS,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
       injectCompanyLessonManageController.getLessons(req,res);
-    })
+    });
     
     this.router.get(Routes.COMPANY_ADMIN.FETCH_LESSON_BY_ID,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
       injectCompanyLessonManageController.getLesson(req,res);
-    })
+    });
     this.router.put(Routes.COMPANY_ADMIN.UPDATE_LESSON,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
-      console.log("here in update lesson")
       injectCompanyLessonManageController.updateLesson(req,res);
-    })
+    });
     this.router.delete(Routes.COMPANY_ADMIN.DELETE_LESSON,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
       injectCompanyLessonManageController.deleteLesson(req,res);
-    })
+    });
     this.router.get(Routes.COMPANY_ADMIN.GET_COMPANY_USERS,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
       injectCompanyUserController.getUsers(req,res);
     });

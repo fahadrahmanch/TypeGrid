@@ -1,6 +1,4 @@
 import { Schema, model } from "mongoose";
-import { Company } from "./companySchema";
-
 const lessonAssignmentSchema = new Schema(
   {
     userId: {
@@ -32,7 +30,7 @@ const lessonAssignmentSchema = new Schema(
     },
     companyId:{
       type:Schema.Types.ObjectId,
-      ref:'Company',
+      ref:"Company",
       required:true
     },
 

@@ -22,15 +22,18 @@ const resultSchema = new Schema(
       required: true,
       index: true,
     },
-
-    wpm: Number,
-    accuracy: Number,
-    errors: Number,
-    timeTaken: Number,
-    rank: Number,
+result: {
+      wpm: { type: Number, required: true },
+      accuracy: { type: Number, required: true },
+      errors: { type: Number, required: true },
+      time: { type: Number, required: true },
+      rank: { type: Number, required: false},
+    },
+   
   },
   { timestamps: true }
 );
+
 
 resultSchema.index({ competitionId: 1, userId: 1 }, { unique: true });
 

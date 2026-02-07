@@ -189,14 +189,14 @@ export class CompanyLessonManageController {
   async assignLessons(req: AuthRequest, res: Response): Promise<void> {
     try {
       const users:string[]=req.body.users;
-      const userId=req.user?.userId
-      const deadline=req.body.deadline
+      const userId=req.user?.userId;
+      const deadline=req.body.deadline;
       const lessons:string[]=req.body.lessons;
       if (!users || users.length === 0 || !lessons || lessons.length === 0 || !userId) {
-      res.status(400).json(MESSAGES.ALL_FIELDS_REQUIRED)
-      return
+      res.status(400).json(MESSAGES.ALL_FIELDS_REQUIRED);
+      return;
       }
-      await this._assignLessonUseCase.execute(userId,users,lessons,deadline)
+      await this._assignLessonUseCase.execute(userId,users,lessons,deadline);
       res.status(200).json({
       success: true,
       message: "Lessons assigned successfully"

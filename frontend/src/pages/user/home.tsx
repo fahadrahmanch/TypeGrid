@@ -27,37 +27,39 @@ const Home: React.FC = () => {
 
   async function handleGameModeClick(mode: string) {
     // Implement navigation or other actions based on the selected game mode;
-    if(mode==='group'){
+    if(mode==="group"){
       try{
-        const response=await createGroupRoom()
+        const response=await createGroupRoom();
         if(response){
-          const joinLink=response?.data?.group?.joinLink
+          const joinLink=response?.data?.group?.joinLink;
           navigate(`/group-play/group/${joinLink}`);
         }
       }
       catch(error){
         toast.error("Failed to create group room. Please try again.");
-        console.log(error)
+        console.log(error);
       }
-    }else if(mode==='solo'){
+    }else if(mode==="solo"){
       try{
-      const response=await createSoloRoom()
-      const data=response?.data
+      const response=await createSoloRoom();
+      const data=response?.data;
        if (!data?._id) {
       throw new Error("Solo room ID missing");
     }
 
-      const soloId=data?._id
+      const soloId=data?._id;
       if(response){
         navigate( `/solo-play/${soloId}`,{
           state: { gameData: data },
-        } )
+        } );
       }
       }
       catch(error){
         toast.error("Failed to create solo room. Please try again.");
-        console.log(error)
+        console.log(error);
       }
+    }else if(mode==="practice"){
+      navigate("/typing/practice");
     }
    
     

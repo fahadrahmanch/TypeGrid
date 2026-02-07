@@ -5,11 +5,11 @@ export class ChangeGroupStatusUseCase implements IChangeGroupStatusUseCase{
         private _baseRepoGroup:IBaseRepository<any>
     ){}
     async changeGroupStatus(groupId:string,status:string){
-        const group=await this._baseRepoGroup.findById(groupId)
+        const group=await this._baseRepoGroup.findById(groupId);
         if(!group){
-            throw new Error("Group not found with the provided group ID.")
+            throw new Error("Group not found with the provided group ID.");
         }
-        group.status=status
-        await this._baseRepoGroup.update(group)
+        group.status=status;
+        await this._baseRepoGroup.update(group);
     }
 }

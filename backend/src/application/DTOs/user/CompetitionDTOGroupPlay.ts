@@ -19,6 +19,7 @@ export interface CompetitionDTOGroupPlay {
   groupId?: string;
   status: string;
   lesson: Lesson;
+  JoinLink?:string;
   duration: number;
   startedAt:string;
   startTime:number;
@@ -36,8 +37,9 @@ export const mapCompetitionToDTOGroupPlay = (
     groupId: competition.groupId?.toString(),
     startedAt:competition.startedAt,
     startTime:competition.startTime,
+    JoinLink:competition.joinLink,
     lesson: {
-  id: competition.lesson.id,
+  id: competition.lesson._id,
   text: competition.lesson.text,
   category: competition.lesson.category,
   level: competition.lesson.level,

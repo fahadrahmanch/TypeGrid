@@ -52,9 +52,9 @@ export const Routes = {
 
     CREATE_LESSON:"/lessons",
     FETCH_LESSONS:"/lessons",
-    FETCH_LESSON:'/lesson/:id',
-    UPDATE_LESSON:'/lesson/:id',
-    DELETE_LESSON:'/lesson/:id',
+    FETCH_LESSON:"/lesson/:id",
+    UPDATE_LESSON:"/lesson/:id",
+    DELETE_LESSON:"/lesson/:id",
     //patch
     UPDATE_USER_STATUS: "/users/:userId/status",
     
@@ -84,14 +84,14 @@ export const Routes = {
   EDIT_GROUP: "/group-play/groups/:groupId",
   JOIN_GROUP: "/group-play/groups/join/:joinLink",
   REMOVE_MEMBER: "/group-play/groups/:groupId/players/:playerId",
-  
+  NEW_GAME:"/group-play/:gameId/new-game",
   //play
   START_GAME: "/group-play/groups/:groupId/start",
   
 },
 SOLO_PLAY:{
-SOLO_CREATE:'/solo-play',
-RESULT_SOLO_PLAY:'/solo-result:gameId'
+SOLO_CREATE:"/solo-play",
+RESULT_SOLO_PLAY:"/solo-result:gameId"
 
 }
 
@@ -106,18 +106,18 @@ RESULT_SOLO_PLAY:'/solo-result:gameId'
    //lesson
    CREATE_LESSON:"/lesson",
    FETCH_LESSONS:"/lessons",
-   FETCH_LESSON:'/lesson/:id',
-   UPDATE_LESSON:'/lesson/:id',
-   DELETE_LESSON:'/lesson/:id',
-   FETCH_LESSON_BY_ID:'/lesson/:id',
-   GET_ADMIN_LESSONS:'/admin-lessons',
+   FETCH_LESSON:"/lesson/:id",
+   UPDATE_LESSON:"/lesson/:id",
+   DELETE_LESSON:"/lesson/:id",
+   FETCH_LESSON_BY_ID:"/lesson/:id",
+   GET_ADMIN_LESSONS:"/admin-lessons",
    ASSIGN_LESSON:"/lesson-assignments"
   },
 
   COMPANY_USER:{
-    MY_LESSONS:'/my-lessons',
-    ASSIGNED_LESSON_BY_ID: '/my-lessons/:assignmentId',
-    SAVE_LESSON_RESULT:'/lesson/:id/result',
+    MY_LESSONS:"/my-lessons",
+    ASSIGNED_LESSON_BY_ID: "/my-lessons/:assignmentId",
+    SAVE_LESSON_RESULT:"/lesson/:id/result",
   }
   
 };

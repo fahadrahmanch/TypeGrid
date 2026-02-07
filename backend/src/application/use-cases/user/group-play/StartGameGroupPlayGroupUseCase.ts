@@ -13,11 +13,11 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
 
     ){}
     async execute(groupId:string,startTime:number):Promise<CompetitionDTOGroupPlay>{
-     const group=await this._baseRepoGroup.findById(groupId)
+     const group=await this._baseRepoGroup.findById(groupId);
      if(!group){
-        throw new Error("Group not found")
+        throw new Error("Group not found");
      }
-     const participants=group.members.map((item:any)=>item.toString())
+     const participants=group.members.map((item:any)=>item.toString());
        const difficultyToLevelMap: Record<string, string> = {
     easy: "beginner",
     medium: "intermediate",
@@ -25,24 +25,24 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
   };
      const level=difficultyToLevelMap[group.difficulty];
     
-     const lessons=await this._baseRepoLesson.find({level,createdBy:"admin"})
+     const lessons=await this._baseRepoLesson.find({level,createdBy:"admin"});
     if (!lessons.length) {
       throw new Error("No lessons found for this level");
     }
-     let randomIndex=Math.floor(Math.random()*lessons.length)
-     let selectedLesson=mapLessonDTOforGroupPlay(lessons[randomIndex])
+     let randomIndex=Math.floor(Math.random()*lessons.length);
+     let selectedLesson=mapLessonDTOforGroupPlay(lessons[randomIndex]);
      const competitionEntity=new CompetitionEntity({
       type:"group",
-      mode:'global',
+      mode:"global",
       textId: selectedLesson.id,
       participants,
       groupId:group._id.toString(),
-      duration: 3000,
-      status:'ongoing',
+      duration: 100,
+      status:"ongoing",
       startTime,
-     })
-     const competitionObject=await competitionEntity.toObject()
-     const competition=await this._baseRepoCompetion.create(competitionObject)
+     });
+     const competitionObject=await competitionEntity.toObject();
+     const competition=await this._baseRepoCompetion.create(competitionObject);
      const populatedParticipants = await Promise.all(
       competitionEntity.getParticipants().map((item: any) =>
         this._baseRepoUser.findById(item)
@@ -52,9 +52,10 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
     ...competition,
     participants: populatedParticipants,
     lesson: selectedLesson,
+    JoinLink:group.joinLink,
     
   };
-  console.log("responseCompetition",responseCompetition)
+  
   return mapCompetitionToDTOGroupPlay(responseCompetition, group.ownerId);
     }
 

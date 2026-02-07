@@ -4,7 +4,6 @@ import { ITokenService } from "../../../domain/interfaces/services/ITokenService
 import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/IFindUserUseCase";
 import { IGetCompanyUseCase } from "../../../application/use-cases/interfaces/user/IGetCompanyUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
-import { CompanyReApplyDTO } from "../../../application/DTOs/user/CompanyReApplyDTO";
 import { ICompanyReApplyUseCase } from "../../../application/use-cases/interfaces/user/ICompanyReApplyUseCase";
 
 export class companyRequestController {
@@ -18,7 +17,6 @@ export class companyRequestController {
   async companyRequestDetails(req: Request, res: Response): Promise<void> {
     try {
       const token = req.cookies.refresh_user;
-
       if (!token) {
         throw new Error(MESSAGES.AUTH_TOKEN_MISSING);
       }

@@ -9,11 +9,11 @@ export class getAdminLessonsUseCase implements IGetAdminLessonsUseCase{
         private _lessonRepo: IBaseRepository<any>
     ){}
     async execute( ):Promise<CompanyLessonDTO[]>{
-        const lessons=await this._lessonRepo.find({createdBy:'admin'})
+        const lessons=await this._lessonRepo.find({createdBy:"admin"});
         if(!lessons){
             throw new Error(MESSAGES.LESSON_NOT_FOUND);
         }
         const lessonDTOs = lessons.map(mapLessonDTOforCompanyLesson);
-        return lessonDTOs
+        return lessonDTOs;
     }
 }   

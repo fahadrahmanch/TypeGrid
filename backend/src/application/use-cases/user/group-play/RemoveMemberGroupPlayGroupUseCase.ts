@@ -1,35 +1,35 @@
-import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository"
-import { IRemoveMemberGroupPlayGroupUseCase } from "../../interfaces/user/groupplayUseCases/IRemoveMemberGroupPlayGroupUseCase"
-import { GroupEntity } from "../../../../domain/entities/GroupEntity"
-import { groupDTO, mapGroupToDTO } from "../../../DTOs/user/groupDto"
+import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
+import { IRemoveMemberGroupPlayGroupUseCase } from "../../interfaces/user/groupplayUseCases/IRemoveMemberGroupPlayGroupUseCase";
+import { GroupEntity } from "../../../../domain/entities/GroupEntity";
+import { groupDTO, mapGroupToDTO } from "../../../DTOs/user/groupDto";
 export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlayGroupUseCase{
     constructor(
         private _baseRepoGroup:IBaseRepository<any>,
         private _baseRepoUser:IBaseRepository<any>
     ){}
     async execute(groupId:string,userId:string, reason: "KICK" | "LEAVE"):Promise<groupDTO>{
-      const group=await this._baseRepoGroup.findById(groupId)
+      const group=await this._baseRepoGroup.findById(groupId);
       if(!group){
-        throw new Error("Group not found")
+        throw new Error("Group not found");
       }
-      const user=await this._baseRepoUser.findById(userId)
+      const user=await this._baseRepoUser.findById(userId);
       if(!user){
-        throw new Error("User not found")
+        throw new Error("User not found");
       }
-      const groupEntity=new GroupEntity(group)
-      groupEntity.removeMember(userId)
+      const groupEntity=new GroupEntity(group);
+      groupEntity.removeMember(userId);
       if(group.ownerId.toString()==userId){
-        const pickOnehoster=groupEntity.getMembers().find((memberId:string)=>memberId!=userId)
+        const pickOnehoster=groupEntity.getMembers().find((memberId:string)=>memberId!=userId);
         if(pickOnehoster){
-          groupEntity.setOwner(pickOnehoster.toString())
+          groupEntity.setOwner(pickOnehoster.toString());
         }
        
       }
       if(reason==="KICK"){
-        groupEntity.kickUser(userId)
+        groupEntity.kickUser(userId);
       }
       
-      const kickedUsers=groupEntity.getKickedUsers()
+      const kickedUsers=groupEntity.getKickedUsers();
         const updatedGroup = await this._baseRepoGroup.update({
       _id: groupId,
       members: groupEntity.getMembers(),

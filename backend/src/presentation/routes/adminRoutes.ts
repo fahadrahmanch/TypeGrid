@@ -36,16 +36,16 @@ export class adminRouter {
     this.router.get(Routes.ADMIN.FETCH_LESSONS,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
       injectLessonManageController.getLessons(req,res);
     });
-  this.router.get(Routes.ADMIN.FETCH_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
-    injectLessonManageController.fetchLesson(req,res)
-  })
-  this.router.put(Routes.ADMIN.UPDATE_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
-    injectLessonManageController.updateLesson(req,res)
-  })
+  this.router.get(Routes.ADMIN.FETCH_LESSON,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
+    injectLessonManageController.fetchLesson(req,res);
+  });
+  this.router.put(Routes.ADMIN.UPDATE_LESSON,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
+    injectLessonManageController.updateLesson(req,res);
+  });
     
-  this.router.delete(Routes.ADMIN.DELETE_LESSON,checkRoleBasedMiddleware(['admin']),(req:Request,res:Response)=>{
-    injectLessonManageController.deleteLesson(req,res)
-  })
+  this.router.delete(Routes.ADMIN.DELETE_LESSON,checkRoleBasedMiddleware(["admin"]),(req:Request,res:Response)=>{
+    injectLessonManageController.deleteLesson(req,res);
+  });
   }
   getRouter() {
     return this.router;

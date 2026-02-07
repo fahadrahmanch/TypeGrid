@@ -13,15 +13,15 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase{
 
     }
     async execute(userId:string):Promise<CompetitionDTOSoloPlay>{
-    const user=await this._baseRepoUser.findById(userId)
+    const user=await this._baseRepoUser.findById(userId);
     if(!user){
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND)
+        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
     }
-    const Lessons=await this._baseRepoLesson.find()
+    const Lessons=await this._baseRepoLesson.find();
     if(!Lessons){
-        throw new Error(MESSAGES.LESSON_NOT_FOUND)
+        throw new Error(MESSAGES.LESSON_NOT_FOUND);
     }
-    const selectedLesson=Lessons[Math.floor(Math.random() * Lessons.length)]
+    const selectedLesson=Lessons[Math.floor(Math.random() * Lessons.length)];
     const competition=new CompetitionEntity({
         type:"solo",
         mode:"global",
@@ -30,9 +30,9 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase{
         duration:300,
         startTime:10,
         status:"ongoing",
-    })
-    const CompetitionObject=competition.toObject()
-    const createdCompetition=await this._baseRepoCompetion.create(CompetitionObject)
+    });
+    const CompetitionObject=competition.toObject();
+    const createdCompetition=await this._baseRepoCompetion.create(CompetitionObject);
      
     const populatedParticipants = await Promise.all(
       competition.getParticipants().map((item: any) =>
@@ -46,5 +46,5 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase{
     
   };
  
-    return mapCompetitionToDTOSoloPlay(responseCompetition)
+    return mapCompetitionToDTOSoloPlay(responseCompetition);
 }   }

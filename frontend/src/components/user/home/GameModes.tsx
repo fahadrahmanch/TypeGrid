@@ -1,9 +1,9 @@
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
-import GroupImg from '../../../assets/images/game-mode-group.png';
-import QuickImg from '../../../assets/images/game-mode-quick.png';
-import SoloImg from '../../../assets/images/game-mode-solo.png';
-import PracticeImg from '../../../assets/images/game-mode-practice.png';
+import React from "react";
+import { ArrowRight } from "lucide-react";
+import GroupImg from "../../../assets/images/game-mode-group.png";
+import QuickImg from "../../../assets/images/game-mode-quick.png";
+import SoloImg from "../../../assets/images/game-mode-solo.png";
+import PracticeImg from "../../../assets/images/game-mode-practice.png";
 
 interface GameModeProps {
   title: string;
@@ -16,7 +16,7 @@ interface GameModeProps {
 
 const GameModeCard: React.FC<GameModeProps> = ({ title, description, image,  mode, onClick }) => (
   <div onClick={() => onClick(mode)}
- className={`p-6 rounded-3xl bg-[#FFF5E0] hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-[180px] relative overflow-hidden`}>
+ className={"p-6 rounded-3xl bg-[#FFF5E0] hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-[180px] relative overflow-hidden"}>
     <div className="z-10 relative">
         <div className="flex items-center gap-2 mb-1">
             <h3 className="text-lg font-bold text-gray-900 group-hover:no-underline font-serif">{title}</h3>
@@ -33,31 +33,31 @@ const GameModeCard: React.FC<GameModeProps> = ({ title, description, image,  mod
 const GameModes: React.FC<{onGameModeClick: (mode: string) => void}> = ({ onGameModeClick }) => {
   const modes = [
     {
-      title: 'Group play',
-      description: 'Play against friends',
+      title: "Group play",
+      description: "Play against friends",
       image: GroupImg,
-      bg: 'bg-[#FFF8E7]', // Beige
+      bg: "bg-[#FFF8E7]", // Beige
       mode: "group",
     },
     {
-      title: 'Quick play',
-      description: 'Play against others',
+      title: "Quick play",
+      description: "Play against others",
       image: QuickImg,
-      bg: 'bg-[#FFF8E7]' ,// Beige
+      bg: "bg-[#FFF8E7]" ,// Beige
       mode: "quick",
     },
     {
-      title: 'Solo play',
-      description: 'Play on your own',
+      title: "Solo play",
+      description: "Play on your own",
       image: SoloImg,
-      bg: 'bg-[#FFF8E7]', // Beige
+      bg: "bg-[#FFF8E7]", // Beige
       mode: "solo",
     },
     {
-        title: 'Practice mode',
-        description: 'Practice Typing',
+        title: "Practice mode",
+        description: "Practice Typing",
         image: PracticeImg,
-        bg: 'bg-[#FFF8E7]', // Beige
+        bg: "bg-[#FFF8E7]", // Beige
         mode: "practice",
       },
   ];

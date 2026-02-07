@@ -9,18 +9,18 @@ export class editGroupUseCase implements IEditGroupPlayUseCase{
         private _baseRepoGroup:IBaseRepository<any>
     ){}
     async execute(groupId:string,difficulty:Difficulty,maxPlayers:number,userId:string):Promise<groupDTO>{
-        const group=await this._baseRepoGroup.findById(groupId)
+        const group=await this._baseRepoGroup.findById(groupId);
         if(!group){
-            throw new Error("Group not found with the provided group ID.")
+            throw new Error("Group not found with the provided group ID.");
         }
-        const groupEntity=new GroupEntity(group)
+        const groupEntity=new GroupEntity(group);
         if(groupEntity.getOwnerId()!=userId){
             throw new Error("Only host can edit group settings");
         }
-         groupEntity.changeDifficulty(difficulty )
-         groupEntity.changeMaximumPlayers(maxPlayers)
-         const groupObject=await groupEntity.toObject()
-         const updatedGroup= await this._baseRepoGroup.update(groupObject)
+         groupEntity.changeDifficulty(difficulty );
+         groupEntity.changeMaximumPlayers(maxPlayers);
+         const groupObject=await groupEntity.toObject();
+         const updatedGroup= await this._baseRepoGroup.update(groupObject);
          
          return mapGroupToDTO({
            ...updatedGroup,

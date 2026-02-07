@@ -16,8 +16,8 @@ export async function createSoloRoom() {
 }
 export async function saveSoloPlayResult(gameId:string,result:resultType){
     try{
-    return await userAPI.post(`/solo-result${gameId}`,result)
+    return await userAPI.post(`/solo-result${gameId}`,result);
     }catch(error){
-        console.log(error)
+        console.log(error);
     }
 }

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 // import { X } from 'lucide-react';
-import { titleValidation, LevelValidation, WpmValidation, accuracyValidation, CategoryValidation, textValidation } from '../../../validations/lessonValidation';
-import { useEffect } from 'react';
-import { getLessonById } from '../../../api/companyAdmin/lessons';
-import { toast } from 'react-toastify';
-import { updateLesson } from '../../../api/companyAdmin/lessons';
+import { titleValidation, LevelValidation, WpmValidation, accuracyValidation, CategoryValidation, textValidation } from "../../../validations/lessonValidation";
+import { useEffect } from "react";
+import { getLessonById } from "../../../api/companyAdmin/lessons";
+import { toast } from "react-toastify";
+import { updateLesson } from "../../../api/companyAdmin/lessons";
 interface EditLessonModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -21,7 +21,7 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(({ isOpen, on
         text: "",
         accuracy: "",
         category: "",
-    })
+    });
     const [error, setError] = useState({ title: "", level: "", wpm: "", accuracy: "", category: "", text: "" });
     useEffect(() => {
         async function fetchLesson() {
@@ -44,33 +44,33 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(({ isOpen, on
         }
         fetchLesson();
         
-    }, [lessonId, isOpen])
+    }, [lessonId, isOpen]);
     
     if (!isOpen) return null;
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        if (name == 'title') {
+        if (name == "title") {
             setError({ ...error, title: titleValidation(value) });
 
         }
         // if (name == 'description') {
         //     setError({ ...error, description: DescriptionValidation(value) });
         // }
-        if (name == 'level') {
+        if (name == "level") {
             setError({ ...error, level: LevelValidation(value) });
         }
-        if (name == 'wpm') {
+        if (name == "wpm") {
             setError({ ...error, wpm: WpmValidation(value) });
         }
-        if (name == 'accuracy') {
+        if (name == "accuracy") {
             setError({ ...error, accuracy: accuracyValidation(value) });
         }
-        if (name == 'category') {
+        if (name == "category") {
             setError({ ...error, category: CategoryValidation(value) });
         }
-        if (name == 'text') {
+        if (name == "text") {
             setError({ ...error, text: textValidation(value) });
         }
         setValues((prevValues) => ({
@@ -108,8 +108,8 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(({ isOpen, on
             return;
         }
         try {
-        const response=await updateLesson(lessonId,values)
-        const updatedLesson=response.data.lesson
+        const response=await updateLesson(lessonId,values);
+        const updatedLesson=response.data.lesson;
        setLessons((prev: any) =>
   prev.map((lesson: any) =>
     lesson.id === updatedLesson.id ? updatedLesson : lesson
@@ -117,12 +117,12 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(({ isOpen, on
 );
 
 
-        toast.success("Lesson updated successfully")
-        onClose()
+        toast.success("Lesson updated successfully");
+        onClose();
         }
         catch (error: any) {
-            console.log("error",error)
-            toast.error("Something went wrong")
+            console.log("error",error);
+            toast.error("Something went wrong");
         }
     }
 

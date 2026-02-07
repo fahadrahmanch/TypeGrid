@@ -36,5 +36,5 @@ export const mapLessonDTOforCompanyLesson=(lesson:any):CompanyLessonDTO=>{
   createdAt: lesson.createdAt,
     createdBy:lesson.createdBy,
    companyId: lesson.companyId ? lesson.companyId.toString() : undefined,
-  }
-}
+  };
+};

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 // import { X } from 'lucide-react';
-import { createLesson } from '../../../api/companyAdmin/lessons';
-import { titleValidation, LevelValidation, WpmValidation, accuracyValidation, CategoryValidation, textValidation } from '../../../validations/lessonValidation';
-import { toast } from 'react-toastify';
+import { createLesson } from "../../../api/companyAdmin/lessons";
+import { titleValidation, LevelValidation, WpmValidation, accuracyValidation, CategoryValidation, textValidation } from "../../../validations/lessonValidation";
+import { toast } from "react-toastify";
 interface CreateLessonModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -19,30 +19,30 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
         text: "",
         accuracy: "",
         category: "",
-    })
+    });
     const [error, setError] = useState({ title: "", level: "", wpm: "", accuracy: "", category: "", text: "" });
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        if(name=='title'){
+        if(name=="title"){
             setError({ ...error, title: titleValidation(value) });
             
         }
         // if(name=='description'){
         //     setError({ ...error, description: DescriptionValidation(value) });
         // }
-        if(name=='level'){
+        if(name=="level"){
             setError({ ...error, level: LevelValidation(value) });
         }
-        if(name=='wpm'){
+        if(name=="wpm"){
             setError({ ...error, wpm: WpmValidation(value) });
         }
-        if(name=='accuracy'){
+        if(name=="accuracy"){
             setError({ ...error, accuracy: accuracyValidation(value) });
         }
-        if(name=='category'){
+        if(name=="category"){
             setError({ ...error, category: CategoryValidation(value) });
         }
-        if(name=='text'){
+        if(name=="text"){
             setError({ ...error, text: textValidation(value) });
         }
         setValues((prevValues) => ({

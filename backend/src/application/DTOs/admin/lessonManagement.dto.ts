@@ -1,4 +1,3 @@
-import { create } from "domain";
 import { LessonCategory,LessonLevel } from "../../../domain/entities/LessonEntity";
 export interface LessonDTO {
   id: string;
@@ -28,5 +27,5 @@ export const mapLessonDTOforGroupPlay=(lesson:any):LessonDTO=>{
     text: lesson.text,
     category: lesson.category,
     level: lesson.level,
-  }
-}
+  };
+};

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React from "react";
+import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
 export interface User {
     id: number;
     name: string;
@@ -16,10 +16,10 @@ interface UserSelectionListProps {
 
 const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
-        case 'beginner': return 'bg-green-100 text-green-700';
-        case 'intermediate': return 'bg-yellow-100 text-yellow-700';
-        case 'advanced': return 'bg-red-100 text-red-700';
-        default: return 'bg-gray-100 text-gray-700';
+        case "beginner": return "bg-green-100 text-green-700";
+        case "intermediate": return "bg-yellow-100 text-yellow-700";
+        case "advanced": return "bg-red-100 text-red-700";
+        default: return "bg-gray-100 text-gray-700";
     }
 };
 
@@ -66,12 +66,12 @@ const UserSelectionList: React.FC<UserSelectionListProps> = ({ users, selectedUs
                         key={user._id}
                         onClick={() => onToggleUser(user._id)}
                         className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${selectedUsers.includes(user._id)
-                            ? 'border-blue-500 bg-blue-50/50'
-                            : 'border-transparent hover:bg-gray-50'
+                            ? "border-blue-500 bg-blue-50/50"
+                            : "border-transparent hover:bg-gray-50"
                             }`}
                     >
                         <div className="flex items-center gap-3">
-                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${selectedUsers.includes(user._id) ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${selectedUsers.includes(user._id) ? "border-blue-500 bg-blue-500" : "border-gray-300"
                                 }`}>
                                 {selectedUsers.includes(user._id) && <div className="w-2 h-2 bg-white rounded-full" />}
                             </div>

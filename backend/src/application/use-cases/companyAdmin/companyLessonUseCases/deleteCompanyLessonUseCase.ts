@@ -6,10 +6,10 @@ export class deleteCompanyLessonUseCase implements IDeleteCompanyLessonUseCase{
         private _baseRepoLesson:IBaseRepository<any>
     ){}
     async execute(lessonId: string): Promise<void> {
-        const lesson=await this._baseRepoLesson.findById(lessonId)
+        const lesson=await this._baseRepoLesson.findById(lessonId);
         if(!lesson){
             throw new Error(MESSAGES.COMPANY_LESSON_NOT_FOUND);
         }
-        await this._baseRepoLesson.delete(lessonId)
+        await this._baseRepoLesson.delete(lessonId);
     }
 }

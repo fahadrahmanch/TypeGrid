@@ -18,7 +18,6 @@ companyAPI.interceptors.request.use((config: any) => {
 companyAPI.interceptors.response.use(
   (res) => res,
   async (error) => {
-    console.log("error in axios",error)
     const orginalRequest = error.config;
     if (!error.response) {
       return Promise.reject(error);
