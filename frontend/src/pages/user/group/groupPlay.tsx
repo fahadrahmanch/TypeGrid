@@ -151,6 +151,7 @@ const GroupPlay: React.FC = () => {
   }, [gameData?._id, currentUser?._id]);
 
   // 3. Handle Component Unmount (Navigation/Back Button)
+
   useEffect(() => {
     return () => {
       if (gameIdRef.current && userIdRef.current) {
@@ -163,6 +164,7 @@ const GroupPlay: React.FC = () => {
     };
   }, []);
   //typing progress update from other players
+  
   useEffect(() => {
     const handler = (data: any) => {
 

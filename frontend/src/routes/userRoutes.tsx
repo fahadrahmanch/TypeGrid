@@ -20,6 +20,7 @@ import TypingPracticeArea from "../pages/user/practiceTyping/typingPracticeArea"
 import GroupLobby from "../pages/user/group/GroupLobby";
 import GroupPlay from "../pages/user/group/groupPlay";
 import SoloPlay from "../pages/user/solo/SoloPlay";
+import QuickPlay from "../pages/user/quick-play/quickPlay";
 export default function UserRoutes() {
   const location = useLocation();
   return (
@@ -53,7 +54,10 @@ export default function UserRoutes() {
       <Route path="/group-play/game/:joinLink" element={<ProtectRouteUser><GroupPlay /></ProtectRouteUser>} />
 
       <Route path="/solo-play/:soloId" element={<ProtectRouteUser><SoloPlay /></ProtectRouteUser>} />
+      
 
+      {/* quick play */}
+      <Route path="/quick-play" element={<ProtectRouteUser><QuickPlay /></ProtectRouteUser>} />
     </Routes>
   );
 }

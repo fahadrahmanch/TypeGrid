@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { createGroupRoom } from "../../api/user/group";
 import { toast } from "react-toastify";
 import { createSoloRoom } from "../../api/user/solo";
+import { createQuick } from "../../api/user/quick";
 
 
 const Home: React.FC = () => {
@@ -60,9 +61,21 @@ const Home: React.FC = () => {
       }
     }else if(mode==="practice"){
       navigate("/typing/practice");
+    }else if(mode==="quick"){
+       try {
+    const response = await createQuick();
+    if(!response){
+      throw new Error("Quick play  missing");
     }
-   
-    
+    navigate("/quick-play", {
+      state: { gameData: response.data.quickPlay },
+      replace: true,
+    });
+  } catch (error) {
+    toast.error("Failed to start quick play. Please try again.");
+    console.log(error);
+  }
+    }
   }
 
   return (

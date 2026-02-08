@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { startGroupPlayAPI } from "../../../api/user/group";
 import { socket } from "../../../socket";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 import { useRef } from "react";
 type Player = {
   userId: string;
