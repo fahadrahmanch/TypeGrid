@@ -6,7 +6,7 @@ import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddlewar
 import { injectTypingPracticeController } from "../DI/user";
 import { injectGroupPlayController } from "../DI/user"; 
 import { injectSoloPlayController } from "../DI/user";
-import { request } from "http";
+import { injectQuickPlayController } from "../DI/user";
 export class UserRoutes {
     private router:express.Router;
     constructor() {
@@ -76,7 +76,14 @@ export class UserRoutes {
             injectSoloPlayController.result(req,res);
     });
 
-    }
+    //quick play
+        this.router.post(Routes.USERS.QUICK_PLAY.START_QUICK_PLAY,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
+            injectQuickPlayController.startQuickPlay(req,res);
+        });
+        this.router.post(Routes.USERS.QUICK_PLAY.CHANGE_STATUS,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
+            injectQuickPlayController.changeStatus(req,res);
+        });
+        }
      getRouter(){
         return this.router;
     }

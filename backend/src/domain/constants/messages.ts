@@ -103,4 +103,11 @@ export const MESSAGES = {
   COMPANY_LESSON_UPDATED_SUCCESS: "Company lesson updated successfully",
  
 
+  //quick play
+  QUICK_PLAY_START_FAILED: "Failed to start quick play",
+  COMPETITION_NOT_FOUND: "Competition not found",
+  USER_NOT_PARTICIPANT: "User is not a participant in this competition",
+  STATUS_REQUIRED: "Status is required",
+
+
 };

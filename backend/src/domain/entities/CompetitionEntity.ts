@@ -52,7 +52,7 @@ export class CompetitionEntity {
     this.duration = props.duration;
     this.reward = props.reward ?? [];
     this.startTime=props?.startTime||10;
-     this.startedAt = props.startedAt ?? new Date();
+    this.startedAt = props.startedAt ?? new Date();
   }
 
 
@@ -73,12 +73,13 @@ export class CompetitionEntity {
 
 
   addParticipant(userId: string) {
+   
     if (this.participants.includes(userId)) {
       throw new Error("User already joined this competition");
     }
     this.participants.push(userId);
   }
-
+  
   startCompetition() {
     if (this.status !== "pending") {
       throw new Error("Competition cannot be started");
@@ -101,8 +102,9 @@ export class CompetitionEntity {
   setStatus(status:string){
     this.status=status as CompetitionStatus;
   }
-
-
+getMaxParticipantsInQuickPlay(){
+  return 5
+}
   toObject() {
     return {
       _id: this.id,

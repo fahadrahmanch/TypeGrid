@@ -93,6 +93,10 @@ SOLO_PLAY:{
 SOLO_CREATE:"/solo-play",
 RESULT_SOLO_PLAY:"/solo-result:gameId"
 
+},
+QUICK_PLAY:{
+START_QUICK_PLAY:"/quick-play/start",
+CHANGE_STATUS:"/quick-play/start/:competitionId",
 }
 
   },
@@ -119,5 +123,6 @@ RESULT_SOLO_PLAY:"/solo-result:gameId"
     ASSIGNED_LESSON_BY_ID: "/my-lessons/:assignmentId",
     SAVE_LESSON_RESULT:"/lesson/:id/result",
   }
+
   
 };

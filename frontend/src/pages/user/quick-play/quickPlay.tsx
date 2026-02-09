@@ -168,7 +168,6 @@ const QuickPlay: React.FC = () => {
     //user join 
     useEffect(() => {
         const handleUserJoin = (data: any) => {
-            console.log("user join", data);
 
             setLivePlayers((prev) => {
                 const exists = prev.some(
@@ -398,6 +397,7 @@ const QuickPlay: React.FC = () => {
                         accuracy,
                         errors,
                         typedLength: typedText.length,
+                        totalTyped,
                         status: "FINISHED",
                     });
                 }
@@ -425,6 +425,7 @@ const QuickPlay: React.FC = () => {
                 accuracy,
                 errors,
                 typedLength: typedText.length,
+                totalTyped,
                 status: "times-up",
             });
         }

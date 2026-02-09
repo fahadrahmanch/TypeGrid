@@ -37,7 +37,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       textId: selectedLesson.id,
       participants,
       groupId:group._id.toString(),
-      duration: 100,
+      duration: 300,
       status:"ongoing",
       startTime,
      });

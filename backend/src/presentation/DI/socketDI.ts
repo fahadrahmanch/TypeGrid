@@ -7,6 +7,9 @@ import { ValidateGroupPlayMemberUseCase } from "../../application/use-cases/user
 import { Competition } from "../../infrastructure/db/models/user/competitionSchema";
 import { finishGroupPlayUseCase } from "../../application/use-cases/user/group-play/finishGroupPlayUseCase";
 import { Result } from "../../infrastructure/db/models/user/resultSchema";
+import { quickSocketController } from "../../infrastructure/socket/quickSocketController";
+import { getJoinMemberUseCase } from "../../application/use-cases/user/quick-play/getJoinMemberUseCase";
+import { finishQuickPlayResultUseCase } from "../../application/use-cases/user/quick-play/finishQuickPlayUseCase";
 const baseRepoCompetion=new BaseRepository(Competition);
 const baseRepoGroup=new BaseRepository(Group);
 const baseRepoUser=new BaseRepository(User);
@@ -14,4 +17,7 @@ const baseRepoResult=new BaseRepository(Result);
 const removeMemberUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser);
 const validateGroupPlayMemberUseCase=new ValidateGroupPlayMemberUseCase(baseRepoGroup,baseRepoCompetion);
 const FinishGroupPlayUseCase=new finishGroupPlayUseCase(baseRepoCompetion,baseRepoGroup,baseRepoResult);
+const getJoinMemberUseCaseInstance=new getJoinMemberUseCase(baseRepoCompetion,baseRepoUser);
+const FinishQuickPlayResultUseCase=new finishQuickPlayResultUseCase(baseRepoCompetion,baseRepoResult)
+export const injectQuickSocketController=new quickSocketController(getJoinMemberUseCaseInstance,FinishQuickPlayResultUseCase);
 export const injectGroupSocketController =new GroupSocketController(removeMemberUseCase,validateGroupPlayMemberUseCase,FinishGroupPlayUseCase);
