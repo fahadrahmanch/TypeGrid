@@ -14,3 +14,5 @@ export async function fetchCompanyUsers() {
 export async function deleteCompanyUser(userId: string) {
   return companyAPI.delete(`/users/${userId}`);
 }
+
+
