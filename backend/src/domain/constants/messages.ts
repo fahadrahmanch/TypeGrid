@@ -110,4 +110,10 @@ export const MESSAGES = {
   STATUS_REQUIRED: "Status is required",
 
 
+
+  //company group
+  GROUP_DATA_REQUIRED: "Group data is required",
+  USER_NOT_PART_OF_ANY_COMPANY: "User is not part of any company",
+  GROUPS_FETCHED_SUCCESS: "Groups fetched successfully",
+  GROUP_NOT_FOUND: "Group not found",
 };

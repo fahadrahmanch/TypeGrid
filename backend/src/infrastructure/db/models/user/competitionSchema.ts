@@ -52,11 +52,18 @@ const competitionSchema = new Schema(
     },
 
     reward: [
-      {
-        rank: Number,
-        prize: String,
-      },
-    ],
+  {
+    rank: {
+      type: Number,  
+      required: false,
+    },
+    prize: {
+      type: Number,   
+      required: false,
+    },
+  },
+],
+
      startTime: {
       type: Number, // seconds
       required: true,

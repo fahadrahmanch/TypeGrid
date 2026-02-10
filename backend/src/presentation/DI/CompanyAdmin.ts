@@ -17,6 +17,10 @@ import { deleteCompanyLessonUseCase } from "../../application/use-cases/companyA
 import { getAdminLessonsUseCase } from "../../application/use-cases/companyAdmin/companyLessonUseCases/getAdminLessonUseCase";
 import { assignLessonUseCase } from "../../application/use-cases/companyAdmin/companyLessonUseCases/assignLessonUseCase";
 import { LessonAssignment } from "../../infrastructure/db/models/company/lesssonAssigmentSchema";
+import { CompanyGroupController } from "../controllers/company-admin/companyGroupController";
+import { createCompanyGroupUseCase } from "../../application/use-cases/companyAdmin/companyGroupUseCase/createCompanyGroupUseCase";
+import { CompanyGroup } from "../../infrastructure/db/models/company/companyGroupSchema";
+import { getCompanyGroupsUseCase } from "../../application/use-cases/companyAdmin/companyGroupUseCase/getCompanyGroupsUseCase";
 const baseRepoUser=new BaseRepository(User);
 const tokenService=new TokenService();
 const hashService = new HashService();
@@ -36,8 +40,11 @@ const GetCompanyLessonUseCase=new getCompanyLessonUseCase(baseRepoLesson,baseRep
 const UpdateCompanyLessonUseCase=new updateCompanyLessonUseCase(baseRepoLesson);
 const DeleteCompanyLessonUseCase=new deleteCompanyLessonUseCase(baseRepoLesson);
 const GetAdminLessonsUseCase=new getAdminLessonsUseCase(baseRepoLesson);
-
 const AssignLessonUseCase=new assignLessonUseCase(baseRepoAssignLesson,baseRepoUser,baseRepoLesson);
+const baseRepoCompanyGroup=new BaseRepository(CompanyGroup)
+const CreateCompanyGroupUseCase=new createCompanyGroupUseCase(baseRepoUser,baseRepoCompanyGroup)
+const GetCompanygroupUseCase=new getCompanyGroupsUseCase(baseRepoUser,baseRepoCompanyGroup)
+export const injectCompanyGroupController=new CompanyGroupController(CreateCompanyGroupUseCase,GetCompanygroupUseCase)
 export const injectCompanyLessonManageController=new CompanyLessonManageController(createCompanyLessonUseCase,GetCompanyLessonUseCase,GetLessonUseCase,UpdateCompanyLessonUseCase,DeleteCompanyLessonUseCase,GetAdminLessonsUseCase,AssignLessonUseCase);
 
 export const injectCompanyUserController=new CompanyUserController(AddUserUseCase,tokenService,FindUserUseCase,GetCompanyUsersUseCase,DeleteCompanyUserUseCase);

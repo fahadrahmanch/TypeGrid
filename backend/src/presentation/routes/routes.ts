@@ -115,7 +115,14 @@ CHANGE_STATUS:"/quick-play/start/:competitionId",
    DELETE_LESSON:"/lesson/:id",
    FETCH_LESSON_BY_ID:"/lesson/:id",
    GET_ADMIN_LESSONS:"/admin-lessons",
-   ASSIGN_LESSON:"/lesson-assignments"
+   ASSIGN_LESSON:"/lesson-assignments",
+
+
+
+   //companyGroup
+   CREATE_COMPANY_GROUP:"/company-groups",
+   GET_COMPANY_GROUPS:"/company-groups"
+
   },
 
   COMPANY_USER:{
