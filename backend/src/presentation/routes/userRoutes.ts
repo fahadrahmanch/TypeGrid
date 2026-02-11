@@ -26,7 +26,9 @@ export class UserRoutes {
         this.router.put(Routes.USERS.UPDATE_PROFILE,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectUserController.updateProfile(req,res);
         });
-
+        this.router.put(Routes.USERS.CHANGE_PASSWORD,checkRoleBasedMiddleware(['user','companyAdmin']),(req:Request,res:Response)=>{
+            injectUserController.changePassword(req,res)
+        })
         this.router.get(Routes.USERS.GET_COMPANY_STATUS,checkRoleBasedMiddleware(["user","companyAdmin"]),(req:Request,res:Response)=>{
             injectCompanyRequestController.getCompanyStatus(req,res);
         });

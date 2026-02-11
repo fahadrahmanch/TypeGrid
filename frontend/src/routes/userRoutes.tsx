@@ -21,6 +21,7 @@ import GroupLobby from "../pages/user/group/GroupLobby";
 import GroupPlay from "../pages/user/group/groupPlay";
 import SoloPlay from "../pages/user/solo/SoloPlay";
 import QuickPlay from "../pages/user/quick-play/quickPlay";
+import ChangePassword from "../pages/user/changePassword";
 export default function UserRoutes() {
   const location = useLocation();
   return (
@@ -32,10 +33,11 @@ export default function UserRoutes() {
       <Route path="forgot/password" element={<IsloggedUser><ForgotPassword /></IsloggedUser>} />
       <Route path="forgot/password/otp" element={<IsloggedUser><OtpForgotPassword /></IsloggedUser>} />
       <Route path="create/new/password" element={<IsloggedUser><NewPasswordForm /></IsloggedUser>} />
-
+       
       <Route path="/" element={<ProtectRouteUser><Home /></ProtectRouteUser>} />
       <Route path="profile" element={<ProtectRouteUser><Profile /></ProtectRouteUser>} />
       <Route path="profile/edit" element={<ProtectRouteUser><EditProfile /></ProtectRouteUser>} />
+      <Route path="/change/password" element={<ProtectRouteUser><ChangePassword /></ProtectRouteUser>} />
 
       {/* Subscription */}
       <Route path="subscription/company" element={<ProtectRouteUser><CompanySubscription /></ProtectRouteUser>} />
@@ -58,6 +60,8 @@ export default function UserRoutes() {
 
       {/* quick play */}
       <Route path="/quick-play" element={<ProtectRouteUser><QuickPlay /></ProtectRouteUser>} />
+
+      //au
     </Routes>
   );
 }

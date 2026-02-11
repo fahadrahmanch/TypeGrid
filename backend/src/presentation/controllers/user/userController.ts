@@ -3,11 +3,14 @@ import { ITokenService } from "../../../domain/interfaces/services/ITokenService
 import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/IFindUserUseCase";
 import { IUserUpdateUseCase } from "../../../application/use-cases/interfaces/user/IUserUpdateUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { IChangePasswordUseCase } from "../../../application/use-cases/interfaces/user/IChangePasswordUseCase";
 export class userController {
   constructor(
     private _tokenService: ITokenService,
     private _findUserUseCase: IFindUserUseCase,
-    private _updateUserUseCase: IUserUpdateUseCase
+    private _updateUserUseCase: IUserUpdateUseCase,
+    private _changePasswordUseCase: IChangePasswordUseCase
   ) {}
 
   async getProfile(req: Request, res: Response) {
@@ -50,6 +53,30 @@ export class userController {
       });
     } catch (error) {
       console.log("error ", error);
+    }
+  }
+
+  async changePassword(req:AuthRequest,res:Response):Promise<void>{
+    try{
+    const userId=req.user?.userId;
+    const data=req.body
+    if(!userId){
+      throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+    }
+    console.log("req.body",req.body)
+    console.log("user daata",userId,data)
+    await this._changePasswordUseCase.execute(userId, data.currentPassword, data.newPassword);
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+    }
+    catch(error:any){
+      console.log(error)
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
   }
 }

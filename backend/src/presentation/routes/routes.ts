@@ -65,7 +65,7 @@ export const Routes = {
     // profile
     GET_PROFILE: "/me",
     UPDATE_PROFILE: "/me",
-
+    CHANGE_PASSWORD:"/password",
     // company subscription
     VERIFY_COMPANY: "/company/verification",
     RE_VERIFY_COMPANY: "/company/verification/retry",
@@ -74,7 +74,7 @@ export const Routes = {
     // typing practice
     START_TYPING_PRACTICE: "/typing/practice",
     GET_LESSON_BY_ID: "/typing/practice/:lessonId",
-
+    
 
 
     // group

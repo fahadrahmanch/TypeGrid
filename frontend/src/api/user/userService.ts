@@ -51,6 +51,12 @@ export async function getCompanyStatusApi() {
   return userAPI.get("/company/status");
 }
 
+// change password
+export async function changePasswordApi(data: any) {
+  return userAPI.put("/password", data);
+}
+
+
 
 
 

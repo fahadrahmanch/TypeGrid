@@ -31,6 +31,8 @@ import { newGroupPlayUseCase } from "../../application/use-cases/user/group-play
 import { QuickPlayController } from "../controllers/user/quickPlayController";
 import { startQuickPlayUseCase } from "../../application/use-cases/user/quick-play/startQuickPlayUseCase";
 import { changeStatusUseCase } from "../../application/use-cases/user/quick-play/changeStatusUseCase";
+import { ChangePasswordUseCase } from "../../application/use-cases/user/changePasswordUseCase";
+import { HashService } from "../../application/services/hashService";
 const baseRepoCompany=new BaseRepository(Company);
 const baseRepoUser=new BaseRepository<AuthUserEntity>(User);
 const CompanyRequestUseCase=new companyRequestUseCase(baseRepoCompany,baseRepoUser);
@@ -39,7 +41,8 @@ const FindUserUseCase=new findUserUseCase(baseRepoUser);
 const GetCompanyUseCase=new getCompanyUseCase(baseRepoCompany);
 const CompanyReApplyUseCase=new companyReApplyUseCase(baseRepoCompany,baseRepoUser);
 const UpdateUserUseCase=new updateUserUseCase(baseRepoUser);
-
+const hashService=new HashService();
+const changePasswordUseCase=new ChangePasswordUseCase(baseRepoUser,hashService);
 // typing practice  dependencies
 const baseRepoLesson=new BaseRepository(Lesson);
 const GetPracticeTypingContentUseCase=new getPracticeTypingContentUseCase(baseRepoLesson);
@@ -72,4 +75,4 @@ export const injectGroupPlayController=new groupPlayController(createGroupPlayRo
 
 export const injectTypingPracticeController=new typingPracticeController(GetPracticeTypingContentUseCase);
 export const injectCompanyRequestController=new companyRequestController(CompanyRequestUseCase,tokenService,FindUserUseCase,GetCompanyUseCase,CompanyReApplyUseCase);
-export const injectUserController =new userController(tokenService,FindUserUseCase,UpdateUserUseCase);
+export const injectUserController =new userController(tokenService,FindUserUseCase,UpdateUserUseCase,changePasswordUseCase);
