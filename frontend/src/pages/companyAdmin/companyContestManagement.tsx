@@ -1,61 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
 import ContestStatsCards from "../../components/companyAdmin/contest/ContestStatsCards";
 import ContestCard, { ContestProps } from "../../components/companyAdmin/contest/ContestCard";
 import CreateContestModal from "../../components/companyAdmin/contest/CreateContestModal";
 import { Plus } from "lucide-react";
+import { companyContests } from "../../api/companyAdmin/companyContextAPI";
 
-const dummyContests: ContestProps[] = [
-    {
-        id: "1",
-        title: "Speed Typing Challenge",
-        status: "Waiting",
-        participants: 12,
-        maxParticipants: 50,
-        duration: 5,
-        level: "Intermediate",
-        targetWpm: 60,
-        prize: "$500",
-        date: "1/25/2024",
-    },
-    {
-        id: "2",
-        title: "Advanced Typing Masters",
-        status: "Active",
-        participants: 8,
-        maxParticipants: 20,
-        duration: 10,
-        level: "Advanced",
-        targetWpm: 80,
-        prize: "$500",
-        type: "Group",
-    },
-    {
-        id: "3",
-        title: "Speed Typing Challenge",
-        status: "Upcoming",
-        participants: 12,
-        maxParticipants: 50,
-        duration: 5,
-        level: "Intermediate",
-        targetWpm: 60,
-        prize: "$500",
-    },
-    {
-        id: "4",
-        title: "Speed Typing Challenge",
-        status: "Completed",
-        participants: 50,
-        maxParticipants: 50,
-        duration: 5,
-        level: "Intermediate",
-        targetWpm: 60,
-        prize: "$500",
-    },
-];
 
 const CompanyContestManagement: React.FC = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [contests, setContests] = useState<ContestProps[]>([]);
+
+    useEffect(() => {
+        const fetchContests = async () => {
+            const response = await companyContests();
+            const data = response.data.data;
+            setContests(data);
+        };
+        fetchContests();
+    }, []);
 
     return (
         <div className="flex min-h-screen bg-[#FFF8EA]">
@@ -92,8 +55,9 @@ const CompanyContestManagement: React.FC = () => {
 
                     {/* Contest Cards List */}
                     <div className="flex flex-col gap-6">
-                        {dummyContests.map((contest) => (
-                            <ContestCard key={contest.id} {...contest} />
+                        {contests.map((contest: any) => (
+
+                            <ContestCard key={contest._id} title={contest.title} status={contest.status} participants={contest.participants} maxParticipants={contest.maxParticipants} duration={contest.duration} level={contest.difficulty} targetWpm={contest.targetWpm} prize={contest.prize} rewards={contest.rewards} date={contest.date} id={contest._id} type={contest.contestMode} />
                         ))}
                     </div>
                 </div>

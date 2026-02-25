@@ -15,6 +15,9 @@ import CompanyContestManagement from "../pages/companyAdmin/companyContestManage
 import CompanyContestLobby from "../pages/companyAdmin/CompanyContestLobby";
 import GroupsManagement from "../pages/companyAdmin/groupsManagement";
 import GroupDetails from "../pages/companyAdmin/GroupDetails";
+import Contests from "../pages/companyUser/Contests";
+import ContestLobby from "../pages/companyUser/contestLobby";
+import ContestArea from "../pages/companyUser/contestArea";
 export default function CompanyRoutes() {
   return (
     <Routes>
@@ -37,7 +40,9 @@ export default function CompanyRoutes() {
           </ProtectRouteCompany>
         }
       />
-
+      <Route path="user/contests" element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]}><Contests /></ProtectRouteCompany>} />
+      <Route path="user/contests/lobby/:contestId" element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]}><ContestLobby /></ProtectRouteCompany>} />
+      <Route path="user/contest/:contestId" element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]}><ContestArea /></ProtectRouteCompany>} />
 
 
       <Route path="admin/lessons" element={<ProtectRouteCompany allowedRoles={["companyAdmin"]}><Lessons /></ProtectRouteCompany>} />

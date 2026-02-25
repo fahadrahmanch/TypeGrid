@@ -232,7 +232,7 @@ const EditProfileDiv1: React.FC = () => {
 
             {/* Change Password Card */}
             <div className="bg-[#FAF3E6] rounded-2xl p-6 shadow-sm border border-[#F5EBD8] relative overflow-hidden group hover:shadow-md transition-all duration-300">
-              <div className="flex items-center justify-between cursor-pointer" onClick={() => navigate('/change/password')}>
+              <div className="flex items-center justify-between cursor-pointer" onClick={() => navigate("/change/password")}>
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-white rounded-full group-hover:bg-[#96705B]/10 transition-colors">
                     <Lock className="w-6 h-6 text-[#96705B]" />
@@ -269,7 +269,7 @@ const EditProfileDiv1: React.FC = () => {
                       name="name"
                       onChange={handleChange}
                       value={user.name}
-                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.name ? 'border-red-400 ring-2 ring-red-400' : ''}`}
+                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.name ? "border-red-400 ring-2 ring-red-400" : ""}`}
                       placeholder="Enter your name"
                     />
                     {error.name && <p className="text-red-500 text-xs mt-1">{error.name}</p>}
@@ -284,7 +284,7 @@ const EditProfileDiv1: React.FC = () => {
                       name="number"
                       onChange={handleChange}
                       value={user.number}
-                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.number ? 'border-red-400 ring-2 ring-red-400' : ''}`}
+                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.number ? "border-red-400 ring-2 ring-red-400" : ""}`}
                       placeholder="Enter your number"
                     />
                     {error.number && <p className="text-red-500 text-xs mt-1">{error.number}</p>}
@@ -314,7 +314,7 @@ const EditProfileDiv1: React.FC = () => {
                     name="bio"
                     value={user.bio || ""}
                     onChange={handleChange}
-                    className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none resize-none transition-all ${error.bio ? 'border-red-400 ring-2 ring-red-400' : ''}`}
+                    className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none resize-none transition-all ${error.bio ? "border-red-400 ring-2 ring-red-400" : ""}`}
                     placeholder="Tell us a little about yourself..."
                   ></textarea>
                   {error.bio && <p className="text-red-500 text-xs mt-1">{error.bio}</p>}
@@ -331,7 +331,7 @@ const EditProfileDiv1: React.FC = () => {
                       name="age"
                       onChange={handleChange}
                       value={user.age}
-                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.age ? 'border-red-400 ring-2 ring-red-400' : ''}`}
+                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.age ? "border-red-400 ring-2 ring-red-400" : ""}`}
                       placeholder="Your age"
                     />
                     {error.age && <p className="text-red-500 text-xs mt-1">{error.age}</p>}
@@ -365,7 +365,7 @@ const EditProfileDiv1: React.FC = () => {
               <div className="mt-12 flex flex-col md:flex-row items-center justify-end gap-4 border-t border-[#F5EBD8] pt-8">
                 <button
                   type="button"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate("/")}
                   className="px-8 py-3 bg-[#E5DCD0] text-[#4A4A4A] border border-transparent rounded-xl font-semibold hover:bg-[#D6C8B8] transition w-full md:w-auto flex items-center justify-center gap-2"
                 >
                   <X className="w-4 h-4" />
@@ -374,7 +374,7 @@ const EditProfileDiv1: React.FC = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className={`px-8 py-3 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 w-full md:w-auto flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className={`px-8 py-3 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 w-full md:w-auto flex items-center justify-center gap-2 ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
                 >
                   {isLoading ? (
                     <>

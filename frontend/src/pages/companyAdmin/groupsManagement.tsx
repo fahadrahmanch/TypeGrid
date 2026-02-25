@@ -61,13 +61,13 @@ const GroupsManagement: React.FC = () => {
 
                     {/* Tabs */}
                     <div className="flex items-center gap-2">
-                        {['All Groups', 'Beginner', 'Intermediate', 'Advanced'].map(tab => (
+                        {["All Groups", "Beginner", "Intermediate", "Advanced"].map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
                                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${activeTab === tab
-                                        ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
-                                        : 'bg-white text-gray-600 hover:bg-gray-50 border border-transparent'
+                                        ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                                        : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
                                     }`}
                             >
                                 {tab}

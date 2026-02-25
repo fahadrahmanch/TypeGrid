@@ -19,7 +19,7 @@ const StatCard: React.FC<StatProps> = ({
             <span className="text-sm font-medium text-gray-500">{label}</span>
             <span className="text-3xl font-bold text-gray-900 font-sans">{value}</span>
         </div>
-        <div className={`p-3 rounded-xl bg-opacity-10 ${iconColor.replace('text-', 'bg-')}`}>
+        <div className={`p-3 rounded-xl bg-opacity-10 ${iconColor.replace("text-", "bg-")}`}>
             <Icon className={`w-6 h-6 ${iconColor}`} />
         </div>
     </div>

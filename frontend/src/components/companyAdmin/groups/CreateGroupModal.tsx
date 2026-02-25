@@ -20,7 +20,6 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ isOpen, onClose }) 
     // Manual Selection State
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     
-    console.log("values",groupName,groupType,selectedUsers);
      
     const handleUserSelect = (id: string) => {
         setSelectedUsers((prev) =>
@@ -31,7 +30,6 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ isOpen, onClose }) 
     useEffect(() => {
         const fetchUsers = async () => {
             const response = await fetchCompanyUsers();
-            console.log("Response", response.data.data);
             setUsers(response.data.data);
         };
         fetchUsers();
@@ -48,7 +46,6 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ isOpen, onClose }) 
             // minAccuracy,
             selectedUsers
         });
-        console.log("Response", response.data);
         }
         catch(error){
             console.log("Error", error);

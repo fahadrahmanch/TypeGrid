@@ -25,9 +25,9 @@ export function joinGroupAPI(joinLink: string) {
 export function removePlayerAPI(groupId?:string,playerId?:string){
   return userAPI.delete(`/group-play/groups/${groupId}/players/${playerId}`);
 }
-export function startGroupPlayAPI(gameId:string,startTime:number){
+export function startGroupPlayAPI(gameId:string,countDown:number){
   return userAPI.post(`/group-play/groups/${gameId}/start`,{
-    startTime
+    countDown
   });
 }
 

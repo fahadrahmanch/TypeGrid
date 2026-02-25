@@ -1,6 +1,6 @@
 import { getGroupRoomDetails } from "../../../api/user/group";
 import Navbar from "../../../components/user/Navbar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import LoadingPage from "../../../components/common/LoadingPage";
 import { editGroupAPI } from "../../../api/user/group";
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { startGroupPlayAPI } from "../../../api/user/group";
 import { socket } from "../../../socket";
 import { useSelector } from "react-redux";
-import { useRef } from "react";
+import { FaWhatsapp, FaTelegram, FaShareAlt, FaTimes } from "react-icons/fa";
 type Player = {
   userId: string;
   name: string;
@@ -42,82 +42,83 @@ const GroupLobby: React.FC = () => {
   const isHost = group?.currentUserId === group?.ownerId;
   const inviteLink = `http://localhost:5173/group-play/group/${group?.joinLink}`;
   const [isBlurred, setIsBlurred] = useState(true);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const user = useSelector((state: any) => state.userAuth.user);
-  const [startTime, setStartTime] = useState<string>();
+  const [countDown, setCountDown] = useState<string>();
   const isStartingGameRef = useRef(false);
 
   const navigate = useNavigate();
-useEffect(() => {
+  useEffect(() => {
     if (!group?.id) return;
-    
+
     socket.emit("join-room", {
       groupId: group.id,
       userId: user._id,
     });
 
     return () => {
-         if (isStartingGameRef.current) {
-      return;
-    }
-     
+      if (isStartingGameRef.current) {
+        return;
+      }
+
       socket.emit("leave-group", {
         groupId: group.id,
         userId: user._id,
       });
-      
+
     };
   }, [group?.id, user._id]);
 
 
 
-useEffect(() => {
-  const handleUserLeave = ({
-    members,
-    newHostId,
-  }: {
-    members: Player[];
-    newHostId: string;
-  }) => {
+  useEffect(() => {
+    const handleUserLeave = ({
+      members,
+      newHostId,
+    }: {
+      members: Player[];
+      newHostId: string;
+    }) => {
 
-    const updatedMembers = [...members];
+      const updatedMembers = [...members];
 
-    setPlayers(updatedMembers);
+      setPlayers(updatedMembers);
 
-    setGroup((prev) =>
-      prev
-        ? {
+      setGroup((prev) =>
+        prev
+          ? {
             ...prev,
             ownerId: newHostId,
             members: updatedMembers,
           }
-        : prev
-    );
-  };
+          : prev
+      );
+    };
 
-  socket.on("player-left", handleUserLeave);
+    socket.on("player-left", handleUserLeave);
 
-  return () => {
-    socket.off("player-left", handleUserLeave);
-  };
-}, []);
+    return () => {
+      socket.off("player-left", handleUserLeave);
+    };
+  }, []);
 
 
-useEffect(() => {
-  const handler = (data: any) => {
-    isStartingGameRef.current = true; 
+  useEffect(() => {
+    const handler = (data: any) => {
+      isStartingGameRef.current = true;
 
-    navigate(`/group-play/game/${joinLink}`, {
-      state: { gameData: data.competition },
-      replace: true,
-    });
-  };
+      navigate(`/group-play/game/${joinLink}`, {
+        state: { gameData: data.competition },
+        replace: true,
+      });
+    };
 
-  socket.on("game-started", handler);
+    socket.on("game-started", handler);
 
-  return () => {
-    socket.off("game-started", handler);
-  };
-}, [navigate, joinLink]);
+    return () => {
+      socket.off("game-started", handler);
+    };
+  }, [navigate, joinLink]);
 
 
 
@@ -154,8 +155,8 @@ useEffect(() => {
 
       if (isRemoved) {
         toast.info("You have been removed from the group");
-        navigate("/",{ replace: true, });
-        
+        navigate("/", { replace: true, });
+
       } else {
         setGroup((prev: any) => ({
           ...prev,
@@ -195,7 +196,7 @@ useEffect(() => {
 
   useEffect(() => {
     async function fetchGroupDetails() {
- 
+
 
       try {
         await joinGroupAPI(joinLink!);
@@ -243,8 +244,8 @@ useEffect(() => {
   async function startGame() {
     try {
       if (!group?.id) return;
-       isStartingGameRef.current = true; 
-      await startGroupPlayAPI(group?.id, Number(startTime));
+      isStartingGameRef.current = true;
+      await startGroupPlayAPI(group?.id, Number(countDown));
 
     }
     catch (error: any) {
@@ -369,11 +370,11 @@ useEffect(() => {
 
               <input
                 type="text"
-                value={startTime}
+                value={countDown}
                 disabled={!isHost}
                 onChange={(e) => {
                   if (!isHost) return;
-                  setStartTime(e.target.value);
+                  setCountDown(e.target.value);
                 }}
                 className="w-full border rounded-lg px-4 py-3"
               />
@@ -424,7 +425,63 @@ useEffect(() => {
                 >
                   {isBlurred ? "SHOW" : "HIDE"}
                 </button>
+
+                {/* SHARE BUTTON */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowShareMenu(!showShareMenu)}
+                    className="px-6 py-2.5 text-base rounded-lg border bg-white flex items-center gap-2 hover:bg-gray-50 transition shadow-sm"
+                  >
+                    <FaShareAlt />
+                    Share
+                  </button>
+
+                  {/* SHARE MENU POPUP */}
+                  {showShareMenu && (
+                    <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-white border rounded-xl shadow-lg p-4 z-10 w-64 animate-fade-in-up">
+                      <div className="flex justify-between items-center mb-3 pb-2 border-b">
+                        <h4 className="text-sm font-semibold text-gray-700">Share via</h4>
+                        <button
+                          onClick={() => setShowShareMenu(false)}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2">
+                        <button
+                          onClick={() => {
+                            const text = `Join my TypeGrid group! Link: ${inviteLink}`;
+                            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                            window.open(url, "_blank");
+                            setShowShareMenu(false);
+                          }}
+                          className="w-full px-4 py-2.5 rounded-lg bg-[#25D366] text-white flex items-center gap-3 hover:bg-[#128C7E] transition"
+                        >
+                          <FaWhatsapp size={20} />
+                          WhatsApp
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const text = "Join my TypeGrid group!";
+                            const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`;
+                            window.open(url, "_blank");
+                            setShowShareMenu(false);
+                          }}
+                          className="w-full px-4 py-2.5 rounded-lg bg-[#0088cc] text-white flex items-center gap-3 hover:bg-[#007dbb] transition"
+                        >
+                          <FaTelegram size={20} />
+                          Telegram
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
+
+
 
               {group?.currentUserId === group?.ownerId ? (
                 <button

@@ -19,7 +19,7 @@ const TypingPracticeArea = () => {
   const navigate = useNavigate();
   const [Content, setContent] = useState<any>(null);
   const [typedText, setTypedText] = useState("");
-  const [startTime, setStartTime] = useState<number | null>(null);
+  const [countDown, setCountDown] = useState<number | null>(null);
   const [time, setTime] = useState(0);
   const [errors, setErrors] = useState(0);
   const [wpm, setWpm] = useState(0);
@@ -49,18 +49,18 @@ const TypingPracticeArea = () => {
 
 
   useEffect(() => {
-    if (!startTime || isFinished) return;
+    if (!countDown || isFinished) return;
 
     const interval = setInterval(() => {
-      const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      const elapsedTime = Math.floor((Date.now() - countDown) / 1000);
       setTime(elapsedTime);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, isFinished]);
+  }, [countDown, isFinished]);
 
   useEffect(() => {
-    if (!Content || !startTime) {
+    if (!Content || !countDown) {
       return;
     }
 
@@ -74,7 +74,7 @@ const TypingPracticeArea = () => {
     }
     setErrors(errorCount);
 
-    const elaspedTime = (Date.now() - startTime) / 1000;
+    const elaspedTime = (Date.now() - countDown) / 1000;
     const minutes = elaspedTime / 60;
     const correctChars = typedText.length - errorCount;
     const calculatedWpm = minutes > 0 ? Math.round((correctChars / 5) / minutes) : 0;
@@ -152,8 +152,8 @@ const TypingPracticeArea = () => {
         e.preventDefault();
       }
 
-      if (!startTime && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        setStartTime(Date.now());
+      if (!countDown && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        setCountDown(Date.now());
       }
 
       if (e.key === "Backspace") {
@@ -168,7 +168,7 @@ const TypingPracticeArea = () => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [Content, isFinished, startTime, typedText]); // Added dependencies
+  }, [Content, isFinished, countDown, typedText]); // Added dependencies
 
   // Check finish condition separately to avoid race conditions in keydown
   useEffect(() => {
@@ -180,7 +180,7 @@ const TypingPracticeArea = () => {
 
   const handleReset = () => {
     setTypedText("");
-    setStartTime(null);
+    setCountDown(null);
     setTime(0);
     setErrors(0);
     setWpm(0);
@@ -318,10 +318,10 @@ const TypingPracticeArea = () => {
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-baseline gap-3">
                 <h2 className="text-3xl font-extrabold text-gray-800 tracking-tight">Typing Practice</h2>
-                {!isFinished && !startTime && (
+                {!isFinished && !countDown && (
                   <span className="text-xs font-bold text-orange-500 uppercase tracking-wide animate-pulse">Waiting to start...</span>
                 )}
-                {startTime && !isFinished && (
+                {countDown && !isFinished && (
                   <span className="bg-green-100 text-green-700 text-[10px] uppercase font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span> Live
                   </span>

@@ -19,7 +19,7 @@ const CompanyUserNavbar: React.FC = () => {
     const navItems = [
         { name: "Dashboard", icon: House, path: "/company/user/dashboard" },
         { name: "Lessons", icon: BookOpen, path: "/company/user/lessons" },
-        { name: "Contests", icon: Trophy, path: "/company/user/my-contests" },
+        { name: "Contests", icon: Trophy, path: "/company/user/contests" },
         { name: "Challenges", icon: Swords, path: "/company/user/my-challenges", badge: true },
         { name: "Keyboard", icon: Keyboard, path: "/company/user/my-keyboard" },
         { name: "Practice", icon: Sparkles, path: "/company/user/my-practice" },
@@ -75,7 +75,7 @@ const CompanyUserNavbar: React.FC = () => {
                                     ${isActive ? "text-[#8B7355]" : "text-gray-400 group-hover:text-[#8B7355]"}
                                 `}
                             />
-                            <span>{item.label}</span>
+                            {/* <span>{item.label}</span> */}
                             {isActive && (
                                 <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#8B7355] rounded-full" />
                             )}

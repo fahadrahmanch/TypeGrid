@@ -58,7 +58,6 @@ const ChangePassword: React.FC = () => {
         if (currentPassErr || newPassErr || confirmPassErr) return;
 
         setIsLoading(true);
-        console.log(values.currentPassword,values.newPassword,values.confirmPassword)
         try {
             const response = await changePasswordApi({
                 currentPassword: values.currentPassword,
@@ -97,9 +96,9 @@ const ChangePassword: React.FC = () => {
         const hasValue = values.newPassword.length > 0;
 
         return (
-            <div className={`mt-2 transition-all duration-300 overflow-hidden ${hasValue ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className={`mt-2 transition-all duration-300 overflow-hidden ${hasValue ? "max-h-20 opacity-100" : "max-h-0 opacity-0"}`}>
                 <div className="text-xs space-y-1 pl-1">
-                    <div className={`flex items-center ${minLength ? 'text-green-500' : 'text-gray-400'}`}>
+                    <div className={`flex items-center ${minLength ? "text-green-500" : "text-gray-400"}`}>
                         {minLength ? <Check size={12} className="mr-1" /> : <div className="w-3 h-3 rounded-full border border-gray-300 mr-1"></div>}
                         <span>At least 6 characters</span>
                     </div>
@@ -140,7 +139,7 @@ const ChangePassword: React.FC = () => {
                                     </label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <Lock className={`h-5 w-5 ${errors.currentPassword ? 'text-red-400' : 'text-[#B99F8D] group-focus-within:text-[#9A8170]'} transition-colors duration-200`} />
+                                            <Lock className={`h-5 w-5 ${errors.currentPassword ? "text-red-400" : "text-[#B99F8D] group-focus-within:text-[#9A8170]"} transition-colors duration-200`} />
                                         </div>
                                         <input
                                             type={showCurrentPassword ? "text" : "password"}
@@ -173,7 +172,7 @@ const ChangePassword: React.FC = () => {
                                     </label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <Lock className={`h-5 w-5 ${errors.newPassword ? 'text-red-400' : 'text-[#B99F8D] group-focus-within:text-[#9A8170]'} transition-colors duration-200`} />
+                                            <Lock className={`h-5 w-5 ${errors.newPassword ? "text-red-400" : "text-[#B99F8D] group-focus-within:text-[#9A8170]"} transition-colors duration-200`} />
                                         </div>
                                         <input
                                             type={showNewPassword ? "text" : "password"}
@@ -207,7 +206,7 @@ const ChangePassword: React.FC = () => {
                                     </label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <Lock className={`h-5 w-5 ${errors.confirmPassword ? 'text-red-400' : 'text-[#B99F8D] group-focus-within:text-[#9A8170]'} transition-colors duration-200`} />
+                                            <Lock className={`h-5 w-5 ${errors.confirmPassword ? "text-red-400" : "text-[#B99F8D] group-focus-within:text-[#9A8170]"} transition-colors duration-200`} />
                                         </div>
                                         <input
                                             type={showConfirmPassword ? "text" : "password"}
@@ -258,7 +257,7 @@ const ChangePassword: React.FC = () => {
                                 <div className="text-center pt-2">
                                     <button
                                         type="button"
-                                        onClick={() => navigate('/')}
+                                        onClick={() => navigate("/")}
                                         className="text-[#8C7362] hover:text-[#6E5A4B] dark:text-gray-400 dark:hover:text-gray-200 text-sm font-medium transition-colors"
                                     >
                                         Cancel

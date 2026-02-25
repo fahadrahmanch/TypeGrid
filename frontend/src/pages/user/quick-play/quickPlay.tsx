@@ -64,7 +64,7 @@ const QuickPlay: React.FC = () => {
     const players = gameData?.participants;
     const [typedText, setTypedText] = useState("");
     const [isFinished, setIsfinished] = useState(false);
-    const [countdown, setCountdown] = useState<number>(gameData?.startTime || 10);
+    const [countdown, setCountdown] = useState<number>(gameData?.countDown || 10);
     const [remainingTime, setRemainingTime] = useState<number>(gameData?.duration || 300);
     const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
     const [hasError, setHasError] = useState(false);
@@ -103,7 +103,7 @@ const QuickPlay: React.FC = () => {
             userId: currentUser._id,
             typedLength: typedText.length,
             wpm,
-            status:'PLAYING',
+            status:"PLAYING",
             accuracy,
             errors,
         });
@@ -225,15 +225,15 @@ const QuickPlay: React.FC = () => {
         const interval = setInterval(() => {
             const now = Date.now();
             const elapsed = Math.floor((now - startTimesamp) / 1000);
-            if (elapsed < gameData.startTime) {
+            if (elapsed < gameData.countDown) {
                 setPhase("COUNTDOWN");
-                setCountdown(gameData.startTime - elapsed);
+                setCountdown(gameData.countDown - elapsed);
             }
-            else if (elapsed < gameData.startTime + gameData.duration) {
+            else if (elapsed < gameData.countDown + gameData.duration) {
                 setPhase("PLAY");
-                setRemainingTime(gameData.startTime + gameData.duration - elapsed);
+                setRemainingTime(gameData.countDown + gameData.duration - elapsed);
 
-                setElapsedTime(elapsed - gameData.startTime);
+                setElapsedTime(elapsed - gameData.countDown);
             }
             else {
                 setPhase("PLAY");
@@ -243,14 +243,14 @@ const QuickPlay: React.FC = () => {
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [gameData?.startedAt, gameData?.duration, gameData?.startTime, isFinished]);
+    }, [gameData?.startedAt, gameData?.duration, gameData?.countDown, isFinished]);
 
     const startGameAPI = async (competitionId: string) => {
         try {
             const response = await startGame(competitionId, "ongoing");
-            console.log(response)
+            console.log(response);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
 
@@ -258,7 +258,7 @@ const QuickPlay: React.FC = () => {
     useEffect(() => {
         if (phase === "PLAY" && !hasSentStart) {
             setHasSentStart(true);
-            startGameAPI(gameData._id)
+            startGameAPI(gameData._id);
         }
     }, [phase, hasSentStart, currentUser, gameData?._id]);
 
@@ -549,18 +549,18 @@ const QuickPlay: React.FC = () => {
                             {livePlayers.map((player) => (
                                 <div
                                     key={player._id}
-                                    className={`bg-white rounded-2xl p-4 shadow-sm border ${player.rank === 1 ? 'border-amber-200 shadow-amber-50 ring-1 ring-amber-100' :
-                                        player.rank === 2 ? 'border-gray-200 shadow-gray-50 ring-1 ring-gray-100' :
-                                            player.rank === 3 ? 'border-orange-200 shadow-orange-50 ring-1 ring-orange-100' :
-                                                'border-gray-100'
+                                    className={`bg-white rounded-2xl p-4 shadow-sm border ${player.rank === 1 ? "border-amber-200 shadow-amber-50 ring-1 ring-amber-100" :
+                                        player.rank === 2 ? "border-gray-200 shadow-gray-50 ring-1 ring-gray-100" :
+                                            player.rank === 3 ? "border-orange-200 shadow-orange-50 ring-1 ring-orange-100" :
+                                                "border-gray-100"
                                         } flex flex-col gap-4 relative overflow-hidden transition-all hover:shadow-md hover:-translate-y-1`}
                                 >
                                     {/* Rank Badge */}
                                     {player.rank && (
                                         <div className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm z-10
-                                    ${player.rank === 1 ? 'bg-gradient-to-br from-amber-400 to-amber-600' :
-                                                player.rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
-                                                    player.rank === 3 ? 'bg-gradient-to-br from-orange-400 to-orange-600' : 'bg-gray-100 text-gray-400'
+                                    ${player.rank === 1 ? "bg-gradient-to-br from-amber-400 to-amber-600" :
+                                                player.rank === 2 ? "bg-gradient-to-br from-gray-300 to-gray-500" :
+                                                    player.rank === 3 ? "bg-gradient-to-br from-orange-400 to-orange-600" : "bg-gray-100 text-gray-400"
                                             }`}
                                         >
                                             {player.rank}

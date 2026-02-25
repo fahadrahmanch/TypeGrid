@@ -47,7 +47,7 @@ interface GameData {
   status: string;
   duration: number;
   lesson: Lesson;
-  startTime: number;
+  countDown: number;
   startedAt: string;
   JoinLink?: string;
   participants: Participant[];
@@ -82,7 +82,7 @@ const GroupPlay: React.FC = () => {
   const [isFinished, setIsfinished] = useState(false);
 
   const user = useSelector((state: any) => state.userAuth.user);
-  const [countdown, setCountdown] = useState<number>(gameData?.startTime || 10);
+  const [countdown, setCountdown] = useState<number>(gameData?.countDown || 10);
   const [remainingTime, setRemainingTime] = useState<number>(gameData?.duration || 300);
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [hasError, setHasError] = useState(false);
@@ -238,15 +238,15 @@ const GroupPlay: React.FC = () => {
     const interval = setInterval(() => {
       const now = Date.now();
       const elapsed = Math.floor((now - startTimesamp) / 1000);
-      if (elapsed < gameData.startTime) {
+      if (elapsed < gameData.countDown) {
         setPhase("COUNTDOWN");
-        setCountdown(gameData.startTime - elapsed);
+        setCountdown(gameData.countDown - elapsed);
       }
-      else if (elapsed < gameData.startTime + gameData.duration) {
+      else if (elapsed < gameData.countDown + gameData.duration) {
         setPhase("PLAY");
-        setRemainingTime(gameData.startTime + gameData.duration - elapsed);
+        setRemainingTime(gameData.countDown + gameData.duration - elapsed);
 
-        setElapsedTime(elapsed - gameData.startTime);
+        setElapsedTime(elapsed - gameData.countDown);
       }
       else {
         setPhase("PLAY");
@@ -256,7 +256,7 @@ const GroupPlay: React.FC = () => {
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [gameData?.startedAt, gameData?.duration, gameData?.startTime, isFinished, finalResult]);
+  }, [gameData?.startedAt, gameData?.duration, gameData?.countDown, isFinished, finalResult]);
 
   //wpm
 
@@ -562,7 +562,7 @@ const GroupPlay: React.FC = () => {
     setFinalResult([]);
     setPhase("COUNTDOWN");
     setElapsedTime(0);
-    setCountdown(gameData.startTime);
+    setCountdown(gameData.countDown);
     setRemainingTime(gameData.duration);
 
   }, [gameData?._id]);

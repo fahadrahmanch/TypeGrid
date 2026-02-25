@@ -44,7 +44,7 @@ const AssignedLessonTypingArea: React.FC = () => {
     const [accuracy, setAccuracy] = useState(100);
     const [errors, setErrors] = useState(0);
     const [typedText, setTypedText] = useState("");
-    const [startTime, setStartTime] = useState<number | null>(null);
+    const [countDown, setCountDown] = useState<number | null>(null);
     const [assignedLesson, setAssignedLesson] = useState<AssignedLesson | null>(null);
     const [totalTyped, setTotalTyped] = useState(0);
     // const assignedData
@@ -64,9 +64,9 @@ const AssignedLessonTypingArea: React.FC = () => {
 
     //wpm calculation
     useEffect(() => {
-        if (!isActive || !startTime) return;
+        if (!isActive || !countDown) return;
 
-        const timeElapsedMin = (Date.now() - startTime) / 60000;
+        const timeElapsedMin = (Date.now() - countDown) / 60000;
         const correctChars = Math.max(0, totalTyped - errors);
 
         const calculatedWpm =
@@ -75,11 +75,11 @@ const AssignedLessonTypingArea: React.FC = () => {
                 : 0;
 
         setWpm(calculatedWpm);
-    }, [totalTyped, errors, isActive, startTime]);
+    }, [totalTyped, errors, isActive, countDown]);
 
 
     useEffect(() => {
-        if (!isActive || !startTime || isFinished) return;
+        if (!isActive || !countDown || isFinished) return;
 
         const interval = setInterval(() => {
             setTimeLeft(prev => {
@@ -94,7 +94,7 @@ const AssignedLessonTypingArea: React.FC = () => {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [isActive, startTime, isFinished]);
+    }, [isActive, countDown, isFinished]);
 
 
     // Finish Condition
@@ -112,7 +112,7 @@ const AssignedLessonTypingArea: React.FC = () => {
             if (!isActive && !isFinished && e.code === "Space") {
                 e.preventDefault();
                 setIsActive(true);
-                setStartTime(Date.now());
+                setCountDown(Date.now());
                 if (inputRef.current) {
                     inputRef.current.focus();
                 }
@@ -161,7 +161,7 @@ const AssignedLessonTypingArea: React.FC = () => {
         setErrors(0);
         setIsTimeUp(false);
         setTotalTyped(0);
-        setStartTime(null);
+        setCountDown(null);
         hasSavedRef.current = false;
         if (inputRef.current) {
             inputRef.current.value = "";
