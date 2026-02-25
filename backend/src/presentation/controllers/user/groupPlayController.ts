@@ -171,11 +171,11 @@ export class groupPlayController{
     async startGame(req:AuthRequest,res:Response):Promise<void>{
         try{
             const groupId=req.params.groupId;
-            const { startTime } = req.body;
+            const { countDown } = req.body;
             if(!groupId){
                 throw new Error("Group ID is required to start game.");
             }
-            const startCompetition=await this._startGameGroupPlayGroupUseCase.execute(groupId,startTime);
+            const startCompetition=await this._startGameGroupPlayGroupUseCase.execute(groupId,countDown);
             await this._changeGroupStatusUseCase.changeGroupStatus(groupId,"started");
 
             if(!startCompetition){

@@ -12,7 +12,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
        private _baseRepoUser:IBaseRepository<any>
 
     ){}
-    async execute(groupId:string,startTime:number):Promise<CompetitionDTOGroupPlay>{
+    async execute(groupId:string,countDown:number):Promise<CompetitionDTOGroupPlay>{
      const group=await this._baseRepoGroup.findById(groupId);
      if(!group){
         throw new Error("Group not found");
@@ -39,7 +39,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       groupId:group._id.toString(),
       duration: 300,
       status:"ongoing",
-      startTime,
+      countDown,
      });
      const competitionObject=await competitionEntity.toObject();
      const competition=await this._baseRepoCompetion.create(competitionObject);

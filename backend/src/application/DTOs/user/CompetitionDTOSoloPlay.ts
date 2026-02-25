@@ -21,7 +21,7 @@ export interface CompetitionDTOSoloPlay {
   lesson: Lesson;
   duration: number;
   startedAt:string;
-  startTime:number;
+  countDown:number;
 }
 export const mapCompetitionToDTOSoloPlay = (
   competition: any,
@@ -33,7 +33,7 @@ export const mapCompetitionToDTOSoloPlay = (
     status: competition.status,
     duration: competition.duration,
     startedAt:competition.startedAt,
-    startTime:competition.startTime,
+    countDown:competition.countDown,
     lesson: {
   id: competition.lesson.id,
   text: competition.lesson.text,

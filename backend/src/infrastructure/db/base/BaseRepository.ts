@@ -62,13 +62,25 @@ async findById(
   }
   async update(data: any): Promise<any> {
         const { _id, ...updateFields } = data;
-      
     return await this.model.findByIdAndUpdate(
       _id,
       { $set: updateFields },
       { new: true }
     ).lean<T>().exec();
   }
+
+
+
+async updateById(_id: string, updateQuery: any): Promise<T | null> {
+  return await this.model.findByIdAndUpdate(
+  _id,
+  { $set: updateQuery },
+  { new: true }
+);
+}
+
+
+
   async delete(_id:string):Promise<T|null>{
     return this.model.findByIdAndDelete(_id);
   }

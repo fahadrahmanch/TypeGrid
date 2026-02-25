@@ -12,7 +12,7 @@ export const checkGameEndService = async (gameId: string) => {
 };
 
 export const checkQuickGameEndService = async (gameId: string) => {
-  const key = `quick:game:${gameId}`
+  const key = `quick:game:${gameId}`;
   const allPlayers = await redis.hgetall(key);
   const players = Object.values(allPlayers).map((p) => JSON.parse(p));
   const isComplete = players.every((item) => {

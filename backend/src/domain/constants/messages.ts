@@ -116,4 +116,8 @@ export const MESSAGES = {
   USER_NOT_PART_OF_ANY_COMPANY: "User is not part of any company",
   GROUPS_FETCHED_SUCCESS: "Groups fetched successfully",
   GROUP_NOT_FOUND: "Group not found",
+
+  CONTEST_NOT_FOUND: "Contest not found",
+  CONTEST_JOINED_SUCCESS: "Contest joined successfully",
+  CONTEST_LEAVED_SUCCESS: "Contest leaved successfully",
 };

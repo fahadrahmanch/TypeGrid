@@ -121,7 +121,13 @@ CHANGE_STATUS:"/quick-play/start/:competitionId",
 
    //companyGroup
    CREATE_COMPANY_GROUP:"/company-groups",
-   GET_COMPANY_GROUPS:"/company-groups"
+   GET_COMPANY_GROUPS:"/company-groups",
+
+   //companyContest
+   CREATE_COMPANY_CONTEST:"/company/contest",
+   COMPANY_CONTESTS:"/company/contests",
+   CONTEST_STATUS:"/company/contest/:contestId/status",
+   
 
   },
 
@@ -129,6 +135,13 @@ CHANGE_STATUS:"/quick-play/start/:competitionId",
     MY_LESSONS:"/my-lessons",
     ASSIGNED_LESSON_BY_ID: "/my-lessons/:assignmentId",
     SAVE_LESSON_RESULT:"/lesson/:id/result",
+    
+    OPEN_CONTESTS:"/open-contests",
+  JOIN_OR_LEAVE_CONTEST:"/join-or-leave-contest/:contestId",
+  GROUP_CONTESTS:"/group-contests",
+  FETCH_CONTEST:"/company/contest/:contestId",
+  FETCH_CONTEST_DATA:"/company/contest-area/:contestId"
+
   }
 
   

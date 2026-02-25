@@ -22,7 +22,7 @@ export interface CompetitionDTOGroupPlay {
   JoinLink?:string;
   duration: number;
   startedAt:string;
-  startTime:number;
+  countDown:number;
 }
 export const mapCompetitionToDTOGroupPlay = (
   competition: any,
@@ -36,7 +36,7 @@ export const mapCompetitionToDTOGroupPlay = (
     duration: competition.duration,
     groupId: competition.groupId?.toString(),
     startedAt:competition.startedAt,
-    startTime:competition.startTime,
+    countDown:competition.countDown,
     JoinLink:competition.joinLink,
     lesson: {
   id: competition.lesson._id,

@@ -24,7 +24,7 @@ type CompetitionProps = {
   textId?: string;
   duration: number;
   reward?: Reward[];
-  startTime:number
+  countDown:number
   startedAt?: Date;
 };
 
@@ -38,7 +38,7 @@ export class CompetitionEntity {
   private textId?: string;
   private duration!: number;
   private reward!: Reward[];
-  private startTime!:number;
+  private countDown!:number;
   private startedAt?:Date;
 
   constructor(props: CompetitionProps) {
@@ -51,7 +51,7 @@ export class CompetitionEntity {
     this.textId = props.textId;
     this.duration = props.duration;
     this.reward = props.reward ?? [];
-    this.startTime=props?.startTime||10;
+    this.countDown=props?.countDown||10;
     this.startedAt = props.startedAt ?? new Date();
   }
 
@@ -103,7 +103,7 @@ export class CompetitionEntity {
     this.status=status as CompetitionStatus;
   }
 getMaxParticipantsInQuickPlay(){
-  return 5
+  return 5;
 }
   toObject() {
     return {
@@ -116,7 +116,7 @@ getMaxParticipantsInQuickPlay(){
       textId: this.textId,
       duration: this.duration,
       reward: this.reward,
-      startTime:this.startTime,
+      countDown:this.countDown,
       startedAt: this.startedAt 
     };
   }

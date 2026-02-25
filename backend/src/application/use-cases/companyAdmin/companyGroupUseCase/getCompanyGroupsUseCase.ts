@@ -1,5 +1,4 @@
 import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
-import { CompanyGroupEntity } from "../../../../domain/entities/CompanyGroupEntity";
 import { IGetCompanyGroupsUseCase } from "../../interfaces/companyAdmin/IGetCompanyGroupsUseCase";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CompanyGroupDTO } from "../../../DTOs/companyAdmin/companyGroupDTO";

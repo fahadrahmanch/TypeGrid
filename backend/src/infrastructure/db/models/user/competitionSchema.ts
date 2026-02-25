@@ -64,7 +64,7 @@ const competitionSchema = new Schema(
   },
 ],
 
-     startTime: {
+     countDown: {
       type: Number, // seconds
       required: true,
       default: 10,

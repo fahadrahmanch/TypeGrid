@@ -70,7 +70,7 @@ export class startQuickPlayUseCase implements IStartQuickPlayUseCase {
     type: "quick",
     mode: "global",
     duration: 50,
-    startTime: 10,
+    countDown: 10,
     status: "pending",
     participants: [userId.toString()],
     textId: selectedLesson._id.toString(),

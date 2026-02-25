@@ -9,7 +9,6 @@ export class GroupSocketController{
         private _finishGroupPlayUseCase:IFinishGroupPlayUseCase,
     ){}
     async handleDisconnect(socket:any,io:any){
-        console.log("Handling disconnect for socket:", socket.id);
         const {groupId,userId}=socket.data;
         if(!groupId||!userId){
             return;

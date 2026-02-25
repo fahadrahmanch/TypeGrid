@@ -16,4 +16,5 @@ export interface IBaseRepository<T> {
   ): Promise<T[]>;    FindByEmail(email:string):Promise<T|null>;
     findOne(filter?:any):Promise<T|null>;
     delete(_id:string):Promise<T|null>;
+    updateById(_id:string,updateQuery:any):Promise<T|null>;
 }

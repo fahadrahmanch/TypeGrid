@@ -18,7 +18,7 @@ export class getJoinMemberUseCase implements IGetJoinMemberUseCase{
         }
         const competition=await this._competitionRepository.findById(competitionId);
         if(!competition){
-            throw new Error(MESSAGES.COMPETITION_NOT_FOUND)
+            throw new Error(MESSAGES.COMPETITION_NOT_FOUND);
         }
         const isParticipant=competition.participants.some((participant:string)=>participant.toString()===userId);
         if(!isParticipant){

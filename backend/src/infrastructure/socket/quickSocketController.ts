@@ -26,7 +26,7 @@ export class quickSocketController {
             await this._finishQuickPlayResultUseCase.execute(gameId,resultArray);
             }
             catch(error:any){
-                console.log("Error in saveGroupPlayResult:",error);
+                console.log(error);
             }
         } 
 }

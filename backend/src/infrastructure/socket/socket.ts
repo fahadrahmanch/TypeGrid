@@ -6,6 +6,8 @@ import { checkGameEndService,checkQuickGameEndService } from "../../application/
 
 let io: Server;
 
+
+
 export const initSocket = (server: any) => {
   io = new Server(server, {
     cors: {
@@ -17,6 +19,10 @@ export const initSocket = (server: any) => {
 
   io.on("connection", (socket) => {
     //group play and groups features
+
+  socket.on("connect_error", (err) => {
+    console.log("Socket connection error:", err);
+  });
 
     socket.on(
       "join-room",
@@ -284,7 +290,7 @@ socket.on("quick-join", async ({ competitionId, userId }) => {
   socket.join(competitionId);
   socket.data.gameId = competitionId;
   socket.data.userId = userId;
-  let member
+  let member;
   try {
      member =
       await injectQuickSocketController.getQuickPlayData(
@@ -299,7 +305,7 @@ socket.on("quick-join", async ({ competitionId, userId }) => {
     socket.emit("quick-join-error", {
       message: "Unable to join quick play",
     });
-    return
+    return;
   }
 
     // socket.emit("quick-join-success", { member });
@@ -355,7 +361,7 @@ socket.on("quick-join", async ({ competitionId, userId }) => {
       }) => {
         const gameId = socket.data.gameId;
         if (!gameId) return;
-        const key = `quick:game:${gameId}`
+        const key = `quick:game:${gameId}`;
 
         const raw = await redis.hget(key, userId);
         if (!raw) return;
@@ -445,11 +451,11 @@ socket.on("quick-join", async ({ competitionId, userId }) => {
       }) => {
         const gameId = socket.data.gameId;
         if (!gameId) return;
-        const key = `quick:game:${gameId}`
+        const key = `quick:game:${gameId}`;
         const raw = await redis.hget(key, userId);
         if (!raw) return;
         const data = JSON.parse(raw);
-if(data.status==="FINISHED")return
+if(data.status==="FINISHED")return;
           const { wpm, accuracy } = calculateStats({
       totalTyped, 
       errors,
@@ -523,22 +529,201 @@ if(data.status==="FINISHED")return
     );
 
 
+    //here need to implement leave game for quick play
 
 
 
 
+//company contest  admin and user
+socket.on("contest-status-updated", async ({ contestId, status }) => {
 
+  const lobbyKey = `company:lobby:${contestId}`;
+  const gameKey = `company:game:${contestId}`;
 
-    socket.on("disconnect", async () => {
-      // if (!socket.data.groupId || !socket.data.userId) {
-      //   return;
-      // }
-      // await injectGroupSocketController.handleDisconnect(socket, io);
-      if (socket.data.groupId && socket.data.userId) {
-        await injectGroupSocketController.handleDisconnect(socket, io);
-      }
+  if (status === "ongoing") {
 
+    const lobbyUsers = await redis.hgetall(lobbyKey);
+
+    for (const [userId, value] of Object.entries(lobbyUsers)) {
+
+      const user = JSON.parse(value);
+
+      await redis.hset(
+        gameKey,
+        userId,
+        JSON.stringify({
+          userId,
+          name: user.name,
+          imageUrl: user.imageUrl,
+          progress: 0,
+          wpm: 0,
+          accuracy: 100,
+          errors: 0,
+          timeTaken: 0,
+          status: "PLAYING"
+        })
+      );
+    }
+
+    await redis.del(lobbyKey);
+
+    const gameUsers = await redis.hgetall(gameKey);
+
+    io.to(contestId).emit("contest-status-changed", {
+      contestId,
+      status,
+      activeUsers: Object.values(gameUsers).map(v => JSON.parse(v))
     });
+
+  } else {
+
+    const all = await redis.hgetall(lobbyKey);
+
+    io.to(contestId).emit("contest-status-changed", {
+      contestId,
+      status,
+      activeUsers: Object.values(all).map(v => JSON.parse(v))
+    });
+  }
+});
+
+
+// 1 company contest lobby join
+
+socket.on(
+  "join-companyContest-lobby",
+  async ({ contestId, user }) => {
+
+
+    if (socket.data.contestId) {
+      socket.leave(socket.data.contestId);
+    }
+      socket.data.contestId = contestId;   
+    socket.data.userId = user.userId;
+     socket.join(contestId);
+  const key = `company:lobby:${contestId}`;
+
+  await redis.hset(
+    key,
+    user.userId,
+    JSON.stringify(user)
+  );
+   const all = await redis.hgetall(key);
+
+  const users = Object.values(all).map(u => JSON.parse(u));
+  io.to(contestId).emit(
+    "lobby-users-update",
+    users
+  );
+
+
+  }
+);
+
+//leave contest lobby
+socket.on("leave-companyContest-lobby", async({ contestId, userId }) => {
+
+   const key = `company:lobby:${contestId}`;
+
+  await redis.hdel(key, userId);
+
+  const all = await redis.hgetall(key);
+
+  const users = Object.values(all).map(u => JSON.parse(u));
+  io.to(contestId).emit("lobby-users-update", users);
+});
+//company contest area
+socket.on("join-companyContest-game", async({ contestId ,user}) => {
+
+    if(socket.data.gamecontestId&&socket.data.userId){
+      socket.leave(socket.data.gamecontestId);
+    }
+    const userId=user?._id;
+    socket.data.gamecontestId=contestId;
+    socket.data.userId=userId;
+    socket.join(contestId);
+     const key = `company:game:${contestId}`;
+
+ const raw = await redis.hget(key, userId);
+
+if (raw) {
+  const player = JSON.parse(raw);
+
+  player.status = "PLAYING";
+  player.socketId = socket.id;
+
+  await redis.hset(key, userId, JSON.stringify(player));
+}
+
+  const all = await redis.hgetall(key);
+  const users = Object.values(all).map(u => JSON.parse(u));
+    io.to(contestId).emit("contest-game-players",users);
+
+
+});
+
+//leave company contest game
+socket.on("leave-companyContest-game",async({contestId,userId})=>{
+const key = `company:game:${contestId}`;
+   const raw = await redis.hget(key, userId);
+
+ if (!raw) return;
+  const player = JSON.parse(raw);
+ player.status = "LEFT";
+  player.disconnectedAt = Date.now();
+  await redis.hset(key, userId, JSON.stringify(player));
+
+  const all = await redis.hgetall(key);
+
+  const users = Object.values(all).map(u => JSON.parse(u));
+  io.to(contestId).emit("contest-users-update", users);
+});
+
+
+  socket.on("disconnect", async () => {
+    // if (!socket.data.groupId || !socket.data.userId) {
+    //   return;
+    // }
+    // await injectGroupSocketController.handleDisconnect(socket, io);
+    if (socket.data.contestId && socket.data.userId) {
+      const contestId = socket.data.contestId;
+      const userId = socket.data.userId;
+
+      const key = `company:lobby:${contestId}`;
+
+      await redis.hdel(key, userId);
+
+      const all = await redis.hgetall(key);
+      const users = Object.values(all).map(u => JSON.parse(u));
+
+      io.to(contestId).emit(
+        "lobby-users-update",
+        users
+      );
+    }
+    if (socket.data.gamecontestId && socket.data.userId) {
+
+  const contestId = socket.data.gamecontestId;
+  const userId = socket.data.userId;
+
+  const gameKey = `company:game:${contestId}`;
+
+   const raw = await redis.hget(gameKey, userId);
+  if (!raw) return;
+  const player = JSON.parse(raw);
+ player.status = "DISCONNECTED";
+  player.disconnectedAt = Date.now();
+  await redis.hset(gameKey, userId, JSON.stringify(player));
+  const all = await redis.hgetall(gameKey);
+const users = Object.values(all).map(v => JSON.parse(v));
+
+io.to(contestId).emit("contest-users-update", users);
+}
+
+    if (socket.data.groupId && socket.data.userId) {
+      await injectGroupSocketController.handleDisconnect(socket, io);
+    }
+  });
   });
 };
 export const getIO = () => {
@@ -566,15 +751,4 @@ function calculateStats({
 
   return { wpm, accuracy };
 }
- 
-  // useEffect(() => {
-  //       if (phase !== "PLAY" || isFinished) return;
-  //       if (elapsedTime <= 0) return;
 
-  //       const elapsedMinutes = elapsedTime / 60;
-  //       const correctChars = Math.max(totalTyped - errors, 0);
-
-  //       const calculatedWpm = Math.round((correctChars / 5) / elapsedMinutes);
-
-  //       setWpm(calculatedWpm);
-  //   }, [elapsedTime, totalTyped, errors, phase, isFinished]);

@@ -24,6 +24,7 @@ export class userController {
       if (!user) {
         throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
       }
+      
       const userDoc = JSON.parse(JSON.stringify(user));
       delete userDoc.password;
       delete userDoc.CompanyId;
@@ -59,12 +60,11 @@ export class userController {
   async changePassword(req:AuthRequest,res:Response):Promise<void>{
     try{
     const userId=req.user?.userId;
-    const data=req.body
+    const data=req.body;
     if(!userId){
       throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
     }
-    console.log("req.body",req.body)
-    console.log("user daata",userId,data)
+  
     await this._changePasswordUseCase.execute(userId, data.currentPassword, data.newPassword);
     res.status(200).json({
       success: true,
@@ -72,7 +72,7 @@ export class userController {
     });
     }
     catch(error:any){
-      console.log(error)
+      console.log(error);
       res.status(500).json({
         success: false,
         message: error.message,

@@ -1,5 +1,5 @@
-import { AuthRequest } from "../../../types/AuthRequest"
-import { Response } from "express"
+import { AuthRequest } from "../../../types/AuthRequest";
+import { Response } from "express";
 import { IGetCompanyGroupsUseCase } from "../../../application/use-cases/interfaces/companyAdmin/IGetCompanyGroupsUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
 export class CompanyGroupController{
@@ -52,7 +52,6 @@ async getCompanyGroups(req: AuthRequest, res: Response): Promise<void> {
     }
 
     const groups = await this._getCompanyGroupsUseCase.execute(userId);
-    console.log("groups in controller",groups)
     res.status(200).json({
       success: true,
       message: MESSAGES.GROUPS_FETCHED_SUCCESS,

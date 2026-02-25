@@ -53,7 +53,7 @@ export class newGroupPlayUseCase implements INewGroupPlayUseCase{
             groupId:groupId,
             duration: 100,
             status:"ongoing",
-            startTime: compatitionData.startTime ||10
+            countDown: compatitionData.countDown ||10
            });
            const competitionObject=await newCompetitionEntity.toObject();
            const newCompetition=await this._baseRepoCompetition.create(competitionObject);

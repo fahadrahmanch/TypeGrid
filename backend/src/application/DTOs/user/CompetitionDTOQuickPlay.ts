@@ -19,7 +19,7 @@ export interface CompetitionDTOQuickPlay {
   lesson: Lesson;
   duration: number;
   startedAt: string;
-  startTime: number;
+  countDown: number;
 }
 export const mapCompetitionToDTOQuickPlay = (
   competition: any,
@@ -30,7 +30,7 @@ export const mapCompetitionToDTOQuickPlay = (
     status: competition.status,
     duration: competition.duration,
     startedAt: competition.startedAt,
-    startTime: competition.startTime,
+    countDown: competition.countDown,
     lesson: {
       id: competition.lesson._id,
       text: competition.lesson.text,

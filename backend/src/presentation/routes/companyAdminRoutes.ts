@@ -4,6 +4,7 @@ import { injectCompanyUserController } from "../DI/CompanyAdmin";
 import { checkRoleBasedMiddleware } from "../middlewares/checkRoleBasedMIddleware";
 import { injectCompanyLessonManageController } from "../DI/CompanyAdmin";
 import { injectCompanyGroupController } from "../DI/CompanyAdmin";
+import { injectCompanyContestManagementController } from "../DI/CompanyAdmin";
 export class companyAdminRouter {
   private router: express.Router;
   constructor() {
@@ -49,13 +50,25 @@ export class companyAdminRouter {
     this.router.post(Routes.COMPANY_ADMIN.ASSIGN_LESSON,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
       injectCompanyLessonManageController.assignLessons(req,res);
     });
-    this.router.post(Routes.COMPANY_ADMIN.CREATE_COMPANY_GROUP,checkRoleBasedMiddleware(['companyAdmin']),(req:Request,res:Response)=>{
-      injectCompanyGroupController.createGroup(req,res)
-    })
-    this.router.get(Routes.COMPANY_ADMIN.GET_COMPANY_GROUPS,checkRoleBasedMiddleware(['companyAdmin']),(req:Request,res:Response)=>{
-      injectCompanyGroupController.getCompanyGroups(req,res)
-    })
+    this.router.post(Routes.COMPANY_ADMIN.CREATE_COMPANY_GROUP,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
+      injectCompanyGroupController.createGroup(req,res);
+    });
+    this.router.get(Routes.COMPANY_ADMIN.GET_COMPANY_GROUPS,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
+      injectCompanyGroupController.getCompanyGroups(req,res);
+    });
     
+    //company contest 
+    this.router.post(Routes.COMPANY_ADMIN.CREATE_COMPANY_CONTEST,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
+      injectCompanyContestManagementController.createContest(req,res);
+    });
+    this.router.get(Routes.COMPANY_ADMIN.COMPANY_CONTESTS,checkRoleBasedMiddleware(["companyAdmin","companyUser"]),(req:Request,res:Response)=>{
+      injectCompanyContestManagementController.getContests(req,res);
+    });
+    this.router.patch(Routes.COMPANY_ADMIN.CONTEST_STATUS,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
+      injectCompanyContestManagementController.updateContestStatus(req,res);
+    });
+
+
   }
   getRouter() {
     return this.router;

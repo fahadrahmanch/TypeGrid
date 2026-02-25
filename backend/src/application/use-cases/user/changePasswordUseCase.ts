@@ -11,15 +11,12 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
     async execute(userId: string, currentPassword: string, newPassword: string): Promise<void> {
         const user = await this.baseUserRepository.findById(userId);
         if (!user) {
-            throw new Error('User not found');
+            throw new Error("User not found");
         }
-        console.log("userid",userId)
-        console.log("currentPassword",currentPassword)
-        console.log("newPassword",newPassword)
-
+       
         const isPasswordValid = await this.hashService.compare(currentPassword, user.password);
         if (!isPasswordValid) {
-            throw new Error('Invalid current password');
+            throw new Error("Invalid current password");
         }
 
         const hashedPassword = await this.hashService.hash(newPassword);

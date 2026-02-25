@@ -28,7 +28,7 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase{
         participants:[user._id],
         textId:selectedLesson._id,
         duration:300,
-        startTime:10,
+        countDown:10,
         status:"ongoing",
     });
     const CompetitionObject=competition.toObject();
