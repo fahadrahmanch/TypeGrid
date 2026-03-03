@@ -8,7 +8,7 @@ import { findUserUseCase } from "../../application/use-cases/user/findUserUseCas
 import { getCompanyUsersUseCase } from "../../application/use-cases/companyAdmin/users/getCompanyUsersUseCase";
 import { deleteCompanyUserUseCase } from "../../application/use-cases/companyAdmin/users/deleteUserUseCase";
 import { Lesson } from "../../infrastructure/db/models/admin/lessonSchema";
-import {CompanyLessonManageController} from "../controllers/company-admin/CompanyLessonManageController";
+import { CompanyLessonManageController } from "../controllers/company-admin/CompanyLessonManageController";
 import { CreateCompanyLessonUseCase } from "../../application/use-cases/companyAdmin/companyLessonUseCases/createCompanyLessonUseCase";
 import { getCompanyLessonUseCase } from "../../application/use-cases/companyAdmin/companyLessonUseCases/getCompanyLessonUseCase";
 import { getLessonUseCase } from "../../application/use-cases/companyAdmin/companyLessonUseCases/getLessonUseCase";
@@ -26,33 +26,104 @@ import { createCompanyContestUseCase } from "../../application/use-cases/company
 import { Contest } from "../../infrastructure/db/models/company/companyContestSchema";
 import { getCompanyContestsUseCase } from "../../application/use-cases/companyAdmin/companyContestUseCase/getContestsUseCase";
 import { updateCompanyContestStatusUseCase } from "../../application/use-cases/companyAdmin/companyContestUseCase/updateCompanyContestStatusUseCase";
-const baseRepoUser=new BaseRepository(User);
-const tokenService=new TokenService();
+import { getContestParticipantsUseCase } from "../../application/use-cases/companyAdmin/companyContestUseCase/getContestParticipantsUseCase";
+import { getContestUseCase } from "../../application/use-cases/companyAdmin/companyContestUseCase/getContestUseCase";
+import { updateContestUse } from "../../application/use-cases/companyAdmin/companyContestUseCase/updateContestUseCase";
+import { deleteCompanyContestUse } from "../../application/use-cases/companyAdmin/companyContestUseCase/deleteCompanyContestUseCase";
+const baseRepoUser = new BaseRepository(User);
+const tokenService = new TokenService();
 const hashService = new HashService();
-const FindUserUseCase=new findUserUseCase(baseRepoUser);
-const AddUserUseCase=new addUserUseCase(baseRepoUser,hashService);
-const GetCompanyUsersUseCase=new getCompanyUsersUseCase(baseRepoUser);
-const DeleteCompanyUserUseCase=new deleteCompanyUserUseCase(baseRepoUser);
+const FindUserUseCase = new findUserUseCase(baseRepoUser);
+const AddUserUseCase = new addUserUseCase(baseRepoUser, hashService);
+const GetCompanyUsersUseCase = new getCompanyUsersUseCase(baseRepoUser);
+const DeleteCompanyUserUseCase = new deleteCompanyUserUseCase(baseRepoUser);
 
 //lesson
-const baseRepoLesson=new BaseRepository(Lesson);
-const baseRepoAssignLesson=new BaseRepository(LessonAssignment);
+const baseRepoLesson = new BaseRepository(Lesson);
+const baseRepoAssignLesson = new BaseRepository(LessonAssignment);
 
-const createCompanyLessonUseCase=new CreateCompanyLessonUseCase(baseRepoLesson,baseRepoUser);
-const GetLessonUseCase=new getLessonUseCase(baseRepoLesson);
-const GetCompanyLessonUseCase=new getCompanyLessonUseCase(baseRepoLesson,baseRepoUser);
-const UpdateCompanyLessonUseCase=new updateCompanyLessonUseCase(baseRepoLesson);
-const DeleteCompanyLessonUseCase=new deleteCompanyLessonUseCase(baseRepoLesson);
-const GetAdminLessonsUseCase=new getAdminLessonsUseCase(baseRepoLesson);
-const AssignLessonUseCase=new assignLessonUseCase(baseRepoAssignLesson,baseRepoUser,baseRepoLesson);
-const baseRepoCompanyGroup=new BaseRepository(CompanyGroup);
-const baseRepoContest=new BaseRepository(Contest);
-const CreateCompanyGroupUseCase=new createCompanyGroupUseCase(baseRepoUser,baseRepoCompanyGroup);
-const GetCompanygroupUseCase=new getCompanyGroupsUseCase(baseRepoUser,baseRepoCompanyGroup);
-const GetCompanyContestsUseCase=new getCompanyContestsUseCase(baseRepoContest,baseRepoUser);
-const CreateCompanyContestUseCase=new createCompanyContestUseCase(baseRepoUser,baseRepoCompanyGroup,baseRepoContest,baseRepoLesson);
-const UpdateCompanyContestStatusUseCase=new updateCompanyContestStatusUseCase(baseRepoContest);
-export const injectCompanyContestManagementController=new CompanyContestManagementController(CreateCompanyContestUseCase,GetCompanyContestsUseCase,UpdateCompanyContestStatusUseCase);
-export const injectCompanyGroupController=new CompanyGroupController(CreateCompanyGroupUseCase,GetCompanygroupUseCase);
-export const injectCompanyLessonManageController=new CompanyLessonManageController(createCompanyLessonUseCase,GetCompanyLessonUseCase,GetLessonUseCase,UpdateCompanyLessonUseCase,DeleteCompanyLessonUseCase,GetAdminLessonsUseCase,AssignLessonUseCase);
-export const injectCompanyUserController=new CompanyUserController(AddUserUseCase,tokenService,FindUserUseCase,GetCompanyUsersUseCase,DeleteCompanyUserUseCase);
+const createCompanyLessonUseCase = new CreateCompanyLessonUseCase(
+  baseRepoLesson,
+  baseRepoUser,
+);
+const GetLessonUseCase = new getLessonUseCase(baseRepoLesson);
+const GetCompanyLessonUseCase = new getCompanyLessonUseCase(
+  baseRepoLesson,
+  baseRepoUser,
+);
+const UpdateCompanyLessonUseCase = new updateCompanyLessonUseCase(
+  baseRepoLesson,
+);
+const DeleteCompanyLessonUseCase = new deleteCompanyLessonUseCase(
+  baseRepoLesson,
+);
+const GetAdminLessonsUseCase = new getAdminLessonsUseCase(baseRepoLesson);
+const AssignLessonUseCase = new assignLessonUseCase(
+  baseRepoAssignLesson,
+  baseRepoUser,
+  baseRepoLesson,
+);
+const baseRepoCompanyGroup = new BaseRepository(CompanyGroup);
+const baseRepoContest = new BaseRepository(Contest);
+const CreateCompanyGroupUseCase = new createCompanyGroupUseCase(
+  baseRepoUser,
+  baseRepoCompanyGroup,
+);
+const GetCompanygroupUseCase = new getCompanyGroupsUseCase(
+  baseRepoUser,
+  baseRepoCompanyGroup,
+);
+const GetCompanyContestsUseCase = new getCompanyContestsUseCase(
+  baseRepoContest,
+  baseRepoUser,
+);
+const CreateCompanyContestUseCase = new createCompanyContestUseCase(
+  baseRepoUser,
+  baseRepoCompanyGroup,
+  baseRepoContest,
+  baseRepoLesson,
+);
+const UpdateCompanyContestStatusUseCase = new updateCompanyContestStatusUseCase(
+  baseRepoContest,
+);
+const GetContestParticipantsUseCase = new getContestParticipantsUseCase(
+  baseRepoContest,
+  baseRepoUser,
+);
+const GetCompanyContestUse = new getContestUseCase(
+  baseRepoContest,
+  baseRepoUser,
+);
+const UpdateContestUseCase = new updateContestUse(baseRepoContest);
+const DeleteContestUseCase = new deleteCompanyContestUse(baseRepoContest);
+export const injectCompanyContestManagementController =
+  new CompanyContestManagementController(
+    CreateCompanyContestUseCase,
+    GetCompanyContestsUseCase,
+    UpdateCompanyContestStatusUseCase,
+    GetContestParticipantsUseCase,
+    GetCompanyContestUse,
+    UpdateContestUseCase,
+    DeleteContestUseCase,
+  );
+export const injectCompanyGroupController = new CompanyGroupController(
+  CreateCompanyGroupUseCase,
+  GetCompanygroupUseCase,
+);
+export const injectCompanyLessonManageController =
+  new CompanyLessonManageController(
+    createCompanyLessonUseCase,
+    GetCompanyLessonUseCase,
+    GetLessonUseCase,
+    UpdateCompanyLessonUseCase,
+    DeleteCompanyLessonUseCase,
+    GetAdminLessonsUseCase,
+    AssignLessonUseCase,
+  );
+export const injectCompanyUserController = new CompanyUserController(
+  AddUserUseCase,
+  tokenService,
+  FindUserUseCase,
+  GetCompanyUsersUseCase,
+  DeleteCompanyUserUseCase,
+);

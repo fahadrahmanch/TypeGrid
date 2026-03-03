@@ -21,3 +21,15 @@ export const checkQuickGameEndService = async (gameId: string) => {
   return isComplete;
   
 };
+
+
+export const checkCompanyContestGameEndService = async (contestId: string) => {
+  const key = `company:game:${contestId}`;
+  const allPlayers = await redis.hgetall(key);
+  const players = Object.values(allPlayers).map((p) => JSON.parse(p));
+  const isComplete = players.every((item) => {
+    return item.status != "PLAYING";
+  });
+  return isComplete;
+  
+};

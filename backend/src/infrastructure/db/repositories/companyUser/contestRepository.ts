@@ -11,10 +11,12 @@ export class contestRepository<T> implements IContestRepository<T>{
         this.model=model;
     }
    async getGroupContests(groupIds: string[]) {
-    return await this.model.find({
-        contestMode: "group",
-        groupId: { $in: groupIds }
-    });
+   return await this.model.find({
+  contestMode: "group",
+  groupId: { $in: groupIds },
+  date: { $gt: new Date() },
+  status: "upcoming"
+});
 }
 async isJoined(contestId:string,userId:string){
     return this.model.findOne({_id:new mongoose.Types.ObjectId(contestId),participants:new mongoose.Types.ObjectId(userId)});

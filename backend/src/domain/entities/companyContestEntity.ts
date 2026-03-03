@@ -29,6 +29,7 @@ export interface ContestProps {
   endTime?: Date;
   duration: number;
   maxParticipants: number;
+  countDown:number
   rewards: RewardProps[];
   status?: ContestStatus;
   createdAt?: Date;
@@ -52,6 +53,7 @@ export class ContestEntity {
   private maxParticipants: number;
   private rewards: RewardProps[];
   private status: ContestStatus;
+  private countDown?:number;
   private createdAt?: Date;
   private updatedAt?: Date;
   private CompanyId: string;
@@ -71,6 +73,7 @@ export class ContestEntity {
     this.maxParticipants = props.maxParticipants;
     this.rewards = props.rewards;
     this.status = props.status ?? "upcoming";
+    this.countDown=10
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.CompanyId = props.CompanyId;
@@ -165,6 +168,7 @@ export class ContestEntity {
       difficulty: this.difficulty,
       groupId: this.groupId,
       participants: this.participants,
+      countDown:this.countDown||10,
       textSource: this.textSource,
       contestText: this.contestText,
       date: this.date,

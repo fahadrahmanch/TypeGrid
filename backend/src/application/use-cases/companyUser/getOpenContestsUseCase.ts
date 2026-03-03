@@ -16,11 +16,14 @@ export class getOpenContestsUseCase implements IGetOpenContestsUseCase{
         if(!user){
             throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
         }
-        const contests=await this._baseRepoContest.find({CompanyId:user.CompanyId,status:"upcoming",contestMode:"open",
-            date:{
-                $gte:new Date()
-            } 
-        });
+       const contests = await this._baseRepoContest.find({
+  CompanyId: user.CompanyId,
+  status: "upcoming",
+  contestMode: "open",
+  date: {
+    $gt: new Date()
+  }
+});
         
        return mapOpenContestDTO(contests,userId);
     }

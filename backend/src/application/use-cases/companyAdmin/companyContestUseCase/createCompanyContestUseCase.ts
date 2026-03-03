@@ -2,6 +2,7 @@ import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseR
 import { ICreateCompanyContestUseCase } from "../../interfaces/companyAdmin/ICreateCompanyContestUseCase";
 import { CreateContestDTO } from "../../../DTOs/companyAdmin/CompanyContestDTO";
 import { ContestEntity } from "../../../../domain/entities/companyContestEntity";
+import { mapContestDTOAdmin } from "../../../DTOs/companyAdmin/CompanyContestDTO";
 export class createCompanyContestUseCase implements ICreateCompanyContestUseCase {
     constructor(
         private _baseRepoUser: IBaseRepository<any>,
@@ -10,7 +11,7 @@ export class createCompanyContestUseCase implements ICreateCompanyContestUseCase
         private _baseRepoLesson: IBaseRepository<any>,
     ) { }
 
-    async execute(data: CreateContestDTO, userId: string): Promise<void> {
+    async execute(data: CreateContestDTO, userId: string): Promise<CreateContestDTO> {
         const user=await this._baseRepoUser.findById(userId);
         if(!user){
             throw new Error("User not found");
@@ -37,22 +38,25 @@ export class createCompanyContestUseCase implements ICreateCompanyContestUseCase
         }
 
 
-
+if (!data.date || !data.startTime) {
+   throw new Error("Date or Start Time missing");
+}
         const contest = new ContestEntity({
             ...data,
             date: new Date(data.date),
             startTime:new Date(`${data.date}T${data.startTime}:00`),
-            duration: Number(data.duration),
+            duration: Number(data.duration)*60,
             maxParticipants: Number(data.maxParticipants),
             groupId: data.targetGroup ?? null,
             rewards: data.rewards.map(r => ({
                 rank: r.rank,
                 prize: Number(r.prize),
             })),
-            CompanyId:companyId
+            CompanyId:companyId,
+            countDown:10
         });
-
-        await this._baseRepoContest.create(contest);
+      const newContest=  await this._baseRepoContest.create(contest);
+      return mapContestDTOAdmin(newContest)
     }
 
 

@@ -17,7 +17,7 @@ export class getCompanyContestsUseCase implements IGetCompanyContestsUsecase{
         if(!contests){
             throw new Error("Contests not found");
         }
-        return mapCompanyContestDTO(contests,userId);
+        return mapCompanyContestDTO(contests);
      
     }
 }

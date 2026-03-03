@@ -2,6 +2,7 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { ICompanyApproveRejectUsecase } from "../../../application/use-cases/interfaces/admin/ICompanyApproveRejectUsecase";
 import { IGetCompanysUseCase } from "../../../application/use-cases/interfaces/admin/IGetCompanysUseCase";
 import { Request, Response } from "express";
+import { AuthRequest } from "../../../types/AuthRequest";
 export class companyManageController {
   constructor(
     private _getCompanysUseCase: IGetCompanysUseCase,
@@ -71,6 +72,7 @@ export class companyManageController {
     });
   }
 }
+
 
 
 

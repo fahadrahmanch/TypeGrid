@@ -14,6 +14,7 @@ export class updateCompanyContestStatusUseCase implements IUpdateCompanyContestS
         const contestEntity=new ContestEntity(contest);
         contestEntity.updateStatus(status);
         const updatedStatus=contestEntity.getStatus();
-        await this._baseRepoContest.update({_id:contestId,status:updatedStatus});
+      
+        await this._baseRepoContest.update({_id:contestId,status:updatedStatus,...(updatedStatus === "ongoing" && { startTime: new Date() })});
     }
 }

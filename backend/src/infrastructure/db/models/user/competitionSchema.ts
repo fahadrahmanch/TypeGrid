@@ -26,6 +26,11 @@ const competitionSchema = new Schema(
       ref: "Group",
       default: null,
     },
+
+    startedAt: {
+      type: Date,
+      default: null,
+    },
     
     status: {
       type: String,
@@ -39,11 +44,6 @@ const competitionSchema = new Schema(
       required: true,
     },
 
-    // countdown: {
-    //   type: Number, // seconds
-    //   default:60,
-    //   required: true,
-    // },
 
     duration: {
       type: Number, // seconds
@@ -70,10 +70,7 @@ const competitionSchema = new Schema(
       default: 10,
     },
     
-    startedAt: {
-  type: Date,
-  default: Date.now,
-}
+
   },
   {
     timestamps: true, // createdAt & updatedAt

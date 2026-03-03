@@ -15,7 +15,7 @@ export class companyAdminRouter {
     this.router.post(Routes.COMPANY_ADMIN.ADD_USER,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
         injectCompanyUserController.addUser(req,res);
     });
-    this.router.get(Routes.COMPANY_ADMIN.GET_COMPANY_USERS,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
+    this.router.get(Routes.COMPANY_ADMIN.GET_COMPANY_USERS,checkRoleBasedMiddleware(["companyAdmin",'companyUser']),(req:Request,res:Response)=>{
       injectCompanyUserController.getUsers(req,res);
     });
     this.router.delete(Routes.COMPANY_ADMIN.DELETE_COMPANY_USER,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
@@ -64,11 +64,22 @@ export class companyAdminRouter {
     this.router.get(Routes.COMPANY_ADMIN.COMPANY_CONTESTS,checkRoleBasedMiddleware(["companyAdmin","companyUser"]),(req:Request,res:Response)=>{
       injectCompanyContestManagementController.getContests(req,res);
     });
-    this.router.patch(Routes.COMPANY_ADMIN.CONTEST_STATUS,checkRoleBasedMiddleware(["companyAdmin"]),(req:Request,res:Response)=>{
+    this.router.patch(Routes.COMPANY_ADMIN.CONTEST_STATUS,checkRoleBasedMiddleware(["companyAdmin",'companyUser']),(req:Request,res:Response)=>{
       injectCompanyContestManagementController.updateContestStatus(req,res);
     });
-
-
+    this.router.get(Routes.COMPANY_ADMIN.CONTEST_PARTICIPANTS,checkRoleBasedMiddleware(['companyAdmin']),(req:Request,res:Response)=>{
+      injectCompanyContestManagementController.getContestsParticipants(req,res)
+    })
+    this.router.get(Routes.COMPANY_ADMIN.FETCH_CONTEST_ADMIN,checkRoleBasedMiddleware(['companyAdmin']),(req:Request,res:Response)=>{
+      injectCompanyContestManagementController.getContestData(req,res)
+    })
+    this.router.put(Routes.COMPANY_ADMIN.UPDATE_CONTEST,checkRoleBasedMiddleware(['companyAdmin']),(req:Request,res:Response)=>{
+      injectCompanyContestManagementController.updateContest(req,res)
+    }) 
+    this.router.delete(Routes.COMPANY_ADMIN.DELETE_CONTEST,checkRoleBasedMiddleware(['companyAdmin']),(req:Request,res:Response)=>{
+      injectCompanyContestManagementController.deleteContest(req,res)
+    })
+    
   }
   getRouter() {
     return this.router;

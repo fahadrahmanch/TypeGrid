@@ -127,8 +127,10 @@ CHANGE_STATUS:"/quick-play/start/:competitionId",
    CREATE_COMPANY_CONTEST:"/company/contest",
    COMPANY_CONTESTS:"/company/contests",
    CONTEST_STATUS:"/company/contest/:contestId/status",
-   
-
+   CONTEST_PARTICIPANTS:'/company/contest/:contestId/participants',
+   FETCH_CONTEST_ADMIN:`/company/contest/:contestId/admin`,
+   UPDATE_CONTEST:"/company/contest/:contestId",
+   DELETE_CONTEST:`/company/contest/:contestId`
   },
 
   COMPANY_USER:{

@@ -4,14 +4,22 @@ const resultSchema = new Schema(
   {
      type: {
       type: String,
-      enum: ["quick", "solo", "group"],
+      enum: ["quick", "solo", "group","contest"],
       required: true,
     },
     competitionId: {
       type: Types.ObjectId,
       ref: "Competition",
-      required: true,
+      required: false,
       index: true,
+      default:null
+    },
+     contestId: {
+      type: Types.ObjectId,
+      ref: "Contest",
+      required: false,
+      index: true,
+      default:null
     },
      
     
@@ -28,6 +36,7 @@ result: {
       errors: { type: Number, required: true },
       time: { type: Number, required: true },
       rank: { type: Number, required: false},
+      prize:{type:Number,required:false}
     },
    
   },
@@ -35,6 +44,6 @@ result: {
 );
 
 
-resultSchema.index({ competitionId: 1, userId: 1 }, { unique: true });
+
 
 export const Result = model("Result", resultSchema);

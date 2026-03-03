@@ -91,6 +91,16 @@ const contestSchema = new Schema(
       enum: ["upcoming", "ongoing", "completed","waiting"],
       default: "upcoming",
     },
+       countDown: {
+      type: Number, // seconds
+      required: false,
+      default: 10,
+    },
+       startedAt: {
+  type: Date,
+  default: Date.now,
+  required:false
+},
     CompanyId: {
       type: Types.ObjectId,
       ref: "Company",
