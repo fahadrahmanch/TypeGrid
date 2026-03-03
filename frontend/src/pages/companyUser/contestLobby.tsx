@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, Clock, Trophy, Users, CheckCircle2, Timer, Award, ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 import { socket } from "../../socket";
 import { fetchContestDetails } from "../../api/companyAdmin/companyContextAPI";
 import { useSelector } from "react-redux";
-
+import { updateContestStatus } from "../../api/companyAdmin/companyContextAPI";
 const ContestLobby = () => {
     const navigate = useNavigate();
     const { contestId } = useParams<{ contestId: string }>();
@@ -13,61 +13,62 @@ const ContestLobby = () => {
     // Countdown state initializing with days/hours/minutes/seconds
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     const [contestDetails, setContestDetails] = useState<any>({});
-    const user=useSelector((state:any)=>state.companyAuth.user);
+    const user = useSelector((state: any) => state.companyAuth.user);
 
     const [lobbyParticipants, setLobbyParticipants] = useState<any>([]);
-    const [contestStatus, setContestStatus] = useState<any>(contestDetails?.status);
+    const [contestStatus, setContestStatus] = useState<any>("");
 
-useEffect(() => {
-  if (!contestId || !user?._id) return;
+const [timerFinished, setTimerFinished] = useState(false);
+    useEffect(() => {
+        if (!contestId || !user?._id) return;
 
-   socket.emit("join-companyContest-lobby", {
-    contestId,
-    user: {
-      userId: user._id,
-      name: user.name,
-      imageUrl: user.imageUrl,
-    },
-  });
-}, [contestId, user?._id]);
-
-
-useEffect(() => {
-
-  socket.on("lobby-users-update", (data) => {
-    setLobbyParticipants(data);
-  });
-
-  return () => {
-    socket.off("lobby-users-update");
-  };
-
-}, []);
+        socket.emit("join-companyContest-lobby", {
+            contestId,
+            user: {
+                userId: user._id,
+                name: user.name,
+                imageUrl: user.imageUrl,
+            },
+        });
+    }, [contestId, user?._id]);
 
 
-useEffect(() => {
-  socket.on("contest-status-changed", (data) => {
-    setContestStatus(data.status);
-    if (data.status === "ongoing") {
-      navigate(`/company/user/contest/${data.contestId}`, {
-     
-      });
-    }
-  });
+    useEffect(() => {
 
-  return () => {
-    socket.off("contest-status-changed");
-  };
-}, [contestDetails]);
+        socket.on("lobby-users-update", (data) => {
+            setLobbyParticipants(data);
+        });
 
-useEffect(() => {
-  return () => {
-    socket.emit("leave-companyContest-lobby", {
-      contestId,
-      userId: user?._id,
-    });
-  };
-}, []);
+        return () => {
+            socket.off("lobby-users-update");
+        };
+
+    }, []);
+
+
+    useEffect(() => {
+        socket.on("contest-status-changed", (data) => {
+            setContestStatus(data.status);
+            if (data.status === "ongoing") {
+                navigate(`/company/user/contest/${data.contestId}`, {
+
+                });
+            }
+        });
+
+        return () => {
+            socket.off("contest-status-changed");
+        };
+    }, [contestDetails]);
+
+    useEffect(() => {
+        return () => {
+            socket.emit("leave-companyContest-lobby", {
+                contestId,
+                userId: user?._id,
+            });
+        };
+    }, []);
     //fecth Contest Details
     useEffect(() => {
         const fetchContest = async () => {
@@ -76,7 +77,7 @@ useEffect(() => {
                 setContestDetails(response.data.data);
                 setContestStatus(response.data.data.status);
             } catch (error) {
-                navigate("/company/user/contests",{replace:true});
+                navigate("/company/user/contests", { replace: true });
             }
         };
         fetchContest();
@@ -84,7 +85,7 @@ useEffect(() => {
 
     useEffect(() => {
         if (!contestDetails?.startTime) return;
-
+        if (contestStatus == "waiting") return;
         const updateTimer = () => {
             const now = new Date().getTime();
             const start = new Date(contestDetails.startTime).getTime();
@@ -99,6 +100,7 @@ useEffect(() => {
                 });
             } else {
                 setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                 setTimerFinished(true);
                 return true; // indicates timer is done
             }
             return false;
@@ -113,12 +115,33 @@ useEffect(() => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [contestDetails?.startTime]);
+    }, [contestDetails?.startTime, contestStatus]);
 
     const formatTime = (time: number) => time.toString().padStart(2, "0");
-    if(!contestDetails){
-       return; 
+    if (!contestDetails) {
+        return;
     }
+    useEffect(() => {
+        if (contestStatus === "waiting") {
+            setTimeLeft({
+                days: 0,
+                hours: 0,
+                minutes: 0,
+                seconds: 0
+            });
+            setTimerFinished(true);
+        }
+    }, [contestStatus]);
+useEffect(() => {
+    if (
+        contestStatus === "upcoming" &&
+        timerFinished
+    ) {
+        updateContestStatus(contestId!, "waiting")
+            .then(res => setContestStatus(res.data.status));
+    }
+}, [timerFinished, contestStatus]);
+
 
     return (
         <div className="h-screen  text-gray-900 font-sans overflow-hidden flex flex-col">
@@ -166,16 +189,27 @@ useEffect(() => {
                         <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-3 gap-6 items-center mb-6">
 
                             {/* Left Info Stats */}
-                            <div className="flex flex-col gap-3">
-                                <div className="bg-gray-50/50 rounded-xl p-4 border border-gray-100 flex items-center gap-4 hover:bg-white hover:shadow-sm transition-all">
-                                    <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
+                            <div className="flex flex-col gap-3 h-full">
+                                <div className="bg-gray-50/50 rounded-xl p-4 border border-gray-100 flex items-start gap-4 hover:bg-white hover:shadow-sm transition-all h-full">
+                                    <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
                                         <Trophy className="w-5 h-5" />
                                     </div>
-                                    <div>
-                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Prize Pool</p>
-                                        <p className="text-lg font-bold text-gray-900">
-                                            ${contestDetails.rewards ? contestDetails.rewards.reduce((total: number, reward: any) => total + reward.prize, 0) : 0}
-                                        </p>
+                                    <div className="w-full pr-2">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Prize Pool</p>
+                                        {contestDetails.rewards && contestDetails.rewards.length > 0 ? (
+                                            <div className="flex flex-col gap-0.5">
+                                                {[...contestDetails.rewards].sort((a: any, b: any) => a.rank - b.rank).map((reward: any) => (
+                                                    <div key={reward.rank} className="flex justify-between items-center text-sm border-b last:border-0 border-gray-100 pb-0.5 last:pb-0">
+                                                        <span className="font-medium text-gray-500">
+                                                            {reward.rank}{reward.rank === 1 ? 'st' : reward.rank === 2 ? 'nd' : reward.rank === 3 ? 'rd' : 'th'}
+                                                        </span>
+                                                        <span className="font-bold text-orange-600">${reward.prize}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p className="text-lg font-bold text-gray-900">$0</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -186,24 +220,32 @@ useEffect(() => {
                                     <div className="absolute inset-0 bg-gradient-to-br from-amber-200 to-orange-300 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
                                     <div className="relative bg-white border border-gray-100 rounded-3xl shadow-lg p-6 flex flex-col items-center justify-center w-[220px] h-[160px]">
                                         <Clock className="w-5 h-5 text-orange-500 mb-2" />
-                                        <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Starts In</span>
-                                        <div className={`font-mono font-bold tracking-tight text-gray-900 drop-shadow-sm flex items-center ${timeLeft.days > 0 ? "text-3xl" : "text-4xl"}`}>
-                                            {timeLeft.days > 0 && (
-                                                <>
-                                                    <span>{formatTime(timeLeft.days)}</span>
+                                        {contestStatus === "waiting" ? (
+                                            <span className="text-sm font-semibold text-gray-500 uppercase tracking-widest text-center px-4 leading-snug">
+                                                Wait for to start from company
+                                            </span>
+                                        ) : (
+                                            <>
+                                                <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Starts In</span>
+                                                <div className={`font-mono font-bold tracking-tight text-gray-900 drop-shadow-sm flex items-center ${timeLeft.days > 0 ? "text-3xl" : "text-4xl"}`}>
+                                                    {timeLeft.days > 0 && (
+                                                        <>
+                                                            <span>{formatTime(timeLeft.days)}</span>
+                                                            <span className="text-orange-400 opacity-80 mx-0.5 mb-1">:</span>
+                                                        </>
+                                                    )}
+                                                    {(timeLeft.days > 0 || timeLeft.hours > 0) && (
+                                                        <>
+                                                            <span>{formatTime(timeLeft.hours)}</span>
+                                                            <span className="text-orange-400 opacity-80 mx-0.5 mb-1">:</span>
+                                                        </>
+                                                    )}
+                                                    <span>{formatTime(timeLeft.minutes)}</span>
                                                     <span className="text-orange-400 opacity-80 mx-0.5 mb-1">:</span>
-                                                </>
-                                            )}
-                                            {(timeLeft.days > 0 || timeLeft.hours > 0) && (
-                                                <>
-                                                    <span>{formatTime(timeLeft.hours)}</span>
-                                                    <span className="text-orange-400 opacity-80 mx-0.5 mb-1">:</span>
-                                                </>
-                                            )}
-                                            <span>{formatTime(timeLeft.minutes)}</span>
-                                            <span className="text-orange-400 opacity-80 mx-0.5 mb-1">:</span>
-                                            <span>{formatTime(timeLeft.seconds)}</span>
-                                        </div>
+                                                    <span>{formatTime(timeLeft.seconds)}</span>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +258,7 @@ useEffect(() => {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Duration</p>
-                                        <p className="text-lg font-bold text-gray-900">{contestDetails.duration} min</p>
+                                        <p className="text-lg font-bold text-gray-900">{Math.round(contestDetails.duration / 60)} min</p>
                                     </div>
                                 </div>
                             </div>
@@ -232,7 +274,7 @@ useEffect(() => {
                                     <div>
                                         <h3 className="text-lg font-bold text-gray-900 leading-tight">Lobby Waiting</h3>
                                         <p className="text-xs text-gray-500 font-medium">
-                                            {contestDetails.joinedParticipants} of {contestDetails.maxParticipants} ready
+                                            {lobbyParticipants.length} of {contestDetails.maxParticipants} ready
                                         </p>
                                     </div>
                                 </div>
@@ -244,7 +286,7 @@ useEffect(() => {
                             {/* Participant Grid Layout */}
                             <div className="flex-1 overflow-y-auto pr-2 pb-2 custom-scrollbar">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-                                    {lobbyParticipants.map((participant:any) => (
+                                    {lobbyParticipants.map((participant: any) => (
                                         <div
                                             key={participant.id}
                                             className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm hover:shadow-md transition-all flex justify-between items-center group cursor-default"

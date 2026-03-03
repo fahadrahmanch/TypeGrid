@@ -1,10 +1,13 @@
 import React from "react";
-import { Users, Clock, Target, Calendar } from "lucide-react";
+import { Users, Clock, Calendar } from "lucide-react";
 import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { useState } from "react";
 export type ContestStatus = "waiting" | "ongoing" | "upcoming" | "completed";
 export type ContestLevel = "easy" | "medium" | "hard"; // Added Hard
 import { socket } from "../../../socket";
+import ContestDetailsModal from "./ContestDetailsModal";
+import ContestLobbyModal from "./ContestLobbyModal";
+import LiveMonitorModal from "./LiveMonitorModal";
 // Helper to determine status style
 const getStatusStyle = (status: ContestStatus) => {
     switch (status) {
@@ -42,8 +45,9 @@ export interface ContestProps {
     targetWpm: number;
     prize?: string;
     rewards?: { rank: number; prize: string | number }[];
-    date?: string; // Optional for active contests
+    startTime?: string; // Optional for active contests
     type?: "open" | "group"; // Just to show badges
+    setContests: React.Dispatch<React.SetStateAction<ContestProps[]>>;
 }
 
 const ContestCard: React.FC<ContestProps> = ({
@@ -56,27 +60,33 @@ const ContestCard: React.FC<ContestProps> = ({
     id,
     prize,
     rewards,
-    date,
-    type
+    startTime,
+    type,
+    setContests
 }) => {
-    const participantsCount = participants?.length;
+    const participantsCount = participants?.length || 0;
     const [contestStatus, setContestStatus] = useState<ContestStatus>(status);
-    const changeStatus = async (id:string,status: ContestStatus) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLobbyModalOpen, setIsLobbyModalOpen] = useState(false);
+    const [isLiveMonitorOpen, setIsLiveMonitorOpen] = useState(false);
+
+    const changeStatus = async (id: string, status: ContestStatus) => {
         try {
             const response = await updateContestStatus(id, status);
             const data = response.data;
-            if(data.success){
-               setContestStatus(data.status);
-                  socket.emit("contest-status-updated", {
-       contestId: id,
-       status: data.status
-   });
+            if (data.success) {
+                setContestStatus(data.status);
+                socket.emit("contest-status-updated", {
+                    contestId: id,
+                    status: data.status
+                });
             }
-           
+
         } catch (error) {
             console.log(error);
         }
     };
+
 
     return (
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 relative overflow-hidden group">
@@ -95,10 +105,10 @@ const ContestCard: React.FC<ContestProps> = ({
                     {type === "open" ? "Open" : "Group"}
                 </span>
 
-                {date && (
+                {startTime && (
                     <div className="flex items-center text-gray-400 text-xs ml-auto">
                         <Calendar className="w-3 h-3 mr-1" />
-                        {new Date(date).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true })}
+                        {new Date(startTime).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true })}
                     </div>
                 )}
 
@@ -113,12 +123,10 @@ const ContestCard: React.FC<ContestProps> = ({
                         <span className="text-gray-400">/{maxParticipants} participants</span>
                     </span>
                 </div>
-
                 <div className="flex items-center gap-1.5">
                     <Clock className="w-4 h-4 text-gray-400" />
-                    <span>{duration} minutes</span>
+                    <span>{Math.floor(duration / 60)} minutes</span>
                 </div>
-
                 <div className="flex items-center gap-1.5">
                     <span className="text-gray-400">Level:</span>
                     {getLevelBadge(level)}
@@ -133,12 +141,15 @@ const ContestCard: React.FC<ContestProps> = ({
                 <div className="flex gap-3">
                     {contestStatus === "waiting" && (
                         <>
-                            <button className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                            <button
+                                onClick={() => setIsLobbyModalOpen(true)}
+                                className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                            >
                                 View Lobby
                             </button>
-                            <button 
-                            onClick={() => changeStatus(id, "ongoing")}
-                            className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm hover:shadow shadow-green-200">
+                            <button
+                                onClick={() => changeStatus(id, "ongoing")}
+                                className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm hover:shadow shadow-green-200">
                                 Start Contest
                             </button>
                         </>
@@ -146,26 +157,32 @@ const ContestCard: React.FC<ContestProps> = ({
 
                     {contestStatus === "ongoing" && (
                         <>
-                            <button className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm hover:shadow shadow-indigo-200">
+                            <button
+                                onClick={() => setIsLiveMonitorOpen(true)}
+                                className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm hover:shadow shadow-indigo-200"
+                            >
                                 Live Monitor
                             </button>
-                            <button 
-                            onClick={() => changeStatus(id, "upcoming")}
-                            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow shadow-blue-200">
+                            <button
+                                onClick={() => changeStatus(id, "upcoming")}
+                                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow shadow-blue-200">
                                 End Contest
                             </button>
                         </>
                     )}
 
                     {(contestStatus === "upcoming" || contestStatus === "completed") && (
-                        <button className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                        >
                             Details
                         </button>
                     )}
                     {contestStatus === "upcoming" && (
-                        <button 
-                        onClick={() => changeStatus(id, "waiting")}
-                        className="px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-lg hover:bg-yellow-600 transition-colors shadow-sm">
+                        <button
+                            onClick={() => changeStatus(id, "waiting")}
+                            className="px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-lg hover:bg-yellow-600 transition-colors shadow-sm">
                             Move to Waiting
                         </button>
                     )}
@@ -195,6 +212,48 @@ const ContestCard: React.FC<ContestProps> = ({
                     ) : null}
                 </div>
             </div>
+
+            <ContestDetailsModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                contestData={{
+                    id: id,
+                    title,
+                    mode: type === "open" ? "Open" : "Group",
+                    difficulty: level,
+                    date: startTime ? new Date(startTime).toLocaleDateString() : undefined,
+                    time: startTime ? new Date(startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : undefined,
+                    duration,
+                    participantsCount: participantsCount,
+                    maxParticipants,
+                    reward: prize || (rewards && rewards.length > 0 ? `$${rewards.reduce((acc, curr) => acc + Number(curr.prize), 0)} Total` : "No Reward"),
+                    status: contestStatus
+
+                }}
+                setContests={setContests}
+            />
+
+            <ContestLobbyModal
+                isOpen={isLobbyModalOpen}
+                onClose={() => setIsLobbyModalOpen(false)}
+                contestId={id}
+                contestTitle={title}
+                onStartContest={() => {
+                    setContestStatus("ongoing");
+                }}
+            />
+            {isLiveMonitorOpen && (
+            <LiveMonitorModal
+                isOpen={isLiveMonitorOpen}
+                onClose={() => setIsLiveMonitorOpen(false)}
+                contestId={id}
+                contestTitle={title}
+                duration={duration}
+                // onEndContest={() => {
+                //     setContestStatus("completed");
+                // }}
+            />
+            )}
         </div>
     );
 };

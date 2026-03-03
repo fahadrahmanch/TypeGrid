@@ -22,6 +22,7 @@ export interface ContestResponseDTO {
   textSource: "random" | "custom";
   contestText?: string;
   startTime:string;
+  participants:string[];
   date: string;
   duration: number;
   maxParticipants: number;
@@ -140,7 +141,7 @@ const Contests: React.FC = () => {
       title={contest.title}
       description={contest.description}
       status={contest.status}
-      participants={[]}
+      participants={contest.participants}
       maxParticipants={contest.maxParticipants}
       duration={contest.duration}
       joined={contest.joined}
@@ -172,6 +173,7 @@ const Contests: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                      {openContests.map((contest) => {
   const start = new Date(contest.startTime);
+  console.log("contest", contest);
 
   return (
     <UserContestCard
@@ -180,7 +182,7 @@ const Contests: React.FC = () => {
       title={contest.title}
       description={contest.description}
       status={contest.status}
-      participants={[]}
+      participants={contest.participants}
       maxParticipants={contest.maxParticipants}
       duration={contest.duration}
       joined={contest.joined}

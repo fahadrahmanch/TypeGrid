@@ -19,7 +19,7 @@ const CompanyContestManagement: React.FC = () => {
         };
         fetchContests();
     }, []);
-
+    console.log("contests", contests)
     return (
         <div className="flex min-h-screen bg-[#FFF8EA]">
             {/* Fixed Sidebar */}
@@ -56,8 +56,7 @@ const CompanyContestManagement: React.FC = () => {
                     {/* Contest Cards List */}
                     <div className="flex flex-col gap-6">
                         {contests.map((contest: any) => (
-
-                            <ContestCard key={contest._id} title={contest.title} status={contest.status} participants={contest.participants} maxParticipants={contest.maxParticipants} duration={contest.duration} level={contest.difficulty} targetWpm={contest.targetWpm} prize={contest.prize} rewards={contest.rewards} date={contest.date} id={contest._id} type={contest.contestMode} />
+                            <ContestCard key={contest._id} title={contest.title} status={contest.status} participants={contest.participants} maxParticipants={contest.maxParticipants} duration={contest.duration} level={contest.difficulty} targetWpm={contest.targetWpm} prize={contest.prize} rewards={contest.rewards} startTime={contest.startTime} id={contest._id} type={contest.contestMode} setContests={setContests} />
                         ))}
                     </div>
                 </div>
@@ -66,6 +65,7 @@ const CompanyContestManagement: React.FC = () => {
                 <CreateContestModal
                     isOpen={isCreateModalOpen}
                     onClose={() => setIsCreateModalOpen(false)}
+                    setContests={setContests}
                 />
             </main>
         </div>

@@ -220,11 +220,13 @@ const QuickPlay: React.FC = () => {
 
     useEffect(() => {
         if (!gameData?.startedAt || !gameData?.duration) return;
+        console.log("gameData started at",gameData.startedAt)
         const startTimesamp = new Date(gameData.startedAt).getTime();
 
         const interval = setInterval(() => {
             const now = Date.now();
             const elapsed = Math.floor((now - startTimesamp) / 1000);
+            console.log("elapsed",elapsed)
             if (elapsed < gameData.countDown) {
                 setPhase("COUNTDOWN");
                 setCountdown(gameData.countDown - elapsed);

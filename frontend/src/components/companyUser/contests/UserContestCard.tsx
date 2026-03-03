@@ -19,7 +19,7 @@ export interface UserContestCardProps {
     title: string;
     description?: string;
     status: string;
-    participants: User[] | [];
+    participants: string[] | [];
     maxParticipants: number;
     startTime: string;
     joined: boolean;
@@ -70,8 +70,9 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
 }) => {
 
     const [isJoined, setIsJoined] = useState(joined);
-    const [participantList, setParticipantList] = useState<User[]>(participants);
+    const [participantList, setParticipantList] = useState<User[]>([]);
     const [isHovered, setIsHovered] = useState(false);
+    const [participantsCount, setParticipantsCount] = useState<number>(participants.length);
     const navigate = useNavigate();
 
     async function handleClick(contestId: string, actionLabel: string) {
@@ -84,11 +85,17 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
 
         setIsJoined(contest.joined);
         setParticipantList(contest.participants);
+            if(actionLabel === "join") {
+                setParticipantsCount(participantsCount + 1);
+            }else if(actionLabel === "cancel") {
+                setParticipantsCount(participantsCount - 1);
+            }
+       
     }
 
     // Capitalize properly in button later
     const action = isJoined ? "cancel" : "join";
-
+console.log("participantList", participantList);
     return (
         <div
             className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 relative w-full transform hover:-translate-y-1 overflow-hidden flex flex-col h-full"
@@ -197,7 +204,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
                     <div className="p-1.5 bg-gray-50 rounded-md text-gray-400">
                         <Users className="w-4 h-4" />
                     </div>
-                    <span className="font-medium">{participantList.length}/{maxParticipants} joined</span>
+                    <span className="font-medium">{participantsCount}/{maxParticipants} joined</span>
                 </div>
             </div>
 

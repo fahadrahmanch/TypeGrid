@@ -230,7 +230,7 @@ const GroupPlay: React.FC = () => {
   }, [typedText]);
 
   //countdown and game timer
-
+  
   useEffect(() => {
     if (!gameData?.startedAt || !gameData?.duration || finalResult.length) return;
     const startTimesamp = new Date(gameData.startedAt).getTime();
@@ -259,6 +259,7 @@ const GroupPlay: React.FC = () => {
   }, [gameData?.startedAt, gameData?.duration, gameData?.countDown, isFinished, finalResult]);
 
   //wpm
+  console.log("remaining time", remainingTime);
 
   useEffect(() => {
     if (phase !== "PLAY" || isFinished) return;

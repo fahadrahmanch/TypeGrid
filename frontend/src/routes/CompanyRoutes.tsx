@@ -18,6 +18,8 @@ import GroupDetails from "../pages/companyAdmin/GroupDetails";
 import Contests from "../pages/companyUser/Contests";
 import ContestLobby from "../pages/companyUser/contestLobby";
 import ContestArea from "../pages/companyUser/contestArea";
+import Challenge from "../pages/companyUser/challenge";
+
 export default function CompanyRoutes() {
   return (
     <Routes>
@@ -41,9 +43,9 @@ export default function CompanyRoutes() {
         }
       />
       <Route path="user/contests" element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]}><Contests /></ProtectRouteCompany>} />
+      <Route path="user/challenges" element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]}><Challenge /></ProtectRouteCompany>} />
       <Route path="user/contests/lobby/:contestId" element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]}><ContestLobby /></ProtectRouteCompany>} />
       <Route path="user/contest/:contestId" element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]}><ContestArea /></ProtectRouteCompany>} />
-
 
       <Route path="admin/lessons" element={<ProtectRouteCompany allowedRoles={["companyAdmin"]}><Lessons /></ProtectRouteCompany>} />
       <Route path="admin/contest-management" element={<ProtectRouteCompany allowedRoles={["companyAdmin"]}><CompanyContestManagement /></ProtectRouteCompany>} />

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { X, Calendar, Clock, Trash, Plus, Users, Globe } from "lucide-react";
 import { getCompanyGroups } from "../../../api/companyAdmin/companyGroup";
-import { createCompanyContest } from "../../../api/companyAdmin/companyContextAPI";
-interface CreateContestModalProps {
+import { updateCompanyContest, fetchContest } from "../../../api/companyAdmin/companyContextAPI";
+import { ContestProps } from "./ContestCard";
+interface EditContestModalProps {
     isOpen: boolean;
     onClose: () => void;
-    setContests: React.Dispatch<React.SetStateAction<any[]>>;
+    contestId: string;
+    onUpdate?: () => void;
+    setContests: React.Dispatch<React.SetStateAction<ContestProps[]>>;
 }
 
 interface RewardRank {
@@ -16,26 +19,97 @@ interface RewardRank {
     prize: string;
 }
 
-const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose,setContests }) => {
+const EditContestModal: React.FC<EditContestModalProps> = ({ isOpen, onClose, contestId, onUpdate ,setContests}) => {
     const [contestMode, setContestMode] = useState<"group" | "open">("group");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [targetGroup, setTargetGroup] = useState(""); 
+    const [targetGroup, setTargetGroup] = useState("");
     const [difficulty, setDifficulty] = useState("easy");
     const [textSource, setTextSource] = useState<"manual" | "random">("manual");
     const [contestText, setContestText] = useState("");
     const [date, setDate] = useState("");
-    const [duration, setDuration] = useState("30"); // minutes
+    const [duration, setDuration] = useState("30");
     const [maxParticipants, setMaxParticipants] = useState("10");
     const [companyGroups, setCompanyGroups] = useState([]);
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [startTime,setStartTime]=useState("");
-    // Reward Management State
-    const [rewards, setRewards] = useState<RewardRank[]>([
-        { rank: 1, place: "1st Place", type: "Money ($)", prize: "" },
-        { rank: 2, place: "2nd Place", type: "Money ($)", prize: "" },
-        { rank: 3, place: "3rd Place", type: "Money ($)", prize: "" },
-    ]);
+    const [startTime, setStartTime] = useState("");
+    const [rewards, setRewards] = useState<RewardRank[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        async function fetchGroups() {
+            try {
+                const response = await getCompanyGroups();
+                const groups = response.data.groups;
+                if (!groups) return;
+                setCompanyGroups(groups);
+            } catch (error) {
+                console.error("Failed to fetch groups", error);
+            }
+        }
+
+        async function loadContestDetails() {
+            if (!contestId) return;
+            setLoading(true);
+            try {
+                const res = await fetchContest(contestId);
+                const data = res.data.data;
+                if (data) {
+                    setContestMode(data.contestMode || "open");
+                    setTitle(data.title || "");
+                    setDescription(data.description || "");
+                    setTargetGroup(data.targetGroup || "");
+                    setDifficulty(data.difficulty || "easy");
+                    setTextSource(data.textSource || "manual");
+                    setContestText(data.contestText || "");
+
+                    if (data.date) {
+                        setDate(new Date(data.date).toISOString().split('T')[0]);
+                    }
+                    if (data.startTime) {
+                        try {
+                            const dateObj = new Date(data.startTime);
+                            setStartTime(dateObj.toTimeString().slice(0, 5));
+                        } catch (e) {
+                            setStartTime(data.startTime);
+                        }
+                    } else if (data.time) {
+                        setStartTime(data.time);
+                    }
+
+                    setDuration(data.duration ? data.duration.toString() : "30");
+                    setMaxParticipants(data.maxParticipants ? data.maxParticipants.toString() : "10");
+
+                    if (data.rewards && data.rewards.length > 0) {
+                        setRewards(data.rewards.map((r: any, idx: number) => ({
+                            rank: r.rank || idx + 1,
+                            place: `${r.rank || idx + 1}${['st', 'nd', 'rd'][(r.rank || idx + 1) - 1] || 'th'} Place`,
+                            type: "Money ($)", // assuming all are money, or map type appropriately
+                            prize: r.prize?.toString() || ""
+                        })));
+                    } else if (data.prize) {
+                        setRewards([{ rank: 1, place: "1st Place", type: "Money ($)", prize: data.prize.toString() }]);
+                    } else {
+                        setRewards([
+                            { rank: 1, place: "1st Place", type: "Money ($)", prize: "" },
+                            { rank: 2, place: "2nd Place", type: "Money ($)", prize: "" },
+                            { rank: 3, place: "3rd Place", type: "Money ($)", prize: "" },
+                        ]);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load contest details", error);
+                toast.error("Failed to load contest details");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        if (isOpen) {
+            fetchGroups();
+            loadContestDetails();
+        }
+    }, [contestId, isOpen]);
 
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
@@ -54,13 +128,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
         }
         if (!date) {
             newErrors.date = "Please select a date.";
-        } else {
-            const selectedDate = new Date(date);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Reset time for accurate comparison
-            if (selectedDate < today) {
-                newErrors.date = "Date cannot be in the past.";
-            }
         }
         if (!duration || parseInt(duration) <= 0) {
             newErrors.duration = "Duration must be a positive number.";
@@ -69,7 +136,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
             newErrors.maxParticipants = "Participants must be a positive number.";
         }
 
-        // validate rewards
         const rewardErrors: string[] = [];
         rewards.forEach((reward) => {
             if (!reward.prize.trim()) {
@@ -84,90 +150,38 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleCreateContest = async () => {
+    const handleUpdateContest = async () => {
         if (validateForm()) {
-            let data;
-            if (contestMode === "group" && !contestText) {
+            let data: any = {
+                contestMode,
+                title,
+                description,
+                difficulty,
+                textSource,
+                startTime,
+                date,
+                duration,
+                maxParticipants,
+                rewards: rewards.map(r => ({ rank: r.rank, prize: r.prize }))
+            };
 
-                data = {
-                    contestMode,
-                    title,
-                    description,
-                    targetGroup,
-                    difficulty,
-                    textSource,
-                    startTime,
-                    date,
-                    duration,
-                    maxParticipants,
-                    rewards
-                };
-            } else if (contestMode === "open" && !contestText) {
-                data = {
-                    contestMode,
-                    title,
-                    description,
-                    difficulty,
-                    textSource,
-                    startTime,
-                    // endTime,
-                    date,
-                    duration,
-                    maxParticipants,
-                    rewards
-                };
-            } else if (contestMode === "open" && contestText) {
-                data = {
-                    contestMode,
-                    title,
-                    description,
-                    difficulty,
-                    textSource,
-                    contestText,
-                    startTime,
-                    // endTime,
-                    date,
-                    duration,
-                    maxParticipants,
-                    rewards
-                };
-            } else if (contestMode === "group" && contestText) {
-                data = {
-                    contestMode,
-                    title,
-                    description,
-                    targetGroup,
-                    difficulty,
-                    textSource,
-                    contestText,
-                    date,
-                    duration,
-                    startTime,
-                    maxParticipants,
-                    rewards
-                };
+            if (contestMode === "group") data.targetGroup = targetGroup;
+            if (textSource === "manual") data.contestText = contestText;
+
+            try {
+                const response = await updateCompanyContest(contestId, data);
+                if (response.data?.success || response.status === 200 || response.data) {
+                    toast.success("Contest updated successfully");
+                    if (onUpdate) onUpdate();
+                    setContests((prev: any) => prev.map((c: any) => c._id === contestId ? { ...c, ...data } : c));
+                    onClose();
+                } else {
+                    toast.error("Failed to update contest");
+                }
+            } catch (error) {
+                console.error("Failed to update contest", error);
+                toast.error("Failed to update contest");
             }
-            const response = await createCompanyContest(data);
-            if (response) {
-                toast.success("Contest created successfully");
-                setTextSource("manual");
-                setTitle("");
-                setDescription("");
-                setDifficulty("");
-                setContestText("");
-                setDate("");
-                setDuration("");
-                setMaxParticipants("");
-                setRewards([
-                    { rank: 1, place: "1st Place", type: "Money ($)", prize: "" },
-                    { rank: 2, place: "2nd Place", type: "Money ($)", prize: "" },
-                    { rank: 3, place: "3rd Place", type: "Money ($)", prize: "" },
-                ]);
-                setContests((prev) => [...prev, response.data.data]);
-            } else {
-                toast.error("Failed to create contest");
-            }
-            onClose(); 
         } else {
             toast.error("Form has errors");
         }
@@ -189,53 +203,30 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
         setRewards(rewards.map(r => r.rank === rank ? { ...r, [field]: value } : r));
     };
 
-    useEffect(() => {
-        async function fetchGroups() {
-            try {
-                const response = await getCompanyGroups();
-                const groups = response.data.groups;
-                if (!groups) return;
-                setCompanyGroups(groups);
-            } catch (error) {
-                console.error("Failed to fetch groups", error);
-            }
-        }
-        fetchGroups();
-    }, []);
-
-
-    
-
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm overflow-y-auto pt-10 pb-10">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm overflow-y-auto pt-10 pb-10">
             <div className="bg-white rounded-2xl w-full max-w-3xl shadow-2xl scale-100 transition-all my-auto relative flex flex-col max-h-[90vh]">
-
-                {/* Header */}
                 <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-2xl">
-                    <h2 className="text-2xl font-bold text-gray-900">Create New Contest</h2>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
-                    >
+                    <h2 className="text-2xl font-bold text-gray-900">Edit Contest</h2>
+                    <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
-                {/* Scrollable Content */}
-                <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar flex-1">
-
-                    {/* Contest Mode Selection */}
+                <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar flex-1 relative">
+                    {loading && (
+                        <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center backdrop-blur-sm">
+                            <div className="w-8 h-8 rounded-full border-t-2 border-b-2 border-blue-600 animate-spin"></div>
+                        </div>
+                    )}
                     <div className="space-y-3">
                         <label className="text-sm font-semibold text-gray-700 block">Contest Mode</label>
                         <div className="grid grid-cols-2 gap-4">
                             <button
                                 onClick={() => setContestMode("group")}
-                                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "group"
-                                    ? "border-blue-600 bg-blue-50/50"
-                                    : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"
-                                    }`}
+                                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "group" ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"}`}
                             >
                                 <div className="flex items-center gap-2 mb-2">
                                     <Users className={`w-5 h-5 ${contestMode === "group" ? "text-blue-600" : "text-gray-500"}`} />
@@ -246,10 +237,7 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
 
                             <button
                                 onClick={() => setContestMode("open")}
-                                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "open"
-                                    ? "border-blue-600 bg-blue-50/50"
-                                    : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"
-                                    }`}
+                                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "open" ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"}`}
                             >
                                 <div className="flex items-center gap-2 mb-2">
                                     <Globe className={`w-5 h-5 ${contestMode === "open" ? "text-blue-600" : "text-gray-500"}`} />
@@ -260,7 +248,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         </div>
                     </div>
 
-                    {/* Contest Name */}
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-gray-700">Contest Name</label>
@@ -276,25 +263,8 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                             />
                             {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
                         </div>
-
-                        {/* Templates */}
-                        <div className="flex flex-wrap gap-2">
-                            {["Speed Typing Championship", "Accuracy Challenge", "Beginner Bootcamp", "Advanced Masters", "Weekly Sprint"].map(tag => (
-                                <button
-                                    key={tag}
-                                    onClick={() => {
-                                        setTitle(tag);
-                                        if (errors.title) setErrors({ ...errors, title: "" });
-                                    }}
-                                    className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
-                                >
-                                    {tag}
-                                </button>
-                            ))}
-                        </div>
                     </div>
 
-                    {/* Description */}
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700">Description</label>
                         <textarea
@@ -310,7 +280,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
                     </div>
 
-                    {/* Target Group (Only for Group Contest) */}
                     {contestMode === "group" && (
                         <div className="space-y-2 animate-fadeIn">
                             <label className="text-sm font-semibold text-gray-700">Target Group</label>
@@ -338,7 +307,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         </div>
                     )}
 
-                    {/* Difficulty Level */}
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700">Difficulty Level</label>
                         <div className="grid grid-cols-3 gap-3">
@@ -346,10 +314,7 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                                 <button
                                     key={level}
                                     onClick={() => setDifficulty(level)}
-                                    className={`py-2.5 text-sm font-medium rounded-xl border transition-all ${difficulty === level
-                                        ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200"
-                                        : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
-                                        }`}
+                                    className={`py-2.5 text-sm font-medium rounded-xl border transition-all ${difficulty === level ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"}`}
                                 >
                                     {level}
                                 </button>
@@ -357,7 +322,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         </div>
                     </div>
 
-                    {/* Text Source */}
                     <div className="space-y-3">
                         <label className="text-sm font-semibold text-gray-700">Text Source</label>
                         <div className="flex items-center gap-6">
@@ -393,7 +357,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         </div>
                     </div>
 
-                    {/* Contest Text (If Manual) */}
                     {textSource === "manual" && (
                         <div className="space-y-2 animate-fadeIn">
                             <label className="text-sm font-semibold text-gray-700">Contest Text</label>
@@ -411,7 +374,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         </div>
                     )}
 
-                    {/* Date & Duration */}
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-gray-700">Date</label>
@@ -447,7 +409,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         </div>
                     </div>
 
-                    {/* Start Time & End Time (Placeholders for now, can be computed or inputs) */}
                     <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-gray-700">Start Time</label>
@@ -461,21 +422,8 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                                 className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
                             />
                         </div>
-                        {/* <div className="space-y-2">
-                            <label className="text-sm font-semibold text-gray-700">End Time</label>
-                            <input
-                                type="time"
-                                value={endTime}
-                                onChange={(e) => {
-                                    setEndTime(e.target.value);
-                                    if (errors.endTime) setErrors({ ...errors, endTime: "" });
-                                }}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
-                            />
-                        </div> */}
                     </div>
 
-                    {/* Max Participants */}
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700">Maximum Participants</label>
                         <input
@@ -490,7 +438,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         {errors.maxParticipants && <p className="text-red-500 text-xs mt-1">{errors.maxParticipants}</p>}
                     </div>
 
-                    {/* Reward/Point Management */}
                     <div className="space-y-4 pt-4 border-t border-gray-100">
                         <div className="flex items-center justify-between">
                             <h3 className="text-md font-bold text-gray-900">Reward /Point Management</h3>
@@ -524,7 +471,6 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                                             className="w-full bg-transparent text-sm text-gray-600 focus:outline-none cursor-pointer"
                                         >
                                             <option>Money ($)</option>
-
                                         </select>
                                     </div>
                                     <div className="w-px h-6 bg-gray-200" />
@@ -550,21 +496,14 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                             ))}
                         </div>
                     </div>
-
                 </div>
 
-                {/* Footer */}
                 <div className="flex justify-end gap-3 px-8 py-5 border-t border-gray-100 bg-gray-50/50 sticky bottom-0 rounded-b-2xl">
-                    <button
-                        onClick={onClose}
-                        className="px-6 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-                    >
+                    <button onClick={onClose} className="px-6 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                         Cancel
                     </button>
-                    <button
-                        onClick={handleCreateContest}
-                        className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:translate-y-px transition-all">
-                        Create Contest
+                    <button onClick={handleUpdateContest} className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:translate-y-px transition-all">
+                        Save Changes
                     </button>
                 </div>
             </div>
@@ -572,4 +511,4 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
     );
 };
 
-export default CreateContestModal;
+export default EditContestModal;

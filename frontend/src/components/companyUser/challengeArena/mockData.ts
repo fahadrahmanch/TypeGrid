@@ -1,0 +1,18 @@
+import { Teammate, BaseChallenge, CompletedChallenge } from './types';
+
+export const mockTeammates: Teammate[] = [
+    { id: '1', name: 'Sarah Johnson', role: 'Senior Developer', avatar: 'https://i.pravatar.cc/150?u=1', status: 'online', avgWpm: 95, accuracy: 98 },
+    { id: '2', name: 'Michael Chen', role: 'Tech Lead', avatar: 'https://i.pravatar.cc/150?u=2', status: 'online', avgWpm: 102, accuracy: 97 },
+    { id: '3', name: 'Emily Rodriguez', role: 'Junior Developer', avatar: 'https://i.pravatar.cc/150?u=3', status: 'offline', avgWpm: 78, accuracy: 94 },
+    { id: '4', name: 'David Kim', role: 'Senior Developer', avatar: 'https://i.pravatar.cc/150?u=4', status: 'online', avgWpm: 88, accuracy: 96 },
+    { id: '5', name: 'Jessica Brown', role: 'Intern', avatar: 'https://i.pravatar.cc/150?u=5', status: 'online', avgWpm: 65, accuracy: 91 },
+    { id: '6', name: 'Alex Turner', role: 'Mid-level Developer', avatar: 'https://i.pravatar.cc/150?u=6', status: 'offline', avgWpm: 82, accuracy: 95 }
+];
+
+export const mockChallenges: (BaseChallenge | CompletedChallenge)[] = [
+    { id: 'c1', opponent: mockTeammates[0], difficulty: 'medium', durationSeconds: 60, type: 'sent', status: 'pending' },
+    { id: 'c2', opponent: mockTeammates[1], difficulty: 'hard', durationSeconds: 90, type: 'sent', status: 'accepted' },
+    { id: 'c3', opponent: mockTeammates[2], difficulty: 'easy', durationSeconds: 60, type: 'received', status: 'pending' },
+    { id: 'c4', opponent: mockTeammates[3], difficulty: 'medium', durationSeconds: 60, type: 'received', status: 'waiting' },
+    { id: 'c5', opponent: mockTeammates[4], difficulty: 'easy', durationSeconds: 30, type: 'completed', status: 'completed', result: 'won', yourWpm: 95, theirWpm: 72 } as CompletedChallenge
+];
