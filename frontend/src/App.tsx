@@ -15,10 +15,10 @@ import { setAdminAccessToken, setAdminAuthLoaded, } from "./store/slices/auth/ad
 import { companyRefreshAPI } from "./api/auth/authServices";
 import { setcompanyAccessToken, setCompanyAuthLoaded } from "./store/slices/auth/companyAuthSlice";
 
+import ChallengeModal from "./components/common/ChallengeModal";
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
-
   useEffect(() => {
     const path = location.pathname;
     const load = async () => {
@@ -69,6 +69,7 @@ function App() {
     load();
   }, []);
 
+
   return (
     <>
       <ToastContainer />
@@ -77,6 +78,7 @@ function App() {
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/company/*" element={<CompanyRoutes />} />
       </Routes>
+      <ChallengeModal />
     </>
   );
 }

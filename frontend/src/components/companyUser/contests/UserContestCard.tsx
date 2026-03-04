@@ -95,7 +95,6 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
 
     // Capitalize properly in button later
     const action = isJoined ? "cancel" : "join";
-console.log("participantList", participantList);
     return (
         <div
             className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 relative w-full transform hover:-translate-y-1 overflow-hidden flex flex-col h-full"

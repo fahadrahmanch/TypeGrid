@@ -3,12 +3,12 @@ export type UserStatus = 'online' | 'offline';
 export interface Teammate {
     _id: string;
     name: string;
-    role: string;
+    companyRole: string;
     avatar: string;
-    status: UserStatus;
+    online: boolean;
     avgWpm: number;
     accuracy: number;
-}
+}   
 
 export type ChallengeStatus = 'pending' | 'accepted' | 'completed' | 'waiting';
 export type ChallengeType = 'sent' | 'received' | 'completed';
@@ -19,6 +19,7 @@ export interface BaseChallenge {
     difficulty: 'easy' | 'medium' | 'hard';
     durationSeconds: number;
     type: ChallengeType;
+    senderId:string;
     status: ChallengeStatus;
 }
 

@@ -20,7 +20,7 @@ const CompanyUserNavbar: React.FC = () => {
         { name: "Dashboard", icon: House, path: "/company/user/dashboard" },
         { name: "Lessons", icon: BookOpen, path: "/company/user/lessons" },
         { name: "Contests", icon: Trophy, path: "/company/user/contests" },
-        { name: "Challenges", icon: Swords, path: "/company/user/my-challenges", badge: true },
+        { name: "Challenges", icon: Swords, path: "/company/user/challenges", badge: true },
         { name: "Keyboard", icon: Keyboard, path: "/company/user/my-keyboard" },
         { name: "Practice", icon: Sparkles, path: "/company/user/my-practice" },
         { name: "Notifications", icon: Bell, path: "/company/user/my-notifications" },

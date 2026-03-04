@@ -19,7 +19,6 @@ const CompanyContestManagement: React.FC = () => {
         };
         fetchContests();
     }, []);
-    console.log("contests", contests)
     return (
         <div className="flex min-h-screen bg-[#FFF8EA]">
             {/* Fixed Sidebar */}

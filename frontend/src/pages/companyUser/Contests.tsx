@@ -173,7 +173,6 @@ const Contests: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                      {openContests.map((contest) => {
   const start = new Date(contest.startTime);
-  console.log("contest", contest);
 
   return (
     <UserContestCard

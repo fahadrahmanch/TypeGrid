@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Target, Swords, Search, ChevronDown } from "lucide-react";
 import TeammateCard from './TeammateCard';
 import { Teammate } from './types';
-
+import { companyUsers } from '../../../api/companyUser/challenge';
+import { useSelector } from 'react-redux';
 const ChallengeArena = ({ setView }: { setView: (v: 'arena' | 'my-challenges') => void }) => {
     const [users, setUsers] = useState<Teammate[]>([])
+    const companyUser = useSelector((state: any) => state.companyAuth.user);
+
     useEffect(() => {
         async function fetchCompanyUsers() {
             try {
@@ -18,7 +21,6 @@ const ChallengeArena = ({ setView }: { setView: (v: 'arena' | 'my-challenges') =
         }
         fetchCompanyUsers();
     }, [])
-    console.log(users)
     return (
         <div className="max-w-7xl mx-auto">
             {/* Header Area */}
@@ -38,6 +40,7 @@ const ChallengeArena = ({ setView }: { setView: (v: 'arena' | 'my-challenges') =
 
                 <button
                     onClick={() => setView('my-challenges')}
+
                     className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-indigo-600 transition-colors"
                 >
                     <Swords className="w-4 h-4" />
@@ -75,8 +78,12 @@ const ChallengeArena = ({ setView }: { setView: (v: 'arena' | 'my-challenges') =
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {users.map(user => (
-                    <TeammateCard key={user._id} teammate={user} />
+                {users.filter(user => user._id !== companyUser._id).map(user => (
+                    <TeammateCard
+                        key={user._id}
+                        teammate={user}
+                        onViewChallenges={() => setView('my-challenges')}
+                    />
                 ))}
             </div>
         </div>

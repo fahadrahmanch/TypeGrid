@@ -259,7 +259,6 @@ const GroupPlay: React.FC = () => {
   }, [gameData?.startedAt, gameData?.duration, gameData?.countDown, isFinished, finalResult]);
 
   //wpm
-  console.log("remaining time", remainingTime);
 
   useEffect(() => {
     if (phase !== "PLAY" || isFinished) return;

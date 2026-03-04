@@ -95,7 +95,6 @@ const ContestArea: React.FC = () => {
             try {
                 setLoading(true);
                 const response = await fetchContestAreaDetails(contestId);
-                console.log("response", response.data.data)
                 if (!response?.data?.data) {
                     navigate("/company/user/contests", { replace: true });
                     return;
@@ -458,7 +457,6 @@ const ContestArea: React.FC = () => {
     
     useEffect(() => {
   const handleRestart = (data: any) => {
-    console.log("Contest restarted for user");
     
     // Clear result screen
     setFinalResult([]);
