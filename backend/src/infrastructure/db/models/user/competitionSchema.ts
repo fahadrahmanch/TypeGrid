@@ -63,7 +63,13 @@ const competitionSchema = new Schema(
     },
   },
 ],
-
+CompanyId:{
+  type: Types.ObjectId,
+  ref:"Company",
+  require:false,
+  default:null
+}
+,
      countDown: {
       type: Number, // seconds
       required: true,

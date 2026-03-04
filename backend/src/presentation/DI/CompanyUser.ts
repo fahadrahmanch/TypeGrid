@@ -17,10 +17,20 @@ import { CompanyGroup } from "../../infrastructure/db/models/company/companyGrou
 import { contestRepository } from "../../infrastructure/db/repositories/companyUser/contestRepository";
 import { getContestUseCase } from "../../application/use-cases/companyUser/getContestUseCase";
 import { getContestDataUseCase } from "../../application/use-cases/companyUser/getContestDataUseCase";
+import { challengesController } from "../controllers/company-user/ChallegesController";
+import { getCompanyUsers } from "../../application/use-cases/companyUser/getCompanyUsers";
+import { makeChallengeUseCase } from "../../application/use-cases/companyUser/challenges/makeChallengeUseCase";
+import { CompanyChallenge } from "../../infrastructure/db/models/company/companyChallengeSchema";
+import { Competition } from "../../infrastructure/db/models/user/competitionSchema";
+import { getSentChallengesUseCase } from "../../application/use-cases/companyUser/challenges/getSendChallengesUseCase";
+import { getChallengesUseCase } from "../../application/use-cases/companyUser/challenges/getChallengesUseCase";
+import { acceptChallengeUseCase } from "../../application/use-cases/companyUser/challenges/acceptChallengeUseCase";
 const BaseAssignmentLessonRepository=new BaseRepository(LessonAssignment);
 const BaseRepoUser=new BaseRepository(User);
 const BaseRepoLesson=new BaseRepository(Lesson);
 const BaseRepoLessonResult=new BaseRepository(LessonResult);
+const BaseRepoChallenge=new BaseRepository(CompanyChallenge)
+const BaseRepoCompetition=new BaseRepository(Competition)
 const GetAssignLessonUseCase=new getAssignLessonUseCase(BaseAssignmentLessonRepository);
 const GetMyLessonsUseCase=new getMyLessonsUseCase(BaseAssignmentLessonRepository,BaseRepoUser,BaseRepoLesson);
 const SaveLessonResultUseCase=new saveLessonResultUseCase(BaseRepoLessonResult,BaseAssignmentLessonRepository);
@@ -32,5 +42,12 @@ const ContestRepository=new contestRepository(Contest);
 const GetGroupContestsUseCase=new getGroupConstestsUsecase(baseRepoContest,BaseRepoUser,CompanyGroupRepository,ContestRepository);
 const GetContestUseCase=new getContestUseCase(baseRepoContest,BaseRepoUser,ContestRepository);
 const GetContestDataUseCase=new getContestDataUseCase(baseRepoContest,BaseRepoUser,ContestRepository);
+const GetCompanyUsers=new getCompanyUsers(BaseRepoUser)
+
+const MakeChallengeUseCase=new makeChallengeUseCase(BaseRepoChallenge,BaseRepoUser,BaseRepoCompetition,BaseRepoLesson)
+const GetSentChallengesUseCase= new getSentChallengesUseCase(BaseRepoChallenge,BaseRepoUser)
+const GetAllChallengesUseCase=new getChallengesUseCase(BaseRepoChallenge,BaseRepoUser)
+const AcceptChallengeUseCase=new acceptChallengeUseCase(BaseRepoChallenge,BaseRepoCompetition)
+export const injectChallengesController=new challengesController(GetCompanyUsers,MakeChallengeUseCase,GetSentChallengesUseCase,GetAllChallengesUseCase,AcceptChallengeUseCase)
 export const injectContestController=new ContestsController(GetOpenContestsUseCase,JoinOrLeaveContestUseCase,GetGroupContestsUseCase,GetContestUseCase,GetContestDataUseCase);
 export const injectMyLessonsController= new MyLessonsController(GetMyLessonsUseCase,GetAssignLessonUseCase,SaveLessonResultUseCase); 

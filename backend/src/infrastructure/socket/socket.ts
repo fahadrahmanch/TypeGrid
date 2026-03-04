@@ -17,9 +17,9 @@ export const initSocket = (server: any) => {
   });
 
   io.on("connection", (socket) => {
-    //group play and groups features
     socket.on('register-user',async(userId:string)=>{
     socket.data.userId=userId
+    socket.join(`user:${userId}`);
     await redis.sadd("online:users",userId)
       io.emit("user-status-changed", {
       userId,
@@ -310,7 +310,6 @@ socket.on("quick-join", async ({ competitionId, userId }) => {
   
 
   } catch (error) {
-    console.log("Error in quick-join:", error);
     socket.emit("quick-join-error", {
       message: "Unable to join quick play",
     });
@@ -1023,6 +1022,33 @@ socket.on("end-contest", async ({ contestId }) => {
 
   await redis.del(key);
 });
+
+
+//company challenge
+socket.on("challenge-accepted", ({ challengeId, senderId }) => {
+
+  io.to(`user:${senderId}`).emit("challenge-status-updated", {
+    challengeId,
+    status: "accepted"
+  })
+
+})
+
+socket.on("join-match", async ({ challengeId }) => {
+
+    socket.join(challengeId)
+
+    const room = io.sockets.adapter.rooms.get(challengeId)
+    console.log("room in join room",room)
+    if (room && room.size === 2) {
+
+        io.to(challengeId).emit("start-match", { challengeId })
+
+    }
+
+})
+
+
 
   socket.on("disconnect", async () => {
     // if (!socket.data.groupId || !socket.data.userId) {

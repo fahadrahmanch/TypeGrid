@@ -2,33 +2,35 @@ export type ChallengeStatus =
   | "pending"
   | "accepted"
   | "declined"
-  | "completed";
+  | "completed"
+  | "waiting";
 
 export interface ICompanyChallenge {
   _id?: string;
-  companyId: string;
+  CompanyId: string;
   senderId: string;
   receiverId: string;
-  difficulty: "easy" | "medium" | "hard";
+  // difficulty: "easy" | "medium" | "hard";
   status?: ChallengeStatus;
   competitionId?: string | null;
 }
 
 export class CompanyChallengeEntity {
   private _id?: string;
-  private companyId: string;
+  private CompanyId: string;
   private senderId: string;
   private receiverId: string;
-  private difficulty: "easy" | "medium" | "hard";
+  // private difficulty: "easy" | "medium" | "hard";
   private status: ChallengeStatus;
   private competitionId?: string | null;
 
   constructor(data: ICompanyChallenge) {
     this._id = data._id;
-    this.companyId = data.companyId;
+    this.CompanyId = data.CompanyId;
     this.senderId = data.senderId;
     this.receiverId = data.receiverId;
-    this.difficulty = data.difficulty;
+    // this.difficulty = data.difficulty;
+    this.CompanyId=data.CompanyId??null;
     this.status = data.status ?? "pending";
     this.competitionId = data.competitionId ?? null;
 
@@ -41,13 +43,12 @@ export class CompanyChallengeEntity {
     }
   }
 
-  accept(competitionId: string) {
+  accept() {
     if (this.status !== "pending") {
       throw new Error("Only pending challenge can be accepted");
     }
 
     this.status = "accepted";
-    this.competitionId = competitionId;
   }
 
   decline() {
@@ -77,10 +78,10 @@ export class CompanyChallengeEntity {
   toObject() {
     return {
       _id: this._id,
-      companyId: this.companyId,
+      CompanyId: this.CompanyId,
       senderId: this.senderId,
       receiverId: this.receiverId,
-      difficulty: this.difficulty,
+      // difficulty: this.difficulty,
       status: this.status,
       competitionId: this.competitionId,
     };

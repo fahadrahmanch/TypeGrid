@@ -142,7 +142,14 @@ CHANGE_STATUS:"/quick-play/start/:competitionId",
   JOIN_OR_LEAVE_CONTEST:"/join-or-leave-contest/:contestId",
   GROUP_CONTESTS:"/group-contests",
   FETCH_CONTEST:"/company/contest/:contestId",
-  FETCH_CONTEST_DATA:"/company/contest-area/:contestId"
+  FETCH_CONTEST_DATA:"/company/contest-area/:contestId",
+  FETCH_COMPANY_USRS:"/company/users",
+
+  ///challenge
+  MAKE_CHALLENGE:"/challenge",
+  CHECK_ALREAY_SEND:`/challenge/check-challenge-sent`,
+  GET_CHALLENGES:"/challenges",
+  CHALLENGE_ACCEPT:`/challenge/accept/:challengeId`,
 
   }
 

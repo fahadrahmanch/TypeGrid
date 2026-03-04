@@ -18,6 +18,7 @@ type CompetitionProps = {
   id?: string;
   type: CompetitionType;
   mode: CompetitionMode;
+  CompanyId?: string; 
   participants?: string[];
   groupId?: string | null;
   status?: CompetitionStatus;
@@ -36,6 +37,7 @@ export class CompetitionEntity {
   private groupId!: string | null;
   private status!: CompetitionStatus;
   private textId?: string;
+  private CompanyId:string|null;
   private duration!: number;
   private reward!: Reward[];
   private countDown!:number;
@@ -50,6 +52,7 @@ export class CompetitionEntity {
     this.status = props.status ?? "pending";
     this.textId = props.textId;
     this.duration = props.duration;
+    this.CompanyId=props.CompanyId||null
     this.reward = props.reward ?? [];
     this.countDown=props?.countDown||10;
     this.startedAt = props.startedAt ?? new Date();
@@ -116,6 +119,7 @@ getMaxParticipantsInQuickPlay(){
       textId: this.textId,
       duration: this.duration,
       reward: this.reward,
+      CompanyId:this.CompanyId,
       countDown:this.countDown,
       startedAt: this.startedAt 
     };

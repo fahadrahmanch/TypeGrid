@@ -8,8 +8,6 @@ export class finishContestUseCase implements IFinishContestUseCase {
     private _baseRepoResult: IBaseRepository<any>,
   ) {}
   async execute(contestId: string, result: any[]): Promise<void> {
-    console.log("contest id in usecase", contestId);
-    console.log("result in use Case", result);
     const contest = await this._baseRepocontest.findById(contestId);
     const contestEntity = new ContestEntity(contest);
     contestEntity.completeContest();
