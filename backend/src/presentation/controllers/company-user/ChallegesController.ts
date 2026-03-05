@@ -7,13 +7,15 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { IGetChallengesUseCase } from "../../../application/use-cases/interfaces/companyUser/IGetChallengesUseCase";
 import { getIO } from "../../../infrastructure/socket/socket";
 import { IAcceptChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/IAcceptChallengeUseCase";
+import { IGetChallengeGameDataUseCase } from "../../../application/use-cases/interfaces/companyUser/IGetChallengeGameDataUseCase";
 export class challengesController{
     constructor(
     private _getCompanyUsersUseCase:IGetCompanyUsers,
     private _makeChallengeUseCase:IMakeChallengeUseCase,
     private _getSentChallengesUseCase:IGetSentChallengeUseCase,
     private _getChallengesUseCase:IGetChallengesUseCase,
-    private _acceptChallengeUseCase:IAcceptChallengeUseCase
+    private _acceptChallengeUseCase:IAcceptChallengeUseCase,
+    private _getChallengeGameDataUseCase:IGetChallengeGameDataUseCase
     ){}
   async companyUsers(req: AuthRequest, res: Response): Promise<void> {
   try {
@@ -181,6 +183,38 @@ async acceptChallenge(req: AuthRequest, res: Response): Promise<void> {
       message: error.message || "Internal server error"
     });
 
+  }
+}
+
+async getChallengeGameData(req: AuthRequest, res: Response): Promise<void> {
+  try {
+
+    const challengeId = req.params.challengeId
+
+    if (!challengeId) {
+      res.status(400).json({
+        success: false,
+        message: "Challenge ID is required"
+      })
+      return
+    }
+
+    const challengeGameData = await this._getChallengeGameDataUseCase.execute(challengeId)
+
+
+    res.status(200).json({
+      success: true,
+      data: challengeGameData
+    })
+
+  } catch (error: any) {
+
+    console.error("Error in getChallengeGameData:", error)
+
+    res.status(500).json({
+      success: false,
+      message: error?.message || "Internal server error"
+    })
   }
 }
 

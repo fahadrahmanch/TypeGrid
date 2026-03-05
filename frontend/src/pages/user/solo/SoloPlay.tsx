@@ -70,18 +70,18 @@ useEffect(() => {
             const now = Date.now();
             const elapsed = Math.floor((now - startTime) / 1000);
             setElapsedTime(elapsed);
-            if (elapsed < gameData.startTime) {
+            if (elapsed < gameData.countDown) {
                 setPhase("COUNTDOWN");
-                setCountdown(gameData.startTime - elapsed);
+                setCountdown(gameData.countDown - elapsed);
             }
-            else if (elapsed < gameData.startTime + gameData.duration) {
+            else if (elapsed < gameData.countDown + gameData.duration) {
                 setPhase("PLAY");
                  if (playStartRef.current === null) {
     playStartRef.current = Date.now();
   }
-                setRemainingTime(gameData.startTime + gameData.duration - elapsed);
+                setRemainingTime(gameData.countDown + gameData.duration - elapsed);
 
-                setElapsedTime(elapsed - gameData.startTime);
+                setElapsedTime(elapsed - gameData.countDown);
             }
             else {
                 setPhase("PLAY");
@@ -91,7 +91,7 @@ useEffect(() => {
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [gameData?.startedAt, gameData?.duration, gameData?.startTime, isFinished, space]);
+    }, [gameData?.startedAt, gameData?.duration, gameData?.countDown, isFinished, space]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {

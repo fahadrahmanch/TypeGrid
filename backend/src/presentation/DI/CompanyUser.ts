@@ -25,6 +25,7 @@ import { Competition } from "../../infrastructure/db/models/user/competitionSche
 import { getSentChallengesUseCase } from "../../application/use-cases/companyUser/challenges/getSendChallengesUseCase";
 import { getChallengesUseCase } from "../../application/use-cases/companyUser/challenges/getChallengesUseCase";
 import { acceptChallengeUseCase } from "../../application/use-cases/companyUser/challenges/acceptChallengeUseCase";
+import { GetChallengeGameDataUseCase } from "../../application/use-cases/companyUser/challenges/getChallengeGameDataUseCase";
 const BaseAssignmentLessonRepository=new BaseRepository(LessonAssignment);
 const BaseRepoUser=new BaseRepository(User);
 const BaseRepoLesson=new BaseRepository(Lesson);
@@ -48,6 +49,7 @@ const MakeChallengeUseCase=new makeChallengeUseCase(BaseRepoChallenge,BaseRepoUs
 const GetSentChallengesUseCase= new getSentChallengesUseCase(BaseRepoChallenge,BaseRepoUser)
 const GetAllChallengesUseCase=new getChallengesUseCase(BaseRepoChallenge,BaseRepoUser)
 const AcceptChallengeUseCase=new acceptChallengeUseCase(BaseRepoChallenge,BaseRepoCompetition)
-export const injectChallengesController=new challengesController(GetCompanyUsers,MakeChallengeUseCase,GetSentChallengesUseCase,GetAllChallengesUseCase,AcceptChallengeUseCase)
+const GetGameDataChallengeUseCase=new GetChallengeGameDataUseCase(BaseRepoChallenge,BaseRepoCompetition,BaseRepoUser,BaseRepoLesson)
+export const injectChallengesController=new challengesController(GetCompanyUsers,MakeChallengeUseCase,GetSentChallengesUseCase,GetAllChallengesUseCase,AcceptChallengeUseCase,GetGameDataChallengeUseCase)
 export const injectContestController=new ContestsController(GetOpenContestsUseCase,JoinOrLeaveContestUseCase,GetGroupContestsUseCase,GetContestUseCase,GetContestDataUseCase);
 export const injectMyLessonsController= new MyLessonsController(GetMyLessonsUseCase,GetAssignLessonUseCase,SaveLessonResultUseCase); 

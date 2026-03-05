@@ -150,7 +150,7 @@ CHANGE_STATUS:"/quick-play/start/:competitionId",
   CHECK_ALREAY_SEND:`/challenge/check-challenge-sent`,
   GET_CHALLENGES:"/challenges",
   CHALLENGE_ACCEPT:`/challenge/accept/:challengeId`,
-
+  GET_CHALLENGE_GAME_DATA:`/challenge/game-data/:challengeId`
   }
 
   

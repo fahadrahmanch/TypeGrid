@@ -4,6 +4,7 @@ import { injectQuickSocketController } from "../../presentation/DI/socketDI";
 import redis from "../../config/redis";
 import { checkGameEndService,checkQuickGameEndService ,checkCompanyContestGameEndService} from "../../application/services/gameResultService";
 import { injectContestSocketController } from "../../presentation/DI/socketDI";
+import { injectChallengeSocketController } from "../../presentation/DI/socketDI";
 let io: Server;
 
 
@@ -1039,9 +1040,8 @@ socket.on("join-match", async ({ challengeId }) => {
     socket.join(challengeId)
 
     const room = io.sockets.adapter.rooms.get(challengeId)
-    console.log("room in join room",room)
     if (room && room.size === 2) {
-
+        await injectChallengeSocketController.execute(challengeId)
         io.to(challengeId).emit("start-match", { challengeId })
 
     }

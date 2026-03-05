@@ -37,7 +37,19 @@ export const RealtimeProvider = ({ children }: any) => {
         socket.emit("register-user", companyUser._id);
 
     }, [companyUser]);
-  
+    useEffect(() => {
+
+        socket.on("start-match", ({ challengeId }) => {
+
+            window.location.href = `/company/user/challenge/${challengeId}`;
+
+        });
+
+        return () => {
+            socket.off("start-match");
+        };
+        
+    }, []);
 
     return (
         <RealtimeContext.Provider value={{ socket, challengeModal, setChallengeModal }}>

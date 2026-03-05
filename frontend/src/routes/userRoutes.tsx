@@ -33,7 +33,7 @@ export default function UserRoutes() {
       <Route path="forgot/password" element={<IsloggedUser><ForgotPassword /></IsloggedUser>} />
       <Route path="forgot/password/otp" element={<IsloggedUser><OtpForgotPassword /></IsloggedUser>} />
       <Route path="create/new/password" element={<IsloggedUser><NewPasswordForm /></IsloggedUser>} />
-       
+
       <Route path="/" element={<ProtectRouteUser><Home /></ProtectRouteUser>} />
       <Route path="profile" element={<ProtectRouteUser><Profile /></ProtectRouteUser>} />
       <Route path="profile/edit" element={<ProtectRouteUser><EditProfile /></ProtectRouteUser>} />
@@ -56,7 +56,6 @@ export default function UserRoutes() {
       <Route path="/group-play/game/:joinLink" element={<ProtectRouteUser><GroupPlay /></ProtectRouteUser>} />
 
       <Route path="/solo-play/:soloId" element={<ProtectRouteUser><SoloPlay /></ProtectRouteUser>} />
-      
 
       {/* quick play */}
       <Route path="/quick-play" element={<ProtectRouteUser><QuickPlay /></ProtectRouteUser>} />

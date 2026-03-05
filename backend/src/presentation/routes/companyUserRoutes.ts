@@ -53,6 +53,9 @@ this.router.get(Routes.COMPANY_USER.GET_CHALLENGES,checkRoleBasedMiddleware(['co
 this.router.put(Routes.COMPANY_USER.CHALLENGE_ACCEPT,checkRoleBasedMiddleware(['companyAdmin','companyUser']),(req:Request,res:Response)=>{
   injectChallengesController.acceptChallenge(req,res)
 })
+this.router.get(Routes.COMPANY_USER.GET_CHALLENGE_GAME_DATA,checkRoleBasedMiddleware(['companyAdmin','companyUser']),(req:Request,res:Response)=>{
+  injectChallengesController.getChallengeGameData(req,res)
+})
   }
 
   getRouter() {

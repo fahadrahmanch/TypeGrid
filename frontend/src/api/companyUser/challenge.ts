@@ -16,3 +16,6 @@ export async function getAllChallenges() {
 export async function challengeAccept(challengeId:string){
     return companyAPI.put(`/challenge/accept/${challengeId}`)
 }
+export async function getChallengeGameData(challengeId:string){
+    return companyAPI.get(`/challenge/game-data/${challengeId}`)
+}

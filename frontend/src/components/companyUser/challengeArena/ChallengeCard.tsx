@@ -64,8 +64,8 @@ const ChallengeCard = ({ challenge }: { challenge: BaseChallenge | CompletedChal
 
             setHasJoined(true)
 
-            socket.emit("join-challenge-match", {
-                challengeId
+            socket.emit("join-match", {
+                challengeId: String(challengeId)
             })
 
         } catch (error) {
@@ -73,17 +73,7 @@ const ChallengeCard = ({ challenge }: { challenge: BaseChallenge | CompletedChal
         }
 
     }
-    useEffect(() => {
 
-        socket.on("start-match", ({ challengeId }) => {
-
-            navigate(`/challenge/${challengeId}`)
-
-        })
-
-        return () => { socket.off("start-match"); };
-
-    }, [])
 
     return (
         <div className={`bg-[#FAF3E0] rounded-2xl p-6 shadow-sm border flex flex-col transition-all hover:shadow-md ${isAccepted ? 'border-green-300 border-l-4 border-l-green-400' : isWaiting ? 'border-indigo-200 border-l-4 border-l-indigo-400' : isPending && isSent ? 'border-[#EBE3D5] border-l-4 border-l-yellow-400' : 'border-[#EBE3D5]'}`}>

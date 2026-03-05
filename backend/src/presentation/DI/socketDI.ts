@@ -13,17 +13,23 @@ import { finishQuickPlayResultUseCase } from "../../application/use-cases/user/q
 import { contestSocketController } from "../../infrastructure/socket/contestSocketController";
 import { finishContestUseCase } from "../../application/use-cases/companyUser/finishContestUseCase";
 import { Contest } from "../../infrastructure/db/models/company/companyContestSchema";
+import { challengeSocketController } from "../../infrastructure/socket/challengeSocketController";
+import { startChallengeUseCase } from "../../application/use-cases/companyUser/challenges/startChallengeUseCase";
+import { CompanyChallenge } from "../../infrastructure/db/models/company/companyChallengeSchema";
 const baseRepoCompetion=new BaseRepository(Competition);
 const baseRepoGroup=new BaseRepository(Group);
 const baseRepoUser=new BaseRepository(User);
 const baseRepoResult=new BaseRepository(Result);
 const baseRepoContest=new BaseRepository(Contest)
+const baseRepoChallenge=new BaseRepository(CompanyChallenge)
 const removeMemberUseCase=new RemoveMemberGroupPlayGroupUseCase(baseRepoGroup,baseRepoUser);
 const validateGroupPlayMemberUseCase=new ValidateGroupPlayMemberUseCase(baseRepoGroup,baseRepoCompetion);
 const FinishGroupPlayUseCase=new finishGroupPlayUseCase(baseRepoCompetion,baseRepoGroup,baseRepoResult);
 const getJoinMemberUseCaseInstance=new getJoinMemberUseCase(baseRepoCompetion,baseRepoUser);
 const FinishQuickPlayResultUseCase=new finishQuickPlayResultUseCase(baseRepoCompetion,baseRepoResult);
 const FinishContestUseCase=new finishContestUseCase(baseRepoContest,baseRepoResult)
+const StartChallengeUseCase=new startChallengeUseCase(baseRepoChallenge,baseRepoCompetion)
+export const injectChallengeSocketController=new challengeSocketController(StartChallengeUseCase)
 export const injectContestSocketController=new contestSocketController(FinishContestUseCase)
 export const injectQuickSocketController=new quickSocketController(getJoinMemberUseCaseInstance,FinishQuickPlayResultUseCase);
 export const injectGroupSocketController =new GroupSocketController(removeMemberUseCase,validateGroupPlayMemberUseCase,FinishGroupPlayUseCase);

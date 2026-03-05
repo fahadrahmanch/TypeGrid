@@ -30,21 +30,13 @@ const ChallengeModal = () => {
             getChallenge();
         }
     }, [challengeModal]);
-    useEffect(() => {
-        socket.on("start-match", ({ challengeId }) => {
-            navigate(`/challenge/${challengeId}`);
-            setWaiting(false);
-            setChallengeModal(null);
-        });
-
-        return () => {
-            socket.off("start-match");
-        };
-    }, [navigate, setChallengeModal]);
+  
 
     const handleJoinMatch = () => {
         setWaiting(true);
-        socket.emit("join-match", { challengeId: challengeModal.challengeId });
+            const roomId = String(challengeModal.challengeId)
+
+        socket.emit("join-match", { challengeId: roomId });
     };
 
 
