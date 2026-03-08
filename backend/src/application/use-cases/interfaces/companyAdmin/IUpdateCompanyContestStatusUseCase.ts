@@ -1,4 +1,3 @@
-
-export interface IUpdateCompanyContestStatusUseCase{
-    execute(contestId:string,status:string):Promise<void>
+export interface IUpdateCompanyContestStatusUseCase {
+  execute(contestId: string, status: string): Promise<void>;
 }

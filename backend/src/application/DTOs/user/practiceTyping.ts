@@ -10,6 +10,6 @@ export function mapPracticeTypingToDTO(doc: any): PracticeTypingDTO {
     id: doc._id.toString(),
     text: doc.text,
     category: doc.category,
-    level: doc.level
+    level: doc.level,
   };
 }

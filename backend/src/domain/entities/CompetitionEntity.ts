@@ -18,14 +18,14 @@ type CompetitionProps = {
   id?: string;
   type: CompetitionType;
   mode: CompetitionMode;
-  CompanyId?: string; 
+  CompanyId?: string;
   participants?: string[];
   groupId?: string | null;
   status?: CompetitionStatus;
   textId?: string;
   duration: number;
   reward?: Reward[];
-  countDown:number
+  countDown: number;
   startedAt?: Date;
 };
 
@@ -37,11 +37,11 @@ export class CompetitionEntity {
   private groupId!: string | null;
   private status!: CompetitionStatus;
   private textId?: string;
-  private CompanyId:string|null;
+  private CompanyId: string | null;
   private duration!: number;
   private reward!: Reward[];
-  private countDown!:number;
-  private startedAt?:Date;
+  private countDown!: number;
+  private startedAt?: Date;
 
   constructor(props: CompetitionProps) {
     this.id = props.id;
@@ -52,12 +52,11 @@ export class CompetitionEntity {
     this.status = props.status ?? "pending";
     this.textId = props.textId;
     this.duration = props.duration;
-    this.CompanyId=props.CompanyId||null
+    this.CompanyId = props.CompanyId || null;
     this.reward = props.reward ?? [];
-    this.countDown=props?.countDown||10;
+    this.countDown = props?.countDown || 10;
     this.startedAt = props.startedAt ?? new Date();
   }
-
 
   getId() {
     return this.id;
@@ -70,26 +69,24 @@ export class CompetitionEntity {
   getParticipants() {
     return this.participants;
   }
-  getGroupId(){
+  getGroupId() {
     return this.groupId;
   }
 
-
   addParticipant(userId: string) {
-   
     if (this.participants.includes(userId)) {
       throw new Error("User already joined this competition");
     }
     this.participants.push(userId);
   }
-  
+
   startCompetition() {
     if (this.status !== "pending") {
       throw new Error("Competition cannot be started");
     }
     this.status = "ongoing";
   }
-  endCompetition(){
+  endCompetition() {
     if (this.status !== "ongoing") {
       throw new Error("Competition is not running");
     }
@@ -102,12 +99,12 @@ export class CompetitionEntity {
     }
     this.status = "completed";
   }
-  setStatus(status:string){
-    this.status=status as CompetitionStatus;
+  setStatus(status: string) {
+    this.status = status as CompetitionStatus;
   }
-getMaxParticipantsInQuickPlay(){
-  return 5;
-}
+  getMaxParticipantsInQuickPlay() {
+    return 5;
+  }
   toObject() {
     return {
       _id: this.id,
@@ -119,9 +116,9 @@ getMaxParticipantsInQuickPlay(){
       textId: this.textId,
       duration: this.duration,
       reward: this.reward,
-      CompanyId:this.CompanyId,
-      countDown:this.countDown,
-      startedAt: this.startedAt 
+      CompanyId: this.CompanyId,
+      countDown: this.countDown,
+      startedAt: this.startedAt,
     };
   }
 }

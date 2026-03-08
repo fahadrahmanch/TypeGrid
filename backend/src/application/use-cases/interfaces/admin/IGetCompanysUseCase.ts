@@ -1,5 +1,5 @@
-import { companyEntity } from "../../../entities/user/CompanyEntiriy";
+import { companyEntity } from "../../../../domain/entities/CompanyEntity";
 
-export interface IGetCompanysUseCase{
-    execute():Promise<companyEntity[]>
+export interface IGetCompanysUseCase {
+  execute(): Promise<companyEntity[]>;
 }

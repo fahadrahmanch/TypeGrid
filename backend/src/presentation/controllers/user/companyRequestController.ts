@@ -1,4 +1,6 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
+import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
 import { ICompanyRequestUseCase } from "../../../application/use-cases/interfaces/user/ICompanyRequestUseCase";
 import { ITokenService } from "../../../domain/interfaces/services/ITokenService";
 import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/IFindUserUseCase";
@@ -12,9 +14,9 @@ export class companyRequestController {
     private _tokenService: ITokenService,
     private _findUserUseCase: IFindUserUseCase,
     private _GetCompanyStatusUseCase: IGetCompanyUseCase,
-    private _companyReApplyUseCase:ICompanyReApplyUseCase
+    private _companyReApplyUseCase: ICompanyReApplyUseCase,
   ) {}
-  async companyRequestDetails(req: Request, res: Response): Promise<void> {
+  async companyRequestDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const token = req.cookies.refresh_user;
       if (!token) {
@@ -43,24 +45,20 @@ export class companyRequestController {
         companyName,
         address,
         email,
-        number
+        number,
       );
-      res.status(201).json({
+      logger.info("Company request submitted successfully", { userId: user._id, companyName });
+      res.status(HttpStatus.CREATED).json({
         success: true,
         message: MESSAGES.COMPANY_REQUEST_SUBMITTED_SUCCESS,
         data: result,
       });
     } catch (error: any) {
-      console.error("Company Request Error:", error);
-
-      res.status(500).json({
-        success: false,
-        message: error.message || "Internal Server Error",
-      });
+      next(error);
     }
   }
-  
-  async reApplyCompanyDetails(req: Request, res: Response): Promise<void> {
+
+  async reApplyCompanyDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const token = req.cookies.refresh_user;
 
@@ -83,22 +81,24 @@ export class companyRequestController {
       if (!companyName || !address || !email || !number) {
         throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
       }
-      await this._companyReApplyUseCase.execute({userId:user._id,email,companyName,number,address});
-      res.status(200).json({
-      success: true,
-      message: "Company details re-applied successfully",
-    });
-
+      await this._companyReApplyUseCase.execute({
+        userId: user._id,
+        email,
+        companyName,
+        number,
+        address,
+      });
+      logger.info("Company details re-applied successfully", { userId: user._id, companyName });
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: "Company details re-applied successfully",
+      });
     } catch (error: any) {
-      console.log(error);
-      res.status(500).json({
-      success: false,
-      message: error.message || "Internal server error",
-    });
+      next(error);
     }
   }
-  
-  async getCompanyStatus(req: Request, res: Response): Promise<void> {
+
+  async getCompanyStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const token = req.cookies.refresh_user;
       if (!token) {
@@ -113,18 +113,14 @@ export class companyRequestController {
         throw new Error(MESSAGES.COMPANY_NOT_ASSIGNED_TO_USER);
       }
       const company = await this._GetCompanyStatusUseCase.execute(
-        user.CompanyId
+        user.CompanyId,
       );
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: MESSAGES.COMPANY_STATUS_FETCHED_SUCCESS,
         company,
       });
     } catch (error: any) {
-      console.log(error);
-      res.status(500).json({
-        message: error.message || "Internal server error",
-      });
+      next(error);
     }
   }
 }
-

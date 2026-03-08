@@ -33,7 +33,7 @@ export class GroupEntity {
       this.kickedUsers = attrs.kickedUsers ?? [];
     }
   }
-    changeDifficulty(difficulty: "easy" | "medium" | "hard") {
+  changeDifficulty(difficulty: "easy" | "medium" | "hard") {
     if (this.status !== "waiting") {
       throw new Error("Cannot change difficulty after game has started");
     }
@@ -50,32 +50,35 @@ export class GroupEntity {
     this.maximumPlayers = max;
   }
   addMember(memberId: string) {
-
     if (this.members.length >= this.maximumPlayers) {
       throw new Error("Group is full");
     }
-    if(this.status!="waiting"){
-        throw new Error("Cannot join group after game has started");
+    if (this.status != "waiting") {
+      throw new Error("Cannot join group after game has started");
     }
-    const kikedUser=this.kickedUsers.find((user)=>user.toString()===memberId);
-    if(kikedUser){
+    const kikedUser = this.kickedUsers.find(
+      (user) => user.toString() === memberId,
+    );
+    if (kikedUser) {
       throw new Error("User is kicked from group");
     }
 
-    const alreadyMember=this.members.find((member)=>member.toString()===memberId);
-    if(!alreadyMember){
+    const alreadyMember = this.members.find(
+      (member) => member.toString() === memberId,
+    );
+    if (!alreadyMember) {
       this.members.push(memberId);
     }
   }
 
-
   setOwner(ownerId: string) {
     this.ownerId = ownerId;
   }
-  
-  removeMember(memberId: string) {
-    this.members = this.members.filter((member) => member.toString() !== memberId.toString());
 
+  removeMember(memberId: string) {
+    this.members = this.members.filter(
+      (member) => member.toString() !== memberId.toString(),
+    );
   }
   getId() {
     return this._id;
@@ -97,8 +100,6 @@ export class GroupEntity {
     return this.maximumPlayers;
   }
 
-  
-
   getJoinLink() {
     return this.joinLink;
   }
@@ -110,30 +111,31 @@ export class GroupEntity {
     return this.kickedUsers;
   }
   kickUser(memberId: string) {
-    this.members = this.members.filter((member) => member.toString() !== memberId.toString());
+    this.members = this.members.filter(
+      (member) => member.toString() !== memberId.toString(),
+    );
     this.kickedUsers.push(memberId.toString());
   }
-  setStatus(status:string){
-    this.status=status as "waiting" | "started" | "completed";
+  setStatus(status: string) {
+    this.status = status as "waiting" | "started" | "completed";
   }
-  setGroupMembers(members:string[]){
-    this.members=[...members];
+  setGroupMembers(members: string[]) {
+    this.members = [...members];
   }
-  getDifficulty(){
+  getDifficulty() {
     return this.difficulty;
   }
   toObject() {
-  return {
-    _id: this._id,
-    name: this.name,
-    ownerId: this.ownerId,
-    members: [...this.members],
-    maximumPlayers: this.maximumPlayers,
-    difficulty: this.difficulty,
-    joinLink: this.joinLink,
-    status: this.status,
-    kickedUsers: [...this.kickedUsers],
-  };
-}
-
+    return {
+      _id: this._id,
+      name: this.name,
+      ownerId: this.ownerId,
+      members: [...this.members],
+      maximumPlayers: this.maximumPlayers,
+      difficulty: this.difficulty,
+      joinLink: this.joinLink,
+      status: this.status,
+      kickedUsers: [...this.kickedUsers],
+    };
+  }
 }

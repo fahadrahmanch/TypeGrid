@@ -1,31 +1,29 @@
 import { IAcceptChallengeUseCase } from "../../interfaces/companyUser/IAcceptChallengeUseCase";
-import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
-import { CompanyChallengeEntity } from "../../../../domain/entities/companyChallengeEntity";
+import { ICompanyChallengeRepository } from "../../../../domain/interfaces/repository/company/ICompanyChallengeRepository";
+import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/ICompetitionRepository";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/customError";
+import { HttpStatusCodes } from "../../../../domain/enums/httpStatusCodes";
 
 export class acceptChallengeUseCase implements IAcceptChallengeUseCase {
-
   constructor(
-    private _baseRepoChallenge: IBaseRepository<any>,
-    private _baseRepoCompetition: IBaseRepository<any>,
+    private challengeRepository: ICompanyChallengeRepository,
+    private competitionRepository: ICompetitionRepository,
   ) {}
 
   async execute(challengeId: string): Promise<void> {
-
-
-    const challenge = await this._baseRepoChallenge.findById(challengeId)
+    const challenge = await this.challengeRepository.findById(challengeId);
 
     if (!challenge) {
-      throw new Error("Challenge not found")
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CHALLENGE_NOT_FOUND,
+      );
     }
 
-    const challengeEntity = new CompanyChallengeEntity(challenge)
+    const challengeEntity = challenge;
 
-    challengeEntity.accept()
-    const toObject= challengeEntity.toObject()
-    await this._baseRepoChallenge.update(
-      {...toObject}
-     
-    )
-
+    challengeEntity.accept();
+    await this.challengeRepository.update(challengeEntity);
   }
 }

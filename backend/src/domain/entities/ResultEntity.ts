@@ -3,21 +3,19 @@ type Result = {
   accuracy: number;
   errors: number;
   time: number;
-  rank?:number;
-  prize?:number;
-
+  rank?: number;
+  prize?: number;
 };
 
-type CompetitionType = "solo" | "group" | "quick"|'contest';
+type CompetitionType = "solo" | "group" | "quick" | "contest";
 
 type ResultProps = {
   _id?: string;
   userId: string;
   type: CompetitionType;
   competitionId?: string;
-  contestId?:string;
+  contestId?: string;
   result: Result;
- 
 };
 
 export class ResultEntity {
@@ -25,7 +23,7 @@ export class ResultEntity {
   private userId: string;
   private type: CompetitionType;
   private competitionId?: string;
-  private contestId?:string;
+  private contestId?: string;
   private result: Result;
   private createdAt?: Date;
   private updatedAt?: Date;
@@ -35,39 +33,36 @@ export class ResultEntity {
     this.userId = attrs.userId;
     this.type = attrs.type;
     this.competitionId = attrs.competitionId;
-    this.contestId=attrs.contestId;
+    this.contestId = attrs.contestId;
     this.result = attrs.result;
-  
   }
-getWpm(): number {
-  return this.result.wpm;
-}
+  getWpm(): number {
+    return this.result.wpm;
+  }
 
-getAccuracy(): number {
-  return this.result.accuracy;
-}
+  getAccuracy(): number {
+    return this.result.accuracy;
+  }
 
-getErrors(): number {
-  return this.result.errors;
-}
+  getErrors(): number {
+    return this.result.errors;
+  }
 
-getTime(): number {
-  return this.result.time;
-}
+  getTime(): number {
+    return this.result.time;
+  }
 
-toObject(){
+  toObject() {
     return {
-        _id:this._id,
-        userId:this.userId,
-        type:this.type,
-        competitionId:this.competitionId,
-        contestId:this.contestId,
-        result:this.result,
-        createdAt:this.createdAt,
-  
-        updatedAt:this.updatedAt
+      _id: this._id,
+      userId: this.userId,
+      type: this.type,
+      competitionId: this.competitionId,
+      contestId: this.contestId,
+      result: this.result,
+      createdAt: this.createdAt,
+
+      updatedAt: this.updatedAt,
     };
-}
-
-
+  }
 }

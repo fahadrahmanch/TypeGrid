@@ -16,10 +16,10 @@ import { ForgotPasswordOtpVerify } from "../../application/use-cases/auth/forgot
 import { createNewPassword } from "../../application/use-cases/auth/forgotPassword/createNewPasswordUseCase";
 import { companyFindUseCase } from "../../application/use-cases/auth/companyAuth/companyFindUseCase";
 import { Company } from "../../infrastructure/db/models/company/companySchema";
-import { BaseRepository } from "../../infrastructure/db/base/BaseRepository";
+import { CompanyRepository } from "../../infrastructure/db/repositories/company/CompanyRepository";
 //auth
 const AuthRepository = new authRepository();
-const baseRepo = new BaseRepository(Company);
+const companyRepository = new CompanyRepository(Company);
 const EmailServive = new EmailService();
 const caching = new Caching();
 const hashService = new HashService();
@@ -27,12 +27,12 @@ const otpService = new OtpService(caching);
 const ResentOtpUseCase = new resentOtpUseCase(
   otpService,
   EmailServive,
-  AuthRepository
+  AuthRepository,
 );
 const completeSignup = new completeSignupUseCase(
   otpService,
   hashService,
-  AuthRepository
+  AuthRepository,
 );
 const RegisterUser = new registerUser(AuthRepository, otpService, EmailServive);
 const LoginUserCase = new loginUseCase(AuthRepository, hashService);
@@ -40,10 +40,13 @@ const tokenService = new TokenService();
 const forgotPasswordOtpVerify = new ForgotPasswordOtpVerify(otpService);
 const GoogleAuthUseCase = new googleAuthUseCase(AuthRepository);
 const findUserByIdEmailCase = new FindUserByIdEmailCase(AuthRepository);
-const ForgotPassword = new forgotPassword(otpService,EmailServive,AuthRepository
+const ForgotPassword = new forgotPassword(
+  otpService,
+  EmailServive,
+  AuthRepository,
 );
 const CreateNewPassword = new createNewPassword(AuthRepository, hashService);
-const CompanyFindUseCase = new companyFindUseCase(baseRepo);
+const CompanyFindUseCase = new companyFindUseCase(companyRepository);
 
 export const injectAuthController = new authController(
   RegisterUser,
@@ -56,5 +59,5 @@ export const injectAuthController = new authController(
   ForgotPassword,
   forgotPasswordOtpVerify,
   CreateNewPassword,
-  CompanyFindUseCase
+  CompanyFindUseCase,
 );

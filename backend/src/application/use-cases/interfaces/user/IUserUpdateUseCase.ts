@@ -1,4 +1,3 @@
-
-export interface IUserUpdateUseCase{
-    execute(data:any):Promise<void>
+export interface IUserUpdateUseCase {
+  execute(data: any): Promise<void>;
 }

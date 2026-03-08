@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { Routes } from "../routes";
 import { injectAuthController } from "../../DI/auth";
 export class adminAuthRouter {
@@ -8,22 +8,24 @@ export class adminAuthRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.post(Routes.AUTH.SIGNIN,(req: Request, res: Response) => {
-        injectAuthController.AdminSignIn(req, res);
-      }
-    );
-    this.router.post(Routes.AUTH.REFRESH_TOKEN,(req: Request, res: Response) => {
-        injectAuthController.refreshToken(req, res);
-      }
-    );
-    this.router.post(Routes.AUTH.REFRESH_TOKEN,(req: Request, res: Response) => {
-            injectAuthController.refreshToken(req, res);
-          }
-    );
-     this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response) => {
-      injectAuthController.logout(req, res);
+    this.router.post(Routes.AUTH.SIGNIN, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.AdminSignIn(req, res, next);
     });
-   
+    this.router.post(
+      Routes.AUTH.REFRESH_TOKEN,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.refreshToken(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.AUTH.REFRESH_TOKEN,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.refreshToken(req, res, next);
+      },
+    );
+    this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.logout(req, res, next);
+    });
   }
   getRouter() {
     return this.router;

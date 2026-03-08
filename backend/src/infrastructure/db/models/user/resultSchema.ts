@@ -1,49 +1,43 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
+import { IResultDocument } from "../../types/documents";
 
-const resultSchema = new Schema(
+const resultSchema = new Schema<IResultDocument>(
   {
-     type: {
+    type: {
       type: String,
-      enum: ["quick", "solo", "group","contest"],
+      enum: ["quick", "solo", "group", "contest"],
       required: true,
     },
     competitionId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Competition",
       required: false,
       index: true,
-      default:null
+      default: null,
     },
-     contestId: {
-      type: Types.ObjectId,
+    contestId: {
+      type: Schema.Types.ObjectId,
       ref: "Contest",
       required: false,
       index: true,
-      default:null
+      default: null,
     },
-     
-    
-
     userId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
       index: true,
     },
-result: {
+    result: {
       wpm: { type: Number, required: true },
       accuracy: { type: Number, required: true },
       errors: { type: Number, required: true },
       time: { type: Number, required: true },
-      rank: { type: Number, required: false},
-      prize:{type:Number,required:false}
+      rank: { type: Number, required: false },
+      prize: { type: Number, required: false },
     },
-   
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-
-
-
-export const Result = model("Result", resultSchema);
+export const Result = model<IResultDocument>("Result", resultSchema);

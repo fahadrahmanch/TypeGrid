@@ -1,7 +1,7 @@
 import { userEntity } from "./UserEntity";
-export default class AuthUserEntity extends userEntity{
+export default class AuthUserEntity extends userEntity {
   password!: string;
-    constructor(attrs?: Partial<AuthUserEntity>) {
+  constructor(attrs?: Partial<AuthUserEntity>) {
     super(attrs);
   }
 }

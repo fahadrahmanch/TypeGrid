@@ -1,86 +1,78 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
+import { ICompetitionDocument } from "../../types/documents";
 
-const competitionSchema = new Schema(
+const competitionSchema = new Schema<ICompetitionDocument>(
   {
     type: {
       type: String,
       enum: ["quick", "solo", "group", "oneToOne", "company"],
       required: true,
     },
-   
     mode: {
       type: String,
       enum: ["global", "company"],
       required: true,
     },
-
     participants: [
       {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-
     groupId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Group",
       default: null,
     },
-
     startedAt: {
       type: Date,
       default: null,
     },
-    
     status: {
       type: String,
       enum: ["pending", "ongoing", "completed"],
       default: "pending",
     },
-
     textId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "TypingText",
       required: true,
     },
-
-
     duration: {
-      type: Number, // seconds
-      default:300,
+      type: Number,
+      default: 300,
       required: true,
     },
-
     reward: [
-  {
-    rank: {
-      type: Number,  
+      {
+        rank: {
+          type: Number,
+          required: false,
+        },
+        prize: {
+          type: Number,
+          required: false,
+        },
+      },
+    ],
+    CompanyId: {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
       required: false,
+      default: null,
     },
-    prize: {
-      type: Number,   
-      required: false,
-    },
-  },
-],
-CompanyId:{
-  type: Types.ObjectId,
-  ref:"Company",
-  require:false,
-  default:null
-}
-,
-     countDown: {
-      type: Number, // seconds
+    countDown: {
+      type: Number,
       required: true,
       default: 10,
     },
-    
-
   },
   {
-    timestamps: true, // createdAt & updatedAt
-  }
+    timestamps: true,
+  },
 );
 
-export const Competition = model("Competition", competitionSchema);
+export const Competition = model<ICompetitionDocument>(
+  "Competition",
+  competitionSchema,
+);

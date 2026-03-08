@@ -1,33 +1,33 @@
 export interface SentChallengeDTO {
-  challengeId: string
-  receiverId: string
-  status: string
+  challengeId: string;
+  receiverId: string;
+  status: string;
 }
 export const mapSentChallengeToDTO = (challenge: any): SentChallengeDTO => {
   return {
     challengeId: challenge._id.toString(),
     receiverId: challenge.receiverId.toString(),
-    status: challenge.status
-  }
-}
+    status: challenge.status,
+  };
+};
 export interface OpponentDTO {
-  id: string
-  name: string
-  email: string
-  imageUrl: string
-  companyRole: string | null
+  id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+  companyRole: string | null;
 }
 export interface ChallengeDTO {
-  id: string
-  companyId: string
-  senderId: string
-  receiverId: string
-  status: string
-  competitionId: string
-  type: "sent" | "received"|"completed"
-  opponent: OpponentDTO
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  companyId: string;
+  senderId: string;
+  receiverId: string;
+  status: string;
+  competitionId: string;
+  type: "sent" | "received" | "completed";
+  opponent: OpponentDTO;
+  createdAt: Date;
+  updatedAt: Date;
 }
 export const mapOpponentToDTO = (user: any): OpponentDTO => {
   return {
@@ -35,9 +35,9 @@ export const mapOpponentToDTO = (user: any): OpponentDTO => {
     name: user.name,
     email: user.email,
     imageUrl: user.imageUrl,
-    companyRole: user.CompanyRole ?? null
-  }
-}
+    companyRole: user.CompanyRole ?? null,
+  };
+};
 export const mapChallengeToDTO = (challenge: any): ChallengeDTO => {
   return {
     id: challenge._id.toString(),
@@ -49,33 +49,33 @@ export const mapChallengeToDTO = (challenge: any): ChallengeDTO => {
     type: challenge.type,
     opponent: mapOpponentToDTO(challenge.opponent),
     createdAt: challenge.createdAt,
-    updatedAt: challenge.updatedAt
-  }
-}
+    updatedAt: challenge.updatedAt,
+  };
+};
 
 //game Data Challenge
 export interface ChallengeGameDTO {
-  id: string
-  startedAt: Date
-  status: string
-  duration: number
-  companyId: string
-  countDown: number
+  id: string;
+  startedAt: Date;
+  status: string;
+  duration: number;
+  companyId: string;
+  countDown: number;
 
   lesson: {
-    id: string
-    title: string
-    text: string
-  }
+    id: string;
+    title: string;
+    text: string;
+  };
 
   players: {
-    id:string
-    name: string
-    imageUrl: string
-    companyId: string
-    companyRole: string | null
-    bio: string | null
-  }[]
+    id: string;
+    name: string;
+    imageUrl: string;
+    companyId: string;
+    companyRole: string | null;
+    bio: string | null;
+  }[];
 }
 export const mapChallengeGameToDTO = (data: any): ChallengeGameDTO => {
   return {
@@ -89,16 +89,16 @@ export const mapChallengeGameToDTO = (data: any): ChallengeGameDTO => {
     lesson: {
       id: data.lesson._id.toString(),
       title: data.lesson.title,
-      text: data.lesson.text
+      text: data.lesson.text,
     },
 
     players: data.players.map((player: any) => ({
-      id:player._id.toString(),
+      id: player._id.toString(),
       name: player.name,
       imageUrl: player.imageUrl,
       companyId: player.CompanyId?.toString(),
       companyRole: player.CompanyRole,
-      bio: player.bio
-    }))
-  }
-}
+      bio: player.bio,
+    })),
+  };
+};

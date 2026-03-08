@@ -1,69 +1,53 @@
 import { AuthRequest } from "../../../types/AuthRequest";
-import { Response } from "express";
+import logger from "../../../utils/logger";
+import { Response, NextFunction } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
 import { IGetCompanyGroupsUseCase } from "../../../application/use-cases/interfaces/companyAdmin/IGetCompanyGroupsUseCase";
 import { MESSAGES } from "../../../domain/constants/messages";
-export class CompanyGroupController{
-    constructor(
-        private _createCompanyGroupUseCase:any,
-        private _getCompanyGroupsUseCase:IGetCompanyGroupsUseCase
-    ){}
+export class CompanyGroupController {
+  constructor(
+    private _createCompanyGroupUseCase: any,
+    private _getCompanyGroupsUseCase: IGetCompanyGroupsUseCase,
+  ) {}
 
-  async createGroup(req: AuthRequest, res: Response): Promise<void> {
-  try {
-    const userId = req.user?.userId;
+  async createGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
 
-    if (!userId) {
-      res.status(401).json({
-        success: false,
-        message: MESSAGES.UNAUTHORIZED,
+      if (!userId) {
+        throw new Error(MESSAGES.UNAUTHORIZED);
+      }
+
+      const groupData = req.body;
+
+      await this._createCompanyGroupUseCase.execute(groupData, userId);
+
+      logger.info("Company group created successfully", { userId });
+      res.status(HttpStatus.CREATED).json({
+        success: true,
+        message: MESSAGES.GROUP_CREATED_SUCCESS,
       });
-      return;
+    } catch (error: any) {
+      next(error);
     }
-
-    const groupData = req.body;
-
-    await this._createCompanyGroupUseCase.execute(groupData, userId);
-
-    res.status(201).json({
-      success: true,
-      message: MESSAGES.GROUP_CREATED_SUCCESS,
-    });
-
-  } catch (error) {
-    console.error("Create Group Error:", error);
-
-    res.status(500).json({
-      success: false,
-      message: MESSAGES.INTERNAL_SERVER_ERROR,
-    });
   }
-}
 
-async getCompanyGroups(req: AuthRequest, res: Response): Promise<void> {
-  try {
-    const userId = req.user?.userId;
+  async getCompanyGroups(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
 
-    if (!userId) {
-      res.status(401).json({
-        success: false,
-        message: MESSAGES.UNAUTHORIZED,
+      if (!userId) {
+        throw new Error(MESSAGES.UNAUTHORIZED);
+      }
+
+      const groups = await this._getCompanyGroupsUseCase.execute(userId);
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: MESSAGES.GROUPS_FETCHED_SUCCESS,
+        groups,
       });
-      return;
+    } catch (error: any) {
+      next(error);
     }
-
-    const groups = await this._getCompanyGroupsUseCase.execute(userId);
-    res.status(200).json({
-      success: true,
-      message: MESSAGES.GROUPS_FETCHED_SUCCESS,
-      groups,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: MESSAGES.INTERNAL_SERVER_ERROR,
-    });
   }
-}
-
 }

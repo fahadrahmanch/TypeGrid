@@ -12,82 +12,81 @@ export interface ParticipantDTO {
 }
 export interface ContestProps {
   contestMode: ContestMode;
-  _id:string;
+  _id: string;
   title: string;
   description: string;
-      startTime:Date,
+  startTime: Date;
 
   targetGroup?: string;
   difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
-  date:string;
-  
-  countDown?:number;
-  status:string;
+  date: string;
+
+  countDown?: number;
+  status: string;
   participants: ParticipantDTO[];
   duration: number;
   maxParticipants: number;
-  
+
   rewards: RewardDTO[];
 }
 export interface CreateContestDTO {
   contestMode: ContestMode;
   title: string;
   description: string;
-  targetGroup?: string; 
-  startTime:Date|string;
+  targetGroup?: string;
+  startTime: Date | string;
   difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
   date: string;
-  countDown?:number;
+  countDown?: number;
   duration: number;
   maxParticipants: number;
-  groupId?:string
+  groupId?: string;
   rewards: RewardDTO[];
 }
 export interface openContestDTO {
-  _id:string;
+  _id: string;
   contestMode: ContestMode;
   title: string;
   description: string;
-  targetGroup?: string; 
+  targetGroup?: string;
   difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
-  status:string;
-  countDown?:number;
-  startTime: Date
+  status: string;
+  countDown?: number;
+  startTime: Date;
   date: string;
   duration: number;
   participants: ParticipantDTO[];
   maxParticipants: number;
   rewards: RewardDTO[];
 }
-export const mapContestDTO = (
-  contest: openContestDTO,
-  userId:string
-) => {
+export const mapContestDTO = (contest: openContestDTO, userId: string) => {
   return {
-    _id:contest._id.toString(),
+    _id: contest._id.toString(),
     contestMode: contest.contestMode,
     title: contest.title,
     description: contest.description,
     targetGroup: contest.targetGroup,
     difficulty: contest.difficulty,
-   
+
     textSource: contest.textSource,
     contestText: contest.contestText,
-    status:contest.status,
+    status: contest.status,
     // string → Date
     date: new Date(contest.date).toString(),
-    startTime:contest.startTime,
-    countDown:contest.countDown,
+    startTime: contest.startTime,
+    countDown: contest.countDown,
     duration: contest.duration,
     maxParticipants: contest.maxParticipants,
-  participants: contest.participants,
-    joined: contest.participants.some((p) => p.toString() === userId.toString()),
+    participants: contest.participants,
+    joined: contest.participants.some(
+      (p) => p.toString() === userId.toString(),
+    ),
     rewards: contest.rewards.map((reward) => ({
       rank: reward.rank,
       prize: reward.prize,
@@ -96,25 +95,25 @@ export const mapContestDTO = (
 };
 export const mapOpenContestDTO = (
   contests: openContestDTO[],
-  userId:string
+  userId: string,
 ): ContestProps[] => {
   return contests.map((data) => ({
-    _id:data._id.toString(),
+    _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
     description: data.description,
     targetGroup: data.targetGroup,
     difficulty: data.difficulty,
-    countDown:data.countDown,
+    countDown: data.countDown,
     textSource: data.textSource,
     contestText: data.contestText,
-    status:data.status,
+    status: data.status,
     // string → Date
     date: new Date(data.date).toString(),
-    startTime:data.startTime,
+    startTime: data.startTime,
     duration: data.duration,
     maxParticipants: data.maxParticipants,
-  participants: data.participants,
+    participants: data.participants,
     joined: data.participants.some((p) => p.toString() === userId.toString()),
     rewards: data.rewards.map((reward) => ({
       rank: reward.rank,
@@ -123,19 +122,18 @@ export const mapOpenContestDTO = (
   }));
 };
 
-
 export interface groupContestDTO {
-  _id:string;
+  _id: string;
   contestMode: ContestMode;
   title: string;
   description: string;
-  targetGroup?: string; 
+  targetGroup?: string;
   difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
-  status:string;
-  countDown:number;
-  startTime: Date
+  status: string;
+  countDown: number;
+  startTime: Date;
   date: string;
   duration: number;
   participants: ParticipantDTO[];
@@ -143,57 +141,58 @@ export interface groupContestDTO {
   rewards: RewardDTO[];
 }
 
-export const mapGroupContestDTO=(
-  contests:groupContestDTO[],
-  userId:string
-)=>{
+export const mapGroupContestDTO = (
+  contests: groupContestDTO[],
+  userId: string,
+) => {
   return contests.map((data) => ({
-    _id:data._id.toString(),
+    _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
     description: data.description,
     targetGroup: data.targetGroup,
     difficulty: data.difficulty,
-   
+
     textSource: data.textSource,
     contestText: data.contestText,
-    status:data.status,
+    status: data.status,
     // string → Date
     date: new Date(data.date).toString(),
-    startTime:data.startTime,
-    countDown:data.countDown,
+    startTime: data.startTime,
+    countDown: data.countDown,
     duration: data.duration,
     maxParticipants: data.maxParticipants,
-  participants: data.participants,
+    participants: data.participants,
     joined: data.participants.some((p) => p.toString() === userId.toString()),
     rewards: data.rewards.map((reward) => ({
       rank: reward.rank,
       prize: reward.prize,
     })),
-}));};
+  }));
+};
 
 export const mapCompanyContestDTO = (
   contests: openContestDTO[],
-//  userId:string
+  //  userId:string
 ): ContestProps[] => {
   return contests.map((data) => ({
-    _id:data._id.toString(),
+    _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
     description: data.description,
     targetGroup: data.targetGroup,
     difficulty: data.difficulty,
-   
+
     textSource: data.textSource,
     contestText: data.contestText,
-    status:data.status,
+    status: data.status,
     // string → Date
     date: new Date(data.date).toString(),
-    startTime:data.startTime,
+    startTime: data.startTime,
     duration: data.duration,
-    countDown:data.countDown,
+    countDown: data.countDown,
     maxParticipants: data.maxParticipants,
-  participants: data.participants,
+    participants: data.participants,
     rewards: data.rewards.map((reward) => ({
       rank: reward.rank,
       prize: reward.prize,
@@ -203,34 +202,30 @@ export const mapCompanyContestDTO = (
 
 export interface ParticipantsDTO {
   userId: string;
-  email:string;
+  email: string;
   // score: number;
   // joinedAt: string;
 }
 
-
-export const mapContestDTOAdmin = (
-  contest: openContestDTO,
-
-) => {
+export const mapContestDTOAdmin = (contest: openContestDTO) => {
   return {
-    _id:contest._id.toString(),
+    _id: contest._id.toString(),
     contestMode: contest.contestMode,
     title: contest.title,
     description: contest.description,
     targetGroup: contest.targetGroup,
     difficulty: contest.difficulty,
-   
+
     textSource: contest.textSource,
     contestText: contest.contestText,
-    status:contest.status,
+    status: contest.status,
     // string → Date
     date: new Date(contest.date).toString(),
-    startTime:contest.startTime,
-    countDown:contest.countDown,
+    startTime: contest.startTime,
+    countDown: contest.countDown,
     duration: contest.duration,
     maxParticipants: contest.maxParticipants,
-  participants: contest.participants,
+    participants: contest.participants,
     rewards: contest.rewards.map((reward) => ({
       rank: reward.rank,
       prize: reward.prize,

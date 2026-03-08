@@ -1,6 +1,7 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
+import { IGroupDocument } from "../../types/documents";
 
-const groupSchema = new Schema(
+const groupSchema = new Schema<IGroupDocument>(
   {
     name: {
       type: String,
@@ -9,20 +10,14 @@ const groupSchema = new Schema(
     },
 
     ownerId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
-    // companyId: {
-    //   type: Types.ObjectId,
-    //   ref: "Company",
-    //   default: null,
-    // },
-
     members: [
       {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
       },
     ],
@@ -42,8 +37,8 @@ const groupSchema = new Schema(
     joinLink: {
       type: String,
       unique: true,
-      sparse: true, 
-      default: null, 
+      sparse: true,
+      default: null,
     },
 
     status: {
@@ -52,15 +47,15 @@ const groupSchema = new Schema(
       default: "waiting",
     },
     kickedUsers: [
-  {
-    type: Types.ObjectId,
-    ref: "User",
-  },
-],
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export const Group = model("Group", groupSchema);
+export const Group = model<IGroupDocument>("Group", groupSchema);

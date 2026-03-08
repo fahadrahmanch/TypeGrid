@@ -1,3 +1,3 @@
-export interface IBlockUserUseCase{
-    execute(userId:string):Promise<void>
+export interface IBlockUserUseCase {
+  execute(userId: string): Promise<void>;
 }

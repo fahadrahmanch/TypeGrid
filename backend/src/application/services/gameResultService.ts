@@ -8,7 +8,6 @@ export const checkGameEndService = async (gameId: string) => {
     return item.status != "PLAYING";
   });
   return isComplete;
-  
 };
 
 export const checkQuickGameEndService = async (gameId: string) => {
@@ -19,9 +18,7 @@ export const checkQuickGameEndService = async (gameId: string) => {
     return item.status != "PLAYING";
   });
   return isComplete;
-  
 };
-
 
 export const checkCompanyContestGameEndService = async (contestId: string) => {
   const key = `company:game:${contestId}`;
@@ -31,5 +28,4 @@ export const checkCompanyContestGameEndService = async (contestId: string) => {
     return item.status != "PLAYING";
   });
   return isComplete;
-  
 };

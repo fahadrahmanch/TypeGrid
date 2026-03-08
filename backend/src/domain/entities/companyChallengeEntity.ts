@@ -30,7 +30,7 @@ export class CompanyChallengeEntity {
     this.senderId = data.senderId;
     this.receiverId = data.receiverId;
     // this.difficulty = data.difficulty;
-    this.CompanyId=data.CompanyId??null;
+    this.CompanyId = data.CompanyId ?? null;
     this.status = data.status ?? "pending";
     this.competitionId = data.competitionId ?? null;
 

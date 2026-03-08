@@ -1,42 +1,42 @@
 import { Schema, model } from "mongoose";
-const lessonAssignmentSchema = new Schema(
+import { ILessonAssignmentDocument } from "../../types/documents";
+
+const lessonAssignmentSchema = new Schema<ILessonAssignmentDocument>(
   {
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-
     lessonId: {
       type: Schema.Types.ObjectId,
       ref: "Lesson",
       required: true,
     },
-
     status: {
       type: String,
       enum: ["assigned", "progress", "completed", "expired"],
       default: "assigned",
     },
-
     assignedAt: {
       type: Date,
       default: Date.now,
     },
-
     deadlineAt: {
       type: Date,
-      required: true, 
+      required: true,
     },
-    companyId:{
-      type:Schema.Types.ObjectId,
-      ref:"Company",
-      required:true
+    companyId: {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
     },
-
     completedAt: Date,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export const LessonAssignment = model("LessonAssignment", lessonAssignmentSchema);
+export const LessonAssignment = model<ILessonAssignmentDocument>(
+  "LessonAssignment",
+  lessonAssignmentSchema,
+);

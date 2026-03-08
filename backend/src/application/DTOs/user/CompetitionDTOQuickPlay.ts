@@ -45,7 +45,6 @@ export const mapCompetitionToDTOQuickPlay = (
   };
 };
 
-
 export const mapQuickMemberToDTO = (user: any): CompetitionMember => {
   return {
     _id: user._id.toString(),
@@ -54,10 +53,10 @@ export const mapQuickMemberToDTO = (user: any): CompetitionMember => {
   };
 };
 
-export interface QuickPlayMemberDTO{  
-    _id:string,
-    name:string,
-    imageUrl:string,
+export interface QuickPlayMemberDTO {
+  _id: string;
+  name: string;
+  imageUrl: string;
 }
 
 export interface QuicKPlayResult {
@@ -71,6 +70,6 @@ export interface QuicKPlayResult {
   typedLength: number;
   rank?: number;
   status: "FINISHED" | "TIMES_UP" | "PLAYING";
-  timeTaken: number;  
-  updatedAt: number;   
+  timeTaken: number;
+  updatedAt: number;
 }

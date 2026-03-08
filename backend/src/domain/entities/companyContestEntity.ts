@@ -1,7 +1,7 @@
 export type ContestMode = "open" | "group";
 export type Difficulty = "easy" | "medium" | "hard";
 export type TextSource = "manual" | "random";
-export type ContestStatus = "upcoming" | "ongoing" | "completed"|"waiting";
+export type ContestStatus = "upcoming" | "ongoing" | "completed" | "waiting";
 
 export interface RewardProps {
   rank: number;
@@ -29,7 +29,7 @@ export interface ContestProps {
   endTime?: Date;
   duration: number;
   maxParticipants: number;
-  countDown:number
+  countDown: number;
   rewards: RewardProps[];
   status?: ContestStatus;
   createdAt?: Date;
@@ -53,7 +53,7 @@ export class ContestEntity {
   private maxParticipants: number;
   private rewards: RewardProps[];
   private status: ContestStatus;
-  private countDown?:number;
+  private countDown?: number;
   private createdAt?: Date;
   private updatedAt?: Date;
   private CompanyId: string;
@@ -73,7 +73,7 @@ export class ContestEntity {
     this.maxParticipants = props.maxParticipants;
     this.rewards = props.rewards;
     this.status = props.status ?? "upcoming";
-    this.countDown=10
+    this.countDown = 10;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.CompanyId = props.CompanyId;
@@ -115,7 +115,7 @@ export class ContestEntity {
   updateStatus(status: string) {
     this.status = status as ContestStatus;
   }
-  getStatus(){
+  getStatus() {
     return this.status;
   }
 
@@ -133,7 +133,7 @@ export class ContestEntity {
     }
 
     const alreadyJoined = this.participants.find(
-      (p) => p.toString() === userId.toString()
+      (p) => p.toString() === userId.toString(),
     );
 
     if (alreadyJoined) {
@@ -144,7 +144,7 @@ export class ContestEntity {
   }
   unJoin(userId: string) {
     const alreadyJoined = this.participants.find(
-      (p) => p.toString() === userId.toString()
+      (p) => p.toString() === userId.toString(),
     );
 
     if (!alreadyJoined) {
@@ -152,7 +152,7 @@ export class ContestEntity {
     }
 
     this.participants = this.participants.filter(
-      (p) => p.toString() !== userId.toString()
+      (p) => p.toString() !== userId.toString(),
     );
   }
 
@@ -168,7 +168,7 @@ export class ContestEntity {
       difficulty: this.difficulty,
       groupId: this.groupId,
       participants: this.participants,
-      countDown:this.countDown||10,
+      countDown: this.countDown || 10,
       textSource: this.textSource,
       contestText: this.contestText,
       date: this.date,

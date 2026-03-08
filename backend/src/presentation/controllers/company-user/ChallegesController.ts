@@ -1,5 +1,7 @@
 import { AuthRequest } from "../../../types/AuthRequest";
-import { Response } from "express";
+import logger from "../../../utils/logger";
+import { Response, NextFunction } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
 import { IGetCompanyUsers } from "../../../application/use-cases/interfaces/companyUser/IGetCompanyUsers";
 import { IMakeChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/IMakeChallengeUseCase";
 import { IGetSentChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/IGetSentChallengeUseCase";
@@ -8,216 +10,149 @@ import { IGetChallengesUseCase } from "../../../application/use-cases/interfaces
 import { getIO } from "../../../infrastructure/socket/socket";
 import { IAcceptChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/IAcceptChallengeUseCase";
 import { IGetChallengeGameDataUseCase } from "../../../application/use-cases/interfaces/companyUser/IGetChallengeGameDataUseCase";
-export class challengesController{
-    constructor(
-    private _getCompanyUsersUseCase:IGetCompanyUsers,
-    private _makeChallengeUseCase:IMakeChallengeUseCase,
-    private _getSentChallengesUseCase:IGetSentChallengeUseCase,
-    private _getChallengesUseCase:IGetChallengesUseCase,
-    private _acceptChallengeUseCase:IAcceptChallengeUseCase,
-    private _getChallengeGameDataUseCase:IGetChallengeGameDataUseCase
-    ){}
-  async companyUsers(req: AuthRequest, res: Response): Promise<void> {
-  try {
-    const userId = req.user?.userId;
+export class challengesController {
+  constructor(
+    private _getCompanyUsersUseCase: IGetCompanyUsers,
+    private _makeChallengeUseCase: IMakeChallengeUseCase,
+    private _getSentChallengesUseCase: IGetSentChallengeUseCase,
+    private _getChallengesUseCase: IGetChallengesUseCase,
+    private _acceptChallengeUseCase: IAcceptChallengeUseCase,
+    private _getChallengeGameDataUseCase: IGetChallengeGameDataUseCase,
+  ) {}
+  async companyUsers(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
 
-    if (!userId) {
-      res.status(401).json({
-        success: false,
-        message: "Unauthorized user",
+      if (!userId) {
+        throw new Error(MESSAGES.UNAUTHORIZED);
+      }
+
+      const users = await this._getCompanyUsersUseCase.execute(userId);
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data: users,
       });
-      return;
+    } catch (error: any) {
+      next(error);
     }
-
-    const users = await this._getCompanyUsersUseCase.execute(userId);
-
-    res.status(200).json({
-      success: true,
-      data: users,
-    });
-
-  } catch (error: any) {
-    console.error("Error in companyUsers controller:", error);
-
-    res.status(500).json({
-      success: false,
-      message: error.message || "Internal Server Error",
-    });
   }
-}
-async makeChallenge(req: AuthRequest, res: Response): Promise<void> {
-  try {
-    const receiverId = req.body.receiverId;
-    const senderId = req.user?.userId;
+  async makeChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const receiverId = req.body.receiverId;
+      const senderId = req.user?.userId;
 
-    if (!receiverId) {
-      res.status(400).json({
-        success: false,
-        message: "receiverId is required"
+      if (!receiverId) {
+        throw new Error(MESSAGES.INVALID_REQUEST);
+      }
+
+      if (!senderId) {
+        throw new Error(MESSAGES.UNAUTHORIZED);
+      }
+
+      const challenge = await this._makeChallengeUseCase.execute(
+        senderId,
+        receiverId,
+      );
+      const io = getIO();
+
+      io.to(`user:${receiverId}`).emit("challenge-received", challenge);
+
+      logger.info("Challenge made successfully", { senderId, receiverId });
+      res.status(HttpStatus.CREATED).json({
+        success: true,
+        message: MESSAGES.CREATE_SUCCESS,
       });
-      return;
+    } catch (err: any) {
+      next(err);
     }
+  }
 
-    if (!senderId) {
-      res.status(401).json({
-        success: false,
-        message: "Unauthorized"
+  async checkAlreadySentChallenge(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const senderId = req.user?.userId;
+
+      if (!senderId) {
+        throw new Error(MESSAGES.SENDER_ID_REQUIRED);
+      }
+
+      const challenges = await this._getSentChallengesUseCase.execute(senderId);
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data: challenges,
       });
-      return;
+    } catch (error: any) {
+      next(error);
     }
-
-    const challenge=await this._makeChallengeUseCase.execute(senderId, receiverId);
-    const io = getIO()
-
-io.to(`user:${receiverId}`).emit("challenge-received", challenge)
-  
-    res.status(201).json({
-      success: true,
-      message: "Challenge sent successfully"
-    });
-
-  } catch (err: any) {
-
-    console.error("Make Challenge Error:", err);
-
-    res.status(400).json({
-      success: false,
-      message: err.message || "Something went wrong"
-    });
   }
-}
 
-async checkAlreadySentChallenge(req: AuthRequest, res: Response): Promise<void> {
-  try {
-   
-   
-    const senderId = req.user?.userId
+  async getAllChallenges(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.userId;
 
-    if (!senderId ) {
-      res.status(400).json({ message: "senderId  are required" })
-      return
-    }
+      if (!userId) {
+        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+      }
 
-    const challenges = await this._getSentChallengesUseCase.execute(senderId)
-    
+      const challenges = await this._getChallengesUseCase.execute(userId);
 
-    res.status(200).json({
-      success: true,
-      data:challenges
-    })
-
-  } catch (error) {
-    res.status(500).json({
-      message: "Server error"
-    })
-  }
-}
-
-
-async getAllChallenges(req: AuthRequest, res: Response): Promise<void> {
-  try {
-
-    const userId = req.user?.userId;
-
-    if (!userId) {
-      res.status(401).json({
-        success: false,
-        message: MESSAGES.AUTH_USER_NOT_FOUND
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data: challenges,
       });
-      return;
+    } catch (error: any) {
+      next(error);
     }
-
-    const challenges = await this._getChallengesUseCase.execute(userId);
-
-    res.status(200).json({
-      success: true,
-      data: challenges
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch challenges"
-    });
   }
-}
 
-async acceptChallenge(req: AuthRequest, res: Response): Promise<void> {
-  try {
+  async acceptChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const challengeId = req.params.challengeId;
 
-    const challengeId = req.params.challengeId;
+      if (!challengeId) {
+        throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+      }
 
-    if (!challengeId) {
-      res.status(400).json({
-        success: false,
-        message: "Challenge ID is required"
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        throw new Error(MESSAGES.UNAUTHORIZED);
+      }
+
+      await this._acceptChallengeUseCase.execute(challengeId);
+
+      logger.info("Challenge accepted successfully", { challengeId, userId });
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: MESSAGES.UPDATE_SUCCESS,
       });
-      return;
+    } catch (error: any) {
+      next(error);
     }
+  }
 
-    const userId = req.user?.userId;
+  async getChallengeGameData(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const challengeId = req.params.challengeId;
 
-    if (!userId) {
-      res.status(401).json({
-        success: false,
-        message: "Unauthorized"
+      if (!challengeId) {
+        throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+      }
+
+      const challengeGameData =
+        await this._getChallengeGameDataUseCase.execute(challengeId);
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data: challengeGameData,
       });
-      return;
+    } catch (error: any) {
+      next(error);
     }
-
-    await this._acceptChallengeUseCase.execute(challengeId);
-
-
-    res.status(200).json({
-      success: true,
-      message: "Challenge accepted successfully"
-    });
-
-  } catch (error: any) {
-
-    console.error("Error in acceptChallenge controller:", error);
-
-    res.status(500).json({
-      success: false,
-      message: error.message || "Internal server error"
-    });
-
   }
-}
-
-async getChallengeGameData(req: AuthRequest, res: Response): Promise<void> {
-  try {
-
-    const challengeId = req.params.challengeId
-
-    if (!challengeId) {
-      res.status(400).json({
-        success: false,
-        message: "Challenge ID is required"
-      })
-      return
-    }
-
-    const challengeGameData = await this._getChallengeGameDataUseCase.execute(challengeId)
-
-
-    res.status(200).json({
-      success: true,
-      data: challengeGameData
-    })
-
-  } catch (error: any) {
-
-    console.error("Error in getChallengeGameData:", error)
-
-    res.status(500).json({
-      success: false,
-      message: error?.message || "Internal server error"
-    })
-  }
-}
-
-
-
 }

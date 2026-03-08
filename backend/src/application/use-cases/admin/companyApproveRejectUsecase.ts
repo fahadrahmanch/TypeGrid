@@ -1,36 +1,49 @@
 import { ICompanyApproveRejectUsecase } from "../interfaces/admin/ICompanyApproveRejectUsecase";
-import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
+import { ICompanyRepository } from "../../../domain/interfaces/repository/company/ICompanyRepository";
+import { IUserRepository } from "../../../domain/interfaces/repository/user/IUserRepository";
 import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/customError";
+import { HttpStatusCodes } from "../../../domain/enums/httpStatusCodes";
 import { IEmailService } from "../../../domain/interfaces/services/IEmailService";
-export class companyApproveRejectUsecase
-  implements ICompanyApproveRejectUsecase
-{
+export class companyApproveRejectUsecase implements ICompanyApproveRejectUsecase {
   constructor(
-    private _baseRepositoryCompany: IBaseRepository<any>,
-    private _baseRepositoryUser:IBaseRepository<any>,
-    private _emailService:IEmailService
+    private companyRepository: ICompanyRepository,
+    private userRepository: IUserRepository,
+    private _emailService: IEmailService,
   ) {}
 
   async approve(companyId: string): Promise<void> {
-    const company = await this._baseRepositoryCompany.findById(companyId);
+    const company = await this.companyRepository.findById(companyId);
     if (!company) {
       throw new Error(MESSAGES.COMPANY_NOT_FOUND_OR_REMOVED);
     }
-    const OwnerId=company.OwnerId;
+    const OwnerId = company.OwnerId;
+    if (!OwnerId) {
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPANY_OWNER_NOT_FOUND,
+      );
+    }
 
-    const user=await this._baseRepositoryUser.findById(OwnerId);
-    user.role="companyAdmin";
+    const user = await this.userRepository.findById(OwnerId);
+    if (!user) {
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
+    }
+    user.role = "companyAdmin";
     company.status = "active";
 
-    await this._baseRepositoryUser.update(user);
-    await this._baseRepositoryCompany.update(company);
-  
-  await this._emailService.sendMail({
-    from: process.env.EMAIL_USER,
-    to: user.email,
-    subject: "🎉 Company Approved",
-    text: `Hello ${user.name}, your company has been approved successfully.`,
-    html: `
+    await this.userRepository.update(user);
+    await this.companyRepository.update(company);
+
+    await this._emailService.sendMail({
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: "🎉 Company Approved",
+      text: `Hello ${user.name}, your company has been approved successfully.`,
+      html: `
       <div style="font-family: Arial, sans-serif; line-height:1.6;">
         <h2 style="color:#27ae60;">Company Approved ✅</h2>
 
@@ -52,23 +65,23 @@ export class companyApproveRejectUsecase
         </p>
       </div>
     `,
-  });
+    });
   }
 
-  async reject(companyId: string,rejectionReason:string): Promise<void> {
-    const company = await this._baseRepositoryCompany.findById(companyId);
+  async reject(companyId: string, rejectionReason: string): Promise<void> {
+    const company = await this.companyRepository.findById(companyId);
     if (!company) {
       throw new Error(MESSAGES.COMPANY_NOT_FOUND_OR_REMOVED);
     }
     company.status = "reject";
-    company.rejectionReason=rejectionReason;
-    await this._baseRepositoryCompany.update(company);
-  await this._emailService.sendMail({
-    from: process.env.EMAIL_USER,
-    to: company.email,
-    subject: "❌ Company Application Rejected",
-    text: `Your company application was rejected. Reason: ${rejectionReason}`,
-    html: `
+    company.rejectionReason = rejectionReason;
+    await this.companyRepository.update(company);
+    await this._emailService.sendMail({
+      from: process.env.EMAIL_USER,
+      to: company.email,
+      subject: "❌ Company Application Rejected",
+      text: `Your company application was rejected. Reason: ${rejectionReason}`,
+      html: `
       <div style="font-family: Arial, sans-serif; line-height:1.6;">
         <h2 style="color:#e74c3c;">Company Application Rejected ❌</h2>
 
@@ -94,8 +107,6 @@ export class companyApproveRejectUsecase
         </p>
       </div>
     `,
-  });
+    });
   }
-  
 }
-

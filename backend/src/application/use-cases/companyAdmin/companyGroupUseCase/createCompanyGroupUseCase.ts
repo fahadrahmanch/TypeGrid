@@ -1,19 +1,16 @@
-import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/IUserRepository";
+import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/ICompanyGroupRepository";
 import { CompanyGroupEntity } from "../../../../domain/entities/CompanyGroupEntity";
 import { ICreateCompanyGroupUseCase } from "../../interfaces/companyAdmin/ICreateCompanyGroupUseCase";
 import { CompanyGroupDTO } from "../../../DTOs/companyAdmin/companyGroupDTO";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class createCompanyGroupUseCase implements ICreateCompanyGroupUseCase {
   constructor(
-    private readonly userRepo: IBaseRepository<any>,
-    private readonly companyGroupRepo: IBaseRepository<any>
+    private readonly userRepo: IUserRepository,
+    private readonly companyGroupRepo: ICompanyGroupRepository,
   ) {}
 
-  async execute(
-    groupData: CompanyGroupDTO,
-    userId: string
-  ): Promise<void> {
-
+  async execute(groupData: CompanyGroupDTO, userId: string): Promise<void> {
     if (!userId) {
       throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
     }
@@ -39,8 +36,5 @@ export class createCompanyGroupUseCase implements ICreateCompanyGroupUseCase {
     });
 
     await this.companyGroupRepo.create(companyGroup);
-
   }
-
-
 }

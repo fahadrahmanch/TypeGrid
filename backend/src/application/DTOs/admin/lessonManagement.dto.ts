@@ -1,9 +1,12 @@
-import { LessonCategory,LessonLevel } from "../../../domain/entities/LessonEntity";
+import {
+  LessonCategory,
+  LessonLevel,
+} from "../../../domain/entities/LessonEntity";
 export interface LessonDTO {
   id: string;
   text: string;
   category: LessonCategory;
-  description?:string,
+  description?: string;
   level: LessonLevel;
   targetWpm?: number;
   targetAccuracy?: number;
@@ -21,8 +24,8 @@ export const mapLessonToDTO = (lesson: any): LessonDTO => {
   };
 };
 
-export const mapLessonDTOforGroupPlay=(lesson:any):LessonDTO=>{
-  return{
+export const mapLessonDTOforGroupPlay = (lesson: any): LessonDTO => {
+  return {
     id: lesson._id.toString(),
     text: lesson.text,
     category: lesson.category,

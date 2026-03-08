@@ -1,25 +1,23 @@
 import mongoose from "mongoose";
+import { ICompanyGroupDocument } from "../../types/documents";
 
-const companyGroupSchema = new mongoose.Schema(
+const companyGroupSchema = new mongoose.Schema<ICompanyGroupDocument>(
   {
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
       required: true,
     },
-
     name: {
       type: String,
       required: true,
       trim: true,
     },
-
     type: {
       type: String,
       enum: ["beginner", "intermidate", "advanced"],
       required: true,
     },
-
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -28,11 +26,11 @@ const companyGroupSchema = new mongoose.Schema(
     ],
   },
   {
-    timestamps: true, // creates createdAt & updatedAt automatically
-  }
+    timestamps: true,
+  },
 );
 
-export const CompanyGroup = mongoose.model(
+export const CompanyGroup = mongoose.model<ICompanyGroupDocument>(
   "CompanyGroup",
-  companyGroupSchema
+  companyGroupSchema,
 );

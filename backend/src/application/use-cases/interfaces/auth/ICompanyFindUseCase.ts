@@ -1,5 +1,5 @@
-import { companyEntity } from "../../../../domain/entities/user/CompanyEntity";
+import { companyEntity } from "../../../../domain/entities/CompanyEntity";
 
-export interface IcompanyFindUseCase{
-     execute(companyID:string):Promise<companyEntity>
+export interface IcompanyFindUseCase {
+  execute(companyID: string): Promise<companyEntity>;
 }

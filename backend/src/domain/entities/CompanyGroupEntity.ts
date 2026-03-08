@@ -56,6 +56,6 @@ export class CompanyGroupEntity {
   }
 
   removeMember(userId: string) {
-    this.members = this.members.filter(id => id !== userId);
+    this.members = this.members.filter((id) => id !== userId);
   }
 }

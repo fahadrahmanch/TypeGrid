@@ -1,22 +1,19 @@
 import { LessonDTO } from "../../../DTOs/admin/lessonManagement.dto";
 import { ICreateLessonUseCase } from "../../interfaces/admin/ICreateLessonUseCase";
-import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/ILessonRepository";
 import { LessonEntity } from "../../../../domain/entities/LessonEntity";
 import { mapLessonToDTO } from "../../../DTOs/admin/lessonManagement.dto";
 export class createLessonUseCase implements ICreateLessonUseCase {
-    constructor(
-        private _baseRepositoryLesson:IBaseRepository<any>
-    ){}
-    async execute(lessonData: LessonDTO): Promise<void> {
-        const lessonEntity = new LessonEntity(lessonData);
-        await this._baseRepositoryLesson.create(lessonEntity);
-    }
+  constructor(private lessonRepository: ILessonRepository) {}
+  async execute(lessonData: LessonDTO): Promise<void> {
+    const lessonEntity = new LessonEntity(lessonData);
+    await this.lessonRepository.create(lessonEntity);
+  }
 
-    async getLessons(): Promise<LessonDTO[]> {
-        let lessons= await this._baseRepositoryLesson.find();
-        return lessons.map((item)=>{
-            return mapLessonToDTO(item);    
-        });
-        
-    }   
+  async getLessons(): Promise<LessonDTO[]> {
+    let lessons = await this.lessonRepository.find();
+    return lessons.map((item) => {
+      return mapLessonToDTO(item);
+    });
+  }
 }

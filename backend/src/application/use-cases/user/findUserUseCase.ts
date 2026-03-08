@@ -1,13 +1,9 @@
 import { IFindUserUseCase } from "../interfaces/user/IFindUserUseCase";
-import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
+import { IUserRepository } from "../../../domain/interfaces/repository/user/IUserRepository";
 import { AuthUserEntity } from "../../../domain/entities";
-export class findUserUseCase implements IFindUserUseCase{
-constructor(
-private _baseRepository:IBaseRepository< AuthUserEntity>
-){}
-async execute(email: string): Promise<AuthUserEntity | null> {
-    return await this._baseRepository.FindByEmail(email);
-}
-
-
+export class findUserUseCase implements IFindUserUseCase {
+  constructor(private userRepository: IUserRepository) {}
+  async execute(email: string): Promise<AuthUserEntity | null> {
+    return await this.userRepository.FindByEmail(email);
+  }
 }

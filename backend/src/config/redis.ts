@@ -1,4 +1,5 @@
 import Redis from "ioredis";
+import logger from "../utils/logger";
 
 const redis = new Redis({
   host: "127.0.0.1",
@@ -6,11 +7,12 @@ const redis = new Redis({
 });
 
 redis.on("connect", () => {
-  console.log("Redis connected");
+  logger.info("Redis connected successfully");
 });
 
 redis.on("error", (err) => {
-  console.error(" Redis error", err);
+  logger.error("Redis error", { error: err.message, stack: err.stack });
 });
 
 export default redis;
+

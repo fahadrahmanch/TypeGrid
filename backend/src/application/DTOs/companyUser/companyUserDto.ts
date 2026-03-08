@@ -1,19 +1,17 @@
-
-export interface companyUserDTO{
-    _id:string;
-    name:string;
-    email:string;
-    imageUrl:string;
-    number?:string;
-    bio?:string;
-    companyRole?:string;
-    online:boolean;
+export interface companyUserDTO {
+  _id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+  number?: string;
+  bio?: string;
+  companyRole?: string;
+  online: boolean;
 }
 export const mapCompanyUsersWithOnlineStatus = async (
   users: any[],
-  onlineUsers:string[]
+  onlineUsers: string[],
 ): Promise<companyUserDTO[]> => {
-  
   const onlineUsersSet = new Set(onlineUsers);
 
   return users.map((user) => ({

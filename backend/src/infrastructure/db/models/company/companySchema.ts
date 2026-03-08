@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
-import { companyEntity } from "../../../../domain/entities";
-const companySchema = new Schema(
+import { ICompanyDocument } from "../../types/documents";
+
+const companySchema = new Schema<ICompanyDocument>(
   {
     companyName: {
       type: String,
@@ -15,32 +16,32 @@ const companySchema = new Schema(
     },
     OwnerId: {
       type: Schema.Types.ObjectId,
-      ref: "User",   
+      ref: "User",
       required: false,
     },
     description: {
       type: String,
       trim: true,
     },
-    address:{
-      type:String,
-      require:true
+    address: {
+      type: String,
+      required: true,
     },
-    number:{
-      type:String,
-      require:true
+    number: {
+      type: String,
+      required: true,
     },
-    rejectionReason:{
-      type:String,
-      require:false
+    rejectionReason: {
+      type: String,
+      required: false,
     },
     status: {
       type: String,
-      enum: ["active", "inactive","pending","reject"],
+      enum: ["active", "inactive", "pending", "reject"],
       default: "active",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export const Company = model<companyEntity>("Company", companySchema);
+export const Company = model<ICompanyDocument>("Company", companySchema);

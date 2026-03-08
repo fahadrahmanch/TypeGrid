@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { Routes } from "../routes";
 import { injectAuthController } from "../../DI/auth";
 export class userAuthRouter {
@@ -9,36 +9,48 @@ export class userAuthRouter {
   }
   initializeRoutes() {
     //user
-    this.router.post(Routes.AUTH.SIGNUP, (req: Request, res: Response) => {
-      injectAuthController.register(req, res);
+    this.router.post(Routes.AUTH.SIGNUP, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.register(req, res, next);
     });
-    this.router.post(Routes.AUTH.VERIFY_OTP, (req: Request, res: Response) => {
-      injectAuthController.verifyOtp(req, res);
+    this.router.post(Routes.AUTH.VERIFY_OTP, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.verifyOtp(req, res, next);
     });
-    this.router.post(Routes.AUTH.RESEND_OTP, (req: Request, res: Response) => {
-      injectAuthController.resentOtp(req, res);
+    this.router.post(Routes.AUTH.RESEND_OTP, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.resentOtp(req, res, next);
     });
-    this.router.post(Routes.AUTH.SIGNIN, (req: Request, res: Response) => {
-      injectAuthController.signin(req, res);
+    this.router.post(Routes.AUTH.SIGNIN, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.signin(req, res, next);
     });
-    this.router.post(Routes.AUTH.REFRESH_TOKEN,(req: Request, res: Response) => {
-      injectAuthController.refreshToken(req, res);
+    this.router.post(
+      Routes.AUTH.REFRESH_TOKEN,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.refreshToken(req, res, next);
+      },
+    );
+    this.router.post(Routes.AUTH.GOOGLE_AUTH, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.googleAuth(req, res, next);
     });
-    this.router.post(Routes.AUTH.GOOGLE_AUTH, (req: Request, res: Response) => {
-      injectAuthController.googleAuth(req, res);
+    this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response, next: NextFunction) => {
+      injectAuthController.logout(req, res, next);
     });
-    this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response) => {
-      injectAuthController.logout(req, res);
-    });
-    this.router.post(Routes.AUTH.FORGOT_PASSWORD,(req: Request, res: Response) => {
-      injectAuthController.forgotPassword(req, res);
-    });
-    this.router.post(Routes.AUTH.VERIFY_FORGOT_PASSWORD_OTP,(req: Request, res: Response) => {
-      injectAuthController.verifyForgotPasswordOtp(req, res);
-    });
-    this.router.post(Routes.AUTH.RESET_PASSWORD,(req: Request, res: Response) => {
-      injectAuthController.resetPassword(req, res);
-    });
+    this.router.post(
+      Routes.AUTH.FORGOT_PASSWORD,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.forgotPassword(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.AUTH.VERIFY_FORGOT_PASSWORD_OTP,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.verifyForgotPasswordOtp(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.AUTH.RESET_PASSWORD,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.resetPassword(req, res, next);
+      },
+    );
   }
   getRouter() {
     return this.router;

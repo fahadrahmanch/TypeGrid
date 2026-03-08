@@ -1,12 +1,10 @@
 import { companyEntity } from "../../../domain/entities";
 import { IGetCompanysUseCase } from "../interfaces/admin/IGetCompanysUseCase";
-import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
-export class getCompanysUseCase implements IGetCompanysUseCase{
-    constructor(
-        private _baseRepository:IBaseRepository<any>,
-    ){}
-    async execute():Promise<companyEntity[]>{
-    const companies = await this._baseRepository.find();
+import { ICompanyRepository } from "../../../domain/interfaces/repository/company/ICompanyRepository";
+export class getCompanysUseCase implements IGetCompanysUseCase {
+  constructor(private companyRepository: ICompanyRepository) {}
+  async execute(): Promise<companyEntity[]> {
+    const companies = await this.companyRepository.find();
     return companies;
-    }
+  }
 }

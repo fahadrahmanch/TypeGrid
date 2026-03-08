@@ -1,3 +1,3 @@
-export interface IFindUserByemailUseCase{
-    execute(userId: string):Promise<any>
+export interface IFindUserByemailUseCase {
+  execute(userId: string): Promise<any>;
 }

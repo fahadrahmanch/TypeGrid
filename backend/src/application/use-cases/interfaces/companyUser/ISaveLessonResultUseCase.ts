@@ -1,3 +1,3 @@
-export interface ISaveLessonResultUseCase{
-    execute(userId:string,assignmentId:string,result:any):Promise<void>
+export interface ISaveLessonResultUseCase {
+  execute(userId: string, assignmentId: string, result: any): Promise<void>;
 }

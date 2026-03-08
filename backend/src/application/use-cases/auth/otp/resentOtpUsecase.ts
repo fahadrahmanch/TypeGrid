@@ -6,7 +6,7 @@ export class resentOtpUseCase {
   constructor(
     private _otpService: IOtpService,
     private _emailService: IEmailService,
-    private _authRepository: IAuthRepostory
+    private _authRepository: IAuthRepostory,
   ) {}
   async execute(name: string, email: string): Promise<void> {
     await this._authRepository.findByEmail(email);

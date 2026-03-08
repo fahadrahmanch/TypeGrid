@@ -1,15 +1,15 @@
 import { Entity } from "./Entity";
-export class companyEntity extends Entity<companyEntity>{
-      constructor(attrs?: Partial<companyEntity>) {
+export class companyEntity extends Entity<companyEntity> {
+  constructor(attrs?: Partial<companyEntity>) {
     super(attrs);
   }
-    _id?:string;
-    companyName?:string;
-    email?:string;
-    address?:string;
-    number?:string;
-    OwnerId?:string;
-    // subscriptionPlansId!: string;
-    rejectionReason?:string;
-    status?: "active" | "inactive"|"pending"|"reject";
+  _id?: string;
+  companyName?: string;
+  email?: string;
+  address?: string;
+  number?: string;
+  OwnerId?: string;
+  // subscriptionPlansId!: string;
+  rejectionReason?: string;
+  status?: "active" | "inactive" | "pending" | "reject";
 }

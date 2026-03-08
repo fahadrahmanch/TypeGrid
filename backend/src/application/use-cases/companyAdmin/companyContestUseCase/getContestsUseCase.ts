@@ -1,23 +1,27 @@
-import { IBaseRepository } from "../../../../domain/interfaces/repository/IBaseRepository";
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/IContestRepository";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/IUserRepository";
+import { MESSAGES } from "../../../../domain/constants/messages";
 import { IGetCompanyContestsUsecase } from "../../interfaces/companyAdmin/IGetCompanyContestsUseCase";
-import { mapCompanyContestDTO,ContestProps } from "../../../DTOs/companyAdmin/CompanyContestDTO";
-export class getCompanyContestsUseCase implements IGetCompanyContestsUsecase{
-    constructor(
-        private _baseRepoContest:IBaseRepository<any>,
-        private _baseRepoUser:IBaseRepository<any>
-    ){}
-    async execute(userId:string):Promise<ContestProps[]>{
-        const user=await this._baseRepoUser.findById(userId);
-        if(!user){
-            throw new Error("User not found");
-        }
-        const contests=await this._baseRepoContest.find({
-            companyId:user.companyId
-        });
-        if(!contests){
-            throw new Error("Contests not found");
-        }
-        return mapCompanyContestDTO(contests);
-     
+import {
+  mapCompanyContestDTO,
+  ContestProps,
+} from "../../../DTOs/companyAdmin/CompanyContestDTO";
+export class getCompanyContestsUseCase implements IGetCompanyContestsUsecase {
+  constructor(
+    private contestRepository: IContestRepository,
+    private userRepository: IUserRepository,
+  ) {}
+  async execute(userId: string): Promise<ContestProps[]> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
     }
+    const contests = await this.contestRepository.find({
+      CompanyId: user.CompanyId,
+    });
+    if (!contests) {
+      throw new Error(MESSAGES.CONTESTS_NOT_FOUND);
+    }
+    return mapCompanyContestDTO(contests as any);
+  }
 }

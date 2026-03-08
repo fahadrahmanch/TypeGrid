@@ -1,4 +1,3 @@
-
 export type LessonResultStatus =
   | "assigned"
   | "progress"
@@ -76,8 +75,6 @@ export class LessonResult {
   getErrors() {
     return this.errors;
   }
-
-
 
   getStatus() {
     return this.status;

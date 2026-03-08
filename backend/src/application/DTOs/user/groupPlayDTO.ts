@@ -9,6 +9,6 @@ export interface GroupPlayResult {
   typedLength: number;
   rank?: number;
   status: "FINISHED" | "TIMES_UP" | "PLAYING";
-  timeTaken: number;  
-  updatedAt: number;   
+  timeTaken: number;
+  updatedAt: number;
 }

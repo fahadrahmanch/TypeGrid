@@ -1,7 +1,7 @@
 export interface CompanyReApplyDTO {
-  userId:string;
+  userId: string;
   companyName: string;
   address: string;
-  email:string;
-  number:string
+  email: string;
+  number: string;
 }

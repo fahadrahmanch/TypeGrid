@@ -1,29 +1,41 @@
 import { ICompanyRequestUseCase } from "../interfaces/user/ICompanyRequestUseCase";
-import { IBaseRepository } from "../../../domain/interfaces/repository/IBaseRepository";
+import { ICompanyRepository } from "../../../domain/interfaces/repository/company/ICompanyRepository";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/customError";
+import { HttpStatusCodes } from "../../../domain/enums/httpStatusCodes";
+import { IUserRepository } from "../../../domain/interfaces/repository/user/IUserRepository";
 import { companyEntity } from "../../../domain/entities";
 export class companyRequestUseCase implements ICompanyRequestUseCase {
-    constructor(
-        private _baseRepositoryCompany: IBaseRepository<any>,
-        private _baseRepositoryUser:IBaseRepository<any>
-    ) { }
-    async execute(OwnerId:string,companyName: string, address: string, email: string, number: string): Promise<void> {
-        const company = new companyEntity({
-            companyName,
-            address,
-            email,
-            OwnerId,
-            number,
-            status: "pending",
-        });
-        const exists=await this._baseRepositoryCompany.find({OwnerId});
-        
-if (exists.length > 0) {
-  throw new Error("You have already registered a company");
-}
-        const user=await this._baseRepositoryUser.findById(OwnerId);
-        const companyDoc= await this._baseRepositoryCompany.create(company);
-        user.CompanyId=companyDoc._id;
-        await this._baseRepositoryUser.update(user); 
-    }
+  constructor(
+    private companyRepository: ICompanyRepository,
+    private userRepository: IUserRepository,
+  ) {}
+  async execute(
+    OwnerId: string,
+    companyName: string,
+    address: string,
+    email: string,
+    number: string,
+  ): Promise<void> {
+    const company = new companyEntity({
+      companyName,
+      address,
+      email,
+      OwnerId,
+      number,
+      status: "pending",
+    });
+    const exists = await this.companyRepository.find({ OwnerId });
 
+    if (exists.length > 0) {
+      throw new CustomError(
+        HttpStatusCodes.CONFLICT,
+        MESSAGES.COMPANY_ALREADY_REGISTERED,
+      );
+    }
+    const user = await this.userRepository.findById(OwnerId);
+    const companyDoc = await this.companyRepository.create(company);
+    (user as any).CompanyId = (companyDoc as any)._id;
+    await this.userRepository.update(user as any);
+  }
 }

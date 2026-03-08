@@ -1,3 +1,3 @@
-export interface IGetCompanyUseCase{
-    execute(companyId:string):Promise<any>
+export interface IGetCompanyUseCase {
+  execute(companyId: string): Promise<any>;
 }

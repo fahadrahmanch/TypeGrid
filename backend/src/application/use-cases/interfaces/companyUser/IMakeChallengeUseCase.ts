@@ -1,5 +1,5 @@
-import { ChallengeDTO } from "../../../DTOs/companyUser/challengeDTO"
+import { ChallengeDTO } from "../../../DTOs/companyUser/challengeDTO";
 
-export interface IMakeChallengeUseCase{
-    execute(senderId:string,receiverId:string):Promise<ChallengeDTO>
+export interface IMakeChallengeUseCase {
+  execute(senderId: string, receiverId: string): Promise<ChallengeDTO>;
 }

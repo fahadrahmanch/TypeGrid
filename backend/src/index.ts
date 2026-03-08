@@ -12,28 +12,29 @@ import { companyAdminRouter } from "./presentation/routes/companyAdminRoutes";
 import { TokenService } from "./application/services/tokenService";
 import { authMiddleware } from "./presentation/middlewares/authMiddleware";
 import { companyUserRoutes } from "./presentation/routes/companyUserRoutes";
+import { errorMiddleware } from "./presentation/middlewares/errorMiddleware";
 
 dotenv.config();
 export class app {
   public app: Application;
-  private tokenService: TokenService; 
+  private tokenService: TokenService;
   constructor() {
     this.app = express();
-    this.tokenService = new TokenService();    
+    this.tokenService = new TokenService();
     this.setMiddleWares();
     this.setAuthRoutes();
     this.setAdminRoutes();
     this.setUserRoutes();
     this.setCompanyAdminRoutes();
     this.setCompanyUserRoutes();
-  
+    this.app.use(errorMiddleware);
   }
   setMiddleWares() {
     this.app.use(
       cors({
         origin: "http://localhost:5173",
         credentials: true,
-      })
+      }),
     );
     this.app.use(cookieParser());
     this.app.use(express.json());
@@ -45,7 +46,7 @@ export class app {
       next();
     });
   }
-   
+
   private setAuthRoutes() {
     const UserAuthRouter = new userAuthRouter();
     const AdminAuthRouter = new adminAuthRouter();
@@ -56,19 +57,35 @@ export class app {
   }
   private setAdminRoutes() {
     const routerAdmin = new adminRouter();
-    this.app.use("/admin", authMiddleware(this.tokenService),routerAdmin.getRouter());
+    this.app.use(
+      "/admin",
+      authMiddleware(this.tokenService),
+      routerAdmin.getRouter(),
+    );
   }
   private setUserRoutes() {
     const routerUser = new UserRoutes();
-    this.app.use("/user",authMiddleware(this.tokenService), routerUser.getRouter());
+    this.app.use(
+      "/user",
+      authMiddleware(this.tokenService),
+      routerUser.getRouter(),
+    );
   }
-  private setCompanyAdminRoutes(){
-    const routerCompanyAdmin=new companyAdminRouter();
-    this.app.use("/company",authMiddleware(this.tokenService),routerCompanyAdmin.getRouter());
+  private setCompanyAdminRoutes() {
+    const routerCompanyAdmin = new companyAdminRouter();
+    this.app.use(
+      "/company",
+      authMiddleware(this.tokenService),
+      routerCompanyAdmin.getRouter(),
+    );
   }
-  private setCompanyUserRoutes(){
-    const routerCompanyUser= new companyUserRoutes();
-    this.app.use("/company",authMiddleware(this.tokenService),routerCompanyUser.getRouter());
+  private setCompanyUserRoutes() {
+    const routerCompanyUser = new companyUserRoutes();
+    this.app.use(
+      "/company",
+      authMiddleware(this.tokenService),
+      routerCompanyUser.getRouter(),
+    );
   }
   public async connectDatabase() {
     const db = new connectDB();

@@ -19,15 +19,15 @@ export interface CompetitionDTOGroupPlay {
   groupId?: string;
   status: string;
   lesson: Lesson;
-  JoinLink?:string;
+  JoinLink?: string;
   duration: number;
-  startedAt:string;
-  countDown:number;
+  startedAt: string;
+  countDown: number;
 }
 export const mapCompetitionToDTOGroupPlay = (
   competition: any,
-  
-  hostUserId: string
+
+  hostUserId: string,
 ): CompetitionDTOGroupPlay => {
   return {
     _id: competition._id.toString(),
@@ -35,15 +35,15 @@ export const mapCompetitionToDTOGroupPlay = (
     status: competition.status,
     duration: competition.duration,
     groupId: competition.groupId?.toString(),
-    startedAt:competition.startedAt,
-    countDown:competition.countDown,
-    JoinLink:competition.joinLink,
+    startedAt: competition.startedAt,
+    countDown: competition.countDown,
+    JoinLink: competition.joinLink,
     lesson: {
-  id: competition.lesson._id,
-  text: competition.lesson.text,
-  category: competition.lesson.category,
-  level: competition.lesson.level,
-},
+      id: competition.lesson._id,
+      text: competition.lesson.text,
+      category: competition.lesson.category,
+      level: competition.lesson.level,
+    },
 
     participants: competition.participants.map((user: any) => ({
       _id: user._id.toString(),

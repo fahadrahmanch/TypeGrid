@@ -1,4 +1,3 @@
-
 export const HtmlforOtp = (name: string, otp: string, body: string) => {
   return `
   <!doctype html>

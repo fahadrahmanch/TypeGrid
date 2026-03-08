@@ -1,4 +1,3 @@
-
-export interface IDeleteCompanyUserUseCase{
-    deleteUser(companyUserId:string):Promise<void>
+export interface IDeleteCompanyUserUseCase {
+  deleteUser(companyUserId: string): Promise<void>;
 }
