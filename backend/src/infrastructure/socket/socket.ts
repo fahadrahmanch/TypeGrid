@@ -1,15 +1,15 @@
 import { Server } from "socket.io";
 import logger from "../../utils/logger";
-import { injectGroupSocketController } from "../../presentation/DI/socketDI";
-import { injectQuickSocketController } from "../../presentation/DI/socketDI";
+import { injectGroupSocketController } from "../../presentation/DI/socket.di";
+import { injectQuickSocketController } from "../../presentation/DI/socket.di";
 import redis from "../../config/redis";
 import {
   checkGameEndService,
   checkQuickGameEndService,
   checkCompanyContestGameEndService,
-} from "../../application/services/gameResultService";
-import { injectContestSocketController } from "../../presentation/DI/socketDI";
-import { injectChallengeSocketController } from "../../presentation/DI/socketDI";
+} from "../../application/services/game-result.service";
+import { injectContestSocketController } from "../../presentation/DI/socket.di";
+import { injectChallengeSocketController } from "../../presentation/DI/socket.di";
 let io: Server;
 
 export const initSocket = (server: any) => {

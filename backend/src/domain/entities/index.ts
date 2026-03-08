@@ -1,4 +1,4 @@
-import { userEntity } from "./UserEntity";
-import AuthUserEntity from "./AuthUserEntity";
-import { companyEntity } from "./CompanyEntity";
-export { userEntity, AuthUserEntity, companyEntity };
+import { UserEntity } from "./user.entity";
+import AuthUserEntity from "./auth-user.entity";
+import { CompanyEntity } from "./company.entity";
+export { UserEntity, AuthUserEntity, CompanyEntity };

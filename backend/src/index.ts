@@ -2,17 +2,17 @@ import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db";
-import { userAuthRouter } from "./presentation/routes/auth/userAuthRoutes";
-import { adminAuthRouter } from "./presentation/routes/auth/adminAuthRoutes";
+import { userAuthRouter } from "./presentation/routes/auth/user-auth.route";
+import { adminAuthRouter } from "./presentation/routes/auth/admin-auth.route";
 import cookieParser from "cookie-parser";
-import { adminRouter } from "./presentation/routes/adminRoutes";
-import { UserRoutes } from "./presentation/routes/userRoutes";
-import { companyAuthRouter } from "./presentation/routes/auth/companyAuthRoutes";
-import { companyAdminRouter } from "./presentation/routes/companyAdminRoutes";
-import { TokenService } from "./application/services/tokenService";
-import { authMiddleware } from "./presentation/middlewares/authMiddleware";
-import { companyUserRoutes } from "./presentation/routes/companyUserRoutes";
-import { errorMiddleware } from "./presentation/middlewares/errorMiddleware";
+import { adminRouter } from "./presentation/routes/admin.route";
+import { UserRoutes } from "./presentation/routes/user.route";
+import { companyAuthRouter } from "./presentation/routes/auth/company-auth.route";
+import { companyAdminRouter } from "./presentation/routes/company-admin.route";
+import { TokenService } from "./application/services/token.service";
+import { authMiddleware } from "./presentation/middlewares/auth.middleware";
+import { companyUserRoutes } from "./presentation/routes/company-user.route";
+import { errorMiddleware } from "./presentation/middlewares/error.middleware";
 
 dotenv.config();
 export class app {
