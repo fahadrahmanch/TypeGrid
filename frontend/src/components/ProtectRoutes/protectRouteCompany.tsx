@@ -3,14 +3,16 @@ import { Navigate } from "react-router-dom";
 import { ReactNode } from "react";
 interface Props {
   children: ReactNode;
-  allowedRoles:string[];
+  allowedRoles: string[];
 }
-interface PropsIsloggedCompany{
-children:ReactNode;
+interface PropsIsloggedCompany {
+  children: ReactNode;
 }
 
-export default function   ProtectRouteCompany({ children ,allowedRoles}: Props) {
-  const accessToken = useSelector((state: any) => state.companyAuth.accessToken);
+export default function ProtectRouteCompany({ children, allowedRoles }: Props) {
+  const accessToken = useSelector(
+    (state: any) => state.companyAuth.accessToken,
+  );
   const user = useSelector((state: any) => state.companyAuth.user);
   const authLoaded = useSelector((state: any) => state.companyAuth.authLoaded);
 
@@ -23,7 +25,6 @@ export default function   ProtectRouteCompany({ children ,allowedRoles}: Props) 
   if (!user || !allowedRoles.includes(user.role)) {
     return <Navigate to="/company/user/dashboard" replace />;
   }
-
 
   return children;
 }

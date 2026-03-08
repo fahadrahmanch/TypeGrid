@@ -49,12 +49,12 @@ body::-webkit-scrollbar {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #D1D5DB;
+  background-color: #d1d5db;
   /* gray-300 */
   border-radius: 20px;
 }
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #D1D5DB transparent;
+  scrollbar-color: #d1d5db transparent;
 }

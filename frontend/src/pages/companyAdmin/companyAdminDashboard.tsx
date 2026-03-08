@@ -2,7 +2,7 @@ import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdm
 const CompanyAdminDashboard: React.FC = () => {
   return (
     <>
-    <CompanyAdminSidebar/>
+      <CompanyAdminSidebar />
       <h1>Dashboar</h1>
     </>
   );

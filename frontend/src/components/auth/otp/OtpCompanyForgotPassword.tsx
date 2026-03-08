@@ -1,15 +1,18 @@
 import OtpKid from "../../../assets/images/auth/otp/otp-kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
 import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
-import {companyForgotPasswordOtpVerification,resendOtp} from "../../../api/auth/authServices";
+import {
+  companyForgotPasswordOtpVerification,
+  resendOtp,
+} from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const OtpCompanyForgotPassword: React.FC = () => {
-    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const [otp, setOtp] = useState<string>("");
   const location = useLocation();
   const name = location.state?.name;
@@ -18,13 +21,13 @@ const OtpCompanyForgotPassword: React.FC = () => {
   const navigate = useNavigate();
   const [expire, setExpire] = useState<number>(30);
   const OTP_VALID_TIME = 30;
-    useEffect(() => {
-  if (!email) {
-    navigate("/company/signin", { replace: true });
-  }
-}, []);
+  useEffect(() => {
+    if (!email) {
+      navigate("/company/signin", { replace: true });
+    }
+  }, []);
 
- useEffect(() => {
+  useEffect(() => {
     const savedTime = localStorage.getItem("otpRequestedTime");
     if (savedTime) {
       const elapsed = Math.floor((Date.now() - Number(savedTime)) / 1000);
@@ -76,7 +79,10 @@ const OtpCompanyForgotPassword: React.FC = () => {
     e.preventDefault();
     try {
       const response = await companyForgotPasswordOtpVerification(otp, email);
-      navigate("/company/create/new/password", { state: { email } ,replace: true, });
+      navigate("/company/create/new/password", {
+        state: { email },
+        replace: true,
+      });
       toast.success(response.data.message);
     } catch (error: any) {
       const msg =

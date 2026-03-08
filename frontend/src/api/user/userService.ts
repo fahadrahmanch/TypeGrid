@@ -23,7 +23,6 @@
 
 import { userAPI } from "../axios/userAPI";
 
-
 // get logged-in user data
 export async function getUserDataApi() {
   return userAPI.get("/me");
@@ -33,8 +32,6 @@ export async function getUserDataApi() {
 export async function updateUserDataApi(user: any) {
   return userAPI.put("/me", user);
 }
-
-
 
 // apply / verify company
 export async function verifyCompanyApi(data: any) {
@@ -55,9 +52,3 @@ export async function getCompanyStatusApi() {
 export async function changePasswordApi(data: any) {
   return userAPI.put("/password", data);
 }
-
-
-
-
-
-

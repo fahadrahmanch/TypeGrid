@@ -8,10 +8,38 @@ import Lessons from "../pages/admin/Lessons";
 export default function AdminRoutes() {
   return (
     <Routes>
-      <Route path="signin" element={<IsloggedAdmin><AdminSignIn /></IsloggedAdmin>} />
-      <Route path="users" element={<ProtectRouteAdmin><Users /></ProtectRouteAdmin>} />
-      <Route path="company" element={<ProtectRouteAdmin><Company /></ProtectRouteAdmin>} />
-      <Route path="lessons" element={<ProtectRouteAdmin><Lessons/></ProtectRouteAdmin>}/>
+      <Route
+        path="signin"
+        element={
+          <IsloggedAdmin>
+            <AdminSignIn />
+          </IsloggedAdmin>
+        }
+      />
+      <Route
+        path="users"
+        element={
+          <ProtectRouteAdmin>
+            <Users />
+          </ProtectRouteAdmin>
+        }
+      />
+      <Route
+        path="company"
+        element={
+          <ProtectRouteAdmin>
+            <Company />
+          </ProtectRouteAdmin>
+        }
+      />
+      <Route
+        path="lessons"
+        element={
+          <ProtectRouteAdmin>
+            <Lessons />
+          </ProtectRouteAdmin>
+        }
+      />
     </Routes>
   );
 }

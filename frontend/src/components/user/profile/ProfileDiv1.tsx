@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import {getUserDataApi } from "../../../api/user/userService";
-import {useState, useEffect } from "react";
+import { getUserDataApi } from "../../../api/user/userService";
+import { useState, useEffect } from "react";
 const ProfileDiv1: React.FC = () => {
   const [user, setUser] = useState({
     name: "",
@@ -12,23 +12,23 @@ const ProfileDiv1: React.FC = () => {
     imageUrl: "",
   });
 
-    useEffect(() => {
-      async function getUserData() {
-        const res = await getUserDataApi();
-        if (res?.data) {
-          setUser({
-            name: res.data.name,
-            email: res.data.email,
-            bio: res.data.bio,
-            age: res.data.age,
-            number: res.data.number,
-            gender: res.data.gender || "",
-            imageUrl: res.data.imageUrl || "",
-          });
-        }
+  useEffect(() => {
+    async function getUserData() {
+      const res = await getUserDataApi();
+      if (res?.data) {
+        setUser({
+          name: res.data.name,
+          email: res.data.email,
+          bio: res.data.bio,
+          age: res.data.age,
+          number: res.data.number,
+          gender: res.data.gender || "",
+          imageUrl: res.data.imageUrl || "",
+        });
       }
-      getUserData();
-    }, []);
+    }
+    getUserData();
+  }, []);
   return (
     <>
       <div className="w-full mt-16 max-w-6xl bg-[#FAF3E6] rounded-2xl p-8 flex flex-col md:flex-row items-start justify-between gap-6 shadow-sm  border border-[#F5EBD8] ">
@@ -36,22 +36,21 @@ const ProfileDiv1: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-6 w-full">
           {/* Avatar Placeholder */}
           <div className="flex-shrink-0">
- <img
-                    src={
-                      user.imageUrl
-                        ? user.imageUrl
-                        : "https://via.placeholder.com/150"
-                    }
-                    alt="Profile"
-                    className="w-32 h-32 rounded-full border-4 border-[#F0E4D4] object-cover"
-                  />          </div>
+            <img
+              src={
+                user.imageUrl
+                  ? user.imageUrl
+                  : "https://via.placeholder.com/150"
+              }
+              alt="Profile"
+              className="w-32 h-32 rounded-full border-4 border-[#F0E4D4] object-cover"
+            />{" "}
+          </div>
           {/* User Details */}
           <div className="flex flex-col">
             {/* Name & Badge Row */}
             <div className="flex  gap-3 mb-1 ">
-              <h1 className="text-3xl font-bold text-[#2D2D2D]">
-                {user.name}
-              </h1>
+              <h1 className="text-3xl font-bold text-[#2D2D2D]">{user.name}</h1>
               {/* "Free" Badge */}
               <div className="flex items-center gap-1 bg-white px-2 py-0.5 rounded-full border border-gray-200 shadow-sm">
                 <svg
@@ -74,9 +73,7 @@ const ProfileDiv1: React.FC = () => {
               Level 12
             </p>
             {/* Email */}
-            <p className="text-gray-500 text-base mb-3 flex">
-              {user.email}
-            </p>
+            <p className="text-gray-500 text-base mb-3 flex">{user.email}</p>
             {/* Bio Description */}
             <p className="text-gray-600 leading-relaxed max-w-2xl flex">
               {user.bio}

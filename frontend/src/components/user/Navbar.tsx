@@ -1,23 +1,22 @@
 import { Link } from "react-router-dom";
 import { getUserDataApi } from "../../api/user/userService";
-import {useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Logo from "../../assets/Icon/logo.png";
 const Navbar: React.FC = () => {
-   const [image, setImage] = useState({
-    
-      imageUrl: "",
-    });
-      useEffect(() => {
-        async function getUserData() {
-          const res = await getUserDataApi();
-          if (res?.data) {
-            setImage({
-              imageUrl: res.data.imageUrl || "",
-            });
-          }
-        }
-        getUserData();
-      }, []);
+  const [image, setImage] = useState({
+    imageUrl: "",
+  });
+  useEffect(() => {
+    async function getUserData() {
+      const res = await getUserDataApi();
+      if (res?.data) {
+        setImage({
+          imageUrl: res.data.imageUrl || "",
+        });
+      }
+    }
+    getUserData();
+  }, []);
   return (
     <>
       <nav className="bg-white flex items-center justify-between w-full px-6 py-4 fixed top-0 left-0 z-50 shadow-sm h-20">
@@ -37,11 +36,11 @@ const Navbar: React.FC = () => {
         </div>
         <Link to="/profile">
           <img
-              src={
-                      image.imageUrl
-                        ? image.imageUrl
-                        : "https://via.placeholder.com/150"
-                    }
+            src={
+              image.imageUrl
+                ? image.imageUrl
+                : "https://via.placeholder.com/150"
+            }
             alt="User"
             className="w-14 h-14 rounded-full object-cover shadow cursor-pointer"
           />

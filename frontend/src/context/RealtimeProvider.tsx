@@ -4,58 +4,48 @@ import { socket } from "../socket";
 const RealtimeContext = createContext<any>(null);
 
 export const RealtimeProvider = ({ children }: any) => {
+  const [challengeModal, setChallengeModal] = useState<any>(null);
 
-    const [challengeModal, setChallengeModal] = useState<any>(null);
+  const companyUser = useSelector((state: any) => state.companyAuth.user);
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
 
-    const companyUser = useSelector((state: any) => state.companyAuth.user);
-    useEffect(() => {
+    socket.on("challenge-status-updated", (data) => {
+      setChallengeModal({
+        open: true,
+        challengeId: data.challengeId,
+      });
+    });
 
-        socket.on("connect", () => {
-            console.log("Socket connected:", socket.id);
-        });
+    return () => {
+      socket.off("challenge-status-updated");
+    };
+  }, []);
 
-        socket.on("challenge-status-updated", (data) => {
+  useEffect(() => {
+    if (!companyUser?._id) return;
 
+    socket.emit("register-user", companyUser._id);
+  }, [companyUser]);
+  useEffect(() => {
+    socket.on("start-match", ({ challengeId }) => {
+      window.location.href = `/company/user/challenge/${challengeId}`;
+    });
 
-            setChallengeModal({
-                open: true,
-                challengeId: data.challengeId
-            });
+    return () => {
+      socket.off("start-match");
+    };
+  }, []);
 
-        });
-
-        return () => {
-            socket.off("challenge-status-updated");
-        };
-
-    }, []);
-
-    useEffect(() => {
-
-        if (!companyUser?._id) return;
-
-        socket.emit("register-user", companyUser._id);
-
-    }, [companyUser]);
-    useEffect(() => {
-
-        socket.on("start-match", ({ challengeId }) => {
-
-            window.location.href = `/company/user/challenge/${challengeId}`;
-
-        });
-
-        return () => {
-            socket.off("start-match");
-        };
-        
-    }, []);
-
-    return (
-        <RealtimeContext.Provider value={{ socket, challengeModal, setChallengeModal }}>
-            {children}
-        </RealtimeContext.Provider>
-    );
+  return (
+    <RealtimeContext.Provider
+      value={{ socket, challengeModal, setChallengeModal }}
+    >
+      {children}
+    </RealtimeContext.Provider>
+  );
 };
 
 export const useRealtime = () => useContext(RealtimeContext);

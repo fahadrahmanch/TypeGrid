@@ -2,16 +2,21 @@ import { useState } from "react";
 import { verifyCompanyApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { nameValidation,emailValidation,addressValidation,numberValidation } from "../../../validations/companyRequestFormValidations";
+import {
+  nameValidation,
+  emailValidation,
+  addressValidation,
+  numberValidation,
+} from "../../../validations/companyRequestFormValidations";
 const CompanyVerificationFormDiv: React.FC = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     companyName: "",
     address: "",
     email: "",
-    number:""
+    number: "",
   });
-    const [error, setError] = useState({
+  const [error, setError] = useState({
     companyName: "",
     email: "",
     number: "",
@@ -22,24 +27,24 @@ const CompanyVerificationFormDiv: React.FC = () => {
   }
   async function handleSubmit(e: any) {
     e.preventDefault();
-        const nameErr = nameValidation(values.companyName);
-        const emailErr = emailValidation(values.email);
-        const addressErr = addressValidation(values.address);
-        const numberErr = numberValidation(values.number);
-    
-        setError({
-          companyName: nameErr,
-          email: emailErr,
-          address: addressErr,
-          number: numberErr,
-        });
-    
-        if (nameErr || emailErr || addressErr || numberErr) return;
+    const nameErr = nameValidation(values.companyName);
+    const emailErr = emailValidation(values.email);
+    const addressErr = addressValidation(values.address);
+    const numberErr = numberValidation(values.number);
+
+    setError({
+      companyName: nameErr,
+      email: emailErr,
+      address: addressErr,
+      number: numberErr,
+    });
+
+    if (nameErr || emailErr || addressErr || numberErr) return;
     try {
       const response = await verifyCompanyApi(values);
-    toast.success(response?.data?.message || "Company details submitted!");
-    navigate("/subscription/company/verify/status");
-    } catch (error:any) {
+      toast.success(response?.data?.message || "Company details submitted!");
+      navigate("/subscription/company/verify/status");
+    } catch (error: any) {
       toast.error(error.response?.data?.message);
       console.log(error);
     }
@@ -72,7 +77,9 @@ const CompanyVerificationFormDiv: React.FC = () => {
                 placeholder="Your company name"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
               />
-              <p className="text-left text-red-500 text-sm">{error.companyName}</p>
+              <p className="text-left text-red-500 text-sm">
+                {error.companyName}
+              </p>
             </div>
             {/* Address */}
             <div>

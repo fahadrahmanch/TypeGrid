@@ -9,37 +9,34 @@ import { companyForgotPasswordApi } from "../../../api/auth/authServices";
 const CompanyForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState({ email: "" });
-      const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const emailErr = emailValidation(email);
+    setError({
+      email: emailErr,
+    });
+    if (loading) return;
+    setLoading(true);
+    try {
+      const res = await companyForgotPasswordApi(email);
+      if (res?.data?.success) {
+        toast.success(res.data.message || "OTP sent successfully");
+        localStorage.setItem("otpRequestedTime", Date.now().toString());
 
-    const handleSubmit = async (e: any) => {
-      e.preventDefault();
-      const emailErr = emailValidation(email);
-      setError({
-        email: emailErr,
-      });
-       if (loading) return;
-setLoading(true);
-      try {
-        const res = await companyForgotPasswordApi(email);
-        if (res?.data?.success) {
-          toast.success(res.data.message || "OTP sent successfully");
-          localStorage.setItem("otpRequestedTime", Date.now().toString());
-
-          navigate("/company/forgot/password/otp", {
-            state: { email: email, name: res.data.name },
-            
-          });
-        }
-      } catch (error: any) {
-        console.log(error);
-        toast.error(error.response?.data?.message || "Something went wrong");
-              setLoading(false);
-
+        navigate("/company/forgot/password/otp", {
+          state: { email: email, name: res.data.name },
+        });
       }
-    };
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
+      setLoading(false);
+    }
+  };
 
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
@@ -73,19 +70,19 @@ setLoading(true);
               />
               <p className=" text-left text-red-500 text-sm">{error.email}</p>
 
-                <button
-              type="submit"
-              onClick={handleSubmit}
-              disabled={loading}
-              className={`w-full text-white rounded-md py-2 mt-2 transition 
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                disabled={loading}
+                className={`w-full text-white rounded-md py-2 mt-2 transition 
     ${
       loading
         ? "bg-gray-700 cursor-not-allowed"
         : "bg-gray-900 hover:bg-gray-800"
     }`}
-            >
-              {loading ? "Sending..." : "Submit"}
-            </button>
+              >
+                {loading ? "Sending..." : "Submit"}
+              </button>
             </form>
           </div>
 

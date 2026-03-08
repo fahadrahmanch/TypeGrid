@@ -7,10 +7,9 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 const SideNavbar: React.FC = () => {
   const [open, setOpen] = useState(false);
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   async function handleLogout() {
     try {
-
       await adminLogoutApi();
       dispatch(logout());
     } catch (error) {
@@ -18,7 +17,7 @@ const SideNavbar: React.FC = () => {
     }
   }
   return (
-     <>
+    <>
       {/* Mobile Top Bar */}
       <div className="md:hidden flex items-center justify-between p-4 bg-[#FFF3DB] shadow fixed top-0 left-0 right-0 z-50">
         <div className="flex items-center">

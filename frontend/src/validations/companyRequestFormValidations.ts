@@ -12,16 +12,16 @@ export function emailValidation(email: string) {
 }
 export function numberValidation(number: string) {
   if (!number.trim()) return "Phone number is required";
-  
+
   const regex = /^[6-9]\d{9}$/; // Valid Indian mobile format
   if (!regex.test(number)) return "Invalid phone number (10 digits required)";
-  
+
   return "";
 }
 
 export function addressValidation(address: string) {
   if (!address.trim()) return "Address is required";
   if (address.trim().length < 5) return "Address must be at least 5 characters";
-  
+
   return "";
 }

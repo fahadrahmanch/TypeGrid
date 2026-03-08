@@ -9,11 +9,21 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { userRefreshAPI } from "./api/auth/authServices";
 import { useDispatch } from "react-redux";
-import { logout, setuserAccessToken, setUserAuthLoaded } from "./store/slices/auth/userAuthSlice";
+import {
+  logout,
+  setuserAccessToken,
+  setUserAuthLoaded,
+} from "./store/slices/auth/userAuthSlice";
 import { adminRefreshAPI } from "./api/auth/authServices";
-import { setAdminAccessToken, setAdminAuthLoaded, } from "./store/slices/auth/adminAuthSlice";
+import {
+  setAdminAccessToken,
+  setAdminAuthLoaded,
+} from "./store/slices/auth/adminAuthSlice";
 import { companyRefreshAPI } from "./api/auth/authServices";
-import { setcompanyAccessToken, setCompanyAuthLoaded } from "./store/slices/auth/companyAuthSlice";
+import {
+  setcompanyAccessToken,
+  setCompanyAuthLoaded,
+} from "./store/slices/auth/companyAuthSlice";
 
 import ChallengeModal from "./components/common/ChallengeModal";
 function App() {
@@ -35,9 +45,7 @@ function App() {
           const user = res.data.user;
           if (accessToken) {
             dispatch(setcompanyAccessToken({ accessToken, user }));
-
           }
-
         } else {
           const res = await userRefreshAPI();
           const accessToken = res?.data?.accessToken;
@@ -68,7 +76,6 @@ function App() {
     };
     load();
   }, []);
-
 
   return (
     <>

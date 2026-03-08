@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import { BookOpen, Calendar, Clock, Trophy, ChevronDown, CheckCircle2, PlayCircle, Circle } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  Clock,
+  Trophy,
+  ChevronDown,
+  CheckCircle2,
+  PlayCircle,
+  Circle,
+} from "lucide-react";
 import StreakModal from "../../components/companyUser/lessons/StreakModal";
 import { toast } from "react-toastify";
 import { myLessons } from "../../api/companyUser/lessons";
@@ -45,21 +54,27 @@ const MyLessons: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "Completed": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-      case "In Progress": return <PlayCircle className="w-5 h-5 text-blue-500" />;
-      default: return <Circle className="w-5 h-5 text-gray-400" />;
+      case "Completed":
+        return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+      case "In Progress":
+        return <PlayCircle className="w-5 h-5 text-blue-500" />;
+      default:
+        return <Circle className="w-5 h-5 text-gray-400" />;
     }
   };
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case "Beginner": return "bg-emerald-100 text-emerald-700";
-      case "Intermediate": return "bg-yellow-100 text-yellow-700";
-      case "Advanced": return "bg-pink-100 text-pink-700";
-      default: return "bg-gray-100 text-gray-700";
+      case "Beginner":
+        return "bg-emerald-100 text-emerald-700";
+      case "Intermediate":
+        return "bg-yellow-100 text-yellow-700";
+      case "Advanced":
+        return "bg-pink-100 text-pink-700";
+      default:
+        return "bg-gray-100 text-gray-700";
     }
   };
-
 
   useEffect(() => {
     async function fetchMyLessons() {
@@ -89,14 +104,15 @@ const MyLessons: React.FC = () => {
 
         const filtered = mappedLessons.filter((lesson) => {
           const levelOk =
-            selectedLevel === "All" || lesson.level.toLowerCase() === selectedLevel.toLowerCase();
+            selectedLevel === "All" ||
+            lesson.level.toLowerCase() === selectedLevel.toLowerCase();
 
           const statusOk =
-            selectedStatus === "All" || lesson.status.toLowerCase() === selectedStatus.toLowerCase();
+            selectedStatus === "All" ||
+            lesson.status.toLowerCase() === selectedStatus.toLowerCase();
 
           return levelOk && statusOk;
         });
-
 
         setMyLessons({
           lessons: mappedLessons,
@@ -113,14 +129,9 @@ const MyLessons: React.FC = () => {
     fetchMyLessons();
   }, [selectedLevel, selectedStatus]);
 
-
-
-async function handleLessonClick(assignedId: string) {
- navigate(`/company/user/assigned-lessons/${assignedId}`);
- 
-}
-
-
+  async function handleLessonClick(assignedId: string) {
+    navigate(`/company/user/assigned-lessons/${assignedId}`);
+  }
 
   return (
     <div className="flex min-h-screen bg-[#FFF8EA] pt-20">
@@ -134,7 +145,9 @@ async function handleLessonClick(assignedId: string) {
               <BookOpen className="w-6 h-6 text-gray-700" />
               <h1 className="text-2xl font-bold text-gray-900">My Lessons</h1>
             </div>
-            <p className="text-sm text-gray-500 ml-9">{MyLessons?.total} lessons assigned</p>
+            <p className="text-sm text-gray-500 ml-9">
+              {MyLessons?.total} lessons assigned
+            </p>
           </div>
           <button
             onClick={() => setIsStreakModalOpen(true)}
@@ -151,8 +164,6 @@ async function handleLessonClick(assignedId: string) {
             <span className="text-xs font-semibold tracking-wide opacity-90">
               Overall Progress
             </span>
-
-
 
             <span className="text-xs font-bold opacity-90">
               {progressPercent} %
@@ -207,7 +218,13 @@ async function handleLessonClick(assignedId: string) {
             <select
               value={selectedLevel}
               onChange={(e) =>
-                setSelectedLevel(e.target.value as "All" | "Beginner" | "Intermediate" | "Advanced")
+                setSelectedLevel(
+                  e.target.value as
+                    | "All"
+                    | "Beginner"
+                    | "Intermediate"
+                    | "Advanced",
+                )
               }
               className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
             >
@@ -223,7 +240,13 @@ async function handleLessonClick(assignedId: string) {
             <select
               value={selectedStatus}
               onChange={(e) =>
-                setSelectedStatus(e.target.value as "All" | "Completed" | "In Progress" | "Not Started")
+                setSelectedStatus(
+                  e.target.value as
+                    | "All"
+                    | "Completed"
+                    | "In Progress"
+                    | "Not Started",
+                )
               }
               className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
             >
@@ -235,12 +258,11 @@ async function handleLessonClick(assignedId: string) {
           </div>
         </div>
 
-
         {/* Lessons Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
           {filteredLessons.map((lesson) => (
             <div
-            onClick={() => handleLessonClick(lesson.id)}
+              onClick={() => handleLessonClick(lesson.id)}
               key={lesson.id}
               className="bg-[#FFF3DB] rounded-2xl p-6 border border-orange-50 hover:bg-[#FFF3E0]/50 transition-all duration-300 hover:scale-105 cursor-pointer group relative"
             >
@@ -252,7 +274,7 @@ async function handleLessonClick(assignedId: string) {
                 </h3>
                 <span
                   className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${getLevelColor(
-                    lesson.level
+                    lesson.level,
                   )}`}
                 >
                   {lesson.level}
@@ -277,12 +299,13 @@ async function handleLessonClick(assignedId: string) {
               <div className="flex items-center gap-2">
                 {getStatusIcon(lesson.status)}
                 <span
-                  className={`text-xs font-semibold ${lesson.status === "Completed"
+                  className={`text-xs font-semibold ${
+                    lesson.status === "Completed"
                       ? "text-emerald-600"
                       : lesson.status === "In Progress"
                         ? "text-blue-600"
                         : "text-gray-500"
-                    }`}
+                  }`}
                 >
                   {lesson.status}
                 </span>
@@ -290,12 +313,14 @@ async function handleLessonClick(assignedId: string) {
             </div>
           ))}
         </div>
-
       </main>
 
       {/* Streak Modal */}
-      <StreakModal isOpen={isStreakModalOpen} onClose={() => setIsStreakModalOpen(false)} />
-    </div >
+      <StreakModal
+        isOpen={isStreakModalOpen}
+        onClose={() => setIsStreakModalOpen(false)}
+      />
+    </div>
   );
 };
 export default MyLessons;

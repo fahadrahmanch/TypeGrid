@@ -3,11 +3,11 @@ export function nameValidation(name: string) {
   if (name.trim().length < 3) return "Name must be at least 3 characters";
   return "";
 }
-export function numberValidation(number: string) {  
-    if (!number || !number.trim()) return "";
-  const regex = /^[6-9]\d{9}$/; 
+export function numberValidation(number: string) {
+  if (!number || !number.trim()) return "";
+  const regex = /^[6-9]\d{9}$/;
   if (!regex.test(number)) return "Invalid phone number (10 digits required)";
-  
+
   return "";
 }
 export function ageValidation(age: string) {
@@ -18,7 +18,7 @@ export function ageValidation(age: string) {
 }
 
 export function bioValidation(bio: string) {
-    if (!bio || !bio.trim()) return "";
+  if (!bio || !bio.trim()) return "";
   if (bio.trim().length < 10) return "Bio must be at least 10 characters";
   if (bio.trim().length > 200) return "Bio must be less than 200 characters";
   return "";

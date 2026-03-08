@@ -37,7 +37,7 @@ const CompanyNewPasswordForm: React.FC = () => {
         toast.success("Password updated successfully");
         localStorage.setItem("otpRequestedTime", Date.now().toString());
 
-        navigate("/company/signin",{replace: true, });
+        navigate("/company/signin", { replace: true });
       } else {
         toast.error(res.data.message || "Something went wrong");
       }

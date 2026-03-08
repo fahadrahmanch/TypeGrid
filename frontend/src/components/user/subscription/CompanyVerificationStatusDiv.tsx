@@ -2,28 +2,25 @@ import { useEffect, useState } from "react";
 import { getCompanyStatusApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 const CompanyVerificationStatusDiv1: React.FC = () => {
-  const [company,setCompany]=useState<any>();
+  const [company, setCompany] = useState<any>();
   const navigate = useNavigate();
-  useEffect(()=>{
-    async function fetchCompanyDetails(){
-      try{
-        const response=await getCompanyStatusApi(); 
-        if(!response.data){
+  useEffect(() => {
+    async function fetchCompanyDetails() {
+      try {
+        const response = await getCompanyStatusApi();
+        if (!response.data) {
           return navigate("/");
         }
         setCompany(response.data.company);
-
-      }catch(error){
-       console.log(error);
-       navigate("/");
-
+      } catch (error) {
+        console.log(error);
+        navigate("/");
       }
-    
     }
     fetchCompanyDetails();
-  },[]);
+  }, []);
 
-  const handleReApply=()=>{
+  const handleReApply = () => {
     navigate("/subscription/company/re-verify");
   };
 
@@ -86,7 +83,6 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
                     </p>
                   </div>
                 )}
-
 
                 {/* ACTIONS */}
                 <div className="mt-5  gap-3 flex justify-center">

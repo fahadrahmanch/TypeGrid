@@ -1,12 +1,15 @@
 // import lines from "../../../assets/images/auth/login/lines.png";
 import kid2 from "../../../assets/images/auth/login/Kid2.png";
-import {emailValidation,passwordValidation} from "../../../validations/authValidations";
+import {
+  emailValidation,
+  passwordValidation,
+} from "../../../validations/authValidations";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { companySignIn } from "../../../api/auth/authServices";
-import {setcompanyAccessToken} from "../../../store/slices/auth/companyAuthSlice";
+import { setcompanyAccessToken } from "../../../store/slices/auth/companyAuthSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const CompanyLoginForm: React.FC = () => {
@@ -57,7 +60,7 @@ const CompanyLoginForm: React.FC = () => {
       }
       toast.success(response.data.message);
     } catch (error: any) {
-        console.log("error",error);
+      console.log("error", error);
       const msg =
         error?.response?.data?.message ||
         "Something went wrong. Please try again.";
@@ -94,25 +97,25 @@ const CompanyLoginForm: React.FC = () => {
               className=" rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
             <p className=" text-left text-red-500 text-sm">{error.email}</p>
-                    <div className="relative">
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Password"
-          name="password"
-          onChange={handleChange}
-          className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
-        />
-        <span
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
-        >
-          {showPassword ? (
-            <AiOutlineEyeInvisible size={20} />
-          ) : (
-            <AiOutlineEye size={20} />
-          )}
-        </span>
-      </div>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                name="password"
+                onChange={handleChange}
+                className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
+              </span>
+            </div>
             <p className="text-left text-red-500 text-sm">{error.password}</p>
             <button
               type="submit"
@@ -122,12 +125,12 @@ const CompanyLoginForm: React.FC = () => {
               Sign In
             </button>
           </form>
-             <a
-              href="/company/forgot/password"
-              className="text-gray-900 font-sans  hover:underline"
-            >
-              forgot password
-            </a>
+          <a
+            href="/company/forgot/password"
+            className="text-gray-900 font-sans  hover:underline"
+          >
+            forgot password
+          </a>
         </div>
         {/* Illustration */}
         <div className="w-38 ml-[-17px] mt-[6rem] hidden sm:block ">

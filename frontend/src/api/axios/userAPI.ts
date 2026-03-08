@@ -1,6 +1,9 @@
 import axios from "axios";
 import store from "../../store/store";
-import {setuserAccessToken,logout} from "../../store/slices/auth/userAuthSlice";
+import {
+  setuserAccessToken,
+  logout,
+} from "../../store/slices/auth/userAuthSlice";
 import { userRefreshAPI } from "../auth/authServices";
 export const userAPI = axios.create({
   baseURL: import.meta.env.VITE_API_URL + "/user",
@@ -27,8 +30,8 @@ userAPI.interceptors.response.use(
       try {
         const res = await userRefreshAPI();
         const accessToken = await res.data.accessToken;
-        const user = res.data.user ;
-        
+        const user = res.data.user;
+
         store.dispatch(setuserAccessToken({ accessToken, user }));
         orginalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
         return userAPI(orginalRequest);

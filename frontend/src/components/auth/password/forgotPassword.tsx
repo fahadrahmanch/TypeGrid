@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 const ForgotPassWordForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState({ email: "" });
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const handleSubmit = async (e: any) => {
@@ -23,7 +23,7 @@ const ForgotPassWordForm: React.FC = () => {
       email: emailErr,
     });
     if (loading) return;
-setLoading(true);
+    setLoading(true);
     try {
       const res = await forgotPasswordApi(email);
       if (res?.data?.success) {

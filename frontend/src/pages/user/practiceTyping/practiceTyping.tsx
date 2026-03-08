@@ -5,30 +5,27 @@ import { getTypingPracticeContent } from "../../../api/user/typingPracticeServic
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const PracticeTyping: React.FC = () => {
-  type Difficulty = "beginner"|"intermediate"| "advanced"
-  type Category = "sentence" | "paragraph"
+  type Difficulty = "beginner" | "intermediate" | "advanced";
+  type Category = "sentence" | "paragraph";
 
   const [difficulty, setDifficulty] = useState<Difficulty>("beginner");
   const [category, setCategory] = useState<Category>("sentence");
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const handleStart = async () => {
-    try{
-      const fetchLesson=await getTypingPracticeContent(difficulty,category);
-      const lesson=fetchLesson.data.lesson;
-      if(!lesson){
+    try {
+      const fetchLesson = await getTypingPracticeContent(difficulty, category);
+      const lesson = fetchLesson.data.lesson;
+      if (!lesson) {
         toast.error("No lesson found for the selected options.");
         return;
       }
-      
+
       navigate(`/typing/practice/${lesson.id}`);
-      
-    }
-    catch(error: any){
+    } catch (error: any) {
       console.error("Error fetching lesson:", error);
       toast.error(error.response?.data?.message || "Something went wrong!");
     }
-    
   };
 
   return (
@@ -37,7 +34,6 @@ const PracticeTyping: React.FC = () => {
 
       <div className="min-h-screen bg-[#FFF6E8] flex items-center justify-center">
         <div className="w-full max-w-5xl px-6 py-10 text-center">
-
           {/* Title */}
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             TypeGrid Practice
@@ -60,52 +56,50 @@ const PracticeTyping: React.FC = () => {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
               {/* Easy */}
               <div
                 onClick={() => setDifficulty("beginner")}
                 className={`rounded-xl p-6 cursor-pointer transition
-                  ${difficulty === "beginner"
-                    ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
-                    : "border hover:shadow-md"}
+                  ${
+                    difficulty === "beginner"
+                      ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
+                      : "border hover:shadow-md"
+                  }
                 `}
               >
                 <h3 className="font-semibold text-gray-900 mb-1">Easy</h3>
-                <p className="text-sm text-gray-600">
-                  Perfect for beginners
-                </p>
+                <p className="text-sm text-gray-600">Perfect for beginners</p>
               </div>
 
               {/* Medium */}
               <div
                 onClick={() => setDifficulty("intermediate")}
                 className={`rounded-xl p-6 cursor-pointer transition
-                  ${difficulty === "intermediate"
-                    ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
-                    : "border hover:shadow-md"}
+                  ${
+                    difficulty === "intermediate"
+                      ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
+                      : "border hover:shadow-md"
+                  }
                 `}
               >
                 <h3 className="font-semibold text-gray-900 mb-1">Medium</h3>
-                <p className="text-sm text-gray-600">
-                  Intermediate challenge
-                </p>
+                <p className="text-sm text-gray-600">Intermediate challenge</p>
               </div>
 
               {/* Hard */}
               <div
                 onClick={() => setDifficulty("advanced")}
                 className={`rounded-xl p-6 cursor-pointer transition
-                  ${difficulty === "advanced"
-                    ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
-                    : "border hover:shadow-md"}
+                  ${
+                    difficulty === "advanced"
+                      ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
+                      : "border hover:shadow-md"
+                  }
                 `}
               >
                 <h3 className="font-semibold text-gray-900 mb-1">Hard</h3>
-                <p className="text-sm text-gray-600">
-                  Expert level typing
-                </p>
+                <p className="text-sm text-gray-600">Expert level typing</p>
               </div>
-
             </div>
           </div>
 
@@ -116,14 +110,15 @@ const PracticeTyping: React.FC = () => {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               {/* Paragraphs */}
               <div
                 onClick={() => setCategory("paragraph")}
                 className={`rounded-xl p-6 cursor-pointer transition
-                  ${category === "paragraph"
-                    ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
-                    : "border hover:shadow-md"}
+                  ${
+                    category === "paragraph"
+                      ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
+                      : "border hover:shadow-md"
+                  }
                 `}
               >
                 <h3 className="font-semibold text-gray-900 mb-1">Paragraphs</h3>
@@ -136,9 +131,11 @@ const PracticeTyping: React.FC = () => {
               <div
                 onClick={() => setCategory("sentence")}
                 className={`rounded-xl p-6 cursor-pointer transition
-                  ${category === "sentence"
-                    ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
-                    : "border hover:shadow-md"}
+                  ${
+                    category === "sentence"
+                      ? "border-2 border-orange-400 bg-[#FFF1DC] shadow-md"
+                      : "border hover:shadow-md"
+                  }
                 `}
               >
                 <h3 className="font-semibold text-gray-900 mb-1">Sentences</h3>
@@ -146,7 +143,6 @@ const PracticeTyping: React.FC = () => {
                   Practice typing full sentences
                 </p>
               </div>
-
             </div>
           </div>
 
@@ -157,11 +153,10 @@ const PracticeTyping: React.FC = () => {
           >
             ▶ Start Practicing
           </button>
-
         </div>
       </div>
     </>
   );
-  };
+};
 
 export default PracticeTyping;

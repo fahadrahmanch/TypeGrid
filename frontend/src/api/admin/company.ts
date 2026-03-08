@@ -5,11 +5,10 @@ export async function getAllcompanies() {
 export async function updateCompanyStatus(
   companyId: string,
   status: "active" | "reject",
-  reason?: string
+  reason?: string,
 ) {
   return adminAPI.patch(`/companies/${companyId}/status`, {
     status,
     reason,
   });
 }
-

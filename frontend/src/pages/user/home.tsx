@@ -13,7 +13,6 @@ import { toast } from "react-toastify";
 import { createSoloRoom } from "../../api/user/solo";
 import { createQuick } from "../../api/user/quick";
 
-
 const Home: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,79 +27,75 @@ const Home: React.FC = () => {
 
   async function handleGameModeClick(mode: string) {
     // Implement navigation or other actions based on the selected game mode;
-    if(mode==="group"){
-      try{
-        const response=await createGroupRoom();
-        if(response){
-          const joinLink=response?.data?.group?.joinLink;
+    if (mode === "group") {
+      try {
+        const response = await createGroupRoom();
+        if (response) {
+          const joinLink = response?.data?.group?.joinLink;
           navigate(`/group-play/group/${joinLink}`);
         }
-      }
-      catch(error){
+      } catch (error) {
         toast.error("Failed to create group room. Please try again.");
         console.log(error);
       }
-    }else if(mode==="solo"){
-      try{
-      const response=await createSoloRoom();
-      const data=response?.data;
-       if (!data?._id) {
-      throw new Error("Solo room ID missing");
-    }
+    } else if (mode === "solo") {
+      try {
+        const response = await createSoloRoom();
+        const data = response?.data;
+        if (!data?._id) {
+          throw new Error("Solo room ID missing");
+        }
 
-      const soloId=data?._id;
-      if(response){
-        navigate( `/solo-play/${soloId}`,{
-          state: { gameData: data },
-        } );
-      }
-      }
-      catch(error){
+        const soloId = data?._id;
+        if (response) {
+          navigate(`/solo-play/${soloId}`, {
+            state: { gameData: data },
+          });
+        }
+      } catch (error) {
         toast.error("Failed to create solo room. Please try again.");
         console.log(error);
       }
-    }else if(mode==="practice"){
+    } else if (mode === "practice") {
       navigate("/typing/practice");
-    }else if(mode==="quick"){
-       try {
-    const response = await createQuick();
-    if(!response){
-      throw new Error("Quick play  missing");
-    }
-    navigate("/quick-play", {
-      state: { gameData: response.data.quickPlay },
-      replace: true,
-    });
-  } catch (error) {
-    toast.error("Failed to start quick play. Please try again.");
-    console.log(error);
-  }
+    } else if (mode === "quick") {
+      try {
+        const response = await createQuick();
+        if (!response) {
+          throw new Error("Quick play  missing");
+        }
+        navigate("/quick-play", {
+          state: { gameData: response.data.quickPlay },
+          replace: true,
+        });
+      } catch (error) {
+        toast.error("Failed to start quick play. Please try again.");
+        console.log(error);
+      }
     }
   }
 
   return (
     <div className="min-h-screen ">
       <Navbar />
-      
+
       <main className="w-full px-4 md:px-8 py-6">
-
         <WelcomeSection />
-        
-      <GameModes onGameModeClick={handleGameModeClick} />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-12">
 
+        <GameModes onGameModeClick={handleGameModeClick} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-12">
           {/* Left Column: Recent Matches */}
 
           {/* <div className="lg:col-span-1">
             <RecentMatches />
           </div> */}
-          
+
           {/* Middle Column: Highscores */}
           {/* <div className="lg:col-span-1">
             <Highscores />
           </div> */}
-          
+
           {/* Right Column: Recent Posts */}
           {/* <div className="lg:col-span-1">
             <RecentPosts />
@@ -108,9 +103,12 @@ const Home: React.FC = () => {
         </div>
 
         <div className="mt-8 text-center opacity-50 hover:opacity-100">
-            <button className="text-red-500 underline text-sm" onClick={() => handleLogout()}>
-                Temporary Logout
-            </button>
+          <button
+            className="text-red-500 underline text-sm"
+            onClick={() => handleLogout()}
+          >
+            Temporary Logout
+          </button>
         </div>
       </main>
     </div>

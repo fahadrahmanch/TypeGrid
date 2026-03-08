@@ -17,11 +17,11 @@ const OtpForm: React.FC = () => {
   const [expire, setExpire] = useState<number>(30);
   const OTP_VALID_TIME = 30;
   useEffect(() => {
-  if (!email) {
-    navigate("/Signin", { replace: true });
-  }
-}, []);
- useEffect(() => {
+    if (!email) {
+      navigate("/Signin", { replace: true });
+    }
+  }, []);
+  useEffect(() => {
     const savedTime = localStorage.getItem("otpRequestedTime");
     if (savedTime) {
       const elapsed = Math.floor((Date.now() - Number(savedTime)) / 1000);
@@ -60,7 +60,7 @@ const OtpForm: React.FC = () => {
     try {
       const response = await resendOtp(name, email);
       toast.success(response.data.message);
-       localStorage.setItem("otpRequestedTime", Date.now().toString());
+      localStorage.setItem("otpRequestedTime", Date.now().toString());
       setExpire(30);
     } catch (error: any) {
       const msg =
@@ -73,7 +73,7 @@ const OtpForm: React.FC = () => {
     e.preventDefault();
     try {
       const response = await verifyOtp(otp, name, email, password);
-      navigate("/Signin",{replace: true, });
+      navigate("/Signin", { replace: true });
       toast.success(response.data.message);
     } catch (error: any) {
       const msg =

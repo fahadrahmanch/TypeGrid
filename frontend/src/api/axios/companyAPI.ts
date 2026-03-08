@@ -1,6 +1,9 @@
 import axios from "axios";
 import store from "../../store/store";
-import { setcompanyAccessToken,logout } from "../../store/slices/auth/companyAuthSlice";
+import {
+  setcompanyAccessToken,
+  logout,
+} from "../../store/slices/auth/companyAuthSlice";
 import { companyRefreshAPI } from "../auth/authServices";
 export const companyAPI = axios.create({
   baseURL: import.meta.env.VITE_API_URL + "/company",
@@ -37,6 +40,4 @@ companyAPI.interceptors.response.use(
     }
     return Promise.reject(error);
   },
- 
 );
-

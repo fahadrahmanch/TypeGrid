@@ -27,39 +27,170 @@ export default function UserRoutes() {
   return (
     <Routes location={location} key={location.pathname}>
       {/* User Auth */}
-      <Route path="signup" element={<IsloggedUser><Signup /></IsloggedUser>} />
-      <Route path="Signin" element={<IsloggedUser><SignIn /></IsloggedUser>} />
-      <Route path="otp" element={<IsloggedUser><Otp /></IsloggedUser>} />
-      <Route path="forgot/password" element={<IsloggedUser><ForgotPassword /></IsloggedUser>} />
-      <Route path="forgot/password/otp" element={<IsloggedUser><OtpForgotPassword /></IsloggedUser>} />
-      <Route path="create/new/password" element={<IsloggedUser><NewPasswordForm /></IsloggedUser>} />
-
-      <Route path="/" element={<ProtectRouteUser><Home /></ProtectRouteUser>} />
-      <Route path="profile" element={<ProtectRouteUser><Profile /></ProtectRouteUser>} />
-      <Route path="profile/edit" element={<ProtectRouteUser><EditProfile /></ProtectRouteUser>} />
-      <Route path="/change/password" element={<ProtectRouteUser><ChangePassword /></ProtectRouteUser>} />
-
+      <Route
+        path="signup"
+        element={
+          <IsloggedUser>
+            <Signup />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="Signin"
+        element={
+          <IsloggedUser>
+            <SignIn />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="otp"
+        element={
+          <IsloggedUser>
+            <Otp />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="forgot/password"
+        element={
+          <IsloggedUser>
+            <ForgotPassword />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="forgot/password/otp"
+        element={
+          <IsloggedUser>
+            <OtpForgotPassword />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="create/new/password"
+        element={
+          <IsloggedUser>
+            <NewPasswordForm />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <ProtectRouteUser>
+            <Home />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="profile"
+        element={
+          <ProtectRouteUser>
+            <Profile />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="profile/edit"
+        element={
+          <ProtectRouteUser>
+            <EditProfile />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="/change/password"
+        element={
+          <ProtectRouteUser>
+            <ChangePassword />
+          </ProtectRouteUser>
+        }
+      />
       {/* Subscription */}
-      <Route path="subscription/company" element={<ProtectRouteUser><CompanySubscription /></ProtectRouteUser>} />
-      <Route path="subscription/company/verify" element={<ProtectRouteUser><CompanyVerification /></ProtectRouteUser>} />
-      <Route path="subscription/company/verify/status" element={<ProtectRouteUser><CompanyVerificationStatus /></ProtectRouteUser>} />
-      <Route path="subscription/company/re-verify" element={<ProtectRouteUser><CompanyVerificationReapply /></ProtectRouteUser>} />
-
-
+      <Route
+        path="subscription/company"
+        element={
+          <ProtectRouteUser>
+            <CompanySubscription />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="subscription/company/verify"
+        element={
+          <ProtectRouteUser>
+            <CompanyVerification />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="subscription/company/verify/status"
+        element={
+          <ProtectRouteUser>
+            <CompanyVerificationStatus />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="subscription/company/re-verify"
+        element={
+          <ProtectRouteUser>
+            <CompanyVerificationReapply />
+          </ProtectRouteUser>
+        }
+      />
       {/* Typing Practice */}
-      <Route path="/typing/practice" element={<ProtectRouteUser><PracticeTyping /></ProtectRouteUser>} />
-      <Route path="/typing/practice/:lessonId" element={<ProtectRouteUser><TypingPracticeArea /></ProtectRouteUser>} />
-
-
+      <Route
+        path="/typing/practice"
+        element={
+          <ProtectRouteUser>
+            <PracticeTyping />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="/typing/practice/:lessonId"
+        element={
+          <ProtectRouteUser>
+            <TypingPracticeArea />
+          </ProtectRouteUser>
+        }
+      />
       {/* // Group  */}
-      <Route path="/group-play/group/:joinLink" element={<ProtectRouteUser><GroupLobby /></ProtectRouteUser>} />
-      <Route path="/group-play/game/:joinLink" element={<ProtectRouteUser><GroupPlay /></ProtectRouteUser>} />
-
-      <Route path="/solo-play/:soloId" element={<ProtectRouteUser><SoloPlay /></ProtectRouteUser>} />
-
+      <Route
+        path="/group-play/group/:joinLink"
+        element={
+          <ProtectRouteUser>
+            <GroupLobby />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="/group-play/game/:joinLink"
+        element={
+          <ProtectRouteUser>
+            <GroupPlay />
+          </ProtectRouteUser>
+        }
+      />
+      <Route
+        path="/solo-play/:soloId"
+        element={
+          <ProtectRouteUser>
+            <SoloPlay />
+          </ProtectRouteUser>
+        }
+      />
       {/* quick play */}
-      <Route path="/quick-play" element={<ProtectRouteUser><QuickPlay /></ProtectRouteUser>} />
-
+      <Route
+        path="/quick-play"
+        element={
+          <ProtectRouteUser>
+            <QuickPlay />
+          </ProtectRouteUser>
+        }
+      />
       //au
     </Routes>
   );

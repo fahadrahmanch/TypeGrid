@@ -27,10 +27,7 @@ type Group = {
   difficulty: string;
   maximumPlayers: number;
   joinLink: string;
-
 };
-
-
 
 const GroupLobby: React.FC = () => {
   const { joinLink } = useParams<{ joinLink: string }>();
@@ -65,11 +62,8 @@ const GroupLobby: React.FC = () => {
         groupId: group.id,
         userId: user._id,
       });
-
     };
   }, [group?.id, user._id]);
-
-
 
   useEffect(() => {
     const handleUserLeave = ({
@@ -79,7 +73,6 @@ const GroupLobby: React.FC = () => {
       members: Player[];
       newHostId: string;
     }) => {
-
       const updatedMembers = [...members];
 
       setPlayers(updatedMembers);
@@ -87,11 +80,11 @@ const GroupLobby: React.FC = () => {
       setGroup((prev) =>
         prev
           ? {
-            ...prev,
-            ownerId: newHostId,
-            members: updatedMembers,
-          }
-          : prev
+              ...prev,
+              ownerId: newHostId,
+              members: updatedMembers,
+            }
+          : prev,
       );
     };
 
@@ -101,7 +94,6 @@ const GroupLobby: React.FC = () => {
       socket.off("player-left", handleUserLeave);
     };
   }, []);
-
 
   useEffect(() => {
     const handler = (data: any) => {
@@ -120,8 +112,6 @@ const GroupLobby: React.FC = () => {
     };
   }, [navigate, joinLink]);
 
-
-
   useEffect(() => {
     if (!group?.id) return;
 
@@ -130,8 +120,12 @@ const GroupLobby: React.FC = () => {
       setMaximumPlayes(data.maximumPlayers);
       setGroup((prev) =>
         prev
-          ? { ...prev, difficulty: data.difficulty, maximumPlayers: data.maximumPlayers }
-          : prev
+          ? {
+              ...prev,
+              difficulty: data.difficulty,
+              maximumPlayers: data.maximumPlayers,
+            }
+          : prev,
       );
     };
 
@@ -146,17 +140,13 @@ const GroupLobby: React.FC = () => {
     if (!group?.id) return;
 
     const handler = (data: any) => {
-
       const isRemoved = data.group.kickedUsers.find((m: any) => {
-
         return m.toString() === user?._id;
       });
 
-
       if (isRemoved) {
         toast.info("You have been removed from the group");
-        navigate("/", { replace: true, });
-
+        navigate("/", { replace: true });
       } else {
         setGroup((prev: any) => ({
           ...prev,
@@ -196,8 +186,6 @@ const GroupLobby: React.FC = () => {
 
   useEffect(() => {
     async function fetchGroupDetails() {
-
-
       try {
         await joinGroupAPI(joinLink!);
         const response = await getGroupRoomDetails(joinLink!);
@@ -220,25 +208,26 @@ const GroupLobby: React.FC = () => {
   }, [joinLink]);
 
   async function removePlayer(playerId: string) {
-
     try {
       const response = await removePlayerAPI(group?.id, playerId);
       const groupDetails = response?.data?.group;
       setGroup((prev) => ({
         ...groupDetails,
-        currentUserId: prev?.currentUserId
+        currentUserId: prev?.currentUserId,
       }));
       setPlayers(groupDetails.members);
     } catch (error: any) {
       console.log(error);
     }
-
   }
 
   async function editGroup(newDifficulty?: string, newMaxPlayers?: number) {
     if (!group?.id) return;
-    await editGroupAPI(group.id, newDifficulty ?? difficulty,
-      newMaxPlayers ?? maximumPlayers);
+    await editGroupAPI(
+      group.id,
+      newDifficulty ?? difficulty,
+      newMaxPlayers ?? maximumPlayers,
+    );
   }
 
   async function startGame() {
@@ -246,18 +235,12 @@ const GroupLobby: React.FC = () => {
       if (!group?.id) return;
       isStartingGameRef.current = true;
       await startGroupPlayAPI(group?.id, Number(countDown));
-
-    }
-    catch (error: any) {
+    } catch (error: any) {
       console.log(error);
     }
-
   }
 
   if (loading) return <LoadingPage />;
-
-
-
 
   return (
     <>
@@ -287,19 +270,24 @@ const GroupLobby: React.FC = () => {
                       onClick={() => {
                         if (!isHost) return;
 
-                        setGroup((prev: any) => ({ ...prev, difficulty: value }));
+                        setGroup((prev: any) => ({
+                          ...prev,
+                          difficulty: value,
+                        }));
                         setDifficulty(value);
                         editGroup(value, undefined);
                       }}
                       className={`text-base py-2 rounded-lg border transition
-            ${value === group?.difficulty
-                          ? "bg-[#7A6A5D] text-white"
-                          : "bg-white text-gray-700"
-                        }
-            ${!isHost
-                          ? "cursor-not-allowed opacity-50"
-                          : "hover:bg-[#7A6A5D] hover:text-white"
-                        }
+            ${
+              value === group?.difficulty
+                ? "bg-[#7A6A5D] text-white"
+                : "bg-white text-gray-700"
+            }
+            ${
+              !isHost
+                ? "cursor-not-allowed opacity-50"
+                : "hover:bg-[#7A6A5D] hover:text-white"
+            }
           `}
                     >
                       {d}
@@ -314,7 +302,6 @@ const GroupLobby: React.FC = () => {
                 </p>
               )}
             </div>
-
 
             {/* Max Players */}
             <div className="mb-8">
@@ -337,14 +324,16 @@ const GroupLobby: React.FC = () => {
                       editGroup(undefined, num);
                     }}
                     className={`text-base py-2 rounded-lg border transition
-          ${num === Number(group?.maximumPlayers)
-                        ? "bg-[#7A6A5D] text-white"
-                        : "bg-white"
-                      }
-          ${!isHost
-                        ? "cursor-not-allowed opacity-50"
-                        : "hover:bg-[#7A6A5D] hover:text-white"
-                      }
+          ${
+            num === Number(group?.maximumPlayers)
+              ? "bg-[#7A6A5D] text-white"
+              : "bg-white"
+          }
+          ${
+            !isHost
+              ? "cursor-not-allowed opacity-50"
+              : "hover:bg-[#7A6A5D] hover:text-white"
+          }
         `}
                   >
                     {num}
@@ -358,8 +347,6 @@ const GroupLobby: React.FC = () => {
                 </p>
               )}
             </div>
-
-
 
             {/* Start Time */}
             <div>
@@ -379,14 +366,12 @@ const GroupLobby: React.FC = () => {
                 className="w-full border rounded-lg px-4 py-3"
               />
 
-
               {!isHost && (
                 <p className="text-xs text-gray-500 mt-2">
                   Only the host can change start time
                 </p>
               )}
             </div>
-
           </div>
 
           {/* CENTER */}
@@ -440,7 +425,9 @@ const GroupLobby: React.FC = () => {
                   {showShareMenu && (
                     <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-white border rounded-xl shadow-lg p-4 z-10 w-64 animate-fade-in-up">
                       <div className="flex justify-between items-center mb-3 pb-2 border-b">
-                        <h4 className="text-sm font-semibold text-gray-700">Share via</h4>
+                        <h4 className="text-sm font-semibold text-gray-700">
+                          Share via
+                        </h4>
                         <button
                           onClick={() => setShowShareMenu(false)}
                           className="text-gray-400 hover:text-gray-600"
@@ -481,8 +468,6 @@ const GroupLobby: React.FC = () => {
                 </div>
               </div>
 
-
-
               {group?.currentUserId === group?.ownerId ? (
                 <button
                   onClick={startGame}
@@ -495,7 +480,6 @@ const GroupLobby: React.FC = () => {
                   ⏳ Waiting for host to start the game…
                 </p>
               )}
-
             </div>
 
             {/* CHAT */}
@@ -548,9 +532,7 @@ const GroupLobby: React.FC = () => {
 
                     {/* Name + host */}
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-base truncate">
-                        {p.name}
-                      </span>
+                      <span className="text-base truncate">{p.name}</span>
 
                       {p.isHost && (
                         <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full flex-shrink-0">
@@ -580,7 +562,6 @@ const GroupLobby: React.FC = () => {
               <span className="w-3 h-3 bg-gray-300 rounded-full" />
             </div>
           </div>
-
         </div>
       </div>
     </>

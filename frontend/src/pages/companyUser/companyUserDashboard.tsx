@@ -7,7 +7,6 @@ const CompanyUserDashboard: React.FC = () => {
 
   async function handleLogout() {
     try {
-
       await companyLogoutApi();
       dispatch(logout());
     } catch (error) {
@@ -18,7 +17,10 @@ const CompanyUserDashboard: React.FC = () => {
     <div className="min-h-screen pt-20 px-8 bg-[#FFF8EA]">
       <CompanyUserNavbar />
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" onClick={() => handleLogout()}>
+      <button
+        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        onClick={() => handleLogout()}
+      >
         Logout
       </button>
     </div>

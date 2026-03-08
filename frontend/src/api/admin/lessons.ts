@@ -13,9 +13,6 @@ export async function deleteLesson(id: string) {
 export async function fetchLesson(id: any) {
   return adminAPI.get(`/lesson/${id}`);
 }
-export async function updateLesson(id:string,lessonData:any){
-  return adminAPI.put(`/lesson/${id}`,lessonData);
+export async function updateLesson(id: string, lessonData: any) {
+  return adminAPI.put(`/lesson/${id}`, lessonData);
 }
-
-
-

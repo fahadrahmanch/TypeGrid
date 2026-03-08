@@ -35,7 +35,7 @@ const NewPasswordForm: React.FC = () => {
       const res = await resetPasswordApi(email, values.password);
       if (res.data.success) {
         toast.success("Password updated successfully");
-        navigate("/Signin",{replace: true, });
+        navigate("/Signin", { replace: true });
       } else {
         toast.error(res.data.message || "Something went wrong");
       }

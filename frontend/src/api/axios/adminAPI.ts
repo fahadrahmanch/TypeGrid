@@ -1,6 +1,9 @@
 import axios from "axios";
 import store from "../../store/store";
-import { setAdminAccessToken,logout } from "../../store/slices/auth/adminAuthSlice";
+import {
+  setAdminAccessToken,
+  logout,
+} from "../../store/slices/auth/adminAuthSlice";
 import { adminRefreshAPI } from "../auth/authServices";
 export const adminAPI = axios.create({
   baseURL: import.meta.env.VITE_API_URL + "/admin",

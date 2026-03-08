@@ -42,7 +42,7 @@ const UsersTable: React.FC = () => {
       filtered = filtered.filter(
         (u) =>
           u.name.toLowerCase().startsWith(lower) ||
-          u.email.toLowerCase().startsWith(lower)
+          u.email.toLowerCase().startsWith(lower),
       );
     }
     const total = Math.ceil(filtered.length / limit);
