@@ -1,4 +1,4 @@
-type CompetitionMember = {
+export type CompetitionMember = {
   _id: string;
   name: string;
   imageUrl: string;
@@ -21,37 +21,7 @@ export interface CompetitionDTOQuickPlay {
   startedAt: string;
   countDown: number;
 }
-export const mapCompetitionToDTOQuickPlay = (
-  competition: any,
-): CompetitionDTOQuickPlay => {
-  return {
-    _id: competition._id.toString(),
-    mode: competition.mode,
-    status: competition.status,
-    duration: competition.duration,
-    startedAt: competition.startedAt,
-    countDown: competition.countDown,
-    lesson: {
-      id: competition.lesson._id,
-      text: competition.lesson.text,
-      category: competition.lesson.category,
-      level: competition.lesson.level,
-    },
-    participants: competition.participants.map((user: any) => ({
-      _id: user._id.toString(),
-      name: user.name,
-      imageUrl: user.imageUrl,
-    })),
-  };
-};
 
-export const mapQuickMemberToDTO = (user: any): CompetitionMember => {
-  return {
-    _id: user._id.toString(),
-    name: user.name,
-    imageUrl: user.imageUrl,
-  };
-};
 
 export interface QuickPlayMemberDTO {
   _id: string;

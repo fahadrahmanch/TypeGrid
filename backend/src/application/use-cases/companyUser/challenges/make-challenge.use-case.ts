@@ -8,10 +8,8 @@ import { ICompetitionRepository } from "../../../../domain/interfaces/repository
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { CompanyChallengeEntity } from "../../../../domain/entities/company-challenge.entity";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import {
-  ChallengeDTO,
-  mapChallengeToDTO,
-} from "../../../DTOs/companyUser/challenge.dto";
+import { ChallengeDTO } from "../../../DTOs/companyUser/challenge.dto";
+import { mapChallengeToDTO } from "../../../mappers/companyUser/challenge.mapper";
 export class MakeChallengeUseCase implements IMakeChallengeUseCase {
   constructor(
     private challengeRepository: ICompanyChallengeRepository,

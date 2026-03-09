@@ -1,10 +1,8 @@
 import { IGetCompanyUsersUseCase } from "../interfaces/companyUser/get-company-users.interface";
 import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
-import {
-  companyUserDTO,
-  mapCompanyUsersWithOnlineStatus,
-} from "../../DTOs/companyUser/company-user.dto";
+import { companyUserDTO } from "../../DTOs/companyUser/company-user.dto";
+import { mapCompanyUsersWithOnlineStatus } from "../../mappers/companyUser/company-user.mapper";
 import redis from "../../../config/redis";
 
 export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
@@ -19,6 +17,6 @@ export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
       CompanyId: companyId,
     });
     const onlineUsers = await redis.smembers("online:users");
-    return mapCompanyUsersWithOnlineStatus(users as any, onlineUsers);
+    return mapCompanyUsersWithOnlineStatus(users, onlineUsers);
   }
 }

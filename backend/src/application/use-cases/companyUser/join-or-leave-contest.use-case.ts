@@ -4,7 +4,7 @@ import { IUserRepository } from "../../../domain/interfaces/repository/user/user
 import { MESSAGES } from "../../../domain/constants/messages";
 import { ContestEntity } from "../../../domain/entities/company-contest.entity";
 import { openContestDTO } from "../../../application/DTOs/companyAdmin/company-contest.dto";
-import { mapContestDTO } from "../../../application/DTOs/companyAdmin/company-contest.dto";
+import { mapContestDTO } from "../../../application/mappers/companyAdmin/company-contest.mapper";
 export class JoinOrLeaveContestUseCase implements IJoinOrLeaveContestUseCase {
   constructor(
     private readonly contestRepository: IContestRepository,
@@ -34,6 +34,6 @@ export class JoinOrLeaveContestUseCase implements IJoinOrLeaveContestUseCase {
     }
     const Object = contestEntity.toObject();
     const contests = await this.contestRepository.update(Object);
-    return mapContestDTO(contests as any, userId);
+    return mapContestDTO(contests, userId);
   }
 }

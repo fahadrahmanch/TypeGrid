@@ -5,7 +5,7 @@ import { ILessonRepository } from "../../../../domain/interfaces/repository/admi
 import { ICreateCompanyContestUseCase } from "../../interfaces/companyAdmin/create-company-contest.interface";
 import { CreateContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
 import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
-import { mapContestDTOAdmin } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
 import { MESSAGES } from "../../../../domain/constants/messages";
 export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase {
   constructor(
@@ -71,6 +71,6 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       countDown: 10,
     });
     const newContest = await this.contestRepository.create(contest);
-    return mapContestDTOAdmin(newContest as any);
+    return mapContestDTOAdmin(newContest);
   }
 }

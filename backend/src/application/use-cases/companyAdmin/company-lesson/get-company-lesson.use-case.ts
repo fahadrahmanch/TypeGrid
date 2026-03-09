@@ -2,7 +2,7 @@ import { IGetCompanyLessonsUseCase } from "../../interfaces/companyAdmin/get-com
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
-import { mapLessonDTOforCompanyLesson } from "../../../../application/DTOs/companyAdmin/company-lesson.dto";
+import { mapLessonDTOforCompanyLesson } from "../../../../application/mappers/companyAdmin/company-lesson.mapper";
 import { CompanyLessonDTO } from "../../../../application/DTOs/companyAdmin/company-lesson.dto";
 export class GetCompanyLessonUseCase implements IGetCompanyLessonsUseCase {
   constructor(

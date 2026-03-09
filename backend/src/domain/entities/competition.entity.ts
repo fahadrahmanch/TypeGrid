@@ -14,7 +14,7 @@ type Reward = {
   prize: string;
 };
 
-type CompetitionProps = {
+export type CompetitionProps = {
   id?: string;
   type: CompetitionType;
   mode: CompetitionMode;

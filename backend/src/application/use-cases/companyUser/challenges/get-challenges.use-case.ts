@@ -1,10 +1,8 @@
 import { ICompanyChallengeRepository } from "../../../../domain/interfaces/repository/company/company-challenge-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { IGetChallengesUseCase } from "../../interfaces/companyUser/get-challenges.interface";
-import {
-  ChallengeDTO,
-  mapChallengeToDTO,
-} from "../../../DTOs/companyUser/challenge.dto";
+import { ChallengeDTO } from "../../../DTOs/companyUser/challenge.dto";
+import { mapChallengeToDTO } from "../../../mappers/companyUser/challenge.mapper";
 export class GetChallengesUseCase implements IGetChallengesUseCase {
   constructor(
     private _baseRepoChallange: ICompanyChallengeRepository,

@@ -84,7 +84,7 @@ export class CompanyContestManagementController {
 
       const participants = await this._getContestParticipantsUseCase.execute(
         contestId,
-        userId!,
+       
       );
 
       res.status(HttpStatus.OK).json({

@@ -4,8 +4,9 @@ import { IGroupRepository } from "../../../../domain/interfaces/repository/user/
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import { mapLessonDTOforGroupPlay } from "../../../DTOs/admin/lesson-management.dto";
-import { mapCompetitionToDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
+import { ICompetitionDocument } from "../../../../infrastructure/db/types/documents";
+import { mapLessonDTOforGroupPlay } from "../../../mappers/admin/lesson-management.mapper";
+import { mapCompetitionToDTOGroupPlay } from "../../../mappers/user/competition-group-play.mapper";
 import { CompetitionDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
 import { groupDTO, mapGroupToDTO } from "../../../DTOs/user/group.dto";
 import { MESSAGES } from "../../../../domain/constants/messages";
@@ -29,13 +30,13 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
         MESSAGES.GROUP_NOT_FOUND,
       );
     }
-    const participants = group.members.map((item: any) => item.toString());
+    const participants = group.members.map((item: string) => item.toString());
     const difficultyToLevelMap: Record<string, string> = {
       easy: "beginner",
       medium: "intermediate",
       hard: "advanced",
     };
-    const level = difficultyToLevelMap[(group as any).difficulty];
+    const level = difficultyToLevelMap[group.difficulty];
 
     const lessons = await this.lessonRepository.find({
       level,
@@ -55,7 +56,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       mode: "global",
       textId: selectedLesson.id,
       participants,
-      groupId: (group as any)._id.toString(),
+      groupId: group.getId()!.toString(),
       duration: 300,
       status: "ongoing",
       countDown,
@@ -63,17 +64,17 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
     const competitionObject = competitionEntity.toObject();
     const competition = await this._baseRepoCompetion.create(competitionEntity);
     const populatedParticipants = await Promise.all(
-      (competitionEntity as any).participants.map((item: any) =>
+      competitionEntity.getParticipants().map((item: string) =>
         this.userRepository.findById(item),
       ),
     );
     const responseCompetition = {
-      ...(competition as any),
+      ...(competition as ICompetitionDocument),
       participants: populatedParticipants,
       lesson: selectedLesson,
-      JoinLink: (group as any).joinLink,
+      JoinLink: group.getJoinLink() || undefined,
     };
 
-    return mapCompetitionToDTOGroupPlay(responseCompetition, group.ownerId);
+    return mapCompetitionToDTOGroupPlay(responseCompetition as unknown as import("../../../mappers/user/competition-group-play.mapper").PopulatedGroupCompetitionPayload, group.ownerId);
   }
 }

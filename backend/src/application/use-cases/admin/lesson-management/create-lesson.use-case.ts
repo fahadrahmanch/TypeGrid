@@ -2,7 +2,7 @@ import { LessonDTO } from "../../../DTOs/admin/lesson-management.dto";
 import { ICreateLessonUseCase } from "../../interfaces/admin/create-lesson.interface";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { LessonEntity } from "../../../../domain/entities/lesson.entity";
-import { mapLessonToDTO } from "../../../DTOs/admin/lesson-management.dto";
+import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper";
 export class CreateLessonUseCase implements ICreateLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
   async execute(lessonData: LessonDTO): Promise<void> {

@@ -6,10 +6,8 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
-import {
-  ChallengeGameDTO,
-  mapChallengeGameToDTO,
-} from "../../../DTOs/companyUser/challenge.dto";
+import { ChallengeGameDTO } from "../../../DTOs/companyUser/challenge.dto";
+import { mapChallengeGameToDTO } from "../../../mappers/companyUser/challenge.mapper";
 
 export class GetChallengeGameDataUseCase implements IGetChallengeGameDataUseCase {
   constructor(

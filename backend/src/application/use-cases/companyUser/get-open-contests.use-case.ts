@@ -3,7 +3,7 @@ import { IContestRepository } from "../../../domain/interfaces/repository/compan
 import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { openContestDTO } from "../../DTOs/companyAdmin/company-contest.dto";
-import { mapOpenContestDTO } from "../../DTOs/companyAdmin/company-contest.dto";
+import { mapOpenContestDTO } from "../../mappers/companyAdmin/company-contest.mapper";
 export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
   constructor(
     private readonly contestRepository: IContestRepository,
@@ -26,6 +26,6 @@ export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
       },
     });
 
-    return mapOpenContestDTO(contests as any, userId);
+    return mapOpenContestDTO(contests, userId);
   }
 }

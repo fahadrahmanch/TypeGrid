@@ -8,7 +8,7 @@ export class GetContestParticipantsUseCase implements IGetContestParticipantsUse
     private contestRepository: IContestRepository,
     private userRepository: IUserRepository,
   ) {}
-  async execute(contestId: string, userId: string): Promise<ParticipantsDTO[]> {
+  async execute(contestId: string): Promise<ParticipantsDTO[]> {
     const contest = await this.contestRepository.findById(contestId);
     if (!contest) {
       throw new Error(MESSAGES.CONTEST_NOT_FOUND);

@@ -4,7 +4,7 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-import { mapQuickMemberToDTO } from "../../../DTOs/user/competition-quick-play.dto";
+import { mapQuickMemberToDTO } from "../../../mappers/user/competition-quick-play.mapper";
 import { QuickPlayMemberDTO } from "../../../DTOs/user/competition-quick-play.dto";
 import logger from "../../../../utils/logger";
 
@@ -34,9 +34,8 @@ export class GetJoinMemberUseCase implements IGetJoinMemberUseCase {
           MESSAGES.COMPETITION_NOT_FOUND,
         );
       }
-      const isParticipant = (competition as any)
-        .getParticipants()
-        .some((participant: string) => participant.toString() === userId);
+      const isParticipant = competition.participants
+        .some((participant: any) => participant.toString() === userId);
       if (!isParticipant) {
         throw new CustomError(
           HttpStatusCodes.FORBIDDEN,

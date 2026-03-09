@@ -3,10 +3,8 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { IUpdateLessonUseCase } from "../../interfaces/admin/update-lesson.interface";
-import {
-  LessonDTO,
-  mapLessonToDTO,
-} from "../../../DTOs/admin/lesson-management.dto";
+import { LessonDTO } from "../../../DTOs/admin/lesson-management.dto";
+import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper";
 
 export class UpdateLessonUseCase implements IUpdateLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}

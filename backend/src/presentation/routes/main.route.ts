@@ -117,9 +117,9 @@ export const Routes = {
     COMPANY_CONTESTS: "/company/contests",
     CONTEST_STATUS: "/company/contest/:contestId/status",
     CONTEST_PARTICIPANTS: "/company/contest/:contestId/participants",
-    FETCH_CONTEST_ADMIN: `/company/contest/:contestId/admin`,
+    FETCH_CONTEST_ADMIN: "/company/contest/:contestId/admin",
     UPDATE_CONTEST: "/company/contest/:contestId",
-    DELETE_CONTEST: `/company/contest/:contestId`,
+    DELETE_CONTEST: "/company/contest/:contestId",
   },
 
   COMPANY_USER: {
@@ -136,9 +136,9 @@ export const Routes = {
 
     ///challenge
     MAKE_CHALLENGE: "/challenge",
-    CHECK_ALREAY_SEND: `/challenge/check-challenge-sent`,
+    CHECK_ALREAY_SEND: "/challenge/check-challenge-sent",
     GET_CHALLENGES: "/challenges",
-    CHALLENGE_ACCEPT: `/challenge/accept/:challengeId`,
-    GET_CHALLENGE_GAME_DATA: `/challenge/game-data/:challengeId`,
+    CHALLENGE_ACCEPT: "/challenge/accept/:challengeId",
+    GET_CHALLENGE_GAME_DATA: "/challenge/game-data/:challengeId",
   },
 };

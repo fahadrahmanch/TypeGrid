@@ -1,10 +1,8 @@
 import { IGetContestDataUseCase } from "../interfaces/companyUser/get-contest-data.interface";
 import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
 import { IContestRepository } from "../../../domain/interfaces/repository/company/contest-repository.interface";
-import {
-  ContestProps,
-  mapContestDTO,
-} from "../../DTOs/companyAdmin/company-contest.dto";
+import { ContestProps } from "../../DTOs/companyAdmin/company-contest.dto";
+import { mapContestDTO } from "../../mappers/companyAdmin/company-contest.mapper";
 import { MESSAGES } from "../../../domain/constants/messages";
 export class GetContestDataUseCase implements IGetContestDataUseCase {
   constructor(
@@ -26,6 +24,6 @@ export class GetContestDataUseCase implements IGetContestDataUseCase {
     if (!allowedStatuses.includes((isJoined as any).status)) {
       throw new Error(MESSAGES.GROUP_EXPIRED);
     }
-    return mapContestDTO(isJoined as any, userId);
+    return mapContestDTO(isJoined, userId);
   }
 }

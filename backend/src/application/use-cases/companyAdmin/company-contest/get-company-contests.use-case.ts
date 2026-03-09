@@ -2,15 +2,13 @@ import { IContestRepository } from "../../../../domain/interfaces/repository/com
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { IGetCompanyContestsUsecase } from "../../interfaces/companyAdmin/get-company-contests.interface";
-import {
-  mapCompanyContestDTO,
-  ContestProps,
-} from "../../../DTOs/companyAdmin/company-contest.dto";
+import { ContestProps } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapCompanyContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
 export class GetCompanyContestsUseCase implements IGetCompanyContestsUsecase {
   constructor(
     private contestRepository: IContestRepository,
     private userRepository: IUserRepository,
-  ) {}
+  ) { }
   async execute(userId: string): Promise<ContestProps[]> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
@@ -22,6 +20,6 @@ export class GetCompanyContestsUseCase implements IGetCompanyContestsUsecase {
     if (!contests) {
       throw new Error(MESSAGES.CONTESTS_NOT_FOUND);
     }
-    return mapCompanyContestDTO(contests as any);
+    return mapCompanyContestDTO(contests);
   }
 }

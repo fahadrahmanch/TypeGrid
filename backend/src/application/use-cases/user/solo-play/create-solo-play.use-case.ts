@@ -6,8 +6,9 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
+import { ICompetitionDocument } from "../../../../infrastructure/db/types/documents";
 import { CompetitionDTOSoloPlay } from "../../../../application/DTOs/user/competition-solo-play.dto";
-import { mapCompetitionToDTOSoloPlay } from "../../../../application/DTOs/user/competition-solo-play.dto";
+import { mapCompetitionToDTOSoloPlay } from "../../../../application/mappers/user/competition-solo-play.mapper";
 export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
   constructor(
     private lessonRepository: ILessonRepository,
@@ -34,7 +35,7 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
       type: "solo",
       mode: "global",
       participants: [(user as any)._id],
-      textId: (selectedLesson as any)._id || (selectedLesson as any).id,
+      textId: (selectedLesson as import("../../../../infrastructure/db/types/documents").ILessonDocument)._id!.toString(),
       duration: 300,
       countDown: 10,
       status: "ongoing",
@@ -43,16 +44,16 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
       await this._baseRepoCompetion.create(competition);
 
     const populatedParticipants = await Promise.all(
-      (competition as any).participants.map((item: any) =>
+      competition.getParticipants().map((item: string) =>
         this.userRepository.findById(item),
       ),
     );
     const responseCompetition = {
-      ...(createdCompetition as any),
+      ...(createdCompetition as ICompetitionDocument),
       participants: populatedParticipants,
       lesson: selectedLesson,
     };
 
-    return mapCompetitionToDTOSoloPlay(responseCompetition);
+    return mapCompetitionToDTOSoloPlay(responseCompetition as unknown as import("../../../../application/mappers/user/competition-solo-play.mapper").PopulatedSoloCompetitionPayload);
   }
 }

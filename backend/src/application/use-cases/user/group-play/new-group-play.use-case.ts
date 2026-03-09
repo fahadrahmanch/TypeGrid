@@ -7,9 +7,10 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import { GroupEntity } from "../../../../domain/entities/group.entity";
+import { ICompetitionDocument } from "../../../../infrastructure/db/types/documents";
+import { GroupEntity, GroupProps } from "../../../../domain/entities/group.entity";
 
-import { mapCompetitionToDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
+import { mapCompetitionToDTOGroupPlay } from "../../../mappers/user/competition-group-play.mapper";
 import { CompetitionDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
 
 export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
@@ -25,7 +26,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     users: string[],
   ): Promise<CompetitionDTOGroupPlay> {
     const compatitionData = await this.competitionRepository.findById(gameId);
-    if ((compatitionData as any).status !== "completed") {
+    if ((compatitionData as ICompetitionDocument).status !== "completed") {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
         "Cannot start a new game. The current game is not completed yet.",
@@ -38,8 +39,8 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       );
     }
     const competitionEntity = new CompetitionEntity({
-      ...(compatitionData as any),
-      id: (compatitionData as any)._id,
+      ...(compatitionData as unknown as import("../../../../domain/entities/competition.entity").CompetitionProps),
+      id: (compatitionData as ICompetitionDocument)._id!.toString(),
     });
     const groupId = competitionEntity.getGroupId();
     if (!groupId) {
@@ -55,7 +56,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
         MESSAGES.GROUP_NOT_FOUND,
       );
     }
-    const groupEntity = new GroupEntity(groupData as any);
+    const groupEntity = new GroupEntity(groupData as unknown as GroupProps);
     groupEntity.setGroupMembers(users);
     groupEntity.setStatus("started");
     const updatedGroup = groupEntity.toObject();
@@ -84,27 +85,27 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       type: "group",
       mode: "global",
       textId:
-        (selectedLesson as any)._id?.toString() || (selectedLesson as any).id,
+        (selectedLesson as import("../../../../infrastructure/db/types/documents").ILessonDocument)._id!.toString(),
       participants: users,
       groupId: groupId,
       duration: 100,
       status: "ongoing",
-      countDown: (compatitionData as any).countDown || 10,
+      countDown: (compatitionData as ICompetitionDocument).countDown || 10,
     });
     const competitionObject = newCompetitionEntity.toObject();
     const newCompetition =
       await this.competitionRepository.create(newCompetitionEntity);
     const populatedParticipants = await Promise.all(
-      (newCompetitionEntity as any).participants.map((item: any) =>
+      newCompetitionEntity.getParticipants().map((item: string) =>
         this.userRepository.findById(item),
       ),
     );
 
     const responseCompetition = {
-      ...(newCompetition as any),
+      ...(newCompetition as ICompetitionDocument),
       participants: populatedParticipants,
       lesson: selectedLesson,
-      joinLink: JoinLink,
+      joinLink: JoinLink || undefined,
     };
     return mapCompetitionToDTOGroupPlay(
       responseCompetition,

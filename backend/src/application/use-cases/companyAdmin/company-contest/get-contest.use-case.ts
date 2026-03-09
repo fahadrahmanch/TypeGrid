@@ -3,7 +3,7 @@ import { IContestRepository } from "../../../../domain/interfaces/repository/com
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { ContestProps } from "../../../DTOs/companyAdmin/company-contest.dto";
 import { IGetContestUseCase } from "../../interfaces/companyAdmin/get-contest.interface";
-import { mapContestDTOAdmin } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
 export class GetContestUseCase implements IGetContestUseCase {
   constructor(
     private readonly contestRepository: IContestRepository,
@@ -19,6 +19,6 @@ export class GetContestUseCase implements IGetContestUseCase {
       throw new Error(MESSAGES.CONTEST_NOT_FOUND);
     }
 
-    return mapContestDTOAdmin(contest as any);
+    return mapContestDTOAdmin(contest);
   }
 }

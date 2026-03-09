@@ -4,7 +4,7 @@ import { IGetAdminLessonsUseCase } from "../../interfaces/companyAdmin/get-admin
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-import { mapLessonDTOforCompanyLesson } from "../../../DTOs/companyAdmin/company-lesson.dto";
+import { mapLessonDTOforCompanyLesson } from "../../../mappers/companyAdmin/company-lesson.mapper";
 export class GetAdminLessonUseCase implements IGetAdminLessonsUseCase {
   constructor(private _lessonRepo: ILessonRepository) {}
   async execute(): Promise<CompanyLessonDTO[]> {

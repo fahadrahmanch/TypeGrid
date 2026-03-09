@@ -3,7 +3,7 @@ import { IUpdateContestUseCase } from "../../interfaces/companyAdmin/update-cont
 import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
 import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 import { MESSAGES } from "../../../../domain/constants/messages";
-import { mapContestDTOAdmin } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
 export class UpdateContestUseCase implements IUpdateContestUseCase {
   constructor(private contestRepository: IContestRepository) {}
   async execute(
@@ -21,6 +21,6 @@ export class UpdateContestUseCase implements IUpdateContestUseCase {
     const contestEntity = new ContestEntity(contest);
     Object.assign(contestEntity, data);
     const updatedContest = await this.contestRepository.update(contestEntity);
-    return mapContestDTOAdmin(updatedContest as any);
+    return mapContestDTOAdmin(updatedContest);
   }
 }

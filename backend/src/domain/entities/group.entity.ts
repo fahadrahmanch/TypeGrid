@@ -1,4 +1,4 @@
-type GroupProps = {
+export type GroupProps = {
   _id?: string;
   name: string;
   ownerId: string;

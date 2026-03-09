@@ -5,7 +5,7 @@ import { LessonEntity } from "../../../../domain/entities/lesson.entity";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-import { mapLessonDTOforCompanyLesson } from "../../../DTOs/companyAdmin/company-lesson.dto";
+import { mapLessonDTOforCompanyLesson } from "../../../mappers/companyAdmin/company-lesson.mapper";
 export class UpdateCompanyLessonUseCase implements IUpdateCompanyLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
   async execute(
@@ -29,6 +29,6 @@ export class UpdateCompanyLessonUseCase implements IUpdateCompanyLessonUseCase {
     const LessonEntity = lesson;
     Object.assign(LessonEntity, lessonData);
     const updatedLesson = await this.lessonRepository.update(LessonEntity);
-    return mapLessonDTOforCompanyLesson(updatedLesson as any);
+    return mapLessonDTOforCompanyLesson(updatedLesson);
   }
 }

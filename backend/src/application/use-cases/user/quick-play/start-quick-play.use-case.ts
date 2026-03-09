@@ -6,7 +6,8 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { IStartQuickPlayUseCase } from "../../interfaces/user/quick-play/start-quick-play.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import { mapCompetitionToDTOQuickPlay } from "../../../DTOs/user/competition-quick-play.dto";
+import { ICompetitionDocument } from "../../../../infrastructure/db/types/documents";
+import { mapCompetitionToDTOQuickPlay } from "../../../mappers/user/competition-quick-play.mapper";
 import { CompetitionDTOQuickPlay } from "../../../DTOs/user/competition-quick-play.dto";
 export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
   constructor(
@@ -37,16 +38,16 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
 
     if (competition) {
       const competitionEntity = new CompetitionEntity({
-        ...(competition as any),
-        id: (competition as any)._id,
-        participants: (competition as any).participants.map((p: any) =>
+        ...(competition as unknown as import("../../../../domain/entities/competition.entity").CompetitionProps),
+        id: (competition as ICompetitionDocument)._id!.toString(),
+        participants: (competition as ICompetitionDocument).participants.map((p: any) =>
           p.toString(),
         ),
       });
 
       competitionEntity.addParticipant(userId.toString());
 
-      await this.competitionRepository.updateById((competition as any)._id, {
+      await this.competitionRepository.updateById((competition as ICompetitionDocument)._id!.toString(), {
         participants: competitionEntity.getParticipants(),
       });
 
@@ -57,7 +58,7 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
       );
 
       const lesson = await this.lessonRepository.findById(
-        (competition as any).textId,
+        (competition as ICompetitionDocument).textId!.toString(),
       );
 
       return mapCompetitionToDTOQuickPlay({
@@ -83,8 +84,7 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
       countDown: 10,
       status: "pending",
       participants: [userId.toString()],
-      textId:
-        (selectedLesson as any)._id?.toString() || (selectedLesson as any).id,
+      textId: (selectedLesson as any)._id?.toString() || (selectedLesson as any).id?.toString(),
     });
 
     const createdCompetition =
@@ -93,7 +93,7 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
     const populatedParticipants = [await this.userRepository.findById(userId)];
 
     return mapCompetitionToDTOQuickPlay({
-      ...(createdCompetition as any),
+      ...(createdCompetition as ICompetitionDocument),
       participants: populatedParticipants,
       lesson: selectedLesson,
     });

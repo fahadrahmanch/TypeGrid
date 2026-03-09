@@ -3,7 +3,7 @@ import { IUserRepository } from "../../../domain/interfaces/repository/user/user
 import { ICompanyGroupRepository } from "../../../domain/interfaces/repository/company/company-group-repository.interface";
 import { IContestRepository } from "../../../domain/interfaces/repository/company/contest-repository.interface";
 import { groupContestDTO } from "../../DTOs/companyAdmin/company-contest.dto";
-import { mapGroupContestDTO } from "../../DTOs/companyAdmin/company-contest.dto";
+import { mapGroupContestDTO } from "../../mappers/companyAdmin/company-contest.mapper";
 export class GetGroupContestUseCase implements IGetGroupContestsUseCase {
   constructor(
     private readonly contestRepository: IContestRepository,
@@ -18,6 +18,6 @@ export class GetGroupContestUseCase implements IGetGroupContestsUseCase {
     const groupContests =
       await this._contestRepository.getGroupContests(groupsId);
     if (!groupContests.length) return [];
-    return mapGroupContestDTO(groupContests as any, userId);
+    return mapGroupContestDTO(groupContests, userId);
   }
 }
