@@ -4,11 +4,9 @@ import { IGroupRepository } from "../../../../domain/interfaces/repository/user/
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import { ICompetitionDocument } from "../../../../infrastructure/db/types/documents";
 import { mapLessonDTOforGroupPlay } from "../../../mappers/admin/lesson-management.mapper";
 import { mapCompetitionToDTOGroupPlay } from "../../../mappers/user/competition-group-play.mapper";
 import { CompetitionDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
-import { groupDTO, mapGroupToDTO } from "../../../DTOs/user/group.dto";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
@@ -69,12 +67,12 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       ),
     );
     const responseCompetition = {
-      ...(competition as ICompetitionDocument),
+      ...competition,
       participants: populatedParticipants,
       lesson: selectedLesson,
       JoinLink: group.getJoinLink() || undefined,
     };
 
-    return mapCompetitionToDTOGroupPlay(responseCompetition as unknown as import("../../../mappers/user/competition-group-play.mapper").PopulatedGroupCompetitionPayload, group.ownerId);
+    return mapCompetitionToDTOGroupPlay(responseCompetition , group.ownerId);
   }
 }

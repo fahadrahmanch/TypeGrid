@@ -33,7 +33,7 @@ export class adminRouter {
       Routes.ADMIN.GET_COMPANYS,
       checkRoleBasedMiddleware(["admin"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectCompanyManageController.getCompanys(req, res, next);
+        injectCompanyManageController.getCompanies(req, res, next);
       },
     );
 

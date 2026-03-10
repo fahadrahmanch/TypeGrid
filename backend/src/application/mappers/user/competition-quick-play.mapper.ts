@@ -1,9 +1,23 @@
-import { ICompetitionDocument, ILessonDocument, IUserDocument } from "../../../infrastructure/db/types/documents";
 import { CompetitionDTOQuickPlay, CompetitionMember } from "../../DTOs/user/competition-quick-play.dto";
 
-export interface PopulatedQuickCompetitionPayload extends Omit<ICompetitionDocument, "participants" | "textId"> {
-  lesson: ILessonDocument;
-  participants: IUserDocument[];
+export interface PopulatedQuickCompetitionPayload {
+  _id: any;
+  mode: string;
+  status: any;
+  duration: number;
+  startedAt?: Date | string;
+  countDown: number;
+  lesson: {
+    _id: any;
+    text: string;
+    category: string;
+    level: string;
+  };
+  participants: {
+    _id: any;
+    name: string;
+    imageUrl?: string;
+  }[];
 }
 
 export const mapCompetitionToDTOQuickPlay = (
@@ -30,7 +44,7 @@ export const mapCompetitionToDTOQuickPlay = (
   };
 };
 
-export const mapQuickMemberToDTO = (user: IUserDocument): CompetitionMember => {
+export const mapQuickMemberToDTO = (user: { _id: any, name: string, imageUrl?: string }): CompetitionMember => {
   return {
     _id: user._id!.toString(),
     name: user.name,

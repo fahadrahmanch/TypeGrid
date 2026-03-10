@@ -9,7 +9,7 @@ import { CompanyApproveRejectUseCase } from "../../application/use-cases/admin/c
 import { User } from "../../infrastructure/db/models/user/user.schema";
 import { UserRepository } from "../../infrastructure/db/repositories/user/user.repository";
 import { BlockUserUseCase } from "../../application/use-cases/admin/block-user.use-case";
-import { EmailService } from "../../application/services/email.service";
+import { EmailService } from "../../infrastructure/services/email.service";
 import { LessonManageController } from "../controllers/admin/lesson-manage.controller";
 import { CreateLessonUseCase } from "../../application/use-cases/admin/lesson-management/create-lesson.use-case";
 import { Lesson } from "../../infrastructure/db/models/admin/lesson.schema";

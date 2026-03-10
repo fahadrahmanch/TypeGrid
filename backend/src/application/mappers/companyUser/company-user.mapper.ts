@@ -1,8 +1,17 @@
-import { IUserDocument } from "../../../infrastructure/db/types/documents";
 import { companyUserDTO } from "../../DTOs/companyUser/company-user.dto";
 
+export type CompanyUserPayload = {
+  _id: any;
+  name: string;
+  email: string;
+  imageUrl?: string;
+  number?: string;
+  bio?: string;
+  CompanyRole?: string;
+};
+
 export const mapCompanyUsersWithOnlineStatus = async (
-  users: IUserDocument[],
+  users: CompanyUserPayload[],
   onlineUsers: string[],
 ): Promise<companyUserDTO[]> => {
   const onlineUsersSet = new Set(onlineUsers);

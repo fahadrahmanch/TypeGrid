@@ -1,7 +1,33 @@
-import { ICompanyChallengeDocument, IUserDocument, ICompetitionDocument, ILessonDocument } from "../../../infrastructure/db/types/documents";
 import { SentChallengeDTO, OpponentDTO, ChallengeDTO, ChallengeGameDTO } from "../../DTOs/companyUser/challenge.dto";
 
-export const mapSentChallengeToDTO = (challenge: ICompanyChallengeDocument): SentChallengeDTO => {
+export type ChallengeOpponentPayload = {
+  _id: any;
+  name: string;
+  email: string;
+  imageUrl?: string;
+  CompanyRole?: string;
+};
+
+export type SentChallengePayload = {
+  _id: any;
+  receiverId: any;
+  status: string;
+};
+
+export type ChallengePayload = {
+  _id: any;
+  CompanyId: any;
+  senderId: any;
+  receiverId: any;
+  status: string;
+  competitionId?: any;
+  type?: string;
+  opponent: ChallengeOpponentPayload;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export const mapSentChallengeToDTO = (challenge: SentChallengePayload): SentChallengeDTO => {
   return {
     challengeId: challenge._id!.toString(),
     receiverId: challenge.receiverId.toString(),
@@ -9,7 +35,7 @@ export const mapSentChallengeToDTO = (challenge: ICompanyChallengeDocument): Sen
   };
 };
 
-export const mapOpponentToDTO = (user: IUserDocument): OpponentDTO => {
+export const mapOpponentToDTO = (user: ChallengeOpponentPayload): OpponentDTO => {
   return {
     id: user._id!.toString(),
     name: user.name,
@@ -19,9 +45,7 @@ export const mapOpponentToDTO = (user: IUserDocument): OpponentDTO => {
   };
 };
 
-export type PopulatedChallengePayload = ICompanyChallengeDocument & { opponent: IUserDocument, type?: string };
-
-export const mapChallengeToDTO = (challenge: PopulatedChallengePayload): ChallengeDTO => {
+export const mapChallengeToDTO = (challenge: ChallengePayload): ChallengeDTO => {
   return {
     id: challenge._id!.toString(),
     companyId: challenge.CompanyId.toString(),
@@ -37,9 +61,27 @@ export const mapChallengeToDTO = (challenge: PopulatedChallengePayload): Challen
 };
 
 export interface ChallengeGamePayload {
-  competition: ICompetitionDocument;
-  lesson: ILessonDocument;
-  players: IUserDocument[];
+  competition: {
+    _id: any;
+    startedAt?: Date;
+    status: any;
+    duration: number;
+    CompanyId?: any;
+    countDown: number;
+  };
+  lesson: {
+    _id: any;
+    title?: string;
+    text: string;
+  };
+  players: {
+    _id: any;
+    name: string;
+    imageUrl?: string;
+    CompanyId?: any;
+    CompanyRole?: string;
+    bio?: string;
+  }[];
 }
 
 export const mapChallengeGameToDTO = (data: ChallengeGamePayload): ChallengeGameDTO => {

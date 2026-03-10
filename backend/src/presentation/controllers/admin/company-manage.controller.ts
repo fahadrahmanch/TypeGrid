@@ -3,17 +3,17 @@ import { HttpStatus } from "../../constants/httpStatus";
 import { ICompanyApproveRejectUseCase } from "../../../application/use-cases/interfaces/admin/company-approve-reject.interface";
 import { IGetCompaniesUseCase } from "../../../application/use-cases/interfaces/admin/get-companies.interface";
 import { Request, Response, NextFunction } from "express";
-import { AuthRequest } from "../../../types/AuthRequest";
 import logger from "../../../utils/logger";
+
 export class CompanyManageController {
   constructor(
-    private _GetCompaniesUseCase: IGetCompaniesUseCase,
+    private _getCompaniesUseCase: IGetCompaniesUseCase,
     private _companyApproveRejectUseCase: ICompanyApproveRejectUseCase,
   ) {}
 
-  async getCompanys(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getCompanies(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const companies = await this._GetCompaniesUseCase.execute();
+      const companies = await this._getCompaniesUseCase.execute();
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.COMPANIES_FETCHED_SUCCESS,
@@ -28,10 +28,13 @@ export class CompanyManageController {
     try {
       const { companyId } = req.params;
       const { status, reason } = req.body;
-      // status: "approved" | "rejected"
 
       if (!companyId || !status) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.INVALID_REQUEST,
+        });
+        return;
       }
 
       if (status === "active") {
@@ -39,22 +42,35 @@ export class CompanyManageController {
 
         logger.info("Company request approved successfully", { companyId });
         res.status(HttpStatus.OK).json({
+          success: true,
           message: MESSAGES.COMPANY_APPROVED_SUCCESS,
         });
         return;
       }
 
       if (status === "reject") {
+        if (!reason) {
+          res.status(HttpStatus.BAD_REQUEST).json({
+            success: false,
+            message: MESSAGES.ALL_FIELDS_REQUIRED,
+          });
+          return;
+        }
+
         await this._companyApproveRejectUseCase.reject(companyId, reason);
 
         logger.info("Company request rejected successfully", { companyId, reason });
         res.status(HttpStatus.OK).json({
+          success: true,
           message: MESSAGES.COMPANY_REJECTED_SUCCESS,
         });
         return;
       }
 
-      // throw new Error("Invalid status value");
+      res.status(HttpStatus.BAD_REQUEST).json({
+        success: false,
+        message: MESSAGES.INVALID_REQUEST,
+      });
     } catch (error: any) {
       next(error);
     }

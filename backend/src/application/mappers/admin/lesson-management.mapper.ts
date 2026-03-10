@@ -1,7 +1,7 @@
-import { ILessonDocument } from "../../../infrastructure/db/types/documents";
 import { LessonDTO } from "../../DTOs/admin/lesson-management.dto";
 import { LessonLevel } from "../../../domain/entities/lesson.entity";
-export const mapLessonToDTO = (lesson: ILessonDocument): LessonDTO => {
+import { GetLessonDTO } from "../../DTOs/admin/lesson-management.dto";
+export const mapLessonToDTO = (lesson: GetLessonDTO): LessonDTO => {
   return {
     id: lesson._id!.toString(),
     text: lesson.text,
@@ -13,7 +13,7 @@ export const mapLessonToDTO = (lesson: ILessonDocument): LessonDTO => {
   };
 };
 
-export const mapLessonDTOforGroupPlay = (lesson: ILessonDocument): LessonDTO => {
+export const mapLessonDTOforGroupPlay = (lesson: GetLessonDTO): LessonDTO => {
   return {
     id: lesson._id!.toString(),
     text: lesson.text,

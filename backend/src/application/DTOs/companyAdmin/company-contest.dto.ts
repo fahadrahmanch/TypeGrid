@@ -90,3 +90,25 @@ export interface ParticipantsDTO {
   // score: number;
   // joinedAt: string;
 }
+export interface GetGroupContestDTO {
+  _id?: string;
+  contestMode: "open" | "group";
+  title: string;
+  description?: string;
+  difficulty: "easy" | "medium" | "hard";
+  groupId?: string;
+  textSource: "manual" | "random";
+  participants: string[];
+  contestText?: string;
+  date: Date;
+  startTime?: Date;
+  duration: number;
+  maxParticipants: number;
+  rewards: Array<{ rank: number; prize: number }>;
+  status: "upcoming" | "ongoing" | "completed" | "waiting";
+  countDown?: number;
+  startedAt?: Date;
+  CompanyId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

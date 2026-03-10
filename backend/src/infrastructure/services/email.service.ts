@@ -1,7 +1,7 @@
 import { IEmailService } from "../../domain/interfaces/services/email-service.interface";
 import nodemailer from "nodemailer";
-import { IEmailTemplate } from "../DTOs/email/email-template.dto";
-import { HtmlforOtp } from "../../infrastructure/email/templates/otpMailHtml";
+import { IEmailTemplate } from "../../application/DTOs/email/email-template.dto";
+import { HtmlforOtp } from "../email/templates/otpMailHtml";
 import dotenv from "dotenv";
 import logger from "../../utils/logger";
 dotenv.config();

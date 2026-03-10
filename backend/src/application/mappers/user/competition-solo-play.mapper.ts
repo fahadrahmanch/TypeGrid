@@ -1,14 +1,23 @@
-import { ICompetitionDocument, IUserDocument } from "../../../infrastructure/db/types/documents";
 import { CompetitionDTOSoloPlay } from "../../DTOs/user/competition-solo-play.dto";
 
-export interface PopulatedSoloCompetitionPayload extends Omit<ICompetitionDocument, "participants" | "textId"> {
+export type PopulatedSoloCompetitionPayload = {
+  _id: any;
+  mode: string;
+  status: any;
+  duration: number;
+  startedAt?: Date | string;
+  countDown: number;
   lesson: {
     id: string;
     text: string;
     category: string;
     level: string;
   };
-  participants: IUserDocument[];
+  participants: {
+    _id: any;
+    name: string;
+    imageUrl?: string;
+  }[];
 }
 
 export const mapCompetitionToDTOSoloPlay = (

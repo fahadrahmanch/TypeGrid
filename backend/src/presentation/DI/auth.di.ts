@@ -2,7 +2,7 @@ import { AuthController } from "../controllers/auth/auth.controller";
 import { SignupUseCase } from "../../application/use-cases/auth/signup/signup.use-case";
 import { AuthRepository } from "../../infrastructure/db/repositories/auth/auth.repository";
 import { OtpService } from "../../application/services/otp.service";
-import { EmailService } from "../../application/services/email.service";
+import { EmailService } from "../../infrastructure/services/email.service";
 import { CachingService } from "../../application/services/caching.service";
 import { CompleteSignupUseCase } from "../../application/use-cases/auth/signup/complete-signup.use-case";
 import { HashService } from "../../application/services/hash.service";

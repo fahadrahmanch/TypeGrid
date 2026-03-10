@@ -8,7 +8,6 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
   constructor(
     private _baseAssignmentLessonRepository: ILessonAssignmentRepository,
     private userRepository: IUserRepository,
-    private lessonRepository: ILessonRepository,
   ) {}
   async execute(userId: string): Promise<GetMyLessonsResponseDTO> {
     const user = await this.userRepository.findById(userId);

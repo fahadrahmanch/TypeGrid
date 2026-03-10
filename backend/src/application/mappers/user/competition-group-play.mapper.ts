@@ -1,10 +1,25 @@
-import { ICompetitionDocument, ILessonDocument, IUserDocument } from "../../../infrastructure/db/types/documents";
 import { CompetitionDTOGroupPlay } from "../../DTOs/user/competition-group-play.dto";
 
-export interface PopulatedGroupCompetitionPayload extends Omit<ICompetitionDocument, "participants" | "textId"> {
-  lesson: ILessonDocument;
-  participants: IUserDocument[];
+export interface PopulatedGroupCompetitionPayload {
+  _id: any;
+  mode: string;
+  status: any;
+  duration: number;
+  groupId?: any;
+  startedAt?: Date | string;
+  countDown: number;
   joinLink?: string;
+  lesson: {
+    _id: any;
+    text: string;
+    category: string;
+    level: string;
+  };
+  participants: {
+    _id: any;
+    name: string;
+    imageUrl?: string;
+  }[];
 }
 
 export const mapCompetitionToDTOGroupPlay = (

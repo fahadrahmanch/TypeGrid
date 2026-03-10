@@ -3,7 +3,7 @@ import { ILessonAssignmentRepository } from "../../../../domain/interfaces/repos
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
-import { LessonAssignment } from "../../../../infrastructure/db/models/company/lesson-assignment.schema";
+import { LessonAssignmentEntity } from "../../../../domain/entities/assign-lesson.entity";
 export class AssignLessonUseCase implements IAssignLessonUseCase {
   constructor(
     private _baseRepoAssignLesson: ILessonAssignmentRepository,
@@ -26,14 +26,14 @@ export class AssignLessonUseCase implements IAssignLessonUseCase {
     }
     for (let i = 0; i < users.length; i++) {
       for (let j = 0; j < lessons.length; j++) {
-        const assigned = new LessonAssignment({
+        const assigned = new LessonAssignmentEntity({
           userId: users[i],
           lessonId: lessons[j],
           status: "assigned",
           companyId: companyId,
-          deadlineAt: deadline,
+          deadlineAt: new Date(deadline)
         });
-        await this._baseRepoAssignLesson.create(assigned);
+        await this._baseRepoAssignLesson.create(assigned.toObject());
       }
     }
   }

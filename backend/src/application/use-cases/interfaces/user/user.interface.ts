@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 
 export interface IUser {
   name: string;
@@ -8,7 +7,7 @@ export interface IUser {
   bio?: string;
   age?: string;
   number?: string;
-  CompanyId?: string | ObjectId;
+  CompanyId?: string;
   CompanyRole?: string;
   KeyBoardLayout?: string;
   status?: string;

@@ -6,7 +6,6 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import { ICompetitionDocument } from "../../../../infrastructure/db/types/documents";
 import { CompetitionDTOSoloPlay } from "../../../../application/DTOs/user/competition-solo-play.dto";
 import { mapCompetitionToDTOSoloPlay } from "../../../../application/mappers/user/competition-solo-play.mapper";
 export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
@@ -34,8 +33,8 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
     const competition = new CompetitionEntity({
       type: "solo",
       mode: "global",
-      participants: [(user as any)._id],
-      textId: (selectedLesson as import("../../../../infrastructure/db/types/documents").ILessonDocument)._id!.toString(),
+      participants: [user._id],
+      textId: selectedLesson._id.toString(),
       duration: 300,
       countDown: 10,
       status: "ongoing",
@@ -49,11 +48,11 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
       ),
     );
     const responseCompetition = {
-      ...(createdCompetition as ICompetitionDocument),
+      ...createdCompetition,
       participants: populatedParticipants,
       lesson: selectedLesson,
     };
 
-    return mapCompetitionToDTOSoloPlay(responseCompetition as unknown as import("../../../../application/mappers/user/competition-solo-play.mapper").PopulatedSoloCompetitionPayload);
+    return mapCompetitionToDTOSoloPlay(responseCompetition);
   }
 }

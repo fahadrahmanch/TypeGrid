@@ -47,7 +47,6 @@ const getAssignLessonUseCaseInstance = new GetAssignLessonUseCase(
 const getMyLessonsUseCaseInstance = new GetMyLessonsUseCase(
   lessonAssignmentRepository,
   userRepository,
-  lessonRepository,
 );
 const saveLessonResultUseCaseInstance = new SaveLessonResultUseCase(
   lessonResultRepository,

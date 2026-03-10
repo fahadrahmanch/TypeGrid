@@ -11,6 +11,7 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
   }
 
   async getLessons(): Promise<LessonDTO[]> {
+    console.log("hello there")
     let lessons = await this.lessonRepository.find();
     return lessons.map((item) => {
       return mapLessonToDTO(item);

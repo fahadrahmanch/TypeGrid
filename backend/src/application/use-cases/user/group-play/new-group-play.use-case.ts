@@ -7,7 +7,6 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import { ICompetitionDocument } from "../../../../infrastructure/db/types/documents";
 import { GroupEntity, GroupProps } from "../../../../domain/entities/group.entity";
 
 import { mapCompetitionToDTOGroupPlay } from "../../../mappers/user/competition-group-play.mapper";
@@ -26,7 +25,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     users: string[],
   ): Promise<CompetitionDTOGroupPlay> {
     const compatitionData = await this.competitionRepository.findById(gameId);
-    if ((compatitionData as ICompetitionDocument).status !== "completed") {
+    if (compatitionData.status !== "completed") {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
         "Cannot start a new game. The current game is not completed yet.",
@@ -39,8 +38,8 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       );
     }
     const competitionEntity = new CompetitionEntity({
-      ...(compatitionData as unknown as import("../../../../domain/entities/competition.entity").CompetitionProps),
-      id: (compatitionData as ICompetitionDocument)._id!.toString(),
+      ...compatitionData,
+      id: compatitionData._id!.toString(),
     });
     const groupId = competitionEntity.getGroupId();
     if (!groupId) {
@@ -84,13 +83,12 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     const newCompetitionEntity = new CompetitionEntity({
       type: "group",
       mode: "global",
-      textId:
-        (selectedLesson as import("../../../../infrastructure/db/types/documents").ILessonDocument)._id!.toString(),
+      textId: selectedLesson._id!.toString(),
       participants: users,
       groupId: groupId,
       duration: 100,
       status: "ongoing",
-      countDown: (compatitionData as ICompetitionDocument).countDown || 10,
+      countDown: compatitionData.countDown || 10,
     });
     const competitionObject = newCompetitionEntity.toObject();
     const newCompetition =
@@ -102,7 +100,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     );
 
     const responseCompetition = {
-      ...(newCompetition as ICompetitionDocument),
+      ...newCompetition,
       participants: populatedParticipants,
       lesson: selectedLesson,
       joinLink: JoinLink || undefined,
