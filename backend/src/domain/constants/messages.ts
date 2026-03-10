@@ -170,4 +170,7 @@ export const MESSAGES = {
   SENDER_ID_REQUIRED: "senderId are required",
   UNAUTHORIZED_PORTAL_ACCESS:
     "You are not authorized to login from this portal",
+
+
+    //admin
 };

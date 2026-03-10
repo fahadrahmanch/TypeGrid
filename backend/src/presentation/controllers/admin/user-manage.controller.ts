@@ -4,18 +4,20 @@ import { IGetUsersUseCase } from "../../../application/use-cases/interfaces/admi
 import { IBlockUserUseCase } from "../../../application/use-cases/interfaces/admin/block-user.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
 import logger from "../../../utils/logger";
+import { mapToSafeUsers } from "../../../application/mappers/admin/user-manage.mapper";
+
+
 export class UserManageController {
   constructor(
-    private _GetUsersUseCase: IGetUsersUseCase,
-    private _BlockUserUseCase: IBlockUserUseCase,
-  ) {}
+    private _getUsersUseCase: IGetUsersUseCase,
+    private _blockUserUseCase: IBlockUserUseCase,
+  ) { }
+
   async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const users = await this._GetUsersUseCase.execute();
-      const safeUsers = users.map((user) => {
-        const { password, ...rest } = user;
-        return rest;
-      });
+      const users = await this._getUsersUseCase.execute();
+      const safeUsers = mapToSafeUsers(users);
+
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.USERS_FETCHED_SUCCESS,
@@ -28,13 +30,24 @@ export class UserManageController {
 
   async updateUserStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const userId = req.params.userId;
+      const { userId } = req.params;
+
       if (!userId) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.INVALID_REQUEST,
+        });
+        return;
       }
-      await this._BlockUserUseCase.execute(userId);
+
+      await this._blockUserUseCase.execute(userId);
+
       logger.info("User status updated successfully by admin", { userId });
-      res.status(HttpStatus.OK).json({ success: true });
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: MESSAGES.UPDATE_SUCCESS,
+      });
     } catch (error: any) {
       next(error);
     }

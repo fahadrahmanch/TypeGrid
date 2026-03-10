@@ -3,18 +3,17 @@ import { ICreateLessonUseCase } from "../../interfaces/admin/create-lesson.inter
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { LessonEntity } from "../../../../domain/entities/lesson.entity";
 import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 export class CreateLessonUseCase implements ICreateLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
   async execute(lessonData: LessonDTO): Promise<void> {
+    if(!lessonData){
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
+    }
     const lessonEntityInstance = new LessonEntity(lessonData);
     await this.lessonRepository.create(lessonEntityInstance);
   }
 
-  async getLessons(): Promise<LessonDTO[]> {
-    console.log("hello there")
-    let lessons = await this.lessonRepository.find();
-    return lessons.map((item) => {
-      return mapLessonToDTO(item);
-    });
-  }
 }

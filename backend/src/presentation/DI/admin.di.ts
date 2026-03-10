@@ -17,7 +17,7 @@ import { LessonRepository } from "../../infrastructure/db/repositories/admin/les
 import { GetLessonUseCase } from "../../application/use-cases/admin/lesson-management/get-lesson.use-case";
 import { UpdateLessonUseCase } from "../../application/use-cases/admin/lesson-management/update-lesson.use-case";
 import { DeleteLessonUseCase } from "../../application/use-cases/admin/lesson-management/delete-lesson.use-case";
-
+import { GetLessonsUseCase } from "../../application/use-cases/admin/lesson-management/get-lessons.use-case";
 const authRepo = new AuthRepository();
 const userRepository = new UserRepository(User);
 const blockUserUseCase = new BlockUserUseCase(userRepository);
@@ -35,7 +35,7 @@ const createLessonUseCase = new CreateLessonUseCase(lessonRepository);
 const getLessonUseCase = new GetLessonUseCase(lessonRepository);
 const updateLessonUseCase = new UpdateLessonUseCase(lessonRepository);
 const deleteLessonUseCase = new DeleteLessonUseCase(lessonRepository);
-
+const getLessonsUseCase = new GetLessonsUseCase(lessonRepository);
 export const injectCompanyManageController = new CompanyManageController(
   getCompaniesUseCase,
   companyApproveRejectUseCase,
@@ -49,4 +49,5 @@ export const injectLessonManageController = new LessonManageController(
   getLessonUseCase,
   updateLessonUseCase,
   deleteLessonUseCase,
+  getLessonsUseCase,
 );

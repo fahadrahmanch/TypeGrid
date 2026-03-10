@@ -5,7 +5,10 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { IGetLessonUseCase } from "../../../application/use-cases/interfaces/admin/get-lesson.interface";
 import { IUpdateLessonUseCase } from "../../../application/use-cases/interfaces/admin/update-lesson.interface";
 import { IDeleteLessonUseCase } from "../../../application/use-cases/interfaces/admin/delete-lesson.interface";
+import { IGetLessonsUseCase } from "../../../application/use-cases/interfaces/admin/get-lessons.interface";
 import logger from "../../../utils/logger";
+
+//lesson management controller
 
 export class LessonManageController {
   constructor(
@@ -13,7 +16,10 @@ export class LessonManageController {
     private _getLessonUseCase: IGetLessonUseCase,
     private _updateLessonUseCase: IUpdateLessonUseCase,
     private _deleteLessonUseCase: IDeleteLessonUseCase,
-  ) {}
+    private _getLessonsUseCase: IGetLessonsUseCase,
+  ) { }
+
+  //create lesson
 
   async createLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -37,18 +43,22 @@ export class LessonManageController {
     }
   }
 
+  //get lessons
+
   async getLessons(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const lessons = await this._createLessonUseCase.getLessons();
+      const lessons = await this._getLessonsUseCase.execute();
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.FETCH_SUCCESS,
-        data: lessons,
+        lessons: lessons,
       });
     } catch (error: any) {
       next(error);
     }
   }
+
+  //fetch lesson
 
   async fetchLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -73,6 +83,8 @@ export class LessonManageController {
       next(error);
     }
   }
+
+  //update lesson
 
   async updateLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -110,6 +122,8 @@ export class LessonManageController {
       next(error);
     }
   }
+
+  //delete lesson
 
   async deleteLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

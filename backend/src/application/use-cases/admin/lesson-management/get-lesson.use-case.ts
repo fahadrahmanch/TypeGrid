@@ -7,7 +7,7 @@ import { LessonDTO } from "../../../DTOs/admin/lesson-management.dto";
 import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper";
 
 export class GetLessonUseCase implements IGetLessonUseCase {
-  constructor(private _lessonRepo: ILessonRepository) {}
+  constructor(private _lessonRepo: ILessonRepository) { }
 
   async execute(lessonId: string): Promise<LessonDTO> {
     const lesson = await this._lessonRepo.findById(lessonId);

@@ -9,11 +9,14 @@ export class CompanyManageController {
   constructor(
     private _getCompaniesUseCase: IGetCompaniesUseCase,
     private _companyApproveRejectUseCase: ICompanyApproveRejectUseCase,
-  ) {}
+  ) { }
+  
+  //company management
 
   async getCompanies(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const companies = await this._getCompaniesUseCase.execute();
+         logger.info("Companies fetched successfully by admin");
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.COMPANIES_FETCHED_SUCCESS,
@@ -24,6 +27,7 @@ export class CompanyManageController {
     }
   }
 
+  //company approval
   async updateCompanyRequestStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { companyId } = req.params;
