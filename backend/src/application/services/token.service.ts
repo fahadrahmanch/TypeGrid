@@ -1,12 +1,17 @@
 import { ITokenService } from "../../domain/interfaces/services/token-service.interface";
 import jwt from "jsonwebtoken";
+import { CustomError } from "../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../domain/enums/http-status-codes.enum";
 export class TokenService implements ITokenService {
   private accessSecret: string;
   private refreshSecret: string;
-  constructor() {
-    this.accessSecret = process.env.ACCESS_SECRET || "";
-    this.refreshSecret = process.env.REFRESH_SECRET || "";
-  }
+constructor() {
+  if (!process.env.ACCESS_SECRET) throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, "ACCESS_SECRET is required");
+  if (!process.env.REFRESH_SECRET) throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, "REFRESH_SECRET is required");
+  
+  this.accessSecret = process.env.ACCESS_SECRET;
+  this.refreshSecret = process.env.REFRESH_SECRET;
+}
 
   async generateAccessToken(
     userId: string,
@@ -16,7 +21,8 @@ export class TokenService implements ITokenService {
     return jwt.sign(
       { userId: userId, email: email, role: role },
       this.accessSecret,
-      { expiresIn: "7h" },
+          { expiresIn: (process.env.ACCESS_EXPIRY || "7h") as jwt.SignOptions["expiresIn"] },
+
     );
   }
 
@@ -28,7 +34,8 @@ export class TokenService implements ITokenService {
     return jwt.sign(
       { userId: userId, email: email, role: role },
       this.refreshSecret,
-      { expiresIn: "7d" },
+         { expiresIn: (process.env.REFRESH_EXPIRY || "7d") as jwt.SignOptions["expiresIn"] },
+
     );
   }
 

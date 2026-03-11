@@ -60,6 +60,7 @@ export interface openContestDTO {
   countDown?: number;
   startTime: Date;
   date: string;
+  joined?:boolean;
   duration: number;
   participants: ParticipantDTO[];
   maxParticipants: number;

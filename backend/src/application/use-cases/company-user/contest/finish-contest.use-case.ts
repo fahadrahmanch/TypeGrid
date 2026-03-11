@@ -1,13 +1,13 @@
-import { IFinishContestUseCase } from "../interfaces/companyUser/finish-contest.interface";
-import { IContestRepository } from "../../../domain/interfaces/repository/company/contest-repository.interface";
-import { IResultRepository } from "../../../domain/interfaces/repository/company/result-repository.interface";
-import { ContestEntity } from "../../../domain/entities/company-contest.entity";
-import { ResultEntity } from "../../../domain/entities/result.entity";
+import { IFinishContestUseCase } from "../../interfaces/companyUser/finish-contest.interface";
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { IResultRepository } from "../../../../domain/interfaces/repository/company/result-repository.interface";
+import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
+import { ResultEntity } from "../../../../domain/entities/result.entity";
 export class FinishContestUseCase implements IFinishContestUseCase {
   constructor(
     private contestRepository: IContestRepository,
     private resultRepository: IResultRepository,
-  ) {}
+  ) { }
   async execute(contestId: string, result: any[]): Promise<void> {
     const contest = await this.contestRepository.findById(contestId);
     const contestEntity = new ContestEntity(contest);

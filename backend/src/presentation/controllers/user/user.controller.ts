@@ -1,51 +1,86 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpStatus } from "../../constants/httpStatus";
-import { ITokenService } from "../../../domain/interfaces/services/token-service.interface";
 import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/find-user.interface";
 import { IUserUpdateUseCase } from "../../../application/use-cases/interfaces/user/user-update.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { AuthRequest } from "../../../types/AuthRequest";
 import { IChangePasswordUseCase } from "../../../application/use-cases/interfaces/user/change-password.interface";
+import { mapToUserProfileDTO } from "../../../application/mappers/user/user.mapper";
 import logger from "../../../utils/logger";
+
 export class UserController {
   constructor(
-    private _tokenService: ITokenService,
     private _findUserUseCase: IFindUserUseCase,
     private _updateUserUseCase: IUserUpdateUseCase,
     private _changePasswordUseCase: IChangePasswordUseCase,
   ) {}
 
-  async getProfile(req: Request, res: Response, next: NextFunction) {
+  async getProfile(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
-      const token = req.cookies.refresh_user;
-      if (!token) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
-      }
-      const { email } = await this._tokenService.verifyRefreshToken(token);
-      const user = await this._findUserUseCase.execute(email);
-      if (!user) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+      const email = req.user?.email;
+      if (!email) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
 
-      const userDoc = JSON.parse(JSON.stringify(user));
-      delete userDoc.password;
-      delete userDoc.CompanyId;
-      delete userDoc.CompanyRole;
-      res.status(HttpStatus.OK).json(userDoc);
+      const user = await this._findUserUseCase.execute(email);
+      if (!user) {
+        res.status(HttpStatus.NOT_FOUND).json({
+
+          success: false,
+          message: MESSAGES.USER_DETAILS_NOT_FOUND,
+        });
+        return;
+      }
+
+      const userProfile = mapToUserProfileDTO(user);
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: MESSAGES.FETCH_SUCCESS,
+        user: userProfile,
+      });
     } catch (error: any) {
       next(error);
     }
   }
 
-  async updateProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async updateProfile(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const data = req.body;
-      const user = await this._findUserUseCase.execute(data?.email);
-      if (!user) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+      const email = req.user?.email;
+
+      if (!email) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
+
+      const user = await this._findUserUseCase.execute(email);
+      if (!user) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.USER_DETAILS_NOT_FOUND,
+        });
+        return;
+      }
+
       data._id = user._id;
       await this._updateUserUseCase.execute(data);
+
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.UPDATE_SUCCESS,
@@ -55,12 +90,21 @@ export class UserController {
     }
   }
 
-  async changePassword(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async changePassword(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       const data = req.body;
+
       if (!userId) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
 
       await this._changePasswordUseCase.execute(
@@ -68,9 +112,10 @@ export class UserController {
         data.currentPassword,
         data.newPassword,
       );
+
       res.status(HttpStatus.OK).json({
         success: true,
-        message: "Password changed successfully",
+        message: MESSAGES.PASSWORD_UPDATE_SUCCESS,
       });
     } catch (error: any) {
       next(error);

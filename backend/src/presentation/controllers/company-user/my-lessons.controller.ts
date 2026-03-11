@@ -19,7 +19,6 @@ export class MyLessonsController {
       const userId = req.user?.userId as string;
 
       const myLessons = await this._getMyLessonsUseCase.execute(userId);
-
       res.status(HttpStatus.OK).json({
         success: true,
         data: myLessons,
@@ -34,11 +33,19 @@ export class MyLessonsController {
       const { assignmentId } = req.params;
       const userId = req.user?.userId;
       if (!assignmentId) {
-        throw new Error("assignmentId is required");
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: "assignmentId is required",
+        });
+        return;
       }
 
       if (!userId) {
-        throw new Error("Unauthorized");
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
 
       const assignedLesson =
@@ -59,10 +66,18 @@ export class MyLessonsController {
       const assignmentId = req.params.id;
       const result = req.body;
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       if (!assignmentId) {
-        throw new Error("assignmentId is required");
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: "assignmentId is required",
+        });
+        return;
       }
       await this._saveLessonResultUseCase.execute(userId, assignmentId, result);
       logger.info("Lesson result saved successfully", { userId, assignmentId });

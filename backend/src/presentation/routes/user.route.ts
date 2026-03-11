@@ -62,10 +62,10 @@ export class UserRoutes {
 
     // typing practice routes
     this.router.get(
-      Routes.USERS.START_TYPING_PRACTICE,
+      Routes.USERS.GET_RANDOM_PRACTICE_LESSON,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectTypingPracticeController.startTypingPractice(req, res, next);
+        injectTypingPracticeController.getRandomPracticeLesson(req, res, next);
       },
     );
 

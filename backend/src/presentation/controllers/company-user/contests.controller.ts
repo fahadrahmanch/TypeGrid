@@ -21,7 +21,11 @@ export class ContestsController {
       const userId = req.user?.userId;
 
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
 
       const contests = await this._getOpenContestsUseCase.execute(userId);
@@ -39,7 +43,11 @@ export class ContestsController {
     try {
       const userId = req.user?.userId;
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       const groupContests = await this._getGroupContestsUseCase.execute(userId);
       return res.status(HttpStatus.OK).json({
@@ -54,12 +62,23 @@ export class ContestsController {
 
   async getContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const ContestId = req.params.contestId;
+      const contestId = req.params.contestId;
       const userId = req.user?.userId;
-      if (!ContestId) {
-        throw new Error("Contest ID is required");
+      if (!contestId) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: "Contest ID is required",
+        });
+        return;
       }
-      const contest = await this._getContestUseCase.execute(ContestId, userId!);
+      if (!userId) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
+      }
+      const contest = await this._getContestUseCase.execute(contestId, userId);
       res.status(HttpStatus.OK).json({
         success: true,
         data: contest,
@@ -70,14 +89,25 @@ export class ContestsController {
   }
   async getContestData(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const ContestId = req.params.contestId;
+      const contestId = req.params.contestId;
       const userId = req.user?.userId;
-      if (!ContestId) {
-        throw new Error("Contest ID is required");
+      if (!contestId) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: "Contest ID is required",
+        });
+        return;
+      }
+      if (!userId) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       const contest = await this._getContestDataUseCase.execute(
-        ContestId,
-        userId!,
+        contestId,
+        userId,
       );
       res.status(HttpStatus.OK).json({
         success: true,
@@ -94,7 +124,11 @@ export class ContestsController {
       const contestId = req.params.contestId;
       const action = req.body.action;
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       const contest = await this._joinOrLeaveContestUseCase.execute(
         userId,

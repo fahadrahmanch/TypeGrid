@@ -10,7 +10,7 @@ export interface PopulatedGroupCompetitionPayload {
   countDown: number;
   joinLink?: string;
   lesson: {
-    _id: any;
+    id: any;
     text: string;
     category: string;
     level: string;
@@ -26,6 +26,7 @@ export const mapCompetitionToDTOGroupPlay = (
   competition: PopulatedGroupCompetitionPayload,
   hostUserId: string,
 ): CompetitionDTOGroupPlay => {
+
   return {
     _id: competition._id!.toString(),
     mode: competition.mode,
@@ -36,7 +37,7 @@ export const mapCompetitionToDTOGroupPlay = (
     countDown: competition.countDown,
     JoinLink: competition.joinLink,
     lesson: {
-      id: competition.lesson._id!.toString(),
+      id: competition.lesson.id!.toString(),
       text: competition.lesson.text,
       category: competition.lesson.category,
       level: competition.lesson.level,

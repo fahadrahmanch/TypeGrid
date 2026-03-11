@@ -28,13 +28,13 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     if (compatitionData.status !== "completed") {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        "Cannot start a new game. The current game is not completed yet.",
+        MESSAGES.SOMETHING_WENT_WRONG, // I'll use a generic one or check MESSAGES
       );
     }
     if (!compatitionData) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        "Competition not found with the provided game ID.",
+        MESSAGES.SOMETHING_WENT_WRONG,
       );
     }
     const competitionEntity = new CompetitionEntity({

@@ -69,7 +69,7 @@ export const Routes = {
     GET_COMPANY_STATUS: "/company/status",
 
     // typing practice
-    START_TYPING_PRACTICE: "/typing/practice",
+    GET_RANDOM_PRACTICE_LESSON: "/typing/practice",
     GET_LESSON_BY_ID: "/typing/practice/:lessonId",
 
     // group

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import logger from "../../../utils/logger";
 import { HttpStatus } from "../../constants/httpStatus";
+import { AuthRequest } from "../../../types/AuthRequest";
 import { ICompanyRequestUseCase } from "../../../application/use-cases/interfaces/user/company-request.interface";
 import { ITokenService } from "../../../domain/interfaces/services/token-service.interface";
 import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/find-user.interface";
@@ -13,41 +14,38 @@ export class CompanyRequestController {
     private _companyRequestUseCase: ICompanyRequestUseCase,
     private _tokenService: ITokenService,
     private _findUserUseCase: IFindUserUseCase,
-    private _GetCompanyStatusUseCase: IGetCompanyUseCase,
+    private _getCompanyStatusUseCase: IGetCompanyUseCase,
     private _companyReApplyUseCase: ICompanyReApplyUseCase,
   ) {}
-  async companyRequestDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async companyRequestDetails(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const token = req.cookies.refresh_user;
-      if (!token) {
-        throw new Error(MESSAGES.AUTH_TOKEN_MISSING);
+      const userId = req.user?.userId;
+      if (!userId) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
 
-      const decoded = await this._tokenService.verifyRefreshToken(token);
-
-      if (!decoded?.email) {
-        throw new Error(MESSAGES.AUTH_TOKEN_INVALID);
-      }
-
-      const user = await this._findUserUseCase.execute(decoded.email);
-
-      if (!user || !user._id) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
-      }
       const { companyName, address, email, number } = req.body;
 
       if (!companyName || !address || !email || !number) {
-        throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.ALL_FIELDS_REQUIRED,
+        });
+        return;
       }
 
       const result = await this._companyRequestUseCase.execute(
-        user._id,
+        userId,
         companyName,
         address,
         email,
         number,
       );
-      logger.info("Company request submitted successfully", { userId: user._id, companyName });
+      logger.info("Company request submitted successfully", { userId, companyName });
       res.status(HttpStatus.CREATED).json({
         success: true,
         message: MESSAGES.COMPANY_REQUEST_SUBMITTED_SUCCESS,
@@ -58,37 +56,34 @@ export class CompanyRequestController {
     }
   }
 
-  async reApplyCompanyDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async reApplyCompanyDetails(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const token = req.cookies.refresh_user;
+      const userId = req.user?.userId;
 
-      if (!token) {
-        throw new Error(MESSAGES.AUTH_TOKEN_MISSING);
+      if (!userId) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
 
-      const decoded = await this._tokenService.verifyRefreshToken(token);
-
-      if (!decoded?.email) {
-        throw new Error(MESSAGES.AUTH_TOKEN_INVALID);
-      }
-
-      const user = await this._findUserUseCase.execute(decoded.email);
-
-      if (!user || !user._id) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
-      }
       const { companyName, address, email, number } = req.body;
       if (!companyName || !address || !email || !number) {
-        throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.ALL_FIELDS_REQUIRED,
+        });
+        return;
       }
       await this._companyReApplyUseCase.execute({
-        userId: user._id,
+        userId,
         email,
         companyName,
         number,
         address,
       });
-      logger.info("Company details re-applied successfully", { userId: user._id, companyName });
+      logger.info("Company details re-applied successfully", { userId, companyName });
       res.status(HttpStatus.OK).json({
         success: true,
         message: "Company details re-applied successfully",
@@ -98,21 +93,32 @@ export class CompanyRequestController {
     }
   }
 
-  async getCompanyStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getCompanyStatus(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const token = req.cookies.refresh_user;
-      if (!token) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+      const email = req.user?.email;
+      if (!email) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
-      const { email } = await this._tokenService.verifyRefreshToken(token);
       const user = await this._findUserUseCase.execute(email);
       if (!user) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       if (!user.CompanyId) {
-        throw new Error(MESSAGES.COMPANY_NOT_ASSIGNED_TO_USER);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.COMPANY_NOT_ASSIGNED_TO_USER,
+        });
+        return;
       }
-      const company = await this._GetCompanyStatusUseCase.execute(
+      const company = await this._getCompanyStatusUseCase.execute(
         user.CompanyId,
       );
       res.status(HttpStatus.OK).json({

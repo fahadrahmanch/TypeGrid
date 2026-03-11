@@ -4,6 +4,9 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { LessonAssignmentEntity } from "../../../../domain/entities/assign-lesson.entity";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
 export class AssignLessonUseCase implements IAssignLessonUseCase {
   constructor(
     private _baseRepoAssignLesson: ILessonAssignmentRepository,
@@ -18,11 +21,11 @@ export class AssignLessonUseCase implements IAssignLessonUseCase {
   ): Promise<void> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
     const companyId = user.CompanyId;
     if (!companyId) {
-      throw new Error(MESSAGES.COMPANY_NOT_FOUND);
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.COMPANY_NOT_FOUND);
     }
     for (let i = 0; i < users.length; i++) {
       for (let j = 0; j < lessons.length; j++) {

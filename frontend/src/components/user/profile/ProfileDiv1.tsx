@@ -15,15 +15,16 @@ const ProfileDiv1: React.FC = () => {
   useEffect(() => {
     async function getUserData() {
       const res = await getUserDataApi();
+       console.log("User Data",res)
       if (res?.data) {
         setUser({
-          name: res.data.name,
-          email: res.data.email,
-          bio: res.data.bio,
-          age: res.data.age,
-          number: res.data.number,
-          gender: res.data.gender || "",
-          imageUrl: res.data.imageUrl || "",
+          name: res.data.user.name,
+          email: res.data.user.email,
+          bio: res.data.user.bio,
+          age: res.data.user.age,
+          number: res.data.user.number,
+          gender: res.data.user.gender || "",
+          imageUrl: res.data.user.imageUrl || "",
         });
       }
     }

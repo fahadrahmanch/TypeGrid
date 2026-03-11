@@ -48,7 +48,7 @@ const CompanyLoginForm: React.FC = () => {
         password: values.password,
       });
       const accessToken = response?.data?.accessToken;
-      const user = response?.data?.UserDeepCopy;
+      const user = response?.data?.user;
       if (!accessToken || !user) {
         throw new Error("Something went wrong. Please try again");
       }

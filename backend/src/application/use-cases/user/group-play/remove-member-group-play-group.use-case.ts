@@ -27,7 +27,7 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        "User not found",
+        MESSAGES.AUTH_USER_NOT_FOUND,
       );
     }
     const groupEntity = new GroupEntity(group as any);

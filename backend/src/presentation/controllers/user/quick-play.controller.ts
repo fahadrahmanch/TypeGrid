@@ -14,11 +14,19 @@ export class QuickPlayController {
     try {
       const userId = req.user?.userId;
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       const quickPlay = await this._startQuickPlayUseCase.execute(userId);
       if (!quickPlay) {
-        throw new Error(MESSAGES.QUICK_PLAY_START_FAILED);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.QUICK_PLAY_START_FAILED,
+        });
+        return;
       }
       logger.info("Quick play started successfully", { userId, quickPlayId: quickPlay._id });
       res.status(HttpStatus.OK).json({
@@ -37,10 +45,18 @@ export class QuickPlayController {
       const userId = req.user?.userId;
       const status = req.body.status;
       if (!status) {
-        throw new Error(MESSAGES.STATUS_REQUIRED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.STATUS_REQUIRED,
+        });
+        return;
       }
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       await this._changeStatusUseCase.execute(competitionId, status);
 

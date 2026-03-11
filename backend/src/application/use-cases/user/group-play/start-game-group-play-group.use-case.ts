@@ -16,7 +16,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
     private groupRepository: IGroupRepository,
     private lessonRepository: ILessonRepository,
     private userRepository: IUserRepository,
-  ) {}
+  ) { }
   async execute(
     groupId: string,
     countDown: number,
@@ -54,7 +54,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       mode: "global",
       textId: selectedLesson.id,
       participants,
-      groupId: group.getId()!.toString(),
+      groupId: group._id.toString(),
       duration: 300,
       status: "ongoing",
       countDown,
@@ -70,9 +70,9 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       ...competition,
       participants: populatedParticipants,
       lesson: selectedLesson,
-      JoinLink: group.getJoinLink() || undefined,
+      JoinLink: group.joinLink || undefined,
     };
 
-    return mapCompetitionToDTOGroupPlay(responseCompetition , group.ownerId);
+    return mapCompetitionToDTOGroupPlay(responseCompetition, group.ownerId);
   }
 }

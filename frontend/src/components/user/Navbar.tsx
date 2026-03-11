@@ -9,9 +9,9 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     async function getUserData() {
       const res = await getUserDataApi();
-      if (res?.data) {
+      if (res?.data.user.imageUrl) {
         setImage({
-          imageUrl: res.data.imageUrl || "",
+          imageUrl: res.data.user.imageUrl || "",
         });
       }
     }

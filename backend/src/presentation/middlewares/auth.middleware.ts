@@ -9,6 +9,7 @@ export function authMiddleware(tokenService: ITokenService) {
       const token = authHeader.split(" ")[1];
       try {
         const decoded = await tokenService.verifyAccessToken(token);
+        
         (req as any).user = decoded;
 
         next();

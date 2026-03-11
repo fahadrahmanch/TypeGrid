@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import logger from "../../../utils/logger";
 import { HttpStatus } from "../../constants/httpStatus";
 import { ICreateCompanyContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/create-company-contest.interface";
@@ -10,6 +10,8 @@ import { IGetContestUseCase } from "../../../application/use-cases/interfaces/co
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IUpdateContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/update-contest.interface";
 import { IDeleteContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/delete-contest.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+
 export class CompanyContestManagementController {
   constructor(
     private _createCompanyContestUseCase: ICreateCompanyContestUseCase,
@@ -21,12 +23,18 @@ export class CompanyContestManagementController {
     private _deleteContestUseCase: IDeleteContestUseCase,
   ) {}
 
+  //create contest
+
   async createContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const data = req.body;
       const userId = req.user?.userId;
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       const contest = await this._createCompanyContestUseCase.execute(
         data,
@@ -44,10 +52,19 @@ export class CompanyContestManagementController {
     }
   }
 
+  // get contests
+
   async getContests(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const userId = req.user?.userId;
-      const contests = await this._getCompanyContestsUseCase.execute(userId!);
+      if (!userId) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
+      }
+      const contests = await this._getCompanyContestsUseCase.execute(userId);
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.FETCH_SUCCESS,
@@ -57,10 +74,20 @@ export class CompanyContestManagementController {
       next(error);
     }
   }
+
+  //update contest status
   async updateContestStatus(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const contestId = req.params.contestId;
       const status = req.body.status;
+
+      if (!contestId) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
+      }
 
       await this._updateCompanyContestStatusUseCase.execute(contestId, status);
       logger.info("Contest status updated successfully", { contestId, status });
@@ -73,18 +100,26 @@ export class CompanyContestManagementController {
       next(error);
     }
   }
+
+  // get contests participants
+
   async getContestsParticipants(
     req: AuthRequest,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const userId = req.user?.userId;
       const contestId = req.params.contestId;
+      if (!contestId) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
+      }
 
       const participants = await this._getContestParticipantsUseCase.execute(
         contestId,
-       
       );
 
       res.status(HttpStatus.OK).json({
@@ -96,14 +131,26 @@ export class CompanyContestManagementController {
     }
   }
 
+  //get contest data
   async getContestData(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const ContestId = req.params.contestId;
+      const contestId = req.params.contestId;
       const userId = req.user?.userId;
-      if (!ContestId) {
-        throw new Error(MESSAGES.CONTEST_NOT_FOUND);
+      if (!contestId) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.CONTEST_NOT_FOUND,
+        });
+        return;
       }
-      const contest = await this._getContestUseCase.execute(ContestId, userId!);
+      if (!userId) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
+      }
+      const contest = await this._getContestUseCase.execute(contestId, userId);
       res.status(HttpStatus.OK).json({
         success: true,
         data: contest,
@@ -113,10 +160,19 @@ export class CompanyContestManagementController {
     }
   }
 
+  // update contest
   async updateContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const contestId = req.params.contestId;
       const data = req.body;
+
+      if (!contestId) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
+      }
 
       const updatedContest = await this._updateContestUseCase.execute(
         contestId,
@@ -134,15 +190,20 @@ export class CompanyContestManagementController {
     }
   }
 
-  async deleteContest(req: Request, res: Response, next: NextFunction): Promise<void> {
+  // delete contest
+  async deleteContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const contestId = req.params.contestId;
 
       if (!contestId) {
-        throw new Error(MESSAGES.CONTEST_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.CONTEST_NOT_FOUND,
+        });
+        return;
       }
 
-      await this._deleteContestUseCase.delete(contestId);
+      await this._deleteContestUseCase.execute(contestId);
 
       logger.info("Contest deleted successfully", { contestId });
       res.status(HttpStatus.OK).json({

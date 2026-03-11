@@ -13,12 +13,12 @@ import { QuickSocketController } from "../../infrastructure/socket/quick-socket.
 import { GetJoinMemberUseCase } from "../../application/use-cases/user/quick-play/get-join-member.use-case";
 import { FinishQuickPlayUseCase } from "../../application/use-cases/user/quick-play/finish-quick-play.use-case";
 import { ContestSocketController } from "../../infrastructure/socket/contest-socket.controller";
-import { FinishContestUseCase } from "../../application/use-cases/companyUser/finish-contest.use-case";
+import { FinishContestUseCase } from "../../application/use-cases/company-user/contest/finish-contest.use-case";
 import { GroupRepository } from "../../infrastructure/db/repositories/user/group.repository";
 import { Contest } from "../../infrastructure/db/models/company/company-contest.schema";
 import { ContestRepository } from "../../infrastructure/db/repositories/company/contest.repository";
 import { ChallengeSocketController } from "../../infrastructure/socket/challenge-socket.controller";
-import { StartChallengeUseCase } from "../../application/use-cases/companyUser/challenges/start-challenge.use-case";
+import { StartChallengeUseCase } from "../../application/use-cases/company-user/challenges/start-challenge.use-case";
 import { CompanyChallenge } from "../../infrastructure/db/models/company/company-challenge.schema";
 import { CompanyChallengeRepository } from "../../infrastructure/db/repositories/company/company-challenge.repository";
 

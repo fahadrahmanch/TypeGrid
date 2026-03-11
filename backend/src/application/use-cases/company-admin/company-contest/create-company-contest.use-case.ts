@@ -7,6 +7,9 @@ import { CreateContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto
 import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatus } from "../../../../presentation/constants/httpStatus";
+
 export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase {
   constructor(
     private userRepository: IUserRepository,
@@ -21,40 +24,40 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
   ): Promise<CreateContestDTO> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
     const companyId = user.CompanyId;
     if (!companyId) {
-      throw new Error(MESSAGES.USER_NO_COMPANY_ASSIGNED);
+      throw new CustomError(HttpStatus.FORBIDDEN, MESSAGES.USER_NO_COMPANY_ASSIGNED);
     }
     if (data.textSource === "random") {
       const difficulty =
-        data.difficulty == "easy"
-          ? "beginner"
-          : data.difficulty == "medium"
-            ? "intermediate"
-            : "advanced";
+          data.difficulty == "easy"
+              ? "beginner"
+              : data.difficulty == "medium"
+                  ? "intermediate"
+                  : "advanced";
       const lesson = await this.lessonRepository.findOne({
         level: difficulty,
       });
       if (!lesson) {
-        throw new Error(MESSAGES.LESSON_NOT_FOUND);
+        throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
       }
       data.contestText = lesson.text;
     }
     if (data.contestMode === "group") {
       const companyGroup = data.targetGroup;
       if (!companyGroup) {
-        throw new Error(MESSAGES.GROUP_NOT_FOUND);
+        throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
       }
       const group = await this._baseRepoCompanyGroup.findById(companyGroup);
       if (!group) {
-        throw new Error(MESSAGES.GROUP_NOT_FOUND);
+        throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
       }
     }
 
     if (!data.date || !data.startTime) {
-      throw new Error(MESSAGES.DATE_OR_START_TIME_REQUIRED);
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.DATE_OR_START_TIME_REQUIRED);
     }
     const contest = new ContestEntity({
       ...data,

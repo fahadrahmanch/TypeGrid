@@ -4,13 +4,15 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { companyUserDTO } from "../../DTOs/companyUser/company-user.dto";
 import { mapCompanyUsersWithOnlineStatus } from "../../mappers/companyUser/company-user.mapper";
 import redis from "../../../config/redis";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
 
 export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
   constructor(private userRepository: IUserRepository) {}
   async execute(userId: string): Promise<companyUserDTO[]> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
-      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
     const companyId = user.CompanyId;
     const users = await this.userRepository.find({

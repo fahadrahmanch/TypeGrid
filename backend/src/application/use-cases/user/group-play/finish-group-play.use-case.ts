@@ -6,6 +6,10 @@ import { IResultRepository } from "../../../../domain/interfaces/repository/comp
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
 import { ResultEntity } from "../../../../domain/entities/result.entity";
 import { GroupEntity } from "../../../../domain/entities/group.entity";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+
 export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
   constructor(
     private competitionRepository: ICompetitionRepository,
@@ -14,6 +18,12 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
   ) {}
   async execute(gameId: string, resultArray: GroupPlayResult[]): Promise<void> {
     const competition = await this.competitionRepository.findById(gameId);
+    if (!competition) {
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        "Competition not found",
+      );
+    }
     const competitionEntity = new CompetitionEntity({
       ...(competition as any),
       id: (competition as any)._id,
@@ -22,7 +32,14 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
     await this.competitionRepository.update(competitionEntity);
     const groupId = competitionEntity.getGroupId();
 
-    const group = await this.groupRepository.findById(groupId!);
+    if (!groupId) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+    }
+
+    const group = await this.groupRepository.findById(groupId);
+    if (!group) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+    }
     const groupEntity = new GroupEntity(group as any);
     groupEntity.setStatus("completed");
     const updatedGroup = groupEntity.toObject();

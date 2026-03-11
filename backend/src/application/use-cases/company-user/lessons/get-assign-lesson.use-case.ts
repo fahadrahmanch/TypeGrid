@@ -1,13 +1,15 @@
-import { IGetAssignLessonUseCase } from "../interfaces/companyUser/get-assign-lesson.interface";
-import { MESSAGES } from "../../../domain/constants/messages";
-import { ILessonAssignmentRepository } from "../../../domain/interfaces/repository/company/lesson-assignment-repository.interface";
-import { ILessonRepository } from "../../../domain/interfaces/repository/admin/lesson-repository.interface";
-import { AssignedLessonDTO } from "../../DTOs/companyUser/get-assign-lesson-response.dto";
+import { IGetAssignLessonUseCase } from "../../interfaces/companyUser/get-assign-lesson.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { ILessonAssignmentRepository } from "../../../../domain/interfaces/repository/company/lesson-assignment-repository.interface";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { AssignedLessonDTO } from "../../../DTOs/companyUser/get-assign-lesson-response.dto";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class GetAssignLessonUseCase implements IGetAssignLessonUseCase {
   constructor(
     private _baseAssignmentLessonRepository: ILessonAssignmentRepository,
-  ) {}
+  ) { }
 
   async execute(assignmentId: string): Promise<AssignedLessonDTO> {
     const assignedLesson = await this._baseAssignmentLessonRepository.findById(
@@ -16,7 +18,7 @@ export class GetAssignLessonUseCase implements IGetAssignLessonUseCase {
     );
 
     if (!assignedLesson) {
-      throw new Error(MESSAGES.ASSIGNED_LESSON_NOT_FOUND);
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.ASSIGNED_LESSON_NOT_FOUND);
     }
     return {
       id: assignedLesson._id.toString(),

@@ -23,20 +23,29 @@ export class GroupPlayController {
     private _startGameGroupPlayGroupUseCase: IStartGameGroupPlayGroupUseCase,
     private _changeGroupStatusUseCase: IChangeGroupStatusUseCase,
     private _newGroupPlayUseCase: INewGroupPlayUseCase,
-  ) {}
+  ) { }
 
   async createGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const hostUserId = req.user?.userId;
       if (!hostUserId) {
-        throw new Error(MESSAGES.UNAUTHORIZED);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
       const group = await this._createGroupPlayRoomUseCase.execute(hostUserId);
-      logger.info("Room created successfully", { groupId: group.id, hostId: hostUserId });
+
       if (!group) {
-        throw new Error(MESSAGES.GROUP_PLAY_ROOM_CREATE_FAILED);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.GROUP_PLAY_ROOM_CREATE_FAILED,
+        });
+        return;
       }
 
+      logger.info("Room created successfully", { groupId: group.id, hostId: hostUserId });
       res.status(HttpStatus.CREATED).json({
         success: true,
         message: "Room created successfully",
@@ -51,19 +60,37 @@ export class GroupPlayController {
     try {
       const joinLink = req.params.joinLink;
       const userId = req.user?.userId;
-      if (!userId) return;
-      if (!joinLink) {
-        throw new Error(MESSAGES.JOIN_ID_REQUIRED_FOR_GROUP_DETAILS);
+
+      if (!userId) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
+
+      if (!joinLink) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.JOIN_ID_REQUIRED_FOR_GROUP_DETAILS,
+        });
+        return;
+      }
+
       const group = await this._getGroupPlayGroupUseCase.execute(
         joinLink,
         userId,
       );
-      logger.info("Group fetched successfully", { groupId: group.id, userId });
+
       if (!group) {
-        throw new Error(MESSAGES.GROUP_NOT_FOUND_WITH_JOIN_ID);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.GROUP_NOT_FOUND_WITH_JOIN_ID,
+        });
+        return;
       }
 
+      logger.info("Group fetched successfully", { groupId: group.id, userId });
       res.status(HttpStatus.OK).json({
         success: true,
         message: "Group fetched successfully",
@@ -78,16 +105,32 @@ export class GroupPlayController {
     try {
       const { difficulty, maxPlayers } = req.body;
       const groupId = req.params.groupId;
-      if (!groupId) {
-        throw new Error(MESSAGES.GROUP_ID_REQUIRED_TO_EDIT);
-      }
       const userId = req.user?.userId;
-      if (!difficulty && !maxPlayers) {
-        throw new Error(MESSAGES.DIFFICULTY_AND_MAX_PLAYERS_REQUIRED);
-      }
+
       if (!userId) {
-        throw new Error(MESSAGES.UNAUTHORIZED);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
+
+      if (!groupId) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.GROUP_ID_REQUIRED_TO_EDIT,
+        });
+        return;
+      }
+
+      if (!difficulty && !maxPlayers) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.DIFFICULTY_AND_MAX_PLAYERS_REQUIRED,
+        });
+        return;
+      }
+
       const group = await this._editGroupPlayGroupUseCase.execute(
         groupId,
         difficulty,
@@ -107,20 +150,33 @@ export class GroupPlayController {
       next(error);
     }
   }
+
   async joinGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const joinLink = req.params.joinLink;
       const userId = req.user?.userId;
-      if (!joinLink) {
-        throw new Error(MESSAGES.JOIN_ID_REQUIRED_TO_JOIN);
-      }
+
       if (!userId) {
-        throw new Error(MESSAGES.UNAUTHORIZED);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
+
+      if (!joinLink) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.JOIN_ID_REQUIRED_TO_JOIN,
+        });
+        return;
+      }
+
       const group = await this._joinGroupPlayGroupUseCase.execute(
         joinLink,
         userId,
       );
+
       getIO().to(group.id).emit("fetchGroupDetails", {
         group,
       });
@@ -137,17 +193,29 @@ export class GroupPlayController {
     try {
       const groupId = req.params.groupId;
       const userId = req.params.playerId;
+
       if (!groupId) {
-        throw new Error(MESSAGES.GROUP_ID_REQUIRED_TO_REMOVE_MEMBER);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.GROUP_ID_REQUIRED_TO_REMOVE_MEMBER,
+        });
+        return;
       }
+
       if (!userId) {
-        throw new Error(MESSAGES.UNAUTHORIZED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
+
       const group = await this._removeMemberGroupPlayGroupUseCase.execute(
         groupId,
         userId,
         "KICK",
       );
+
       getIO().to(groupId).emit("remove-player", {
         group,
       });
@@ -159,26 +227,36 @@ export class GroupPlayController {
     } catch (error: any) {
       next(error);
     }
-
   }
 
   async startGame(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const groupId = req.params.groupId;
       const { countDown } = req.body;
+
       if (!groupId) {
-        throw new Error(MESSAGES.GROUP_ID_REQUIRED_TO_START_GAME);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.GROUP_ID_REQUIRED_TO_START_GAME,
+        });
+        return;
       }
-      const startCompetition =
-        await this._startGameGroupPlayGroupUseCase.execute(groupId, countDown);
+
+      const startCompetition = await this._startGameGroupPlayGroupUseCase.execute(groupId, countDown);
+
+      if (!startCompetition) {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
+      }
+
       await this._changeGroupStatusUseCase.changeGroupStatus(
         groupId,
         "started",
       );
 
-      if (!startCompetition) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
-      }
       getIO().to(groupId).emit("game-started", {
         competition: startCompetition,
       });
@@ -190,26 +268,42 @@ export class GroupPlayController {
     } catch (error: any) {
       next(error);
     }
-
   }
 
   async newGame(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const gameId = req.params.gameId;
       const users = req.body.currentUsers;
+
       if (!gameId) {
-        throw new Error(MESSAGES.GAME_ID_REQUIRED_TO_START_NEW_GAME);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.GAME_ID_REQUIRED_TO_START_NEW_GAME,
+        });
+        return;
       }
-      if (users.length === 0) {
-        throw new Error(MESSAGES.AT_LEAST_ONE_USER_REQUIRED);
+
+      if (!users || users.length === 0) {
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.AT_LEAST_ONE_USER_REQUIRED,
+        });
+        return;
       }
+
       const startCompetition = await this._newGroupPlayUseCase.execute(
         gameId,
         users,
       );
+
       if (!startCompetition) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
       }
+
       getIO().to(startCompetition.groupId!).emit("new-game-started", {
         competition: startCompetition,
       });
@@ -221,6 +315,5 @@ export class GroupPlayController {
     } catch (error: any) {
       next(error);
     }
-
   }
 }

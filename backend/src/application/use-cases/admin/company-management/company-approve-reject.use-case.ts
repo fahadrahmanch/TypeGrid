@@ -1,10 +1,10 @@
-import { ICompanyApproveRejectUseCase } from "../interfaces/admin/company-approve-reject.interface";
-import { ICompanyRepository } from "../../../domain/interfaces/repository/company/company-repository.interface";
-import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
-import { MESSAGES } from "../../../domain/constants/messages";
-import { CustomError } from "../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
-import { IEmailService } from "../../../domain/interfaces/services/email-service.interface";
+import { ICompanyApproveRejectUseCase } from "../../interfaces/admin/company-approve-reject.interface";
+import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { IEmailService } from "../../../../domain/interfaces/services/email-service.interface";
 export class CompanyApproveRejectUseCase implements ICompanyApproveRejectUseCase {
   constructor(
     private companyRepository: ICompanyRepository,

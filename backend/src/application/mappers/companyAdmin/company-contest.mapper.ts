@@ -35,6 +35,7 @@ export const mapContestDTO = (contest: ContestPayload, userId: string): openCont
     duration: contest.duration,
     maxParticipants: contest.maxParticipants,
     participants: contest.participants.map(p => ({ userId: p.toString() })),
+    joined: contest.participants.some(p => p.toString() === userId.toString()),
     rewards: contest.rewards.map(r => ({ rank: r.rank, prize: r.prize })),
   };
 };

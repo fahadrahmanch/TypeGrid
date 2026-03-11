@@ -1,6 +1,6 @@
-import { IGetUsersUseCase } from "../interfaces/admin/get-users.interface";
-import { AuthUserEntity } from "../../../domain/entities";
-import { IAuthRepostory } from "../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IGetUsersUseCase } from "../../interfaces/admin/get-users.interface";
+import { AuthUserEntity } from "../../../../domain/entities";
+import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
 export class GetUsersUseCase implements IGetUsersUseCase {
   constructor(private authRepository: IAuthRepostory) {}
   async execute(): Promise<AuthUserEntity[]> {

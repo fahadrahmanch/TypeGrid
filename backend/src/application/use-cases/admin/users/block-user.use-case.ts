@@ -1,10 +1,10 @@
-import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
-import { IBlockUserUseCase } from "../interfaces/admin/block-user.interface";
-import { MESSAGES } from "../../../domain/constants/messages";
-import { CustomError } from "../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { IBlockUserUseCase } from "../../interfaces/admin/block-user.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 export class BlockUserUseCase implements IBlockUserUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private userRepository: IUserRepository) { }
   async execute(userId: string): Promise<void> {
     if (!userId) {
       throw new CustomError(

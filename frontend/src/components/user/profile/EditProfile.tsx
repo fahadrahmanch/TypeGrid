@@ -52,15 +52,15 @@ const EditProfileDiv1: React.FC = () => {
   useEffect(() => {
     async function getUserData() {
       const res = await getUserDataApi();
-      if (res?.data) {
+      if (res?.data.user.imageUrl) {
         setUser({
-          name: res.data.name,
-          email: res.data.email,
-          bio: res.data.bio,
-          age: res.data.age,
-          number: res.data.number,
-          gender: res.data.gender || "",
-          imageUrl: res.data.imageUrl || "",
+          name: res.data.user.name,
+          email: res.data.user.email,
+          bio: res.data.user.bio,
+          age: res.data.user.age,
+          number: res.data.user.number,
+          gender: res.data.user.gender || "",
+          imageUrl: res.data.user.imageUrl || "",
         });
       }
     }

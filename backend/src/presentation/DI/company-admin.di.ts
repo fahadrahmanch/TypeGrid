@@ -1,39 +1,39 @@
 import { CompanyUserController } from "../controllers/company-admin/users/company-user.controller";
-import { AddUserUseCase } from "../../application/use-cases/companyAdmin/users/add-user.use-case";
+import { AddUserUseCase } from "../../application/use-cases/company-admin/users/add-user.use-case";
 import { User } from "../../infrastructure/db/models/user/user.schema";
 import { UserRepository } from "../../infrastructure/db/repositories/user/user.repository";
 import { HashService } from "../../application/services/hash.service";
 import { TokenService } from "../../application/services/token.service";
 import { FindUserUseCase } from "../../application/use-cases/user/find-user.use-case";
-import { GetCompanyUsersUseCase } from "../../application/use-cases/companyAdmin/users/get-company-users.use-case";
-import { DeleteUserUseCase } from "../../application/use-cases/companyAdmin/users/delete-user.use-case";
+import { GetCompanyUsersUseCase } from "../../application/use-cases/company-admin/users/get-company-users.use-case";
+import { DeleteUserUseCase } from "../../application/use-cases/company-admin/users/delete-user.use-case";
 import { Lesson } from "../../infrastructure/db/models/admin/lesson.schema";
 import { LessonRepository } from "../../infrastructure/db/repositories/admin/lesson.repository";
 import { CompanyLessonManageController } from "../controllers/company-admin/company-lesson-manage.controller";
-import { CreateCompanyLessonUseCase } from "../../application/use-cases/companyAdmin/company-lesson/create-company-lesson.use-case";
-import { GetCompanyLessonUseCase } from "../../application/use-cases/companyAdmin/company-lesson/get-company-lesson.use-case";
-import { GetLessonUseCase } from "../../application/use-cases/companyAdmin/company-lesson/get-lesson.use-case";
-import { UpdateCompanyLessonUseCase } from "../../application/use-cases/companyAdmin/company-lesson/update-company-lesson.use-case";
-import { DeleteCompanyLessonUseCase } from "../../application/use-cases/companyAdmin/company-lesson/delete-company-lesson.use-case";
-import { GetAdminLessonUseCase } from "../../application/use-cases/companyAdmin/company-lesson/get-admin-lesson.use-case";
-import { AssignLessonUseCase } from "../../application/use-cases/companyAdmin/company-lesson/assign-lesson.use-case";
+import { CreateCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/create-company-lesson.use-case";
+import { GetCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/get-company-lesson.use-case";
+import { GetLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/get-lesson.use-case";
+import { UpdateCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/update-company-lesson.use-case";
+import { DeleteCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/delete-company-lesson.use-case";
+import { GetAdminLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/get-admin-lesson.use-case";
+import { AssignLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/assign-lesson.use-case";
 import { LessonAssignment } from "../../infrastructure/db/models/company/lesson-assignment.schema";
 import { LessonAssignmentRepository } from "../../infrastructure/db/repositories/company/lesson-assignment.repository";
 import { CompanyGroupController } from "../controllers/company-admin/company-group.controller";
-import { CreateCompanyGroupUseCase } from "../../application/use-cases/companyAdmin/company-group/create-company-group.use-case";
+import { CreateCompanyGroupUseCase } from "../../application/use-cases/company-admin/company-group/create-company-group.use-case";
 import { CompanyGroup } from "../../infrastructure/db/models/company/company-group.schema";
 import { CompanyGroupRepository } from "../../infrastructure/db/repositories/company/company-group.repository";
-import { GetCompanyGroupsUseCase } from "../../application/use-cases/companyAdmin/company-group/get-company-groups.use-case";
+import { GetCompanyGroupsUseCase } from "../../application/use-cases/company-admin/company-group/get-company-groups.use-case";
 import { CompanyContestManagementController } from "../controllers/company-admin/company-contest-management.controller";
-import { CreateCompanyContestUseCase } from "../../application/use-cases/companyAdmin/company-contest/create-company-contest.use-case";
+import { CreateCompanyContestUseCase } from "../../application/use-cases/company-admin/company-contest/create-company-contest.use-case";
 import { Contest } from "../../infrastructure/db/models/company/company-contest.schema";
 import { ContestRepository } from "../../infrastructure/db/repositories/company/contest.repository";
-import { GetCompanyContestsUseCase } from "../../application/use-cases/companyAdmin/company-contest/get-company-contests.use-case";
-import { UpdateCompanyContestStatusUseCase } from "../../application/use-cases/companyAdmin/company-contest/update-company-contest-status.use-case";
-import { GetContestParticipantsUseCase } from "../../application/use-cases/companyAdmin/company-contest/get-contest-participants.use-case";
-import { GetContestUseCase } from "../../application/use-cases/companyAdmin/company-contest/get-contest.use-case";
-import { UpdateContestUseCase } from "../../application/use-cases/companyAdmin/company-contest/update-contest.use-case";
-import { DeleteContestUseCase } from "../../application/use-cases/companyAdmin/company-contest/delete-company-contest.use-case";
+import { GetCompanyContestsUseCase } from "../../application/use-cases/company-admin/company-contest/get-company-contests.use-case";
+import { UpdateCompanyContestStatusUseCase } from "../../application/use-cases/company-admin/company-contest/update-company-contest-status.use-case";
+import { GetContestParticipantsUseCase } from "../../application/use-cases/company-admin/company-contest/get-contest-participants.use-case";
+import { GetContestUseCase } from "../../application/use-cases/company-admin/company-contest/get-contest.use-case";
+import { UpdateContestUseCase } from "../../application/use-cases/company-admin/company-contest/update-contest.use-case";
+import { DeleteContestUseCase } from "../../application/use-cases/company-admin/company-contest/delete-company-contest.use-case";
 
 const userRepository = new UserRepository(User);
 const tokenService = new TokenService();
@@ -130,7 +130,6 @@ export const injectCompanyLessonManageController =
   );
 export const injectCompanyUserController = new CompanyUserController(
   addUserUseCaseInstance,
-  tokenService,
   findUserUseCaseInstance,
   getCompanyUsersUseCaseInstance,
   deleteUserUseCaseInstance,

@@ -15,12 +15,17 @@ export class SoloPlayController {
     try {
       const userId = req.user?.userId;
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       const soloPlay = await this._createSoloPlayUseCase.execute(userId);
 
       logger.info("Solo play created successfully", { userId, soloPlayId: soloPlay._id });
       res.status(HttpStatus.OK).json({
+        success: true,
         message: "Solo play created successfully",
         data: soloPlay,
       });
@@ -35,12 +40,25 @@ export class SoloPlayController {
       const gameId = req.params.gameId;
       const result = req.body;
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
       if (!gameId) {
-        throw new Error(MESSAGES.GAME_ID_NOT_FOUND);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.GAME_ID_NOT_FOUND,
+        });
+        return;
       }
       await this._soloPlayResultUseCase.execute(userId, gameId, result);
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: "Solo play result saved successfully",
+      });
     } catch (error: any) {
       next(error);
     }

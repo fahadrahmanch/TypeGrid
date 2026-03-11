@@ -8,25 +8,33 @@ export class TypingPracticeController {
     private _getPracticeTypingContentUseCase: IGetPracticeTypingContentUseCase,
   ) {}
 
-  async startTypingPractice(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getRandomPracticeLesson(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const level = req.query.level as string;
       const category = req.query.category as string;
+
       if (!level || !category) {
-        throw new Error(MESSAGES.LESSON_DATA_REQUIRED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.LESSON_DATA_REQUIRED,
+        });
+        return;
       }
+
       const lesson = await this._getPracticeTypingContentUseCase.execute(
         level,
         category,
       );
-      if (!lesson) {
-        throw new Error(MESSAGES.LESSON_NOT_FOUND);
-      }
-      logger.info("Typing practice started", { level, category });
+
+      logger.info("Typing practice lesson retrieved", { level, category });
 
       res.status(HttpStatus.OK).json({
         success: true,
-        message: "Typing practice started",
+        message: MESSAGES.FETCH_SUCCESS,
         lesson,
       });
     } catch (error: any) {
@@ -34,18 +42,30 @@ export class TypingPracticeController {
     }
   }
 
-  async getLessonById(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getLessonById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const lessonId = req.params.lessonId;
+
       if (!lessonId) {
-        throw new Error(MESSAGES.INVALID_REQUEST);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.INVALID_REQUEST,
+        });
+        return;
       }
+
       const lesson =
         await this._getPracticeTypingContentUseCase.getLessonById(lessonId);
-      if (!lesson) {
-        throw new Error(MESSAGES.LESSON_NOT_FOUND);
-      }
-      res.status(HttpStatus.OK).json({ success: true, lesson });
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: MESSAGES.FETCH_SUCCESS,
+        lesson,
+      });
     } catch (error: any) {
       next(error);
     }

@@ -13,55 +13,76 @@ import { ICreateNewPasswordUseCase } from "../../../application/use-cases/interf
 import { ICompanyFindUseCase } from "../../../application/use-cases/interfaces/auth/company-find.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { HttpStatus } from "../../constants/httpStatus";
+import { getRoleConfig } from "../../helpers/auth-role.helper";
+import { mapToSafeUser } from "../../../application/mappers/auth/auth.mapper";
+
 export class AuthController {
   constructor(
-    private _RegisterUser: IAuthUseCase,
+    private _registerUserUseCase: IAuthUseCase,
     private _completeSignupUseCase: ICompleteSignupUseCase,
     private _resentOtpUseCase: IResentOtpUseCase,
-    private _LoginUseCase: ILoginUseCase,
-    private _tokenServie: ITokenService,
-    private _GoogleAuthUseCase: IGoogleAuthUseCase,
-    private _FindUserByEmailUseCase: IFindUserByemailUseCase,
-    private _forgotPassword: IForgotPasswordUseCase,
-    private _ForgotPasswordOtpVerifyUseCase: IForgotPasswordOtpVerifyUseCaseUseCase,
+    private _loginUseCase: ILoginUseCase,
+    private _tokenService: ITokenService,
+    private _googleAuthUseCase: IGoogleAuthUseCase,
+    private _findUserByEmailUseCase: IFindUserByemailUseCase,
+    private _forgotPasswordUseCase: IForgotPasswordUseCase,
+    private _forgotPasswordOtpVerifyUseCase: IForgotPasswordOtpVerifyUseCaseUseCase,
     private _createNewPasswordUseCase: ICreateNewPasswordUseCase,
-    private _CompanyFindUseCase: ICompanyFindUseCase,
-  ) {}
-  async register(req: Request, res: Response, next: NextFunction): Promise<any> {
+    private _companyFindUseCase: ICompanyFindUseCase,
+  ) { }
+
+
+  //user register
+  async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { name, email, password } = req.body;
       if (!name || !email || !password) {
-        throw new Error(MESSAGES.ALL_FIELDS_REQUIRED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.ALL_FIELDS_REQUIRED,
+        });
+        return;
       }
-      await this._RegisterUser.createUser({
+      //create user
+      await this._registerUserUseCase.createUser({
         name,
         email,
         password,
       });
       res.status(HttpStatus.OK).json({
+        success: true,
         message: MESSAGES.OTP_SENT_SUCCESS,
       });
     } catch (error: any) {
       next(error);
     }
   }
+//verify otp
   async verifyOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { otp, name, email, password } = req.body;
-      logger.info(req.body);
+      logger.info("Verifying OTP", { email });
       await this._completeSignupUseCase.otp(otp, name, email, password);
       res.status(HttpStatus.OK).json({
+        success: true,
         message: MESSAGES.AUTH_REGISTER_SUCCESS,
       });
     } catch (error: any) {
       next(error);
+   
     }
   }
+  //resentOtp
+
   async resentOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { name, email } = req.body;
       if (!email) {
-        throw new Error(MESSAGES.EMAIL_REQUIRED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.EMAIL_REQUIRED,
+        });
+        return;
       }
       await this._resentOtpUseCase.execute(name, email);
       res.status(HttpStatus.OK).json({
@@ -72,33 +93,51 @@ export class AuthController {
       next(error);
     }
   }
+
+  // normal user signin and company admin signin into normal side
   async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password, role } = req.body.data;
-      const user = await this._LoginUseCase.execute(email, password);
+      const user = await this._loginUseCase.execute(email, password);
 
       if (!user || !user._id) {
-        throw new Error(MESSAGES.USER_DETAILS_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.USER_DETAILS_NOT_FOUND,
+        });
+        return;
       }
+      //check role user || companyAdmin
       if (user.role !== role && user.role !== "companyAdmin") {
-        throw new Error(MESSAGES.UNAUTHORIZED_PORTAL_ACCESS);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED_PORTAL_ACCESS,
+        });
+        return;
       }
+      //generate accesstoken
+      const accessToken = await this._tokenService.generateAccessToken(
+        user._id,
+        user?.email,
+        user?.role,
+      );
+      // generate refreshToken
+      const refreshToken = await this._tokenService.generateRefreshToken(
+        user._id,
+        user?.email,
+        user?.role,
+      );
 
-      const accessToken = await this._tokenServie.generateAccessToken(
-        user._id,
-        user?.email,
-        user?.role,
-      );
-      const refreshToken = await this._tokenServie.generateRefreshToken(
-        user._id,
-        user?.email,
-        user?.role,
-      );
       if (!accessToken || !refreshToken) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
       }
-      const UserDeepCopy = JSON.parse(JSON.stringify(user));
-      delete UserDeepCopy.password;
+      //remove password from user
+      const safeUser = mapToSafeUser(user);
+      //set refresh token in cookie
       res.cookie("refresh_user", refreshToken, {
         httpOnly: true,
         secure: true,
@@ -106,87 +145,116 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         path: "/user",
       });
+
       logger.info("User signed in successfully", { email });
+
       res.status(HttpStatus.OK).json({
+        success: true,
         message: MESSAGES.AUTH_LOGIN_SUCCESS,
         accessToken,
-        UserDeepCopy,
+        user: safeUser,
       });
     } catch (error: any) {
       next(error);
     }
   }
-
+  // refresh-token
   async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const base = req.baseUrl;
-      let tokenName = "";
-      let role = "";
-      if (base.startsWith("/admin")) {
-        tokenName = "refresh_admin";
-        role = "admin";
-      } else if (base.startsWith("/company")) {
-        tokenName = "refresh_company";
-        role = "company";
-      } else if (base.startsWith("/user")) {
-        tokenName = "refresh_user";
-        role = "user";
-      }
+      const { tokenName } = getRoleConfig(req.baseUrl);
       const token = req.cookies[tokenName];
 
-      if (!token) throw new Error(MESSAGES.REFRESH_TOKEN_NOT_FOUND);
-      const decoded = await this._tokenServie.verifyRefreshToken(token);
-      const user = await this._FindUserByEmailUseCase.execute(decoded?.email);
+      if (!token) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.REFRESH_TOKEN_NOT_FOUND,
+        });
+        return;
+      }
+
+      const decoded = await this._tokenService.verifyRefreshToken(token);
+      const user = await this._findUserByEmailUseCase.execute(decoded?.email);
+
       if (!user) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
-      if (user.status == "block") {
-        throw new Error(MESSAGES.ACCOUNT_BLOCKED_ACCESS_DENIED);
+
+      if (user.status === "block") {
+        res.status(HttpStatus.FORBIDDEN).json({
+          success: false,
+          message: MESSAGES.ACCOUNT_BLOCKED_ACCESS_DENIED,
+        });
+        return;
       }
-      const accessToken = await this._tokenServie.generateAccessToken(
+      //generate new access token
+      const accessToken = await this._tokenService.generateAccessToken(
         decoded?.userId,
         decoded?.email,
         decoded?.role,
       );
+
       res.status(HttpStatus.OK).json({
         success: true,
         accessToken,
-        user,
+        user: mapToSafeUser(user),
       });
     } catch (error: any) {
       next(error);
     }
   }
+  // google-auth
+
   async googleAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { name, email, googleId } = req.body;
       if (!name || !email || !googleId || Object.keys(req.body).length === 0) {
-        throw new Error(MESSAGES.REQUEST_BODY_MISSING);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.REQUEST_BODY_MISSING,
+        });
+        return;
       }
-      const user = await this._GoogleAuthUseCase.gooogleAuth(
+
+
+      const user = await this._googleAuthUseCase.gooogleAuth(
         name,
         email,
         googleId,
       );
+
       if (!user || !user._id) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
       }
-      const accessToken = await this._tokenServie.generateAccessToken(
+      //generate access token
+      const accessToken = await this._tokenService.generateAccessToken(
         user._id.toString(),
         email,
         "user",
       );
-      const refreshToken = await this._tokenServie.generateRefreshToken(
+      //generate refresh token
+      const refreshToken = await this._tokenService.generateRefreshToken(
         user._id.toString(),
         email,
         "user",
       );
 
       if (!accessToken || !refreshToken) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
       }
-      const UserDeepCopy = JSON.parse(JSON.stringify(user));
-      delete UserDeepCopy.password;
+
+      const safeUser = mapToSafeUser(user);
 
       res.cookie("refresh_user", refreshToken, {
         httpOnly: true,
@@ -195,41 +263,59 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         path: "/user",
       });
+
       logger.info("Google Authentication successful", { email });
+
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.GOOGLE_LOGIN_SUCCESS,
-        user: UserDeepCopy,
+        user: safeUser,
         accessToken,
       });
     } catch (error: any) {
       next(error);
     }
   }
-
+  // forgot-password user
   async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const base = req.baseUrl;
       const { email } = req.body;
       if (!email) {
-        throw new Error(MESSAGES.EMAIL_REQUIRED);
-      }
-      const user = await this._FindUserByEmailUseCase.execute(email);
-      if (!user) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.EMAIL_REQUIRED,
+        });
+        return;
       }
 
-      if (
-        base.startsWith("/company") &&
-        !["companyUser", "companyAdmin"].includes(user.role)
-      ) {
-        throw new Error(MESSAGES.ACCESS_DENIED_NOT_COMPANY);
+      const user = await this._findUserByEmailUseCase.execute(email);
+      if (!user) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
+      }
+
+      if (base.startsWith("/company") && !["companyUser", "companyAdmin"].includes(user.role)) {
+        res.status(HttpStatus.FORBIDDEN).json({
+          success: false,
+          message: MESSAGES.ACCESS_DENIED_NOT_COMPANY,
+        });
+        return;
       }
 
       if (user?.googleId) {
-        throw new Error(MESSAGES.GOOGLE_ACCOUNT_PASSWORD_RESET_NOT_ALLOWED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.GOOGLE_ACCOUNT_PASSWORD_RESET_NOT_ALLOWED,
+        });
+        return;
       }
-      await this._forgotPassword.execute(email);
+
+      await this._forgotPasswordUseCase.execute(email);
+
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.OTP_SENT_SUCCESS,
@@ -238,18 +324,21 @@ export class AuthController {
       next(error);
     }
   }
-
+  // verify-forgot-password-otp
   async verifyForgotPasswordOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { otp, email } = req.body;
-      await this._ForgotPasswordOtpVerifyUseCase.verify(otp, email);
+      await this._forgotPasswordOtpVerifyUseCase.verify(otp, email);
       res.status(HttpStatus.OK).json({
+        success: true,
         message: MESSAGES.OTP_VERIFIED_SUCCESS,
       });
     } catch (error: any) {
       next(error);
     }
   }
+  //rest password user
+
   async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body;
@@ -262,65 +351,63 @@ export class AuthController {
       next(error);
     }
   }
-
+//logout
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const base = req.baseUrl;
-      let tokenName = "";
-      let path = "/";
-      if (base.startsWith("/admin")) {
-        tokenName = "refresh_admin";
-        path = "/admin";
-      } else if (base.startsWith("/company")) {
-        tokenName = "refresh_company";
-        path = "/company";
-      } else if (base.startsWith("/user")) {
-        tokenName = "refresh_user";
-        path = "/user";
-      }
-      res.clearCookie(tokenName, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        path,
-      });
+      const { tokenName, path } = getRoleConfig(req.baseUrl);
+      res.clearCookie(tokenName, { httpOnly: true, secure: true, sameSite: "strict", path });
       res.status(HttpStatus.OK).json({
-        message: MESSAGES.AUTH_LOGOUT_SUCCESS,
+        success: true,
+        message: MESSAGES.AUTH_LOGOUT_SUCCESS
       });
     } catch (error: any) {
       next(error);
     }
   }
 
-  //admin
+  //admin signin
   async AdminSignIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password, role } = req.body.data;
-      const admin = await this._LoginUseCase.execute(email, password);
+      const admin = await this._loginUseCase.execute(email, password);
 
       if (!admin || !admin._id) {
-        throw new Error(MESSAGES.ADMIN_NOT_FOUND);
-      }
-      if (admin.role !== role) {
-        throw new Error(`You are not authorized to login from ${role} portal`);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.ADMIN_NOT_FOUND,
+        });
+        return;
       }
 
-      const accessToken = await this._tokenServie.generateAccessToken(
+      if (admin.role !== role) {
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: `You are not authorized to login from ${role} portal`,
+        });
+        return;
+      }
+
+      const accessToken = await this._tokenService.generateAccessToken(
         admin?._id.toString(),
         admin?.email,
         admin?.role,
       );
-      const refreshToken = await this._tokenServie.generateRefreshToken(
+      const refreshToken = await this._tokenService.generateRefreshToken(
         admin?._id.toString(),
         admin?.email,
         admin?.role,
       );
 
       if (!accessToken || !refreshToken) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
       }
-      const adminDeepCopy = JSON.parse(JSON.stringify(admin));
-      delete adminDeepCopy.password;
+
+      const safeAdmin = mapToSafeUser(admin);
+
       res.cookie("refresh_admin", refreshToken, {
         httpOnly: true,
         secure: true,
@@ -328,50 +415,74 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         path: "/admin",
       });
+
       logger.info("Admin signed in successfully", { email });
+
       res.status(HttpStatus.OK).json({
+        success: true,
         message: MESSAGES.AUTH_LOGIN_SUCCESS,
         accessToken,
-        adminDeepCopy,
+        user: safeAdmin,
       });
     } catch (error: any) {
       next(error);
     }
   }
 
-  //company
+  //company signin
 
   async companySignIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body.data;
-      logger.info("email password", email, password);
-      const user = await this._LoginUseCase.execute(email, password);
+      const user = await this._loginUseCase.execute(email, password);
 
       if (!user || !user._id) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
+
       if (user.role !== "companyAdmin" && user.role !== "companyUser") {
-        throw new Error(MESSAGES.UNAUTHORIZED_COMPANY_PORTAL_ACCESS);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED_COMPANY_PORTAL_ACCESS,
+        });
+        return;
       }
+
       if (!user.CompanyId) {
-        throw new Error(MESSAGES.MISSING_COMPANY_ASSOCIATION);
+        res.status(HttpStatus.FORBIDDEN).json({
+          success: false,
+          message: MESSAGES.MISSING_COMPANY_ASSOCIATION,
+        });
+        return;
       }
-      const company = await this._CompanyFindUseCase.execute(user?.CompanyId);
-      const accessToken = await this._tokenServie.generateAccessToken(
+
+      const company = await this._companyFindUseCase.execute(user?.CompanyId);
+
+      const accessToken = await this._tokenService.generateAccessToken(
         user?._id.toString(),
         user?.email,
         user?.role,
       );
-      const refreshToken = await this._tokenServie.generateRefreshToken(
+      const refreshToken = await this._tokenService.generateRefreshToken(
         user?._id.toString(),
         user?.email,
         user?.role,
       );
+
       if (!accessToken || !refreshToken) {
-        throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: MESSAGES.SOMETHING_WENT_WRONG,
+        });
+        return;
       }
-      const UserDeepCopy = JSON.parse(JSON.stringify(user));
-      delete UserDeepCopy.password;
+
+      const safeUser = mapToSafeUser(user);
+
       res.cookie("refresh_company", refreshToken, {
         httpOnly: true,
         secure: true,
@@ -379,11 +490,14 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         path: "/company",
       });
+
       logger.info("Company signed in successfully", { email });
+
       res.status(HttpStatus.OK).json({
+        success: true,
         message: MESSAGES.AUTH_LOGIN_SUCCESS,
         accessToken,
-        UserDeepCopy,
+        user: safeUser,
         company,
       });
     } catch (error: any) {

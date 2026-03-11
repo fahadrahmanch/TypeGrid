@@ -1,17 +1,17 @@
-import { ICreateCompanyLessonUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/create-company-lesson.interface";
-import { CompanyLessonDTO } from "../../../../application/DTOs/companyAdmin/company-lesson.dto";
+import { ICreateCompanyLessonUseCase } from "../../interfaces/companyAdmin/create-company-lesson.interface";
+import { CompanyLessonDTO } from "../../../DTOs/companyAdmin/company-lesson.dto";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { LessonEntity } from "../../../../domain/entities/lesson.entity";
-import { mapLessonDTOforCompanyLesson } from "../../../../application/mappers/companyAdmin/company-lesson.mapper";
+import { mapLessonDTOforCompanyLesson } from "../../../mappers/companyAdmin/company-lesson.mapper";
 export class CreateCompanyLessonUseCase implements ICreateCompanyLessonUseCase {
   constructor(
     private lessonRepository: ILessonRepository,
     private userRepository: IUserRepository,
-  ) {}
+  ) { }
   async execute(
     userId: string,
     data: Partial<CompanyLessonDTO>,

@@ -148,7 +148,6 @@ export const injectCompanyRequestController = new CompanyRequestController(
   companyReApplyUseCaseInstance,
 );
 export const injectUserController = new UserController(
-  tokenService,
   findUserUseCaseInstance,
   updateUserUseCaseInstance,
   changePasswordUseCaseInstance,

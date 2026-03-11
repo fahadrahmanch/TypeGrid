@@ -10,6 +10,8 @@ import { IGetChallengesUseCase } from "../../../application/use-cases/interfaces
 import { getIO } from "../../../infrastructure/socket/socket";
 import { IAcceptChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/accept-challenge.interface";
 import { IGetChallengeGameDataUseCase } from "../../../application/use-cases/interfaces/companyUser/get-challenge-game-data.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+
 export class ChallengesController {
   constructor(
     private _getCompanyUsersUseCase: IGetCompanyUsersUseCase,
@@ -19,12 +21,18 @@ export class ChallengesController {
     private _acceptChallengeUseCase: IAcceptChallengeUseCase,
     private _getChallengeGameDataUseCase: IGetChallengeGameDataUseCase,
   ) {}
+
+  //company users
   async companyUsers(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const userId = req.user?.userId;
 
       if (!userId) {
-        throw new Error(MESSAGES.UNAUTHORIZED);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
 
       const users = await this._getCompanyUsersUseCase.execute(userId);
@@ -37,17 +45,26 @@ export class ChallengesController {
       next(error);
     }
   }
+  // make challenge
   async makeChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const receiverId = req.body.receiverId;
       const senderId = req.user?.userId;
 
       if (!receiverId) {
-        throw new Error(MESSAGES.INVALID_REQUEST);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.INVALID_REQUEST,
+        });
+        return;
       }
 
       if (!senderId) {
-        throw new Error(MESSAGES.UNAUTHORIZED);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
 
       const challenge = await this._makeChallengeUseCase.execute(
@@ -64,10 +81,17 @@ export class ChallengesController {
         message: MESSAGES.CREATE_SUCCESS,
       });
     } catch (err: any) {
-      next(err);
+      if (err instanceof CustomError) {
+        res.status(err.statusCode).json({
+          success: false,
+          message: err.message,
+        });
+      } else {
+        next(err);
+      }
     }
   }
-
+//check already sent challenge
   async checkAlreadySentChallenge(
     req: AuthRequest,
     res: Response,
@@ -77,7 +101,11 @@ export class ChallengesController {
       const senderId = req.user?.userId;
 
       if (!senderId) {
-        throw new Error(MESSAGES.SENDER_ID_REQUIRED);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success: false,
+          message: MESSAGES.SENDER_ID_REQUIRED,
+        });
+        return;
       }
 
       const challenges = await this._getSentChallengesUseCase.execute(senderId);
@@ -90,13 +118,17 @@ export class ChallengesController {
       next(error);
     }
   }
-
+//get all challenges
   async getAllChallenges(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const userId = req.user?.userId;
 
       if (!userId) {
-        throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.AUTH_USER_NOT_FOUND,
+        });
+        return;
       }
 
       const challenges = await this._getChallengesUseCase.execute(userId);
@@ -106,22 +138,33 @@ export class ChallengesController {
         data: challenges,
       });
     } catch (error: any) {
-      next(error);
+      
+        next(error);
+      
     }
   }
+  //accept challenge
 
   async acceptChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const challengeId = req.params.challengeId;
 
       if (!challengeId) {
-        throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.CHALLENGE_NOT_FOUND,
+        });
+        return;
       }
 
       const userId = req.user?.userId;
 
       if (!userId) {
-        throw new Error(MESSAGES.UNAUTHORIZED);
+        res.status(HttpStatus.UNAUTHORIZED).json({
+          success: false,
+          message: MESSAGES.UNAUTHORIZED,
+        });
+        return;
       }
 
       await this._acceptChallengeUseCase.execute(challengeId);
@@ -132,16 +175,23 @@ export class ChallengesController {
         message: MESSAGES.UPDATE_SUCCESS,
       });
     } catch (error: any) {
-      next(error);
+    
+        next(error);
+      
     }
   }
 
+  //get challenge game data
   async getChallengeGameData(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const challengeId = req.params.challengeId;
 
       if (!challengeId) {
-        throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.CHALLENGE_NOT_FOUND,
+        });
+        return;
       }
 
       const challengeGameData =
@@ -152,7 +202,9 @@ export class ChallengesController {
         data: challengeGameData,
       });
     } catch (error: any) {
-      next(error);
+     
+        next(error);
+      
     }
   }
 }

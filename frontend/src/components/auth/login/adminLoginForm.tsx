@@ -49,7 +49,7 @@ const AdminLoginForm: React.FC = () => {
         role: "admin",
       });
       const accessToken = response?.data?.accessToken;
-      const admin = response?.data?.adminDeepCopy;
+      const admin = response?.data?.user;
       if (!accessToken || !admin) {
         throw new Error("Something went wrong. Please try again");
       }
