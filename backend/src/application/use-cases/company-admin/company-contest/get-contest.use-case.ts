@@ -4,19 +4,37 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { ContestProps } from "../../../DTOs/companyAdmin/company-contest.dto";
 import { IGetContestUseCase } from "../../interfaces/companyAdmin/get-contest.interface";
 import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
+/**
+ * Use case for retrieving a contest by ID with admin-level details.
+ * 
+ * Validates that both the user and contest exist before returning the contest data.
+ */
 export class GetContestUseCase implements IGetContestUseCase {
   constructor(
-    private readonly contestRepository: IContestRepository,
-    private readonly userRepository: IUserRepository,
+    private readonly _contestRepository: IContestRepository,
+    private readonly _userRepository: IUserRepository,
   ) {}
+
   async execute(contestId: string, userId: string): Promise<ContestProps> {
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
+
     if (!user) {
-      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
-    const contest = await this.contestRepository.findById(contestId);
+
+    const contest = await this._contestRepository.findById(contestId);
+
     if (!contest) {
-      throw new Error(MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
 
     return mapContestDTOAdmin(contest);

@@ -2,33 +2,61 @@ import { IStartChallengeUseCase } from "../../interfaces/companyUser/start-chall
 import { ICompanyChallengeRepository } from "../../../../domain/interfaces/repository/company/company-challenge-repository.interface";
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
+/**
+ * Use case for starting a challenge competition.
+ */
 export class StartChallengeUseCase implements IStartChallengeUseCase {
   constructor(
-    private challengeRepository: ICompanyChallengeRepository,
-    private competitionRepository: ICompetitionRepository,
+    private readonly _challengeRepository: ICompanyChallengeRepository,
+    private readonly _competitionRepository: ICompetitionRepository
   ) {}
 
+  /**
+   * Start the competition linked to a challenge.
+   */
   async execute(challengeId: string): Promise<void> {
-    const challenge = await this.challengeRepository.findById(challengeId);
+
+    if (!challengeId) {
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST
+      );
+    }
+
+    const challenge = await this._challengeRepository.findById(challengeId);
 
     if (!challenge) {
-      throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
-    }
-    const competitionId = (challenge as any).competitionId;
-    if (!competitionId) {
-      throw new Error(MESSAGES.COMPETITION_NOT_FOUND_FOR_CHALLENGE);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CHALLENGE_NOT_FOUND
+      );
     }
 
-    const competition =
-      await this.competitionRepository.findById(competitionId);
+    const competitionId = challenge.competitionId;
+
+    if (!competitionId) {
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND_FOR_CHALLENGE
+      );
+    }
+
+    const competition = await this._competitionRepository.findById(
+      competitionId
+    );
 
     if (!competition) {
-      throw new Error(MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND
+      );
     }
 
-    if ((competition as any).status !== "ongoing") {
-      await this.competitionRepository.updateById(competitionId, {
+    if (competition.status !== "ongoing") {
+      await this._competitionRepository.updateById(competitionId, {
         status: "ongoing",
       });
     }

@@ -17,7 +17,7 @@ export const MESSAGES = {
     "This account is registered using Google Sign-In. Password reset is not applicable.",
   PASSWORD_UPDATE_SUCCESS: "Password updated successfully.",
   UNAUTHORIZED: "Unauthorized: user not authenticated",
-
+AUTH_UNAUTHORIZED_ROLE: "You are not authorized to login with this role.",
   ADMIN_NOT_FOUND: "Admin not found",
 
   // ================= USER / COMPANY ACCESS =================
@@ -172,5 +172,8 @@ export const MESSAGES = {
     "You are not authorized to login from this portal",
 
 
-    //admin
+    //company user
+      LESSON_UPDATE_FAILED: "Failed to update lesson",
+
+
 };

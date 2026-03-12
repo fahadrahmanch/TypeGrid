@@ -86,8 +86,10 @@ export interface groupContestDTO {
 }
 
 export interface ParticipantsDTO {
-  userId: string;
+  userId?: string;
   email: string;
+  name?:string;
+  
   // score: number;
   // joinedAt: string;
 }

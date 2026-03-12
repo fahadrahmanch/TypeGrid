@@ -7,21 +7,29 @@ import { CompanyLessonDTO } from "../../../DTOs/companyAdmin/company-lesson.dto"
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
-export class GetCompanyLessonUseCase implements IGetCompanyLessonsUseCase {
+/**
+ * Use case responsible for retrieving all lessons belonging to a company.
+ * Resolves the company context from the requesting user's profile.
+ */
+export class GetCompanyLessonsUseCase implements IGetCompanyLessonsUseCase {
+
   constructor(
-    private lessonRepository: ILessonRepository,
-    private userRepository: IUserRepository,
-  ) { }
+    private readonly _lessonRepository: ILessonRepository,
+    private readonly _userRepository: IUserRepository,
+  ) {}
+
   async execute(userId: string): Promise<CompanyLessonDTO[]> {
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
+
     const companyId = user.CompanyId;
-    const lessons = await this.lessonRepository.find({ companyId });
-    if (!lessons.length) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+    if (!companyId) {
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.COMPANY_NOT_FOUND);
     }
+
+    const lessons = await this._lessonRepository.find({ companyId });
 
     return lessons.map((lesson) => mapLessonDTOforCompanyLesson(lesson));
   }

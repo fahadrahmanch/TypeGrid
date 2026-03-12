@@ -26,8 +26,6 @@ export class LessonResult {
     wpm: number;
     accuracy: number;
     errors: number;
-    totalTyped: number;
-    takeTime: number;
     status: LessonResultStatus;
     createdAt?: Date;
   }) {

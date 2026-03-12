@@ -3,50 +3,62 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { IGetChallengesUseCase } from "../../interfaces/companyUser/get-challenges.interface";
 import { ChallengeDTO } from "../../../DTOs/companyUser/challenge.dto";
 import { mapChallengeToDTO } from "../../../mappers/companyUser/challenge.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+
+/**
+ * Use case for retrieving challenges for a user.
+ */
 export class GetChallengesUseCase implements IGetChallengesUseCase {
   constructor(
-    private _baseRepoChallange: ICompanyChallengeRepository,
-    private userRepository: IUserRepository,
+    private readonly challengeRepository: ICompanyChallengeRepository,
+    private readonly userRepository: IUserRepository
   ) {}
+
+  /**
+   * Get all sent and received challenges.
+   * @param userId - User identifier
+   */
   async execute(userId: string): Promise<ChallengeDTO[]> {
-    let sendChallanges: any[] = await this._baseRepoChallange.find({
-      senderId: userId,
-    });
-    if (sendChallanges.length) {
-      sendChallanges = await Promise.all(
-        sendChallanges.map(async (item) => {
-          const opponent = await this.userRepository.findById(item.receiverId);
-          const type = item.status === "completed" ? "completed" : "sent";
-          return {
-            ...item,
-            type,
-            opponent,
-          };
-        }),
+
+    if (!userId) {
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST
       );
     }
 
-    let receiveChallenges: any[] = await this._baseRepoChallange.find({
-      receiverId: userId,
-    });
-    if (receiveChallenges.length) {
-      receiveChallenges = await Promise.all(
-        receiveChallenges.map(async (item) => {
-          const opponent = await this.userRepository.findById(item.senderId);
-          const type = item.status === "completed" ? "completed" : "received";
+    const [sentChallenges, receivedChallenges] = await Promise.all([
+      this.challengeRepository.find({ senderId: userId }),
+      this.challengeRepository.find({ receiverId: userId }),
+    ]);
+
+    const processChallenges = async (
+      challenges: any[],
+      type: "sent" | "received"
+    ) => {
+      return Promise.all(
+        challenges.map(async (item) => {
+          const opponentId =
+            type === "sent" ? item.receiverId : item.senderId;
+
+          const opponent = await this.userRepository.findById(opponentId);
+
           return {
             ...item,
-            type,
+            type: item.status === "completed" ? "completed" : type,
             opponent,
           };
-        }),
+        })
       );
-    }
-    const challenges = [...sendChallanges, ...receiveChallenges];
+    };
 
-    const mappedChallenges: ChallengeDTO[] = challenges.map((challenge: any) =>
-      mapChallengeToDTO(challenge),
-    );
-    return mappedChallenges;
+    const [sent, received] = await Promise.all([
+      processChallenges(sentChallenges, "sent"),
+      processChallenges(receivedChallenges, "received"),
+    ]);
+
+    return [...sent, ...received].map(mapChallengeToDTO);
   }
 }

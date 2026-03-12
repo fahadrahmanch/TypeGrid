@@ -1,5 +1,5 @@
 export interface IAuthUseCase {
-  createUser(data: {
+  execute(data: {
     name: string;
     email: string;
     password: string;

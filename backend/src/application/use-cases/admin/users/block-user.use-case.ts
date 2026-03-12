@@ -3,25 +3,32 @@ import { IBlockUserUseCase } from "../../interfaces/admin/block-user.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
+/**
+ * Use case for blocking or unblocking a user.
+ *
+ * This use case toggles the user's status between "block" and "active".
+ */
 export class BlockUserUseCase implements IBlockUserUseCase {
-  constructor(private userRepository: IUserRepository) { }
+
+  constructor(private readonly _userRepository: IUserRepository) {}
+
   async execute(userId: string): Promise<void> {
-    if (!userId) {
-      throw new CustomError(
-        HttpStatusCodes.INTERNAL_SERVER_ERROR,
-        MESSAGES.SOMETHING_WENT_WRONG,
-      );
-    }
-    const blockUser = await this.userRepository.findById(userId);
-    if (!blockUser) {
+
+    const user = await this._userRepository.findById(userId);
+
+    if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND
       );
     }
-    blockUser.status == "block"
-      ? (blockUser.status = "active")
-      : (blockUser.status = "block");
-    await this.userRepository.update(blockUser);
+
+    // Toggle user status
+    user.status = user.status === "block" ? "active" : "block";
+
+    await this._userRepository.update(user);
+
   }
+
 }

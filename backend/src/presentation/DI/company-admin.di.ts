@@ -11,7 +11,7 @@ import { Lesson } from "../../infrastructure/db/models/admin/lesson.schema";
 import { LessonRepository } from "../../infrastructure/db/repositories/admin/lesson.repository";
 import { CompanyLessonManageController } from "../controllers/company-admin/company-lesson-manage.controller";
 import { CreateCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/create-company-lesson.use-case";
-import { GetCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/get-company-lesson.use-case";
+import { GetCompanyLessonsUseCase } from "../../application/use-cases/company-admin/company-lesson/get-company-lesson.use-case";
 import { GetLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/get-lesson.use-case";
 import { UpdateCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/update-company-lesson.use-case";
 import { DeleteCompanyLessonUseCase } from "../../application/use-cases/company-admin/company-lesson/delete-company-lesson.use-case";
@@ -54,7 +54,7 @@ const createCompanyLessonUseCaseInstance = new CreateCompanyLessonUseCase(
   userRepository,
 );
 const getLessonUseCaseInstance = new GetLessonUseCase(lessonRepository);
-const getCompanyLessonUseCaseInstance = new GetCompanyLessonUseCase(
+const getCompanyLessonUseCaseInstance = new GetCompanyLessonsUseCase(
   lessonRepository,
   userRepository,
 );
@@ -68,7 +68,6 @@ const getAdminLessonsUseCaseInstance = new GetAdminLessonUseCase(lessonRepositor
 const assignLessonUseCaseInstance = new AssignLessonUseCase(
   lessonAssignmentRepository,
   userRepository,
-  lessonRepository,
 );
 const companyGroupRepository = new CompanyGroupRepository(CompanyGroup);
 const contestRepository = new ContestRepository(Contest);

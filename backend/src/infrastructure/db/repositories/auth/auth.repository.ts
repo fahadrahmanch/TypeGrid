@@ -1,11 +1,11 @@
 import { User } from "../../models/user/user.schema";
-import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
 import { BaseRepository } from "../../base/base.repository";
 import { IUserDocument } from "../../types/documents";
 
 export class AuthRepository
   extends BaseRepository<IUserDocument>
-  implements IAuthRepostory
+  implements IAuthRepository
 {
   constructor() {
     super(User);

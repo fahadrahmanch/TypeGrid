@@ -7,16 +7,21 @@ import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { LessonEntity } from "../../../../domain/entities/lesson.entity";
 import { mapLessonDTOforCompanyLesson } from "../../../mappers/companyAdmin/company-lesson.mapper";
+/**
+ * Use case for creating a company lesson.
+ * 
+ * Handles the creation of a new lesson for a company by validating the requesting user
+ */
 export class CreateCompanyLessonUseCase implements ICreateCompanyLessonUseCase {
   constructor(
-    private lessonRepository: ILessonRepository,
-    private userRepository: IUserRepository,
+    private readonly _lessonRepository: ILessonRepository,
+    private readonly _userRepository: IUserRepository,
   ) { }
   async execute(
     userId: string,
     data: Partial<CompanyLessonDTO>,
   ): Promise<CompanyLessonDTO> {
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
@@ -30,15 +35,14 @@ export class CreateCompanyLessonUseCase implements ICreateCompanyLessonUseCase {
       );
     }
     const companyId = user.CompanyId;
-    data.companyId = companyId;
     if (!companyId) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
         MESSAGES.INVALID_COMPANY_REFERENCE,
       );
     }
-    const lesson = new LessonEntity({ ...data, createdBy: "company" });
-    const createdLesson = await this.lessonRepository.create(lesson);
+    const lesson = new LessonEntity({ ...data, companyId,createdBy: "company" });
+    const createdLesson = await this._lessonRepository.create(lesson);
     return mapLessonDTOforCompanyLesson(createdLesson);
   }
 }

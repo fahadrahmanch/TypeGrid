@@ -3,13 +3,19 @@ import { IContestRepository } from "../../../../domain/interfaces/repository/com
 import { IResultRepository } from "../../../../domain/interfaces/repository/company/result-repository.interface";
 import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 import { ResultEntity } from "../../../../domain/entities/result.entity";
+/**
+ * Use case for finishing a contest and storing results.
+ */
 export class FinishContestUseCase implements IFinishContestUseCase {
   constructor(
-    private contestRepository: IContestRepository,
-    private resultRepository: IResultRepository,
-  ) { }
+    private readonly _contestRepository: IContestRepository,
+    private readonly _resultRepository: IResultRepository,
+  ) {}
+   /**
+   * Complete a contest and save participant results.
+   */
   async execute(contestId: string, result: any[]): Promise<void> {
-    const contest = await this.contestRepository.findById(contestId);
+    const contest = await this._contestRepository.findById(contestId);
     const contestEntity = new ContestEntity(contest);
     contestEntity.completeContest();
     const rewards = contestEntity.getRewards();
@@ -36,9 +42,9 @@ export class FinishContestUseCase implements IFinishContestUseCase {
         },
       });
       const resultObject = resultEntity.toObject();
-      await this.resultRepository.create(resultObject);
+      await this._resultRepository.create(resultObject);
     }
     const contestObject = (contestEntity as any).toObject();
-    await this.contestRepository.updateById(contestId, contestObject);
+    await this._contestRepository.updateById(contestId, contestObject);
   }
 }

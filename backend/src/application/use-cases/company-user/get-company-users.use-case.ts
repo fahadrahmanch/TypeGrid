@@ -8,14 +8,14 @@ import { CustomError } from "../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
 
 export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private readonly _userRepository: IUserRepository) {}
   async execute(userId: string): Promise<companyUserDTO[]> {
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
     const companyId = user.CompanyId;
-    const users = await this.userRepository.find({
+    const users = await this._userRepository.find({
       CompanyId: companyId,
     });
     const onlineUsers = await redis.smembers("online:users");

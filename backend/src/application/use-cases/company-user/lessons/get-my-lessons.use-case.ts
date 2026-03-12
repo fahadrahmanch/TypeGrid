@@ -9,10 +9,10 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
   constructor(
     private _baseAssignmentLessonRepository: ILessonAssignmentRepository,
-    private userRepository: IUserRepository,
+    private _userRepository: IUserRepository,
   ) { }
   async execute(userId: string): Promise<GetMyLessonsResponseDTO> {
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }

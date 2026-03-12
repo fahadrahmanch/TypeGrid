@@ -5,8 +5,12 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { mapLessonDTOforCompanyLesson } from "../../../mappers/companyAdmin/company-lesson.mapper";
+
+/**
+ * Use case for retrieving admin-created lessons for company access.
+ */
 export class GetAdminLessonUseCase implements IGetAdminLessonsUseCase {
-  constructor(private _lessonRepo: ILessonRepository) {}
+  constructor(private readonly _lessonRepo: ILessonRepository) {}
   async execute(): Promise<CompanyLessonDTO[]> {
     const lessons = await this._lessonRepo.find({ createdBy: "admin" });
     if (!lessons) {

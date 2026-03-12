@@ -32,9 +32,11 @@ export function createAPI(
         return Promise.reject(error);
       }
 
-      if (error.response?.status === 401 && !originalRequest._retry) {
+      if (error.response?.status === 401 && !originalRequest._retry&&
+  !originalRequest.url?.includes("signin")) {
         originalRequest._retry = true;
         try {
+          alert("hu")
           const res = await refreshAPI();
           const accessToken = res.data.accessToken;
           const user = res.data.user;

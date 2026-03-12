@@ -1,5 +1,5 @@
 export interface ICompleteSignupUseCase {
-  otp(
+  execute(
     otp: string,
     name: string,
     email: string,

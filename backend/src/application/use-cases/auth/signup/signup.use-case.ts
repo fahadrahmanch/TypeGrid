@@ -1,18 +1,24 @@
 import { IAuthUseCase } from "../../interfaces/auth/auth.interface";
-import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
 import { IOtpService } from "../../../../domain/interfaces/services/otp-service.interface";
 import { IEmailService } from "../../../../domain/interfaces/services/email-service.interface";
 import { IEmailTemplate } from "../../../DTOs/email/email-template.dto";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
+/**
+ * Handles user signup by validating input, checking for existing email,
+ * and sending an OTP for verification.
+ */
 export class SignupUseCase implements IAuthUseCase {
   constructor(
-    private userRepository: IAuthRepostory,
-    private otpService: IOtpService,
-    private _EmailService: IEmailService,
+    private readonly _authRepository: IAuthRepository,
+    private readonly _otpService: IOtpService,
+    private readonly _emailService: IEmailService,
   ) {}
-  async createUser({
+
+  async execute({
     name,
     email,
     password,
@@ -21,26 +27,24 @@ export class SignupUseCase implements IAuthUseCase {
     email: string;
     password: string;
   }): Promise<void> {
-    if (!name || !email || !password) {
-      throw new CustomError(
-        HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.ALL_FIELDS_REQUIRED,
-      );
-    }
-    const exists = await this.userRepository.findByEmail(email);
+    const exists = await this._authRepository.findByEmail(email);
+
     if (exists) {
       throw new CustomError(
         HttpStatusCodes.CONFLICT,
         MESSAGES.AUTH_EMAIL_EXISTS,
       );
     }
-    const otp = await this.otpService.createOtp(email);
+
+    const otp = await this._otpService.createOtp(email);
+
     const emailOptions: IEmailTemplate = {
       name,
       email,
       otp,
-      subject: "Type Grid Sign Up Otp",
+      subject: "Type Grid Sign Up OTP",
     };
-    await this._EmailService.sentOtp(emailOptions);
+
+    await this._emailService.sentOtp(emailOptions);
   }
 }

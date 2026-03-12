@@ -8,57 +8,60 @@ import { ContestEntity } from "../../../../domain/entities/company-contest.entit
 import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatus } from "../../../../presentation/constants/httpStatus";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
+/**
+ * Use case for creating a company contest.
+ * Handles the business logic for creating a new contest within a company context.
+ * Validates user permissions, company assignment, and required contest data.
+ * Supports both random text selection from lessons and group-based contest modes.
+ */
 export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase {
   constructor(
-    private userRepository: IUserRepository,
-    private _baseRepoCompanyGroup: ICompanyGroupRepository,
-    private contestRepository: IContestRepository,
-    private lessonRepository: ILessonRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _companyGroupRepository: ICompanyGroupRepository,
+    private readonly _contestRepository: IContestRepository,
+    private readonly _lessonRepository: ILessonRepository,
   ) {}
 
-  async execute(
-    data: CreateContestDTO,
-    userId: string,
-  ): Promise<CreateContestDTO> {
-    const user = await this.userRepository.findById(userId);
+  async execute(data: CreateContestDTO, userId: string): Promise<CreateContestDTO> {
+    const user = await this._userRepository.findById(userId);
+
     if (!user) {
-      throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
-    const companyId = user.CompanyId;
-    if (!companyId) {
-      throw new CustomError(HttpStatus.FORBIDDEN, MESSAGES.USER_NO_COMPANY_ASSIGNED);
-    }
-    if (data.textSource === "random") {
-      const difficulty =
-          data.difficulty == "easy"
-              ? "beginner"
-              : data.difficulty == "medium"
-                  ? "intermediate"
-                  : "advanced";
-      const lesson = await this.lessonRepository.findOne({
-        level: difficulty,
-      });
-      if (!lesson) {
-        throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
-      }
-      data.contestText = lesson.text;
-    }
-    if (data.contestMode === "group") {
-      const companyGroup = data.targetGroup;
-      if (!companyGroup) {
-        throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
-      }
-      const group = await this._baseRepoCompanyGroup.findById(companyGroup);
-      if (!group) {
-        throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
-      }
+
+    if (!user.CompanyId) {
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_NO_COMPANY_ASSIGNED);
     }
 
     if (!data.date || !data.startTime) {
-      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.DATE_OR_START_TIME_REQUIRED);
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.DATE_OR_START_TIME_REQUIRED);
     }
+
+    if (data.textSource === "random") {
+      const difficulty = this.mapDifficulty(data.difficulty);
+      const lesson = await this._lessonRepository.findOne({ level: difficulty });
+
+      if (!lesson) {
+        throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      }
+
+      data.contestText = lesson.text;
+    }
+
+    if (data.contestMode === "group") {
+      if (!data.targetGroup) {
+        throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      }
+
+      const group = await this._companyGroupRepository.findById(data.targetGroup);
+
+      if (!group) {
+        throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      }
+    }
+
     const contest = new ContestEntity({
       ...data,
       date: new Date(data.date),
@@ -66,14 +69,22 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       duration: Number(data.duration) * 60,
       maxParticipants: Number(data.maxParticipants),
       groupId: data.targetGroup ?? null,
-      rewards: data.rewards.map((r) => ({
-        rank: r.rank,
-        prize: Number(r.prize),
-      })),
-      CompanyId: companyId,
+      rewards: data.rewards.map((r) => ({ rank: r.rank, prize: Number(r.prize) })),
+      CompanyId: user.CompanyId,
       countDown: 10,
     });
-    const newContest = await this.contestRepository.create(contest);
+
+    const newContest = await this._contestRepository.create(contest);
+
     return mapContestDTOAdmin(newContest);
+  }
+
+  private mapDifficulty(difficulty: string): string {
+    const map: Record<string, string> = {
+      easy: "beginner",
+      medium: "intermediate",
+      hard: "advanced",
+    };
+    return map[difficulty] ?? "beginner";
   }
 }

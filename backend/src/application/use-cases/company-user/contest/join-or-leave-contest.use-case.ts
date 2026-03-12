@@ -7,35 +7,62 @@ import { openContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
 import { mapContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
+/**
+ * Use case for joining or leaving a contest.
+ */
 export class JoinOrLeaveContestUseCase implements IJoinOrLeaveContestUseCase {
   constructor(
-    private readonly contestRepository: IContestRepository,
-    private readonly userRepository: IUserRepository,
-  ) { }
+    private readonly _contestRepository: IContestRepository,
+    private readonly _userRepository: IUserRepository
+  ) {}
+
+  /**
+   * Join or cancel participation in a contest.
+   */
   async execute(
     userId: string,
     contestId: string,
-    action: string,
+    action: "join" | "cancel"
   ): Promise<openContestDTO> {
-    if (!userId) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.AUTH_USER_NOT_FOUND);
+
+    if (!userId || !contestId) {
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST
+      );
     }
-    const user = await this.userRepository.findById(userId);
+
+    const user = await this._userRepository.findById(userId);
+
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND
+      );
     }
-    const contest = await this.contestRepository.findById(contestId);
+
+    const contest = await this._contestRepository.findById(contestId);
+
     if (!contest) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND
+      );
     }
+
     const contestEntity = new ContestEntity(contest);
-    if (action == "join") {
+
+    if (action === "join") {
       contestEntity.joinContest(userId);
-    } else if (action == "cancel") {
+    } else {
       contestEntity.unJoin(userId);
     }
-    const Object = contestEntity.toObject();
-    const contests = await this.contestRepository.update(Object);
-    return mapContestDTO(contests, userId);
+
+    const contestObject = contestEntity.toObject();
+
+    const updatedContest = await this._contestRepository.update(contestObject);
+
+    return mapContestDTO(updatedContest, userId);
   }
 }

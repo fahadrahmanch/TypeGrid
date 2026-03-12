@@ -3,5 +3,6 @@ export default class AuthUserEntity extends UserEntity {
   password!: string;
   constructor(attrs?: Partial<AuthUserEntity>) {
     super(attrs);
+    
   }
 }

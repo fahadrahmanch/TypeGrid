@@ -6,18 +6,29 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 import { LessonDTO } from "../../../DTOs/admin/lesson-management.dto";
 import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper";
 
+/**
+ * Use case responsible for retrieving a lesson by ID.
+ */
 export class GetLessonUseCase implements IGetLessonUseCase {
-  constructor(private _lessonRepo: ILessonRepository) { }
 
+  constructor(private readonly _lessonRepository: ILessonRepository) {}
+
+  /**
+   * Retrieves a lesson by its ID.
+   * @param lessonId - The ID of the lesson to retrieve.
+   */
   async execute(lessonId: string): Promise<LessonDTO> {
-    const lesson = await this._lessonRepo.findById(lessonId);
+
+    const lesson = await this._lessonRepository.findById(lessonId);
+
     if (!lesson) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.LESSON_NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND
       );
     }
 
     return mapLessonToDTO(lesson);
   }
+
 }

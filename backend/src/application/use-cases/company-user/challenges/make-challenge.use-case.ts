@@ -10,14 +10,19 @@ import { CompanyChallengeEntity } from "../../../../domain/entities/company-chal
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
 import { ChallengeDTO } from "../../../DTOs/companyUser/challenge.dto";
 import { mapChallengeToDTO } from "../../../mappers/companyUser/challenge.mapper";
+/**
+ * Use case for creating a company challenge.
+ */
 export class MakeChallengeUseCase implements IMakeChallengeUseCase {
   constructor(
-    private challengeRepository: ICompanyChallengeRepository,
-    private userRepository: IUserRepository,
-    private competitionRepository: ICompetitionRepository,
-    private lessonRepository: ILessonRepository,
+    private readonly _challengeRepository: ICompanyChallengeRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _competitionRepository: ICompetitionRepository,
+    private readonly _lessonRepository: ILessonRepository,
   ) {}
-
+  /**
+   * Create a challenge between two users.
+   */
   async execute(senderId: string, receiverId: string): Promise<ChallengeDTO> {
     if (senderId === receiverId) {
       throw new CustomError(
@@ -26,8 +31,8 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
       );
     }
 
-    const sender = await this.userRepository.findById(senderId);
-    const receiver = await this.userRepository.findById(receiverId);
+    const sender = await this._userRepository.findById(senderId);
+    const receiver = await this._userRepository.findById(receiverId);
 
     if (!sender || !receiver) {
       throw new CustomError(
@@ -36,9 +41,8 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
       );
     }
     if (
-      !(sender as any).CompanyId ||
-      (sender as any).CompanyId.toString() !==
-        (receiver as any).CompanyId.toString()
+      !sender.CompanyId ||
+      sender.CompanyId.toString() !== receiver.CompanyId.toString()
     ) {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
@@ -51,7 +55,7 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
 
     const level = levels[randomIndex];
 
-    const lesson = await this.lessonRepository.findOne({ level });
+    const lesson = await this._lessonRepository.findOne({ level });
 
     if (!lesson) {
       throw new CustomError(
@@ -63,28 +67,28 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
     const competition = new CompetitionEntity({
       type: "company",
       mode: "company",
-      CompanyId: (sender as any).CompanyId,
+      CompanyId: sender.CompanyId,
       participants: [senderId, receiverId],
       duration: 300, // 5 mins
       countDown: 10,
       status: "pending",
-      textId: (lesson as any)._id || lesson.id,
+      textId: lesson._id || lesson.id,
     });
 
     const savedCompetition =
-      await this.competitionRepository.create(competition);
+      await this._competitionRepository.create(competition);
 
     const challenge = new CompanyChallengeEntity({
-      CompanyId: (sender as any).CompanyId!,
+      CompanyId: sender.CompanyId!,
       senderId,
       receiverId,
       status: "pending",
-      competitionId: (savedCompetition as any)._id
-        ? (savedCompetition as any)._id.toString()
-        : (savedCompetition as any).id.toString(),
+      competitionId: savedCompetition._id
+        ? savedCompetition._id.toString()
+        : savedCompetition.id.toString(),
     });
 
-    let Challenge = await this.challengeRepository.create(challenge);
+    let Challenge = await this._challengeRepository.create(challenge);
     const challengeWithOpponent = {
       ...Challenge,
       opponent: sender,

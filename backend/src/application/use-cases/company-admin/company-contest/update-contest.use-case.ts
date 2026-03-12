@@ -4,23 +4,36 @@ import { IContestRepository } from "../../../../domain/interfaces/repository/com
 import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
+/**
+ * Use case for updating an existing contest.
+ * And returns the updated contest information mapped to DTO format.
+ */
 export class UpdateContestUseCase implements IUpdateContestUseCase {
-  constructor(private contestRepository: IContestRepository) {}
+  constructor(private readonly _contestRepository: IContestRepository) {}
+
   async execute(
-    constestId: string,
+    contestId: string,
     data: CreateContestDTO,
   ): Promise<CreateContestDTO> {
-    const contest = await this.contestRepository.findById(constestId);
+    const contest = await this._contestRepository.findById(contestId);
 
     if (!contest) {
-      throw new Error(MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
+
     if (data.date && data.startTime) {
       data.startTime = new Date(`${data.date}T${data.startTime}:00`);
     }
-    const contestEntity = new ContestEntity(contest);
-    Object.assign(contestEntity, data);
-    const updatedContest = await this.contestRepository.update(contestEntity);
+
+    const contestEntity = new ContestEntity({ ...contest, ...data });
+    const updatedContest = await this._contestRepository.update(contestEntity);
+
     return mapContestDTOAdmin(updatedContest);
   }
 }

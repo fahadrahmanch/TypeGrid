@@ -1,39 +1,48 @@
 import { ICompleteSignupUseCase } from "../../interfaces/auth/complete-signup.interface";
 import { IOtpService } from "../../../../domain/interfaces/services/otp-service.interface";
 import { AuthUserEntity } from "../../../../domain/entities";
-import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
 import { IHashService } from "../../../../domain/interfaces/services/hash-service.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
+/**
+ * Completes the user signup by verifying OTP and creating the account.
+ */
 export class CompleteSignupUseCase implements ICompleteSignupUseCase {
   constructor(
-    private _otpservice: IOtpService,
-    private _hashService: IHashService,
-    private _authRepository: IAuthRepostory,
+    private readonly _otpService: IOtpService,
+    private readonly _hashService: IHashService,
+    private readonly _authRepository: IAuthRepository,
   ) {}
-  async otp(
+
+  async execute(
     otp: string,
     name: string,
     email: string,
     password: string,
   ): Promise<void> {
-    const verifry = await this._otpservice.verifyOtp(otp, email);
-    if (!verifry) {
+    const isVerified = await this._otpService.verifyOtp(otp, email);
+
+    if (!isVerified) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
         MESSAGES.OTP_VERIFICATION_FAILED,
       );
     }
+
     const hashedPassword = await this._hashService.hash(password);
+
     const newUser = new AuthUserEntity({
-      name: name,
-      email: email,
+      name,
+      email,
       password: hashedPassword,
       role: "user",
       KeyBoardLayout: "QWERTY",
       status: "active",
     });
+
     await this._authRepository.create(newUser);
   }
 }

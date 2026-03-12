@@ -1,13 +1,16 @@
 import { ICreateNewPasswordUseCase } from "../../interfaces/auth/create-new-password.interface";
-import { IAuthRepostory } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
 import { IHashService } from "../../../../domain/interfaces/services/hash-service.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+/**
+ * Use case for creating a new password during the forgot password flow.
+ */
 export class CreateNewPasswordUseCase implements ICreateNewPasswordUseCase {
   constructor(
-    private _authRepository: IAuthRepostory,
-    private _hashServie: IHashService,
+    private readonly _authRepository: IAuthRepository,
+    private readonly _hashServie: IHashService,
   ) {}
   async execute(email: string, password: string): Promise<void> {
     if (!email) {

@@ -4,7 +4,6 @@ import { IGetUsersUseCase } from "../../../application/use-cases/interfaces/admi
 import { IBlockUserUseCase } from "../../../application/use-cases/interfaces/admin/block-user.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
 import logger from "../../../utils/logger";
-import { mapToSafeUsers } from "../../../application/mappers/admin/user-manage.mapper";
 
 
 export class UserManageController {
@@ -16,12 +15,11 @@ export class UserManageController {
   async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const users = await this._getUsersUseCase.execute();
-      const safeUsers = mapToSafeUsers(users);
-
+     
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.USERS_FETCHED_SUCCESS,
-        data: safeUsers,
+        data: users||[],
       });
     } catch (error: any) {
       next(error);

@@ -1,25 +1,40 @@
 import { IGetSentChallengeUseCase } from "../../interfaces/companyUser/get-sent-challenge.interface";
 import { ICompanyChallengeRepository } from "../../../../domain/interfaces/repository/company/company-challenge-repository.interface";
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { SentChallengeDTO } from "../../../DTOs/companyUser/challenge.dto";
 import { mapSentChallengeToDTO } from "../../../mappers/companyUser/challenge.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
+/**
+ * Use case for retrieving pending challenges sent by a user.
+ */
 export class GetSentChallengeUseCase implements IGetSentChallengeUseCase {
   constructor(
-    private challengeRepository: ICompanyChallengeRepository,
-    private userRepository: IUserRepository,
+    private readonly _challengeRepository: ICompanyChallengeRepository
   ) {}
 
+  /**
+   * Get all pending challenges sent by a user.
+   * @param userId - User identifier
+   * @returns List of sent challenges
+   */
   async execute(userId: string): Promise<SentChallengeDTO[]> {
-    const challenges = await this.challengeRepository.find({
+
+    if (!userId) {
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST
+      );
+    }
+
+    const challenges = await this._challengeRepository.find({
       senderId: userId,
       status: "pending",
     });
 
-    const mappedChallenges: SentChallengeDTO[] = challenges.map(
-      (challenge: any) => mapSentChallengeToDTO(challenge),
-    );
+    if (!challenges.length) return [];
 
-    return mappedChallenges;
+    return challenges.map(mapSentChallengeToDTO);
   }
 }

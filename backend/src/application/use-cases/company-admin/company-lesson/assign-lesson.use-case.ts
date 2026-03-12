@@ -1,17 +1,18 @@
 import { IAssignLessonUseCase } from "../../interfaces/companyAdmin/assign-lesson.interface";
 import { ILessonAssignmentRepository } from "../../../../domain/interfaces/repository/company/lesson-assignment-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { LessonAssignmentEntity } from "../../../../domain/entities/assign-lesson.entity";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
+/**
+ * Use case for assigning lessons to multiple users within a company.
+ */
 export class AssignLessonUseCase implements IAssignLessonUseCase {
   constructor(
     private _baseRepoAssignLesson: ILessonAssignmentRepository,
-    private userRepository: IUserRepository,
-    private _baseRepoLeson: ILessonRepository,
+    private _userRepository: IUserRepository,
   ) {}
   async execute(
     userId: string,
@@ -19,7 +20,7 @@ export class AssignLessonUseCase implements IAssignLessonUseCase {
     lessons: string[],
     deadline: string,
   ): Promise<void> {
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }

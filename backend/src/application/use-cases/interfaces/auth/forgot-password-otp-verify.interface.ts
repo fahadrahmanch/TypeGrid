@@ -1,3 +1,3 @@
-export interface IForgotPasswordOtpVerifyUseCaseUseCase {
-  verify(otp: string, email: string): Promise<void>;
+export interface IForgotPasswordOtpVerifyUseCase {
+  execute(otp: string, email: string): Promise<void>;
 }

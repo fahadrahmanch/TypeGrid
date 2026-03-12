@@ -1,8 +1,8 @@
 import { AuthUserEntity } from "../../../../domain/entities";
 export interface IGoogleAuthUseCase {
-  gooogleAuth(
+  execute(
     name: string,
     email: string,
     googleId: string,
-  ): Promise<AuthUserEntity | void>;
+  ): Promise<AuthUserEntity>;
 }

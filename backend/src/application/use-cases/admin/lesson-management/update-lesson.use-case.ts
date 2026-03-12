@@ -6,23 +6,38 @@ import { IUpdateLessonUseCase } from "../../interfaces/admin/update-lesson.inter
 import { LessonDTO } from "../../../DTOs/admin/lesson-management.dto";
 import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper";
 
+/**
+ * Use case responsible for updating a lesson.
+ */
 export class UpdateLessonUseCase implements IUpdateLessonUseCase {
-  constructor(private lessonRepository: ILessonRepository) {}
 
-  async execute(lessonId: string, values: any): Promise<LessonDTO> {
-    const lesson = await this.lessonRepository.findById(lessonId);
+  constructor(private readonly _lessonRepository: ILessonRepository) {}
+
+  /**
+   * Updates a lesson with the given values.
+   *
+   * @param lessonId - The unique identifier of the lesson to update.
+   * @param values - Partial lesson data to update.
+   * @returns A promise that resolves to the updated lesson as a LessonDTO.
+   * @throws CustomError if the lesson is not found.
+   */
+  async execute(lessonId: string, values: Partial<LessonDTO>): Promise<LessonDTO> {
+
+    const lesson = await this._lessonRepository.findById(lessonId);
 
     if (!lesson) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.LESSON_NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND
       );
     }
 
-    const updatedLesson = await this.lessonRepository.update({
+    const updatedLesson = await this._lessonRepository.update({
       _id: lessonId,
-      ...values,
+      ...values
     });
+
     return mapLessonToDTO(updatedLesson);
   }
+
 }

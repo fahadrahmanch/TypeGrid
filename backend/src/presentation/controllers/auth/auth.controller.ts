@@ -8,7 +8,7 @@ import { ITokenService } from "../../../domain/interfaces/services/token-service
 import { IGoogleAuthUseCase } from "../../../application/use-cases/interfaces/auth/google-auth.interface";
 import { IFindUserByemailUseCase } from "../../../application/use-cases/interfaces/auth/find-user-by-email.interface";
 import { IForgotPasswordUseCase } from "../../../application/use-cases/interfaces/auth/forgot-password.interface";
-import { IForgotPasswordOtpVerifyUseCaseUseCase } from "../../../application/use-cases/interfaces/auth/forgot-password-otp-verify.interface";
+import { IForgotPasswordOtpVerifyUseCase } from "../../../application/use-cases/interfaces/auth/forgot-password-otp-verify.interface";
 import { ICreateNewPasswordUseCase } from "../../../application/use-cases/interfaces/auth/create-new-password.interface";
 import { ICompanyFindUseCase } from "../../../application/use-cases/interfaces/auth/company-find.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
@@ -26,7 +26,7 @@ export class AuthController {
     private _googleAuthUseCase: IGoogleAuthUseCase,
     private _findUserByEmailUseCase: IFindUserByemailUseCase,
     private _forgotPasswordUseCase: IForgotPasswordUseCase,
-    private _forgotPasswordOtpVerifyUseCase: IForgotPasswordOtpVerifyUseCaseUseCase,
+    private _forgotPasswordOtpVerifyUseCase: IForgotPasswordOtpVerifyUseCase,
     private _createNewPasswordUseCase: ICreateNewPasswordUseCase,
     private _companyFindUseCase: ICompanyFindUseCase,
   ) { }
@@ -44,7 +44,7 @@ export class AuthController {
         return;
       }
       //create user
-      await this._registerUserUseCase.createUser({
+      await this._registerUserUseCase.execute({
         name,
         email,
         password,
@@ -62,7 +62,7 @@ export class AuthController {
     try {
       const { otp, name, email, password } = req.body;
       logger.info("Verifying OTP", { email });
-      await this._completeSignupUseCase.otp(otp, name, email, password);
+      await this._completeSignupUseCase.execute(otp, name, email, password);
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.AUTH_REGISTER_SUCCESS,
@@ -98,20 +98,12 @@ export class AuthController {
   async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password, role } = req.body.data;
-      const user = await this._loginUseCase.execute(email, password);
+      const user = await this._loginUseCase.execute(email, password, [role,'companyAdmin']);
 
       if (!user || !user._id) {
         res.status(HttpStatus.NOT_FOUND).json({
           success: false,
           message: MESSAGES.USER_DETAILS_NOT_FOUND,
-        });
-        return;
-      }
-      //check role user || companyAdmin
-      if (user.role !== role && user.role !== "companyAdmin") {
-        res.status(HttpStatus.UNAUTHORIZED).json({
-          success: false,
-          message: MESSAGES.UNAUTHORIZED_PORTAL_ACCESS,
         });
         return;
       }
@@ -165,6 +157,7 @@ export class AuthController {
       const token = req.cookies[tokenName];
 
       if (!token) {
+        console.log('hello there ')
         res.status(HttpStatus.UNAUTHORIZED).json({
           success: false,
           message: MESSAGES.REFRESH_TOKEN_NOT_FOUND,
@@ -220,7 +213,7 @@ export class AuthController {
       }
 
 
-      const user = await this._googleAuthUseCase.gooogleAuth(
+      const user = await this._googleAuthUseCase.execute(
         name,
         email,
         googleId,
@@ -328,7 +321,7 @@ export class AuthController {
   async verifyForgotPasswordOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { otp, email } = req.body;
-      await this._forgotPasswordOtpVerifyUseCase.verify(otp, email);
+      await this._forgotPasswordOtpVerifyUseCase.execute(otp, email);
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.OTP_VERIFIED_SUCCESS,
@@ -368,9 +361,11 @@ export class AuthController {
   //admin signin
   async AdminSignIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      console.log("hello there in admin signin")
       const { email, password, role } = req.body.data;
-      const admin = await this._loginUseCase.execute(email, password);
-
+      console.log("role",role)
+      const admin = await this._loginUseCase.execute(email, password, [role]);
+     
       if (!admin || !admin._id) {
         res.status(HttpStatus.NOT_FOUND).json({
           success: false,
@@ -379,13 +374,6 @@ export class AuthController {
         return;
       }
 
-      if (admin.role !== role) {
-        res.status(HttpStatus.UNAUTHORIZED).json({
-          success: false,
-          message: `You are not authorized to login from ${role} portal`,
-        });
-        return;
-      }
 
       const accessToken = await this._tokenService.generateAccessToken(
         admin?._id.toString(),
@@ -434,8 +422,8 @@ export class AuthController {
   async companySignIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body.data;
-      const user = await this._loginUseCase.execute(email, password);
-
+      const user = await this._loginUseCase.execute(email, password,  ["companyAdmin", "companyUser"]);
+       
       if (!user || !user._id) {
         res.status(HttpStatus.NOT_FOUND).json({
           success: false,
@@ -443,15 +431,6 @@ export class AuthController {
         });
         return;
       }
-
-      if (user.role !== "companyAdmin" && user.role !== "companyUser") {
-        res.status(HttpStatus.UNAUTHORIZED).json({
-          success: false,
-          message: MESSAGES.UNAUTHORIZED_COMPANY_PORTAL_ACCESS,
-        });
-        return;
-      }
-
       if (!user.CompanyId) {
         res.status(HttpStatus.FORBIDDEN).json({
           success: false,

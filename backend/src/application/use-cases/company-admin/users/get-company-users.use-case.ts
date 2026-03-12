@@ -1,13 +1,34 @@
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { AuthUserEntity } from "../../../../domain/entities";
 import { IGetCompanyUsersUseCase } from "../../interfaces/companyAdmin/get-company-users.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+
+/**
+ * Use case for retrieving all users belonging to a company.
+ */
 export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) {}
+
+  /**
+   * Fetch company users by company ID.
+   * @param CompanyId - Company identifier
+   * @returns List of company users
+   */
   async execute(CompanyId: string): Promise<AuthUserEntity[]> {
-    const CompanyUsers = await this.userRepository.find({
-      CompanyId: CompanyId,
+    if (!CompanyId) {
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST
+      );
+    }
+
+    const companyUsers = await this.userRepository.find({
+      CompanyId,
       role: "companyUser",
     });
-    return CompanyUsers;
+
+    return companyUsers;
   }
 }

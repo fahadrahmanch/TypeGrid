@@ -3,21 +3,29 @@ import { IUpdateCompanyContestStatusUseCase } from "../../interfaces/companyAdmi
 import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatus } from "../../../../presentation/constants/httpStatus";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
+/**
+ * Use case for updating the status of a company contest.
+ */
 export class UpdateCompanyContestStatusUseCase implements IUpdateCompanyContestStatusUseCase {
-  constructor(private contestRepository: IContestRepository) {}
+  constructor(private readonly _contestRepository: IContestRepository) {}
 
   async execute(contestId: string, status: string): Promise<void> {
-    const contest = await this.contestRepository.findById(contestId);
+    const contest = await this._contestRepository.findById(contestId);
+
     if (!contest) {
-      throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
+
     const contestEntity = new ContestEntity(contest);
     contestEntity.updateStatus(status);
     const updatedStatus = contestEntity.getStatus();
 
-    await this.contestRepository.updateById(contestId, {
+    await this._contestRepository.updateById(contestId, {
       status: updatedStatus,
       ...(updatedStatus === "ongoing" && { startTime: new Date() }),
     });

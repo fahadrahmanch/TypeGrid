@@ -3,16 +3,27 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { AuthUserEntity } from "../../../../domain/entities";
 import { IHashService } from "../../../../domain/interfaces/services/hash-service.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { AddUserDTO } from "../../../DTOs/companyAdmin/add-uset.dto";
+
+/**
+ * Use case responsible for creating a new company user.
+ */
 
 export class AddUserUseCase implements IAddUserUseCase {
   constructor(
     private userRepository: IUserRepository,
     private _hashService: IHashService,
   ) {}
-  async addUser(data: any): Promise<AuthUserEntity> {
-    const exists = await this.userRepository.FindByEmail(data.email);
-    if (exists) {
-      throw new Error(MESSAGES.AUTH_EMAIL_EXISTS);
+
+  async addUser(data: AddUserDTO): Promise<AuthUserEntity> {
+    const existingUser = await this.userRepository.FindByEmail(data.email);
+    if (existingUser) {
+      throw new CustomError(
+        HttpStatusCodes.CONFLICT,
+        MESSAGES.AUTH_EMAIL_EXISTS,
+      );
     }
     const hashedPassword = await this._hashService.hash(data.password);
     const newUser = new AuthUserEntity({

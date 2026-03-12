@@ -7,7 +7,7 @@ import { UserRepository } from "../../infrastructure/db/repositories/user/user.r
 import { Lesson } from "../../infrastructure/db/models/admin/lesson.schema";
 import { LessonRepository } from "../../infrastructure/db/repositories/admin/lesson.repository";
 import { GetAssignLessonUseCase } from "../../application/use-cases/company-user/lessons/get-assign-lesson.use-case";
-import { SaveLessonResultUseCase } from "../../application/use-cases/company-admin/company-lesson/save-lesson-result.use-case";
+import { SaveLessonResultUseCase } from "../../application/use-cases/company-user/lessons/save-lesson-result.use-case";
 import { LessonResult } from "../../infrastructure/db/models/company/lesson-result.schema";
 import { LessonResultRepository } from "../../infrastructure/db/repositories/company/lesson-result.repository";
 import { ContestsController } from "../controllers/company-user/contests.controller";
@@ -52,32 +52,27 @@ const saveLessonResultUseCaseInstance = new SaveLessonResultUseCase(
   lessonResultRepository,
   lessonAssignmentRepository,
 );
-const contestRepositoryInst = new ContestRepository(Contest);
+const contestRepositoryInstance = new ContestRepository(Contest);
 const getOpenContestsUseCaseInstance = new GetOpenContestsUseCase(
-  contestRepositoryInst,
+  contestRepositoryInstance,
   userRepository,
 );
 const joinOrLeaveContestUseCaseInstance = new JoinOrLeaveContestUseCase(
-  contestRepositoryInst,
+  contestRepositoryInstance,
   userRepository,
 );
 const companyGroupRepository = new CompanyGroupRepository(CompanyGroup);
-const contestRepositorySecond = new ContestRepository(Contest);
 const getGroupContestUseCaseInstance = new GetGroupContestUseCase(
-  contestRepositoryInst,
-  userRepository,
+  contestRepositoryInstance,
   companyGroupRepository,
-  contestRepositorySecond,
 );
 const getContestUseCaseInstance = new GetContestUseCase(
-  contestRepositoryInst,
+  contestRepositoryInstance,
   userRepository,
-  contestRepositorySecond,
 );
 const getContestDataUseCaseInstance = new GetContestDataUseCase(
-  contestRepositoryInst,
+  contestRepositoryInstance,
   userRepository,
-  contestRepositorySecond,
 );
 const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(userRepository);
 
@@ -89,7 +84,6 @@ const makeChallengeUseCaseInstance = new MakeChallengeUseCase(
 );
 const getSentChallengeUseCaseInstance = new GetSentChallengeUseCase(
   challengeRepository,
-  userRepository,
 );
 const getChallengesUseCaseInstance = new GetChallengesUseCase(
   challengeRepository,
@@ -97,7 +91,6 @@ const getChallengesUseCaseInstance = new GetChallengesUseCase(
 );
 const acceptChallengeUseCaseInstance = new AcceptChallengeUseCase(
   challengeRepository,
-  competitionRepository,
 );
 const getChallengeGameDataUseCaseInstance = new GetChallengeGameDataUseCase(
   challengeRepository,
