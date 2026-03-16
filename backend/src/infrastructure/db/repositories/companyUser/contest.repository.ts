@@ -1,11 +1,11 @@
 import { IContestRepository } from "../../../../domain/interfaces/repository/companyUser/contest-repository.interface";
 import { Model } from "mongoose";
 import mongoose from "mongoose";
-
-export class ContestRepository<T> implements IContestRepository<T> {
-  protected model: Model<T>;
-  constructor(model: Model<T>) {
-    this.model = model;
+import { BaseRepository } from "../../base/base.repository";
+import { IContestDocument } from "../../types/documents";
+export class ContestRepository<IContestDocument> extends BaseRepository<IContestDocument> implements IContestRepository<IContestDocument> {
+  constructor(model: Model<IContestDocument>) {
+    super(model)
   }
   async getGroupContests(groupIds: string[]) {
     return await this.model.find({

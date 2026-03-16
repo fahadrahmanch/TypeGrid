@@ -5,6 +5,7 @@ import {
 export interface LessonDTO {
   id: string;
   text: string;
+  title?: string;
   category: LessonCategory;
   description?: string;
   level: LessonLevel;
@@ -15,6 +16,7 @@ export interface LessonDTO {
 export interface GetLessonDTO {
   _id: string;
   text: string;
+  title?: string;
   category: LessonCategory;
   level: LessonLevel;
   description?: string;

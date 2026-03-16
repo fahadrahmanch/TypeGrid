@@ -2,8 +2,7 @@ import React from "react";
 import { Users, Clock, Calendar } from "lucide-react";
 import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { useState } from "react";
-export type ContestStatus = "waiting" | "ongoing" | "upcoming" | "completed";
-export type ContestLevel = "easy" | "medium" | "hard"; // Added Hard
+import { ContestStatus, ContestLevel, ContestProps } from "../../../types/contest";
 import { socket } from "../../../socket";
 import ContestDetailsModal from "./ContestDetailsModal";
 import ContestLobbyModal from "./ContestLobbyModal";
@@ -48,21 +47,6 @@ const getLevelBadge = (level: ContestLevel) => {
   }
 };
 
-export interface ContestProps {
-  id: string;
-  title: string;
-  status: ContestStatus;
-  participants: number[];
-  maxParticipants: number;
-  duration: number; // in minutes
-  level: ContestLevel;
-  targetWpm: number;
-  prize?: string;
-  rewards?: { rank: number; prize: string | number }[];
-  startTime?: string; // Optional for active contests
-  type?: "open" | "group"; // Just to show badges
-  setContests: React.Dispatch<React.SetStateAction<ContestProps[]>>;
-}
 
 const ContestCard: React.FC<ContestProps> = ({
   title,

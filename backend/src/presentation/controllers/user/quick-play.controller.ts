@@ -5,6 +5,7 @@ import { HttpStatus } from "../../constants/httpStatus";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IStartQuickPlayUseCase } from "../../../application/use-cases/interfaces/user/quick-play/start-quick-play.interface";
 import { IChangeStatusUseCase } from "../../../application/use-cases/interfaces/user/quick-play/change-status.interface";
+import redis from "../../../config/redis";
 export class QuickPlayController {
   constructor(
     private _startQuickPlayUseCase: IStartQuickPlayUseCase,
@@ -68,4 +69,5 @@ export class QuickPlayController {
       next(error);
     }
   }
+ 
 }

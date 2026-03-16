@@ -3,8 +3,13 @@ import Navbar from "../../../components/user/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { socket } from "../../../socket";
-import { startGame } from "../../../api/user/quick";
+import {  startGame } from "../../../api/user/quick";
+import { useGameTimer } from "../../../hooks/useGameTimer";
+import { useTypingScroll } from "../../../hooks/useTypingScroll";
+import { useTypingStats } from "../../../hooks/useTypingStats";
+import { useQuickPlaySocket } from "../../../hooks/quickPlay/useQuickPlaySocket";
+import { useQuickPlayHandleKeyDown } from "../../../hooks/quickPlay/useQuickPlayHandleKeyDown";
+import { toast } from "react-toastify";
 import {
   Zap,
   Target,
@@ -30,18 +35,7 @@ export type GamePlayerResult = {
   rank?: number;
 };
 
-// interface Player {
-//     id: string;
-//     name: string;
-//     avatar: string;
-//     rank: number;
-//     wpm: number;
-//     accuracy: number;
-//     time: string;
-//     errors: number;
-//     // status: "online" | "offline" | "playing";
-//     isCurrentUser?: boolean;
-// }
+
 interface Participant {
   _id: string;
   name: string;
@@ -70,8 +64,8 @@ const QuickPlay: React.FC = () => {
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [hasError, setHasError] = useState(false);
   const [errors, setErrors] = useState(0);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState<number | null>(null);
+  // const [wpm, setWpm] = useState(0);
+  // const [accuracy, setAccuracy] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [livePlayers, setLivePlayers] = useState<Participant[]>(players || []);
   const [chatMessage, setChatMessage] = useState("");
@@ -83,101 +77,55 @@ const QuickPlay: React.FC = () => {
   const gameIdRef = useRef(gameData?._id);
   const userIdRef = useRef(user?._id);
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
+  const { wpm, accuracy } = useTypingStats(
+    totalTyped,
+    errors,
+    elapsedTime,
+    phase,
+    isFinished,
+  );
   const [currentUser, setCurrentUser] = useState<
     | {
-        _id: string;
-        name: string;
-        imageUrl?: string;
-        isHost: boolean;
-      }
+      _id: string;
+      name: string;
+      imageUrl?: string;
+      isHost: boolean;
+    }
     | undefined
   >(undefined);
+  // useEffect(() => {
+  //   // alert(JSON.stringify(gameData))
+  //   if (!gameData) {
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [gameData, navigate]);
+
+  useQuickPlaySocket(
+    gameData,
+    // currentUser,
+    typedText,
+    wpm,
+    accuracy,
+    errors,
+    phase,
+    setLivePlayers,
+    setFinalResult,
+    navigate,
+    remainingTime,
+    setIsfinished,
+    elapsedTime,
+    totalTyped,
+    gameIdRef,
+    userIdRef,
+    
+    
+
+  );
   useEffect(() => {
-    if (!gameData) {
-      navigate("/", { replace: true });
-    }
-  }, [gameData, navigate]);
-
-  //send live stats,
-  useEffect(() => {
-    if (!gameData?._id || !currentUser) return;
-    if (phase !== "PLAY") return;
-    socket.emit("typing-progress-quick", {
-      gameId: gameData._id,
-      userId: currentUser._id,
-      typedLength: typedText.length,
-      wpm,
-      status: "PLAYING",
-      accuracy,
-      errors,
-    });
-  }, [typedText, wpm, accuracy, errors, phase]);
-
-  useEffect(() => {
-    gameIdRef.current = gameData?._id;
-    userIdRef.current = currentUser?._id;
-  }, [gameData?._id, currentUser?._id]);
-
-  // 3. Handle Component Unmount (Navigation/Back Button)
-  useEffect(() => {
-    return () => {
-      if (gameIdRef.current && userIdRef.current) {
-        // Emit event to server that this user is leaving
-        socket.emit("leave-game-quick", {
-          gameId: gameIdRef.current,
-          userId: userIdRef.current,
-        });
-      }
-    };
-  }, []);
-
-  //typing progress update from other players
-  useEffect(() => {
-    const handler = (data: any) => {
-      setLivePlayers((prev) =>
-        prev.map((p) =>
-          p._id === data.userId
-            ? { ...p, ...data, progress: data.typedLength }
-            : p,
-        ),
-      );
-    };
-
-    socket.off("typing-progress-update-quick");
-    socket.on("typing-progress-update-quick", handler);
-
-    return () => {
-      socket.off("typing-progress-update-quick", handler);
-    };
-  }, [gameData?._id]);
-
-  useEffect(() => {
-    if (!gameData) return;
-
-    socket.emit("quick-join", {
-      competitionId: gameData._id,
-      userId: currentUser?._id,
-    });
-  }, [gameData, currentUser]);
-
-  //user join
-  useEffect(() => {
-    const handleUserJoin = (data: any) => {
-      setLivePlayers((prev) => {
-        const exists = prev.some((player) => player._id === data.member._id);
-
-        if (exists) return prev;
-
-        return [...prev, data.member];
-      });
-    };
-
-    socket.on("user-join", handleUserJoin);
-
-    return () => {
-      socket.off("user-join", handleUserJoin);
-    };
-  }, []);
+  if (!gameData) {
+    navigate("/", { replace: true });
+  }
+}, []);
 
   useEffect(() => {
     if (!user) return;
@@ -186,12 +134,12 @@ const QuickPlay: React.FC = () => {
       prev.map((p) =>
         p._id === user._id
           ? {
-              ...p,
-              wpm,
-              accuracy,
-              errors,
-              progress: typedText.length,
-            }
+            ...p,
+            wpm,
+            accuracy,
+            errors,
+            progress: typedText.length,
+          }
           : p,
       ),
     );
@@ -199,52 +147,32 @@ const QuickPlay: React.FC = () => {
 
   //current user
   useEffect(() => {
+    console.log(players)
     if (players) {
       setCurrentUser(players?.find((item: any) => item._id === user._id));
     }
   }, [players, user._id]);
 
-  //time
 
-  useEffect(() => {
-    if (!gameData?.startedAt || !gameData?.duration) return;
-    const startTimesamp = new Date(gameData.startedAt).getTime();
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const elapsed = Math.floor((now - startTimesamp) / 1000);
-      if (elapsed < gameData.countDown) {
-        setPhase("COUNTDOWN");
-        setCountdown(gameData.countDown - elapsed);
-      } else if (elapsed < gameData.countDown + gameData.duration) {
-        setPhase("PLAY");
-        setRemainingTime(gameData.countDown + gameData.duration - elapsed);
-
-        setElapsedTime(elapsed - gameData.countDown);
-      } else {
-        setPhase("PLAY");
-        setRemainingTime(0);
-        setIsfinished(true);
-        clearInterval(interval);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [
-    gameData?.startedAt,
-    gameData?.duration,
-    gameData?.countDown,
-    isFinished,
-  ]);
-
+  useGameTimer(
+    gameData,
+    finalResult,
+    setPhase,
+    setCountdown,
+    setRemainingTime,
+    setElapsedTime,
+    setIsfinished
+  );
   const startGameAPI = async (competitionId: string) => {
     try {
-      const response = await startGame(competitionId, "ongoing");
+      await startGame(competitionId, "ongoing");
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to start game");
     }
   };
 
   useEffect(() => {
+    console.log("pahase",phase)
     if (phase === "PLAY" && !hasSentStart) {
       setHasSentStart(true);
       startGameAPI(gameData._id);
@@ -257,29 +185,6 @@ const QuickPlay: React.FC = () => {
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
-  useEffect(() => {
-    if (phase !== "PLAY" || isFinished) return;
-    if (elapsedTime <= 0) return;
-
-    const elapsedMinutes = elapsedTime / 60;
-    const correctChars = Math.max(totalTyped - errors, 0);
-
-    const calculatedWpm = Math.round(correctChars / 5 / elapsedMinutes);
-
-    setWpm(calculatedWpm);
-  }, [elapsedTime, totalTyped, errors, phase, isFinished]);
-
-  // accuracy
-  useEffect(() => {
-    if (totalTyped === 0) {
-      setAccuracy(null);
-      return;
-    }
-
-    const correct = totalTyped - errors;
-    const acc = Math.round((correct / totalTyped) * 100);
-    setAccuracy(acc);
-  }, [totalTyped, errors]);
 
   const renderTextWithHighlight = () => {
     if (!lesson) return null;
@@ -323,123 +228,33 @@ const QuickPlay: React.FC = () => {
   };
 
   // Auto-scroll effect
-  useEffect(() => {
-    if (activeCharRef.current && snippetContainerRef.current) {
-      const container = snippetContainerRef.current;
-      const element = activeCharRef.current;
-
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-
-      const relativeTop = elementRect.top - containerRect.top;
-      const relativeBottom = elementRect.bottom - containerRect.top;
-
-      // Keep cursor in middle-ish of view
-      if (
-        relativeBottom > containerRect.height / 2 ||
-        relativeTop < containerRect.height / 3
-      ) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }
-  }, [typedText]);
+  useTypingScroll({
+    activeCharRef,
+    snippetContainerRef,
+    typedText,
+  });
 
   //handle key down
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!lesson || isFinished || phase !== "PLAY") return;
-      if (e.key === "Backspace") {
-        setHasError(false);
-        setTypedText((prev) => prev.slice(0, -1));
-        return;
-      }
-
-      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        e.preventDefault();
-
-        if (hasError) return;
-
-        const expectedChar = lesson[typedText.length];
-        setTotalTyped((prev) => prev + 1);
-
-        if (e.key !== expectedChar) {
-          setErrors((prev) => prev + 1);
-          setHasError(true);
-          setTypedText((prev) => prev + e.key);
-          return;
-        }
-
-        const nextText = typedText + e.key;
-        setTypedText(nextText);
-
-        if (nextText.length === lesson.length) {
-          setIsfinished(true);
-          socket.emit("player-finished-quick-play", {
-            gameId: gameData?._id,
-            userId: currentUser?._id,
-            name: currentUser?.name,
-            imageUrl: currentUser?.imageUrl,
-            timeTaken: elapsedTime,
-            wpm,
-            accuracy,
-            errors,
-            typedLength: typedText.length,
-            totalTyped,
-            status: "FINISHED",
-          });
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lesson, isFinished, typedText, phase, hasError, gameData?._id]);
-
-  useEffect(() => {
-    if (remainingTime === 0) {
-      setIsfinished(true);
-      socket.emit("time-up-quick", {
-        gameId: gameData?._id,
-        userId: currentUser?._id,
-        name: currentUser?.name,
-        imageUrl: currentUser?.imageUrl,
-        timeTaken: elapsedTime,
-        wpm,
-        accuracy,
-        errors,
-        typedLength: typedText.length,
-        totalTyped,
-        status: "times-up",
-      });
-    }
-
-    return () => {
-      socket.off("time-up-quick");
-    };
-  }, [remainingTime]);
-
-  useEffect(() => {
-    socket.on("game-finished-quick", (data: GamePlayerResult[]) => {
-      setFinalResult(data);
-    });
-    return () => {
-      socket.off("game-finished-quick");
-    };
-  }, [gameData?._id]);
-
-  //leave handles
-
-  //force exit
-  useEffect(() => {
-    socket.on("force-exit", () => {
-      navigate("/");
-    });
-
-    return () => {
-      socket.off("force-exit");
-    };
-  }, []);
-
+useQuickPlayHandleKeyDown({
+  lesson,
+  isFinished,
+  phase,
+  typedText,
+  hasError,
+  setHasError,
+  setTypedText,
+  setErrors,
+  setTotalTyped,
+  setIsfinished,
+  gameData,
+  currentUser,
+  elapsedTime,
+  wpm,
+  accuracy,
+  errors,
+  totalTyped,
+});
+ 
   return (
     <div className="min-h-screen bg-[#FFF8EA] font-sans text-gray-800 flex flex-col">
       <Navbar />
@@ -561,29 +376,27 @@ const QuickPlay: React.FC = () => {
               {livePlayers.map((player) => (
                 <div
                   key={player._id}
-                  className={`bg-white rounded-2xl p-4 shadow-sm border ${
-                    player.rank === 1
+                  className={`bg-white rounded-2xl p-4 shadow-sm border ${player.rank === 1
                       ? "border-amber-200 shadow-amber-50 ring-1 ring-amber-100"
                       : player.rank === 2
                         ? "border-gray-200 shadow-gray-50 ring-1 ring-gray-100"
                         : player.rank === 3
                           ? "border-orange-200 shadow-orange-50 ring-1 ring-orange-100"
                           : "border-gray-100"
-                  } flex flex-col gap-4 relative overflow-hidden transition-all hover:shadow-md hover:-translate-y-1`}
+                    } flex flex-col gap-4 relative overflow-hidden transition-all hover:shadow-md hover:-translate-y-1`}
                 >
                   {/* Rank Badge */}
                   {player.rank && (
                     <div
                       className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm z-10
-                                    ${
-                                      player.rank === 1
-                                        ? "bg-gradient-to-br from-amber-400 to-amber-600"
-                                        : player.rank === 2
-                                          ? "bg-gradient-to-br from-gray-300 to-gray-500"
-                                          : player.rank === 3
-                                            ? "bg-gradient-to-br from-orange-400 to-orange-600"
-                                            : "bg-gray-100 text-gray-400"
-                                    }`}
+                                    ${player.rank === 1
+                          ? "bg-gradient-to-br from-amber-400 to-amber-600"
+                          : player.rank === 2
+                            ? "bg-gradient-to-br from-gray-300 to-gray-500"
+                            : player.rank === 3
+                              ? "bg-gradient-to-br from-orange-400 to-orange-600"
+                              : "bg-gray-100 text-gray-400"
+                        }`}
                     >
                       {player.rank}
                     </div>
@@ -713,18 +526,6 @@ const QuickPlay: React.FC = () => {
                   >
                     <p>{renderTextWithHighlight()}</p>
                   </div>
-
-                  {/* <div className="mt-8 pt-4 border-t border-orange-100/50 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <span className="font-bold text-gray-700 text-sm">Game of Thrones</span>
-                                    <span className="bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">
-                                        Live
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2 text-xs text-gray-400 font-medium">
-                                    <Clock className="w-3 h-3" /> Added 5 years ago
-                                </div>
-                            </div> */}
                 </div>
 
                 {/* Typing Input Area */}

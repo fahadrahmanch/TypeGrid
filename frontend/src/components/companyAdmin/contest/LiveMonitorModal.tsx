@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   ArrowLeft,
-  Pause,
   Square,
   RotateCcw,
-  MessageSquare,
-  Download,
   Send,
   Trophy,
 } from "lucide-react";
 import { socket } from "../../../socket";
-import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { fetchContest } from "../../../api/companyAdmin/companyContextAPI";
 interface LiveMonitorModalProps {
   isOpen: boolean;

@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
+import { toast } from "react-toastify";
+import {
+  titleValidation,
+  LevelValidation,
+  WpmValidation,
+  accuracyValidation,
+  CategoryValidation,
+  textValidation,
+} from "../../validations/lessonValidation";
 import {
   createLesson,
   getAllLessons,
@@ -27,6 +36,24 @@ const Lessons: React.FC = () => {
     text: "",
   });
 
+  const [formErrors, setFormErrors] = useState({
+    title: "",
+    level: "",
+    category: "",
+    wpm: "",
+    accuracy: "",
+    text: "",
+  });
+
+  const [editFormErrors, setEditFormErrors] = useState({
+    title: "",
+    level: "",
+    category: "",
+    wpm: "",
+    accuracy: "",
+    text: "",
+  });
+
   const [lessons, setLessons] = useState<any[]>([]);
   const [isEditOpen, setEditOpen] = useState(false);
 
@@ -45,15 +72,60 @@ const Lessons: React.FC = () => {
   }, []);
 
   function handleChange(e: any) {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+
+    // Real-time validation
+    let err = "";
+    if (name === "title") err = titleValidation(value);
+    if (name === "level") err = LevelValidation(value);
+    if (name === "category") err = CategoryValidation(value);
+    if (name === "wpm") err = WpmValidation(value);
+    if (name === "accuracy") err = accuracyValidation(value);
+    if (name === "text") err = textValidation(value);
+
+    setFormErrors((prev) => ({ ...prev, [name]: err }));
   }
+
   function handleEdiChange(e: any) {
-    setEditValues({ ...editValues, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setEditValues((prev) => ({ ...prev, [name]: value }));
+
+    // Real-time validation
+    let err = "";
+    if (name === "title") err = titleValidation(value);
+    if (name === "level") err = LevelValidation(value);
+    if (name === "category") err = CategoryValidation(value);
+    if (name === "wpm") err = WpmValidation(value);
+    if (name === "accuracy") err = accuracyValidation(value);
+    if (name === "text") err = textValidation(value);
+
+    setEditFormErrors((prev) => ({ ...prev, [name]: err }));
   }
 
   async function handleSubmit() {
+    const titleError = titleValidation(String(values.title || ""));
+    const levelError = LevelValidation(String(values.level || ""));
+    const categoryError = CategoryValidation(String(values.category || ""));
+    const wpmError = WpmValidation(String(values.wpm || ""));
+    const accuracyError = accuracyValidation(String(values.accuracy || ""));
+    const textError = textValidation(String(values.text || ""));
+
+    setFormErrors({
+      title: titleError,
+      level: levelError,
+      category: categoryError,
+      wpm: wpmError,
+      accuracy: accuracyError,
+      text: textError,
+    });
+
+    if (titleError || levelError || categoryError || wpmError || accuracyError || textError) {
+      return;
+    }
+
     try {
-      const response = await createLesson(values);
+      await createLesson(values);
       setOpen(false);
       setValues({
         title: "",
@@ -63,17 +135,37 @@ const Lessons: React.FC = () => {
         accuracy: "",
         text: "",
       });
-    } catch (err) {
+      setFormErrors({
+        title: "",
+        level: "",
+        category: "",
+        wpm: "",
+        accuracy: "",
+        text: "",
+      });
+      toast.success("Lesson created successfully");
+
+      const fetchResponse = await getAllLessons();
+      if (fetchResponse && fetchResponse.data.lessons) {
+        setLessons(fetchResponse.data.lessons);
+      }
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Error creating lesson");
       console.log("Error creating lesson:", err);
     }
   }
 
   async function handleDeleteLesson(lessonId: string) {
+    if (!window.confirm("Are you sure you want to delete this lesson?")) {
+      return;
+    }
     try {
       const response = await deleteLesson(lessonId);
       if (!response) return;
       setLessons((prev) => prev.filter((lesson) => lesson.id !== lessonId));
-    } catch (error) {
+      toast.success("Lesson deleted successfully");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Error deleting lesson");
       console.log(error);
     }
   }
@@ -82,25 +174,51 @@ const Lessons: React.FC = () => {
     try {
       const response = await fetchLesson(lessonId);
       if (!response) return;
-
-      setEditValues(response?.data?.data);
-    } catch (error) {
+      console.log("response",response.data.data)
+      const data=response.data.data
+      setEditValues({id:data.id,title:data.title,level:data.level,category:data.category,wpm:data.targetWpm,accuracy:data.targetAccuracy,text:data.text});
+      setEditOpen(true);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Error fetching lesson details");
       console.log(error);
     }
-
-    setEditOpen(true);
   }
+  console.log(editValues)
 
   async function handleEditSubmit(lessonId: string) {
+    const titleError = titleValidation(String(editValues.title || ""));
+    const levelError = LevelValidation(String(editValues.level || ""));
+    const categoryError = CategoryValidation(String(editValues.category || ""));
+    const wpmError = WpmValidation(String(editValues.wpm || ""));
+    const accuracyError = accuracyValidation(String(editValues.accuracy || ""));
+    const textError = textValidation(String(editValues.text || ""));
+
+    setEditFormErrors({
+      title: titleError,
+      level: levelError,
+      category: categoryError,
+      wpm: wpmError,
+      accuracy: accuracyError,
+      text: textError,
+    });
+
+    if (titleError || levelError || categoryError || wpmError || accuracyError || textError) {
+      return;
+    }
+
     try {
       const response = await updateLesson(lessonId, editValues);
-      setLessons((prev) =>
-        prev.map((lesson) =>
-          lesson.id === lessonId ? response.data.data : lesson,
-        ),
-      );
+      if (response?.data?.data) {
+        setLessons((prev) =>
+          prev.map((lesson) =>
+            lesson.id === lessonId ? response.data.data : lesson,
+          ),
+        );
+      }
       setEditOpen(false);
-    } catch (error) {
+      toast.success("Lesson updated successfully");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Error updating lesson");
       console.log(error);
     }
   }
@@ -236,6 +354,9 @@ const Lessons: React.FC = () => {
                 onChange={handleChange}
                 className="w-full px-4 py-2 rounded-md border outline-none focus:ring-2 focus:ring-[#D6B98C]"
               />
+              {formErrors.title && (
+                <p className="text-red-500 text-xs mt-1">{formErrors.title}</p>
+              )}
             </div>
 
             {/* Description */}
@@ -267,6 +388,9 @@ const Lessons: React.FC = () => {
                   <option value="intermediate">Intermediate</option>
                   <option value="advanced">Advanced</option>
                 </select>
+                {formErrors.level && (
+                  <p className="text-red-500 text-xs mt-1">{formErrors.level}</p>
+                )}
               </div>
 
               <div>
@@ -285,6 +409,11 @@ const Lessons: React.FC = () => {
                   <option value="sentence">Sentence</option>
                   <option value="paragraph">Paragraph</option>
                 </select>
+                {formErrors.category && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {formErrors.category}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -300,6 +429,9 @@ const Lessons: React.FC = () => {
                   placeholder="e.g. 60"
                   className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
                 />
+                {formErrors.wpm && (
+                  <p className="text-red-500 text-xs mt-1">{formErrors.wpm}</p>
+                )}
               </div>
 
               <div>
@@ -314,6 +446,11 @@ const Lessons: React.FC = () => {
                   placeholder="e.g. 90"
                   className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
                 />
+                {formErrors.accuracy && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {formErrors.accuracy}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -330,6 +467,9 @@ const Lessons: React.FC = () => {
                 placeholder="Enter the text students will practice..."
                 className="w-full px-4 py-3 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
               />
+              {formErrors.text && (
+                <p className="text-red-500 text-xs mt-1">{formErrors.text}</p>
+              )}
             </div>
 
             {/* Footer Buttons */}
@@ -368,6 +508,11 @@ const Lessons: React.FC = () => {
                 onChange={handleEdiChange}
                 className="w-full px-4 py-2 rounded-md border outline-none focus:ring-2 focus:ring-[#D6B98C]"
               />
+              {editFormErrors.title && (
+                <p className="text-red-500 text-xs mt-1">
+                  {editFormErrors.title}
+                </p>
+              )}
             </div>
 
             {/* Description */}
@@ -399,6 +544,11 @@ const Lessons: React.FC = () => {
                   <option value="intermediate">Intermediate</option>
                   <option value="advanced">Advanced</option>
                 </select>
+                {editFormErrors.level && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {editFormErrors.level}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -417,6 +567,11 @@ const Lessons: React.FC = () => {
                   <option value="sentence">Sentence</option>
                   <option value="paragraph">Paragraph</option>
                 </select>
+                {editFormErrors.category && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {editFormErrors.category}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -432,6 +587,11 @@ const Lessons: React.FC = () => {
                   placeholder="e.g. 60"
                   className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
                 />
+                {editFormErrors.wpm && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {editFormErrors.wpm}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -446,6 +606,11 @@ const Lessons: React.FC = () => {
                   placeholder="e.g. 90"
                   className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
                 />
+                {editFormErrors.accuracy && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {editFormErrors.accuracy}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -462,6 +627,11 @@ const Lessons: React.FC = () => {
                 placeholder="Enter the text students will practice..."
                 className="w-full px-4 py-3 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
               />
+              {editFormErrors.text && (
+                <p className="text-red-500 text-xs mt-1">
+                  {editFormErrors.text}
+                </p>
+              )}
             </div>
 
             {/* Footer Buttons */}

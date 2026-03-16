@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { ContestLevel } from "./ContestCard";
+import { ContestLevel } from "../../../types/contest";
 import { fetchContestParticipants } from "../../../api/companyAdmin/companyContextAPI";
 import EditContestModal from "./EditContestModal";
-import { ContestProps } from "./ContestCard";
+import { ContestProps } from "../../../types/contest";
 import { deleteContest } from "../../../api/companyAdmin/companyContextAPI";
 interface ContestDetailsModalProps {
   isOpen: boolean;

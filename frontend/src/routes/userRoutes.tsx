@@ -24,174 +24,46 @@ import QuickPlay from "../pages/user/quick-play/quickPlay";
 import ChangePassword from "../pages/user/changePassword";
 export default function UserRoutes() {
   const location = useLocation();
+
   return (
     <Routes location={location} key={location.pathname}>
-      {/* User Auth */}
-      <Route
-        path="signup"
-        element={
-          <IsloggedUser>
-            <Signup />
-          </IsloggedUser>
-        }
-      />
-      <Route
-        path="Signin"
-        element={
-          <IsloggedUser>
-            <SignIn />
-          </IsloggedUser>
-        }
-      />
-      <Route
-        path="otp"
-        element={
-          <IsloggedUser>
-            <Otp />
-          </IsloggedUser>
-        }
-      />
-      <Route
-        path="forgot/password"
-        element={
-          <IsloggedUser>
-            <ForgotPassword />
-          </IsloggedUser>
-        }
-      />
-      <Route
-        path="forgot/password/otp"
-        element={
-          <IsloggedUser>
-            <OtpForgotPassword />
-          </IsloggedUser>
-        }
-      />
-      <Route
-        path="create/new/password"
-        element={
-          <IsloggedUser>
-            <NewPasswordForm />
-          </IsloggedUser>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <ProtectRouteUser>
-            <Home />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="profile"
-        element={
-          <ProtectRouteUser>
-            <Profile />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="profile/edit"
-        element={
-          <ProtectRouteUser>
-            <EditProfile />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="/change/password"
-        element={
-          <ProtectRouteUser>
-            <ChangePassword />
-          </ProtectRouteUser>
-        }
-      />
-      {/* Subscription */}
-      <Route
-        path="subscription/company"
-        element={
-          <ProtectRouteUser>
-            <CompanySubscription />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="subscription/company/verify"
-        element={
-          <ProtectRouteUser>
-            <CompanyVerification />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="subscription/company/verify/status"
-        element={
-          <ProtectRouteUser>
-            <CompanyVerificationStatus />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="subscription/company/re-verify"
-        element={
-          <ProtectRouteUser>
-            <CompanyVerificationReapply />
-          </ProtectRouteUser>
-        }
-      />
-      {/* Typing Practice */}
-      <Route
-        path="/typing/practice"
-        element={
-          <ProtectRouteUser>
-            <PracticeTyping />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="/typing/practice/:lessonId"
-        element={
-          <ProtectRouteUser>
-            <TypingPracticeArea />
-          </ProtectRouteUser>
-        }
-      />
-      {/* // Group  */}
-      <Route
-        path="/group-play/group/:joinLink"
-        element={
-          <ProtectRouteUser>
-            <GroupLobby />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="/group-play/game/:joinLink"
-        element={
-          <ProtectRouteUser>
-            <GroupPlay />
-          </ProtectRouteUser>
-        }
-      />
-      <Route
-        path="/solo-play/:soloId"
-        element={
-          <ProtectRouteUser>
-            <SoloPlay />
-          </ProtectRouteUser>
-        }
-      />
-      {/* quick play */}
-      <Route
-        path="/quick-play"
-        element={
-          <ProtectRouteUser>
-            <QuickPlay />
-          </ProtectRouteUser>
-        }
-      />
-      //au
+
+      {/* Auth Pages */}
+      <Route path="signup" element={<IsloggedUser><Signup /></IsloggedUser>} />
+      <Route path="Signin" element={<IsloggedUser><SignIn /></IsloggedUser>} />
+      <Route path="otp" element={<IsloggedUser><Otp /></IsloggedUser>} />
+      <Route path="forgot/password" element={<IsloggedUser><ForgotPassword /></IsloggedUser>} />
+      <Route path="forgot/password/otp" element={<IsloggedUser><OtpForgotPassword /></IsloggedUser>} />
+      <Route path="create/new/password" element={<IsloggedUser><NewPasswordForm /></IsloggedUser>} />
+
+      {/* Protected Pages */}
+      <Route element={<ProtectRouteUser />}>
+        <Route path="/" element={<Home />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="profile/edit" element={<EditProfile />} />
+        <Route path="change/password" element={<ChangePassword />} />
+
+        {/* Subscription */}
+        <Route path="subscription/company" element={<CompanySubscription />} />
+        <Route path="subscription/company/verify" element={<CompanyVerification />} />
+        <Route path="subscription/company/verify/status" element={<CompanyVerificationStatus />} />
+        <Route path="subscription/company/re-verify" element={<CompanyVerificationReapply />} />
+
+        {/* Typing */}
+        <Route path="typing/practice" element={<PracticeTyping />} />
+        <Route path="typing/practice/:lessonId" element={<TypingPracticeArea />} />
+
+        {/* Group */}
+        <Route path="group-play/group/:joinLink" element={<GroupLobby />} />
+        <Route path="group-play/game/:joinLink" element={<GroupPlay />} />
+
+        {/* Solo */}
+        <Route path="solo-play/:soloId" element={<SoloPlay />} />
+
+        {/* Quick */}
+        <Route path="quick-play" element={<QuickPlay />} />
+      </Route>
+
     </Routes>
   );
 }

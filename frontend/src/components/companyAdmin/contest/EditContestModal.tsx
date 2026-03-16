@@ -6,7 +6,7 @@ import {
   updateCompanyContest,
   fetchContest,
 } from "../../../api/companyAdmin/companyContextAPI";
-import { ContestProps } from "./ContestCard";
+import { ContestProps } from "../../../types/contest";
 interface EditContestModalProps {
   isOpen: boolean;
   onClose: () => void;

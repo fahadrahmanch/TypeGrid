@@ -12,7 +12,7 @@ import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupUseCase {
   constructor(
-    private _baseRepoCompetion: ICompetitionRepository,
+    private competitionRepository: ICompetitionRepository,
     private groupRepository: IGroupRepository,
     private lessonRepository: ILessonRepository,
     private userRepository: IUserRepository,
@@ -55,12 +55,12 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       textId: selectedLesson.id,
       participants,
       groupId: group._id.toString(),
-      duration: 300,
+      duration: 50,
       status: "ongoing",
       countDown,
     });
     const competitionObject = competitionEntity.toObject();
-    const competition = await this._baseRepoCompetion.create(competitionEntity);
+    const competition = await this.competitionRepository.create(competitionObject);
     const populatedParticipants = await Promise.all(
       competitionEntity.getParticipants().map((item: string) =>
         this.userRepository.findById(item),

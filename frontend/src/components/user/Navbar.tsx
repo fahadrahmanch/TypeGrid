@@ -1,22 +1,10 @@
 import { Link } from "react-router-dom";
 import { getUserDataApi } from "../../api/user/userService";
-import { useState, useEffect } from "react";
 import Logo from "../../assets/Icon/logo.png";
+import { useSelector } from "react-redux";
 const Navbar: React.FC = () => {
-  const [image, setImage] = useState({
-    imageUrl: "",
-  });
-  useEffect(() => {
-    async function getUserData() {
-      const res = await getUserDataApi();
-      if (res?.data.user.imageUrl) {
-        setImage({
-          imageUrl: res.data.user.imageUrl || "",
-        });
-      }
-    }
-    getUserData();
-  }, []);
+  const user = useSelector((state:any) => state.userAuth.user);
+  
   return (
     <>
       <nav className="bg-white flex items-center justify-between w-full px-6 py-4 fixed top-0 left-0 z-50 shadow-sm h-20">
@@ -37,8 +25,8 @@ const Navbar: React.FC = () => {
         <Link to="/profile">
           <img
             src={
-              image.imageUrl
-                ? image.imageUrl
+              user.imageUrl
+                ? user.imageUrl
                 : "https://via.placeholder.com/150"
             }
             alt="User"

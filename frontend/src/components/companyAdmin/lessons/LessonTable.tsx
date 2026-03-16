@@ -3,16 +3,7 @@ import { Edit3, Trash2 } from "lucide-react";
 import EditLessonModal from "./EditLessonModal";
 import { deleteLesson } from "../../../api/companyAdmin/lessons";
 import { toast } from "react-toastify";
-export interface Lesson {
-  id: string;
-  title: string;
-  difficulty: string;
-  assigned?: number;
-  completed?: number;
-  avgWpm?: number;
-  level?: string;
-  completionRate: number;
-}
+import { Lesson } from "../../../types/lesson";
 
 const getDifficultyColor = (level: string) => {
   switch (level.toLowerCase()) {

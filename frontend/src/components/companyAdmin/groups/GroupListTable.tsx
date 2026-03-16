@@ -2,14 +2,7 @@ import React from "react";
 import { Eye, Pencil, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export interface Group {
-  id: string;
-  name: string;
-  type: string;
-  usersCount: number;
-  avgWpm: number;
-  avgAccuracy: number;
-}
+import { Group } from "../../../types/group";
 
 interface GroupListTableProps {
   groups: Group[];

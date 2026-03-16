@@ -1,5 +1,5 @@
 import React from "react";
-import { Lesson } from "./LessonTable"; // Reuse existing interface
+import { Lesson } from "../../../types/lesson";
 import { useState, useEffect } from "react";
 interface LessonSelectionGridProps {
   lessons: Lesson[];

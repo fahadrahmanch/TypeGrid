@@ -11,7 +11,7 @@ import { GroupEntity, GroupProps } from "../../../../domain/entities/group.entit
 
 import { mapCompetitionToDTOGroupPlay } from "../../../mappers/user/competition-group-play.mapper";
 import { CompetitionDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
-
+import { mapLessonDTOforGroupPlay } from "../../../mappers/admin/lesson-management.mapper";
 export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
   constructor(
     private groupRepository: IGroupRepository,
@@ -28,7 +28,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     if (compatitionData.status !== "completed") {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.SOMETHING_WENT_WRONG, // I'll use a generic one or check MESSAGES
+        MESSAGES.SOMETHING_WENT_WRONG, 
       );
     }
     if (!compatitionData) {
@@ -79,11 +79,11 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       );
     }
     let randomIndex = Math.floor(Math.random() * lessons.length);
-    let selectedLesson = lessons[randomIndex];
+    let selectedLesson = mapLessonDTOforGroupPlay(lessons[randomIndex]);
     const newCompetitionEntity = new CompetitionEntity({
       type: "group",
       mode: "global",
-      textId: selectedLesson._id!.toString(),
+      textId: selectedLesson.id!.toString(),
       participants: users,
       groupId: groupId,
       duration: 100,
@@ -92,7 +92,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     });
     const competitionObject = newCompetitionEntity.toObject();
     const newCompetition =
-      await this.competitionRepository.create(newCompetitionEntity);
+      await this.competitionRepository.create(competitionObject);
     const populatedParticipants = await Promise.all(
       newCompetitionEntity.getParticipants().map((item: string) =>
         this.userRepository.findById(item),
@@ -105,6 +105,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       lesson: selectedLesson,
       joinLink: JoinLink || undefined,
     };
+    console.log("responseCompetition",responseCompetition)
     return mapCompetitionToDTOGroupPlay(
       responseCompetition,
       groupEntity.getOwnerId(),

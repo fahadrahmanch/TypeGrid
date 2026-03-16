@@ -1,32 +1,32 @@
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate,Outlet } from "react-router-dom";
 import { ReactNode } from "react";
 interface Props {
-  children: ReactNode;
   allowedRoles: string[];
 }
 interface PropsIsloggedCompany {
   children: ReactNode;
 }
 
-export default function ProtectRouteCompany({ children, allowedRoles }: Props) {
-  const accessToken = useSelector(
-    (state: any) => state.companyAuth.accessToken,
-  );
-  const user = useSelector((state: any) => state.companyAuth.user);
-  const authLoaded = useSelector((state: any) => state.companyAuth.authLoaded);
 
-  if (!authLoaded) return <div>Loading...</div>;
+export default function ProtectRouteCompany({ allowedRoles }: Props) {
+  const accessToken = useSelector((state: any) => state?.companyAuth?.accessToken);
+   const user = useSelector((state: any) => state.companyAuth.user);
+  const authLoaded = useSelector((state: any) => state?.companyAuth?.authLoaded);
+
+  if (!authLoaded) {
+    return <div>Loading...</div>;
+  }
 
   if (!accessToken) {
     return <Navigate to="/company/signin" replace />;
   }
 
-  if (!user || !allowedRoles.includes(user.role)) {
-    return <Navigate to="/company/user/dashboard" replace />;
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <Outlet />;
 }
 export function IsloggedCompany({ children }: PropsIsloggedCompany) {
   const accessToken = useSelector(

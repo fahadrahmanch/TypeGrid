@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Target, Swords, Search, ChevronDown } from "lucide-react";
 import TeammateCard from "./TeammateCard";
-import { Teammate } from "./types";
+import { Teammate } from "../../../types/challenge";
 import { companyUsers } from "../../../api/companyUser/challenge";
 import { useSelector } from "react-redux";
 const ChallengeArena = ({

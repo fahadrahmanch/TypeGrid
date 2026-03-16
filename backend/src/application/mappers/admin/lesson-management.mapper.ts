@@ -4,6 +4,7 @@ import { GetLessonDTO } from "../../DTOs/admin/lesson-management.dto";
 export const mapLessonToDTO = (lesson: GetLessonDTO): LessonDTO => {
   return {
     id: lesson._id!.toString(),
+    title: lesson.title,
     text: lesson.text,
     category: lesson.category,
     level: lesson.level as LessonLevel,
@@ -16,6 +17,7 @@ export const mapLessonToDTO = (lesson: GetLessonDTO): LessonDTO => {
 export const mapLessonDTOforGroupPlay = (lesson: GetLessonDTO): LessonDTO => {
   return {
     id: lesson._id!.toString(),
+    
     text: lesson.text,
     category: lesson.category,
     level: lesson.level as LessonLevel,

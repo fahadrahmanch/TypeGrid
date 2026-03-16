@@ -36,7 +36,6 @@ export function createAPI(
   !originalRequest.url?.includes("signin")) {
         originalRequest._retry = true;
         try {
-          alert("hu")
           const res = await refreshAPI();
           const accessToken = res.data.accessToken;
           const user = res.data.user;

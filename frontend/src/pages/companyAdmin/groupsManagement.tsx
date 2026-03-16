@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
 import { Plus } from "lucide-react";
-import GroupListTable, {
-  Group,
-} from "../../components/companyAdmin/groups/GroupListTable";
+import GroupListTable from "../../components/companyAdmin/groups/GroupListTable";
+import { Group } from "../../types/group";
 import CreateGroupModal from "../../components/companyAdmin/groups/CreateGroupModal";
 
 // Dummy data

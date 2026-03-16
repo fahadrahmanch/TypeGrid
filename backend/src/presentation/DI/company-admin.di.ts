@@ -22,7 +22,7 @@ import { LessonAssignmentRepository } from "../../infrastructure/db/repositories
 import { CompanyGroupController } from "../controllers/company-admin/company-group.controller";
 import { CreateCompanyGroupUseCase } from "../../application/use-cases/company-admin/company-group/create-company-group.use-case";
 import { CompanyGroup } from "../../infrastructure/db/models/company/company-group.schema";
-import { CompanyGroupRepository } from "../../infrastructure/db/repositories/company/company-group.repository";
+import { CompanyGroupRepositroy } from "../../infrastructure/db/repositories/companyUser/company-group.repository";
 import { GetCompanyGroupsUseCase } from "../../application/use-cases/company-admin/company-group/get-company-groups.use-case";
 import { CompanyContestManagementController } from "../controllers/company-admin/company-contest-management.controller";
 import { CreateCompanyContestUseCase } from "../../application/use-cases/company-admin/company-contest/create-company-contest.use-case";
@@ -69,7 +69,7 @@ const assignLessonUseCaseInstance = new AssignLessonUseCase(
   lessonAssignmentRepository,
   userRepository,
 );
-const companyGroupRepository = new CompanyGroupRepository(CompanyGroup);
+const companyGroupRepository = new CompanyGroupRepositroy(CompanyGroup);
 const contestRepository = new ContestRepository(Contest);
 const createCompanyGroupUseCaseInstance = new CreateCompanyGroupUseCase(
   userRepository,

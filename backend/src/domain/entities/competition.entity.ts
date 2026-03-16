@@ -105,6 +105,12 @@ export class CompetitionEntity {
   getMaxParticipantsInQuickPlay() {
     return 5;
   }
+  removeParticipant(userId: string) {
+    if (!this.participants.some((participant: any) => participant.toString() === userId)) {
+      throw new Error("User is not a participant");
+    }
+    this.participants = this.participants.filter((participant: any) => participant.toString() !== userId);
+  }
   toObject() {
     return {
       _id: this.id,

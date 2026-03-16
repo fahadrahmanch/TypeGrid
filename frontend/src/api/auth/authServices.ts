@@ -2,11 +2,7 @@ import { userAPI } from "../axios/userAPI";
 import { SignupData } from "../../types/auth";
 import { adminAPI } from "../axios/adminAPI";
 import { companyAPI } from "../axios/companyAPI";
-interface signInData {
-  email: string;
-  password: string;
-  role: string;
-}
+import { signInData } from "../../types/auth";
 
 //user
 

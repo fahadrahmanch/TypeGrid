@@ -4,12 +4,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { socket } from "../../../socket";
 import { newGameAPI } from "../../../api/user/group";
+import { useTypingStats } from "../../../hooks/useTypingStats";
+import { useGameTimer } from "../../../hooks/useGameTimer";
+import { useTypingInput } from "../../../hooks/groupPlay/useTypingInput";
+import { useGroupPlaySocket } from "../../../hooks/groupPlay/useGroupPlaySocket";
+import { useTypingScroll } from "../../../hooks/useTypingScroll";
 import {
   Zap,
   Target,
   Clock,
   AlertCircle,
-  MessageSquare,
   Send,
   Users,
   Crown,
@@ -69,7 +73,6 @@ export type GamePlayerResult = {
 const GroupPlay: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  // const gameData: GameData | undefined = location.state?.gameData;
   const [gameData, setGameData] = useState<GameData | undefined>(
     location.state?.gameData,
   );
@@ -91,17 +94,24 @@ const GroupPlay: React.FC = () => {
   const activeCharRef = useRef<HTMLSpanElement>(null);
   const snippetContainerRef = useRef<HTMLDivElement>(null);
   const [errors, setErrors] = useState(0);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState<number | null>(null);
-
+  // const [wpm, setWpm] = useState(0);
+  // const [accuracy, setAccuracy] = useState<number | null>(null);
+  
   const [elapsedTime, setElapsedTime] = useState(0);
   const [livePlayers, setLivePlayers] = useState<PlayerState[]>(players);
   const [leftPlayers, setLeftPlayers] = useState<GameData["participants"]>([]);
   const gameIdRef = useRef(gameData?._id);
   const userIdRef = useRef(user?._id);
-
+  
   const [totalTyped, setTotalTyped] = useState(0);
-
+  const { wpm, accuracy } = useTypingStats(
+    totalTyped,
+    errors,
+    elapsedTime,
+    phase,
+    isFinished,
+  );
+  
   const [currentUser, setCurrentUser] = useState<
     | {
         _id: string;
@@ -114,19 +124,7 @@ const GroupPlay: React.FC = () => {
   const hasJoinedRef = useRef(false);
 
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
-  //send live stats,
-  useEffect(() => {
-    if (!gameData?._id || !currentUser) return;
-    if (phase !== "PLAY") return;
-    socket.emit("typing-progress", {
-      gameId: gameData._id,
-      userId: currentUser._id,
-      typedLength: typedText.length,
-      wpm,
-      accuracy,
-      errors,
-    });
-  }, [typedText, wpm, accuracy, errors, phase]);
+  
 
   //set status of current user
   useEffect(() => {
@@ -152,39 +150,28 @@ const GroupPlay: React.FC = () => {
     userIdRef.current = currentUser?._id;
   }, [gameData?._id, currentUser?._id]);
 
-  // 3. Handle Component Unmount (Navigation/Back Button)
 
-  useEffect(() => {
-    return () => {
-      if (gameIdRef.current && userIdRef.current) {
-        // Emit event to server that this user is leaving
-        socket.emit("leave-game", {
-          gameId: gameIdRef.current,
-          userId: userIdRef.current,
-        });
-      }
-    };
-  }, []);
-  //typing progress update from other players
 
-  useEffect(() => {
-    const handler = (data: any) => {
-      setLivePlayers((prev) =>
-        prev.map((p) =>
-          p._id === data.userId
-            ? { ...p, ...data, progress: data.typedLength }
-            : p,
-        ),
-      );
-    };
 
-    socket.off("typing-progress-update");
-    socket.on("typing-progress-update", handler);
-
-    return () => {
-      socket.off("typing-progress-update", handler);
-    };
-  }, [gameData?._id]);
+  useGroupPlaySocket({
+  gameData,
+  currentUser,
+  typedText,
+  wpm,
+  accuracy,
+  errors,
+  phase,
+  remainingTime,
+  elapsedTime,
+  navigate,
+  gameIdRef,
+  userIdRef,
+  setLivePlayers,
+  setLeftPlayers,
+  setFinalResult,
+  setIsfinished,
+  hasJoinedRef
+});
 
   //redirect to home if no game data
   useEffect(() => {
@@ -208,88 +195,22 @@ const GroupPlay: React.FC = () => {
   }, []);
 
   // Auto-scroll effect
-  useEffect(() => {
-    if (activeCharRef.current && snippetContainerRef.current) {
-      const container = snippetContainerRef.current;
-      const element = activeCharRef.current;
-
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-
-      const relativeTop = elementRect.top - containerRect.top;
-      const relativeBottom = elementRect.bottom - containerRect.top;
-
-      // Keep cursor in middle-ish of view
-      if (
-        relativeBottom > containerRect.height / 2 ||
-        relativeTop < containerRect.height / 3
-      ) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }
-  }, [typedText]);
+  useTypingScroll({
+  activeCharRef,
+  snippetContainerRef,
+  typedText,
+});
 
   //countdown and game timer
-
-  useEffect(() => {
-    if (!gameData?.startedAt || !gameData?.duration || finalResult.length)
-      return;
-    const startTimesamp = new Date(gameData.startedAt).getTime();
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const elapsed = Math.floor((now - startTimesamp) / 1000);
-      if (elapsed < gameData.countDown) {
-        setPhase("COUNTDOWN");
-        setCountdown(gameData.countDown - elapsed);
-      } else if (elapsed < gameData.countDown + gameData.duration) {
-        setPhase("PLAY");
-        setRemainingTime(gameData.countDown + gameData.duration - elapsed);
-
-        setElapsedTime(elapsed - gameData.countDown);
-      } else {
-        setPhase("PLAY");
-        setRemainingTime(0);
-        setIsfinished(true);
-        clearInterval(interval);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [
-    gameData?.startedAt,
-    gameData?.duration,
-    gameData?.countDown,
-    isFinished,
-    finalResult,
-  ]);
-
-  //wpm
-
-  useEffect(() => {
-    if (phase !== "PLAY" || isFinished) return;
-    if (elapsedTime <= 0) return;
-
-    const elapsedMinutes = elapsedTime / 60;
-    const correctChars = Math.max(totalTyped - errors, 0);
-
-    const calculatedWpm = Math.round(correctChars / 5 / elapsedMinutes);
-
-    setWpm(calculatedWpm);
-  }, [elapsedTime, totalTyped, errors, phase, isFinished]);
-
-  // accuracy
-  useEffect(() => {
-    if (totalTyped === 0) {
-      setAccuracy(null);
-      return;
-    }
-
-    const correct = totalTyped - errors;
-    const acc = Math.round((correct / totalTyped) * 100);
-    setAccuracy(acc);
-  }, [totalTyped, errors]);
-
-  //format time
+  useGameTimer(
+  gameData,
+  finalResult,
+  setPhase,
+  setCountdown,
+  setRemainingTime,
+  setElapsedTime,
+  setIsfinished
+);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -371,143 +292,26 @@ const GroupPlay: React.FC = () => {
 
   //handle key down
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!lesson || isFinished || phase !== "PLAY") return;
+  useTypingInput({
+  lesson,
+  isFinished,
+  phase,
+  hasError,
+  setHasError,
+  typedText,
+  setTypedText,
+  setErrors,
+  setTotalTyped,
+  setIsfinished,
+  gameId: gameData?._id,
+  currentUser,
+  elapsedTime,
+  wpm,
+  accuracy,
+  errors,
+});
 
-      if (e.key === "Backspace") {
-        setHasError(false);
-        setTypedText((prev) => prev.slice(0, -1));
-        return;
-      }
-
-      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        e.preventDefault();
-
-        if (hasError) return;
-
-        const expectedChar = lesson.text[typedText.length];
-        setTotalTyped((prev) => prev + 1);
-
-        if (e.key !== expectedChar) {
-          setErrors((prev) => prev + 1);
-          setHasError(true);
-          setTypedText((prev) => prev + e.key);
-          return;
-        }
-
-        const nextText = typedText + e.key;
-        setTypedText(nextText);
-
-        if (nextText.length === lesson.text.length) {
-          setIsfinished(true);
-          socket.emit("player-finished", {
-            gameId: gameData?._id,
-            userId: currentUser?._id,
-            name: currentUser?.name,
-            imageUrl: currentUser?.imageUrl,
-            timeTaken: elapsedTime,
-            wpm,
-            accuracy,
-            errors,
-            typedLength: typedText.length,
-            status: "finished",
-          });
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lesson, isFinished, typedText, phase, hasError, gameData?._id]);
-
-  //realtime
-  useEffect(() => {
-    if (!gameData?._id || !currentUser?._id) return;
-    socket.emit("group-play", {
-      gameId: gameData._id,
-      userId: currentUser._id,
-    });
-
-    hasJoinedRef.current = true;
-  }, [gameData?._id, currentUser?._id]);
-
-  //force exit
-  useEffect(() => {
-    socket.on("force-exit", () => {
-      navigate("/");
-    });
-
-    return () => {
-      socket.off("force-exit");
-    };
-  }, []);
-
-  //handle leave
-  useEffect(() => {
-    const handleLeave = ({
-      userId,
-      newHostId,
-    }: {
-      userId: string;
-      newHostId?: string;
-    }) => {
-      let leavingPlayer: any = null;
-      setLivePlayers((prev) => {
-        leavingPlayer = prev.find((p) => p._id === userId);
-        if (!leavingPlayer) return prev;
-        if (leavingPlayer) {
-          setLeftPlayers((prev) => {
-            if (prev.some((p) => p._id === leavingPlayer._id)) return prev;
-            return [...prev, leavingPlayer];
-          });
-        }
-
-        return prev
-          .filter((p) => p._id !== userId)
-          .map((p) => ({
-            ...p,
-            isHost: p._id === newHostId,
-          }));
-      });
-    };
-
-    socket.on("player-left", handleLeave);
-    return () => {
-      socket.off("player-left", handleLeave);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (remainingTime === 0) {
-      setIsfinished(true);
-      socket.emit("time-up", {
-        gameId: gameData?._id,
-        userId: currentUser?._id,
-        name: currentUser?.name,
-        imageUrl: currentUser?.imageUrl,
-        timeTaken: elapsedTime,
-        wpm,
-        accuracy,
-        errors,
-        typedLength: typedText.length,
-        status: "times-up",
-      });
-    }
-
-    return () => {
-      socket.off("time-up");
-    };
-  }, [remainingTime]);
-
-  useEffect(() => {
-    socket.on("game-finished", (data: GamePlayerResult[]) => {
-      setFinalResult(data);
-    });
-    return () => {
-      socket.off("game-finished");
-    };
-  }, [gameData?._id]);
-
+  
   async function handleNewGame() {
     try {
       const currentUsers = await livePlayers.map((p) => p._id);
@@ -547,8 +351,7 @@ const GroupPlay: React.FC = () => {
     setLeftPlayers([]);
     setTypedText("");
     setErrors(0);
-    setWpm(0);
-    setAccuracy(null);
+  
     setTotalTyped(0);
     setHasError(false);
     setIsfinished(false);

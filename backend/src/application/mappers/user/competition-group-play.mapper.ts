@@ -26,7 +26,7 @@ export const mapCompetitionToDTOGroupPlay = (
   competition: PopulatedGroupCompetitionPayload,
   hostUserId: string,
 ): CompetitionDTOGroupPlay => {
-
+  console.log("competition in group play dto",competition)
   return {
     _id: competition._id!.toString(),
     mode: competition.mode,

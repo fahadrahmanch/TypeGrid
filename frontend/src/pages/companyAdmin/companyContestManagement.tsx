@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
 import ContestStatsCards from "../../components/companyAdmin/contest/ContestStatsCards";
-import ContestCard, {
-  ContestProps,
-} from "../../components/companyAdmin/contest/ContestCard";
+import ContestCard from "../../components/companyAdmin/contest/ContestCard";
+import { ContestProps } from "../../types/contest";
 import CreateContestModal from "../../components/companyAdmin/contest/CreateContestModal";
 import { Plus } from "lucide-react";
 import { companyContests } from "../../api/companyAdmin/companyContextAPI";

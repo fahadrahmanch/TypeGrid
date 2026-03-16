@@ -22,6 +22,7 @@ export const initSocket = (server: any) => {
   });
 
   io.on("connection", (socket) => {
+    /* ===================== USER CONNECTION ===================== */
     socket.on("register-user", async (userId: string) => {
       socket.data.userId = userId;
       socket.join(`user:${userId}`);
@@ -39,6 +40,7 @@ export const initSocket = (server: any) => {
       });
     });
 
+    /* ===================== GROUP PLAY ===================== */
     socket.on(
       "join-room",
       ({ groupId, userId }: { groupId: string; userId: string }) => {
@@ -136,6 +138,18 @@ export const initSocket = (server: any) => {
             typedLength,
           }),
         );
+        const updatedData = {
+          userId,
+          name,
+          imageUrl,
+          timeTaken,
+          wpm,
+          accuracy,
+          errors,
+          typedLength,
+          status: "FINISHED",
+        }
+        socket.to(gameId).emit("typing-progress-update", updatedData);
         const isEnd = await checkGameEndService(gameId);
         if (isEnd) {
           const result = await redis.hgetall(key);
@@ -177,12 +191,12 @@ export const initSocket = (server: any) => {
               ...player,
               rank: index + 1,
             }));
-          io.to(gameId).emit("game-finished", resultArray);
-          await redis.del(key);
           await injectGroupSocketController.saveGroupPlayResult(
             gameId,
             resultArray,
           );
+          io.to(gameId).emit("game-finished", resultArray);
+          await redis.del(key);
         }
       },
     );
@@ -264,12 +278,12 @@ export const initSocket = (server: any) => {
               ...player,
               rank: index + 1,
             }));
-          io.to(gameId).emit("game-finished", resultArray);
-          await redis.del(key);
           await injectGroupSocketController.saveGroupPlayResult(
             gameId,
             resultArray,
           );
+          io.to(gameId).emit("game-finished", resultArray);
+          await redis.del(key);
         }
       },
     );
@@ -288,38 +302,63 @@ export const initSocket = (server: any) => {
 
     /* ===================== QUICK PLAY ===================== */
 
-    socket.on("quick-join", async ({ competitionId, userId }) => {
-      if (!competitionId || !userId) {
-        socket.emit("quick-join-error", {
-          message: "Invalid data",
-        });
-        return;
-      }
-      if (socket.data.gameId && socket.data.gameId !== competitionId) {
-        socket.leave(socket.data.gameId);
-      }
-      socket.join(competitionId);
-      socket.data.gameId = competitionId;
-      socket.data.userId = userId;
-      let member;
-      try {
-        member = await injectQuickSocketController.getQuickPlayData(
-          competitionId,
-          userId,
-        );
-      } catch (error) {
-        socket.emit("quick-join-error", {
-          message: "Unable to join quick play",
-        });
-        return;
-      }
+  socket.on("quick-join", async ({ competitionId, userId }) => {
+  if (!competitionId || !userId) {
+    socket.emit("quick-join-error", { message: "Invalid data" });
+    socket.emit('force-exit-quick')
+    return;
+  }
 
-      socket.to(competitionId).emit("user-join", { member });
-    });
+  // ← ADD THIS BLOCK
+  const key = `quick:game:${competitionId}`;
+  const raw = await redis.hget(key, userId);
+  
+  if (raw) {
+    const data = JSON.parse(raw);
+    if (data.status === "LEFT") {
+
+      socket.emit("force-exit-quick");
+      return;
+    }
+  }
+  
+
+  // ← END OF NEW BLOCK
+
+  if (socket.data.quickGameId && socket.data.quickGameId !== competitionId) {
+    socket.leave(socket.data.quickGameId);
+  }
+  socket.join(competitionId);
+  socket.data.quickGameId = competitionId;
+  socket.data.userId = userId;
+
+  let member;
+  try {
+    member = await injectQuickSocketController.getQuickPlayData(competitionId, userId);
+      const existing = await redis.hget(key, userId);
+  if (!existing) {
+    await redis.hset(key, userId, JSON.stringify({
+      wpm: 0,
+      accuracy: 100,
+      errors: 0,
+      typedLength: 0,
+      status: "PLAYING",
+      updatedAt: Date.now(),
+    }));
+    await redis.expire(key, 3600);
+  }
+
+  } catch (error) {
+    socket.emit("quick-join-error", { message: "Unable to join quick play" });
+    return;
+  }
+
+  io.to(competitionId).emit("user-join", { member });
+});
 
     socket.on("typing-progress-quick", async (data) => {
       const { userId, wpm, accuracy, errors, typedLength } = data;
-      const gameId = socket.data.gameId;
+      const gameId = socket.data.quickGameId;
       if (!gameId) return;
 
       const key = `quick:game:${gameId}`;
@@ -360,7 +399,7 @@ export const initSocket = (server: any) => {
         errors,
         typedLength,
       }) => {
-        const gameId = socket.data.gameId;
+        const gameId = socket.data.quickGameId;
         if (!gameId) return;
         const key = `quick:game:${gameId}`;
 
@@ -450,7 +489,7 @@ export const initSocket = (server: any) => {
         errors,
         typedLength,
       }) => {
-        const gameId = socket.data.gameId;
+        const gameId = socket.data.quickGameId;
         if (!gameId) return;
         const key = `quick:game:${gameId}`;
         const raw = await redis.hget(key, userId);
@@ -528,6 +567,27 @@ export const initSocket = (server: any) => {
         }
       },
     );
+
+    socket.on("leave-game-quick", async ({ gameId, userId }) => {
+      socket.data.quickGameId = undefined;
+      const key = `quick:game:${gameId}`;
+
+
+      await redis.hdel(key, userId);
+
+      socket.leave(gameId);
+      io.to(gameId).emit("player-left-quick", { userId });
+
+      const players = await redis.hlen(key);
+      await injectQuickSocketController.leaveQuickPlay(gameId, userId); 
+      if (players === 0) {
+        await redis.del(key);
+      }
+    });
+
+  
+
+    /* ===================== COMPANY CONTEST ===================== */
 
     socket.on("contest-status-updated", async ({ contestId, status }) => {
       const lobbyKey = `company:lobby:${contestId}`;
@@ -958,6 +1018,8 @@ export const initSocket = (server: any) => {
       await redis.del(key);
     });
 
+    /* ===================== 1V1 CHALLENGE ===================== */
+
     socket.on("challenge-accepted", ({ challengeId, senderId }) => {
       io.to(`user:${senderId}`).emit("challenge-status-updated", {
         challengeId,
@@ -975,7 +1037,34 @@ export const initSocket = (server: any) => {
       }
     });
 
+    /* ===================== DISCONNECT ===================== */
+
     socket.on("disconnect", async () => {
+      if (socket.data.quickGameId && socket.data.userId) {
+        const gameId = socket.data.quickGameId;
+        const userId = socket.data.userId;
+        const key = `quick:game:${gameId}`;
+        const raw = await redis.hget(key, userId);
+        console.log("disonnect")
+    if (raw) {
+      const data = JSON.parse(raw);
+      console.log("data")
+      await redis.hset(key, userId, JSON.stringify({ ...data, status: "LEFT" }));
+    }
+    const updated=await redis.hget(key,userId)
+    console.log("raw",updated)
+    io.to(gameId).emit("player-left-quick", { userId });
+
+    const all = await redis.hgetall(key);
+    const activePlayers = Object.values(all)
+      .map((v) => JSON.parse(v))
+      .filter((p) => p.status !== "LEFT");
+      await injectQuickSocketController.leaveQuickPlay(gameId, userId);
+    if (activePlayers.length === 0) {
+       await redis.expire(key, 60);
+    }
+  }
+
       if (socket.data.userId) {
         const userId = socket.data.userId;
         await redis.srem("online:users", userId);

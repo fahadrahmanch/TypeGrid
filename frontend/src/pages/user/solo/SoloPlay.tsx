@@ -2,9 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../../../components/user/Navbar";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { FaS } from "react-icons/fa6";
-import { Clock, Zap, Target, AlertCircle } from "lucide-react";
+import { Clock, Zap, Target, AlertCircle, Trophy, Home, RotateCcw } from "lucide-react";
 import { saveSoloPlayResult } from "../../../api/user/solo";
+import { useTypingStats } from "../../../hooks/useTypingStats";
+import { useSoloGameTimer } from "../../../hooks/soloPlay/useSoloGameTimer";
+import { useSoloHandleKeyDown } from "../../../hooks/soloPlay/UseSoloHandleKeyDown";
+import { createSoloRoom } from "../../../api/user/solo";
+import { toast } from "react-toastify";
 const SoloPlay: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -17,9 +21,6 @@ const SoloPlay: React.FC = () => {
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [hasError, setHasError] = useState(false);
   const [errors, setErrors] = useState(0);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(100);
-  const [startTypingTime, setStartTypingTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const activeCharRef = useRef<HTMLSpanElement>(null);
   const [typedText, setTypedText] = useState("");
@@ -27,7 +28,7 @@ const SoloPlay: React.FC = () => {
   const [space, setSpace] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const playStartRef = useRef<number | null>(null);
-
+const [totalTyped, setTotalTyped] = useState(0);
   useEffect(() => {
     window.history.replaceState(null, "", window.location.pathname);
   }, []);
@@ -52,82 +53,22 @@ const SoloPlay: React.FC = () => {
     }
   }, [gameData, navigate]);
 
-  useEffect(() => {
-    if (!gameData?.startedAt || !gameData?.duration || isFinished) return;
-    if (!space || !startTimeRef.current) return;
-
-    const startTime = startTimeRef.current;
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const elapsed = Math.floor((now - startTime) / 1000);
-      setElapsedTime(elapsed);
-      if (elapsed < gameData.countDown) {
-        setPhase("COUNTDOWN");
-        setCountdown(gameData.countDown - elapsed);
-      } else if (elapsed < gameData.countDown + gameData.duration) {
-        setPhase("PLAY");
-        if (playStartRef.current === null) {
-          playStartRef.current = Date.now();
-        }
-        setRemainingTime(gameData.countDown + gameData.duration - elapsed);
-
-        setElapsedTime(elapsed - gameData.countDown);
-      } else {
-        setPhase("PLAY");
-        setRemainingTime(0);
-        setIsfinished(true);
-        clearInterval(interval);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [
-    gameData?.startedAt,
-    gameData?.duration,
-    gameData?.countDown,
-    isFinished,
-    space,
-  ]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key == " " && !space) {
-        setSpace(true);
-        startTimeRef.current = Date.now();
-      }
-
-      if (!lesson || isFinished || phase !== "PLAY" || !space) return;
-
-      if (e.key === "Backspace") {
-        setHasError(false);
-        setTypedText((prev) => prev.slice(0, -1));
-        return;
-      }
-
-      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        e.preventDefault();
-
-        if (hasError) return;
-
-        const expectedChar = lesson.text[typedText.length];
-
-        if (e.key !== expectedChar) {
-          setErrors((prev) => prev + 1);
-          setHasError(true);
-          setTypedText((prev) => prev + e.key);
-          return;
-        }
-        const nextText = typedText + e.key;
-        setTypedText(nextText);
-
-        if (nextText.length === lesson.text.length) {
-          setIsfinished(true);
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lesson, isFinished, typedText, phase, hasError]);
+ 
+  useSoloHandleKeyDown({
+  lesson,
+  isFinished,
+  phase,
+  space,
+  hasError,
+  typedText,
+  startTimeRef,
+  setSpace,
+  setHasError,
+  setTypedText,
+  setErrors,
+  setTotalTyped,
+  setIsfinished,
+});
 
   const renderTextWithHighlight = () => {
     if (!lesson) return null;
@@ -169,38 +110,26 @@ const SoloPlay: React.FC = () => {
     });
   };
 
-  //wpm
-  useEffect(() => {
-    let startTime = playStartRef.current;
-    if (!startTime) return;
-    if (phase !== "PLAY") return;
-    const elapsedMs = Date.now() - startTime;
-    const elapsedMinutes = elapsedMs / 60000;
 
-    if (elapsedMinutes <= 0) return;
-
-    const characters = typedText
-      .split("")
-      .filter((char, i) => char === lesson?.text[i]).length;
-    const words = characters / 5;
-
-    const calculatedWpm = Math.round(words / elapsedMinutes);
-    setWpm(calculatedWpm);
-  }, [typedText]);
-
-  // accuracy
-  useEffect(() => {
-    const correctChars = typedText.length;
-    const totalAttempts = correctChars + errors;
-
-    if (totalAttempts === 0) {
-      setAccuracy(100);
-      return;
-    }
-
-    const acc = Math.round((correctChars / totalAttempts) * 100);
-    setAccuracy(acc);
-  }, [typedText, errors]);
+  const { wpm, accuracy } = useTypingStats(
+  totalTyped,
+  errors,
+  elapsedTime,
+  phase,
+  isFinished
+);
+useSoloGameTimer({
+  gameData,
+  isFinished,
+  space,
+  startTimeRef,
+  playStartRef,
+  setPhase,
+  setCountdown,
+  setRemainingTime,
+  setElapsedTime,
+  setIsfinished,
+});
 
   useEffect(() => {
     async function endGameHandler() {
@@ -220,73 +149,151 @@ const SoloPlay: React.FC = () => {
     endGameHandler();
   }, [isFinished]);
 
+  async function handleNewGame() {
+    try {
+      const response = await createSoloRoom();
+      if (!response) {
+        throw new Error("Solo room ID missing");
+      }
+      const solo=response.data;
+      if (response) {
+        navigate(`/solo-play/${solo._id}`, {
+          state: { gameData: solo },
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to create solo room. Please try again.");
+      console.log(error);
+    }
+  }
+  
+
   return (
     <>
       <Navbar />
 
       <div className="min-h-screen bg-[#fff7e9] flex flex-col items-center px-4 pt-24 pb-12">
-        {/* Header */}
-        <h1 className="text-2xl font-bold">Solo Play</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Start typing to begin the test
-        </p>
+        {isFinished ? (
+          <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 animate-in fade-in zoom-in duration-500 w-full max-w-4xl mx-auto mt-12">
+            <div className="text-center space-y-2">
+              <h1 className="text-4xl font-black text-gray-800 tracking-tight flex items-center justify-center gap-3">
+                <Trophy className="w-10 h-10 text-amber-500 fill-amber-500" />
+                Test Complete!
+                <Trophy className="w-10 h-10 text-amber-500 fill-amber-500" />
+              </h1>
+              <p className="text-gray-500 font-medium">Here are your final results</p>
+            </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl">
-          <StatCard
-            icon={<Clock className="w-5 h-5 text-blue-500" />}
-            label={timeLabel}
-            value={timeDisplay}
-            color="bg-blue-50"
-          />
-          <StatCard
-            icon={<Zap className="w-5 h-5 text-orange-500" />}
-            label="WPM"
-            value={wpm}
-            color="bg-orange-50"
-          />
-          <StatCard
-            icon={<Target className="w-5 h-5 text-emerald-500" />}
-            label="Accuracy"
-            value={`${accuracy}%`}
-            color="bg-emerald-50"
-          />
-          <StatCard
-            icon={<AlertCircle className="w-5 h-5 text-red-500" />}
-            label="Errors"
-            value={errors}
-            color="bg-red-50"
-          />
-        </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+              <StatCard
+                icon={<Clock className="w-5 h-5 text-blue-500" />}
+                label="Time"
+                value={`${elapsedTime}s`}
+                color="bg-blue-50"
+              />
+              <StatCard
+                icon={<Zap className="w-5 h-5 text-orange-500" />}
+                label="WPM"
+                value={wpm}
+                color="bg-orange-50"
+              />
+              <StatCard
+                icon={<Target className="w-5 h-5 text-emerald-500" />}
+                label="Accuracy"
+                value={`${accuracy}%`}
+                color="bg-emerald-50"
+              />
+              <StatCard
+                icon={<AlertCircle className="w-5 h-5 text-red-500" />}
+                label="Errors"
+                value={errors}
+                color="bg-red-50"
+              />
+            </div>
 
-        {/* Divider */}
-        <div className="w-full max-w-4xl h-2 bg-[#9b8a7a] rounded-full my-8" />
-
-        {/* Typing Box */}
-        <div className="w-full max-w-4xl bg-[#fffaf0] border border-gray-200 rounded-2xl p-5">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Typing Test</h3>
-            <button className="flex items-center gap-1 px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-100">
-              Reset
-            </button>
+            <div className="flex items-center gap-4 mt-8">
+              <button
+                onClick={() => navigate("/")}
+                className="px-6 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-600 font-bold hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center gap-2"
+              >
+                <Home className="w-4 h-4" />
+                Back Home
+              </button>
+              <button
+                onClick={handleNewGame}
+                className="px-8 py-3 rounded-xl bg-gray-900 text-white font-bold hover:bg-black hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Play Again
+              </button>
+            </div>
           </div>
+        ) : (
+          <>
+            {/* Header */}
+            <h1 className="text-2xl font-bold">Solo Play</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Start typing to begin the test
+            </p>
 
-          {/* Text Area */}
-          {/* Text Area */}
-          <div
-            className=" mt-5 border-2 border-dashed border-gray-300 rounded-2xl p-8 
-                text-left text-gray-600 text-base leading-relaxed 
-                min-h-[220px]"
-          >
-            {renderTextWithHighlight()}
-          </div>
+            {/* Stats */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl mt-6">
+              <StatCard
+                icon={<Clock className="w-5 h-5 text-blue-500" />}
+                label={timeLabel}
+                value={timeDisplay}
+                color="bg-blue-50"
+              />
+              <StatCard
+                icon={<Zap className="w-5 h-5 text-orange-500" />}
+                label="WPM"
+                value={wpm}
+                color="bg-orange-50"
+              />
+              <StatCard
+                icon={<Target className="w-5 h-5 text-emerald-500" />}
+                label="Accuracy"
+                value={`${accuracy}%`}
+                color="bg-emerald-50"
+              />
+              <StatCard
+                icon={<AlertCircle className="w-5 h-5 text-red-500" />}
+                label="Errors"
+                value={errors}
+                color="bg-red-50"
+              />
+            </div>
 
-          {/* Hint */}
-          <p className="mt-4 text-xs text-center text-gray-500">
-            Click here and start typing to begin the test
-          </p>
-        </div>
+            {/* Divider */}
+            <div className="w-full max-w-4xl h-2 bg-[#9b8a7a] rounded-full my-8" />
+
+            {/* Typing Box */}
+            <div className="w-full max-w-4xl bg-[#fffaf0] border border-gray-200 rounded-2xl p-5">
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold">Typing Test</h3>
+                <button className="flex items-center gap-1 px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-100">
+                  Reset
+                </button>
+              </div>
+
+              {/* Text Area */}
+              {/* Text Area */}
+              <div
+                className=" mt-5 border-2 border-dashed border-gray-300 rounded-2xl p-8 
+                    text-left text-gray-600 text-base leading-relaxed 
+                    min-h-[220px]"
+              >
+                {renderTextWithHighlight()}
+              </div>
+
+              {/* Hint */}
+              {/* <p className="mt-4 text-xs text-center text-gray-500">
+                Click here and start typing to begin the test
+              </p> */}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

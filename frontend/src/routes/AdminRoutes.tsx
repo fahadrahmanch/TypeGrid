@@ -8,6 +8,8 @@ import Lessons from "../pages/admin/Lessons";
 export default function AdminRoutes() {
   return (
     <Routes>
+
+      {/* Auth */}
       <Route
         path="signin"
         element={
@@ -16,30 +18,14 @@ export default function AdminRoutes() {
           </IsloggedAdmin>
         }
       />
-      <Route
-        path="users"
-        element={
-          <ProtectRouteAdmin>
-            <Users />
-          </ProtectRouteAdmin>
-        }
-      />
-      <Route
-        path="company"
-        element={
-          <ProtectRouteAdmin>
-            <Company />
-          </ProtectRouteAdmin>
-        }
-      />
-      <Route
-        path="lessons"
-        element={
-          <ProtectRouteAdmin>
-            <Lessons />
-          </ProtectRouteAdmin>
-        }
-      />
+
+      {/* Protected Admin Routes */}
+      <Route element={<ProtectRouteAdmin />}>
+        <Route path="users" element={<Users />} />
+        <Route path="company" element={<Company />} />
+        <Route path="lessons" element={<Lessons />} />
+      </Route>
+
     </Routes>
   );
 }

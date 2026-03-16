@@ -87,6 +87,7 @@ export class GroupSocketController {
     resultArray: GroupPlayResult[],
   ): Promise<void> {
     try {
+      
       await this._finishGroupPlayUseCase.execute(gameId, resultArray);
     } catch (error: any) {
       logger.error("Error in saveGroupPlayResult socket handler", {

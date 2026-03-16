@@ -25,11 +25,12 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
       );
     }
     const competitionEntity = new CompetitionEntity({
-      ...(competition as any),
-      id: (competition as any)._id,
+      ...competition ,
+      id: competition._id,
     });
     competitionEntity.setStatus("completed");
-    await this.competitionRepository.update(competitionEntity);
+    const competitionObject=competitionEntity.toObject()
+    await this.competitionRepository.update(competitionObject);
     const groupId = competitionEntity.getGroupId();
 
     if (!groupId) {

@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate,Outlet } from "react-router-dom";
 import { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
 }
 
-export default function ProtectRouteAdmin({ children }: Props) {
+export default function ProtectRouteAdmin() {
   const accessToken = useSelector((state: any) => state?.adminAuth.accessToken);
   const authLoaded = useSelector((state: any) => state?.adminAuth.authLoaded);
   if (!authLoaded) {
@@ -16,8 +16,9 @@ export default function ProtectRouteAdmin({ children }: Props) {
   if (!accessToken) {
     return <Navigate to="/admin/signin" replace />;
   }
-  return children;
+  return <Outlet />;
 }
+
 export function IsloggedAdmin({ children }: Props) {
   const accessToken = useSelector((state: any) => state?.adminAuth.accessToken);
   const authLoaded = useSelector((state: any) => state?.adminAuth.authLoaded);

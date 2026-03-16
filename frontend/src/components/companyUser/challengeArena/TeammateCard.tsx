@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Target, Zap, Swords } from "lucide-react";
-import { Teammate } from "./types";
+import { Teammate } from "../../../types/challenge";
 import { sendChallengeApi } from "../../../api/companyUser/challenge";
 import { toast } from "react-toastify";
 import { checkalreadySendChallenge } from "../../../api/companyUser/challenge";
