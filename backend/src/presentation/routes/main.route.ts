@@ -19,16 +19,16 @@ export const Routes = {
   // },
   AUTH: {
     // user & admin authentication (mounted under /admin or /user separately)
-
+    
     SIGNUP: "/signup",
     SIGNIN: "/signin",
     LOGOUT: "/logout",
     REFRESH_TOKEN: "/refresh-token",
-
+    
     // OTP
     VERIFY_OTP: "/otp/verify",
     RESEND_OTP: "/otp/resend",
-
+    
     // Social login
     GOOGLE_AUTH: "/google",
 
@@ -42,13 +42,13 @@ export const Routes = {
     //get
     GET_USERS: "/users",
     GET_COMPANYS: "/companies",
-
+    
     //post
     // APPROVE_COMPANY:"/approve/company",
     // REJECT_COMPANY:"/reject/company",
-
+    
     UPDATE_COMPANY_STATUS: "/companies/:companyId/status",
-
+    
     CREATE_LESSON: "/lessons",
     FETCH_LESSONS: "/lessons",
     FETCH_LESSON: "/lesson/:id",
@@ -120,6 +120,7 @@ export const Routes = {
     FETCH_CONTEST_ADMIN: "/company/contest/:contestId/admin",
     UPDATE_CONTEST: "/company/contest/:contestId",
     DELETE_CONTEST: "/company/contest/:contestId",
+    FETCH_CONTEST_RESULT: "/company/contest/:contestId/results",
   },
 
   COMPANY_USER: {

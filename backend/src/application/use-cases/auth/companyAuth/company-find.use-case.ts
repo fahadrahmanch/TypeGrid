@@ -1,10 +1,9 @@
 import { ICompanyFindUseCase } from "../../interfaces/auth/company-find.interface";
 import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
-import { CompanyEntity } from "../../../../domain/entities";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-
+import { CompanyEntity } from "../../../../domain/entities";
 export class CompanyFindUseCase implements ICompanyFindUseCase {
 
   constructor(private readonly companyRepository: ICompanyRepository) {}

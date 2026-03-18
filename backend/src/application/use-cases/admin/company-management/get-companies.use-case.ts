@@ -14,15 +14,15 @@ import { ICompanyRepository } from "../../../../domain/interfaces/repository/com
  * const companies = await useCase.execute();
  */
 export class GetCompaniesUseCase implements IGetCompaniesUseCase {
-
   constructor(private readonly _companyRepository: ICompanyRepository) {}
-
   /**
    * Executes the use case.
    * @returns Promise containing a list of companies
    */
-  async execute(): Promise<CompanyEntity[]> {
-    return this._companyRepository.find();
+  async execute(status:string,searchText:string,page:number,limit:number): Promise<{companies:CompanyEntity[],total:number}> {
+   const companies=await this._companyRepository.getCompanies(status,searchText,page,limit);
+
+    return companies;
   }
 
 }

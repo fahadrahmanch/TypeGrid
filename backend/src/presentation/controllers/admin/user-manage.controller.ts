@@ -14,12 +14,13 @@ export class UserManageController {
 
   async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const users = await this._getUsersUseCase.execute();
-     
+      const {search,status,page,limit}=req.query
+      const data = await this._getUsersUseCase.execute(search as string,status as string,Number(page),Number(limit));
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.USERS_FETCHED_SUCCESS,
-        data: users||[],
+        users: data.users||[],
+        total:data.total,
       });
     } catch (error: any) {
       next(error);
@@ -50,4 +51,6 @@ export class UserManageController {
       next(error);
     }
   }
+
+
 }

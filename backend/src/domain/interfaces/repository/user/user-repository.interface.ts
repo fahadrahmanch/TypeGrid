@@ -1,4 +1,3 @@
-import { IUserDocument } from "../../../../infrastructure/db/types/documents";
 
 export interface IUserRepository {
   create(data: any): Promise<any>;

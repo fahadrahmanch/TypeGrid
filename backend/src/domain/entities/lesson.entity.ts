@@ -1,7 +1,9 @@
 import { Entity } from "./entity";
 
 export type LessonCategory = "sentence" | "paragraph";
-export type LessonLevel = "easy" | "medium" | "hard";
+// export type LessonLevel = "beginner" | "medium" | "hard";
+export type LessonLevel = "beginner" | "intermediate" | "advanced";
+
 export type LessonCreator = "admin" | "company";
 // export type AssignmentStatus = "active" | "completed" | "expired";
 
@@ -18,7 +20,8 @@ export class LessonEntity extends Entity<LessonEntity> {
   text!: string;
   category!: LessonCategory;
   level!: LessonLevel;
-
+  title?: string;
+  
   wpm!: number;
   accuracy!: number;
 

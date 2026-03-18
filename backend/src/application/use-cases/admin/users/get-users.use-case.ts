@@ -13,11 +13,11 @@ export class GetUsersUseCase implements IGetUsersUseCase {
   /**
    * Retrieves all users from the authentication repository and maps them to DTOs.
    */
-  async execute(): Promise<UserDTO[]> {
+  async execute(search:string,status:string,page:number,limit:number): Promise<{users:UserDTO[],total:number}> {
 
-    const users = await this.authRepository.find({ role: "user" });
-
-    return users.map(mapUserToDTO);
+    const data = await this.authRepository.getUsers(search,status,page,limit);
+    const users = data.users.map(mapUserToDTO);
+    return {users,total:data.total};
 
   }
 

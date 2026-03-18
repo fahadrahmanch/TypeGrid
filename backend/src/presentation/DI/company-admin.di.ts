@@ -22,7 +22,7 @@ import { LessonAssignmentRepository } from "../../infrastructure/db/repositories
 import { CompanyGroupController } from "../controllers/company-admin/company-group.controller";
 import { CreateCompanyGroupUseCase } from "../../application/use-cases/company-admin/company-group/create-company-group.use-case";
 import { CompanyGroup } from "../../infrastructure/db/models/company/company-group.schema";
-import { CompanyGroupRepositroy } from "../../infrastructure/db/repositories/companyUser/company-group.repository";
+import { CompanyGroupRepositroy } from "../../infrastructure/db/repositories/company/company-group.repository";
 import { GetCompanyGroupsUseCase } from "../../application/use-cases/company-admin/company-group/get-company-groups.use-case";
 import { CompanyContestManagementController } from "../controllers/company-admin/company-contest-management.controller";
 import { CreateCompanyContestUseCase } from "../../application/use-cases/company-admin/company-contest/create-company-contest.use-case";
@@ -34,6 +34,9 @@ import { GetContestParticipantsUseCase } from "../../application/use-cases/compa
 import { GetContestUseCase } from "../../application/use-cases/company-admin/company-contest/get-contest.use-case";
 import { UpdateContestUseCase } from "../../application/use-cases/company-admin/company-contest/update-contest.use-case";
 import { DeleteContestUseCase } from "../../application/use-cases/company-admin/company-contest/delete-company-contest.use-case";
+import { GetContestResultUseCase } from "../../application/use-cases/company-admin/company-contest/get-contest-result-use-case";
+import { ResultRepository } from "../../infrastructure/db/repositories/result.repository";
+import { Result } from "../../infrastructure/db/models/user/result.schema";
 
 const userRepository = new UserRepository(User);
 const tokenService = new TokenService();
@@ -102,6 +105,11 @@ const getCompanyContestUseInstance = new GetContestUseCase(
 );
 const updateContestUseCaseInstance = new UpdateContestUseCase(contestRepository);
 const deleteContestUseCaseInstance = new DeleteContestUseCase(contestRepository);
+const resultRepository = new ResultRepository(Result);
+const getContestResultUseCaseInstance = new GetContestResultUseCase(
+  contestRepository,
+  resultRepository,
+);
 
 export const injectCompanyContestManagementController =
   new CompanyContestManagementController(
@@ -112,6 +120,7 @@ export const injectCompanyContestManagementController =
     getCompanyContestUseInstance,
     updateContestUseCaseInstance,
     deleteContestUseCaseInstance,
+    getContestResultUseCaseInstance,
   );
 export const injectCompanyGroupController = new CompanyGroupController(
   createCompanyGroupUseCaseInstance,

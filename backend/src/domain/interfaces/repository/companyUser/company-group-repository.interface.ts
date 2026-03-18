@@ -1,5 +1,5 @@
 import { ICompanyGroupDocument } from "../../../../infrastructure/db/types/documents";
 
-export interface ICompanyGroupRepository<ICompanyGroupDocument> {
-  getGroup(userId: string): Promise<T[] | null>;
+export interface ICompanyGroupRepository {
+  getGroup(userId: string): Promise<ICompanyGroupDocument[] | null>;
 }

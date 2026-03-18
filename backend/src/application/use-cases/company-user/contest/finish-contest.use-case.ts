@@ -1,6 +1,6 @@
 import { IFinishContestUseCase } from "../../interfaces/companyUser/finish-contest.interface";
 import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
-import { IResultRepository } from "../../../../domain/interfaces/repository/company/result-repository.interface";
+import { IResultRepository } from "../../../../domain/interfaces/repository/result-repository.interface";
 import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 import { ResultEntity } from "../../../../domain/entities/result.entity";
 /**
@@ -10,10 +10,10 @@ export class FinishContestUseCase implements IFinishContestUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
     private readonly _resultRepository: IResultRepository,
-  ) {}
-   /**
-   * Complete a contest and save participant results.
-   */
+  ) { }
+  /**
+  * Complete a contest and save participant results.
+  */
   async execute(contestId: string, result: any[]): Promise<void> {
     const contest = await this._contestRepository.findById(contestId);
     const contestEntity = new ContestEntity(contest);

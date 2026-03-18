@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { IUserDocument } from "../../types/documents";
 
-const userSchema: mongoose.Schema = new Schema<IUserDocument>({
+const userSchema: mongoose.Schema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: false },
@@ -28,4 +28,4 @@ const userSchema: mongoose.Schema = new Schema<IUserDocument>({
   role: { type: String, required: true, default: "user" },
 });
 
-export const User = mongoose.model<IUserDocument>("user", userSchema);
+export const User = mongoose.model<IUserDocument>("User", userSchema);

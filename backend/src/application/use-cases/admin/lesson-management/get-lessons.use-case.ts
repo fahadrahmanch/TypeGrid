@@ -13,11 +13,11 @@ export class GetLessonsUseCase implements IGetLessonsUseCase {
   /**
    * Retrieves all lessons created by the admin.
    */
-  async execute(): Promise<LessonDTO[]> {
+  async execute(status:string,searchText:string,page:number,limit:number): Promise<{lessons:LessonDTO[],total:number}> {
 
-    const lessons = await this._lessonRepository.find({ createdBy: "admin" });
+    const lessons = await this._lessonRepository.getLessons(status,searchText,page,limit);
 
-    return lessons.map(mapLessonToDTO);
+    return {lessons:lessons.lessons.map(mapLessonToDTO),total:lessons.total};
 
   }
 

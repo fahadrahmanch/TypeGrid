@@ -25,7 +25,7 @@ export class CompanyApproveRejectUseCase implements ICompanyApproveRejectUseCase
       );
     }
 
-    const user = await this.userRepository.findById(OwnerId);
+    const user = await this.userRepository.findById(OwnerId.toString());
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,

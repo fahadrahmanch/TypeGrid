@@ -28,6 +28,7 @@ export class adminRouter {
       },
     );
 
+
     //company management routes
     this.router.get(
       Routes.ADMIN.GET_COMPANYS,

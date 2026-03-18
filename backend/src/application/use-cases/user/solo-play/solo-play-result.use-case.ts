@@ -1,7 +1,7 @@
 import { ISoloPlayResultUseCase } from "../../interfaces/user/solo-play/solo-play-result.interface";
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { IResultRepository } from "../../../../domain/interfaces/repository/company/result-repository.interface";
+import { IResultRepository } from "../../../../domain/interfaces/repository/result-repository.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
 import { ResultEntity } from "../../../../domain/entities/result.entity";
 import { MESSAGES } from "../../../../domain/constants/messages";
@@ -12,7 +12,7 @@ export class SoloPlayResultUseCase implements ISoloPlayResultUseCase {
     private _competitionRepo: ICompetitionRepository,
     private _userRepo: IUserRepository,
     private _resultRepo: IResultRepository,
-  ) {}
+  ) { }
 
   async execute(userId: string, gameId: string, result: any): Promise<void> {
     const user = await this._userRepo.findById(userId);

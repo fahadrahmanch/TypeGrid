@@ -47,11 +47,13 @@ export class LessonManageController {
 
   async getLessons(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const lessons = await this._getLessonsUseCase.execute();
+      const { status, searchText, page, limit } = req.query;
+      const lessons = await this._getLessonsUseCase.execute(status as string,searchText as string,Number(page),Number(limit));
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.FETCH_SUCCESS,
-        lessons: lessons,
+        total:lessons.total,
+        data: lessons.lessons,
       });
     } catch (error: any) {
       next(error);

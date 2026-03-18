@@ -1,21 +1,15 @@
-import { ICompanyDocument } from "../../../../infrastructure/db/types/documents";
-
-export interface ICompanyRepository {
+import { CompanyEntity } from "../../../entities";
+export interface ICompanyRepository  {
   create(data: any): Promise<any>;
-  findById(
-    id: string,
-    options?: {
-      populate?: any;
-    },
-  ): Promise<any | null>;
-  update(data: any): Promise<any | null>;
-  find(
-    filter?: any,
-    options?: {
-      populate?: { path: string; select?: string };
-    },
-  ): Promise<any[]>;
-  findOne(filter?: any): Promise<any | null>;
-  delete(_id: string): Promise<any | null>;
-  updateById(_id: string, updateQuery: any): Promise<any | null>;
+  findById(id: string): Promise<any>;
+  update(data: any): Promise<any>;
+  delete(id: string): Promise<any>;
+  find(filter?: any): Promise<any>;
+  findOne(filter?: any): Promise<any>;
+  getCompanies(
+    status: string,
+    searchText: string,
+    page: number,
+    limit: number,
+  ): Promise<{ companies: any[]; total: number }>;
 }

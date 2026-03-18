@@ -313,7 +313,6 @@ export class GroupPlayController {
         message: "New Game started successfully",
       });
     } catch (error: any) {
-      console.log("error",error)
       next(error);
     }
   }

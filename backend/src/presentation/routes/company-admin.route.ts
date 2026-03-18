@@ -163,6 +163,13 @@ export class companyAdminRouter {
         injectCompanyContestManagementController.deleteContest(req, res, next);
       },
     );
+    this.router.get(
+      Routes.COMPANY_ADMIN.FETCH_CONTEST_RESULT,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyContestManagementController.getContestResult(req, res, next);
+      },
+    );
   }
   getRouter() {
     return this.router;

@@ -39,17 +39,17 @@ export interface ICompanyDocument {
 
 // ────────────── Lesson ──────────────
 export interface ILessonDocument {
-  _id?: Types.ObjectId;
-  title?: string;
+  _id: Types.ObjectId
+  title: string;       
   text: string;
   category: "sentence" | "paragraph";
-  level: "beginner" | "intermediate" | "advanced" | "easy" | "medium" | "hard";
-  wpm?: number;
-  accuracy?: number;
+  level: "beginner" | "intermediate" | "advanced";
+  wpm: number;
+  accuracy: number;
   createdBy: "admin" | "company";
   companyId?: Types.ObjectId | null;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 // ────────────── Group (user group play) ──────────────
@@ -177,4 +177,21 @@ export interface ILessonResultDocument {
   errors: number;
   status: "assigned" | "progress" | "completed" | "expired";
   createdAt?: Date;
+}
+export interface IResultDocument {
+  _id?: Types.ObjectId;
+  type: "quick" | "solo" | "group" | "contest";
+  competitionId?: Types.ObjectId | null;
+  contestId?: Types.ObjectId | null;
+  userId: Types.ObjectId;
+  result: {
+    wpm: number;
+    accuracy: number;
+    errors: number;
+    time: number;
+    rank?: number;
+    prize?: number;
+  };
+  createdAt?: Date;
+  updatedAt?: Date;
 }

@@ -1,4 +1,3 @@
-import { IGroupDocument } from "../../../../infrastructure/db/types/documents";
 
 export interface IGroupRepository {
   create(data: any): Promise<any>;

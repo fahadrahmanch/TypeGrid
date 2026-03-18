@@ -11,7 +11,7 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { IUpdateContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/update-contest.interface";
 import { IDeleteContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/delete-contest.interface";
 import { CustomError } from "../../../domain/entities/custom-error.entity";
-
+import { IGetContestResultUseCase } from "../../../application/use-cases/interfaces/companyUser/get-contest-result.interface";
 export class CompanyContestManagementController {
   constructor(
     private _createCompanyContestUseCase: ICreateCompanyContestUseCase,
@@ -21,6 +21,7 @@ export class CompanyContestManagementController {
     private _getContestUseCase: IGetContestUseCase,
     private _updateContestUseCase: IUpdateContestUseCase,
     private _deleteContestUseCase: IDeleteContestUseCase,
+    private _getContestResultUseCase: IGetContestResultUseCase,
   ) {}
 
   //create contest
@@ -212,6 +213,28 @@ export class CompanyContestManagementController {
       });
     } catch (error: any) {
       next(error);
+    }
+  }
+
+  async getContestResult(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const contestId = req.params.contestId;
+      if (!contestId) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: MESSAGES.CONTEST_NOT_FOUND,
+        });
+        return;
+      }
+      const result = await this._getContestResultUseCase.execute(contestId);
+      logger.info("Contest result fetched successfully", { contestId });
+      res.status(HttpStatus.OK).json({
+        success: true,
+        data: result,
+      });
+    } catch (error: any) {
+      next(error);
+      
     }
   }
 }

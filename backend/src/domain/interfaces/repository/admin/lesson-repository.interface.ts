@@ -1,21 +1,42 @@
-import { ILessonDocument } from "../../../../infrastructure/db/types/documents";
+import { LessonEntity } from "../../../entities/lesson.entity";
 
 export interface ILessonRepository {
+
+  // CREATE
   create(data: any): Promise<any>;
+
+  // READ
   findById(
     id: string,
     options?: {
-      populate?: any;
-    },
-  ): Promise<any | null>;
-  update(data: any): Promise<any | null>;
+      populate?: { path: string; select?: string };
+    }
+  ): Promise< any>;
+
   find(
     filter?: any,
     options?: {
       populate?: { path: string; select?: string };
-    },
-  ): Promise<any[]>;
-  findOne(filter?: any): Promise<any | null>;
-  delete(_id: string): Promise<any | null>;
-  updateById(_id: string, updateQuery: any): Promise<any | null>;
+    }
+  ): Promise<any>;
+
+  findOne(filter?: any): Promise<any>;
+
+  // UPDATE
+  updateById(
+    id: string,
+    update: any
+  ): Promise<any>;
+
+  // DELETE
+  delete(id: string): Promise<any>;
+  update(data: any): Promise<any>;
+
+  // CUSTOM
+  getLessons(
+    status: string,
+    searchText: string,
+    page: number,
+    limit: number
+  ): Promise<{ lessons: any[]; total: number }>;
 }

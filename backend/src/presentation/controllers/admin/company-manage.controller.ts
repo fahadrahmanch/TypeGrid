@@ -15,12 +15,14 @@ export class CompanyManageController {
 
   async getCompanies(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const companies = await this._getCompaniesUseCase.execute();
+      const {status,searchText,page,limit}=req.query
+      const companies = await this._getCompaniesUseCase.execute(status as string,searchText as string,Number(page) ,Number(limit));
          logger.info("Companies fetched successfully by admin");
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.COMPANIES_FETCHED_SUCCESS,
-        data: companies,
+        total:companies.total,
+        data: companies.companies,
       });
     } catch (error: any) {
       next(error);

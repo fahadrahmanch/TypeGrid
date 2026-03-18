@@ -105,7 +105,6 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       lesson: selectedLesson,
       joinLink: JoinLink || undefined,
     };
-    console.log("responseCompetition",responseCompetition)
     return mapCompetitionToDTOGroupPlay(
       responseCompetition,
       groupEntity.getOwnerId(),

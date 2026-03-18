@@ -3,7 +3,7 @@ import { Model } from "mongoose";
 import mongoose from "mongoose";
 import { BaseRepository } from "../../base/base.repository";
 import { ICompanyGroupDocument } from "../../types/documents";
-export class CompanyGroupRepositroy<ICompanyGroupDocument> extends BaseRepository<ICompanyGroupDocument> implements ICompanyGroupRepository<ICompanyGroupDocument> {
+export class CompanyGroupRepositroy extends BaseRepository<ICompanyGroupDocument> implements ICompanyGroupRepository {
   constructor(model: Model<ICompanyGroupDocument>) {
     super(model)
   }

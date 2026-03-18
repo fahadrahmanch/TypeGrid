@@ -2,7 +2,7 @@ import { IFinishGroupPlayUseCase } from "../../interfaces/user/group-play/finish
 import { GroupPlayResult } from "../../../DTOs/user/group-play.dto";
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
 import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
-import { IResultRepository } from "../../../../domain/interfaces/repository/company/result-repository.interface";
+import { IResultRepository } from "../../../../domain/interfaces/repository/result-repository.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
 import { ResultEntity } from "../../../../domain/entities/result.entity";
 import { GroupEntity } from "../../../../domain/entities/group.entity";
@@ -15,7 +15,7 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
     private competitionRepository: ICompetitionRepository,
     private groupRepository: IGroupRepository,
     private resultRepository: IResultRepository,
-  ) {}
+  ) { }
   async execute(gameId: string, resultArray: GroupPlayResult[]): Promise<void> {
     const competition = await this.competitionRepository.findById(gameId);
     if (!competition) {
@@ -25,11 +25,11 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
       );
     }
     const competitionEntity = new CompetitionEntity({
-      ...competition ,
+      ...competition,
       id: competition._id,
     });
     competitionEntity.setStatus("completed");
-    const competitionObject=competitionEntity.toObject()
+    const competitionObject = competitionEntity.toObject()
     await this.competitionRepository.update(competitionObject);
     const groupId = competitionEntity.getGroupId();
 

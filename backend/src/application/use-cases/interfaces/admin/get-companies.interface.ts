@@ -1,5 +1,5 @@
-import { CompanyEntity } from "../../../../domain/entities/company.entity";
+import { CompanyEntity } from "../../../../domain/entities";
 
 export interface IGetCompaniesUseCase {
-  execute(): Promise<CompanyEntity[]>;
+  execute(status:string,searchText:string,page:number,limit:number): Promise<{companies:CompanyEntity[],total:number}>;
 }

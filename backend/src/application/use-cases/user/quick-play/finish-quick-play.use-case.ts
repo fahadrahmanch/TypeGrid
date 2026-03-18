@@ -1,5 +1,5 @@
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
-import { IResultRepository } from "../../../../domain/interfaces/repository/company/result-repository.interface";
+import { IResultRepository } from "../../../../domain/interfaces/repository/result-repository.interface";
 import { ResultEntity } from "../../../../domain/entities/result.entity";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
 import { QuicKPlayResult } from "../../../DTOs/user/competition-quick-play.dto";
@@ -7,7 +7,7 @@ export class FinishQuickPlayUseCase {
   constructor(
     private competitionRepository: ICompetitionRepository,
     private resultRepository: IResultRepository,
-  ) {}
+  ) { }
   async execute(gameId: string, resultArray: QuicKPlayResult[]): Promise<void> {
     const competition = await this.competitionRepository.findById(gameId);
     const competitionEntity = new CompetitionEntity({

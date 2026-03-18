@@ -588,6 +588,9 @@ export const initSocket = (server: any) => {
   
 
     /* ===================== COMPANY CONTEST ===================== */
+    socket.on("company-admin-contest", () => {
+      socket.join("company-admin-contest");
+    });
 
     socket.on("contest-status-updated", async ({ contestId, status }) => {
       const lobbyKey = `company:lobby:${contestId}`;
@@ -812,7 +815,13 @@ export const initSocket = (server: any) => {
               ...player,
               rank: index + 1,
             }));
+        
           io.to(contestId).emit("game-finished-contest", resultArray);
+         io.to("company-admin-contest").emit("contest-updated-admin", {
+  contestId,
+  status: "completed",
+  results: resultArray,
+});
           await redis.del(key);
           await injectContestSocketController.saveContestResult(
             contestId,
@@ -903,6 +912,11 @@ export const initSocket = (server: any) => {
               rank: index + 1,
             }));
           io.to(contestId).emit("game-finished-contest", resultArray);
+          io.to("company-admin-contest").emit("contest-updated-admin", {
+            contestId,
+            status: "completed",
+            results: resultArray,
+          });
           await redis.del(key);
           await injectContestSocketController.saveContestResult(
             contestId,
@@ -914,7 +928,7 @@ export const initSocket = (server: any) => {
 
     socket.on("leave-companyContest-game", async ({ contestId, userId }) => {
       const key = `company:game:${contestId}`;
-      const raw = await redis.get(key);
+      const raw = await redis.hget(key, userId);
       if (!raw) return;
       const player = JSON.parse(raw);
       player.status = "LEFT";
@@ -1009,7 +1023,11 @@ export const initSocket = (server: any) => {
           ...player,
           rank: index + 1,
         }));
-
+      io.to("company-admin-contest").emit("contest-updated-admin", {
+        contestId,
+        status: "completed",
+        results: resultArray,
+      });
       io.to(contestId).emit("game-finished-contest", resultArray);
       await injectContestSocketController.saveContestResult(
         contestId,
@@ -1045,14 +1063,11 @@ export const initSocket = (server: any) => {
         const userId = socket.data.userId;
         const key = `quick:game:${gameId}`;
         const raw = await redis.hget(key, userId);
-        console.log("disonnect")
     if (raw) {
       const data = JSON.parse(raw);
-      console.log("data")
       await redis.hset(key, userId, JSON.stringify({ ...data, status: "LEFT" }));
     }
     const updated=await redis.hget(key,userId)
-    console.log("raw",updated)
     io.to(gameId).emit("player-left-quick", { userId });
 
     const all = await redis.hgetall(key);

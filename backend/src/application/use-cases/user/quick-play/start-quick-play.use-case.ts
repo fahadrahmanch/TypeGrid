@@ -15,7 +15,6 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
     private lessonRepository: ILessonRepository,
   ) {}
   async execute(userId: string): Promise<CompetitionDTOQuickPlay> {
-    console.log("Staart")
     if (!userId) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
@@ -35,7 +34,6 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
       $expr: { $lt: [{ $size: "$participants" }, 5] },
       participants: { $ne: userId },
     });
-    console.log("competiton",competition)
 
     if (competition) {
       const competitionEntity = new CompetitionEntity({

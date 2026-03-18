@@ -1,4 +1,3 @@
-import { ICompanyGroupDocument } from "../../../../infrastructure/db/types/documents";
 
 export interface ICompanyGroupRepository {
   create(data: any): Promise<any>;

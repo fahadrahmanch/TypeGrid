@@ -31,6 +31,6 @@ export class GetCompanyLessonsUseCase implements IGetCompanyLessonsUseCase {
 
     const lessons = await this._lessonRepository.find({ companyId });
 
-    return lessons.map((lesson) => mapLessonDTOforCompanyLesson(lesson));
+    return lessons.map((lesson:any) => mapLessonDTOforCompanyLesson(lesson));
   }
 }

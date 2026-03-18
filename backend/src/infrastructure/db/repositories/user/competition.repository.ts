@@ -4,10 +4,10 @@ import { ICompetitionRepository } from "../../../../domain/interfaces/repository
 import { ICompetitionDocument } from "../../types/documents";
 
 export class CompetitionRepository
-  extends BaseRepository<ICompetitionDocument>
+  extends BaseRepository<any>
   implements ICompetitionRepository
 {
-  constructor(model: Model<ICompetitionDocument>) {
+  constructor(model: Model<any>) {
     super(model);
   }
 }

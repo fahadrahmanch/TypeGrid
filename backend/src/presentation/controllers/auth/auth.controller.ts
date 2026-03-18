@@ -157,7 +157,6 @@ export class AuthController {
       const token = req.cookies[tokenName];
 
       if (!token) {
-        console.log('hello there ')
         res.status(HttpStatus.UNAUTHORIZED).json({
           success: false,
           message: MESSAGES.REFRESH_TOKEN_NOT_FOUND,
@@ -361,9 +360,7 @@ export class AuthController {
   //admin signin
   async AdminSignIn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log("hello there in admin signin")
       const { email, password, role } = req.body.data;
-      console.log("role",role)
       const admin = await this._loginUseCase.execute(email, password, [role]);
      
       if (!admin || !admin._id) {

@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IResultDocument } from "../../types/documents";
 
-const resultSchema = new Schema<IResultDocument>(
+const resultSchema = new Schema(
   {
     type: {
       type: String,

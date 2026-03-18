@@ -17,7 +17,7 @@ import { ContestRepository } from "../../infrastructure/db/repositories/company/
 import { JoinOrLeaveContestUseCase } from "../../application/use-cases/company-user/contest/join-or-leave-contest.use-case";
 import { GetGroupContestUseCase } from "../../application/use-cases/company-user/contest/get-group-contest.use-case";
 import { CompanyGroup } from "../../infrastructure/db/models/company/company-group.schema";
-import { CompanyGroupRepositroy } from "../../infrastructure/db/repositories/companyUser/company-group.repository";
+import { CompanyGroupRepositroy } from "../../infrastructure/db/repositories/company/company-group.repository";
 import { GetContestUseCase } from "../../application/use-cases/company-user/contest/get-contest.use-case";
 import { GetContestDataUseCase } from "../../application/use-cases/company-user/contest/get-contest-data.use-case";
 import { ChallengesController } from "../controllers/company-user/challenges.controller";

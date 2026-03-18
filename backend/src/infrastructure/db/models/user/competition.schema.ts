@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
-import { ICompetitionDocument } from "../../types/documents";
 
-const competitionSchema = new Schema<ICompetitionDocument>(
+const competitionSchema = new Schema(
   {
     type: {
       type: String,
@@ -72,7 +71,7 @@ const competitionSchema = new Schema<ICompetitionDocument>(
   },
 );
 
-export const Competition = model<ICompetitionDocument>(
+export const Competition = model(
   "Competition",
   competitionSchema,
 );
