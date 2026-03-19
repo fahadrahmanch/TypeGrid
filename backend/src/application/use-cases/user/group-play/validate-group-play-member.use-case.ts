@@ -17,7 +17,7 @@ export class ValidateGroupPlayMemberUseCase implements IValidateGroupPlayMemberU
       return false;
     }
 
-    const isMember = group.members.some(
+    const isMember = group.getMembers().some(
       (member: any) => member.toString() === userId.toString(),
     );
     return isMember;

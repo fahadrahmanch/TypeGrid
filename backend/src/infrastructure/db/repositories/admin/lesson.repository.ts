@@ -3,23 +3,25 @@ import { BaseRepository } from "../../base/base.repository";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { ILessonDocument } from "../../types/documents";
 import { LessonEntity } from "../../../../domain/entities/lesson.entity";
+import { LessonMapper } from "../../mappers/lesson.mapper";
 
 export class LessonRepository
-  extends BaseRepository<ILessonDocument>
+  extends BaseRepository<ILessonDocument, LessonEntity>
   implements ILessonRepository
 {
   constructor(model: Model<ILessonDocument>) {
-    super(model);
+    super(model, LessonMapper.toDomain);
   }
-  async getLessons(status:string,searchText:string,page:number,limit:number): Promise<{lessons:any[],total:number}> {
+  async getLessons(status:string,searchText:string,page:number,limit:number): Promise<{lessons:LessonEntity[],total:number}> {
     const query: any = {};
-    if (status) {
+    if (status && status !== "All") {
       query.status = status;
     }
     if (searchText) {
-      query.text = { $regex: "^"+searchText, $options: "i" };
+      query.title = { $regex: "^"+searchText, $options: "i" };
     }
-    const lessons = await this.model.find(query).skip((page - 1) * limit).limit(limit);
+    const rawLessons = await this.model.find(query).skip((page - 1) * limit).limit(limit).lean<ILessonDocument[]>().exec();
+    const lessons = rawLessons.map(doc => this.toDomain(doc));
     const total = await this.model.countDocuments(query);
     return { lessons, total };
   }

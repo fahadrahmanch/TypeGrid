@@ -43,7 +43,7 @@ export interface UserContestCardProps {
 const getLevelBadgeStyle = (level: string) => {
   switch (level.toLowerCase()) {
     case "easy":
-      return "bg-emerald-50 text-emerald-600 border-emerald-200";
+      return "bg-[#FFF4EC]/60 text-[#D0864B] border-[#FADDB8]";
     case "intermediate":
       return "bg-blue-50 text-blue-600 border-blue-200";
     case "medium":
@@ -60,13 +60,13 @@ const getLevelBadgeStyle = (level: string) => {
 const getStatusBadgeStyle = (status: string) => {
   switch (status.toLowerCase()) {
     case "waiting":
-      return "bg-amber-100 text-amber-700";
+      return "bg-amber-100/60 text-amber-700";
     case "upcoming":
-      return "bg-sky-100 text-sky-700";
+      return "bg-sky-100/60 text-sky-700";
     case "active":
-      return "bg-emerald-100 text-emerald-700";
+      return "bg-[#FFF4EC] text-[#D0864B]";
     default:
-      return "bg-gray-100 text-gray-700";
+      return "bg-gray-100/60 text-gray-700";
   }
 };
 
@@ -87,7 +87,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
   reward,
 }) => {
   const [isJoined, setIsJoined] = useState(joined);
-  const [participantList, setParticipantList] = useState<User[]>([]);
+  // const [participantList, setParticipantList] = useState<User[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const [participantsCount, setParticipantsCount] = useState<number>(
     participants.length,
@@ -103,7 +103,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
     const contest = response.data.data;
 
     setIsJoined(contest.joined);
-    setParticipantList(contest.participants);
+    // setParticipantList(contest.participants);
     if (actionLabel === "join") {
       setParticipantsCount(participantsCount + 1);
     } else if (actionLabel === "cancel") {
@@ -115,7 +115,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
   const action = isJoined ? "cancel" : "join";
   return (
     <div
-      className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 relative w-full transform hover:-translate-y-1 overflow-hidden flex flex-col h-full"
+      className="group bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-[0_10px_30px_rgb(236,164,104,0.04)] hover:shadow-[0_20px_50px_rgb(236,164,104,0.08)] border border-[#ECA468]/10 transition-all duration-500 relative w-full transform hover:-translate-y-1.5 overflow-hidden flex flex-col h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -126,7 +126,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
             ? "from-rose-400 to-red-500"
             : difficulty.toLowerCase() === "medium"
               ? "from-blue-400 to-indigo-500"
-              : "from-emerald-400 to-green-500"
+              : "from-amber-400 to-[#ECA468]"
         }`}
       />
 
@@ -145,7 +145,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
               </span>
             )}
           </div>
-          <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+          <h3 className="text-xl font-black text-slate-800 leading-tight group-hover:text-[#ECA468] transition-colors line-clamp-2">
             {title}
           </h3>
         </div>
@@ -161,7 +161,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
       </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-500 mb-5 line-clamp-2 flex-grow">
+      <p className="text-sm text-slate-500 font-medium mb-6 line-clamp-2 flex-grow leading-relaxed">
         {description ||
           (isGroup
             ? "An exclusive internal team competition to test your skills."
@@ -184,9 +184,9 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
 
       {/* Prize Section (Compacted) */}
       {reward && reward.length > 0 && (
-        <div className="mb-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-3 border border-amber-100 flex flex-col gap-2">
-          <div className="flex items-center gap-1.5 text-amber-800 text-xs font-bold uppercase tracking-wider mb-1">
-            <Trophy className="w-3.5 h-3.5 text-amber-600" />
+        <div className="mb-6 bg-[#fff4ec]/60 rounded-2xl p-4 border border-[#faddb8]/40 flex flex-col gap-3">
+          <div className="flex items-center gap-1.5 text-[#D0864B] text-[10px] font-black uppercase tracking-widest mb-1">
+            <Trophy className="w-4 h-4 text-[#ECA468]" />
             Prize Pool
           </div>
           <div className="flex flex-wrap gap-2">
@@ -200,12 +200,12 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
               return (
                 <div
                   key={r.rank}
-                  className="flex items-center bg-white rounded-lg px-2.5 py-1.5 shadow-sm border border-amber-100/50"
+                  className="flex items-center bg-white/40 backdrop-blur-sm rounded-xl px-3 py-2 shadow-sm border border-[#f8e8c8]/40"
                 >
-                  <span className="text-xs font-bold text-amber-600 mr-1.5">
+                  <span className="text-xs font-black text-[#ECA468] mr-2">
                     {getRankStr(r.rank)}
                   </span>
-                  <span className="text-sm font-bold text-gray-800">
+                  <span className="text-sm font-black text-slate-700">
                     ₹{r.prize}
                   </span>
                 </div>
@@ -216,18 +216,18 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
       )}
 
       {/* Info Grid */}
-      <div className="grid grid-cols-2 gap-y-3 gap-x-4 mb-6 pt-4 border-t border-gray-100">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <div className="p-1.5 bg-gray-50 rounded-md text-gray-400">
+      <div className="grid grid-cols-2 gap-y-4 gap-x-6 mb-7 pt-5 border-t border-[#f8e8c8]/40">
+        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
+          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
             <Calendar className="w-4 h-4" />
           </div>
-          <span className="font-medium">{date.toString().split("T")[0]}</span>
+          <span className="truncate">{date.toString().split("T")[0]}</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <div className="p-1.5 bg-gray-50 rounded-md text-gray-400">
+        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
+          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
             <Clock className="w-4 h-4" />
           </div>
-          <span className="font-medium">
+          <span className="truncate">
             {new Date(startTime).toLocaleTimeString("en-US", {
               hour: "numeric",
               minute: "2-digit",
@@ -235,31 +235,31 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
             })}
           </span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <div className="p-1.5 bg-gray-50 rounded-md text-gray-400">
+        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
+          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
             <Activity className="w-4 h-4" />
           </div>
-          <span className="font-medium">{duration} mins</span>
+          <span className="truncate">{duration} mins</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <div className="p-1.5 bg-gray-50 rounded-md text-gray-400">
+        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
+          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
             <Users className="w-4 h-4" />
           </div>
-          <span className="font-medium">
+          <span className="truncate">
             {participantsCount}/{maxParticipants} joined
           </span>
         </div>
       </div>
 
       {/* Actions */}
-      <div className="mt-auto flex gap-2.5">
+      <div className="mt-auto flex gap-3">
         <button
           onClick={() => handleClick(_id, action)}
-          className={`flex-1 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap
+          className={`flex-1 py-3 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap
                     ${
                       action === "join"
-                        ? "bg-gray-900 text-white hover:bg-gray-800 hover:shadow-md"
-                        : "bg-red-50 text-red-600 border border-red-200 hover:bg-red-100"
+                        ? "bg-[#ECA468] text-white hover:bg-[#D0864B] hover:shadow-lg hover:shadow-[#ECA468]/30"
+                        : "bg-rose-100 text-rose-600 border border-rose-200 hover:bg-rose-200"
                     }
                   `}
         >
@@ -269,10 +269,10 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
         {isJoined && (
           <button
             onClick={() => navigate(`lobby/${_id}`)}
-            className="flex-1 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 bg-blue-600 text-white hover:bg-blue-700 shadow-sm hover:shadow-md flex items-center justify-center gap-1 group/btn whitespace-nowrap"
+            className="flex-1 py-3 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 bg-white shadow-[0_5px_15px_rgba(236,164,104,0.1)] text-[#D0864B] border border-[#FADDB8] hover:bg-[#FFF4EC] flex items-center justify-center gap-1 group/btn whitespace-nowrap"
           >
-            View Lobby
-            <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+            Lobby
+            <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
           </button>
         )}
       </div>

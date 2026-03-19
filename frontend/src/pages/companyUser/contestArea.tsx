@@ -5,19 +5,9 @@ import { socket } from "../../socket";
 import { fetchContestAreaDetails } from "../../api/companyAdmin/companyContextAPI";
 import { Crown, Trophy, Users } from "lucide-react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-type PlayerStatus = "PLAYING" | "DISCONNECTED" | "FINISHED" | "LEFT";
-interface LivePlayer {
-  userId: string;
-  name: string;
-  imageUrl: string;
-  progress: number;
-  wpm: number;
-  accuracy: number;
-  errors: number;
-  timeTaken: number;
-
-  status: PlayerStatus;
-}
+// type PlayerStatus = "PLAYING" | "DISCONNECTED" | "FINISHED" | "LEFT";
+import { useContestSocket } from "../../hooks/companyUser/useContestAreaSocket";
+// import { LivePlayer ,PlayerStatus} from "../../types/contest";
 interface ContestRecord {
   _id: string;
   title: string;
@@ -31,20 +21,7 @@ interface ContestRecord {
   rewards: [{ rank: number; prize: number }];
   countDown: number;
 }
-export type GamePlayerResult = {
-  userId: string;
-  wpm: number;
-  accuracy: number | null;
-  errors: number;
-  typedLength: number;
-  status: "times-up" | "finished" | "playing";
-  updatedAt: number;
-  name: string;
-  imageUrl: string;
-  timeTaken: number;
-  prize: number;
-  rank?: number;
-};
+import { GamePlayerResult, LivePlayer } from "../../types/contest";
 
 const ContestArea: React.FC = () => {
   const { contestId } = useParams<{ contestId: string }>();
@@ -107,37 +84,33 @@ const ContestArea: React.FC = () => {
     fetchContest();
   }, [contestId]);
 
-  useEffect(() => {
-    if (!contestId || !user?._id) return;
+//socket 
+useContestSocket({
+  contestId,
+  user,
+  contestData,
+  phase,
+  typedText,
+  wpm,
+  accuracy,
+  errors,
+  remainingTime,
+  elapsedTime,
+  totalTyped,
+  gameIdRef,
+  userIdRef,
+  setLivePlayers,
+  setFinalResult,
+  setContestData,
+  setTypedText,
+  setErrors,
+  setTotalTyped,
+  setElapsedTime,
+  setIsFinished,
+  finalResult
+});
 
-    const handleLobbyUpdate = (data: any) => {
-      setLivePlayers(data);
-    };
 
-    socket.on("contest-game-players", handleLobbyUpdate);
-
-    // Join room
-    socket.emit("join-companyContest-game", {
-      contestId,
-      user,
-    });
-
-    return () => {
-      socket.off("contest-game-players", handleLobbyUpdate);
-    };
-  }, [contestId, user?._id]);
-
-  useEffect(() => {
-    return () => {
-      if (gameIdRef.current && userIdRef.current) {
-        // Emit event to server that this user is leaving
-        socket.emit("leave-companyContest-game", {
-          contestId: gameIdRef.current,
-          userId: userIdRef.current,
-        });
-      }
-    };
-  }, []);
   useEffect(() => {
     const preventZoom = (e: WheelEvent) => {
       if (e.ctrlKey || e.metaKey) e.preventDefault();
@@ -166,16 +139,6 @@ const ContestArea: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!contestId || !user?._id) return;
-    socket.on("contest-users-update", (data: any) => {
-      setLivePlayers(data);
-    });
-
-    return () => {
-      socket.off("contest-users-update");
-    };
-  }, [contestId, user?._id]);
 
   // Auto-scroll
   useEffect(() => {
@@ -267,9 +230,9 @@ const ContestArea: React.FC = () => {
 
       if (index < typedText.length) {
         if (typedText[index] === char) {
-          className = "text-emerald-600 bg-emerald-50/50";
+          className = "text-emerald-600 bg-emerald-100/20";
         } else {
-          className = "text-red-500 bg-red-100 underline decoration-red-400";
+          className = "text-red-500 bg-red-100/40 underline decoration-red-400";
         }
       }
 
@@ -366,106 +329,7 @@ const ContestArea: React.FC = () => {
     );
   }, [wpm, accuracy, errors, typedText, user, contestData]);
 
-  //send live stats,
-  useEffect(() => {
-    if (!contestData?._id || !user) return;
-    if (phase !== "PLAY") return;
-    socket.emit("typing-progress-contest", {
-      contestId: contestData._id,
-      userId: user._id,
-      typedLength: typedText.length,
-      wpm,
-      status: "PLAYING",
-      accuracy,
-      errors,
-    });
-  }, [typedText, wpm, accuracy, errors, phase]);
-
-  //typing progress update from other players
-  useEffect(() => {
-    const handler = (data: any) => {
-      setLivePlayers((prev: any) =>
-        prev.map((p: any) =>
-          p.userId === data.userId
-            ? { ...p, ...data, progress: data.typedLength }
-            : p,
-        ),
-      );
-    };
-
-    socket.off("typing-progress-update-contest");
-    socket.on("typing-progress-update-contest", handler);
-
-    return () => {
-      socket.off("typing-progress-update-contest", handler);
-    };
-  }, [contestData?._id]);
-  useEffect(() => {
-    socket.on("game-finished-contest", (data: GamePlayerResult[]) => {
-      setFinalResult(data);
-    });
-    return () => {
-      socket.off("game-finished-contest");
-    };
-  }, [contestData?._id]);
-  useEffect(() => {
-    if (remainingTime === 0) {
-      setIsFinished(true);
-      socket.emit("time-up-contest", {
-        contestId: contestData?._id,
-        userId: user?._id,
-        name: user?.name,
-        imageUrl: user?.imageUrl,
-        timeTaken: elapsedTime,
-        wpm,
-        accuracy,
-        errors,
-        typedLength: typedText.length,
-        totalTyped,
-        status: "times-up",
-      });
-    }
-
-    return () => {
-      socket.off("time-up-contest");
-    };
-  }, [remainingTime]);
-
-  useEffect(() => {
-    const handleRestart = (data: any) => {
-      // Clear result screen
-      setFinalResult([]);
-
-      // Reset typing
-      setTypedText("");
-      setErrors(0);
-      setTotalTyped(0);
-      setWpm(0);
-      setAccuracy(null);
-      setElapsedTime(0);
-      setIsFinished(false);
-
-      // Reset players
-      if (Array.isArray(data.users)) {
-        setLivePlayers(data.users);
-      }
-
-      // Update startTime so countdown works again
-      if (data.newStartTime) {
-        setContestData((prev) => ({
-          ...prev!,
-          startTime: data.newStartTime,
-        }));
-      }
-    };
-
-    socket.on("contest-restarted", handleRestart);
-
-    return () => {
-      socket.off("contest-restarted", handleRestart);
-    };
-  }, []);
-
+  
   const progressPercentage = Math.round(
     (typedText.length / (contestData?.contestText?.length || 0)) * 100,
   );
@@ -499,10 +363,10 @@ const ContestArea: React.FC = () => {
               </p>
             </div>
 
-            <div className="w-full max-w-2xl bg-white/90 backdrop-blur-md rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden relative">
+            <div className="w-full max-w-2xl bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 overflow-hidden relative">
               <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ECA468] to-[#8CA78A]"></div>
               {/* Header Row */}
-              <div className="grid grid-cols-[80px_1fr_100px_100px_100px_80px] gap-4 p-4 bg-slate-50/50 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="grid grid-cols-[80px_1fr_100px_100px_100px_80px] gap-4 p-4 bg-[#f8e8c8]/20 border-b border-[#f8e8c8]/30 text-xs font-bold text-slate-500 uppercase tracking-wider">
                 <div className="text-center">Rank</div>
                 <div>Player</div>
                 <div className="text-right">WPM</div>
@@ -580,7 +444,7 @@ const ContestArea: React.FC = () => {
             <div className="flex items-center gap-4 mt-4">
               <button
                 onClick={() => navigate("/company/user/contests")}
-                className="px-6 py-3 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center gap-2"
+                className="px-6 py-3 rounded-xl bg-[#fff8ea]/60 border border-[#f8e8c8] text-slate-600 font-bold hover:bg-[#fff8ea]/80 hover:border-[#ECA468]/30 transition-all flex items-center gap-2"
               >
                 Return to Contests
               </button>
@@ -591,7 +455,7 @@ const ContestArea: React.FC = () => {
             {/* Left Column - Stats & Rankings */}
             <div className="lg:col-span-1 flex flex-col gap-6 h-full min-h-0 overflow-y-auto custom-scrollbar-hidden pb-8">
               {/* Stats Panel */}
-              <div className="bg-white/80 backdrop-blur-md rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 relative overflow-hidden shrink-0 group">
+              <div className="bg-white/40 backdrop-blur-md rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 relative overflow-hidden shrink-0 group">
                 <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ECA468] to-[#8CA78A]"></div>
                 <h3 className="text-sm font-bold text-slate-500 tracking-widest uppercase mb-4 flex items-center gap-2">
                   <Trophy className="w-4 h-4 text-[#ECA468]" />
@@ -599,7 +463,7 @@ const ContestArea: React.FC = () => {
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {/* WPM */}
-                  <div className="bg-slate-50 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-[#FFF4EC] transition-colors border border-slate-100 group-hover:border-[#FADDB8]">
+                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-[#FFF4EC] transition-colors border border-[#f8e8c8]/40 group-hover:border-[#FADDB8]">
                     <span className="text-[10px] font-bold text-[#D0864B] uppercase tracking-widest mb-1">
                       Speed (WPM)
                     </span>
@@ -610,7 +474,7 @@ const ContestArea: React.FC = () => {
                     </div>
                   </div>
                   {/* Accuracy */}
-                  <div className="bg-slate-50 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-[#F2F7F2] transition-colors border border-slate-100 group-hover:border-[#C4E0C4]">
+                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-[#F2F7F2] transition-colors border border-[#f8e8c8]/40 group-hover:border-[#C4E0C4]">
                     <span className="text-[10px] font-bold text-[#6D8A6B] uppercase tracking-widest mb-1">
                       Accuracy
                     </span>
@@ -624,7 +488,7 @@ const ContestArea: React.FC = () => {
                     </div>
                   </div>
                   {/* Errors */}
-                  <div className="bg-slate-50 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-rose-50 transition-colors border border-slate-100 group-hover:border-rose-200">
+                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-rose-50 transition-colors border border-[#f8e8c8]/40 group-hover:border-rose-200">
                     <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">
                       Errors
                     </span>
@@ -635,7 +499,7 @@ const ContestArea: React.FC = () => {
                     </div>
                   </div>
                   {/* Time Left */}
-                  <div className="bg-slate-50 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-indigo-50 transition-colors border border-slate-100 group-hover:border-indigo-200">
+                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-indigo-50 transition-colors border border-[#f8e8c8]/40 group-hover:border-indigo-200">
                     <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1">
                       Remaining Time
                     </span>
@@ -649,7 +513,7 @@ const ContestArea: React.FC = () => {
               </div>
 
               {/* Live Leaderboard */}
-              <div className="bg-white/80 backdrop-blur-md rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col flex-1 min-h-[300px]">
+              <div className="bg-white/40 backdrop-blur-md rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 flex flex-col flex-1 min-h-[300px]">
                 <div className="flex justify-between items-center mb-4 shrink-0">
                   <h3 className="text-sm font-bold text-slate-500 tracking-widest uppercase flex items-center gap-2">
                     <Users className="w-4 h-4 text-[#8CA78A]" />
@@ -673,7 +537,7 @@ const ContestArea: React.FC = () => {
                       return (
                         <div
                           key={player.userId}
-                          className={`flex items-center gap-3 p-3 rounded-xl transition-all shadow-sm ${isMe ? "bg-[#FFF4EC] border border-[#FADDB8] ring-1 ring-[#FADDB8]" : "bg-slate-50 border border-slate-100 hover:border-slate-200 hover:shadow-md"} ${isDisconnected || isLeft ? "opacity-40 grayscale" : ""}`}
+                          className={`flex items-center gap-3 p-3 rounded-xl transition-all shadow-sm ${isMe ? "bg-[#FFF4EC]/60 border border-[#FADDB8] ring-1 ring-[#FADDB8]" : "bg-[#FDF9F2]/40 border border-[#ECA468]/5 hover:border-[#ECA468]/20 hover:shadow-md"} ${isDisconnected || isLeft ? "opacity-40 grayscale" : ""}`}
                         >
                           {/* Left: Name above Avatar */}
                           <div className="relative shrink-0 flex flex-col justify-center items-center px-1">
@@ -761,7 +625,7 @@ const ContestArea: React.FC = () => {
             {/* Right Column - Typing Interface */}
             <div className="lg:col-span-3 flex flex-col h-full min-h-0 relative">
               {/* Visual Racing Track at the top */}
-              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 mb-6 shrink-0 z-20">
+              <div className="bg-white/40 backdrop-blur-md rounded-2xl p-4 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 mb-6 shrink-0 z-20">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold text-slate-500 uppercase">
                     Your Progress
@@ -771,7 +635,7 @@ const ContestArea: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="relative h-4 bg-slate-100 rounded-full overflow-hidden shadow-inner flex items-center px-1">
+                <div className="relative h-4 bg-[#f8e8c8]/30 rounded-full overflow-hidden shadow-inner flex items-center px-1">
                   {livePlayers.map((player) => {
                     const isMe = player.userId === user?._id;
                     const isDisconnected = player.status === "DISCONNECTED";
@@ -813,11 +677,11 @@ const ContestArea: React.FC = () => {
 
               {/* Main Typing Area */}
               <div
-                className="flex-1 bg-white/90 backdrop-blur-xl rounded-[2rem] p-6 md:p-10 shadow-[0_15px_40px_rgb(0,0,0,0.06)] border border-slate-100 flex flex-col relative overflow-hidden group/typing cursor-text focus-within:ring-2 focus-within:ring-[#ECA468]/30 transition-all duration-300 z-10"
+                className="flex-1 bg-white/60 backdrop-blur-xl rounded-[2rem] p-6 md:p-10 shadow-[0_15px_40px_rgb(236,164,104,0.06)] border border-[#ECA468]/10 flex flex-col relative overflow-hidden group/typing cursor-text focus-within:ring-2 focus-within:ring-[#ECA468]/30 transition-all duration-300 z-10"
                 onClick={() => document.body.focus()}
               >
                 {/* Header Info */}
-                <div className="flex justify-between items-center mb-8 shrink-0 relative z-10 border-b border-slate-100 pb-4">
+                <div className="flex justify-between items-center mb-8 shrink-0 relative z-10 border-b border-[#f8e8c8]/40 pb-4">
                   <div>
                     <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight drop-shadow-sm">
                       {contestData?.title || "Contest"}
@@ -828,7 +692,7 @@ const ContestArea: React.FC = () => {
                   </div>
                   {isFinished && (
                     <div className="flex items-center gap-3 bg-[#FFF4EC] text-[#D0864B] px-4 py-2 rounded-xl border border-[#FADDB8] shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
-                      <div className="bg-white p-1.5 rounded-lg shadow-sm">
+                      <div className="bg-[#fff8ea]/80 p-1.5 rounded-lg shadow-sm">
                         <Crown className="w-4 h-4 text-[#ECA468]" />
                       </div>
                       <div className="flex flex-col">
@@ -854,8 +718,8 @@ const ContestArea: React.FC = () => {
 
                 {/* Countdown Overlay */}
                 {phase === "COUNTDOWN" && (
-                  <div className="absolute inset-0 bg-white/40 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-in fade-in duration-300">
-                    <div className="relative flex items-center justify-center group">
+                  <div className="absolute inset-0 bg-[#fff8ea]/40 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-in fade-in duration-300">
+|                    <div className="relative flex items-center justify-center group">
                       <div className="absolute w-48 h-48 bg-[#ECA468]/10 rounded-full blur-2xl animate-pulse"></div>
                       <div className="absolute w-32 h-32 bg-[#8CA78A]/10 rounded-full blur-xl animate-pulse delay-75"></div>
                       <span className="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-slate-800 to-slate-500 drop-shadow-md animate-pulse relative z-10">

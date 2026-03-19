@@ -10,9 +10,7 @@ import { CompanyChallengeEntity } from "../../../../domain/entities/company-chal
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
 import { ChallengeDTO } from "../../../DTOs/companyUser/challenge.dto";
 import { mapChallengeToDTO } from "../../../mappers/companyUser/challenge.mapper";
-/**
- * Use case for creating a company challenge.
- */
+
 export class MakeChallengeUseCase implements IMakeChallengeUseCase {
   constructor(
     private readonly _challengeRepository: ICompanyChallengeRepository,
@@ -20,80 +18,73 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
     private readonly _competitionRepository: ICompetitionRepository,
     private readonly _lessonRepository: ILessonRepository,
   ) {}
-  /**
-   * Create a challenge between two users.
-   */
+
   async execute(senderId: string, receiverId: string): Promise<ChallengeDTO> {
     if (senderId === receiverId) {
-      throw new CustomError(
-        HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.CANNOT_CHALLENGE_SELF,
-      );
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.CANNOT_CHALLENGE_SELF);
     }
 
     const sender = await this._userRepository.findById(senderId);
     const receiver = await this._userRepository.findById(receiverId);
 
     if (!sender || !receiver) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.SENDER_OR_RECEIVER_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.SENDER_OR_RECEIVER_NOT_FOUND);
     }
+
     if (
       !sender.CompanyId ||
-      sender.CompanyId.toString() !== receiver.CompanyId.toString()
+      sender.CompanyId.toString() !== receiver.CompanyId?.toString()
     ) {
-      throw new CustomError(
-        HttpStatusCodes.FORBIDDEN,
-        MESSAGES.USERS_MUST_BELONG_TO_SAME_COMPANY,
-      );
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USERS_MUST_BELONG_TO_SAME_COMPANY);
     }
+
     const levels = ["beginner", "intermediate", "advanced"];
-
-    const randomIndex = Math.floor(Math.random() * levels.length);
-
-    const level = levels[randomIndex];
+    const level = levels[Math.floor(Math.random() * levels.length)];
 
     const lesson = await this._lessonRepository.findOne({ level });
-
     if (!lesson) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.LESSON_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
     }
 
-    const competition = new CompetitionEntity({
+    // Creating new record — new CompetitionEntity() is correct here
+    const competitionEntity = new CompetitionEntity({
       type: "company",
       mode: "company",
       CompanyId: sender.CompanyId,
       participants: [senderId, receiverId],
-      duration: 300, // 5 mins
+      duration: 300,
       countDown: 10,
       status: "pending",
-      textId: lesson._id || lesson.id,
+      textId: lesson._id?.toString(),
     });
 
-    const savedCompetition =
-      await this._competitionRepository.create(competition);
+    const savedCompetition = await this._competitionRepository.create(
+      competitionEntity.toObject(),
+    );
 
-    const challenge = new CompanyChallengeEntity({
+    // Creating new record — new CompanyChallengeEntity() is correct here
+    const challengeEntity = new CompanyChallengeEntity({
       CompanyId: sender.CompanyId!,
       senderId,
       receiverId,
       status: "pending",
-      competitionId: savedCompetition._id
-        ? savedCompetition._id.toString()
-        : savedCompetition.id.toString(),
+      competitionId: savedCompetition.getId()?.toString(),
     });
 
-    let Challenge = await this._challengeRepository.create(challenge);
-    const challengeWithOpponent = {
-      ...Challenge,
-      opponent: sender,
+    const savedChallenge = await this._challengeRepository.create(
+      challengeEntity.toObject(),
+    );
+
+    return mapChallengeToDTO({
+      ...savedChallenge.toObject(),
+      opponent: {
+        _id: sender._id,
+        name: sender.name,
+        email: sender.email,
+        imageUrl: sender.imageUrl,
+        CompanyRole: sender.CompanyRole,
+      },
       type: "received",
-    };
-    return mapChallengeToDTO(challengeWithOpponent);
+    });
   }
 }

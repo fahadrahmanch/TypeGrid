@@ -1,70 +1,78 @@
 import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 import { IRemoveMemberGroupPlayGroupUseCase } from "../../interfaces/user/group-play/remove-member-group-play-group.interface";
-import { GroupEntity } from "../../../../domain/entities/group.entity";
 import { groupDTO, mapGroupToDTO } from "../../../DTOs/user/group.dto";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlayGroupUseCase {
+
+export class RemoveMemberGroupPlayGroupUseCase
+  implements IRemoveMemberGroupPlayGroupUseCase
+{
   constructor(
-    private groupRepository: IGroupRepository,
-    private userRepository: IUserRepository,
+    private readonly _groupRepository: IGroupRepository,
+    private readonly _userRepository: IUserRepository,
   ) {}
+
   async execute(
     groupId: string,
     userId: string,
     reason: "KICK" | "LEAVE",
   ): Promise<groupDTO> {
-    const group = await this.groupRepository.findById(groupId);
-    if (!group) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.GROUP_NOT_FOUND,
-      );
-    }
-    const user = await this.userRepository.findById(userId);
-    if (!user) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND,
-      );
-    }
-    const groupEntity = new GroupEntity(group as any);
-    groupEntity.removeMember(userId);
-    if (group.ownerId.toString() == userId) {
-      const pickOnehoster = groupEntity
-        .getMembers()
-        .find((memberId: string) => memberId != userId);
-      if (pickOnehoster) {
-        groupEntity.setOwner(pickOnehoster.toString());
-      }
-    }
-    if (reason === "KICK") {
-      groupEntity.kickUser(userId);
+    const groupEntity = await this._groupRepository.findById(groupId);
+    if (!groupEntity) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
     }
 
-    const kickedUsers = groupEntity.getKickedUsers();
-    const updatedGroup = await this.groupRepository.updateById(groupId, {
+    const user = await this._userRepository.findById(userId);
+    if (!user) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+    }
+
+    if (groupEntity.getOwnerId().toString() === userId) {
+      const newOwner = groupEntity
+        .getMembers()
+        .find((memberId: string) => memberId !== userId);
+      if (newOwner) {
+        groupEntity.setOwner(newOwner);
+      }
+    }
+
+    if (reason === "KICK") {
+      groupEntity.kickUser(userId);
+    } else {
+      groupEntity.removeMember(userId);
+    }
+
+    const updatedGroup = await this._groupRepository.updateById(groupId, {
       members: groupEntity.getMembers(),
-      kickedUsers,
+      kickedUsers: groupEntity.getKickedUsers(),
       ownerId: groupEntity.getOwnerId(),
     });
+
+    if (!updatedGroup) {
+      throw new CustomError(
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        MESSAGES.SOMETHING_WENT_WRONG,
+      );
+    }
+
     const members = await Promise.all(
-      updatedGroup.members.map(async (memberId: any) => {
-        const member = await this.userRepository.findById(memberId);
+      updatedGroup.getMembers().map(async (memberId: string) => {
+        const member = await this._userRepository.findById(memberId);
         if (!member) return null;
         return {
-          userId: member._id?.toString(),
+          userId: member._id?.toString() ?? memberId,
           name: member.name,
           imageUrl: member.imageUrl,
-          isHost: member._id?.toString() === updatedGroup.ownerId?.toString(),
+          isHost: member._id?.toString() === updatedGroup.getOwnerId().toString(),
         };
       }),
     );
+
     return mapGroupToDTO({
       ...updatedGroup.toObject(),
-      members,
+      members: members.filter(Boolean),
     });
   }
 }

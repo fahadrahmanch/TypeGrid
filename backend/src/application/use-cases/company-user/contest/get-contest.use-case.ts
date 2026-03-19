@@ -46,13 +46,13 @@ export class GetContestUseCase implements IGetContestUseCase {
       );
     }
 
-    if (!["upcoming", "waiting"].includes(contest.status)) {
+    if (!["upcoming", "waiting"].includes(contest.getStatus())) {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
         MESSAGES.GROUP_EXPIRED
       );
     }
 
-    return mapContestDTO(contest, userId);
+    return mapContestDTO(contest.toObject(), userId);
   }
 }

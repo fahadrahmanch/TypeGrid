@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { ContestLevel } from "../../../types/contest";
 import { fetchContestParticipants } from "../../../api/companyAdmin/companyContextAPI";
@@ -62,9 +63,9 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
       console.log(error);
     }
   };
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white rounded-[2.5rem] w-full max-w-7xl max-h-[98vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-200 border border-[#ECA468]/10 text-slate-800">
         {/* Header */}
         <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-start">
           <div>
@@ -195,7 +196,7 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
         <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex gap-3">
           <button
             onClick={() => setIsEditModalOpen(true)}
-            className="px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm flex items-center gap-2"
+            className="px-5 py-2.5 bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#D0864B] transition-colors shadow-sm flex items-center gap-2"
           >
             <svg
               className="w-4 h-4"
@@ -215,7 +216,7 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
           </button>
           <button
             onClick={handleDelete}
-            className="px-5 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-sm flex items-center gap-2"
+            className="px-5 py-2.5 bg-[#7D6B5D] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#635449] transition-colors shadow-sm flex items-center gap-2"
           >
             <svg
               className="w-4 h-4"
@@ -244,7 +245,8 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
         }}
         setContests={setContests}
       />
-    </div>
+    </div>,
+    document.body,
   );
 };
 

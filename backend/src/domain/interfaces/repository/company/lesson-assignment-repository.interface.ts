@@ -1,21 +1,5 @@
-import { ILessonAssignmentDocument } from "../../../../infrastructure/db/types/documents";
+import { LessonAssignmentEntity } from "../../../../domain/entities/assign-lesson.entity";
+import { IBaseRepository } from "../base-repository.interface";
 
-export interface ILessonAssignmentRepository {
-  create(data: any): Promise<any>;
-  findById(
-    id: string,
-    options?: {
-      populate?: any;
-    },
-  ): Promise<any | null>;
-  update(data: any): Promise<any | null>;
-  find(
-    filter?: any,
-    options?: {
-      populate?: { path: string; select?: string };
-    },
-  ): Promise<any[]>;
-  findOne(filter?: any): Promise<any | null>;
-  delete(_id: string): Promise<any | null>;
-  updateById(_id: string, updateQuery: any): Promise<any | null>;
-}
+export interface ILessonAssignmentRepository
+  extends IBaseRepository<LessonAssignmentEntity> {}

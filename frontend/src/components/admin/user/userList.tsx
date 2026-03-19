@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../../../api/admin/users";
-import { updateUserStatus } from "../../../api/admin/users";
+import { updateUserStatus, filterUsersAPI } from "../../../api/admin/users";
 import ConfirmModal from "../../common/ConfirmModal";
+import { Search, Filter, Shield, ShieldOff, User, Mail, ChevronLeft, ChevronRight, Hash, Trophy } from "lucide-react";
+
 const UserList: React.FC = () => {
   const [status, setStatus] = useState("All");
   const [users, setUsers] = useState<any[]>([]);
-  const [filterUsers, setFilterUsers] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
   const [limit] = useState(8);
   const [totalPages, setTotalPages] = useState(1);
@@ -13,183 +13,245 @@ const UserList: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const res = await getAllUsers();
-        setUsers(res?.data?.data);
-        setFilterUsers(res?.data?.data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    }
 
-    fetchUsers();
-  }, []);
-  useEffect(() => {
-    let filtered = [...users];
-
-    if (searchText.trim()) {
-      const lower = searchText.toLowerCase();
-      filtered = filtered.filter(
-        (u) =>
-          u.name.toLowerCase().startsWith(lower) ||
-          u.email.toLowerCase().startsWith(lower),
-      );
-    }
-    if (status !== "All") {
-      filtered = filtered.filter((u) =>
-        status === "Active" ? u.status === "active" : u.status === "block",
-      );
-    }
-    const total = Math.ceil(filtered.length / limit);
-    setTotalPages(total);
-
-    const start = (page - 1) * limit;
-    const paginated = filtered.slice(start, start + limit);
-
-    setFilterUsers(paginated);
-    // setFilterUsers(filtered);
-  }, [searchText, status, users, page]);
 
   function openConfirmModal(user: any) {
     setSelectedUser(user);
     setShowModal(true);
   }
+
   async function confirmBlockAction() {
     if (!selectedUser) return;
-
     const userId = selectedUser._id;
-
-    const res = await updateUserStatus(userId);
-
-    if (res.data.success) {
-      setUsers((prev) =>
-        prev.map((u) =>
-          u._id === userId
-            ? {
+    try {
+      const res = await updateUserStatus(userId);
+      if (res.data.success) {
+        setUsers((prev) =>
+          prev.map((u) =>
+            u._id === userId
+              ? {
                 ...u,
                 status: u.status === "active" ? "blocked" : "active",
               }
-            : u,
-        ),
-      );
+              : u,
+          ),
+        );
+      }
+    } catch (error) {
+      console.error("Error updating user status:", error);
     }
-
     setShowModal(false);
     setSelectedUser(null);
   }
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      search();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchText, status, page]);
+  const search = async () => {
+    const response = await filterUsersAPI(searchText, status, page, limit);
+    const users = response?.data?.users;
+    const total = response?.data?.total;
+
+    const totalPages = Math.ceil(total / limit);
+    setTotalPages(totalPages)
+    setUsers(users)
+  };
+
+  console.log("totalPages", totalPages)
+  console.log("page", page)
+
   return (
     <>
-      {/* Main Content Wrapper */}
-      <div className="md:ml-64 p-4 sm:p-6">
-        <div className="bg-[#FFF3DB] w-full px-4 sm:px-6 py-6 rounded-md shadow-sm">
+      <div className="md:ml-64 p-8 min-h-screen bg-[#FFF8EA]">
+        <div className="max-w-7xl mx-auto">
           {/* Header Section */}
-          <h1 className="font-bold text-xl sm:text-2xl">User Management</h1>
-          <p className="text-gray-700 text-sm sm:text-base">
-            Manage and monitor all platform users
-          </p>
+          <div className="mb-10">
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">User Management</h1>
+            <p className="text-gray-500 font-medium">Monitor and manage all TypeGrid platform users.</p>
+          </div>
 
-          {/* Search + Filter */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 mt-4">
-            <input
-              className="py-2 px-4 w-full shadow-md rounded outline-none 
-               focus:ring-2 focus:ring-[#B99F8D] focus:ring-offset-1
-               transition-all duration-200"
-              placeholder="Search users by name or email"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
+          {/* Search & Filters */}
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-sm border border-[#ECA468]/10 mb-8 flex flex-wrap items-center gap-4">
+            <div className="relative flex-1 min-w-[300px]">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by name or email..."
+                className="w-full pl-12 pr-4 py-3 bg-white/70 rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium text-gray-800"
+                value={searchText}
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  setPage(1);
+                }}
+              />
+            </div>
 
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md bg-[#B99F8D]
-               text-sm outline-none text-black
-               focus:ring-2 focus:ring-[#B99F8D] w-full sm:w-auto"
-            >
-              <option value="All">All</option>
-              <option value="Active">Active</option>
-              <option value="Block">Block</option>
-            </select>
+            <div className="relative min-w-[160px]">
+              <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D0864B]" />
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full pl-10 pr-8 py-2.5 bg-white/70 rounded-xl border border-gray-100 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] appearance-none cursor-pointer"
+              >
+                <option value="All">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Block">Blocked</option>
+              </select>
+            </div>
           </div>
 
           {/* Table Section */}
-          <div className="overflow-x-auto mt-6">
-            <table className="w-full bg-white border rounded-lg">
-              <thead>
-                <tr className="bg-[#FFEFCE] border-b shadow-sm">
-                  <th className="px-4 py-2 text-left">User</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                  <th className="px-4 py-2 text-left hidden sm:table-cell">
-                    Plan
-                  </th>
-                  <th className="px-4 py-2 text-left hidden sm:table-cell">
-                    Competitions
-                  </th>
-                  <th className="px-4 py-2 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-[#FCF8F0]">
-                {filterUsers &&
-                  filterUsers.map((user: any) => (
-                    <tr key={user._id} className="border-b">
-                      <td className="px-4 py-2">
-                        <p className="font-medium">{user.name}</p>
-                        <p className="text-sm text-gray-600">{user.email}</p>
-                      </td>
-                      <td className="px-4 py-2">
-                        <span
-                          className={`px-2 py-1 text-sm rounded font-semibold ${
-                            user.status === "active"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {user.status === "active" ? "Active" : "Blocked"}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 hidden sm:table-cell">—</td>
-                      <td className="px-4 py-2 hidden sm:table-cell">-</td>
-                      <td className="px-4 py-2 flex flex-wrap gap-2">
-                        <button
-                          onClick={() => openConfirmModal(user)}
-                          className={`px-3 py-1 text-sm rounded transition ${
-                            user.status === "active"
-                              ? "bg-red-500 text-white hover:bg-red-600"
-                              : "bg-green-500 text-white hover:bg-green-600"
-                          }`}
-                        >
-                          {user.status === "active" ? "Block" : "Unblock"}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
+            <div className="flex justify-between items-center mb-8 px-2">
+              <div>
+                <h3 className="text-xl font-black text-gray-900 leading-tight">Platform Users</h3>
+                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+                  {users.length} total registered users
+                </p>
+              </div>
+            </div>
 
-        {/* Pagination */}
-        <div className="flex justify-center items-center gap-4 mt-4 flex-wrap">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((prev) => prev - 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            Prev
-          </button>
-          <span className="text-sm sm:text-base">
-            Page {page} of {totalPages}
-          </span>
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((prev) => prev + 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            Next
-          </button>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400">
+                    <th className="pb-4 px-4"><div className="flex items-center gap-2"><User className="w-3 h-3" /> User Profile</div></th>
+                    <th className="pb-4 px-4 text-center">Status</th>
+                    <th className="pb-4 px-4 text-center hidden sm:table-cell"><div className="flex items-center justify-center gap-2"><Trophy className="w-3 h-3" /> Competitions</div></th>
+                    <th className="pb-4 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-50">
+                  {users.map((user: any) => {
+                    const isActive = user.status === "active";
+
+                    return (
+                      <tr key={user._id} className="group hover:bg-white/40 transition-all duration-300">
+                        <td className="py-5 px-4">
+                          <div className="flex items-center gap-4">
+                            <div className="hidden sm:flex w-10 h-10 rounded-2xl bg-[#ECA468]/10 items-center justify-center text-[#ECA468] font-black text-lg">
+                              {user.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <p className="font-bold text-gray-800 text-sm">{user.name}</p>
+                              <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-medium">
+                                <Mail className="w-3 h-3" />
+                                {user.email}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-5 px-4 text-center">
+                          <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
+                            ${isActive ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
+                              "bg-red-50 text-red-600 border-red-100"}`}>
+                            {isActive ? "Active" : "Blocked"}
+                          </span>
+                        </td>
+                        <td className="py-5 px-4 text-center hidden sm:table-cell">
+                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-lg text-xs font-bold text-gray-500 border border-gray-100">
+                            <Hash className="w-3 h-3 text-[#D0864B]" />
+                            0
+                          </div>
+                        </td>
+                        <td className="py-5 px-4">
+                          <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                            <button
+                              onClick={() => openConfirmModal(user)}
+                              className={`p-2 rounded-lg shadow-sm border transition-all ${isActive
+                                  ? "text-gray-400 hover:text-red-500 bg-white border-gray-50 hover:border-red-100"
+                                  : "text-gray-400 hover:text-emerald-500 bg-white border-gray-50 hover:border-emerald-100"
+                                }`}
+                              title={isActive ? "Block User" : "Unblock User"}
+                            >
+                              {isActive ? <ShieldOff className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-6 border-t border-[#ECA468]/5 pt-8">
+                <div className="flex items-center gap-2">
+                  <button
+                    disabled={page === 1}
+                    onClick={() => setPage((prev) => prev - 1)}
+                    className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] hover:text-[#D0864B] text-gray-400 transition-all group"
+                    title="Previous Page"
+                  >
+                    <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {(() => {
+                      const pages = [];
+                      const showEllipsis = totalPages > 7;
+
+                      if (!showEllipsis) {
+                        for (let i = 1; i <= totalPages; i++) {
+                          pages.push(i);
+                        }
+                      } else {
+                        // Logic for ellipses
+                        if (page <= 4) {
+                          pages.push(1, 2, 3, 4, 5, '...', totalPages);
+                        } else if (page >= totalPages - 3) {
+                          pages.push(1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+                        } else {
+                          pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
+                        }
+                      }
+
+                      return pages.map((p, idx) => (
+                        p === '...' ? (
+                          <span key={`ellipsis-${idx}`} className="w-10 h-10 flex items-center justify-center text-gray-400 font-bold">
+                            ...
+                          </span>
+                        ) : (
+                          <button
+                            key={`page-${p}`}
+                            onClick={() => setPage(Number(p))}
+                            className={`w-10 h-10 rounded-xl font-bold text-sm transition-all duration-300 ${page === p
+                                ? "bg-[#ECA468] text-white shadow-md shadow-[#ECA468]/20 scale-105"
+                                : "bg-white text-gray-500 border border-gray-100 hover:border-[#ECA468]/30 hover:bg-[#FFF8EA]"
+                              }`}
+                          >
+                            {p}
+                          </button>
+                        )
+                      ));
+                    })()}
+                  </div>
+
+                  <button
+                    disabled={page >= totalPages}
+                    onClick={() => setPage((prev) => prev + 1)}
+                    className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] hover:text-[#D0864B] text-gray-400 transition-all group"
+                    title="Next Page"
+                  >
+                    <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2 px-4 py-2 bg-[#ECA468]/5 rounded-2xl border border-[#ECA468]/10">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]">
+                    Page <span className="text-gray-900 mx-1">{page}</span> of <span className="text-gray-900 ml-1">{totalPages}</span>
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Confirm Modal */}
@@ -198,10 +260,9 @@ const UserList: React.FC = () => {
           title={
             selectedUser?.status === "active" ? "Block User" : "Unblock User"
           }
-          message={`Are you sure you want to ${
-            selectedUser?.status === "active" ? "block" : "unblock"
-          } this user?`}
-          confirmText={selectedUser?.status === "active" ? "Block" : "Unblock"}
+          message={`Are you sure you want to ${selectedUser?.status === "active" ? "block" : "unblock"
+            } this user? This will affect their ability to participate in contests.`}
+          confirmText={selectedUser?.status === "active" ? "Block User" : "Unblock User"}
           onConfirm={confirmBlockAction}
           onCancel={() => setShowModal(false)}
         />
@@ -209,4 +270,5 @@ const UserList: React.FC = () => {
     </>
   );
 };
+
 export default UserList;

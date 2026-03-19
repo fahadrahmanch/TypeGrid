@@ -1,21 +1,21 @@
 import { CompanyLessonDTO } from "../../DTOs/companyAdmin/company-lesson.dto";
 
 export type CompanyLessonPayload = {
-  _id: any;
-  title: string;
-  text: string;
-  category: string;
-  level: string;
-  wpm: number;
-  accuracy: number;
-  createdAt: Date;
-  createdBy: string;
+  _id?: any;
+  title?: string;
+  text?: string;
+  category?: string;
+  level?: string;
+  wpm?: number;
+  accuracy?: number;
+  createdAt?: Date;
+  createdBy?: string;
   companyId?: any;
 };
 
 export const mapLessonDTOforCompanyLesson = (lesson: CompanyLessonPayload): CompanyLessonDTO => {
   return {
-    id: lesson._id.toString(),
+    id: lesson._id?.toString()??"",
     title: lesson.title,
     text: lesson.text,
     category: lesson.category as any,

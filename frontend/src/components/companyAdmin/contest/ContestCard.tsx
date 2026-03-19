@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Users, Clock, Calendar } from "lucide-react";
 import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { useState } from "react";
@@ -7,40 +8,41 @@ import { socket } from "../../../socket";
 import ContestDetailsModal from "./ContestDetailsModal";
 import ContestLobbyModal from "./ContestLobbyModal";
 import LiveMonitorModal from "./LiveMonitorModal";
+import ContestResultsModal from "./ContestResultsModal";
 // Helper to determine status style
 const getStatusStyle = (status: ContestStatus) => {
   switch (status) {
     case "waiting":
-      return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      return "bg-amber-50 text-amber-700 border-amber-200";
     case "ongoing":
-      return "bg-green-100 text-green-800 border-green-200 animate-pulse"; // Added subtle pulse for active
+    case "active":
+      return "bg-[#FFF4EC] text-[#D0864B] border-[#FADDB8] animate-pulse";
     case "upcoming":
-      return "bg-blue-100 text-blue-800 border-blue-200";
+      return "bg-orange-50 text-orange-700 border-orange-200";
     case "completed":
-      return "bg-gray-100 text-gray-800 border-gray-200";
+      return "bg-slate-100 text-slate-800 border-slate-200";
     default:
-      return "bg-gray-100 text-gray-800";
+      return "bg-slate-50 text-slate-800";
   }
 };
 
-// Helper for difficulty level badges/icons or text
 const getLevelBadge = (level: ContestLevel) => {
   switch (level) {
     case "easy":
       return (
-        <span className="text-xs px-2 py-0.5 rounded bg-green-50 text-green-600 border border-green-100">
+        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-orange-50 text-[#D0864B] border border-orange-100">
           Easy
         </span>
       );
     case "medium":
       return (
-        <span className="text-xs px-2 py-0.5 rounded bg-yellow-50 text-yellow-600 border border-yellow-100">
+        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-orange-50 text-[#D0864B] border border-orange-100">
           Intermediate
         </span>
       );
     case "hard":
       return (
-        <span className="text-xs px-2 py-0.5 rounded bg-orange-50 text-orange-600 border border-orange-100">
+        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-orange-50 text-[#D0864B] border border-orange-100">
           Advanced
         </span>
       );
@@ -67,6 +69,19 @@ const ContestCard: React.FC<ContestProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLobbyModalOpen, setIsLobbyModalOpen] = useState(false);
   const [isLiveMonitorOpen, setIsLiveMonitorOpen] = useState(false);
+  const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setContestStatus(status);
+    console.log("status", status)
+  }, [status]);
+  async function handleEndContest() {
+    socket.emit("end-contest", {
+      contestId: id,
+      status: "completed",
+    });
+  }
+  
 
   const changeStatus = async (id: string, status: ContestStatus) => {
     try {
@@ -79,27 +94,28 @@ const ContestCard: React.FC<ContestProps> = ({
           status: data.status,
         });
       }
+      
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 relative overflow-hidden group">
+    <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-[0_10px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 hover:shadow-[0_20px_50px_rgb(236,164,104,0.08)] transition-all duration-500 relative overflow-hidden group">
       {/* Contest Status Line - Top */}
       <div className="flex items-center gap-3 mb-4">
-        <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+        <h3 className="text-lg font-black text-slate-800 group-hover:text-[#ECA468] transition-colors">
           {title}
         </h3>
 
         <span
-          className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md border ${getStatusStyle(
+          className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-xl border ${getStatusStyle(
             contestStatus,
           )}`}
         >
           {contestStatus}
         </span>
-        <span className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded-md font-medium border border-blue-100">
+        <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 bg-amber-50 text-amber-600 rounded-xl border border-amber-100">
           {type === "open" ? "Open" : "Group"}
         </span>
 
@@ -148,30 +164,30 @@ const ContestCard: React.FC<ContestProps> = ({
             <>
               <button
                 onClick={() => setIsLobbyModalOpen(true)}
-                className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                className="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-colors"
               >
-                View Lobby
+                Lobby
               </button>
               <button
                 onClick={() => changeStatus(id, "ongoing")}
-                className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm hover:shadow shadow-green-200"
+                className="px-4 py-2 bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#D0864B] transition-colors shadow-sm shadow-[#ECA468]/20"
               >
                 Start Contest
               </button>
             </>
           )}
 
-          {contestStatus === "ongoing" && (
+          {(contestStatus === "ongoing" || contestStatus === "active") && (
             <>
               <button
                 onClick={() => setIsLiveMonitorOpen(true)}
-                className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm hover:shadow shadow-indigo-200"
+                className="px-4 py-2 bg-[#7D6B5D] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#635449] transition-colors shadow-sm"
               >
                 Live Monitor
               </button>
               <button
-                onClick={() => changeStatus(id, "upcoming")}
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow shadow-blue-200"
+                onClick={handleEndContest}
+                className="px-4 py-2 bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#D0864B] transition-colors shadow-sm shadow-[#ECA468]/20"
               >
                 End Contest
               </button>
@@ -181,7 +197,7 @@ const ContestCard: React.FC<ContestProps> = ({
           {(contestStatus === "upcoming" || contestStatus === "completed") && (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-black uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-colors"
             >
               Details
             </button>
@@ -189,14 +205,17 @@ const ContestCard: React.FC<ContestProps> = ({
           {contestStatus === "upcoming" && (
             <button
               onClick={() => changeStatus(id, "waiting")}
-              className="px-4 py-2 bg-yellow-500 text-white text-sm font-medium rounded-lg hover:bg-yellow-600 transition-colors shadow-sm"
+              className="px-4 py-2 bg-amber-500 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-amber-600 transition-colors shadow-sm"
             >
-              Move to Waiting
+              Wait Mode
             </button>
           )}
           {contestStatus === "completed" && (
-            <button className="px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors shadow-sm flex items-center gap-1">
-              View Results
+            <button
+              onClick={() => setIsResultsModalOpen(true)}
+              className="px-4 py-2 bg-[#7D6B5D] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#635449] transition-colors shadow-sm flex items-center gap-1"
+            >
+              Results
             </button>
           )}
         </div>
@@ -296,6 +315,15 @@ const ContestCard: React.FC<ContestProps> = ({
           // onEndContest={() => {
           //     setContestStatus("completed");
           // }}
+        />
+      )}
+
+      {isResultsModalOpen && (
+        <ContestResultsModal
+          isOpen={isResultsModalOpen}
+          onClose={() => setIsResultsModalOpen(false)}
+          contestId={id}
+          rewards={rewards||[]}
         />
       )}
     </div>

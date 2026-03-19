@@ -14,39 +14,42 @@ function generateJoinCode(): string {
 
 export class CreateGroupPlayRoomUseCase implements ICreateGroupPlayRoomUseCase {
   constructor(
-    private groupRepository: IGroupRepository,
-    private userRepository: IUserRepository,
+    private readonly _groupRepository: IGroupRepository,
+    private readonly _userRepository: IUserRepository,
   ) {}
+
   async execute(hostUserId: string): Promise<groupDTO> {
     if (!hostUserId) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
-    const joinCode = await generateJoinCode();
+
+    const joinCode = generateJoinCode(); // no need for await — not async
+    
     const group = new GroupEntity({
       name: "Group Play Room",
       ownerId: hostUserId,
       difficulty: "easy",
       joinLink: joinCode,
     });
-    const groupCreated = await this.groupRepository.create(group);
-    groupCreated.members = await Promise.all(
-      groupCreated.members.map(async (item: any) => {
-        const memberId = item.toString();
-        const member = await this.userRepository.findById(memberId);
+
+    const groupCreated = await this._groupRepository.create(group.toObject());
+
+    const members = await Promise.all(
+      groupCreated.getMembers().map(async (memberId: string) => {
+        const member = await this._userRepository.findById(memberId);
         if (!member) return null;
         return {
-          userId: (member as any)._id,
-          name: (member as any).name,
-          imageUrl: (member as any).imageUrl,
-          isHost:
-            (member as any)._id.toString() == groupCreated.ownerId.toString(),
+          userId: member._id?.toString() ?? memberId,
+          name: member.name,
+          imageUrl: member.imageUrl,
+          isHost: member._id?.toString() === groupCreated.getOwnerId().toString(),
         };
       }),
     );
-    groupCreated.members = groupCreated.members.filter((m: any) => m !== null);
-    return mapGroupToDTO(groupCreated);
+
+    return mapGroupToDTO({
+      ...groupCreated.toObject(),
+      members: members.filter((m): m is NonNullable<typeof m> => m !== null),
+    });
   }
 }

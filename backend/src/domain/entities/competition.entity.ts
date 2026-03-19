@@ -72,6 +72,9 @@ export class CompetitionEntity {
   getGroupId() {
     return this.groupId;
   }
+  getCountDown() {
+    return this.countDown;
+  }
 
   addParticipant(userId: string) {
     if (this.participants.includes(userId)) {
@@ -104,6 +107,9 @@ export class CompetitionEntity {
   }
   getMaxParticipantsInQuickPlay() {
     return 5;
+  }
+  getTextId() {
+    return this.textId;
   }
   removeParticipant(userId: string) {
     if (!this.participants.some((participant: any) => participant.toString() === userId)) {

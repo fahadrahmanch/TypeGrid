@@ -13,26 +13,33 @@ export class GetContestResultUseCase implements IGetContestResultUseCase {
     constructor(
         private readonly _contestRepository: IContestRepository,
         private readonly _resultRepository: IResultRepository,
-    ) {}
+        private readonly _userRepository: IUserRepository,
+    ) { }
 
     async execute(contestId: string): Promise<contestResultDTO[]> {
         const contest = await this._contestRepository.findById(contestId);
-        if(!contest){
+        if (!contest) {
             throw new Error(MESSAGES.CONTEST_NOT_FOUND);
         }
-        const result = await this._resultRepository.find({contestId}, {
-            populate: {
-                path: "userId",
-                select: "name imageUrl "
-            }
-        })
-        if(!result){
+        const result = await this._resultRepository.find({ contestId })
+        const mappedResult = await Promise.all(
+            result.map(async (item:any) => {
+                const user = await this._userRepository.findById(item.userId);
+                return contestResultMapper({
+                    ...item.toObject(),
+                    userId: {
+                        _id: user?._id,
+                        name: user?.name,
+                        imageUrl: user?.imageUrl,
+                    },
+                });
+            }),
+        );
+        if (!result) {
             throw new Error("Result not found");
         }
-        const mappedResult = result.map((item:any)=>contestResultMapper(item));
         return mappedResult
-   
+
     }
 }
 
-    

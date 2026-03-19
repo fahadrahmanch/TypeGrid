@@ -1,21 +1,21 @@
 import { ContestProps, openContestDTO } from "../../DTOs/companyAdmin/company-contest.dto";
 
-export type ContestPayload= {
-  _id: any;
-  contestMode: any;
+export type ContestPayload = {
+  _id?: any;
+  contestMode?: any;
   title: string;
   description?: string;
   groupId?: any;
   difficulty: any;
   textSource: any;
   contestText?: string;
-  status: any;
+  status?: any;
   date: Date | string;
   startTime?: Date;
   countDown?: number;
   duration: number;
   maxParticipants: number;
-  participants: any[];
+  participants?: string[];
   rewards: Array<{ rank: number; prize: any }>;
 }
 
@@ -34,8 +34,8 @@ export const mapContestDTO = (contest: ContestPayload, userId: string): openCont
     countDown: contest.countDown ?? 10,
     duration: contest.duration,
     maxParticipants: contest.maxParticipants,
-    participants: contest.participants.map(p => ({ userId: p.toString() })),
-    joined: contest.participants.some(p => p.toString() === userId.toString()),
+    participants: (contest.participants ?? []).map(p => ({ userId: p.toString() })),
+    joined: (contest.participants ?? []).some(p => p.toString() === userId.toString()),
     rewards: contest.rewards.map(r => ({ rank: r.rank, prize: r.prize })),
   };
 };
@@ -55,8 +55,8 @@ export const mapOpenContestDTO = (contests: ContestPayload[], userId: string): C
     startTime: data.startTime!,
     duration: data.duration,
     maxParticipants: data.maxParticipants,
-    participants: data.participants.map(p => ({ userId: p.toString() })),
-    joined: data.participants.some(p => p.toString() === userId.toString()),
+    participants: (data.participants ?? []).map(p => ({ userId: p.toString() })),
+    joined: (data.participants ?? []).some(p => p.toString() === userId.toString()),
     rewards: data.rewards.map(r => ({ rank: r.rank, prize: r.prize })),
   }));
 };
@@ -77,8 +77,8 @@ export const mapGroupContestDTO = (contests: ContestPayload[], userId: string) =
     countDown: data.countDown ?? 10,
     duration: data.duration,
     maxParticipants: data.maxParticipants,
-    participants: data.participants.map(p => ({ userId: p.toString() })),
-    joined: data.participants.some(p => p.toString() === userId.toString()),
+    participants: (data.participants ?? []).map(p => ({ userId: p.toString() })),
+    joined: (data.participants ?? []).some(p => p.toString() === userId.toString()),
     rewards: data.rewards.map(r => ({ rank: r.rank, prize: r.prize })),
   }));
 };
@@ -99,7 +99,7 @@ export const mapCompanyContestDTO = (contests: ContestPayload[]): ContestProps[]
     duration: data.duration,
     countDown: data.countDown ?? 10,
     maxParticipants: data.maxParticipants,
-    participants: data.participants.map(p => ({ userId: p.toString() })),
+    participants: (data.participants ?? []).map(p => ({ userId: p.toString() })),
     rewards: data.rewards.map(r => ({ rank: r.rank, prize: r.prize })),
   }));
 };
@@ -120,7 +120,7 @@ export const mapContestDTOAdmin = (contest: ContestPayload) => {
     countDown: contest.countDown ?? 10,
     duration: contest.duration,
     maxParticipants: contest.maxParticipants,
-    participants: contest.participants.map(p => ({ userId: p.toString() })),
+    participants: (contest.participants ?? []).map(p => ({ userId: p.toString() })),
     rewards: contest.rewards.map(r => ({ rank: r.rank, prize: r.prize })),
   };
 };

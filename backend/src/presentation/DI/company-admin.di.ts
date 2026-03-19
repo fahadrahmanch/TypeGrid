@@ -37,12 +37,13 @@ import { DeleteContestUseCase } from "../../application/use-cases/company-admin/
 import { GetContestResultUseCase } from "../../application/use-cases/company-admin/company-contest/get-contest-result-use-case";
 import { ResultRepository } from "../../infrastructure/db/repositories/result.repository";
 import { Result } from "../../infrastructure/db/models/user/result.schema";
-
+import { AuthRepository } from "../../infrastructure/db/repositories/auth/auth.repository";
 const userRepository = new UserRepository(User);
 const tokenService = new TokenService();
 const hashService = new HashService();
-const findUserUseCaseInstance = new FindUserUseCase(userRepository);
-const addUserUseCaseInstance = new AddUserUseCase(userRepository, hashService);
+const authRepository = new AuthRepository();
+const findUserUseCaseInstance = new FindUserUseCase(authRepository);
+const addUserUseCaseInstance = new AddUserUseCase(authRepository, hashService);
 const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(userRepository);
 const deleteUserUseCaseInstance = new DeleteUserUseCase(userRepository);
 
@@ -109,6 +110,7 @@ const resultRepository = new ResultRepository(Result);
 const getContestResultUseCaseInstance = new GetContestResultUseCase(
   contestRepository,
   resultRepository,
+  userRepository,
 );
 
 export const injectCompanyContestManagementController =

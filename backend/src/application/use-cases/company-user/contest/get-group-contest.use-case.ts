@@ -6,7 +6,7 @@ import { mapGroupContestDTO } from "../../../mappers/companyAdmin/company-contes
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
-
+import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 /**
  * Use case for retrieving contests belonging to the user's groups.
  */
@@ -39,6 +39,6 @@ export class GetGroupContestUseCase implements IGetGroupContestsUseCase {
 
     if (!groupContests.length) return [];
 
-    return mapGroupContestDTO(groupContests, userId);
+    return mapGroupContestDTO(groupContests.map((c: ContestEntity) => c.toObject()), userId);
   }
 }

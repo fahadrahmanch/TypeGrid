@@ -5,37 +5,36 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { IGetGroupPlayGroupUseCase } from "../../interfaces/user/group-play/get-group-play-group.interface";
+
 export class GetGroupPlayGroupUseCase implements IGetGroupPlayGroupUseCase {
   constructor(
-    private groupRepository: IGroupRepository,
-    private userRepository: IUserRepository,
+    private readonly _groupRepository: IGroupRepository,
+    private readonly _userRepository: IUserRepository,
   ) {}
+
   async execute(joinLink: string, userId: string): Promise<groupDTO> {
-    const group = await this.groupRepository.findOne({
-      joinLink: joinLink,
-    });
+    const group = await this._groupRepository.findOne({ joinLink });
     if (!group) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.GROUP_NOT_FOUND_WITH_JOIN_ID,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND_WITH_JOIN_ID);
     }
 
-    group.members = await Promise.all(
-      group.members.map(async (item: any) => {
-        const memberId = item.toString();
-        const member = await this.userRepository.findById(memberId);
+    const members = await Promise.all(
+      group.getMembers().map(async (memberId: string) => {
+        const member = await this._userRepository.findById(memberId);
         if (!member) return null;
         return {
-          userId: (member as any)._id,
-          name: (member as any).name,
-          imageUrl: (member as any).imageUrl,
-          isHost: (member as any)._id.toString() === group.ownerId.toString(),
+          userId: member._id?.toString() ?? memberId,
+          name: member.name,
+          imageUrl: member.imageUrl,
+          isHost: member._id?.toString() === group.getOwnerId().toString(),
         };
       }),
     );
-    group.members = group.members.filter((m: any) => m !== null);
-    group.currentUserId = userId;
-    return mapGroupToDTO(group);
+
+    return mapGroupToDTO({
+      ...group.toObject(),
+      members,
+      currentUserId: userId,
+    });
   }
 }

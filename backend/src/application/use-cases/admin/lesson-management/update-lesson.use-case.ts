@@ -37,7 +37,7 @@ export class UpdateLessonUseCase implements IUpdateLessonUseCase {
       ...values
     });
 
-    return mapLessonToDTO(updatedLesson);
+    return mapLessonToDTO(updatedLesson!);
   }
 
 }

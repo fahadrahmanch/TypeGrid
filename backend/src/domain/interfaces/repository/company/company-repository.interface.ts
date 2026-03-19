@@ -1,15 +1,15 @@
 import { CompanyEntity } from "../../../entities";
 export interface ICompanyRepository  {
-  create(data: any): Promise<any>;
-  findById(id: string): Promise<any>;
-  update(data: any): Promise<any>;
-  delete(id: string): Promise<any>;
-  find(filter?: any): Promise<any>;
-  findOne(filter?: any): Promise<any>;
+  create(data: Partial<CompanyEntity>): Promise<CompanyEntity>;
+  findById(id: string): Promise<CompanyEntity | null>;
+  update(data: Partial<CompanyEntity>): Promise<CompanyEntity | null>;
+  delete(id: string): Promise<CompanyEntity | null>;
+  find(filter?: any): Promise<CompanyEntity[]>;
+  findOne(filter?: any): Promise<CompanyEntity | null>;
   getCompanies(
     status: string,
     searchText: string,
     page: number,
     limit: number,
-  ): Promise<{ companies: any[]; total: number }>;
+  ): Promise<{ companies: CompanyEntity[]; total: number }>;
 }

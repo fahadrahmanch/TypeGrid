@@ -37,8 +37,10 @@ import { StartQuickPlayUseCase } from "../../application/use-cases/user/quick-pl
 import { ChangeStatusUseCase } from "../../application/use-cases/user/quick-play/change-status.use-case";
 import { ChangePasswordUseCase } from "../../application/use-cases/user/change-password.use-case";
 import { HashService } from "../../application/services/hash.service";
-
+import { AuthUserEntity } from "../../domain/entities";
+import { AuthRepository } from "../../infrastructure/db/repositories/auth/auth.repository";
 const userRepository = new UserRepository(User);
+const authRepository = new AuthRepository();
 const companyRepository = new CompanyRepository(Company);
 const lessonRepository = new LessonRepository(Lesson);
 const companyRequestUseCaseInstance = new CompanyRequestUseCase(
@@ -46,7 +48,7 @@ const companyRequestUseCaseInstance = new CompanyRequestUseCase(
   userRepository,
 );
 const tokenService = new TokenService();
-const findUserUseCaseInstance = new FindUserUseCase(userRepository);
+const findUserUseCaseInstance = new FindUserUseCase(authRepository);
 const getCompanyUseCaseInstance = new GetCompanyUseCase(companyRepository);
 const companyReApplyUseCaseInstance = new CompanyReApplyUseCase(
   companyRepository,

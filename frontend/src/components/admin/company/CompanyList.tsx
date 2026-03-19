@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import CompanyDetailsModal from "./CompanyDetailsModal";
-import { getAllcompanies } from "../../../api/admin/company";
+import { companies } from "../../../api/admin/company";
+import { Search, Filter, Eye, ChevronLeft, ChevronRight, Building2, Mail, Calendar } from "lucide-react";
+
 const CompanyList: React.FC = () => {
   const [status, setStatus] = useState("All");
   const [isOpen, setOpen] = useState(false);
   const [company, setCompany] = useState<any[]>([]);
-  const [filterCompany, setFilterCompany] = useState<any[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<any | null>(null);
   const [searchText, setSearchText] = useState("");
   const [limit] = useState(8);
@@ -15,194 +17,171 @@ const CompanyList: React.FC = () => {
   useEffect(() => {
     async function fetchCompanies() {
       try {
-        const res = await getAllcompanies();
-        setCompany(res?.data?.data.reverse());
-        setFilterCompany(res?.data?.data.reverse());
+        const res = await companies(searchText,status,page, limit);
+        const data = res?.data?.data || [];
+        setCompany([...data].reverse());
+        const total=Math.ceil(res?.data?.total/limit);
+        setTotalPages(total);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching companies:", error);
       }
     }
-
     fetchCompanies();
-  }, []);
+  }, [searchText,status,page, limit]);
 
-  useEffect(() => {
-    let filtered = [...company];
-
-    if (searchText.trim()) {
-      const lower = searchText.toLowerCase();
-      filtered = filtered.filter(
-        (u) =>
-          u.companyName.toLowerCase().startsWith(lower) ||
-          u.email.toLowerCase().startsWith(lower),
-      );
-    }
-    if (status !== "All") {
-      filtered = filtered.filter((u) => {
-        if (status === "Accepted") {
-          return u.status === "active" || u.status === "approved";
-        } else if (status === "Pending") {
-          return u.status === "pending";
-        } else if (status == "Rejected") {
-          return u.status === "reject" || u.status === "rejected";
-        }
-        return true;
-      });
-    }
-    const total = Math.ceil(filtered.length / limit);
-    setTotalPages(total);
-
-    const start = (page - 1) * limit;
-    const paginated = filtered.slice(start, start + limit);
-
-    setFilterCompany(paginated.reverse());
-  }, [searchText, status, company, page]);
+ 
   return (
     <>
-      <div className="md:ml-64 p-4 sm:p-6">
-        <div className="bg-[#FFF3DB] w-full px-4 sm:px-6 py-6 rounded-md shadow-sm">
+      <div className="md:ml-64 p-8 min-h-screen bg-[#FFF8EA]">
+        <div className="max-w-7xl mx-auto">
           {/* Header Section */}
-          <h1 className="font-bold text-xl sm:text-2xl">Company Management</h1>
-          <p className="text-gray-700 text-sm sm:text-base">
-            Manage and verify company registrations
-          </p>
+          <div className="mb-10">
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Company Management</h1>
+            <p className="text-gray-500 font-medium">Manage and verify company registrations on the platform.</p>
+          </div>
 
-          {/* Search + Filter */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 mt-4">
-            <input
-              className="py-2 px-4 w-full shadow-md rounded outline-none 
-               focus:ring-2 focus:ring-[#B99F8D] focus:ring-offset-1
-               transition-all duration-200"
-              placeholder="Search companies by name or email"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
+          {/* Search & Filters */}
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-sm border border-[#ECA468]/10 mb-8 flex flex-wrap items-center gap-4">
+            <div className="relative flex-1 min-w-[300px]">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by company name or email..."
+                className="w-full pl-12 pr-4 py-3 bg-white/70 rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium text-gray-800"
+                value={searchText}
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  setPage(1);
+                }}
+              />
+            </div>
 
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md bg-[#B99F8D]
-               text-sm outline-none text-black
-               focus:ring-2 focus:ring-[#B99F8D] w-full sm:w-auto"
-            >
-              <option value="All">All</option>
-              <option value="Pending">Pending</option>
-              <option value="Accepted">Accepted</option>
-              <option value="Rejected">Rejected</option>
-            </select>
+            <div className="relative min-w-[160px]">
+              <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D0864B]" />
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full pl-10 pr-8 py-2.5 bg-white/70 rounded-xl border border-gray-100 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] appearance-none cursor-pointer"
+              >
+                <option value="All">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="active">Active</option>
+                <option value="reject">Reject</option>
+              </select>
+            </div>
           </div>
 
           {/* Table Section */}
-          <div className="overflow-x-auto mt-6">
-            <table className="min-w-max w-full bg-white border rounded-lg">
-              <thead>
-                <tr className="bg-[#FFEFCE] border-b shadow-sm">
-                  <th className="px-4 py-2 text-left">Company Name</th>
-                  <th className="px-4 py-2 text-left">Contact Email</th>
-                  <th className="px-4 py-2 text-left hidden sm:table-cell">
-                    Created At
-                  </th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                  <th className="px-4 py-2 text-left">Actions</th>
-                </tr>
-              </thead>
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
+            <div className="flex justify-between items-center mb-8 px-2">
+              <div>
+                <h3 className="text-xl font-black text-gray-900 leading-tight">Registrations</h3>
+                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+                  {company.length} total applications
+                </p>
+              </div>
+            </div>
 
-              <tbody className="bg-[#FCF8F0]">
-                {filterCompany &&
-                  filterCompany.map((item: any) => (
-                    <tr key={item?._id} className="border-b text-start">
-                      <td className="px-4 py-2">
-                        <p className="font-medium">{item?.companyName}</p>
-                      </td>
-                      <td className="px-4 py-2">
-                        <p className="font-medium">{item?.email}</p>
-                      </td>
-                      <td className="px-4 py-2 hidden sm:table-cell">
-                        <p className="font-medium">
-                          {new Date(item?.createdAt).toLocaleDateString()}
-                        </p>
-                      </td>
-                      <td className="px-4 py-2">
-                        {(() => {
-                          const st = item?.status;
-                          const isApproved =
-                            st === "approved" || st === "active";
-                          const isRejected =
-                            st === "rejected" || st === "reject";
-                          const badgeClass = isApproved
-                            ? "bg-green-100 text-green-700"
-                            : isRejected
-                              ? "bg-red-100 text-red-700"
-                              : "bg-yellow-100 text-yellow-700";
-                          const display = isApproved
-                            ? "Approved"
-                            : isRejected
-                              ? "Rejected"
-                              : st
-                                ? st
-                                : "Pending";
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400">
+                    <th className="pb-4 px-4"><div className="flex items-center gap-2"><Building2 className="w-3 h-3" /> Company</div></th>
+                    <th className="pb-4 px-4"><div className="flex items-center gap-2"><Mail className="w-3 h-3" /> Contact</div></th>
+                    <th className="pb-4 px-4 hidden sm:table-cell"><div className="flex items-center gap-2"><Calendar className="w-3 h-3" /> Applied On</div></th>
+                    <th className="pb-4 px-4 text-center">Status</th>
+                    <th className="pb-4 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
 
-                          return (
-                            <span
-                              className={`px-2 py-1 text-sm rounded ${badgeClass}`}
+                <tbody className="divide-y divide-gray-50">
+                  {company.map((item: any) => {
+                    const st = item?.status;
+                    const isApproved = st === "approved" || st === "active";
+                    const isRejected = st === "rejected" || st === "reject";
+                    
+                    return (
+                      <tr key={item?._id} className="group hover:bg-white/40 transition-all duration-300">
+                        <td className="py-5 px-4 font-bold text-gray-800 text-sm">
+                          {item?.companyName}
+                        </td>
+                        <td className="py-5 px-4 font-medium text-gray-500 text-xs italic">
+                          {item?.email}
+                        </td>
+                        <td className="py-5 px-4 hidden sm:table-cell text-xs font-semibold text-gray-400">
+                          {new Date(item?.createdAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </td>
+                        <td className="py-5 px-4 text-center">
+                          <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
+                            ${isApproved ? "bg-emerald-50 text-emerald-600 border-emerald-100" : 
+                              isRejected ? "bg-red-50 text-red-600 border-red-100" : 
+                              "bg-amber-50 text-amber-600 border-amber-100"}`}>
+                            {isApproved ? "Approved" : isRejected ? "Rejected" : "Pending"}
+                          </span>
+                        </td>
+                        <td className="py-5 px-4">
+                          <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                            <button
+                              onClick={() => {
+                                setSelectedCompany(item);
+                                setOpen(true);
+                              }}
+                              className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
+                              title="View Details"
                             >
-                              {display}
-                            </span>
-                          );
-                        })()}
-                      </td>
+                              <Eye className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
 
-                      <td className="px-4 py-2 flex flex-wrap gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedCompany(item);
-                            setOpen(true);
-                          }}
-                          className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition"
-                        >
-                          View Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+            {/* Pagination */}
+              <div className="mt-10 flex justify-center items-center gap-6">
+                <button
+                  disabled={page === 1}
+                  onClick={() => setPage((prev) => prev - 1)}
+                  className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+                >
+                  <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">of {totalPages}</span>
+                </div>
+
+                <button
+                  disabled={page === totalPages}
+                  onClick={() => setPage((prev) => prev + 1)}
+                  className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+                >
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              </div>
           </div>
         </div>
 
-        {/* Company Details Modal */}
-        {isOpen && (
+        {/* Company Details Modal - Using Portal */}
+        {isOpen && createPortal(
           <CompanyDetailsModal
             setOpen={setOpen}
             company={selectedCompany}
             setCompany={setCompany}
-          />
+          />,
+          document.body
         )}
-
-        {/* Pagination */}
-        <div className="flex justify-center items-center gap-4 mt-4 flex-wrap">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((prev) => prev - 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            Prev
-          </button>
-
-          <span className="text-sm sm:text-base">
-            Page {page} of {totalPages}
-          </span>
-
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((prev) => prev + 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
       </div>
     </>
   );
 };
+
 export default CompanyList;

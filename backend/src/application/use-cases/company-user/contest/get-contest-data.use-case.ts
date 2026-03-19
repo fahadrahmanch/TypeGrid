@@ -14,7 +14,7 @@ export class GetContestDataUseCase implements IGetContestDataUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
     private readonly _userRepository: IUserRepository
-  ) {}
+  ) { }
 
   /**
    * Get contest data if the user has joined the contest.
@@ -46,13 +46,13 @@ export class GetContestDataUseCase implements IGetContestDataUseCase {
       );
     }
 
-    if (contest.status !== "ongoing") {
+    if (contest.getStatus() !== "ongoing") {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
         MESSAGES.GROUP_EXPIRED
       );
     }
 
-    return mapContestDTO(contest, userId);
+    return mapContestDTO(contest.toObject(), userId);
   }
 }

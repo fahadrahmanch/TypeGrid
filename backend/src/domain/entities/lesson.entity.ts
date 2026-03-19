@@ -15,7 +15,7 @@ export type LessonCreator = "admin" | "company";
 // }
 
 export class LessonEntity extends Entity<LessonEntity> {
-  id?: string;
+  _id?: string;
 
   text!: string;
   category!: LessonCategory;

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
+import { Search, Filter, Plus, Edit2, Trash2, BookOpen } from "lucide-react";
 import {
   titleValidation,
   LevelValidation,
@@ -11,13 +13,16 @@ import {
 } from "../../validations/lessonValidation";
 import {
   createLesson,
-  getAllLessons,
+  Lessons,
   fetchLesson,
   updateLesson,
   deleteLesson,
 } from "../../api/admin/lessons";
 const Lessons: React.FC = () => {
   const [isOpen, setOpen] = useState(false);
+  const [searchText,setSearchText]=useState('')
+  const [filter,setFilter]=useState('All')
+  const [limit]=useState(5)
   const [values, setValues] = useState({
     title: "",
     level: "",
@@ -60,7 +65,7 @@ const Lessons: React.FC = () => {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const response = await getAllLessons();
+        const response = await Lessons(searchText,filter,limit,page);
         if (response && response.data.lessons) {
           setLessons(response.data.lessons);
         }
@@ -183,7 +188,6 @@ const Lessons: React.FC = () => {
       console.log(error);
     }
   }
-  console.log(editValues)
 
   async function handleEditSubmit(lessonId: string) {
     const titleError = titleValidation(String(editValues.title || ""));
@@ -227,430 +231,429 @@ const Lessons: React.FC = () => {
     <>
       <SideNavbar />
 
-      <div className="flex min-h-screen bg-[#FBF7EF]">
+      <div className="flex min-h-screen bg-[#FFF8EA]">
         {/* Main Content */}
-        <main className="flex-1 p-8">
-          {/* Header */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold">Lesson Management</h2>
-            <p className="text-gray-600 text-sm">
-              Manage typing content for Practice, Solo Play, Quick Play, and
-              Group Play modes.
-            </p>
-          </div>
-
-          {/* Search & Filters */}
-          <div className="flex items-center gap-4 mb-6">
-            <input
-              type="text"
-              placeholder="Search texts..."
-              className="flex-1 px-4 py-2 rounded-md border outline-none focus:ring-2 focus:ring-[#D6B98C]"
-            />
-
-            <select className="px-3 py-2 rounded-md border text-sm">
-              <option>All Modes</option>
-            </select>
-
-            <select className="px-3 py-2 rounded-md border text-sm">
-              <option>All Categories</option>
-            </select>
-
-            <button
-              onClick={() => setOpen(true)}
-              className="bg-[#E5B56E] px-4 py-2 rounded-md font-medium"
-            >
-              + Add Text
-            </button>
-          </div>
-
-          {/* Stats Cards */}
-          {/* <div className="grid grid-cols-3 gap-6 mb-6">
-              <div className="bg-[#FFF1D6] p-5 rounded-lg">
-                <p className="text-sm text-gray-600">Total Texts</p>
-                <h3 className="text-2xl font-bold">4</h3>
+        <main className="flex-1 ml-64 p-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="flex justify-between items-start mb-10">
+              <div>
+                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
+                  Lesson Management
+                </h1>
+                <p className="text-gray-500 font-medium">
+                  Manage typing content for Practice, Solo Play, Quick Play, and Group Play modes.
+                </p>
               </div>
 
-              <div className="bg-[#FFF1D6] p-5 rounded-lg">
-                <p className="text-sm text-gray-600">Sentences</p>
-                <h3 className="text-2xl font-bold">1</h3>
-              </div>
-
-              <div className="bg-[#FFF1D6] p-5 rounded-lg">
-                <p className="text-sm text-gray-600">Paragraphs</p>
-                <h3 className="text-2xl font-bold">1</h3>
-              </div>
-            </div> */}
-
-          {/* Table */}
-          <div className="bg-[#FFF1D6] rounded-lg p-6">
-            <div className="flex justify-between mb-4">
-              <h3 className="font-semibold">Lessons</h3>
-              <p className="text-sm text-gray-600">4 of 4 texts</p>
+              <button
+                onClick={() => setOpen(true)}
+                className="flex items-center gap-2 bg-[#ECA468] text-white px-6 py-3 rounded-[1.25rem] font-bold shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 uppercase text-xs tracking-widest"
+              >
+                <Plus className="w-5 h-5 stroke-[2.5]" />
+                Add New Lesson
+              </button>
             </div>
 
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-gray-600 border-b">
-                  {/* <th className="pb-2">ID</th> */}
-                  <th>Difficulty</th>
-                  <th>Category</th>
-                  <th>Preview</th>
-                  <th>Created</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+            {/* Search & Filters */}
+            <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-sm border border-[#ECA468]/10 mb-8 flex flex-wrap items-center gap-4">
+              <div className="relative flex-1 min-w-[300px]">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search lessons by title or content..."
+                  className="w-full pl-12 pr-4 py-3 bg-white/70 rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium"
+                />
+              </div>
 
-              <tbody className="text-gray-800">
-                {lessons &&
-                  lessons.map((lesson) => (
-                    <tr key={lesson.id} className="border-b text-start">
-                      <td>
-                        <span className="px-2 py-1 bg-blue-100 rounded text-xs">
-                          {lesson.level}
-                        </span>
-                      </td>
-                      <td>
-                        <span className="px-2 py-1 bg-yellow-100 rounded text-xs">
-                          {lesson.category}
-                        </span>
-                      </td>
-                      <td>{lesson.text.slice(0, 10)}...</td>
-                      <td>{new Date(lesson.createdAt).toLocaleDateString()}</td>
-                      <td className="flex gap-3 py-3">
-                        <button
-                          onClick={() => fetch(lesson.id)}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          onClick={() => handleDeleteLesson(lesson.id)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          🗑️
-                        </button>
-                      </td>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D0864B]" />
+                  <select onChange={(e)=>setFilter(e.target.value)} className="pl-10 pr-8 py-2.5 bg-white/70 rounded-xl border border-gray-100 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] appearance-none cursor-pointer">
+                    <option value="">All Modes</option>
+                    <option value="sentence">Sentence</option> 
+                    <option value="paragraph">Paragraph</option>
+                  </select>
+                </div>
+
+                
+              </div>
+            </div>
+
+            {/* Table Section */}
+            <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
+              <div className="flex justify-between items-center mb-8 px-2">
+                <div>
+                  <h3 className="text-xl font-black text-gray-900 leading-tight">Lessons List</h3>
+                  <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+                    {lessons.length} total lessons
+                  </p>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left">
+                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Difficulty</th>
+                      {/* <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Category</th> */}
+                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Preview</th>
+                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Stats</th>
+                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Created</th>
+                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Actions</th>
                     </tr>
-                  ))}
-              </tbody>
-            </table>
+                  </thead>
+
+                  <tbody className="divide-y divide-gray-50">
+                    {lessons && lessons.map((lesson) => (
+                      <tr key={lesson.id} className="group hover:bg-white/40 transition-all">
+                        <td className="py-5 px-4">
+                          <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border
+                            ${lesson.level === 'beginner' || lesson.level === 'easy' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                              lesson.level === 'intermediate' || lesson.level === 'medium' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
+                              'bg-orange-50 text-[#D0864B] border-orange-100'}`}>
+                            {lesson.level}
+                          </span>
+                        </td>
+                        {/* <td className="py-5 px-4 font-bold text-gray-700 text-xs">
+                          {lesson.category}
+                        </td> */}
+                        <td className="py-5 px-4">
+                          <p className="text-sm font-medium text-gray-600 max-w-[200px] truncate leading-relaxed">
+                            {lesson.text}
+                          </p>
+                        </td>
+                        <td className="py-5 px-4 text-center">
+                          <div className="flex items-center justify-center gap-3">
+                            <div className="flex flex-col items-center">
+                              <span className="text-[10px] text-gray-400 font-bold uppercase">{lesson.targetWpm || '-'}</span>
+                              <span className="text-[9px] text-[#D0864B] font-bold uppercase tracking-tighter">WPM</span>
+                            </div>
+                            <div className="w-[1px] h-4 bg-gray-100"></div>
+                            <div className="flex flex-col items-center">
+                              <span className="text-[10px] text-gray-400 font-bold uppercase">{lesson.targetAccuracy || '-'}%</span>
+                              <span className="text-[9px] text-emerald-500 font-bold uppercase tracking-tighter">ACC</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-5 px-4 text-xs font-medium text-gray-400">
+                          {new Date(lesson.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="py-5 px-4">
+                          <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                            <button
+                              onClick={() => fetch(lesson.id)}
+                              className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
+                              title="Edit Lesson"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteLesson(lesson.id)}
+                              className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
+                              title="Delete Lesson"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </main>
       </div>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      {isOpen && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-200 p-4 sm:p-8">
           {/* Modal Container */}
-          <div className="w-full max-w-3xl bg-[#FBF7EF] rounded-xl shadow-xl p-8">
+          <div className="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-[#ECA468]/10 animate-in zoom-in-95 duration-200">
             {/* Header */}
-            <h2 className="text-xl font-bold mb-6">Create New Lesson</h2>
-            {/* Title */}
-            <div className="mb-5">
-              <label className="text-sm font-medium block mb-2">Title</label>
-              <input
-                type="text"
-                value={values.title}
-                name="title"
-                onChange={handleChange}
-                className="w-full px-4 py-2 rounded-md border outline-none focus:ring-2 focus:ring-[#D6B98C]"
-              />
-              {formErrors.title && (
-                <p className="text-red-500 text-xs mt-1">{formErrors.title}</p>
-              )}
+            <div className="px-10 py-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight">Create New Lesson</h2>
+                <p className="text-sm text-gray-500 font-medium mt-1">Add a new typing lesson to the database</p>
+              </div>
+              <button 
+                onClick={() => setOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-700 transition-colors"
+                title="Close"
+              >
+                <Plus className="w-6 h-6 rotate-45" />
+              </button>
             </div>
 
-            {/* Description */}
-            {/* <div className="mb-5">
-                <label className="text-sm font-medium block mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={values.Description}
-                  rows={3}
-                  name="Description"
+            <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-[#FDFBF7]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Title */}
+                <div className="md:col-span-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Lesson Title</label>
+                  <input
+                    type="text"
+                    value={values.title}
+                    name="title"
                     onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
-                />
-              </div> */}
+                    placeholder="Enter a descriptive title..."
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                  />
+                  {formErrors.title && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{formErrors.title}</p>
+                  )}
+                </div>
 
-            {/* Level & Category */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="text-sm font-medium block mb-2">Level</label>
-                <select
-                  value={values.level}
-                  onChange={handleChange}
-                  name="level"
-                  className="w-full px-4 py-2 rounded-md border outline-none bg-white"
-                >
-                  <option value="">Select level</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
-                {formErrors.level && (
-                  <p className="text-red-500 text-xs mt-1">{formErrors.level}</p>
-                )}
+                {/* Level */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Difficulty Level</label>
+                  <select
+                    value={values.level}
+                    onChange={handleChange}
+                    name="level"
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer shadow-sm"
+                  >
+                    <option value="">Select level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                  {formErrors.level && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{formErrors.level}</p>
+                  )}
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Category</label>
+                  <select
+                    value={values.category}
+                    name="category"
+                    onChange={handleChange}
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer shadow-sm"
+                  >
+                    <option value="" disabled>Select category</option>
+                    <option value="sentence">Sentence</option>
+                    <option value="paragraph">Paragraph</option>
+                  </select>
+                  {formErrors.category && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{formErrors.category}</p>
+                  )}
+                </div>
+
+                {/* WPM */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Target WPM</label>
+                  <input
+                    type="number"
+                    value={values.wpm}
+                    name="wpm"
+                    onChange={handleChange}
+                    placeholder="e.g. 60"
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                  />
+                  {formErrors.wpm && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{formErrors.wpm}</p>
+                  )}
+                </div>
+
+                {/* Accuracy */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Target Accuracy (%)</label>
+                  <input
+                    type="number"
+                    name="accuracy"
+                    onChange={handleChange}
+                    value={values.accuracy}
+                    placeholder="e.g. 90"
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                  />
+                  {formErrors.accuracy && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{formErrors.accuracy}</p>
+                  )}
+                </div>
+
+                {/* Practice Text */}
+                <div className="md:col-span-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Practice Text</label>
+                  <textarea
+                    rows={6}
+                    value={values.text}
+                    name="text"
+                    onChange={handleChange}
+                    placeholder="Enter the text students will practice..."
+                    className="w-full px-6 py-5 bg-white rounded-[2rem] border border-gray-100 outline-none resize-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-medium text-gray-700 leading-relaxed placeholder:text-gray-300 shadow-sm"
+                  />
+                  {formErrors.text && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{formErrors.text}</p>
+                  )}
+                </div>
               </div>
-
-              <div>
-                <label className="text-sm font-medium block mb-2">
-                  Category
-                </label>
-                <select
-                  value={values.category}
-                  name="category"
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-md border outline-none bg-[#FFF3DB] text-gray-600"
-                >
-                  <option value="" disabled>
-                    Select category
-                  </option>
-                  <option value="sentence">Sentence</option>
-                  <option value="paragraph">Paragraph</option>
-                </select>
-                {formErrors.category && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {formErrors.category}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* WPM & Accuracy */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="text-sm font-medium block mb-2">WPM</label>
-                <input
-                  type="number"
-                  value={values.wpm}
-                  name="wpm"
-                  onChange={handleChange}
-                  placeholder="e.g. 60"
-                  className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
-                />
-                {formErrors.wpm && (
-                  <p className="text-red-500 text-xs mt-1">{formErrors.wpm}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="text-sm font-medium block mb-2">
-                  Accuracy
-                </label>
-                <input
-                  type="number"
-                  name="accuracy"
-                  onChange={handleChange}
-                  value={values.accuracy}
-                  placeholder="e.g. 90"
-                  className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
-                />
-                {formErrors.accuracy && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {formErrors.accuracy}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Practice Text */}
-            <div className="mb-8">
-              <label className="text-sm font-medium block mb-2">
-                Practice Text
-              </label>
-              <textarea
-                rows={5}
-                value={values.text}
-                name="text"
-                onChange={handleChange}
-                placeholder="Enter the text students will practice..."
-                className="w-full px-4 py-3 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
-              />
-              {formErrors.text && (
-                <p className="text-red-500 text-xs mt-1">{formErrors.text}</p>
-              )}
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex justify-end gap-4">
+            <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-4 shadow-inner">
               <button
                 onClick={() => setOpen(false)}
-                className="px-6 py-2 rounded-md text-gray-600 hover:text-black"
+                className="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-600 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="px-8 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700"
+                className="px-10 py-3 rounded-2xl bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
               >
                 Create Lesson
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* edit lesson */}
-      {isEditOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      {isEditOpen && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-200 p-4 sm:p-8">
           {/* Modal Container */}
-          <div className="w-full max-w-3xl bg-[#FBF7EF] rounded-xl shadow-xl p-8">
+          <div className="w-full max-w-4xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-[#ECA468]/10 animate-in zoom-in-95 duration-200">
             {/* Header */}
-            <h2 className="text-xl font-bold mb-6">Edit Lesson</h2>
-            {/* Title */}
-            <div className="mb-5">
-              <label className="text-sm font-medium block mb-2">Title</label>
-              <input
-                type="text"
-                value={editValues.title}
-                name="title"
-                onChange={handleEdiChange}
-                className="w-full px-4 py-2 rounded-md border outline-none focus:ring-2 focus:ring-[#D6B98C]"
-              />
-              {editFormErrors.title && (
-                <p className="text-red-500 text-xs mt-1">
-                  {editFormErrors.title}
-                </p>
-              )}
+            <div className="px-10 py-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight">Edit Lesson</h2>
+                <p className="text-sm text-gray-500 font-medium mt-1">Update existing typing lesson details</p>
+              </div>
+              <button 
+                onClick={() => setEditOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-700 transition-colors"
+                title="Close"
+              >
+                <Plus className="w-6 h-6 rotate-45" />
+              </button>
             </div>
 
-            {/* Description */}
-            {/* <div className="mb-5">
-                <label className="text-sm font-medium block mb-2">
-                  Description
-                </label>
-                <textarea
-                  value={values.Description}
-                  rows={3}
-                  name="Description"
-                    onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
-                />
-              </div> */}
+            <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-[#FDFBF7]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Title */}
+                <div className="md:col-span-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Lesson Title</label>
+                  <input
+                    type="text"
+                    value={editValues.title}
+                    name="title"
+                    onChange={handleEdiChange}
+                    placeholder="Enter a descriptive title..."
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                  />
+                  {editFormErrors.title && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{editFormErrors.title}</p>
+                  )}
+                </div>
 
-            {/* Level & Category */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="text-sm font-medium block mb-2">Level</label>
-                <select
-                  value={editValues.level}
-                  onChange={handleEdiChange}
-                  name="level"
-                  className="w-full px-4 py-2 rounded-md border outline-none bg-white"
-                >
-                  <option value="">Select level</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                </select>
-                {editFormErrors.level && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {editFormErrors.level}
-                  </p>
-                )}
+                {/* Level */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Difficulty Level</label>
+                  <select
+                    value={editValues.level}
+                    onChange={handleEdiChange}
+                    name="level"
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer shadow-sm"
+                  >
+                    <option value="">Select level</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                  </select>
+                  {editFormErrors.level && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{editFormErrors.level}</p>
+                  )}
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Category</label>
+                  <select
+                    value={editValues.category}
+                    name="category"
+                    onChange={handleEdiChange}
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer shadow-sm"
+                  >
+                    <option value="" disabled>Select category</option>
+                    <option value="sentence">Sentence</option>
+                    <option value="paragraph">Paragraph</option>
+                  </select>
+                  {editFormErrors.category && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{editFormErrors.category}</p>
+                  )}
+                </div>
+
+                {/* WPM */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Target WPM</label>
+                  <input
+                    type="number"
+                    value={editValues.wpm}
+                    name="wpm"
+                    onChange={handleEdiChange}
+                    placeholder="e.g. 60"
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                  />
+                  {editFormErrors.wpm && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{editFormErrors.wpm}</p>
+                  )}
+                </div>
+
+                {/* Accuracy */}
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Target Accuracy (%)</label>
+                  <input
+                    type="number"
+                    name="accuracy"
+                    onChange={handleEdiChange}
+                    value={editValues.accuracy}
+                    placeholder="e.g. 90"
+                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                  />
+                  {editFormErrors.accuracy && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{editFormErrors.accuracy}</p>
+                  )}
+                </div>
+
+                {/* Practice Text */}
+                <div className="md:col-span-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Practice Text</label>
+                  <textarea
+                    rows={6}
+                    value={editValues.text}
+                    name="text"
+                    onChange={handleEdiChange}
+                    placeholder="Enter the text students will practice..."
+                    className="w-full px-6 py-5 bg-white rounded-[2rem] border border-gray-100 outline-none resize-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-medium text-gray-700 leading-relaxed placeholder:text-gray-300 shadow-sm"
+                  />
+                  {editFormErrors.text && (
+                    <p className="text-red-400 text-[10px] font-bold uppercase tracking-wider mt-2 px-1">{editFormErrors.text}</p>
+                  )}
+                </div>
               </div>
-
-              <div>
-                <label className="text-sm font-medium block mb-2">
-                  Category
-                </label>
-                <select
-                  value={editValues.category}
-                  name="category"
-                  onChange={handleEdiChange}
-                  className="w-full px-4 py-2 rounded-md border outline-none bg-[#FFF3DB] text-gray-600"
-                >
-                  <option value="" disabled>
-                    Select category
-                  </option>
-                  <option value="sentence">Sentence</option>
-                  <option value="paragraph">Paragraph</option>
-                </select>
-                {editFormErrors.category && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {editFormErrors.category}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* WPM & Accuracy */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="text-sm font-medium block mb-2">WPM</label>
-                <input
-                  type="number"
-                  value={editValues.wpm}
-                  name="wpm"
-                  onChange={handleEdiChange}
-                  placeholder="e.g. 60"
-                  className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
-                />
-                {editFormErrors.wpm && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {editFormErrors.wpm}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="text-sm font-medium block mb-2">
-                  Accuracy
-                </label>
-                <input
-                  type="number"
-                  name="accuracy"
-                  onChange={handleEdiChange}
-                  value={editValues.accuracy}
-                  placeholder="e.g. 90"
-                  className="w-full px-4 py-2 rounded-md border bg-[#FFF3DB] outline-none"
-                />
-                {editFormErrors.accuracy && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {editFormErrors.accuracy}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Practice Text */}
-            <div className="mb-8">
-              <label className="text-sm font-medium block mb-2">
-                Practice Text
-              </label>
-              <textarea
-                rows={5}
-                value={editValues.text}
-                name="text"
-                onChange={handleEdiChange}
-                placeholder="Enter the text students will practice..."
-                className="w-full px-4 py-3 rounded-md border outline-none resize-none focus:ring-2 focus:ring-[#D6B98C]"
-              />
-              {editFormErrors.text && (
-                <p className="text-red-500 text-xs mt-1">
-                  {editFormErrors.text}
-                </p>
-              )}
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex justify-end gap-4">
+            <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-4 shadow-inner">
               <button
                 onClick={() => setEditOpen(false)}
-                className="px-6 py-2 rounded-md text-gray-600 hover:text-black"
+                className="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-600 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleEditSubmit(editValues.id)}
-                className="px-8 py-2 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700"
+                className="px-10 py-3 rounded-2xl bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
               >
-                Edit Lesson
+                Update Lesson
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

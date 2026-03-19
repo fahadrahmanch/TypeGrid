@@ -37,6 +37,6 @@ export class GetContestUseCase implements IGetContestUseCase {
       );
     }
 
-    return mapContestDTOAdmin(contest);
+    return mapContestDTOAdmin(contest.toObject());
   }
 }

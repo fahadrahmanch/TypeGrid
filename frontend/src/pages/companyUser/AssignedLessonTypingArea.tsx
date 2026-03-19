@@ -57,6 +57,7 @@ const AssignedLessonTypingArea: React.FC = () => {
   useEffect(() => {
     async function fectchAssignLesson() {
       const response = await getAssignedLessonByAssignmentId(assignedLessonId!);
+      console.log("response",response.data.data)
       setAssignedLesson(response.data.data);
     }
     fectchAssignLesson();

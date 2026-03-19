@@ -7,107 +7,94 @@ import { IUserRepository } from "../../../../domain/interfaces/repository/user/u
 import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
-import { GroupEntity, GroupProps } from "../../../../domain/entities/group.entity";
-
 import { mapCompetitionToDTOGroupPlay } from "../../../mappers/user/competition-group-play.mapper";
 import { CompetitionDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
 import { mapLessonDTOforGroupPlay } from "../../../mappers/admin/lesson-management.mapper";
+
 export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
   constructor(
-    private groupRepository: IGroupRepository,
-    private userRepository: IUserRepository,
-    private competitionRepository: ICompetitionRepository,
-    private lessonRepository: ILessonRepository,
+    private readonly _groupRepository: IGroupRepository,
+    private readonly _userRepository: IUserRepository,
+    private readonly _competitionRepository: ICompetitionRepository,
+    private readonly _lessonRepository: ILessonRepository,
   ) {}
 
-  async execute(
-    gameId: string,
-    users: string[],
-  ): Promise<CompetitionDTOGroupPlay> {
-    const compatitionData = await this.competitionRepository.findById(gameId);
-    if (compatitionData.status !== "completed") {
-      throw new CustomError(
-        HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.SOMETHING_WENT_WRONG, 
-      );
+  async execute(gameId: string, users: string[]): Promise<CompetitionDTOGroupPlay> {
+    const competition = await this._competitionRepository.findById(gameId);
+    if (!competition) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
     }
-    if (!compatitionData) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.SOMETHING_WENT_WRONG,
-      );
+
+    if (competition.getStatus() !== "completed") {
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.SOMETHING_WENT_WRONG);
     }
-    const competitionEntity = new CompetitionEntity({
-      ...compatitionData,
-      id: compatitionData._id!.toString(),
-    });
-    const groupId = competitionEntity.getGroupId();
+
+    const groupId = competition.getGroupId();
     if (!groupId) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.GROUP_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
     }
-    const groupData = await this.groupRepository.findById(groupId);
-    if (!groupData) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.GROUP_NOT_FOUND,
-      );
+
+    const group = await this._groupRepository.findById(groupId);
+    if (!group) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
     }
-    const groupEntity = new GroupEntity(groupData as unknown as GroupProps);
-    groupEntity.setGroupMembers(users);
-    groupEntity.setStatus("started");
-    const updatedGroup = groupEntity.toObject();
-    await this.groupRepository.update(updatedGroup);
-    const JoinLink = groupEntity.getJoinLink();
-    const difficulty = groupEntity.getDifficulty();
-    const level =
-      difficulty === "easy"
-        ? "beginner"
-        : difficulty === "medium"
-          ? "intermediate"
-          : "advanced";
-    const lessons = await this.lessonRepository.find({
-      level: level,
-      createdBy: "admin",
-    });
+
+    group.setGroupMembers(users);
+    group.setStatus("started");
+    await this._groupRepository.update(group.toObject());
+
+    const difficultyToLevelMap: Record<string, string> = {
+      easy: "beginner",
+      medium: "intermediate",
+      hard: "advanced",
+    };
+
+    const level = difficultyToLevelMap[group.getDifficulty()];
+
+    const lessons = await this._lessonRepository.find({ level, createdBy: "admin" });
     if (!lessons.length) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        "No lessons found for this level",
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
     }
-    let randomIndex = Math.floor(Math.random() * lessons.length);
-    let selectedLesson = mapLessonDTOforGroupPlay(lessons[randomIndex]);
+
+    const selectedLesson = mapLessonDTOforGroupPlay(
+      lessons[Math.floor(Math.random() * lessons.length)],
+    );
+
     const newCompetitionEntity = new CompetitionEntity({
       type: "group",
       mode: "global",
       textId: selectedLesson.id!.toString(),
       participants: users,
-      groupId: groupId,
+      groupId,
       duration: 100,
       status: "ongoing",
-      countDown: compatitionData.countDown || 10,
+      countDown: competition.getCountDown() ?? 10,
     });
-    const competitionObject = newCompetitionEntity.toObject();
-    const newCompetition =
-      await this.competitionRepository.create(competitionObject);
-    const populatedParticipants = await Promise.all(
-      newCompetitionEntity.getParticipants().map((item: string) =>
-        this.userRepository.findById(item),
-      ),
+
+    const newCompetition = await this._competitionRepository.create(
+      newCompetitionEntity.toObject(),
     );
 
-    const responseCompetition = {
-      ...newCompetition,
-      participants: populatedParticipants,
-      lesson: selectedLesson,
-      joinLink: JoinLink || undefined,
-    };
+    const populatedParticipants = (await Promise.all(
+      newCompetition.getParticipants().map((memberId: string) =>
+        this._userRepository.findById(memberId),
+      ),
+    ))
+      .filter((m): m is NonNullable<typeof m> => m !== null)
+      .map((member) => ({
+        _id: member._id,
+        name: member.name,
+        imageUrl: member.imageUrl,
+      }));
+
     return mapCompetitionToDTOGroupPlay(
-      responseCompetition,
-      groupEntity.getOwnerId(),
+      {
+        ...newCompetition.toObject(),
+        participants: populatedParticipants,
+        lesson: selectedLesson,
+        joinLink: group.getJoinLink() ?? undefined,
+      },
+      group.getOwnerId(),
     );
   }
 }

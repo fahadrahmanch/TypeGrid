@@ -105,14 +105,10 @@ export class CompanyUserController {
       const companyUsers = await this._getCompanyUsersUseCase.execute(
         adminUser.CompanyId!,
       );
-      const safeCompanyUsers = companyUsers.map(
-        ({ password, ...rest }) => rest,
-      );
-
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.COMPANY_USERS_FETCHED_SUCCESS,
-        data: safeCompanyUsers,
+        data: companyUsers,
       });
     } catch (error: any) {
       next(error);

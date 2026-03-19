@@ -58,4 +58,15 @@ export class CompanyGroupEntity {
   removeMember(userId: string) {
     this.members = this.members.filter((id) => id !== userId);
   }
+  toObject(): CompanyGroupProps {
+  return {
+    id: this.id,
+    companyId: this.companyId,
+    name: this.name,
+    type: this.type,
+    members: [...this.members],
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+}
 }

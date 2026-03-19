@@ -1,7 +1,7 @@
 import { adminAPI } from "../axios/adminAPI";
 
-export async function getAllLessons() {
-  return adminAPI.get("/lessons");
+export async function Lessons(searchText: string, filter: string, limit: number, page: number) {
+  return adminAPI.get("/lessons", { params: { searchText, filter, limit, page } });
 }
 // create lesson
 export async function createLesson(lessonData: any) {

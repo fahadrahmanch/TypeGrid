@@ -6,7 +6,7 @@ import { ContestProps } from "../../types/contest";
 import CreateContestModal from "../../components/companyAdmin/contest/CreateContestModal";
 import { Plus } from "lucide-react";
 import { companyContests } from "../../api/companyAdmin/companyContextAPI";
-
+import { socket } from "../../socket";
 const CompanyContestManagement: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [contests, setContests] = useState<ContestProps[]>([]);
@@ -18,7 +18,27 @@ const CompanyContestManagement: React.FC = () => {
       setContests(data);
     };
     fetchContests();
+
   }, []);
+
+ useEffect(() => {
+  socket.emit("company-admin-contest");
+}, []);
+
+  useEffect(() => {
+    socket.on("contest-updated-admin", ({ contestId, status }) => {
+      if (!status) return;
+      setContests((prev) =>
+        prev.map((contest) =>
+          contest._id === contestId ? { ...contest, status } : contest
+        )
+      );
+    });
+    return () => {
+      socket.off("contest-updated-admin");
+    };
+  }, []);
+  
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
       {/* Fixed Sidebar */}
@@ -40,15 +60,15 @@ const CompanyContestManagement: React.FC = () => {
 
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+              className="flex items-center gap-2 bg-[#ECA468] text-white px-5 py-2.5 rounded-[1.25rem] font-bold shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 uppercase text-xs tracking-widest"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-5 h-5 stroke-[2.5]" />
               Create Contest
             </button>
           </div>
 
           {/* Stats Section */}
-          <ContestStatsCards />
+          {/* <ContestStatsCards /> */}
 
           {/* Filters/Tabs could go here (e.g. All, Active, Completed) */}
 

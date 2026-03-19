@@ -1,72 +1,79 @@
-import { Model } from "mongoose";
+import { Model, Document } from "mongoose";
 import { IBaseRepository } from "../../../domain/interfaces/repository/base-repository.interface";
 
-export class BaseRepository<T> implements IBaseRepository<T> {
-  protected model: Model<T>;
+export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDomain> {
+  protected model: Model<TDocument>;
+  protected toDomain: (doc: any) => TDomain;
 
-  constructor(model: Model<T>) {
+  constructor(model: Model<TDocument>, toDomain: (doc: any) => TDomain) {
     this.model = model;
+    this.toDomain = toDomain;
   }
+
   async find(
     filter: any = {},
     options?: {
       populate?: { path: string; select?: string };
     },
-  ): Promise<T[]> {
+  ): Promise<TDomain[]> {
     let query = this.model.find(filter);
 
     if (options?.populate) {
       query = query.populate(options.populate.path, options.populate.select);
     }
 
-    return query.lean<T[]>().exec();
+    const docs = await query.lean<TDocument[]>().exec();
+    return docs.map(doc => this.toDomain(doc));
   }
 
-  async findOne(filter: any = {}): Promise<T | null> {
-    return this.model.findOne(filter).lean<T>().exec();
+  async findOne(filter: any = {}): Promise<TDomain | null> {
+    const doc = await this.model.findOne(filter).lean<TDocument>().exec();
+    return doc ? this.toDomain(doc) : null;
   }
-  async create(data: any): Promise<T> {
+
+  async create(data: any): Promise<TDomain> {
     const res = await this.model.create(data);
-    return res.toObject() as T;
+    return this.toDomain(res.toObject());
   }
+
   async findById(
     id: string,
     options?: {
       populate?: { path: string; select?: string };
     },
-  ): Promise<T | null> {
+  ): Promise<TDomain | null> {
     let query = this.model.findById(id);
 
     if (options?.populate) {
       query = query.populate(options.populate.path, options.populate.select);
     }
 
-    return query.lean<T>().exec();
+    const doc = await query.lean<TDocument>().exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  async FindByEmail(email: string): Promise<T | null> {
-    const userDoc = await this.model.findOne({ email });
-    if (!userDoc) return null;
-    const obj = userDoc.toObject();
-    return obj;
-  }
+
+
   async update(data: any): Promise<any> {
     const { _id, ...updateFields } = data;
-    return await this.model
+    const doc = await this.model
       .findByIdAndUpdate(_id, { $set: updateFields }, { new: true })
-      .lean<T>()
+      .lean<TDocument>()
       .exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  async updateById(_id: string, updateQuery: any): Promise<T | null> {
-    return await this.model.findByIdAndUpdate(
+  async updateById(_id: string, updateQuery: any): Promise<TDomain | null> {
+    const doc = await this.model.findByIdAndUpdate(
       _id,
       { $set: updateQuery },
       { new: true },
-    );
+    ).lean<TDocument>().exec();
+    return doc ? this.toDomain(doc) : null;
   }
 
-  async delete(_id: string): Promise<T | null> {
-    return this.model.findByIdAndDelete(_id);
+  async delete(_id: string): Promise<TDomain | null> {
+    const doc = await this.model.findByIdAndDelete(_id).exec();
+    return doc ? this.toDomain(doc) : null;
   }
 }

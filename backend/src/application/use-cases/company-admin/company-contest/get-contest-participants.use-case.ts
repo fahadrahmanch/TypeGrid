@@ -8,7 +8,7 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 
 /**
  * Use case for retrieving participants of a contest.
- * 
+ *
  * Fetches a contest by its ID and retrieves detailed information about all participants
  * enrolled in that contest.
  */
@@ -22,21 +22,15 @@ export class GetContestParticipantsUseCase implements IGetContestParticipantsUse
     const contest = await this._contestRepository.findById(contestId);
 
     if (!contest) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.CONTEST_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
     }
 
     const participants = await Promise.all(
-      contest.participants.map(async (participantId: string) => {
+      contest.getParticipants().map(async (participantId: string) => {
         const user = await this._userRepository.findById(participantId);
 
         if (!user) {
-          throw new CustomError(
-            HttpStatusCodes.NOT_FOUND,
-            MESSAGES.AUTH_USER_NOT_FOUND,
-          );
+          throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
         }
 
         return {

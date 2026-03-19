@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { AuthUserEntity } from "../../../../domain/entities";
+import {UserEntity } from "../../../../domain/entities";
 import { IGetCompanyUsersUseCase } from "../../interfaces/companyAdmin/get-company-users.interface";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
@@ -16,7 +16,7 @@ export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
    * @param CompanyId - Company identifier
    * @returns List of company users
    */
-  async execute(CompanyId: string): Promise<AuthUserEntity[]> {
+  async execute(CompanyId: string): Promise<UserEntity[]> {
     if (!CompanyId) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,

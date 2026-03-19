@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-// import { X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { X, Target, Zap, Layers, Type, AlertCircle } from "lucide-react";
 import {
   titleValidation,
   LevelValidation,
@@ -8,10 +9,9 @@ import {
   CategoryValidation,
   textValidation,
 } from "../../../validations/lessonValidation";
-import { useEffect } from "react";
-import { getLessonById } from "../../../api/companyAdmin/lessons";
+import { getLessonById, updateLesson } from "../../../api/companyAdmin/lessons";
 import { toast } from "react-toastify";
-import { updateLesson } from "../../../api/companyAdmin/lessons";
+
 interface EditLessonModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,9 +38,13 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(
       category: "",
       text: "",
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
       async function fetchLesson() {
         if (!lessonId || !isOpen) return;
+        setIsLoading(true);
         try {
           const response = await getLessonById(lessonId);
           const lessonData = response.data.lesson || response.data;
@@ -48,13 +52,16 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(
             title: lessonData.title || "",
             description: lessonData.description || "",
             level: lessonData.level || "",
-            wpm: lessonData.wpm.toString() || "",
+            wpm: lessonData.wpm?.toString() || "",
             text: lessonData.text || "",
-            accuracy: lessonData.accuracy.toString() || "",
+            accuracy: lessonData.accuracy?.toString() || "",
             category: lessonData.category || "",
           });
         } catch (error) {
           console.error("Error fetching lesson:", error);
+          toast.error("Failed to load lesson details");
+        } finally {
+          setIsLoading(false);
         }
       }
       fetchLesson();
@@ -68,61 +75,40 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(
       >,
     ) => {
       const { name, value } = e.target;
-      if (name == "title") {
-        setError({ ...error, title: titleValidation(value) });
-      }
-      // if (name == 'description') {
-      //     setError({ ...error, description: DescriptionValidation(value) });
-      // }
-      if (name == "level") {
-        setError({ ...error, level: LevelValidation(value) });
-      }
-      if (name == "wpm") {
-        setError({ ...error, wpm: WpmValidation(value) });
-      }
-      if (name == "accuracy") {
-        setError({ ...error, accuracy: accuracyValidation(value) });
-      }
-      if (name == "category") {
-        setError({ ...error, category: CategoryValidation(value) });
-      }
-      if (name == "text") {
-        setError({ ...error, text: textValidation(value) });
-      }
+      if (name === "title") setError({ ...error, title: titleValidation(value) });
+      if (name === "level") setError({ ...error, level: LevelValidation(value) });
+      if (name === "wpm") setError({ ...error, wpm: WpmValidation(value) });
+      if (name === "accuracy") setError({ ...error, accuracy: accuracyValidation(value) });
+      if (name === "category") setError({ ...error, category: CategoryValidation(value) });
+      if (name === "text") setError({ ...error, text: textValidation(value) });
+
       setValues((prevValues) => ({
         ...prevValues,
         [name]: value,
       }));
     };
+
     async function handleSubmit(e: React.FormEvent) {
       e.preventDefault();
       const titleErr = titleValidation(values.title);
-      // const descriptionErr = DescriptionValidation(values.description);
       const levelErr = LevelValidation(values.level);
       const wpmErr = WpmValidation(values.wpm);
       const accuracyErr = accuracyValidation(values.accuracy);
       const categoryErr = CategoryValidation(values.category);
       const textErr = textValidation(values.text);
+
       setError({
         title: titleErr,
-        // description: descriptionErr,
         level: levelErr,
         wpm: wpmErr,
         accuracy: accuracyErr,
         category: categoryErr,
         text: textErr,
       });
-      if (
-        titleErr ||
-        // descriptionErr ||
-        levelErr ||
-        wpmErr ||
-        accuracyErr ||
-        categoryErr ||
-        textErr
-      ) {
-        return;
-      }
+
+      if (titleErr || levelErr || wpmErr || accuracyErr || categoryErr || textErr) return;
+
+      setIsSubmitting(true);
       try {
         const response = await updateLesson(lessonId, values);
         const updatedLesson = response.data.lesson;
@@ -136,175 +122,196 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(
         onClose();
       } catch (error: any) {
         console.log("error", error);
-        toast.error("Something went wrong");
+        toast.error(error.response?.data?.message || "Failed to update lesson");
+      } finally {
+        setIsSubmitting(false);
       }
     }
 
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-          <div className="p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              Edit Lesson
-            </h2>
-
-            <div className="space-y-6">
-              {/* Lesson Type */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Lesson Type
-                </label>
-                <button className="w-full md:w-auto px-6 py-2 bg-blue-50 border border-blue-200 text-blue-600 rounded-lg font-medium text-sm">
-                  Custom Lesson
-                </button>
-              </div>
-
-              {/* Title */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={values.title}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
-                />
-                {error.title && (
-                  <p className="text-red-500 text-sm mt-1">{error.title}</p>
-                )}
-              </div>
-
-              {/* Description
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                            <textarea
-                                rows={3}
-                                name="description"
-                                value={values.description}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none"
-                            />
-                            {error.description && <p className="text-red-500 text-sm mt-1">{error.description}</p>}
-                        </div> */}
-
-              {/* Row 1: Level & Duration */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Level
-                  </label>
-                  <select
-                    name="level"
-                    value={values.level}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-white"
-                  >
-                    <option value="">Select Level</option>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                  </select>
-                  {error.level && (
-                    <p className="text-red-500 text-sm mt-1">{error.level}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Row 2: Date, WPM, Accuracy */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    WPM
-                  </label>
-                  <input
-                    type="number"
-                    name="wpm"
-                    value={values.wpm}
-                    onChange={handleInputChange}
-                    placeholder="e.g. 60"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all bg-[#fffcf4]"
-                  />
-                  {error.wpm && (
-                    <p className="text-red-500 text-sm mt-1">{error.wpm}</p>
-                  )}
+    return createPortal(
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-[#1A1512]/40 backdrop-blur-md animate-in fade-in duration-300" 
+          onClick={onClose}
+        />
+        
+        {/* Modal Content */}
+        <div className="relative bg-[#FFF8EA] rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-white/50 animate-in zoom-in-95 duration-300 flex flex-col">
+          {/* Decorative Header */}
+          <div className="h-32 bg-gradient-to-br from-[#ECA468] to-[#D0864B] relative overflow-hidden shrink-0">
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,#fff_0%,transparent_50%)]" />
+            
+            <div className="relative h-full px-10 flex items-center justify-between">
+              <div className="flex items-center gap-4 text-white">
+                <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+                  <Zap size={28} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    accuracy
-                  </label>
-                  <input
-                    type="number"
-                    name="accuracy"
-                    value={values.accuracy}
-                    onChange={handleInputChange}
-                    placeholder="e.g. 60"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all bg-[#fffcf4]"
-                  />
-                  {error.accuracy && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {error.accuracy}
-                    </p>
-                  )}
+                  <h2 className="text-3xl font-black tracking-tight">Edit Lesson</h2>
+                  <p className="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">Update Material</p>
                 </div>
               </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category
-                </label>
-                <select
-                  name="category"
-                  value={values.category}
-                  onChange={handleInputChange}
-                  className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none bg-[#fffcf4]"
-                >
-                  <option value="">Select category</option>
-                  <option value="paragraph">paragraph</option>
-                  <option value="sentence">sentences</option>
-                </select>
-                {error.category && (
-                  <p className="text-red-500 text-sm mt-1">{error.category}</p>
-                )}
-              </div>
-
-              {/* Practice Text */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Practice Text
-                </label>
-                <textarea
-                  rows={6}
-                  name="text"
-                  value={values.text}
-                  onChange={handleInputChange}
-                  placeholder="Enter the text students will practice..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none"
-                />
-                {error.text && (
-                  <p className="text-red-500 text-sm mt-1">{error.text}</p>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center justify-between mt-8 pt-6">
-              <button
+              <button 
                 onClick={onClose}
-                className="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors"
+                className="p-3 hover:bg-white/20 rounded-2xl transition-all text-white/80 hover:text-white"
               >
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-sm"
-              >
-                update Lesson
+                <X size={24} />
               </button>
             </div>
           </div>
+
+          <div className="p-10 overflow-y-auto custom-scrollbar flex-1 bg-white/40">
+            {isLoading ? (
+              <div className="h-64 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#D0864B]"></div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-10">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  <div className="space-y-6">
+                    <div>
+                      <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                        <Layers size={14} className="text-[#D0864B]" />
+                        Lesson Title
+                      </label>
+                      <input
+                        type="text"
+                        name="title"
+                        value={values.title}
+                        onChange={handleInputChange}
+                        className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-gray-800 shadow-sm"
+                      />
+                      {error.title && (
+                        <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
+                          <AlertCircle size={14} />
+                          <span className="text-[10px] font-black uppercase tracking-wider">{error.title}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                          <Zap size={14} className="text-[#D0864B]" />
+                          Level
+                        </label>
+                        <select
+                          name="level"
+                          value={values.level}
+                          onChange={handleInputChange}
+                          className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-gray-700 appearance-none shadow-sm cursor-pointer"
+                        >
+                          <option value="">Select Level</option>
+                          <option value="beginner">Beginner</option>
+                          <option value="intermediate">Intermediate</option>
+                          <option value="advanced">Advanced</option>
+                        </select>
+                        {error.level && <span className="text-[9px] font-bold text-red-500 ml-1">{error.level}</span>}
+                      </div>
+
+                      <div>
+                        <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                          <Type size={14} className="text-[#D0864B]" />
+                          Category
+                        </label>
+                        <select
+                          name="category"
+                          value={values.category}
+                          onChange={handleInputChange}
+                          className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-gray-700 appearance-none shadow-sm cursor-pointer"
+                        >
+                          <option value="">Select Category</option>
+                          <option value="paragraph">Paragraph</option>
+                          <option value="sentence">Sentence</option>
+                        </select>
+                        {error.category && <span className="text-[9px] font-bold text-red-500 ml-1">{error.category}</span>}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="bg-[#FFF8EA] rounded-3xl p-6 border border-[#ECA468]/20 relative overflow-hidden group">
+                      <h4 className="text-sm font-black text-[#D0864B] uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                        <Target size={18} /> Settings Review
+                      </h4>
+
+                      <div className="space-y-6">
+                        <div>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Min. WPM</span>
+                            <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">{values.wpm} WPM</span>
+                          </div>
+                          <input
+                            type="number"
+                            name="wpm"
+                            value={values.wpm}
+                            onChange={handleInputChange}
+                            className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
+                          />
+                          {error.wpm && <span className="text-[9px] font-bold text-red-500 ml-1">{error.wpm}</span>}
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Accuracy %</span>
+                            <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">{values.accuracy}%</span>
+                          </div>
+                          <input
+                            type="number"
+                            name="accuracy"
+                            value={values.accuracy}
+                            onChange={handleInputChange}
+                            className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
+                          />
+                          {error.accuracy && <span className="text-[9px] font-bold text-red-500 ml-1">{error.accuracy}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                    Lesson Content
+                  </label>
+                  <textarea
+                    name="text"
+                    rows={6}
+                    value={values.text}
+                    onChange={handleInputChange}
+                    className="w-full px-8 py-6 bg-white rounded-3xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-medium text-gray-800 shadow-sm resize-none leading-relaxed"
+                  />
+                  {error.text && (
+                    <div className="flex items-center gap-1.5 mt-3 ml-2 text-red-500">
+                      <AlertCircle size={14} />
+                      <span className="text-[10px] font-black uppercase tracking-wider">{error.text}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="flex-1 py-5 rounded-2xl font-black text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all uppercase tracking-widest text-xs"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-[2] py-5 bg-[#D0864B] hover:bg-[#B36E39] text-white rounded-2xl font-black shadow-lg shadow-[#D0864B]/20 transition-all uppercase tracking-widest text-xs disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Updating..." : "Update Changes"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   },
 );

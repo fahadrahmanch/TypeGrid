@@ -10,6 +10,7 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
   constructor(
     private _baseAssignmentLessonRepository: ILessonAssignmentRepository,
     private _userRepository: IUserRepository,
+    private _lessonRepository: ILessonRepository,
   ) { }
   async execute(userId: string): Promise<GetMyLessonsResponseDTO> {
     const user = await this._userRepository.findById(userId);
@@ -19,21 +20,38 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
 
     const assignedLessons = await this._baseAssignmentLessonRepository.find(
       { userId },
-      {
-        populate: {
-          path: "lessonId",
-          select: "text wpm accuracy level title category createdBy",
-        },
-      },
     );
+    
+    const lessons = await Promise.all(
+      assignedLessons.map(async (assignedLesson) => {
+        const lesson = await this._lessonRepository.findById(assignedLesson.getLessonId());
+        return {
+          assignmentId: assignedLesson.getId(),
+          status: assignedLesson.getStatus(),
+          deadlineAt: assignedLesson.getDeadlineAt(),
+          assignedAt: assignedLesson.getAssignedAt(),
+          lesson: lesson ? {
+            id: lesson._id,
+            text: lesson.text,
+            wpm: lesson.wpm,
+            accuracy: lesson.accuracy,
+            level: lesson.level,
+            title: lesson.title,
+            category: lesson.category,
+            createdBy: lesson.createdBy,
+          } : null
+        };
+      })
+    );
+
     const completed = assignedLessons.reduce((acc, curr) => {
-      if (curr.status === "completed") {
+      if (curr.getStatus() === "completed") {
         return acc + 1;
       }
       return acc;
     }, 0);
     return {
-      lessons: assignedLessons,
+      lessons: lessons,
       completed,
       total: assignedLessons.length,
     };

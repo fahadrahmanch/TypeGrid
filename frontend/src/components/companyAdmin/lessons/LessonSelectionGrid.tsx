@@ -1,109 +1,116 @@
 import React from "react";
-import { Lesson } from "../../../types/lesson";
-import { useState, useEffect } from "react";
+import { Check, BookOpen } from "lucide-react";
+import { Lesson } from "./LessonTable";
+
 interface LessonSelectionGridProps {
-  lessons: Lesson[];
+  lessons: (Partial<Lesson> & { is_admin?: boolean; _id?: string })[];
   selectedLessons: string[];
   onToggleLesson: (lessonId: string) => void;
 }
 
-const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty.toLowerCase()) {
-    case "beginner":
-      return "bg-green-100 text-green-700";
-    case "intermediate":
-      return "bg-yellow-100 text-yellow-700";
-    case "advanced":
-      return "bg-red-100 text-red-700";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
-};
 const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
   lessons,
   selectedLessons,
   onToggleLesson,
 }) => {
-  const [filteredLessons, setFilteredLessons] = useState<any>(lessons);
-  const [filter, setFilter] = useState<string>("all");
-  useEffect(() => {
-    if (filter === "all") {
-      setFilteredLessons(lessons);
-    } else if (filter === "company") {
-      setFilteredLessons(lessons.filter((lesson: any) => lesson.companyId));
-    } else if (filter === "admin") {
-      setFilteredLessons(lessons.filter((lesson: any) => !lesson.companyId));
-    }
-  }, [filter, lessons]);
+  const [filter, setFilter] = React.useState<"all" | "company" | "admin">("all");
+
+  const filteredLessons = lessons.filter((lesson) => {
+    if (filter === "all") return true;
+    if (filter === "company") return !lesson.is_admin;
+    if (filter === "admin") return lesson.is_admin;
+    return true;
+  });
+
   return (
-    <div className="mt-8 pt-6 border-t border-gray-100">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-gray-800">Select Lessons</h3>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setFilter("all")}
-            className={`px-3 py-1 ${filter === "all" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600 hover:bg-gray-300"} text-xs rounded-md transition-colors`}
-          >
-            All Lessons
-          </button>
-          <button
-            onClick={() => setFilter("company")}
-            className={`px-3 py-1 ${filter === "company" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600 hover:bg-gray-300"} text-xs rounded-md transition-colors`}
-          >
-            Company Lessons
-          </button>
-          <button
-            onClick={() => setFilter("admin")}
-            className={`px-3 py-1 ${filter === "admin" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600 hover:bg-gray-300"} text-xs rounded-md transition-colors`}
-          >
-            Admin Lessons
-          </button>
+    <div className="space-y-6">
+      <div className="flex justify-center mb-10">
+        <div className="bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-[#ECA468]/20 flex gap-1 shadow-sm">
+          {[
+            { id: "all", label: "All Material" },
+            { id: "company", label: "My Lessons" },
+            { id: "admin", label: "TypeGrid Library" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setFilter(tab.id as any)}
+              className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                filter === tab.id
+                  ? "bg-[#D0864B] text-white shadow-md shadow-[#D0864B]/20"
+                  : "text-gray-400 hover:text-gray-600 hover:bg-white/80"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Lesson Cards for Selection */}
-        {filteredLessons.slice(0, 4).map((lesson: any) => (
-          <div
-            onClick={() => onToggleLesson(lesson.id)}
-            key={`select-${lesson.id}`}
-            className={`
-    p-4 rounded-lg cursor-pointer transition-all bg-white group
-    border
-    ${
-      selectedLessons.includes(lesson.id)
-        ? "border-blue-500 bg-blue-50"
-        : "border-gray-100 hover:border-blue-300 hover:shadow-sm"
-    }
-  `}
-          >
-            {" "}
-            <div className="flex justify-between items-start mb-2">
-              <h4 className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {filteredLessons.map((lesson) => {
+          const lessonId = (lesson._id || lesson.id || "") as string;
+          const isSelected = selectedLessons.includes(lessonId);
+
+          return (
+            <button
+              key={lessonId}
+              onClick={() => onToggleLesson(lessonId)}
+              className={`relative p-5 rounded-2xl border transition-all duration-300 text-left group overflow-hidden ${
+                isSelected
+                  ? "bg-[#D0864B] border-[#D0864B] shadow-lg shadow-[#D0864B]/20"
+                  : "bg-white border-gray-100 hover:border-[#ECA468] hover:shadow-md"
+              }`}
+            >
+              {isSelected && (
+                <div className="absolute top-3 right-3 text-white">
+                  <div className="bg-white/20 rounded-full p-1 backdrop-blur-md">
+                    <Check size={12} strokeWidth={4} />
+                  </div>
+                </div>
+              )}
+
+              <div className={`p-2.5 rounded-xl inline-block mb-4 transition-colors ${
+                isSelected 
+                  ? "bg-white/20 text-white" 
+                  : "bg-[#ECA468]/10 text-[#D0864B]"
+              }`}>
+                <BookOpen size={18} />
+              </div>
+              
+              <h4 className={`font-black text-sm mb-2 transition-colors ${
+                isSelected ? "text-white" : "text-gray-800"
+              }`}>
                 {lesson.title}
               </h4>
-              <span
-                className={`px-2 py-0.5 rounded text-[10px] font-medium ${getDifficultyColor(lesson?.level || "")}`}
-              >
-                {lesson.level}
-              </span>
-            </div>
-            <p className="text-xs text-gray-500 mb-3 text-start">
-              {lesson?.text?.length > 30
-                ? lesson?.text?.slice(0, 30) + "..."
-                : lesson?.text}
-            </p>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] bg-gray-100 px-2 py-1 rounded text-gray-600">
-                5 min
-              </span>
-              <span className="text-[10px] bg-gray-100 px-2 py-1 rounded text-gray-600">
-                {lesson?.text?.split(" ").length} words
-              </span>
-            </div>
-          </div>
-        ))}
+              
+              <div className="flex items-center gap-2">
+                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                  isSelected
+                    ? "bg-white/20 text-white"
+                    : "bg-gray-50 text-gray-400 border border-gray-100"
+                }`}>
+                  {lesson.level}
+                </span>
+                {lesson.is_admin && (
+                  <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                    isSelected
+                      ? "bg-rose-100/20 text-white"
+                      : "bg-rose-50 text-rose-500 border border-rose-100"
+                  }`}>
+                    Library
+                  </span>
+                )}
+              </div>
+            </button>
+          );
+        })}
       </div>
+      
+      {filteredLessons.length === 0 && (
+        <div className="py-20 text-center">
+          <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">No lessons found in this category</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -40,6 +40,6 @@ export class GetCompanyContestsUseCase implements IGetCompanyContestsUsecase {
       );
     }
 
-    return mapCompanyContestDTO(contests);
+    return mapCompanyContestDTO(contests.map(c => c.toObject()));
   }
 }

@@ -2,20 +2,23 @@ import { Model } from "mongoose";
 import { BaseRepository } from "../../base/base.repository";
 import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
 import { ICompanyDocument } from "../../types/documents";
+import { CompanyEntity } from "../../../../domain/entities";
+import { CompanyMapper } from "../../mappers/company.mapper";
 
 export class CompanyRepository
-  extends BaseRepository<ICompanyDocument>
+  extends BaseRepository<ICompanyDocument, CompanyEntity>
   implements ICompanyRepository
 {
   constructor(model: Model<ICompanyDocument>) {
-    super(model);
+    super(model, CompanyMapper.toDomain);
   }
+
   async getCompanies(
     status: string,
     searchText: string,
     page: number,
     limit: number,
-  ): Promise<{ companies: ICompanyDocument[]; total: number }> {
+  ): Promise<{ companies: CompanyEntity[]; total: number }> {
     let query: any = {};
 
     if (searchText) {
@@ -31,12 +34,14 @@ export class CompanyRepository
 
     const total = await this.model.countDocuments(query);
 
-    const companies = await this.model
+    const rawCompanies = await this.model
       .find(query)
       .skip((page - 1) * limit)
       .limit(limit)
       .lean<ICompanyDocument[]>()
       .exec();
+
+    const companies = rawCompanies.map(doc => this.toDomain(doc));
 
     return { companies, total };
   }

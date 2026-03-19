@@ -30,13 +30,15 @@ const Lessons: React.FC = () => {
     async function fetchCompanyUsers() {
       try {
         const response = await getCompanyUsers();
-        setCompanyUsers(response.data.data);
+        const userData = response.data.users || response.data.data || [];
+        setCompanyUsers(userData);
       } catch (error) {
         console.log(error);
       }
     }
     fetchCompanyUsers();
   }, []);
+
   const toggleUserSelection = (userId: string) => {
     setSelectedUsers((prev: any) =>
       prev.includes(userId)
@@ -68,6 +70,7 @@ const Lessons: React.FC = () => {
 
   const handleClear = () => {
     setSelectedUsers([]);
+    setSelectedLessons([]);
   };
 
   useEffect(() => {
@@ -86,7 +89,10 @@ const Lessons: React.FC = () => {
     async function fetchAdminLessons() {
       try {
         const response = await getAdminLessons();
-        const adminLessonsData = response.data.lessons;
+        const adminLessonsData = response.data.lessons.map((lesson: any) => ({
+          ...lesson,
+          is_admin: true,
+        }));
         setAdminLessons(adminLessonsData);
       } catch (error) {
         console.log(error);
@@ -96,7 +102,7 @@ const Lessons: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#fff8ea]">
+    <div className="flex min-h-screen bg-[#FFF8EA]">
       <CompanyAdminSidebar />
       <CreateLessonModal
         isOpen={isCreateModalOpen}
@@ -105,60 +111,83 @@ const Lessons: React.FC = () => {
       />
 
       <div className="flex-1 p-8 overflow-y-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 font-jaini">
-            Lesson Management
-          </h1>
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all shadow-md"
-          >
-            <Plus size={20} />
-            <span>Create New Lesson</span>
-          </button>
-        </div>
-
-        {/* Lessons List Section */}
-
-        {<LessonTable lessons={lessons} setLessons={setLessons} />}
-
-        {/* Assignment Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <div className="flex border-b border-gray-100 mb-6">
-            <button className="flex items-center gap-2 px-4 py-2 border-b-2 border-blue-500 text-blue-600 font-medium text-sm">
-              Assign by User
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-gray-700 font-medium text-sm">
-              Assign by Group
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-gray-700 font-medium text-sm">
-              View Progress
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+            <div>
+              <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">
+                Lesson Management
+              </h1>
+              <p className="text-gray-500 font-medium">Create, manage and assign lessons to your students.</p>
+            </div>
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="flex items-center gap-2 bg-[#D0864B] hover:bg-[#B36E39] text-white px-6 py-3 rounded-2xl transition-all shadow-lg shadow-[#D0864B]/20 font-bold group"
+            >
+              <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+              <span>Create New Lesson</span>
             </button>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8">
-            <UserSelectionList
-              users={companyUsers}
-              selectedUsers={selectedUsers}
-              onToggleUser={toggleUserSelection}
-            />
-
-            <AssignmentSummary
-              selectedUserCount={selectedUsers.length}
-              selectedLessonCount={selectedLessons.length}
-              onAssign={handleAssign}
-              onClear={handleClear}
-              deadlineAt={deadlineAt}
-              setDeadlineAt={setDeadlineAt}
-            />
+          {/* Lessons List Section */}
+          <div className="mb-12">
+            <LessonTable lessons={lessons} setLessons={setLessons} />
           </div>
 
-          <LessonSelectionGrid
-            lessons={lessons.concat(adminLessons)}
-            selectedLessons={selectedLessons}
-            onToggleLesson={toggleLessonSelection}
-          />
+          {/* Assignment Section */}
+          <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] shadow-sm border border-[#ECA468]/10 p-8">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-3 bg-[#ECA468]/10 rounded-2xl text-[#D0864B]">
+                <Plus size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight">Assign Lessons</h2>
+                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">Management Console</p>
+              </div>
+            </div>
+
+            <div className="flex border-b border-gray-100 mb-8">
+              <button className="flex items-center gap-2 px-6 py-3 border-b-2 border-[#D0864B] text-[#D0864B] font-bold text-sm tracking-tight transition-all">
+                Assign by User
+              </button>
+              <button className="flex items-center gap-2 px-6 py-3 text-gray-400 hover:text-gray-600 font-bold text-sm tracking-tight transition-all">
+                Assign by Group
+              </button>
+              <button className="flex items-center gap-2 px-6 py-3 text-gray-400 hover:text-gray-600 font-bold text-sm tracking-tight transition-all ml-auto">
+                View Progress
+              </button>
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-12">
+              <div className="flex-1">
+                <UserSelectionList
+                  users={companyUsers}
+                  selectedUsers={selectedUsers}
+                  onToggleUser={toggleUserSelection}
+                />
+              </div>
+
+              <div className="lg:w-80 shrink-0">
+                <AssignmentSummary
+                  selectedUserCount={selectedUsers.length}
+                  selectedLessonCount={selectedLessons.length}
+                  onAssign={handleAssign}
+                  onClear={handleClear}
+                  deadlineAt={deadlineAt}
+                  setDeadlineAt={setDeadlineAt}
+                />
+              </div>
+            </div>
+
+            <div className="mt-12 pt-12 border-t border-gray-50 text-center">
+              <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8">Select Practice Material</h4>
+              <LessonSelectionGrid
+                lessons={lessons.concat(adminLessons)}
+                selectedLessons={selectedLessons}
+                onToggleLesson={toggleLessonSelection}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 import { X, Calendar, Clock, Trash, Plus, Users, Globe } from "lucide-react";
 import { getCompanyGroups } from "../../../api/companyAdmin/companyGroup";
@@ -245,9 +246,9 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm overflow-y-auto pt-10 pb-10">
-      <div className="bg-white rounded-2xl w-full max-w-3xl shadow-2xl scale-100 transition-all my-auto relative flex flex-col max-h-[90vh]">
+  return createPortal(
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm overflow-y-auto pt-2 pb-2">
+      <div className="bg-white rounded-[2.5rem] w-full max-w-7xl shadow-2xl scale-100 transition-all my-auto relative flex flex-col max-h-[98vh] border border-[#ECA468]/10 text-slate-800">
         <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-2xl">
           <h2 className="text-2xl font-bold text-gray-900">Edit Contest</h2>
           <button
@@ -261,7 +262,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
         <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar flex-1 relative">
           {loading && (
             <div className="absolute inset-0 bg-white/60 z-10 flex items-center justify-center backdrop-blur-sm">
-              <div className="w-8 h-8 rounded-full border-t-2 border-b-2 border-blue-600 animate-spin"></div>
+              <div className="w-8 h-8 rounded-full border-t-2 border-b-2 border-[#ECA468] animate-spin"></div>
             </div>
           )}
           <div className="space-y-3">
@@ -271,14 +272,14 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setContestMode("group")}
-                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "group" ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"}`}
+                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "group" ? "border-[#ECA468] bg-[#FFF4EC]/50" : "border-gray-100 hover:border-[#FADDB8] hover:bg-gray-50"}`}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <Users
-                    className={`w-5 h-5 ${contestMode === "group" ? "text-blue-600" : "text-gray-500"}`}
+                    className={`w-5 h-5 ${contestMode === "group" ? "text-[#ECA468]" : "text-gray-400"}`}
                   />
                   <span
-                    className={`font-bold ${contestMode === "group" ? "text-blue-900" : "text-gray-700"}`}
+                    className={`font-black uppercase tracking-widest text-[10px] ${contestMode === "group" ? "text-[#D0864B]" : "text-gray-500"}`}
                   >
                     Group Contest
                   </span>
@@ -290,14 +291,14 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
 
               <button
                 onClick={() => setContestMode("open")}
-                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "open" ? "border-blue-600 bg-blue-50/50" : "border-gray-200 hover:border-blue-200 hover:bg-gray-50"}`}
+                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "open" ? "border-[#ECA468] bg-[#FFF4EC]/50" : "border-gray-100 hover:border-[#FADDB8] hover:bg-gray-50"}`}
               >
                 <div className="flex items-center gap-2 mb-2">
                   <Globe
-                    className={`w-5 h-5 ${contestMode === "open" ? "text-blue-600" : "text-gray-500"}`}
+                    className={`w-5 h-5 ${contestMode === "open" ? "text-[#ECA468]" : "text-gray-400"}`}
                   />
                   <span
-                    className={`font-bold ${contestMode === "open" ? "text-blue-900" : "text-gray-700"}`}
+                    className={`font-black uppercase tracking-widest text-[10px] ${contestMode === "open" ? "text-[#D0864B]" : "text-gray-500"}`}
                   >
                     Open Contest
                   </span>
@@ -322,7 +323,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                   setTitle(e.target.value);
                   if (errors.title) setErrors({ ...errors, title: "" });
                 }}
-                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.title ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"}`}
+                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.title ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
               />
               {errors.title && (
                 <p className="text-red-500 text-xs mt-1">{errors.title}</p>
@@ -343,7 +344,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 if (errors.description)
                   setErrors({ ...errors, description: "" });
               }}
-              className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none ${errors.description ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"}`}
+              className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none ${errors.description ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
             />
             {errors.description && (
               <p className="text-red-500 text-xs mt-1">{errors.description}</p>
@@ -363,7 +364,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                     if (errors.targetGroup)
                       setErrors({ ...errors, targetGroup: "" });
                   }}
-                  className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm appearance-none cursor-pointer ${errors.targetGroup ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"}`}
+                  className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm appearance-none cursor-pointer ${errors.targetGroup ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
                 >
                   <option value="" disabled>
                     Select a group
@@ -407,7 +408,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 <button
                   key={level}
                   onClick={() => setDifficulty(level)}
-                  className={`py-2.5 text-sm font-medium rounded-xl border transition-all ${difficulty === level ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"}`}
+                  className={`py-2.5 text-sm font-medium rounded-xl border transition-all ${difficulty === level ? "bg-[#ECA468] text-white border-[#ECA468] shadow-md shadow-[#ECA468]/20" : "bg-white text-gray-600 border-gray-100 hover:bg-gray-50"}`}
                 >
                   {level}
                 </button>
@@ -477,7 +478,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                   if (errors.contestText)
                     setErrors({ ...errors, contestText: "" });
                 }}
-                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none font-mono ${errors.contestText ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"}`}
+                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none font-mono ${errors.contestText ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
               />
               {errors.contestText && (
                 <p className="text-red-500 text-xs mt-1">
@@ -500,7 +501,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                     setDate(e.target.value);
                     if (errors.date) setErrors({ ...errors, date: "" });
                   }}
-                  className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.date ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"}`}
+                  className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.date ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
                 />
                 <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
@@ -520,7 +521,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                     setDuration(e.target.value);
                     if (errors.duration) setErrors({ ...errors, duration: "" });
                   }}
-                  className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.duration ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"}`}
+                  className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.duration ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
                 />
                 <Clock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
@@ -559,7 +560,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 if (errors.maxParticipants)
                   setErrors({ ...errors, maxParticipants: "" });
               }}
-              className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.maxParticipants ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"}`}
+              className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.maxParticipants ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
             />
             {errors.maxParticipants && (
               <p className="text-red-500 text-xs mt-1">
@@ -575,7 +576,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
               </h3>
               <button
                 onClick={handleAddReward}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-black uppercase tracking-widest text-[#D0864B] bg-[#FFF4EC] rounded-xl hover:bg-[#FADDB8] transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Custom Rank
@@ -589,7 +590,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
               {rewards.map((reward) => (
                 <div
                   key={reward.rank}
-                  className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-gray-100 group hover:border-blue-200 transition-colors"
+                  className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-gray-100 group hover:border-[#FADDB8] transition-colors"
                 >
                   <div className="flex-1">
                     <input
@@ -653,13 +654,14 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
           </button>
           <button
             onClick={handleUpdateContest}
-            className="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:translate-y-px transition-all"
+            className="px-6 py-2.5 text-sm font-black uppercase tracking-widest text-white bg-[#ECA468] rounded-[1.25rem] shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] hover:translate-y-px transition-all"
           >
             Save Changes
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

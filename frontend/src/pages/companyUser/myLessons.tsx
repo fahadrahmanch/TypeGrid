@@ -81,18 +81,18 @@ const MyLessons: React.FC = () => {
       try {
         const response = await myLessons();
         const data = response.data.data;
-
-        const mappedLessons: Lesson[] = data.lessons.map((item: any) => ({
-          id: item._id,
-          title: item.lessonId.title,
+        const mappedLessons: Lesson[] = data.lessons.map((item: any) => (
+          {
+          id: item.assignmentId,
+          title: item.lesson.title,
           level:
-            item.lessonId.level === "beginner"
+            item.lesson.level === "beginner"
               ? "Beginner"
-              : item.lessonId.level === "intermediate"
+              : item.lesson.level === "intermediate"
                 ? "Intermediate"
                 : "Advanced",
           assignedDate: new Date(item.assignedAt).toLocaleDateString(),
-          targetWpm: item.lessonId.wpm,
+          targetWpm: item.lesson.wpm,
           time: "5 min", // you can calculate later
           status:
             item.status === "completed"
@@ -107,7 +107,7 @@ const MyLessons: React.FC = () => {
             selectedLevel === "All" ||
             lesson.level.toLowerCase() === selectedLevel.toLowerCase();
 
-          const statusOk =
+          const statusOk = 
             selectedStatus === "All" ||
             lesson.status.toLowerCase() === selectedStatus.toLowerCase();
 
@@ -128,7 +128,6 @@ const MyLessons: React.FC = () => {
 
     fetchMyLessons();
   }, [selectedLevel, selectedStatus]);
-
   async function handleLessonClick(assignedId: string) {
     navigate(`/company/user/assigned-lessons/${assignedId}`);
   }

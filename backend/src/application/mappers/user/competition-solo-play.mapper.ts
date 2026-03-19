@@ -8,7 +8,7 @@ export type PopulatedSoloCompetitionPayload = {
   startedAt?: Date | string;
   countDown: number;
   lesson: {
-    id: string;
+    _id?: string;
     text: string;
     category: string;
     level: string;
@@ -31,11 +31,11 @@ export const mapCompetitionToDTOSoloPlay = (
     startedAt: competition.startedAt ? competition.startedAt.toString() : "",
     countDown: competition.countDown,
     lesson: {
-      id: competition.lesson.id,
-      text: competition.lesson.text,
-      category: competition.lesson.category,
-      level: competition.lesson.level,
-    },
+    _id: competition.lesson._id ?? "",
+    text: competition.lesson.text,
+    category: competition.lesson.category,
+    level: competition.lesson.level,
+  },
     participants: competition.participants.map((user) => ({
       _id: user._id!.toString(),
       name: user.name,

@@ -41,8 +41,8 @@ export class SaveLessonResultUseCase implements ISaveLessonResultUseCase {
     const lessonResult = new LessonResult({
       userId,
       assignmentId,
-      companyId: assignment.companyId,
-      lessonId: assignment.lessonId,
+      companyId: assignment.getCompanyId(),
+      lessonId: assignment.getLessonId(),
       status,
       ...metrics,
     });
@@ -58,7 +58,7 @@ export class SaveLessonResultUseCase implements ISaveLessonResultUseCase {
       }
     } else {
 
-      if (assignment.status === "completed") {
+      if (assignment.getStatus() === "completed") {
         logger.info("Lesson already completed");
         return;
       }

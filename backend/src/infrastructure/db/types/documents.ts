@@ -79,7 +79,7 @@ export interface ICompetitionDocument {
   textId?: Types.ObjectId;
   duration: number;
   countDown: number;
-  reward?: Array<{ rank?: number; prize?: number }>;
+  reward?: Array<{ rank?: number | null; prize?: number | null }>
   CompanyId?: Types.ObjectId | null;
   createdAt?: Date;
   updatedAt?: Date;

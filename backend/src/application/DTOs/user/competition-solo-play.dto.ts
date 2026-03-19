@@ -6,14 +6,14 @@ type CompetitionMember = {
 };
 
 type Lesson = {
-  id: string;
+  _id?: string;
   text: string;
   category: string;
   level: string;
 };
 
 export interface CompetitionDTOSoloPlay {
-  _id: string;
+  _id?: string;
   mode: string;
   participants: CompetitionMember[];
   status: string;

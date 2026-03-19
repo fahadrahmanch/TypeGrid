@@ -3,17 +3,17 @@ import { IChangeGroupStatusUseCase } from "../../interfaces/user/group-play/chan
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+
 export class ChangeGroupStatusUseCase implements IChangeGroupStatusUseCase {
-  constructor(private groupRepository: IGroupRepository) {}
-  async changeGroupStatus(groupId: string, status: string) {
-    const group = await this.groupRepository.findById(groupId);
+  constructor(private readonly _groupRepository: IGroupRepository) {}
+
+  async changeGroupStatus(groupId: string, status: string): Promise<void> {
+    const group = await this._groupRepository.findById(groupId);
     if (!group) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.GROUP_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
     }
-    group.status = status;
-    await this.groupRepository.update(group);
+
+    group.setStatus(status);
+    await this._groupRepository.update(group.toObject());
   }
 }

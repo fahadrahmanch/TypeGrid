@@ -9,81 +9,72 @@ import { ILessonRepository } from "../../../../domain/interfaces/repository/admi
 import { ChallengeGameDTO } from "../../../DTOs/companyUser/challenge.dto";
 import { mapChallengeGameToDTO } from "../../../mappers/companyUser/challenge.mapper";
 
-/**
- * Use case for retrieving challenge game data.
- */
 export class GetChallengeGameDataUseCase implements IGetChallengeGameDataUseCase {
   constructor(
     private readonly _challengeRepository: ICompanyChallengeRepository,
     private readonly _competitionRepository: ICompetitionRepository,
     private readonly _userRepository: IUserRepository,
-    private readonly _lessonRepository: ILessonRepository
+    private readonly _lessonRepository: ILessonRepository,
   ) {}
 
-  /**
-   * Get game data for a challenge.
-   * @param challengeId - Challenge identifier
-   */
   async execute(challengeId: string): Promise<ChallengeGameDTO> {
-
     if (!challengeId) {
-      throw new CustomError(
-        HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
-      );
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
     }
 
     const challenge = await this._challengeRepository.findById(challengeId);
-
     if (!challenge) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.CHALLENGE_NOT_FOUND
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CHALLENGE_NOT_FOUND);
     }
 
-    const senderId = challenge.senderId.toString();
-    const receiverId = challenge.receiverId.toString();
-    const competitionId = challenge.competitionId.toString();
+    const competitionId = challenge.getCompetitionId();
+    if (!competitionId) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+    }
 
     const competition = await this._competitionRepository.findById(competitionId);
-
     if (!competition) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.COMPETITION_NOT_FOUND
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
     }
 
     const updatedCompetition = await this._competitionRepository.updateById(
       competitionId,
-      { startedAt: new Date() }
+      { startedAt: new Date() },
     );
 
+    if (!updatedCompetition) {
+      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
+    }
+
     const [player1, player2, lesson] = await Promise.all([
-      this._userRepository.findById(senderId),
-      this._userRepository.findById(receiverId),
-      this._lessonRepository.findById(competition.textId.toString()),
+      this._userRepository.findById(challenge.getSenderId()),
+      this._userRepository.findById(challenge.getReceiverId()),
+      this._lessonRepository.findById(competition.getTextId()!),
     ]);
 
     if (!player1 || !player2) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.PLAYER_NOT_FOUND
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.PLAYER_NOT_FOUND);
     }
 
     if (!lesson) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.LESSON_NOT_FOUND
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
     }
 
     return mapChallengeGameToDTO({
-      competition: updatedCompetition,
-      lesson,
-      players: [player1, player2],
+      competition: updatedCompetition.toObject(),
+      lesson: {
+        _id: lesson._id,
+        title: lesson.title,
+        text: lesson.text,
+      },
+      players: [player1, player2].map((player) => ({
+        _id: player._id,
+        name: player.name,
+        imageUrl: player.imageUrl,
+        CompanyId: player.CompanyId,
+        CompanyRole: player.CompanyRole,
+        bio: player.bio,
+      })),
     });
   }
 }

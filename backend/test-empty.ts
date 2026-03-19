@@ -27,7 +27,7 @@ import { User } from "./src/infrastructure/db/models/user/user.schema";
   console.log("Game after leave execution:", afterGame ? "EXISTS" : "GONE");
   if (afterGame) {
      console.log("Status:", afterGame.status);
-     console.log("Participants:", afterGame.participants);
+     console.log("Participants:", afterGame.participants);  
   }
   
   process.exit();

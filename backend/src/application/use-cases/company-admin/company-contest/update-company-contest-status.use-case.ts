@@ -1,6 +1,5 @@
 import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
 import { IUpdateCompanyContestStatusUseCase } from "../../interfaces/companyAdmin/update-company-contest-status.interface";
-import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
@@ -15,19 +14,14 @@ export class UpdateCompanyContestStatusUseCase implements IUpdateCompanyContestS
     const contest = await this._contestRepository.findById(contestId);
 
     if (!contest) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.CONTEST_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
     }
 
-    const contestEntity = new ContestEntity(contest);
-    contestEntity.updateStatus(status);
-    const updatedStatus = contestEntity.getStatus();
+    contest.updateStatus(status);
 
     await this._contestRepository.updateById(contestId, {
-      status: updatedStatus,
-      ...(updatedStatus === "ongoing" && { startTime: new Date() }),
+      status: contest.getStatus(),
+      ...(contest.getStatus() === "ongoing" && { startTime: new Date() }),
     });
   }
 }

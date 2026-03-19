@@ -1,4 +1,4 @@
-import { IUser } from "../user/user.interface";
+import { UserEntity } from "../../../../domain/entities";
 export interface IGetCompanyUsersUseCase {
-  execute(CompanyId: string): Promise<IUser[]>;
+  execute(CompanyId: string): Promise<UserEntity[]>;
 }

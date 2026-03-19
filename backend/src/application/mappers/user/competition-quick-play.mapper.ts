@@ -46,7 +46,7 @@ export const mapCompetitionToDTOQuickPlay = (
 
 export const mapQuickMemberToDTO = (user: { _id: any, name: string, imageUrl?: string }): CompetitionMember => {
   return {
-    _id: user._id!.toString(),
+    _id: user._id,
     name: user.name,
     imageUrl: user.imageUrl || "",
   };

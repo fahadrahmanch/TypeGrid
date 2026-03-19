@@ -3,7 +3,6 @@ import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNa
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import UserContestCard, {
-  UserContestCardProps,
 } from "../../components/companyUser/contests/UserContestCard";
 import { openContestApi } from "../../api/companyUser/contests";
 import { useState } from "react";
@@ -35,57 +34,11 @@ const Contests: React.FC = () => {
   const navigate = useNavigate();
   const [openContests, setOpenContests] = useState<ContestResponseDTO[]>([]);
   const [groupContests, setGroupContests] = useState<ContestResponseDTO[]>([]);
-  // const groupContests: UserContestCardProps[] = [
-  //     {
-  //         id: "1",
-  //         title: "Company Sprint Challenge",
-  //         status: "Upcoming",
-  //         participants: 12,
-  //         maxParticipants: 30,
-  //         duration: 15,
-  //         startTime:"",
-  //         level: "Hard",
-  //         date: "Oct 29, 07:27 AM",
-  //         isGroup: true,
-  //         prize: "$500",
-  //         tags: [{ label: "Intermediate", color: "bg-gray-400 text-white" }],
-  //         actionLabel: "Join Contest"
-  //     },
-  //     {
-  //         id: "2",
-  //         title: "Company Sprint Challenge",
-  //         status: "Waiting",
-  //         participants: 12,
-  //         startTime:"",
-  //         maxParticipants: 30,
-  //         duration: 15,
-  //         level: "Hard",
-  //         date: "Oct 29, 07:27 AM",
-  //         isGroup: true,
-  //         tags: [{ label: "beginner", color: "bg-gray-400 text-white" }],
-  //         actionLabel: "Join Lobby"
-  //     }
-  // ];
-
-  // const openContests: UserContestCardProps[] = [
-  //     {
-  //         id: "3",
-  //         title: "Speed Typing Championship",
-  //         description: "Test your typing speed against the best!",
-  //         status: "Waiting", // Assuming it's waiting/active based on screenshot having "Join Contest"
-  //         participants: 0,
-  //         maxParticipants: 50,
-  //         duration: 10,
-  //         level: "Medium",
-  //         date: "Oct 29, 06:27 AM",
-  //         isGroup: false,
-  //         actionLabel: "Join Contest"
-  //     }
-  // ];
-
+ 
   useEffect(() => {
     async function fetchGroupContestApi() {
       const openContests = await openContestApi();
+      console.log("open",openContests)
       const data = openContests.data.data;
       setOpenContests(data);
     }

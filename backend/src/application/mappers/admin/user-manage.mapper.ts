@@ -1,7 +1,6 @@
 import { UserDTO } from "../../DTOs/admin/user-management.dto";
-import { IUserDocument } from "../../../infrastructure/db/types/documents";
 
-export const mapUserToDTO = (user: IUserDocument): UserDTO => ({
+export const mapUserToDTO = (user: UserDTO): UserDTO => ({
   _id: user._id?.toString(),
   name: user.name,
   email: user.email,

@@ -6,7 +6,6 @@ import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { mapQuickMemberToDTO } from "../../../mappers/user/competition-quick-play.mapper";
 import { QuickPlayMemberDTO } from "../../../DTOs/user/competition-quick-play.dto";
-import logger from "../../../../utils/logger";
 
 export class GetJoinMemberUseCase implements IGetJoinMemberUseCase {
   constructor(
@@ -18,40 +17,28 @@ export class GetJoinMemberUseCase implements IGetJoinMemberUseCase {
     competitionId: string,
     userId: string,
   ): Promise<QuickPlayMemberDTO> {
-    try {
-      const userExist = await this._userRepository.findById(userId);
-      if (!userExist) {
-        throw new CustomError(
-          HttpStatusCodes.NOT_FOUND,
-          MESSAGES.AUTH_USER_NOT_FOUND,
-        );
-      }
-      const competition =
-        await this._competitionRepository.findById(competitionId);
-      if (!competition) {
-        throw new CustomError(
-          HttpStatusCodes.NOT_FOUND,
-          MESSAGES.COMPETITION_NOT_FOUND,
-        );
-      }
-      const isParticipant = competition.participants
-        .some((participant: any) => participant.toString() === userId);
-      if (!isParticipant) {
-        throw new CustomError(
-          HttpStatusCodes.FORBIDDEN,
-          MESSAGES.USER_NOT_PARTICIPANT,
-        );
-      }
-      const memberDTO = mapQuickMemberToDTO(userExist);
-      return memberDTO;
-    } catch (error: any) {
-      logger.error("Error in getJoinMemberUseCase", {
-        error: error.message,
-        stack: error.stack,
-        competitionId,
-        userId,
-      });
-      throw error;
+    const user = await this._userRepository.findById(userId);
+    if (!user) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
+
+    const competition = await this._competitionRepository.findById(competitionId);
+    if (!competition) {
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+    }
+
+    const isParticipant = competition
+      .getParticipants()
+      .some((participant: string) => participant.toString() === userId);
+
+    if (!isParticipant) {
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_NOT_PARTICIPANT);
+    }
+
+    return mapQuickMemberToDTO({
+      _id: user._id,
+      name: user.name,
+      imageUrl: user.imageUrl,
+    });
   }
 }

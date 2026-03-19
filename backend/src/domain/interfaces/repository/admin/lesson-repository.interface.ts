@@ -3,7 +3,7 @@ import { LessonEntity } from "../../../entities/lesson.entity";
 export interface ILessonRepository {
 
   // CREATE
-  create(data: any): Promise<any>;
+  create(data: any): Promise<LessonEntity>;
 
   // READ
   findById(
@@ -11,26 +11,26 @@ export interface ILessonRepository {
     options?: {
       populate?: { path: string; select?: string };
     }
-  ): Promise< any>;
+  ): Promise<LessonEntity | null>;
 
   find(
     filter?: any,
     options?: {
       populate?: { path: string; select?: string };
     }
-  ): Promise<any>;
+  ): Promise<LessonEntity[]>;
 
-  findOne(filter?: any): Promise<any>;
+  findOne(filter?: any): Promise<LessonEntity | null>;
 
   // UPDATE
   updateById(
     id: string,
     update: any
-  ): Promise<any>;
+  ): Promise<LessonEntity | null>;
 
   // DELETE
-  delete(id: string): Promise<any>;
-  update(data: any): Promise<any>;
+  delete(id: string): Promise<LessonEntity | null>;
+  update(data: any): Promise<LessonEntity | null>;
 
   // CUSTOM
   getLessons(

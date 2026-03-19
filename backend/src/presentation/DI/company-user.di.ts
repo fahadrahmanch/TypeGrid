@@ -43,10 +43,12 @@ const competitionRepository = new CompetitionRepository(Competition);
 
 const getAssignLessonUseCaseInstance = new GetAssignLessonUseCase(
   lessonAssignmentRepository,
+  lessonRepository,
 );
 const getMyLessonsUseCaseInstance = new GetMyLessonsUseCase(
   lessonAssignmentRepository,
   userRepository,
+  lessonRepository,
 );
 const saveLessonResultUseCaseInstance = new SaveLessonResultUseCase(
   lessonResultRepository,

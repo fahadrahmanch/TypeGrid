@@ -11,54 +11,32 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 export class StartChallengeUseCase implements IStartChallengeUseCase {
   constructor(
     private readonly _challengeRepository: ICompanyChallengeRepository,
-    private readonly _competitionRepository: ICompetitionRepository
+    private readonly _competitionRepository: ICompetitionRepository,
   ) {}
 
-  /**
-   * Start the competition linked to a challenge.
-   */
   async execute(challengeId: string): Promise<void> {
-
     if (!challengeId) {
-      throw new CustomError(
-        HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
-      );
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
     }
 
     const challenge = await this._challengeRepository.findById(challengeId);
-
     if (!challenge) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.CHALLENGE_NOT_FOUND
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CHALLENGE_NOT_FOUND);
     }
 
-    const competitionId = challenge.competitionId;
-
+    const competitionId = challenge.getCompetitionId();
     if (!competitionId) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.COMPETITION_NOT_FOUND_FOR_CHALLENGE
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND_FOR_CHALLENGE);
     }
 
-    const competition = await this._competitionRepository.findById(
-      competitionId
-    );
-
+    const competition = await this._competitionRepository.findById(competitionId);
     if (!competition) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.COMPETITION_NOT_FOUND
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
     }
 
-    if (competition.status !== "ongoing") {
-      await this._competitionRepository.updateById(competitionId, {
-        status: "ongoing",
-      });
+    if (competition.getStatus() !== "ongoing") {
+      competition.setStatus("ongoing");
+      await this._competitionRepository.update(competition.toObject());
     }
   }
 }

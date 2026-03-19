@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import AddUser from "./addUser";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus, Search, User as UserIcon, Mail, Target, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "react-toastify";
 import {
   deleteCompanyUser,
   fetchCompanyUsers,
 } from "../../../api/companyAdmin/companyAdminService";
 import ConfirmModal from "../../common/ConfirmModal";
+
 const UsersTable: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [isOpen, setOpen] = useState(false);
@@ -34,6 +35,7 @@ const UsersTable: React.FC = () => {
     }
     fetchUsers();
   }, []);
+
   useEffect(() => {
     let filtered = [...users];
 
@@ -52,8 +54,6 @@ const UsersTable: React.FC = () => {
     const paginated = filtered.slice(start, start + limit);
 
     setFilterUsers(paginated);
-
-    // setFilterUsers(filtered);
   }, [searchText, users, page]);
 
   async function handleDelete(userID: string) {
@@ -74,144 +74,167 @@ const UsersTable: React.FC = () => {
 
   return (
     <>
-      <div className="w-full bg-[#FFF3DB] rounded-lg shadow-sm p-8 ml-28 mt-8">
-        {/* --- Top Header Section --- */}
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl font-bold text-gray-800">Team Members</h2>
+      <div className="flex flex-col gap-8">
+        {/* --- Header Section --- */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div>
+            <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">Team Members</h1>
+            <p className="text-gray-500 font-medium tracking-tight">Manage your company's students and track their typing performance.</p>
+          </div>
 
           <button
             onClick={() => setOpen(true)}
-            className="flex items-center gap-2 bg-[#B99F8D] hover:bg-[#9d8472] text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm"
+            className="flex items-center gap-2 bg-[#D0864B] hover:bg-[#B36E39] text-white px-6 py-3.5 rounded-2xl transition-all shadow-lg shadow-[#D0864B]/20 font-bold group"
           >
-            <i className="fa-solid fa-plus text-sm"></i>
-            Add User
+            <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+            <span>Add New Member</span>
           </button>
         </div>
 
-        {/* --- Search Input --- */}
-        <div className="mb-8">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search by name or email..."
-              onChange={(e) => setSearchText(e.target.value)}
-              className="w-full py-2 text-gray-700 placeholder-gray-300 focus:outline-none focus:border-b focus:border-[#B99F8D] bg-transparent"
-            />
+        {/* --- Main Table Container --- */}
+        <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] shadow-sm border border-[#ECA468]/10 overflow-hidden">
+          {/* Top Bar with Search */}
+          <div className="p-8 border-b border-gray-100/50 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="relative group w-full md:w-96">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#D0864B] transition-colors" size={18} />
+              <input
+                type="text"
+                placeholder="Search by name or email..."
+                value={searchText}
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  setPage(1);
+                }}
+                className="w-full pl-12 pr-6 py-3.5 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-gray-700 shadow-sm"
+              />
+            </div>
+            
+            <div className="flex items-center gap-4 text-gray-400 font-black text-[10px] uppercase tracking-widest">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50" />
+                <span>{users.length} Active Members</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Table Content */}
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-50/50 bg-gray-50/10">
+                  <th className="text-left py-6 px-8 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    Member Details
+                  </th>
+                  <th className="text-center py-6 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    Key Metrics
+                  </th>
+                  <th className="text-right py-6 px-8 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filterUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="py-20 text-center">
+                      <div className="flex flex-col items-center gap-3 opacity-20">
+                        <UserIcon size={48} />
+                        <p className="font-black uppercase tracking-[0.2em] text-sm">No members found</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  filterUsers.map((member: any) => (
+                    <tr
+                      key={member._id}
+                      className="group border-b border-gray-50/50 hover:bg-[#FFF8EA]/40 transition-all duration-300"
+                    >
+                      {/* Member Info */}
+                      <td className="py-6 px-8">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-[#ECA468]/10 flex items-center justify-center text-[#D0864B] font-black shadow-inner group-hover:bg-[#D0864B] group-hover:text-white transition-all duration-500 scale-95 group-hover:scale-100">
+                            {member.name?.[0].toUpperCase()}
+                          </div>
+                          <div>
+                            <h4 className="font-black text-gray-900 group-hover:text-[#D0864B] transition-colors">{member.name}</h4>
+                            <div className="flex items-center gap-2 text-gray-400 font-bold text-[10px] uppercase tracking-tighter">
+                              <Mail size={10} className="opacity-70" />
+                              {member.email}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Performance */}
+                      <td className="py-6 px-4">
+                        <div className="flex items-center justify-center gap-10">
+                          <div className="text-center group/stat">
+                            <div className="flex items-center justify-center gap-1.5 text-gray-900 font-black mb-0.5">
+                              <Zap size={14} className="text-amber-500" />
+                              <span className="text-base tracking-tighter">{member.wpm || 0}</span>
+                            </div>
+                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest opacity-80">WPM Rate</span>
+                          </div>
+                          <div className="text-center group/stat">
+                            <div className="flex items-center justify-center gap-1.5 text-gray-900 font-black mb-0.5">
+                              <Target size={14} className="text-emerald-500" />
+                              <span className="text-base tracking-tighter">{member.accuracy || 0}%</span>
+                            </div>
+                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest opacity-80">Precision</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="py-6 px-8">
+                        <div className="flex justify-end opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                          <button
+                            onClick={() => {
+                              setSelectedUserId(member._id);
+                              setIsConfirmOpen(true);
+                            }}
+                            className="p-3 text-gray-400 hover:text-rose-500 bg-white rounded-xl shadow-sm border border-gray-50 hover:border-rose-100 transition-all"
+                            title="Remove Member"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Section */}
+          <div className="p-8 border-t border-gray-100/50 flex justify-center items-center gap-6 bg-gray-50/5">
+            <button
+              disabled={page === 1}
+              onClick={() => setPage((prev) => prev - 1)}
+              className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+            >
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">of {totalPages}</span>
+            </div>
+
+            <button
+              disabled={page === totalPages}
+                onClick={() => setPage((prev) => prev + 1)}
+              className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+            >
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+            </button>
           </div>
         </div>
-
-        {/* --- Table Section --- */}
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px]">
-            {/* Table Head */}
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                {/* <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Joined
-                </th> */}
-                <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Avg WPM
-                </th>
-                <th className="text-left py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Accuracy
-                </th>
-                <th className="text-right py-4 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-
-            {/* Table Body */}
-            <tbody>
-              {filterUsers.map((member: any) => (
-                <tr
-                  key={member.id}
-                  className="group border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
-                >
-                  {/* Name */}
-                  <td className="py-6 px-4">
-                    <span className="font-bold text-gray-800 text-sm">
-                      {member.name}
-                    </span>
-                  </td>
-
-                  {/* Email */}
-                  <td className="py-6 px-4">
-                    <span className="text-gray-500 text-sm">
-                      {member.email}
-                    </span>
-                  </td>
-
-                  {/* Joined Date */}
-                  {/* <td className="py-6 px-4">
-                    <span className="text-gray-400 text-sm font-medium">
-                      {member.joined}
-                    </span>
-                  </td> */}
-
-                  {/* WPM */}
-                  <td className="py-6 px-4">
-                    <span className="font-bold text-gray-700 text-sm">
-                      {member.wpm}
-                    </span>
-                  </td>
-
-                  {/* Accuracy */}
-                  <td className="py-6 px-4">
-                    <span className="font-semibold text-gray-600 text-sm">
-                      {member.accuracy}
-                    </span>
-                  </td>
-
-                  {/* Actions (Delete Icon) */}
-                  <td className="py-6 px-4 text-right">
-                    <button
-                      onClick={() => {
-                        setSelectedUserId(member._id);
-                        setIsConfirmOpen(true);
-                      }}
-                      className="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-full transition-all"
-                    >
-                      <Trash2
-                        size={22}
-                        className="text-red-500 cursor-pointer"
-                      />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
+
       {isOpen && <AddUser setOpen={setOpen} setUsers={setUsers} />}
-      <div className="flex justify-center items-center gap-4 mt-4">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((prev) => prev - 1)}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-        >
-          Prev
-        </button>
-
-        <span>
-          Page {page} of {totalPages}
-        </span>
-
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage((prev) => prev + 1)}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+      
       <ConfirmModal
         isOpen={isConfirmOpen}
         title="Delete Team Member"

@@ -6,14 +6,14 @@ export interface IBaseRepository<TEntity> {
       populate?: any;
     },
   ): Promise<TEntity | null>;
-  update(data: any): Promise<any>;
+  update(data: any): Promise<TEntity | null>;
   find(
     filter?: any,
     options?: {
       populate?: { path: string; select?: string };
     },
   ): Promise<TEntity[]>;
-  FindByEmail(email: string): Promise<TEntity | null>;
+  // FindByEmail(email: string): Promise<TEntity | null>;
   findOne(filter?: any): Promise<TEntity | null>;
   delete(_id: string): Promise<TEntity | null>;
   updateById(_id: string, updateQuery: any): Promise<TEntity | null>;

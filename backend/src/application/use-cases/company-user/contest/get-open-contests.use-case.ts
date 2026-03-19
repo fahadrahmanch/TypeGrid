@@ -6,7 +6,7 @@ import { openContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
 import { mapOpenContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-
+import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 /**
  * Use case for retrieving open contests available to the user.
  */
@@ -40,12 +40,12 @@ export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
     const now = new Date();
 
     const contests = await this._contestRepository.find({
-      companyId: user.companyId,
+      CompanyId: user.CompanyId,
       status: "upcoming",
       contestMode: "open",
       date: { $gt: now },
     });
 
-    return mapOpenContestDTO(contests, userId);
+    return mapOpenContestDTO(contests.map((c: ContestEntity) => c.toObject()), userId);
   }
 }

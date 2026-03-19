@@ -28,3 +28,6 @@ export const fetchContestParticipants = (contestId: string) => {
 export const deleteContest = (contestId: string) => {
   return companyAPI.delete(`/company/contest/${contestId}`);
 };
+export const fetchContestResults = (contestId: string) => {
+  return companyAPI.get(`/company/contest/${contestId}/results`);
+}

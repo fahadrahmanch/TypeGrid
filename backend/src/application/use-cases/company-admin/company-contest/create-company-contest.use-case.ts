@@ -22,7 +22,7 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
     private readonly _companyGroupRepository: ICompanyGroupRepository,
     private readonly _contestRepository: IContestRepository,
     private readonly _lessonRepository: ILessonRepository,
-  ) {}
+  ) { }
 
   async execute(data: CreateContestDTO, userId: string): Promise<CreateContestDTO> {
     const user = await this._userRepository.findById(userId);
@@ -74,9 +74,9 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       countDown: 10,
     });
 
-    const newContest = await this._contestRepository.create(contest);
+    const newContest = await this._contestRepository.create(contest.toObject());
 
-    return mapContestDTOAdmin(newContest);
+    return mapContestDTOAdmin(newContest.toObject());
   }
 
   private mapDifficulty(difficulty: string): string {

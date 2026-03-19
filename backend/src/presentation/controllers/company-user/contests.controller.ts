@@ -29,7 +29,6 @@ export class ContestsController {
       }
 
       const contests = await this._getOpenContestsUseCase.execute(userId);
-
       return res.status(HttpStatus.OK).json({
         success: true,
         message: "Contests fetched successfully",

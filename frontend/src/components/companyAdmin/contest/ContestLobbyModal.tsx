@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { ArrowLeft, Play, MessageSquare, Users, Send } from "lucide-react";
 import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { socket } from "../../../socket";
@@ -70,15 +71,15 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#F4F2EE]/80 backdrop-blur-sm animate-in fade-in duration-200 p-4 sm:p-8">
-      <div className="bg-[#F8F7F4] w-full max-w-4xl h-full max-h-[90vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl relative animate-in zoom-in-95 duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-200 p-4 sm:p-8">
+      <div className="bg-white w-full max-w-4xl h-full max-h-[90vh] rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl relative animate-in zoom-in-95 duration-200 border border-[#ECA468]/10 text-slate-800">
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 md:p-10 custom-scrollbar relative">
           {/* Back header */}
           <button
             onClick={onClose}
-            className="flex items-center gap-2 text-gray-500 hover:text-gray-800 font-medium mb-8 transition-colors group"
+            className="flex items-center gap-2 text-gray-400 hover:text-gray-600 font-medium mb-8 transition-colors group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Dashboard</span>
@@ -92,9 +93,6 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
               </h1>
               <p className="text-gray-500 font-medium">{contestTitle}</p>
             </div>
-            {/* <div className="bg-yellow-100/80 text-yellow-700 px-4 py-1.5 rounded-full font-bold text-sm border border-yellow-200/50 shadow-sm">
-                            {contestStatus}
-                        </div> */}
           </div>
 
           {/* Action Buttons Card */}
@@ -106,8 +104,8 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
                   setIsStarting(true);
                 }}
                 disabled={isStarting}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white shadow-sm transition-all focus:ring-4 focus:ring-emerald-200 outline-none
-                                    ${isStarting ? "bg-emerald-400 cursor-wait" : "bg-emerald-500 hover:bg-emerald-600 hover:shadow-md hover:-translate-y-0.5"}`}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white shadow-sm transition-all outline-none
+                                    ${isStarting ? "bg-[#ECA468]/70 cursor-wait" : "bg-[#ECA468] hover:bg-[#D0864B] hover:shadow-md hover:-translate-y-0.5"}`}
               >
                 <Play className="w-5 h-5 fill-current" />
                 {isStarting ? "Starting..." : "Start Contest"}
@@ -115,7 +113,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
 
               <button
                 onClick={() => setIsAnnouncementOpen(!isAnnouncementOpen)}
-                className="flex items-center gap-2 px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-200 outline-none"
+                className="flex items-center gap-2 px-6 py-3 bg-[#7D6B5D] hover:bg-[#635449] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
               >
                 <MessageSquare className="w-5 h-5" />
                 Send Announcement
@@ -123,26 +121,26 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
             </div>
 
             {isAnnouncementOpen && (
-              <div className="mt-2 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 animate-in slide-in-from-top-2 duration-200">
+              <div className="mt-2 p-4 bg-[#FFF4EC]/50 rounded-xl border border-[#FADDB8]/50 animate-in slide-in-from-top-2 duration-200">
                 <textarea
                   value={announcementMsg}
                   onChange={(e) => setAnnouncementMsg(e.target.value)}
                   placeholder="Write your announcement here..."
-                  className="w-full p-3 rounded-lg border border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent resize-none h-24 mb-3"
+                  className="w-full p-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] resize-none h-24 mb-3 text-sm"
                 />
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => setIsAnnouncementOpen(false)}
-                    className="px-4 py-2 text-gray-500 hover:text-gray-700 font-medium"
+                    className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSendAnnouncement}
                     disabled={!announcementMsg.trim()}
-                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex items-center gap-2 px-6 py-2 bg-[#ECA468] text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#D0864B] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                   >
-                    <Send className="w-4 h-4" />
+                    <Send className="w-3.5 h-3.5" />
                     Send
                   </button>
                 </div>
@@ -154,7 +152,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
             <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
               Participants{" "}
-              <span className="text-gray-500 text-lg">
+              <span className="text-[#D0864B] text-lg font-black tracking-tighter">
                 ( {participantsList.length} )
               </span>
             </h2>
@@ -164,44 +162,45 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
                 {participantsList.map((participant, idx) => (
                   <div
                     key={idx}
-                    className="bg-[#F9F9F9] rounded-xl p-4 flex items-center justify-between border border-gray-50 hover:bg-gray-50 hover:border-gray-200 transition-colors"
+                    className="bg-[#FDFBF7] rounded-xl p-4 flex items-center justify-between border border-[#ECA468]/5 hover:bg-white hover:border-[#FADDB8]/50 transition-all hover:shadow-sm"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold shadow-inner">
+                      <div className="w-10 h-10 rounded-full bg-[#FFF4EC] flex items-center justify-center text-[#D0864B] font-bold shadow-inner border border-[#FADDB8]/30">
                         {participant.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="font-bold text-gray-800">
+                      <span className="font-bold text-slate-800">
                         {participant.name}
                       </span>
                     </div>
-                    <span className="text-sm text-gray-400 font-medium">
+                    <span className="text-xs text-gray-400 font-medium">
                       {participant.email}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="py-12 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
-                <Users className="w-12 h-12 text-gray-300 mb-3" />
-                <p className="font-medium text-gray-500">
+              <div className="py-12 flex flex-col items-center justify-center text-gray-300 border-2 border-dashed border-gray-100 rounded-[2rem] bg-[#FDFBF7]/50">
+                <Users className="w-12 h-12 text-gray-200 mb-3" />
+                <p className="font-bold text-gray-400 uppercase tracking-widest text-xs">
                   No participants have joined yet
                 </p>
-                <p className="text-sm mt-1">
+                <p className="text-xs mt-2 text-gray-400">
                   They will appear here once they connect to the lobby
                 </p>
               </div>
             )}
           </div>
         </div>
-      </div>
 
-      <style>{`
+        <style>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
             `}</style>
-    </div>
+      </div>
+    </div>,
+    document.body,
   );
 };
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ArrowLeft,
   Square,
@@ -144,7 +145,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
   }, [contestId]);
 
   useEffect(() => {
-    if (!contestDetails?.startTime || !contestDetails?.duration) return;
+    if (!contestDetails?.startTime || !contestDetails?.duration||finalResult.length>0) return;
     const startTimesamp = new Date(contestDetails.startTime).getTime();
 
     const interval = setInterval(() => {
@@ -172,6 +173,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
     contestDetails?.startTime,
     contestDetails?.duration,
     contestDetails?.countDown,
+    finalResult
   ]);
 
   useEffect(() => {
@@ -209,13 +211,14 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
       contestId: contestId,
       status: "completed",
     });
+    
   }
 
   if (!isOpen) return null;
   if (!contestDetails) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-200 p-4 sm:p-8">
-      <div className="bg-[#F4F2EE] w-full max-w-5xl h-full max-h-[90vh] rounded-[2rem] overflow-hidden flex flex-col shadow-2xl relative animate-in zoom-in-95 duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-200 p-2 sm:p-4">
+      <div className="bg-[#F4F2EE] w-full max-w-[1500px] h-full max-h-[98vh] rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl relative animate-in zoom-in-95 duration-200 border border-[#ECA468]/10 text-slate-800">
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-6 md:p-10 custom-scrollbar relative">
           {/* Back header */}
@@ -240,11 +243,8 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                 <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">
                   Time Remaining
                 </p>
-                {/* <p className="text-3xl font-black text-indigo-600 tracking-tight">{remainingTime}</p> */}
-                {formatTime(remainingTime)}
-
                 {contestDetails?.startTime ? (
-                  <p className="text-3xl font-black text-indigo-600 tracking-tight"></p>
+                  <p className="text-3xl font-black text-[#D0864B] tracking-tight">{formatTime(remainingTime)}</p>
                 ) : (
                   <p className="text-gray-500 font-medium">Loading timer...</p>
                 )}
@@ -257,19 +257,20 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
           </div>
 
           {/* Action Buttons Card */}
+          {contestStatus === "ongoing" && (
           <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm mb-6 flex flex-col gap-4 border border-gray-100">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={handleEndContest}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 focus:ring-4 focus:ring-blue-200 outline-none"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#ECA468] hover:bg-[#D0864B] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
                 >
                   <Square className="w-4 h-4 fill-current" />
                   End Contest
                 </button>
                 <button
                   onClick={restart}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 focus:ring-4 focus:ring-gray-300 outline-none"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#7D6B5D] hover:bg-[#635449] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
                 >
                   <RotateCcw className="w-4 h-4 stroke-[3]" />
                   Restart
@@ -311,6 +312,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
               </div>
             )}
           </div>
+          )}
 
           {/* Participants List Panel */}
           <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm border border-gray-100">
@@ -318,7 +320,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
               <>
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                    <Trophy className="w-5 h-5 text-indigo-600" />
+                    <Trophy className="w-5 h-5 text-[#ECA468]" />
                     Final Results
                   </h2>
                 </div>
@@ -331,7 +333,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                         className="bg-gray-50/50 rounded-2xl p-4 border border-gray-100 flex items-center justify-between hover:bg-white hover:shadow-sm transition-all"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold shadow-sm">
+                          <div className="w-10 h-10 rounded-full bg-[#FFF4EC] text-[#D0864B] flex items-center justify-center font-bold shadow-sm border border-[#FADDB8]/50">
                             {result.rank || index + 1}
                           </div>
                           <img
@@ -353,7 +355,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                               WPM
                             </span>
-                            <span className="text-lg font-black text-indigo-600 leading-none">
+                            <span className="text-lg font-black text-[#D0864B] leading-none">
                               {result.wpm}
                             </span>
                           </div>
@@ -415,7 +417,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                                 WPM
                               </span>
-                              <span className="text-xl font-black text-indigo-600 leading-none">
+                              <span className="text-xl font-black text-[#D0864B] leading-none">
                                 {p.wpm || "0"}
                               </span>
                             </div>
@@ -455,10 +457,10 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                         {/* Progress Bar */}
                         <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
                           <div
-                            className="bg-indigo-600 h-1.5 rounded-full transition-all duration-300 relative"
+                            className="bg-[#ECA468] h-1.5 rounded-full transition-all duration-300 relative"
                             style={{ width: `${p.progress || 0}%` }}
                           >
-                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-indigo-600 rounded-full shadow-sm"></div>
+                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-[#ECA468] rounded-full shadow-sm"></div>
                           </div>
                         </div>
                       </div>
@@ -483,7 +485,8 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
             `}</style>
-    </div>
+    </div>,
+    document.body,
   );
 };
 
