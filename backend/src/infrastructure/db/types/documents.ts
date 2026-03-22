@@ -195,3 +195,7 @@ export interface IResultDocument {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+
+
+

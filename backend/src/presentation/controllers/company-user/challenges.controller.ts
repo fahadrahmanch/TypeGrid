@@ -7,7 +7,6 @@ import { IMakeChallengeUseCase } from "../../../application/use-cases/interfaces
 import { IGetSentChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/get-sent-challenge.interface";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IGetChallengesUseCase } from "../../../application/use-cases/interfaces/companyUser/get-challenges.interface";
-import { getIO } from "../../../infrastructure/socket/socket";
 import { IAcceptChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/accept-challenge.interface";
 import { IGetChallengeGameDataUseCase } from "../../../application/use-cases/interfaces/companyUser/get-challenge-game-data.interface";
 import { CustomError } from "../../../domain/entities/custom-error.entity";
@@ -67,13 +66,12 @@ export class ChallengesController {
         return;
       }
 
-      const challenge = await this._makeChallengeUseCase.execute(
+      await this._makeChallengeUseCase.execute(
         senderId,
         receiverId,
       );
-      const io = getIO();
+  
 
-      io.to(`user:${receiverId}`).emit("challenge-received", challenge);
 
       logger.info("Challenge made successfully", { senderId, receiverId });
       res.status(HttpStatus.CREATED).json({
@@ -196,7 +194,6 @@ export class ChallengesController {
 
       const challengeGameData =
         await this._getChallengeGameDataUseCase.execute(challengeId);
-
       res.status(HttpStatus.OK).json({
         success: true,
         data: challengeGameData,

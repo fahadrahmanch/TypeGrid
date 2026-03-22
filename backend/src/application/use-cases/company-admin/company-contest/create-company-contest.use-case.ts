@@ -23,7 +23,12 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
     private readonly _contestRepository: IContestRepository,
     private readonly _lessonRepository: ILessonRepository,
   ) { }
-
+/**
+ * 
+ * @param data 
+ * @param userId 
+ * @returns 
+ */
   async execute(data: CreateContestDTO, userId: string): Promise<CreateContestDTO> {
     const user = await this._userRepository.findById(userId);
 

@@ -19,7 +19,6 @@ import { User } from "./src/infrastructure/db/models/user/user.schema";
 
   const parts = [...testGame.participants];
   for(const p of parts) {
-      console.log("Removing", p);
       await useCase.execute(testGame._id.toString(), p.toString());
   }
 

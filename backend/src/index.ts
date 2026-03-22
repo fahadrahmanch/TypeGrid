@@ -13,7 +13,7 @@ import { TokenService } from "./application/services/token.service";
 import { authMiddleware } from "./presentation/middlewares/auth.middleware";
 import { companyUserRoutes } from "./presentation/routes/company-user.route";
 import { errorMiddleware } from "./presentation/middlewares/error.middleware";
-
+import "./infrastructure/events/registerHandlers";
 dotenv.config();
 export class app {
   public app: Application;

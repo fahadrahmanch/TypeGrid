@@ -5,7 +5,7 @@ const resultSchema = new Schema(
   {
     type: {
       type: String,
-      enum: ["quick", "solo", "group", "contest"],
+      enum: ["quick", "solo", "group", "contest","oneToOne"],
       required: true,
     },
     competitionId: {

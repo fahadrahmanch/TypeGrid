@@ -3,7 +3,8 @@ export type ChallengeStatus =
   | "accepted"
   | "declined"
   | "completed"
-  | "waiting";
+  | "waiting"
+  | "ongoing";
 
 export interface ICompanyChallenge {
   _id?: string;
@@ -43,6 +44,18 @@ export class CompanyChallengeEntity {
     }
   }
 
+  getSenderId() {
+    return this.senderId;
+  }
+
+  getReceiverId() {
+    return this.receiverId;
+  }
+
+  getCompanyId() {
+    return this.CompanyId;
+  }
+
   accept() {
     if (this.status !== "pending") {
       throw new Error("Only pending challenge can be accepted");
@@ -60,11 +73,19 @@ export class CompanyChallengeEntity {
   }
 
   complete() {
-    if (this.status !== "accepted") {
-      throw new Error("Only accepted challenge can be completed");
+    if (this.status !== "ongoing") {
+      throw new Error("Only ongoing challenge can be completed");
     }
 
     this.status = "completed";
+  }
+
+  start() {
+    if (this.status !== "accepted") {
+      throw new Error("Only accepted challenge can be started");
+    }
+
+    this.status = "ongoing";
   }
 
   getStatus() {

@@ -10,14 +10,14 @@ import { CompanyChallengeEntity } from "../../../../domain/entities/company-chal
 import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
 import { ChallengeDTO } from "../../../DTOs/companyUser/challenge.dto";
 import { mapChallengeToDTO } from "../../../mappers/companyUser/challenge.mapper";
-
+import { appEvents } from "../../../events/AppEvents";
 export class MakeChallengeUseCase implements IMakeChallengeUseCase {
   constructor(
     private readonly _challengeRepository: ICompanyChallengeRepository,
     private readonly _userRepository: IUserRepository,
     private readonly _competitionRepository: ICompetitionRepository,
     private readonly _lessonRepository: ILessonRepository,
-  ) {}
+  ) { }
 
   async execute(senderId: string, receiverId: string): Promise<ChallengeDTO> {
     if (senderId === receiverId) {
@@ -75,7 +75,8 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
       challengeEntity.toObject(),
     );
 
-    return mapChallengeToDTO({
+
+    const challegeDTO = mapChallengeToDTO({
       ...savedChallenge.toObject(),
       opponent: {
         _id: sender._id,
@@ -86,5 +87,11 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
       },
       type: "received",
     });
+    appEvents.emit("challenge.created", {
+      receiverId,
+      challenge: challegeDTO,
+    });
+
+    return challegeDTO;
   }
 }

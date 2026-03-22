@@ -23,7 +23,8 @@ export class StartChallengeUseCase implements IStartChallengeUseCase {
     if (!challenge) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CHALLENGE_NOT_FOUND);
     }
-
+    challenge.start();
+    await this._challengeRepository.update(challenge.toObject());
     const competitionId = challenge.getCompetitionId();
     if (!competitionId) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND_FOR_CHALLENGE);

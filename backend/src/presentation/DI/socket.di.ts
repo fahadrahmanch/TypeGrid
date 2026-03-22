@@ -22,6 +22,7 @@ import { StartChallengeUseCase } from "../../application/use-cases/company-user/
 import { CompanyChallenge } from "../../infrastructure/db/models/company/company-challenge.schema";
 import { CompanyChallengeRepository } from "../../infrastructure/db/repositories/company/company-challenge.repository";
 import { LeaveQuickPlayUseCase } from "../../application/use-cases/user/quick-play/leave-quick-play.use-case";
+import { SaveChallengeResultUseCase } from "../../application/use-cases/company-user/challenges/save-challenge-result.use.case";
 const competitionRepository = new CompetitionRepository(Competition);
 const groupRepository = new GroupRepository(Group);
 const userRepository = new UserRepository(User);
@@ -62,8 +63,14 @@ const startChallengeUseCaseInstance = new StartChallengeUseCase(
   challengeRepository,
   competitionRepository,
 );
+const saveChallengeResultUseCaseInstance = new SaveChallengeResultUseCase(
+  challengeRepository,
+  competitionRepository,
+  resultRepository,
+);
 export const injectChallengeSocketController = new ChallengeSocketController(
   startChallengeUseCaseInstance,
+  saveChallengeResultUseCaseInstance,
 );
 export const injectContestSocketController = new ContestSocketController(
   finishContestUseCaseInstance,
