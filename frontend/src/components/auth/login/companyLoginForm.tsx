@@ -60,7 +60,6 @@ const CompanyLoginForm: React.FC = () => {
       }
       toast.success(response.data.message);
     } catch (error: any) {
-      console.log("error", error);
       const msg =
         error?.response?.data?.message ||
         "Something went wrong. Please try again.";

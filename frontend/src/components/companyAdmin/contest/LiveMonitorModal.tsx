@@ -110,22 +110,6 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
     setIsAnnouncementOpen(false);
   };
 
-  // const handleEndContest = async () => {
-  //     try {
-  //         const response = await updateContestStatus(contestId, 'completed');
-  //         if (response.data.success) {
-  //             socket.emit("contest-status-updated", {
-  //                 contestId,
-  //                 status: 'completed'
-  //             });
-  //             onEndContest();
-  //             onClose();
-  //         }
-  //     } catch (error) {
-  //         console.error("Failed to end contest", error);
-  //     }
-  // };
-
   useEffect(() => {
     const fetchContestDetails = async () => {
       try {

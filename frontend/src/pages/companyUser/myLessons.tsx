@@ -93,7 +93,7 @@ const MyLessons: React.FC = () => {
                 : "Advanced",
           assignedDate: new Date(item.assignedAt).toLocaleDateString(),
           targetWpm: item.lesson.wpm,
-          time: "5 min", // you can calculate later
+          time: "5 min", 
           status:
             item.status === "completed"
               ? "Completed"

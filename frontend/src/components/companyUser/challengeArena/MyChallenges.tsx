@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   ChevronLeft,
   LayoutList,
@@ -8,16 +8,20 @@ import {
 } from "lucide-react";
 import ChallengeCard from "./ChallengeCard";
 import { getAllChallenges } from "../../../api/companyUser/challenge";
-import { socket } from "../../../socket";
+import { useMyChallengeSocket } from "../../../hooks/companyUser/useMyChallenges";
 const MyChallenges = ({
-  setView,
+    setView,
+  challenges,
+  setChallenges,
 }: {
   setView: (v: "arena" | "my-challenges") => void;
+  challenges: any[];
+  setChallenges: React.Dispatch<React.SetStateAction<any[]>>;
 }) => {
   const [activeTab, setActiveTab] = useState<
     "all" | "sent" | "received" | "completed"
   >("sent");
-  const [challenges, setChallenges] = useState<any[]>([]);
+
   useEffect(() => {
     const getAllChallengesData = async () => {
       const response = await getAllChallenges();
@@ -31,25 +35,7 @@ const MyChallenges = ({
     };
     getAllChallengesData();
   }, []);
-  socket.on("challenge-received", (challenge) => {
-    setChallenges((prev) => {
-      const alreadyExists = prev.find((c) => c.id === challenge.id);
-
-      if (alreadyExists) {
-        return prev;
-      }
-
-      return [challenge, ...prev];
-    });
-    return socket.off("challenge-received");
-  });
-  socket.on("challenge-status-updated", (data) => {
-    setChallenges((prev) =>
-      prev.map((c) =>
-        c.id === data.challengeId ? { ...c, status: "accepted" } : c,
-      ),
-    );
-  });
+  useMyChallengeSocket(setChallenges);
   const filteredChallenges = challenges.filter((challenge) => {
     if (activeTab === "all") return true;
     return challenge.type === activeTab;

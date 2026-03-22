@@ -10,7 +10,7 @@ import UserRoutes from "./routes/userRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import CompanyRoutes from "./routes/CompanyRoutes";
 import ChallengeModal from "./components/common/ChallengeModal";
-
+import IncomingChallengeModal from "./components/common/IncomingChallengeModal";
 import { authConfig } from "./config/authConfig";
 
 function App() {
@@ -24,8 +24,6 @@ function App() {
     const load = async () => {
       try {
         const res = await config.refreshFn();
-         console.log("segment:", segment);
-  console.log("config:", config);
         const accessToken = res?.data?.accessToken;
         const user = res?.data?.user;
         if (accessToken) {
@@ -50,6 +48,7 @@ function App() {
         <Route path="/company/*" element={<CompanyRoutes />} />
       </Routes>
       <ChallengeModal />
+      <IncomingChallengeModal />
     </>
   );
 }

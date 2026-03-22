@@ -37,9 +37,8 @@ const ChallengeModal = () => {
     setWaiting(true);
     const roomId = String(challengeModal.challengeId);
 
-    socket.emit("join-match", { challengeId: roomId });
+    socket.emit("join-match", { challengeId: roomId,receiverId:challenge.receiverId });
   };
-
   if (!challengeModal?.open) return null;
 
   return (
@@ -55,15 +54,26 @@ const ChallengeModal = () => {
         >
           <X className="w-5 h-5" />
         </button>
-
+{!challengeModal.waiting?(
         <div className="mb-4 pr-6">
           <h3 className="font-extrabold text-gray-900 text-lg leading-tight flex items-center gap-2">
             <span className="text-xl">⚔️</span> Challenge Accepted!
           </h3>
           <p className="text-sm font-medium text-gray-500 mt-1">
-            Opponent is ready. Join the match now.
+            Opponent accepted your challenge. Join the match now.
           </p>
         </div>
+
+):(
+  <div className="mb-4 pr-6">
+    <h3 className="font-extrabold text-gray-900 text-lg leading-tight flex items-center gap-2">
+      <span className="text-xl">⚔️</span> Waiting for opponent...
+    </h3>
+    <p className="text-sm font-medium text-gray-500 mt-1">
+      Oppent joined the match
+    </p>
+  </div>
+)}
 
         {/* User Info & Badge */}
         {challenge ? (

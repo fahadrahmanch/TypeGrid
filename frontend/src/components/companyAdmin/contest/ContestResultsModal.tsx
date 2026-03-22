@@ -34,7 +34,6 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
       setError(null);
       try {
       const response=await fetchContestResults(contestId)
-      console.log("response",response.data)
       const data=response.data.data
       setResults(data)
       } catch (err: any) {

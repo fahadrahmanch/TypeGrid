@@ -1,17 +1,21 @@
-import { Zap, Target, Keyboard, AlertCircle, Clock, Timer } from "lucide-react";
+import { Zap, Target, Keyboard, AlertCircle, Clock, Timer, Trophy } from "lucide-react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 import { ClipboardEvent, useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getChallengeGameData } from "../../api/companyUser/challenge";
 import { socket } from "../../socket";
 import { useSelector } from "react-redux";
+import { useChallengeSocket } from "../../hooks/companyUser/useChallengeSocket";
+import { useChallengeKeydown } from "../../hooks/companyUser/useChallengeKeydown";
+import { useChallengeTimer } from "../../hooks/companyUser/useChallengeTimer";
+import { useTypingStats } from "../../hooks/useTypingStats";
 export type GamePlayerResult = {
   userId: string;
   wpm: number;
   accuracy: number | null;
   errors: number;
   typedLength: number;
-  status: "times-up" | "finished" | "playing";
+  status: "TIMES_UP" | "FINISHED" | "PLAYING" | "LEFT";
   updatedAt: number;
   name: string;
   imageUrl: string;
@@ -93,13 +97,13 @@ export default function ChallengeArea() {
   };
 
   const { challengeId } = useParams();
+  const navigate = useNavigate();
   const [challengeData, setChallengeData] = useState<ChallengeGame | null>(
     null,
   );
   const [players, setPlayers] = useState<LivePlayer[] | null>(null);
   const [errors, setErrors] = useState(0);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState<number | null>(null);
+ 
   const [elapsedTime, setElapsedTime] = useState(0);
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [countdown, setCountdown] = useState(3);
@@ -111,25 +115,8 @@ export default function ChallengeArea() {
   const [totalTyped, setTotalTyped] = useState(0);
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
   const user = useSelector((state: any) => state.companyAuth.user);
-  const [currentUser, setCurrentUser] = useState<
-    | {
-        _id: string;
-        name: string;
-        imageUrl?: string;
-        isHost: boolean;
-      }
-    | undefined
-  >(undefined);
+
   const [hasError, setHasError] = useState(false);
-
-  useEffect(() => {
-    if (!challengeData) return;
-
-    socket.emit("challenge-join", {
-      challengeId: challengeData.id,
-      userId: currentUser?._id,
-    });
-  }, [challengeData, currentUser]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -149,7 +136,7 @@ export default function ChallengeArea() {
           errors: 0,
           progress: 0,
           typedLength: 0,
-          userId: player.userId,
+          userId: player.id,
           timeTaken: player.timeTaken || "00:00",
           color: player.color || "bg-orange-400",
         }));
@@ -163,101 +150,32 @@ export default function ChallengeArea() {
     fetchData();
   }, [challengeId]);
 
-  //send live stats,
-  useEffect(() => {
-    if (!challengeData?.id || !currentUser) return;
-    if (phase !== "PLAY") return;
-    socket.emit("typing-progress-quick", {
-      gameId: challengeData.id,
-      userId: currentUser._id,
-      typedLength: typedText.length,
-      wpm,
-      status: "PLAYING",
-      accuracy,
-      errors,
-    });
-  }, [typedText, wpm, accuracy, errors, phase]);
+   const { wpm, accuracy } = useTypingStats(
+    totalTyped,
+    errors,
+    elapsedTime,
+    phase,
+    isFinished
+  );
 
-  //typing progress update from other players
-  useEffect(() => {
-    const handler = (data: any) => {
-      setPlayers((prev: any) =>
-        prev?.map((p: any) =>
-          p.userId === data.userId
-            ? { ...p, ...data, progress: data.typedLength }
-            : p,
-        ),
-      );
-    };
 
-    socket.off("typing-progress-update-challenge");
-    socket.on("typing-progress-update-challenge", handler);
-
-    return () => {
-      socket.off("typing-progress-update-challenge", handler);
-    };
-  }, [challengeData?.id]);
-
-  useEffect(() => {
-    if (!challengeData?.startedAt || !challengeData?.duration) return;
-    const startTimesamp = new Date(challengeData.startedAt).getTime();
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const elapsed = Math.floor((now - startTimesamp) / 1000);
-      if (elapsed < challengeData.countDown) {
-        setPhase("COUNTDOWN");
-        setCountdown(challengeData.countDown - elapsed);
-      } else if (elapsed < challengeData.countDown + challengeData.duration) {
-        setPhase("PLAY");
-        setRemainingTime(
-          challengeData.countDown + challengeData.duration - elapsed,
-        );
-
-        setElapsedTime(elapsed - challengeData.countDown);
-      } else {
-        setPhase("PLAY");
-        setRemainingTime(0);
-        setIsFinished(true);
-        clearInterval(interval);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [
-    challengeData?.startedAt,
-    challengeData?.duration,
-    challengeData?.countDown,
-    isFinished,
-  ]);
+  useChallengeTimer({
+  startedAt: challengeData?.startedAt,
+  duration: challengeData?.duration,
+  countDown: challengeData?.countDown,
+  isFinished,
+  setPhase,
+  setCountdown,
+  setRemainingTime,
+  setElapsedTime,
+  setIsFinished,
+});
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
-  useEffect(() => {
-    if (phase !== "PLAY" || isFinished) return;
-    if (elapsedTime <= 0) return;
-
-    const elapsedMinutes = elapsedTime / 60;
-    const correctChars = Math.max(totalTyped - errors, 0);
-
-    const calculatedWpm = Math.round(correctChars / 5 / elapsedMinutes);
-
-    setWpm(calculatedWpm);
-  }, [elapsedTime, totalTyped, errors, phase, isFinished]);
-
-  // accuracy
-  useEffect(() => {
-    if (totalTyped === 0) {
-      setAccuracy(null);
-      return;
-    }
-
-    const correct = totalTyped - errors;
-    const acc = Math.round((correct / totalTyped) * 100);
-    setAccuracy(acc);
-  }, [totalTyped, errors]);
 
   const renderTextWithHighlight = () => {
     if (!challengeData?.lesson?.text) return null;
@@ -322,72 +240,160 @@ export default function ChallengeArea() {
     }
   }, [typedText]);
 
-  useEffect(() => {
-    socket.on("game-finished-challenge", (data: GamePlayerResult[]) => {
-      setFinalResult(data);
-    });
-    return () => {
-      socket.off("game-finished-challenge");
-    };
-  }, [challengeData?.id]);
 
   //handle key down
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!challengeData?.lesson.text || isFinished || phase !== "PLAY") return;
-      if (e.key === "Backspace") {
-        setHasError(false);
-        setTypedText((prev) => prev.slice(0, -1));
-        return;
-      }
+  useChallengeKeydown({
+  lessonText: challengeData?.lesson.text,
+  challengeId: challengeId,
+  currentUserId: user?._id,
+  currentUserName: user?.name,
+  currentUserImageUrl: user?.imageUrl,
+  isFinished,
+  phase,
+  hasError,
+  typedText,
+  elapsedTime,
+  wpm,
+  accuracy,
+  errors,
+  totalTyped,
+  setHasError,
+  setTypedText,
+  setTotalTyped,
+  setErrors,
+  setIsFinished,
+});
+  useChallengeSocket({
+  challengeId: challengeId,
+  currentUserId: user?._id,
+  user,
+  phase,
+  isFinished,
+  typedText,
+  wpm,
+  accuracy,
+  errors,
+  elapsedTime,
+  totalLength: challengeData?.lesson?.text?.length || 0,
+  onPlayersUpdate: setPlayers,
+  onGameFinished: setFinalResult,
+});
 
-      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        e.preventDefault();
+ if (finalResult.length > 0) {
+  return (
+    <>
+      <CompanyUserNavbar />
+      <div className="min-h-screen bg-[#FFF8EA] font-sans text-gray-800 flex flex-col pt-24 px-4 pb-12 overflow-y-auto">
+        <div className="flex flex-col items-center justify-center gap-8 animate-in fade-in zoom-in duration-500 max-w-4xl mx-auto w-full">
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-black text-[#111827] tracking-tight flex items-center justify-center gap-3">
+              <Trophy className="w-10 h-10 text-orange-500" />
+              Challenge Results
+              <Trophy className="w-10 h-10 text-orange-500" />
+            </h1>
+            <p className="text-gray-500 font-medium italic">
+              The race has ended! Here's how everyone performed.
+            </p>
+          </div>
 
-        if (hasError) return;
+          <div className="w-full bg-white rounded-[2rem] shadow-xl border border-[#FDE6C6] overflow-hidden">
+            {/* Header */}
+            <div className="grid grid-cols-[60px_1fr_80px_100px_100px] gap-4 p-5 bg-orange-50/50 border-b border-[#FDE6C6] text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+              <div className="text-center">Rank</div>
+              <div>Player</div>
+              <div className="text-right">WPM</div>
+              <div className="text-right">Accuracy</div>
+              <div className="text-right">Time</div>
+            </div>
 
-        const expectedChar = challengeData?.lesson.text[typedText.length];
-        setTotalTyped((prev) => prev + 1);
+            {/* Rows */}
+            <div className="divide-y divide-orange-50">
+              {finalResult
+                .sort((a, b) => (a.rank || 999) - (b.rank || 999))
+                .map((result, index) => (
+                  <div
+                    key={result.userId}
+                    className={`grid grid-cols-[60px_1fr_80px_100px_100px] gap-4 p-5 items-center hover:bg-orange-50/20 transition-colors
+                      ${result.userId === user?._id ? "bg-orange-50/40" : ""}
+                      ${result.status === "LEFT" ? "opacity-50" : ""}
+                    `}
+                  >
+                    {/* Rank */}
+                    <div className="flex justify-center">
+                      {result.status === "LEFT" ? (
+                        <span className="text-[10px] text-red-400 font-bold">LEFT</span>
+                      ) : result.rank === 1 ? (
+                        <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black shadow-sm border border-orange-200">1</div>
+                      ) : result.rank === 2 ? (
+                        <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-black shadow-sm border border-slate-200">2</div>
+                      ) : result.rank === 3 ? (
+                        <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-black shadow-sm border border-amber-100">3</div>
+                      ) : (
+                        <span className="text-gray-400 font-bold">#{result.rank || index + 1}</span>
+                      )}
+                    </div>
 
-        if (e.key !== expectedChar) {
-          setErrors((prev) => prev + 1);
-          setHasError(true);
-          setTypedText((prev) => prev + e.key);
-          return;
-        }
+                    {/* Player */}
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={result.imageUrl}
+                        alt={result.name}
+                        className="w-10 h-10 rounded-xl border-2 border-orange-100 bg-orange-50 object-cover"
+                      />
+                      <div>
+                        <p className="font-bold text-gray-900 text-sm flex items-center gap-2">
+                          {result.name}
+                          {result.userId === user?._id && (
+                            <span className="text-[10px] text-orange-500 ml-1">(You)</span>
+                          )}
+                          {result.status === "LEFT" && (
+                            <span className="text-[10px] text-red-400 bg-red-50 px-1.5 py-0.5 rounded-md border border-red-100">
+                              Left early
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                    </div>
 
-        const nextText = typedText + e.key;
-        setTypedText(nextText);
+                    {/* WPM */}
+                    <div className="text-right font-black text-gray-900 text-lg">
+                      {result.status === "LEFT"
+                        ? <span className="text-gray-300 font-bold text-sm">—</span>
+                        : result.wpm}
+                    </div>
 
-        if (nextText.length === challengeData?.lesson.text.length) {
-          setIsFinished(true);
-          socket.emit("player-finished-challenge", {
-            challengeId: challengeData?.id,
-            userId: currentUser?._id,
-            name: currentUser?.name,
-            imageUrl: currentUser?.imageUrl,
-            timeTaken: elapsedTime,
-            wpm,
-            accuracy,
-            errors,
-            typedLength: typedText.length,
-            totalTyped,
-            status: "FINISHED",
-          });
-        }
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [
-    challengeData?.lesson.text,
-    isFinished,
-    typedText,
-    phase,
-    hasError,
-    challengeData?.id,
-  ]);
+                    {/* Accuracy */}
+                    <div className="text-right font-bold text-emerald-600">
+                      {result.status === "LEFT"
+                        ? <span className="text-gray-300 font-bold text-sm">—</span>
+                        : `${result.accuracy}%`}
+                    </div>
+
+                    {/* Time */}
+                    <div className="text-right font-mono text-gray-500 text-xs">
+                      {result.status === "LEFT"
+                        ? <span className="text-gray-300 font-bold text-sm">—</span>
+                        : formatTime(result.timeTaken)}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 mt-4">
+            <button
+              onClick={() => navigate("/company/user/challenges")}
+              className="px-6 py-3 rounded-2xl bg-white border border-[#FDE6C6] text-gray-600 font-bold hover:bg-orange-50 transition-all flex items-center gap-2 shadow-sm"
+            >
+              Back to Challenges
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
   return (
     <>
@@ -416,9 +422,11 @@ export default function ChallengeArea() {
             </div>
             <div className="bg-white px-3 md:px-4 py-1.5 md:py-2 rounded-[1rem] border border-[#FDE6C6] shadow-sm flex items-center gap-2">
               <Timer className="w-4 h-4 md:w-5 md:h-5 text-orange-500 animate-pulse" />
-              <span className="text-lg md:text-xl font-mono font-bold text-gray-800">
-                {elapsedTime}
-              </span>
+              <h3 className="font-bold text-gray-800 text-sm">
+                  {phase === "COUNTDOWN"
+                    ? `Game starts in ${countdown}s`
+                    : `Time left: ${formatTime(remainingTime)}`}
+                </h3>
             </div>
           </div>
 

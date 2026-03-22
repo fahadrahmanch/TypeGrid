@@ -1,7 +1,7 @@
 import { useEffect, Dispatch, SetStateAction, MutableRefObject } from "react";
 import { socket } from "../../socket";
 import { LivePlayer, GamePlayerResult } from "../../types/contest";
-
+import { useNavigate } from "react-router-dom";
 interface UseContestSocketProps {
   contestId?: string;
   user: any;
@@ -55,7 +55,6 @@ export const useContestSocket = ({
   setIsFinished,
   finalResult
 }: UseContestSocketProps) => {
-
   // join contest
   useEffect(() => {
     if (!contestId || !user?._id) return;
@@ -224,4 +223,5 @@ export const useContestSocket = ({
       socket.off("time-up-contest");
     };
   }, [remainingTime]);
+  
 };

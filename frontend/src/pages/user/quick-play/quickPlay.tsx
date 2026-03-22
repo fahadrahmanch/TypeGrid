@@ -147,7 +147,6 @@ const QuickPlay: React.FC = () => {
 
   //current user
   useEffect(() => {
-    console.log(players)
     if (players) {
       setCurrentUser(players?.find((item: any) => item._id === user._id));
     }
@@ -172,7 +171,6 @@ const QuickPlay: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("pahase",phase)
     if (phase === "PLAY" && !hasSentStart) {
       setHasSentStart(true);
       startGameAPI(gameData._id);

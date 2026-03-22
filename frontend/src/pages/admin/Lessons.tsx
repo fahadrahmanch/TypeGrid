@@ -13,7 +13,7 @@ import {
 } from "../../validations/lessonValidation";
 import {
   createLesson,
-  Lessons,
+  LessonsAPI,
   fetchLesson,
   updateLesson,
   deleteLesson,
@@ -65,9 +65,9 @@ const Lessons: React.FC = () => {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const response = await Lessons(searchText,filter,limit,page);
-        if (response && response.data.lessons) {
-          setLessons(response.data.lessons);
+        const response = await LessonsAPI(searchText,filter,limit,1);
+        if (response && response.data.data) {
+          setLessons(response.data.data);
         }
       } catch (err) {
         console.log("Error fetching lessons:", err);
@@ -150,10 +150,10 @@ const Lessons: React.FC = () => {
       });
       toast.success("Lesson created successfully");
 
-      const fetchResponse = await getAllLessons();
-      if (fetchResponse && fetchResponse.data.lessons) {
-        setLessons(fetchResponse.data.lessons);
-      }
+      // const fetchResponse = await getAllLessons();
+      // if (fetchResponse && fetchResponse.data.lessons) {
+      //   setLessons(fetchResponse.data.lessons);
+      // }
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Error creating lesson");
       console.log("Error creating lesson:", err);
@@ -179,7 +179,6 @@ const Lessons: React.FC = () => {
     try {
       const response = await fetchLesson(lessonId);
       if (!response) return;
-      console.log("response",response.data.data)
       const data=response.data.data
       setEditValues({id:data.id,title:data.title,level:data.level,category:data.category,wpm:data.targetWpm,accuracy:data.targetAccuracy,text:data.text});
       setEditOpen(true);

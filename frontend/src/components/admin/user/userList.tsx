@@ -61,8 +61,6 @@ const UserList: React.FC = () => {
     setUsers(users)
   };
 
-  console.log("totalPages", totalPages)
-  console.log("page", page)
 
   return (
     <>

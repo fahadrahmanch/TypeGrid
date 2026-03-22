@@ -1,55 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Target, Zap, Swords } from "lucide-react";
 import { Teammate } from "../../../types/challenge";
 import { sendChallengeApi } from "../../../api/companyUser/challenge";
 import { toast } from "react-toastify";
-import { checkalreadySendChallenge } from "../../../api/companyUser/challenge";
-import { useSelector } from "react-redux";
+
 const TeammateCard = ({
   teammate,
   onViewChallenges,
+  challengeStatus,
+  onStatusChange,
 }: {
   teammate: Teammate;
   onViewChallenges?: () => void;
+  challengeStatus?: string;
+  onStatusChange: (id: string, status: string) => void;
 }) => {
-  const [sentChallenges, setSentChallenges] = useState<string[]>([]);
-  const companyUser = useSelector((state: any) => state.companyAuth.user);
-
   const handleChallenge = async () => {
     try {
       const response = await sendChallengeApi(teammate._id);
       if (response.status === 201) {
         toast.success("Challenge sent successfully");
-        setSentChallenges((prev) => [...prev, teammate._id]);
+        onStatusChange(teammate._id, "pending");
       }
     } catch (error) {
       toast.error("Failed to send challenge");
     }
   };
-  useEffect(() => {
-    async function checkAlreadySendChallenge() {
-      try {
-        const response = await checkalreadySendChallenge();
 
-        if (response.data) {
-          const res = response.data.data;
-          const receiverIds = res.map((challenge: any) => challenge.receiverId);
-
-          setSentChallenges(receiverIds);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    checkAlreadySendChallenge();
-  }, []);
-  const alreadySent = sentChallenges.includes(teammate._id);
   return (
     <div className="bg-[#FAF3E0] rounded-2xl overflow-hidden shadow-sm border border-[#EBE3D5] flex flex-col relative group hover:shadow-md transition-all">
       {/* Top Banner */}
       <div className="h-24 bg-gradient-to-r from-[#5a483e] to-[#40332c] relative">
-        {/* Status Badge */}
         <div className="absolute top-4 right-4 z-10">
           <span
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold shadow-sm ${teammate.online === true ? "bg-[#1DCE6C] text-white" : "bg-[#A8A2A0] text-white"}`}
@@ -105,7 +86,7 @@ const TeammateCard = ({
         </div>
 
         {/* Action */}
-        {alreadySent ? (
+        {challengeStatus === "pending" ? (
           <div className="flex gap-2 w-full">
             <button
               onClick={onViewChallenges}
@@ -117,13 +98,31 @@ const TeammateCard = ({
               disabled
               className="flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-1.5 transition-all bg-[#E5DFD3] text-[#A8A2A0] cursor-not-allowed text-sm"
             >
-              <Swords className="w-4 h-4" />
-              Sent
+              <Swords className="w-4 h-4" /> Sent
             </button>
           </div>
+        ) : challengeStatus === "accepted" ? (
+          <button
+            onClick={onViewChallenges}
+            className="w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all bg-[#1DCE6C] hover:bg-[#1ab860] text-white shadow-sm"
+          >
+            <Swords className="w-4 h-4" /> Join Match
+          </button>
+        ) : challengeStatus === "rejected" ? (
+          <button
+            onClick={handleChallenge}
+            disabled={!teammate.online}
+            className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+              teammate.online
+                ? "bg-[#B09D89] hover:bg-[#A3907C] text-white shadow-sm"
+                : "bg-[#E5DFD3] text-[#A8A2A0] cursor-not-allowed"
+            }`}
+          >
+            <Swords className="w-4 h-4" /> Challenge Again
+          </button>
         ) : (
           <button
-            disabled={teammate.online === false}
+            disabled={!teammate.online}
             onClick={handleChallenge}
             className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
               teammate.online
@@ -139,4 +138,5 @@ const TeammateCard = ({
     </div>
   );
 };
+
 export default TeammateCard;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { BaseChallenge, CompletedChallenge } from "./types";
 import { CheckCircle2, Clock, Zap, Target, Swords } from "lucide-react";
 import { challengeAccept } from "../../../api/companyUser/challenge";
 import { socket } from "../../../socket";
@@ -7,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ChallengeCard = ({
   challenge,
 }: {
-  challenge: BaseChallenge | CompletedChallenge;
+  challenge: any
 }) => {
   const [hasJoined, setHasJoined] = useState(false);
   const [localAccepted, setLocalAccepted] = useState(false);
@@ -19,6 +18,7 @@ const ChallengeCard = ({
   const isAccepted = challenge.status === "accepted" || localAccepted;
   const isPending = challenge.status === "pending" && !localAccepted;
   const isWaiting = challenge.status === "waiting" && !localAccepted;
+  const isOngoing = challenge.status === "ongoing";
 
   let statusStyle = "";
   let statusIcon = null;
@@ -69,6 +69,8 @@ const ChallengeCard = ({
       console.error("Error joining match:", error);
     }
   }
+
+  if (isOngoing) return null;
 
   return (
     <div
@@ -200,5 +202,6 @@ const ChallengeCard = ({
     </div>
   );
 };
+
 
 export default ChallengeCard;

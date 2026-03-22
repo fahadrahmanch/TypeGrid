@@ -4,27 +4,39 @@ import TeammateCard from "./TeammateCard";
 import { Teammate } from "../../../types/challenge";
 import { companyUsers } from "../../../api/companyUser/challenge";
 import { useSelector } from "react-redux";
+import { checkalreadySendChallenge } from "../../../api/companyUser/challenge";
 const ChallengeArena = ({
   setView,
 }: {
   setView: (v: "arena" | "my-challenges") => void;
 }) => {
-  const [users, setUsers] = useState<Teammate[]>([]);
-  const companyUser = useSelector((state: any) => state.companyAuth.user);
+ const [users, setUsers] = useState<Teammate[]>([]);
+const [challengeStatuses, setChallengeStatuses] = useState<Record<string, string>>({});
+const companyUser = useSelector((state: any) => state.companyAuth.user);
 
-  useEffect(() => {
-    async function fetchCompanyUsers() {
-      try {
-        const res = await companyUsers();
-        if (res.data.data) {
-          setUsers(res.data.data);
-        }
-      } catch (error) {
-        console.log(error);
+useEffect(() => {
+  async function fetchData() {
+    try {
+      const [usersRes, challengesRes] = await Promise.all([
+        companyUsers(),
+        checkalreadySendChallenge(),
+      ]);
+
+      if (usersRes.data.data) setUsers(usersRes.data.data);
+
+      if (challengesRes.data.data) {
+        const statusMap: Record<string, string> = {};
+        challengesRes.data.data.forEach((challenge: any) => {
+          statusMap[challenge.receiverId] = challenge.status;
+        });
+        setChallengeStatuses(statusMap);
       }
+    } catch (error) {
+      console.log(error);
     }
-    fetchCompanyUsers();
-  }, []);
+  }
+  fetchData();
+}, []);
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header Area */}
@@ -85,15 +97,19 @@ const ChallengeArena = ({
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {users
-          .filter((user) => user._id !== companyUser._id)
-          .map((user) => (
-            <TeammateCard
-              key={user._id}
-              teammate={user}
-              onViewChallenges={() => setView("my-challenges")}
-            />
-          ))}
+       {users
+  .filter((user) => user._id !== companyUser._id)
+  .map((user) => (
+    <TeammateCard
+      key={user._id}
+      teammate={user}
+      challengeStatus={challengeStatuses[user._id]}
+      onStatusChange={(id, status) =>
+        setChallengeStatuses((prev) => ({ ...prev, [id]: status }))
+      }
+      onViewChallenges={() => setView("my-challenges")}
+    />
+  ))}
       </div>
     </div>
   );

@@ -73,7 +73,6 @@ const ContestCard: React.FC<ContestProps> = ({
 
   useEffect(() => {
     setContestStatus(status);
-    console.log("status", status)
   }, [status]);
   async function handleEndContest() {
     socket.emit("end-contest", {
