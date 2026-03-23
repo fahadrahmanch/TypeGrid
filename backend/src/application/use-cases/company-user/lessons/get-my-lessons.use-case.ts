@@ -17,11 +17,13 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
+    console.log("user",user)
+    console.log("userId",userId)
 
     const assignedLessons = await this._baseAssignmentLessonRepository.find(
       { userId },
     );
-    
+    console.log("assignedLessons",assignedLessons)
     const lessons = await Promise.all(
       assignedLessons.map(async (assignedLesson) => {
         const lesson = await this._lessonRepository.findById(assignedLesson.getLessonId());

@@ -80,7 +80,9 @@ const MyLessons: React.FC = () => {
     async function fetchMyLessons() {
       try {
         const response = await myLessons();
+        
         const data = response.data.data;
+        console.log("data",data)
         const mappedLessons: Lesson[] = data.lessons.map((item: any) => (
           {
           id: item.assignmentId,

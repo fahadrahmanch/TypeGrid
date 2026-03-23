@@ -174,6 +174,7 @@ AUTH_UNAUTHORIZED_ROLE: "You are not authorized to login with this role.",
 
     //company user
       LESSON_UPDATE_FAILED: "Failed to update lesson",
+      CHALLENGE_ALREADY_EXISTS: "Challenge already exists",
 
 
 };

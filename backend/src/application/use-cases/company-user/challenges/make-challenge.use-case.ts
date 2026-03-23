@@ -31,6 +31,21 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.SENDER_OR_RECEIVER_NOT_FOUND);
     }
 
+    const existingChallenge = await this._challengeRepository.findOne({
+      $or: [
+        { senderId, receiverId },
+        { senderId: receiverId, receiverId: senderId },
+      ],
+      status: { $in: ["pending", "accepted", "waiting"] },
+    });
+
+    if (existingChallenge) {
+      throw new CustomError(
+        HttpStatusCodes.CONFLICT,
+        MESSAGES.CHALLENGE_ALREADY_EXISTS
+      );
+    }
+
     if (
       !sender.CompanyId ||
       sender.CompanyId.toString() !== receiver.CompanyId?.toString()

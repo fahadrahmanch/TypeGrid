@@ -22,8 +22,8 @@ const TeammateCard = ({
         toast.success("Challenge sent successfully");
         onStatusChange(teammate._id, "pending");
       }
-    } catch (error) {
-      toast.error("Failed to send challenge");
+    } catch (error:any) {
+      toast.error(error.response.data.message);
     }
   };
 
@@ -86,7 +86,7 @@ const TeammateCard = ({
         </div>
 
         {/* Action */}
-        {challengeStatus === "pending" ? (
+        {challengeStatus === "pending" || challengeStatus === "accepted"|| challengeStatus === "waiting" ? (
           <div className="flex gap-2 w-full">
             <button
               onClick={onViewChallenges}
@@ -94,12 +94,12 @@ const TeammateCard = ({
             >
               View Challenges
             </button>
-            <button
+            {/* <button
               disabled
               className="flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-1.5 transition-all bg-[#E5DFD3] text-[#A8A2A0] cursor-not-allowed text-sm"
             >
               <Swords className="w-4 h-4" /> Sent
-            </button>
+            </button> */}
           </div>
         ) : challengeStatus === "accepted" ? (
           <button
