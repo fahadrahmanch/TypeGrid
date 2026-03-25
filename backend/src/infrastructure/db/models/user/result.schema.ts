@@ -37,7 +37,7 @@ const resultSchema = new Schema(
       prize: { type: Number, required: false },
     },
   },
-  { timestamps: true },
+  { timestamps: true ,suppressReservedKeysWarning: true},
 );
 
 export const Result = model<IResultDocument>("Result", resultSchema);

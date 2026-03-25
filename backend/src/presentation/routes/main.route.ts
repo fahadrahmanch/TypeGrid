@@ -56,6 +56,34 @@ export const Routes = {
     DELETE_LESSON: "/lesson/:id",
     //patch
     UPDATE_USER_STATUS: "/users/:userId/status",
+    //reward
+    CREATE_REWARD:"/rewards",
+    FETCH_REWARS:"/rewards",
+    FETCH_REWARD_BY_ID:"/rewards/:id",
+    UPDATE_REWARD:"/rewards/:id",
+    DELETE_REWARD:"/rewards/:id",
+    
+    //goals
+    CREATE_GOAL:"/goals",
+    FETCH_GOALS:"/goals",
+    FETCH_GOAL_BY_ID:"/goals/:id",
+    UPDATE_GOAL:"/goals/:id",
+    DELETE_GOAL:"/goals/:id",
+
+    //challenge
+    CREATE_CHALLENGE:"/challenges",
+    FETCH_CHALLENGES:"/challenges",
+    FETCH_CHALLENGE_BY_ID:"/challenges/:id",
+    UPDATE_CHALLENGE:"/challenges/:id",
+    DELETE_CHALLENGE:"/challenges/:id",
+
+    //daily assign challenge
+    CREATE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge",
+    FETCH_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenges",
+    FETCH_DAILY_ASSIGN_CHALLENGE_BY_ID:"/daily-assign-challenge/:id",
+    UPDATE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge/:id",
+    DELETE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge/:id",
+    
   },
 
   USERS: {

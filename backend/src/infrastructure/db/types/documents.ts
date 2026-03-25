@@ -195,7 +195,74 @@ export interface IResultDocument {
   createdAt?: Date;
   updatedAt?: Date;
 }
+export interface IRewardDocument {
+  _id?: Types.ObjectId;
+  xp: number;
+  description: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
+export interface IGoalDocument {
+  _id?: Types.ObjectId;
+  title: string;
+  wpm: number;
+  accuracy: number;
+  description: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IAdminChallengeDocument {
+  _id?: Types.ObjectId;
+  title: string;
+  difficulty: "easy" | "medium" | "hard";
+  goal: Types.ObjectId;
+  reward: Types.ObjectId;
+  duration: number;
+  description: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IDailyChallengeDocument {
+  _id?: Types.ObjectId;
+  challengeId: Types.ObjectId; 
+  date: Date; 
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+export interface IUserStreakDocument  {
+  userId: Types.ObjectId;
+  currentStreak: number;
+  longestStreak: number;
+  lastCompletedDate: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IDailyChallengeProgressDocument{
+  userId: Types.ObjectId;
+  challengeId: Types.ObjectId;
+  date: Date;
+  status: "not_started" | "in_progress" | "completed" | "failed";
+  wpm: number;
+  accuracy: number;
+  wordsTyped: number;
+  xpEarned: number;
+  startedAt: Date;
+  completedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IStatsDocument  {
+  userId: Types.ObjectId;
+  totalXp: number;
+  totalCompetitions: number;
+  bestWpm: number;
+  level: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 
 

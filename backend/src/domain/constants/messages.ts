@@ -127,7 +127,6 @@ AUTH_UNAUTHORIZED_ROLE: "You are not authorized to login with this role.",
   USER_NO_COMPANY_ASSIGNED: "User does not have a company assigned",
   DATE_OR_START_TIME_REQUIRED: "Date or Start Time missing",
   CONTESTS_NOT_FOUND: "Contests not found",
-  CHALLENGE_NOT_FOUND: "Challenge not found",
   PLAYER_NOT_FOUND: "Player not found",
   CANNOT_CHALLENGE_SELF: "You cannot challenge yourself",
   SENDER_OR_RECEIVER_NOT_FOUND: "Sender or Receiver not found",
@@ -174,7 +173,13 @@ AUTH_UNAUTHORIZED_ROLE: "You are not authorized to login with this role.",
 
     //company user
       LESSON_UPDATE_FAILED: "Failed to update lesson",
-      CHALLENGE_ALREADY_EXISTS: "Challenge already exists",
+      REWARD_ALREADY_EXISTS: "Reward already exists with this XP",
 
-
+// admin
+REWARD_NOT_FOUND: "Reward not found",
+GOAL_NOT_FOUND: "Goal not found",
+GOAL_ALREADY_EXISTS: "Goal already exists with this title",
+CHALLENGE_NOT_FOUND: "Challenge not found",
+CHALLENGE_ALREADY_EXISTS: "Challenge already exists with this title",
+DAILY_CHALLENGE_ALREADY_EXIST: "Daily challenge already exists with this date",
 };
