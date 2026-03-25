@@ -65,6 +65,10 @@ const SideNavbar: React.FC = () => {
             { to: "/admin/dashboard", label: "Dashboard" },
             { to: "/admin/users", label: "Users" },
             { to: "/admin/company", label: "Company" },
+            { to: "/admin/challenges", label: "Challenges" },
+            { to: "/admin/reward", label: "Rewards" },
+            { to: "/admin/goals", label: "Goals" },
+            { to: "/admin/daily-assignment", label: "Daily Assignment" },
             { to: "/admin/lessons", label: "Lesson management" },
           ].map((item) => (
             <NavLink
