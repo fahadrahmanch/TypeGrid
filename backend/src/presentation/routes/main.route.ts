@@ -83,6 +83,8 @@ export const Routes = {
     FETCH_DAILY_ASSIGN_CHALLENGE_BY_ID:"/daily-assign-challenge/:id",
     UPDATE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge/:id",
     DELETE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge/:id",
+
+    
     
   },
 
@@ -119,6 +121,12 @@ export const Routes = {
       START_QUICK_PLAY: "/quick-play/start",
       CHANGE_STATUS: "/quick-play/start/:competitionId",
     },
+
+    //challenge
+    GET_TODAY_CHALLENGE:"/today-challenge",
+    //daily challenge  user
+    DAILY_CHALLENGE_FINISHED: "/daily-challenge-finished",
+    DAILY_CHALLENGE_STATISTICS: "/daily-challenge/statistics",
   },
 
   COMPANY_ADMIN: {

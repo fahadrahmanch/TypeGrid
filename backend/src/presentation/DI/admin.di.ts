@@ -129,6 +129,7 @@ const updateDailyAssignChallengeUseCase = new UpdateDailyAssignChallengeUseCase(
 const deleteDailyAssignChallengeUseCase = new DeleteDailyAssignChallengeUseCase(dailyChallengeRepository);
 const getDailyAssignChallengesUseCase = new GetDailyAssignChallengesUseCase(dailyChallengeRepository, challengeRepository);
 
+
 export const injectDailyAssignChallengeManageController = new DailyAssignChallengeManageController(
   createDailyAssignChallengeUseCase,
   getDailyAssignChallengeUseCase,

@@ -37,8 +37,23 @@ import { StartQuickPlayUseCase } from "../../application/use-cases/user/quick-pl
 import { ChangeStatusUseCase } from "../../application/use-cases/user/quick-play/change-status.use-case";
 import { ChangePasswordUseCase } from "../../application/use-cases/user/change-password.use-case";
 import { HashService } from "../../application/services/hash.service";
-import { AuthUserEntity } from "../../domain/entities";
 import { AuthRepository } from "../../infrastructure/db/repositories/auth/auth.repository";
+import { GetTodayChallengeUseCase } from "../../application/use-cases/user/daily-challenge/get-daily-challenge.use-case";
+import { DailyAssignChallengeRepository } from "../../infrastructure/db/repositories/admin/daily-challenge.repository";
+import { DailyChallenge } from "../../infrastructure/db/models/admin/daily-challenge.schema";
+import { DailyChallengeController } from "../controllers/user/daily-challenge.controller";
+import { ChallengeRepository } from "../../infrastructure/db/repositories/admin/challenge.repository";
+import { AdminChallenge } from "../../infrastructure/db/models/admin/challenge.schema";
+import { GoalRepository } from "../../infrastructure/db/repositories/admin/goal.repository";
+import { Goal } from "../../infrastructure/db/models/admin/goal.schema";
+import { RewardRepository } from "../../infrastructure/db/repositories/admin/reward.repository";
+import { Reward } from "../../infrastructure/db/models/admin/reward.schema";
+import { UserStreakRepository } from "../../infrastructure/db/repositories/user/user-streak.repository";
+import { UserStreak } from "../../infrastructure/db/models/user/user-streak.schema";
+import { DailyChallengeProgress } from "../../infrastructure/db/models/user/daily-challenge-progess.schema";
+import { DailyChallengeProgressRepository } from "../../infrastructure/db/repositories/user/daily-challenge-progress.repository";
+import { DailyChallengeFinishedUseCase } from "../../application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case";
+import { GetDailyChallengeStatsUseCase } from "../../application/use-cases/user/daily-challenge/get-daily-challenge-stats.use-case";
 const userRepository = new UserRepository(User);
 const authRepository = new AuthRepository();
 const companyRepository = new CompanyRepository(Company);
@@ -154,3 +169,15 @@ export const injectUserController = new UserController(
   updateUserUseCaseInstance,
   changePasswordUseCaseInstance,
 );
+
+// daily challenge
+const dailyChallengeRepository = new DailyAssignChallengeRepository(DailyChallenge);
+const userStreakRepository = new UserStreakRepository(UserStreak);
+const challengeRepository = new ChallengeRepository(AdminChallenge);
+const goalRepository = new GoalRepository(Goal);
+const dailyChallengeProgressRepository = new DailyChallengeProgressRepository(DailyChallengeProgress);
+const rewardRepository = new RewardRepository(Reward);
+const getTodayChallengeUseCaseInstance = new GetTodayChallengeUseCase(dailyChallengeRepository,challengeRepository,goalRepository,rewardRepository,lessonRepository);
+const dailyChallengeFinishedUseCaseInstance = new DailyChallengeFinishedUseCase(dailyChallengeRepository,challengeRepository,goalRepository,rewardRepository,dailyChallengeProgressRepository,userStreakRepository);
+const getDailyChallengeStatsUseCaseInstance = new GetDailyChallengeStatsUseCase(dailyChallengeProgressRepository, userStreakRepository, dailyChallengeRepository);
+export const injectDailyChallengeController = new DailyChallengeController(getTodayChallengeUseCaseInstance,dailyChallengeFinishedUseCaseInstance, getDailyChallengeStatsUseCaseInstance);

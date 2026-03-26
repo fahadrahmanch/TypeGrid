@@ -182,4 +182,5 @@ GOAL_ALREADY_EXISTS: "Goal already exists with this title",
 CHALLENGE_NOT_FOUND: "Challenge not found",
 CHALLENGE_ALREADY_EXISTS: "Challenge already exists with this title",
 DAILY_CHALLENGE_ALREADY_EXIST: "Daily challenge already exists with this date",
+DAILY_CHALLENGE_NOT_FOUND: "Daily challenge not found",
 };

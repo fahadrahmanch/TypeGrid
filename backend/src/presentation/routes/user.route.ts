@@ -7,6 +7,7 @@ import { injectTypingPracticeController } from "../DI/user.di";
 import { injectGroupPlayController } from "../DI/user.di";
 import { injectSoloPlayController } from "../DI/user.di";
 import { injectQuickPlayController } from "../DI/user.di";
+import { injectDailyChallengeController } from "../DI/user.di";
 export class UserRoutes {
   private router: express.Router;
   constructor() {
@@ -158,6 +159,29 @@ export class UserRoutes {
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
       (req: Request, res: Response, next: NextFunction) => {
         injectQuickPlayController.changeStatus(req, res, next);
+      },
+    );
+
+    //challenge
+    this.router.get(
+      Routes.USERS.GET_TODAY_CHALLENGE,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectDailyChallengeController.getTodayChallenge(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.USERS.DAILY_CHALLENGE_FINISHED,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectDailyChallengeController.dailyChallengeFinished(req, res, next);
+      },
+    );
+    this.router.get(
+      Routes.USERS.DAILY_CHALLENGE_STATISTICS,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectDailyChallengeController.getStatistics(req as any, res, next);
       },
     );
   }

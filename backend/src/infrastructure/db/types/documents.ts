@@ -233,6 +233,7 @@ export interface IDailyChallengeDocument {
   updatedAt?: Date;
 }
 export interface IUserStreakDocument  {
+  _id?: Types.ObjectId;
   userId: Types.ObjectId;
   currentStreak: number;
   longestStreak: number;
@@ -241,8 +242,9 @@ export interface IUserStreakDocument  {
   updatedAt: Date;
 }
 export interface IDailyChallengeProgressDocument{
+  _id?: Types.ObjectId;
   userId: Types.ObjectId;
-  challengeId: Types.ObjectId;
+  dailyChallengeId: Types.ObjectId;
   date: Date;
   status: "not_started" | "in_progress" | "completed" | "failed";
   wpm: number;

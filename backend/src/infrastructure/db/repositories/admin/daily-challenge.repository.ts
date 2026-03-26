@@ -45,4 +45,11 @@ export class DailyAssignChallengeRepository
       total,
     };
   }
+
+  async getTodayChallenge(startOfDay: Date, endOfDay: Date): Promise<DailyAssignChallengeEntity | null> {
+    const  doc=await this.model.findOne({date:{$gte:startOfDay,$lte:endOfDay}}).lean<IDailyChallengeDocument>().exec();
+    return doc?this.toDomain(doc):null;
+  }
+    
+
 }
