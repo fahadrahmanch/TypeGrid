@@ -198,7 +198,7 @@ const DailyChallengeArea: React.FC = () => {
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
-        return `${mins} : ${secs.toString().padStart(2, '0')}`;
+        return `${mins} : ${secs.toString().padStart(2, "0")}`;
     };
 
     const renderTextWithHighlight = () => {
@@ -242,7 +242,7 @@ const DailyChallengeArea: React.FC = () => {
 
 
     useEffect(()=>{
-    if (!isFinished) return
+    if (!isFinished) return;
     const challengeCompleted=async()=>{
     const response=await challengeFinished({
         dailyChallengeId:challenge?._id,
@@ -250,21 +250,21 @@ const DailyChallengeArea: React.FC = () => {
         accuracy:accuracy,
         errors:errors,
         timeTaken:elapsedTime,
-    })
-    }
-    challengeCompleted()
-    },[isFinished])
+    });
+    };
+    challengeCompleted();
+    },[isFinished]);
       useEffect(()=>{
         const fetchChallengeStatistics = async()=>{
           try{
-            const response = await ChallengeStatistics()
+            const response = await ChallengeStatistics();
             setStats(response.data.data);
           }catch(error){
             console.log(error);
           }
-        }
+        };
         fetchChallengeStatistics();
-      },[])
+      },[]);
 
     if (loading) {
         return (
@@ -297,7 +297,7 @@ const DailyChallengeArea: React.FC = () => {
                             </div>
                             
                             {/* LIVE PERFORMANCE METRICS DIV */}
-                            <div className={`flex gap-8 transition-all duration-500 ${phase === "IDLE" ? 'opacity-20 translate-y-1' : 'opacity-100 translate-y-0'}`}>
+                            <div className={`flex gap-8 transition-all duration-500 ${phase === "IDLE" ? "opacity-20 translate-y-1" : "opacity-100 translate-y-0"}`}>
                                 <div className="flex flex-col items-center">
                                     <span className="text-xl font-black text-orange-500 leading-none">{wpm}</span>
                                     <span className="text-[8px] font-black text-gray-400 mt-1 uppercase tracking-[0.2em]">Words/M</span>
@@ -316,11 +316,11 @@ const DailyChallengeArea: React.FC = () => {
                         {/* Challenge Info Card */}
                         <div className="bg-white/40 backdrop-blur-md rounded-[1.5rem] border border-orange-100/50 p-4 shadow-sm relative overflow-hidden flex-shrink-0">
                             <div className="absolute top-0 right-0 p-4">
-                                <span className={`px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${challenge?.challengeId.difficulty === 'hard' ? 'bg-red-100 text-red-600' :
-                                    challenge?.challengeId.difficulty === 'medium' ? 'bg-orange-100 text-orange-600' :
-                                        'bg-emerald-100 text-emerald-600'
+                                <span className={`px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${challenge?.challengeId.difficulty === "hard" ? "bg-red-100 text-red-600" :
+                                    challenge?.challengeId.difficulty === "medium" ? "bg-orange-100 text-orange-600" :
+                                        "bg-emerald-100 text-emerald-600"
                                     }`}>
-                                    {challenge?.challengeId.difficulty || 'Medium'}
+                                    {challenge?.challengeId.difficulty || "Medium"}
                                 </span>
                             </div>
 
@@ -345,7 +345,7 @@ const DailyChallengeArea: React.FC = () => {
                                     <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-1">Goal WPM</span>
                                 </div>
                                 <div className="flex flex-col items-center gap-0 border-r border-gray-100">
-                                    <span className="text-base font-black text-gray-800 leading-none">{challenge?.goal.accuracy || '95'}%</span>
+                                    <span className="text-base font-black text-gray-800 leading-none">{challenge?.goal.accuracy || "95"}%</span>
                                     <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-1">Goal Acc.</span>
                                 </div>
                                 <div className="flex flex-col items-center gap-0 border-r border-gray-100">
@@ -413,7 +413,7 @@ const DailyChallengeArea: React.FC = () => {
                     <div className="flex-1 flex flex-col gap-5 overflow-hidden">
                         {/* Timer Card */}
                         <div className="bg-white/80 rounded-[1.5rem] p-5 border border-emerald-100/50 flex flex-col items-center shadow-sm backdrop-blur-sm flex-shrink-0">
-                            <div className={`text-4xl font-mono font-black mb-2 drop-shadow-sm transition-colors duration-500 ${phase === "IDLE" ? 'text-gray-300' : 'text-emerald-500'}`}>
+                            <div className={`text-4xl font-mono font-black mb-2 drop-shadow-sm transition-colors duration-500 ${phase === "IDLE" ? "text-gray-300" : "text-emerald-500"}`}>
                                 {phase === "COUNTDOWN" ? formatTime(countDown) : formatTime(timeRemaining)}
                             </div>
                             <div className="text-[8px] font-black text-gray-400 uppercase tracking-widest opacity-60 uppercase">Seconds Left</div>
@@ -432,7 +432,7 @@ const DailyChallengeArea: React.FC = () => {
                             </div>
 
                             <div className="grid grid-cols-7 gap-1 mb-1.5 text-center">
-                                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
+                                {["S", "M", "T", "W", "T", "F", "S"].map(d => (
                                     <span key={d} className="text-[7px] font-black uppercase text-gray-400 tracking-[0.2em]">{d}</span>
                                 ))}
                             </div>
@@ -440,15 +440,15 @@ const DailyChallengeArea: React.FC = () => {
                             <div className="grid grid-cols-7 gap-1">
                                 {Array.from({ length: 2 }).map((_, i) => <div key={`empty-${i}`} />)}
                                 {marchDays.slice(0, 24).map(d => {
-                                    const dateStr = `2026-03-${d.toString().padStart(2, '0')}`;
+                                    const dateStr = `2026-03-${d.toString().padStart(2, "0")}`;
                                     const status = stats?.calendarData[dateStr];
                                     const isSuccess = status === "completed";
                                     const isFail = status === "missed";
                                     return (
                                         <div key={d} className={`aspect-square flex items-center justify-center text-[7px] font-black rounded-md transition-all
-                                          ${isSuccess ? 'bg-emerald-500 text-white shadow-sm' :
-                                                isFail ? 'bg-red-500 text-white shadow-sm' :
-                                                    'text-gray-600 hover:bg-white/60'}`}
+                                          ${isSuccess ? "bg-emerald-500 text-white shadow-sm" :
+                                                isFail ? "bg-red-500 text-white shadow-sm" :
+                                                    "text-gray-600 hover:bg-white/60"}`}
                                         >
                                             {d}
                                         </div>

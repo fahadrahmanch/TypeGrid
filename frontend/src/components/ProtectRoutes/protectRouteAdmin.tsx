@@ -7,8 +7,7 @@ interface Props {
 }
 
 export default function ProtectRouteAdmin() {
-  const accessToken = useSelector((state: any) => state?.adminAuth.accessToken);
-  const authLoaded = useSelector((state: any) => state?.adminAuth.authLoaded);
+  const { accessToken, authLoaded } = useSelector((state: any) => state.auth);
   if (!authLoaded) {
     return <div>Loading...</div>;
   }
@@ -20,8 +19,7 @@ export default function ProtectRouteAdmin() {
 }
 
 export function IsloggedAdmin({ children }: Props) {
-  const accessToken = useSelector((state: any) => state?.adminAuth.accessToken);
-  const authLoaded = useSelector((state: any) => state?.adminAuth.authLoaded);
+  const { accessToken, authLoaded } = useSelector((state: any) => state.auth);
   if (!authLoaded) {
     return <div>Loading...</div>;
   }

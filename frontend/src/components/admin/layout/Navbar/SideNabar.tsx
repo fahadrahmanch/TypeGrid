@@ -2,12 +2,14 @@ import Logo from "../../../../assets/Icon/logo.png";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { adminLogoutApi } from "../../../../api/auth/authServices";
-import { logout } from "../../../../store/slices/auth/adminAuthSlice";
+import { logout } from "../../../../store/slices/auth/authSlice";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+
 const SideNavbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
   async function handleLogout() {
     try {
       await adminLogoutApi();
@@ -16,6 +18,7 @@ const SideNavbar: React.FC = () => {
       console.log(error);
     }
   }
+
   return (
     <>
       {/* Mobile Top Bar */}
@@ -101,4 +104,5 @@ const SideNavbar: React.FC = () => {
     </>
   );
 };
+
 export default SideNavbar;

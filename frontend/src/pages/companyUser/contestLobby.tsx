@@ -26,7 +26,7 @@ const ContestLobby = () => {
     seconds: 0,
   });
   const [contestDetails, setContestDetails] = useState<any>({});
-  const user = useSelector((state: any) => state.companyAuth.user);
+  const { user } = useSelector((state: any) => state.auth);
 
   const [lobbyParticipants, setLobbyParticipants] = useState<any>([]);
   const [contestStatus, setContestStatus] = useState<any>("");

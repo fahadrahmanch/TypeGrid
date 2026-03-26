@@ -38,7 +38,7 @@ const Contests: React.FC = () => {
   useEffect(() => {
     async function fetchGroupContestApi() {
       const openContests = await openContestApi();
-      console.log("open",openContests)
+      console.log("open",openContests);
       const data = openContests.data.data;
       setOpenContests(data);
     }

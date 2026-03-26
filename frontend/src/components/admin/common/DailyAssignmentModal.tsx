@@ -1,12 +1,12 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import CustomCalendar from './CustomCalendar';
+import React from "react";
+import { X } from "lucide-react";
+import CustomCalendar from "./CustomCalendar";
 
 interface DailyAssignmentModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  mode: 'add' | 'edit';
+  mode: "add" | "edit";
   values: {
     date: string;
     challengeId: string;
@@ -49,7 +49,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
             <label className="text-xs font-black uppercase tracking-widest text-gray-500">Date</label>
             <CustomCalendar 
               selectedDate={values.date}
-              onSelect={(date) => onChange('date', date)}
+              onSelect={(date) => onChange("date", date)}
             />
           </div>
 
@@ -59,7 +59,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
             <div className="relative">
               <select
                 value={values.challengeId}
-                onChange={(e) => onChange('challengeId', e.target.value)}
+                onChange={(e) => onChange("challengeId", e.target.value)}
                 className="w-full px-4 py-3 bg-white/60 rounded-xl border border-transparent focus:bg-white outline-none transition-all text-gray-800 appearance-none cursor-pointer font-medium"
               >
                 <option value="">Select a Challenge</option>
@@ -102,7 +102,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
               onClick={onSubmit}
               className="px-8 py-2.5 rounded-xl bg-[#ECA468] text-white font-black text-[10px] uppercase tracking-widest hover:bg-[#D0864B] transition-all shadow-lg shadow-[#ECA468]/20"
             >
-              {mode === 'edit' ? 'Update' : 'Assign'}
+              {mode === "edit" ? "Update" : "Assign"}
             </button>
           </div>
         </div>

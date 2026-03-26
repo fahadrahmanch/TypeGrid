@@ -8,7 +8,7 @@ import lines from "../../../assets/images/auth/login/lines.png";
 import kid2 from "../../../assets/images/auth/login/Kid2.png";
 import { signIn } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
-import { setuserAccessToken } from "../../../store/slices/auth/userAuthSlice";
+import { setAccessToken } from "../../../store/slices/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
@@ -64,7 +64,7 @@ export const SignInForm: React.FC = () => {
       if (!accessToken || !user) {
         throw new Error("Something went wrong. Please try again");
       }
-      dispatch(setuserAccessToken({ user, accessToken }));
+      dispatch(setAccessToken({ accessToken, user: response?.data?.user }));
       navigate("/", { replace: true });
       toast.success(response.data.message);
     } catch (error: any) {

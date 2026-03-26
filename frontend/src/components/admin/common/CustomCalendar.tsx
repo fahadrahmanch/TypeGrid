@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import React, { useState } from "react";
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 
 interface CustomCalendarProps {
   selectedDate: string;
@@ -22,7 +22,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({ selectedDate, onSelect 
   };
 
   const handleDateClick = (day: number) => {
-    const dateString = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dateString = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     onSelect(dateString);
     setIsOpen(false);
   };
@@ -40,11 +40,11 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({ selectedDate, onSelect 
     }
 
     const today = new Date();
-    const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
     // Days of the month
     for (let d = 1; d <= totalDays; d++) {
-      const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const date = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
       const isSelected = date === selectedDate;
       const isToday = todayString === date;
 
@@ -54,10 +54,10 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({ selectedDate, onSelect 
           onClick={() => handleDateClick(d)}
           className={`p-2 w-10 h-10 rounded-xl text-xs font-black transition-all border-2 
             ${isSelected 
-              ? 'bg-[#ECA468] text-white border-[#ECA468] shadow-lg shadow-[#ECA468]/20' 
+              ? "bg-[#ECA468] text-white border-[#ECA468] shadow-lg shadow-[#ECA468]/20" 
               : isToday 
-                ? 'border-[#ECA468]/30 text-[#ECA468] bg-orange-50/50' 
-                : 'border-transparent text-gray-600 hover:bg-gray-100'
+                ? "border-[#ECA468]/30 text-[#ECA468] bg-orange-50/50" 
+                : "border-transparent text-gray-600 hover:bg-gray-100"
             }`}
         >
           {d}
@@ -81,7 +81,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({ selectedDate, onSelect 
       >
         <CalendarIcon className="w-4 h-4 text-[#A468D0]/50" />
         <span className="flex-1 text-left truncate">
-          {selectedDate ? new Date(selectedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Pick a date'}
+          {selectedDate ? new Date(selectedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Pick a date"}
         </span>
       </button>
 
@@ -100,7 +100,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({ selectedDate, onSelect 
           </div>
 
           <div className="grid grid-cols-7 gap-1 text-center mb-2">
-            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
+            {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(d => (
               <span key={d} className="text-[10px] font-black uppercase text-gray-400 tracking-widest">{d}</span>
             ))}
           </div>

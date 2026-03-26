@@ -115,7 +115,7 @@ const Reward: React.FC = () => {
             closeModals();
             loadRewards();
         } catch (err: any) {
-            console.log(err)
+            console.log(err);
             toast.error(err?.response?.data?.message || "Something went wrong");
         }
     };

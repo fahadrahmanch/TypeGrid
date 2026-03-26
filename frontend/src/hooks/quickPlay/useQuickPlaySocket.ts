@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { socket } from "../../socket";
 import { GamePlayerResult } from "../../pages/user/quick-play/quickPlay";
-import { current } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 
 export const useQuickPlaySocket = (
@@ -22,7 +21,7 @@ export const useQuickPlaySocket = (
   gameIdRef: React.MutableRefObject<string | undefined>,
   userIdRef: React.MutableRefObject<string | undefined>,
 ) => {
-    const user = useSelector((state: any) => state.userAuth.user);
+    const user = useSelector((state: any) => state.auth.user);
 
 
   // send live stats
@@ -72,10 +71,10 @@ export const useQuickPlaySocket = (
   }, [gameData, user]);
   useEffect(() => {
     socket.on("force-exit-quick", () => {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     });
 
-    return () => {socket.off("force-exit-quick")};
+    return () => {socket.off("force-exit-quick");};
 }, []);
 
   // user join
@@ -180,7 +179,7 @@ useEffect(() => {
       prev.filter((p: any) => p._id !== userId)
     );
     if(userId === user?._id){
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
   };
   

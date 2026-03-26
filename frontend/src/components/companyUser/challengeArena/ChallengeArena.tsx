@@ -12,8 +12,7 @@ const ChallengeArena = ({
 }) => {
  const [users, setUsers] = useState<Teammate[]>([]);
 const [challengeStatuses, setChallengeStatuses] = useState<Record<string, string>>({});
-const companyUser = useSelector((state: any) => state.companyAuth.user);
-
+const companyUser = useSelector((state: any) => state.auth.user);
 useEffect(() => {
   async function fetchData() {
     try {
@@ -98,7 +97,7 @@ useEffect(() => {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
        {users
-  .filter((user) => user._id !== companyUser._id)
+  .filter((user) => user._id !== companyUser?._id)
   .map((user) => (
     <TeammateCard
       key={user._id}

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { companySignIn } from "../../../api/auth/authServices";
-import { setcompanyAccessToken } from "../../../store/slices/auth/companyAuthSlice";
+import { setAccessToken } from "../../../store/slices/auth/authSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const CompanyLoginForm: React.FC = () => {
@@ -52,7 +52,7 @@ const CompanyLoginForm: React.FC = () => {
       if (!accessToken || !user) {
         throw new Error("Something went wrong. Please try again");
       }
-      dispatch(setcompanyAccessToken({ user, accessToken }));
+      dispatch(setAccessToken({ accessToken, user: response?.data?.user }));
       if (user.role == "companyUser") {
         navigate("/company/user/dashboard");
       } else if (user.role == "companyAdmin") {

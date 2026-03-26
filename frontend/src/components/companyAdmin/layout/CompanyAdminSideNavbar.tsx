@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import Logo from "../../../assets/Icon/logo.png";
 import { companyLogoutApi } from "../../../api/auth/authServices";
 import { useDispatch } from "react-redux";
-import { logout } from "../../../store/slices/auth/companyAuthSlice";
+import { logout } from "../../../store/slices/auth/authSlice";
 import {
   LayoutDashboard,
   Users,

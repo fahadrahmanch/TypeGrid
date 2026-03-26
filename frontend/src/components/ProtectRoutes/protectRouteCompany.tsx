@@ -10,9 +10,7 @@ interface PropsIsloggedCompany {
 
 
 export default function ProtectRouteCompany({ allowedRoles }: Props) {
-  const accessToken = useSelector((state: any) => state?.companyAuth?.accessToken);
-   const user = useSelector((state: any) => state.companyAuth.user);
-  const authLoaded = useSelector((state: any) => state?.companyAuth?.authLoaded);
+  const { accessToken, user, authLoaded } = useSelector((state: any) => state.auth);
 
   if (!authLoaded) {
     return <div>Loading...</div>;
@@ -29,11 +27,9 @@ export default function ProtectRouteCompany({ allowedRoles }: Props) {
   return <Outlet />;
 }
 export function IsloggedCompany({ children }: PropsIsloggedCompany) {
-  const accessToken = useSelector(
-    (state: any) => state?.companyAuth.accessToken,
+  const { accessToken, authLoaded, user } = useSelector(
+    (state: any) => state.auth
   );
-  const authLoaded = useSelector((state: any) => state?.companyAuth.authLoaded);
-  const user = useSelector((state: any) => state?.companyAuth.user);
 
   if (!authLoaded) {
     return <div>Loading...</div>;

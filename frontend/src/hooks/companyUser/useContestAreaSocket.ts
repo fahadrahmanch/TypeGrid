@@ -145,7 +145,7 @@ export const useContestSocket = ({
     if(finalResult.length > 0){
       setIsFinished(true);
     }
-  },[finalResult])
+  },[finalResult]);
 
 
 

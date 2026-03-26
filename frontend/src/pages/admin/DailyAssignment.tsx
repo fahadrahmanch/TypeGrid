@@ -26,7 +26,7 @@ const DailyAssignment = () => {
     const [searchText, setSearchText] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
+    const [modalMode, setModalMode] = useState<"add" | "edit">("add");
     const [currentEditId, setCurrentEditId] = useState<string | null>(null);
     const [challenges, setChallenges] = useState<any[]>([]);
     
@@ -84,13 +84,13 @@ const DailyAssignment = () => {
     };
 
     const handleOpenAddModal = () => {
-        setModalMode('add');
+        setModalMode("add");
         setModalValues({ date: selectedDate, challengeId: "" });
         setIsModalOpen(true);
     };
 
     const handleOpenEditModal = (assignment: any) => {
-        setModalMode('edit');
+        setModalMode("edit");
         setCurrentEditId(assignment._id);
         setModalValues({ 
             date: assignment.date, 
@@ -102,14 +102,14 @@ const DailyAssignment = () => {
     const handleModalSubmit = async () => {
         console.log("Submitting:", modalValues);
         try {
-            if (modalMode === 'add') {
+            if (modalMode === "add") {
                 const response = await createAssignChallenge(modalValues);
                 if (response.data) {
                     toast.success("Challenge assigned successfully");
                 }else{
                     toast.error(response.data.message);
                 }
-            } else if (modalMode === 'edit' && currentEditId) {
+            } else if (modalMode === "edit" && currentEditId) {
                 const response = await updateAssignChallenge(currentEditId, modalValues);
                 if (response.data) {
                     toast.success("Assignment updated successfully");
@@ -253,7 +253,7 @@ const DailyAssignment = () => {
             <DailyAssignmentModal 
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                title={modalMode === 'add' ? "Assign Challenge" : "Edit Assignment"}
+                title={modalMode === "add" ? "Assign Challenge" : "Edit Assignment"}
                 mode={modalMode}
                 values={modalValues}
                 challenges={challenges}

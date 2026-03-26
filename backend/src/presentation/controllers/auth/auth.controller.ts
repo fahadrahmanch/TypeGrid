@@ -130,7 +130,7 @@ export class AuthController {
       //remove password from user
       const safeUser = mapToSafeUser(user);
       //set refresh token in cookie
-      res.cookie("refresh_user", refreshToken, {
+      res.cookie("refresh_token", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
@@ -154,7 +154,9 @@ export class AuthController {
   async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { tokenName } = getRoleConfig(req.baseUrl);
+      console.log("tokenname",tokenName)
       const token = req.cookies[tokenName];
+      console.log("token",token)
 
       if (!token) {
         res.status(HttpStatus.UNAUTHORIZED).json({
@@ -182,7 +184,6 @@ export class AuthController {
         });
         return;
       }
-      //generate new access token
       const accessToken = await this._tokenService.generateAccessToken(
         decoded?.userId,
         decoded?.email,
@@ -247,14 +248,13 @@ export class AuthController {
       }
 
       const safeUser = mapToSafeUser(user);
-
-      res.cookie("refresh_user", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/user",
-      });
+     res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/user",
+    });
 
       logger.info("Google Authentication successful", { email });
 
@@ -347,6 +347,8 @@ export class AuthController {
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { tokenName, path } = getRoleConfig(req.baseUrl);
+      console.log("tokenName",tokenName)
+      
       res.clearCookie(tokenName, { httpOnly: true, secure: true, sameSite: "strict", path });
       res.status(HttpStatus.OK).json({
         success: true,
@@ -393,13 +395,13 @@ export class AuthController {
 
       const safeAdmin = mapToSafeUser(admin);
 
-      res.cookie("refresh_admin", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/admin",
-      });
+       res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/admin",
+    })
 
       logger.info("Admin signed in successfully", { email });
 
@@ -459,13 +461,13 @@ export class AuthController {
 
       const safeUser = mapToSafeUser(user);
 
-      res.cookie("refresh_company", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/company",
-      });
+      res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/company",
+    });
 
       logger.info("Company signed in successfully", { email });
 

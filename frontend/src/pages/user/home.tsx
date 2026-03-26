@@ -1,4 +1,4 @@
-import { logout } from "../../store/slices/auth/userAuthSlice";
+import { logout } from "../../store/slices/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { logoutApi } from "../../api/auth/authServices";
 import Navbar from "../../components/user/Navbar";

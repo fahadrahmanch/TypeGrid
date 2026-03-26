@@ -27,7 +27,7 @@ const ContestArea: React.FC = () => {
   const { contestId } = useParams<{ contestId: string }>();
   const [contestData, setContestData] = useState<ContestRecord | null>();
 
-  const user = useSelector((state: any) => state.companyAuth.user);
+  const user = useSelector((state: any) => state.auth.user);
 
   const [hasError, setHasError] = useState(false);
 

@@ -126,7 +126,7 @@ const Challenges: React.FC = () => {
                 await updateChallenge(selectedChallengeId, values);
                 toast.success("Challenge updated successfully");
             } else {
-                console.log("values",values)
+                console.log("values",values);
                 await createChallenge(values);
                 toast.success("Challenge created successfully");
             }
@@ -142,7 +142,7 @@ const Challenges: React.FC = () => {
             const response = await fetchChallengeById(id);
             if (response && response.data) {
                 const data = response.data.challenge;
-                console.log("data",data)
+                console.log("data",data);
                 setValues({
                     title: data.title,
                     difficulty: data.difficulty,
@@ -199,17 +199,17 @@ const Challenges: React.FC = () => {
       const getGoals=async()=>{
         const response=await fetchGoals("",Infinity,1);
         setGoals(response.data.goals);
-      }  
+      };  
       getGoals();
-    },[])
+    },[]);
 
     useEffect(()=>{
       const getRewards=async()=>{
         const response=await fetchRewards("",Infinity,1);
         setRewards(response.data.rewards.rewards);
-      }  
+      };  
       getRewards();
-    },[])
+    },[]);
     return (
         <div className="md:ml-64 p-8 min-h-screen bg-[#FFF8EA] font-sans">
             <SideNavbar />
@@ -316,9 +316,9 @@ const Challenges: React.FC = () => {
                                         </td>
                                         <td className="py-6 px-4 text-center">
                                             <span className={`px-3 py-1 text-[9px] font-black uppercase tracking-wider rounded-lg border
-                                                ${challenge.difficulty === 'hard' ? 'bg-red-50 text-red-600 border-red-100' :
-                                                  challenge.difficulty === 'medium' ? 'bg-orange-50 text-orange-600 border-orange-100' :
-                                                  'bg-emerald-50 text-emerald-600 border-emerald-100'}`}>
+                                                ${challenge.difficulty === "hard" ? "bg-red-50 text-red-600 border-red-100" :
+                                                  challenge.difficulty === "medium" ? "bg-orange-50 text-orange-600 border-orange-100" :
+                                                  "bg-emerald-50 text-emerald-600 border-emerald-100"}`}>
                                                 {challenge.difficulty} Tier
                                             </span>
                                         </td>
@@ -334,9 +334,9 @@ const Challenges: React.FC = () => {
                                         <td className="py-6 px-4 text-center">
                                             <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all inline-block
                                                 ${challenge.isActive 
-                                                    ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
-                                                    : 'bg-gray-50 text-gray-400 border border-gray-100'}`}>
-                                                {challenge.isActive ? 'Active' : 'Archived'}
+                                                    ? "bg-emerald-50 text-emerald-600 border border-emerald-100" 
+                                                    : "bg-gray-50 text-gray-400 border border-gray-100"}`}>
+                                                {challenge.isActive ? "Active" : "Archived"}
                                             </span>
                                         </td>
                                         <td className="py-6 px-4">

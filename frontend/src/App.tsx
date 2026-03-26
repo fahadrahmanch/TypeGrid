@@ -12,32 +12,36 @@ import CompanyRoutes from "./routes/CompanyRoutes";
 import ChallengeModal from "./components/common/ChallengeModal";
 import IncomingChallengeModal from "./components/common/IncomingChallengeModal";
 import { authConfig } from "./config/authConfig";
-
+import { setAccessToken, setAuthLoaded, logout } from "./store/slices/auth/authSlice";
+import { useSelector } from "react-redux";
 function App() {
+  const user=useSelector((state:any)=>state.auth.user)
+  console.log("user",user);
   const dispatch = useDispatch();
   const location = useLocation();
 
-  useEffect(() => {
-    const segment = location.pathname.split("/")[1];
-    const config = authConfig[segment] ?? authConfig["user"];
+useEffect(() => {
+  const segment = location.pathname.split("/")[1];
+  const config = authConfig[segment] ?? authConfig["user"];
 
-    const load = async () => {
-      try {
-        const res = await config.refreshFn();
-        const accessToken = res?.data?.accessToken;
-        const user = res?.data?.user;
-        if (accessToken) {
-          dispatch(config.setToken({ accessToken, user }));
-        }
-      } catch (error) {
-        dispatch(config.logout());
-      } finally {
-        dispatch(config.setLoaded(true));
+  const load = async () => {
+    try {
+      const res = await config.refreshFn();
+      const accessToken = res?.data?.accessToken;
+      const user = res?.data?.user;
+
+      if (accessToken) {
+        dispatch(setAccessToken({ accessToken, user })); 
       }
-    };
+    } catch (error) {
+      dispatch(logout()); 
+    } finally {
+      dispatch(setAuthLoaded(true)); 
+    }
+  };
 
-    load();
-  }, []);
+  load();
+}, []);
 
   return (
     <>

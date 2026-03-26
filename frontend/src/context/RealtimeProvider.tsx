@@ -7,7 +7,7 @@ export const RealtimeProvider = ({ children }: any) => {
   const [challengeModal, setChallengeModal] = useState<any>(null);
   const [incomingChallenge, setIncomingChallenge] = useState<any>(null);
 
-  const companyUser = useSelector((state: any) => state.companyAuth.user);
+  const companyUser = useSelector((state: any) => state.auth.user);
   useEffect(() => {
 
     socket.on("challenge-status-updated", (data) => {
@@ -17,13 +17,13 @@ export const RealtimeProvider = ({ children }: any) => {
       });
       return () => {
         socket.off("challenge-status-updated");
-      }
+      };
     });
     socket.on("challenge-received", (challenge) => {
       setIncomingChallenge({ open: true, challenge });
       return () => {
         socket.off("challenge-received");
-      }
+      };
     });
     return () => {
       socket.off("challenge-status-updated");
@@ -50,12 +50,12 @@ export const RealtimeProvider = ({ children }: any) => {
         open: true,
         challengeId: data.challengeId,
         waiting: true,
-      })
-    })
+      });
+    });
     return () => {
-      socket.off("waiting-for-opponent")
-    }
-  }, [])
+      socket.off("waiting-for-opponent");
+    };
+  }, []);
 
   return (
     <RealtimeContext.Provider

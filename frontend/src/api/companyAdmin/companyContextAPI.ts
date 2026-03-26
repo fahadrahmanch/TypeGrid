@@ -30,4 +30,4 @@ export const deleteContest = (contestId: string) => {
 };
 export const fetchContestResults = (contestId: string) => {
   return companyAPI.get(`/company/contest/${contestId}/results`);
-}
+};

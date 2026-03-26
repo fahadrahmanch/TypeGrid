@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
-import { getUserDataApi } from "../../api/user/userService";
+import { logout } from "../../store/slices/auth/authSlice";
 import Logo from "../../assets/Icon/logo.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutApi } from "../../api/auth/authServices";
 const Navbar: React.FC = () => {
-  const user = useSelector((state:any) => state.userAuth.user);
-  
+  const { user, accessToken } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    await logoutApi();
+    dispatch(logout());
+  };
+
   return (
     <>
       <nav className="bg-white flex items-center justify-between w-full px-6 py-4 fixed top-0 left-0 z-50 shadow-sm h-20">
@@ -22,17 +29,27 @@ const Navbar: React.FC = () => {
             <p>Highscores</p>
           </div>
         </div>
-        <Link to="/profile">
-          <img
-            src={
-              user.imageUrl
-                ? user.imageUrl
-                : "https://via.placeholder.com/150"
-            }
-            alt="User"
-            className="w-14 h-14 rounded-full object-cover shadow cursor-pointer"
-          />
-        </Link>
+        <div className="flex items-center gap-4">
+          {accessToken && (
+            <button
+              onClick={handleLogout}
+              className="text-sm font-bold text-gray-600 hover:text-gray-900"
+            >
+              Logout
+            </button>
+          )}
+          <Link to="/profile">
+            <img
+              src={
+                user?.imageUrl
+                  ? user.imageUrl
+                  : "https://via.placeholder.com/150"
+              }
+              alt="User"
+              className="w-14 h-14 rounded-full object-cover shadow cursor-pointer"
+            />
+          </Link>
+        </div>
       </nav>
     </>
   );

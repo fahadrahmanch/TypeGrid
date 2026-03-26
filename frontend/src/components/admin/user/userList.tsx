@@ -57,8 +57,8 @@ const UserList: React.FC = () => {
     const total = response?.data?.total;
 
     const totalPages = Math.ceil(total / limit);
-    setTotalPages(totalPages)
-    setUsers(users)
+    setTotalPages(totalPages);
+    setUsers(users);
   };
 
 
@@ -203,16 +203,16 @@ const UserList: React.FC = () => {
                       } else {
                         // Logic for ellipses
                         if (page <= 4) {
-                          pages.push(1, 2, 3, 4, 5, '...', totalPages);
+                          pages.push(1, 2, 3, 4, 5, "...", totalPages);
                         } else if (page >= totalPages - 3) {
-                          pages.push(1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+                          pages.push(1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
                         } else {
-                          pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
+                          pages.push(1, "...", page - 1, page, page + 1, "...", totalPages);
                         }
                       }
 
                       return pages.map((p, idx) => (
-                        p === '...' ? (
+                        p === "..." ? (
                           <span key={`ellipsis-${idx}`} className="w-10 h-10 flex items-center justify-center text-gray-400 font-bold">
                             ...
                           </span>

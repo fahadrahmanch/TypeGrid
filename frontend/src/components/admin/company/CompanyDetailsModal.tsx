@@ -110,9 +110,9 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
                 <div className="flex items-center gap-3 text-gray-800 font-bold bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
                   <Calendar className="w-4 h-4 text-[#ECA468]" />
                   {new Date(company.createdAt).toLocaleDateString(undefined, {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
                   })}
                 </div>
               </div>

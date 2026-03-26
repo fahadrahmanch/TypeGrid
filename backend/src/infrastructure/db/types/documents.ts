@@ -266,5 +266,15 @@ export interface IStatsDocument  {
   updatedAt: Date;
 }
 
+export interface ICompanyUserStatsDocument {
+  _id?: Types.ObjectId;
+  userId: Types.ObjectId;
+  companyId: Types.ObjectId;
+  wpm: number;
+  accuracy: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 
 

@@ -257,7 +257,7 @@ const Goals: React.FC = () => {
                                                 <div className="flex flex-col items-center">
                                                     <div className="flex items-center gap-1.5 mb-0.5">
                                                         <Zap className="w-3.5 h-3.5 text-amber-500" />
-                                                        <span className="text-sm font-black text-gray-900">{goal.wpm || '-'}</span>
+                                                        <span className="text-sm font-black text-gray-900">{goal.wpm || "-"}</span>
                                                     </div>
                                                     <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">WPM</span>
                                                 </div>
@@ -266,7 +266,7 @@ const Goals: React.FC = () => {
                                                 <div className="flex flex-col items-center">
                                                     <div className="flex items-center gap-1.5 mb-0.5">
                                                         <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
-                                                        <span className="text-sm font-black text-gray-900">{goal.accuracy || '-'}%</span>
+                                                        <span className="text-sm font-black text-gray-900">{goal.accuracy || "-"}%</span>
                                                     </div>
                                                     <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">ACC</span>
                                                 </div>

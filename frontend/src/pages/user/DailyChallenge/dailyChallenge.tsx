@@ -79,7 +79,7 @@ const DailyChallenge: React.FC = () => {
   useEffect(()=>{
     const fetchTodayChallenge = async()=>{
       try{
-        const response = await TodayChallenge()
+        const response = await TodayChallenge();
         console.log("Challenge Data:", response.data.data);
         setChallenge(response.data.data);
       }catch(error){
@@ -87,21 +87,21 @@ const DailyChallenge: React.FC = () => {
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchTodayChallenge();
-  },[])
+  },[]);
 
   useEffect(()=>{
     const fetchChallengeStatistics = async()=>{
       try{
-        const response = await ChallengeStatistics()
+        const response = await ChallengeStatistics();
         setStats(response.data.data);
       }catch(error){
         console.log(error);
       }
-    }
+    };
     fetchChallengeStatistics();
-  },[])
+  },[]);
 
   return (
     <div className="min-h-screen bg-[#FFF8EA] text-gray-900 font-sans pb-12">
@@ -120,12 +120,12 @@ const DailyChallenge: React.FC = () => {
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-80">
                   <div className="w-40 h-54 bg-white shadow-xl rotate-[-2deg] flex items-center justify-center border-l border-t border-gray-100">
                     <span className="text-8xl font-black text-gray-200">
-                      {challenge?.challengeId.difficulty === 'hard' ? 'H' : 
-                       challenge?.challengeId.difficulty === 'medium' ? 'M' : 'E'}
+                      {challenge?.challengeId.difficulty === "hard" ? "H" : 
+                       challenge?.challengeId.difficulty === "medium" ? "M" : "E"}
                     </span>
                     <div className="absolute bottom-8 w-24 h-16 bg-[#ECA468]/10 rounded-lg flex flex-wrap gap-1 p-2">
                         {Array.from({length: 12}).map((_, i) => (
-                            <div key={i} className={`w-3 h-1 rounded-full ${i < (challenge?.reward.xp ? Math.min(i+1, 12) : 0) ? 'bg-[#ECA468]/50' : 'bg-[#ECA468]/10'}`} />
+                            <div key={i} className={`w-3 h-1 rounded-full ${i < (challenge?.reward.xp ? Math.min(i+1, 12) : 0) ? "bg-[#ECA468]/50" : "bg-[#ECA468]/10"}`} />
                         ))}
                     </div>
                   </div>
@@ -145,15 +145,15 @@ const DailyChallenge: React.FC = () => {
                 <>
                   <div className="flex items-center gap-3 mb-4">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                      challenge?.challengeId.difficulty === 'hard' ? 'bg-red-100 text-red-600' : 
-                      challenge?.challengeId.difficulty === 'medium' ? 'bg-orange-100 text-orange-600' : 
-                      'bg-emerald-100 text-emerald-600'
+                      challenge?.challengeId.difficulty === "hard" ? "bg-red-100 text-red-600" : 
+                      challenge?.challengeId.difficulty === "medium" ? "bg-orange-100 text-orange-600" : 
+                      "bg-emerald-100 text-emerald-600"
                     }`}>
-                      {challenge?.challengeId.difficulty || 'Normal'}
+                      {challenge?.challengeId.difficulty || "Normal"}
                     </span>
                     <span className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                       <Clock className="w-3.5 h-3.5" />
-                      {challenge?.challengeId.duration ? `${Math.floor(challenge.challengeId.duration / 60)}m` : '2m'}
+                      {challenge?.challengeId.duration ? `${Math.floor(challenge.challengeId.duration / 60)}m` : "2m"}
                     </span>
                   </div>
 
@@ -210,7 +210,7 @@ const DailyChallenge: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-7 gap-2 mb-4 text-center">
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
                 <span key={d} className="text-[10px] font-black uppercase text-gray-400 tracking-widest">{d}</span>
               ))}
             </div>
@@ -219,15 +219,15 @@ const DailyChallenge: React.FC = () => {
               {/* March 2022 started on Tuesday (Wait, actually March 1 2022 was Tue) */}
               {Array.from({length: 2}).map((_, i) => <div key={`empty-${i}`} />)}
               {marchDays.map(d => {
-                const dateStr = `2026-03-${d.toString().padStart(2, '0')}`;
+                const dateStr = `2026-03-${d.toString().padStart(2, "0")}`;
                 const status = stats?.calendarData[dateStr];
                 const isSuccess = status === "completed";
                 const isFail = status === "missed";
                 return (
                   <div key={d} className={`aspect-square flex items-center justify-center text-xs font-black rounded-lg transition-all
-                    ${isSuccess ? 'bg-emerald-500 text-white shadow-sm' : 
-                      isFail ? 'bg-red-500 text-white shadow-sm' : 
-                      'text-gray-600 hover:bg-white/60'}`}
+                    ${isSuccess ? "bg-emerald-500 text-white shadow-sm" : 
+                      isFail ? "bg-red-500 text-white shadow-sm" : 
+                      "text-gray-600 hover:bg-white/60"}`}
                   >
                     {d}
                   </div>

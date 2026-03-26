@@ -1,9 +1,6 @@
 // src/config/authConfig.ts
-
 import { userRefreshAPI, adminRefreshAPI, companyRefreshAPI } from "../api/auth/authServices";
-import { setuserAccessToken, setUserAuthLoaded, logout as    userLogout } from "../store/slices/auth/userAuthSlice";
-import { setAdminAccessToken, setAdminAuthLoaded, logout as adminLogout } from "../store/slices/auth/adminAuthSlice";
-import { setcompanyAccessToken, setCompanyAuthLoaded, logout as companyLogout } from "../store/slices/auth/companyAuthSlice";
+import {setAccessToken, setAuthLoaded, logout } from "../store/slices/auth/authSlice";
 
 export const authConfig: Record<string, {
   refreshFn: () => Promise<any>;
@@ -13,21 +10,20 @@ export const authConfig: Record<string, {
 }> = {
   admin: {
     refreshFn: adminRefreshAPI,
-    setToken: setAdminAccessToken,
-    setLoaded: setAdminAuthLoaded,
-    logout: adminLogout,
-    
+    setToken: setAccessToken,    
+    setLoaded: setAuthLoaded,    
+    logout: logout,              
   },
   company: {
     refreshFn: companyRefreshAPI,
-    setToken: setcompanyAccessToken,
-    setLoaded: setCompanyAuthLoaded,
-    logout: companyLogout,
+    setToken: setAccessToken,    
+    setLoaded: setAuthLoaded,    
+    logout: logout,              
   },
   user: {
     refreshFn: userRefreshAPI,
-    setToken: setuserAccessToken,
-    setLoaded: setUserAuthLoaded,
-    logout: userLogout,
+    setToken: setAccessToken,    
+    setLoaded: setAuthLoaded,    
+    logout: logout,              
   },
 };

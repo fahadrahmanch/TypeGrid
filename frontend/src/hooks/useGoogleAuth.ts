@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
 import { googleAuthApi } from "../api/auth/authServices";
-import { setuserAccessToken } from "../store/slices/auth/userAuthSlice";
+import { setAccessToken } from "../store/slices/auth/authSlice";
 import { GoogleJwtPayload } from "../types/auth";
 
 export const useGoogleAuth = () => {
@@ -31,7 +31,7 @@ export const useGoogleAuth = () => {
         throw new Error("Something went wrong. Please try again");
       }
 
-      dispatch(setuserAccessToken({ accessToken }));
+      dispatch(setAccessToken({ user, accessToken }));
       navigate("/");
       toast.success(res?.data.message);
     } catch (error) {

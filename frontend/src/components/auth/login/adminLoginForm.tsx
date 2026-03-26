@@ -7,7 +7,7 @@ import {
 import { adminSigninApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { setAdminAccessToken } from "../../../store/slices/auth/adminAuthSlice";
+import { setAccessToken } from "../../../store/slices/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -53,7 +53,7 @@ const AdminLoginForm: React.FC = () => {
       if (!accessToken || !admin) {
         throw new Error("Something went wrong. Please try again");
       }
-      dispatch(setAdminAccessToken({ admin, accessToken }));
+      dispatch(setAccessToken({ accessToken, user: response?.data?.user }));
       navigate("/admin/users");
       toast.success(response.data.message);
     } catch (error: any) {

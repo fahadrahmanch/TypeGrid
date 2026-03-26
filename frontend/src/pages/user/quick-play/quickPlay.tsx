@@ -53,7 +53,7 @@ const QuickPlay: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const gameData = location.state?.gameData;
-  const user = useSelector((state: any) => state.userAuth.user);
+  const user = useSelector((state: any) => state.auth.user);
   const players = gameData?.participants;
   const [typedText, setTypedText] = useState("");
   const [isFinished, setIsfinished] = useState(false);

@@ -40,7 +40,7 @@ const GroupLobby: React.FC = () => {
   const inviteLink = `http://localhost:5173/group-play/group/${group?.joinLink}`;
   const [isBlurred, setIsBlurred] = useState(true);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const user = useSelector((state: any) => state.userAuth.user);
+  const { user } = useSelector((state: any) => state.auth);
   const [countDown, setCountDown] = useState<string>();
   const isStartingGameRef = useRef(false);
 

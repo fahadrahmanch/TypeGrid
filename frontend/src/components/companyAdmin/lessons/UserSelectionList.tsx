@@ -92,7 +92,7 @@ const UserSelectionList: React.FC<UserSelectionListProps> = ({
                     <p className={`text-[10px] uppercase font-bold tracking-widest transition-colors ${
                       isSelected ? "text-white/70" : "text-gray-400"
                     }`}>
-                      {user.email || (typeof user.progress === 'string' ? user.progress : 'Student')}
+                      {user.email || (typeof user.progress === "string" ? user.progress : "Student")}
                     </p>
                   </div>
                 </button>

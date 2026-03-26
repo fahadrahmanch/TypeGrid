@@ -5,7 +5,7 @@ export async function sendChallengeApi(userId: string) {
 }
 
 export async function checkalreadySendChallenge() {
-  return companyAPI.get(`/challenge/check-challenge-sent`);
+  return companyAPI.get("/challenge/check-challenge-sent");
 }
 export async function companyUsers() {
   return companyAPI.get("/company/users");

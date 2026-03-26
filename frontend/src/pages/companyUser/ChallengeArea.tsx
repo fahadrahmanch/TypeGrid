@@ -3,7 +3,6 @@ import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNa
 import { ClipboardEvent, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getChallengeGameData } from "../../api/companyUser/challenge";
-import { socket } from "../../socket";
 import { useSelector } from "react-redux";
 import { useChallengeSocket } from "../../hooks/companyUser/useChallengeSocket";
 import { useChallengeKeydown } from "../../hooks/companyUser/useChallengeKeydown";
@@ -114,7 +113,7 @@ export default function ChallengeArea() {
   const snippetContainerRef = useRef<HTMLDivElement>(null);
   const [totalTyped, setTotalTyped] = useState(0);
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
-  const user = useSelector((state: any) => state.companyAuth.user);
+  const user = useSelector((state: any) => state.auth.user);
 
   const [hasError, setHasError] = useState(false);
 

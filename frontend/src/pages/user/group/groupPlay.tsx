@@ -83,7 +83,7 @@ const GroupPlay: React.FC = () => {
   const [typedText, setTypedText] = useState("");
   const [isFinished, setIsfinished] = useState(false);
 
-  const user = useSelector((state: any) => state.userAuth.user);
+  const user = useSelector((state: any) => state.auth.user);
   const [countdown, setCountdown] = useState<number>(gameData?.countDown || 10);
   const [remainingTime, setRemainingTime] = useState<number>(
     gameData?.duration || 300,

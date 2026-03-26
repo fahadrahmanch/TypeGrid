@@ -20,9 +20,9 @@ import {
 } from "../../api/admin/lessons";
 const Lessons: React.FC = () => {
   const [isOpen, setOpen] = useState(false);
-  const [searchText,setSearchText]=useState('')
-  const [filter,setFilter]=useState('All')
-  const [limit]=useState(5)
+  const [searchText,setSearchText]=useState("");
+  const [filter,setFilter]=useState("All");
+  const [limit]=useState(5);
   const [values, setValues] = useState({
     title: "",
     level: "",
@@ -179,7 +179,7 @@ const Lessons: React.FC = () => {
     try {
       const response = await fetchLesson(lessonId);
       if (!response) return;
-      const data=response.data.data
+      const data=response.data.data;
       setEditValues({id:data.id,title:data.title,level:data.level,category:data.category,wpm:data.targetWpm,accuracy:data.targetAccuracy,text:data.text});
       setEditOpen(true);
     } catch (error: any) {
@@ -308,9 +308,9 @@ const Lessons: React.FC = () => {
                       <tr key={lesson.id} className="group hover:bg-white/40 transition-all">
                         <td className="py-5 px-4">
                           <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border
-                            ${lesson.level === 'beginner' || lesson.level === 'easy' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
-                              lesson.level === 'intermediate' || lesson.level === 'medium' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
-                              'bg-orange-50 text-[#D0864B] border-orange-100'}`}>
+                            ${lesson.level === "beginner" || lesson.level === "easy" ? "bg-emerald-50 text-emerald-600 border-emerald-100" : 
+                              lesson.level === "intermediate" || lesson.level === "medium" ? "bg-amber-50 text-amber-600 border-amber-100" : 
+                              "bg-orange-50 text-[#D0864B] border-orange-100"}`}>
                             {lesson.level}
                           </span>
                         </td>
@@ -325,12 +325,12 @@ const Lessons: React.FC = () => {
                         <td className="py-5 px-4 text-center">
                           <div className="flex items-center justify-center gap-3">
                             <div className="flex flex-col items-center">
-                              <span className="text-[10px] text-gray-400 font-bold uppercase">{lesson.targetWpm || '-'}</span>
+                              <span className="text-[10px] text-gray-400 font-bold uppercase">{lesson.targetWpm || "-"}</span>
                               <span className="text-[9px] text-[#D0864B] font-bold uppercase tracking-tighter">WPM</span>
                             </div>
                             <div className="w-[1px] h-4 bg-gray-100"></div>
                             <div className="flex flex-col items-center">
-                              <span className="text-[10px] text-gray-400 font-bold uppercase">{lesson.targetAccuracy || '-'}%</span>
+                              <span className="text-[10px] text-gray-400 font-bold uppercase">{lesson.targetAccuracy || "-"}%</span>
                               <span className="text-[9px] text-emerald-500 font-bold uppercase tracking-tighter">ACC</span>
                             </div>
                           </div>

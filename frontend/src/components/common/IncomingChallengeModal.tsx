@@ -11,7 +11,7 @@ const IncomingChallengeModal = () => {
 
   const { challenge } = incomingChallenge;
   const handleAccept = async() => {
-   const response = await challengeAccept(challenge?.challenge?.id)
+   const response = await challengeAccept(challenge?.challenge?.id);
      if (response?.data?.success) {
            socket.emit("challenge-accepted", {
                     challengeId:challenge?.challenge?.id,

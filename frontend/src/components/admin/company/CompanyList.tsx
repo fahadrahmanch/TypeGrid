@@ -110,9 +110,9 @@ const CompanyList: React.FC = () => {
                         </td>
                         <td className="py-5 px-4 hidden sm:table-cell text-xs font-semibold text-gray-400">
                           {new Date(item?.createdAt).toLocaleDateString(undefined, {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric"
                           })}
                         </td>
                         <td className="py-5 px-4 text-center">

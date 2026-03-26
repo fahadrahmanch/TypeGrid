@@ -116,7 +116,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                     value={values.name}
                     onChange={handleChange}
                     placeholder="e.g. Alexander Pierce"
-                    className={`w-full px-6 py-4 bg-white border ${error.name ? 'border-rose-300' : 'border-[#ECA468]/20'} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
+                    className={`w-full px-6 py-4 bg-white border ${error.name ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
                   />
                   {error.name && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-rose-500">
@@ -140,7 +140,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                     value={values.email}
                     onChange={handleChange}
                     placeholder="student@university.edu"
-                    className={`w-full px-6 py-4 bg-white border ${error.email ? 'border-rose-300' : 'border-[#ECA468]/20'} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
+                    className={`w-full px-6 py-4 bg-white border ${error.email ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
                   />
                   {error.email && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-rose-500">
@@ -164,7 +164,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                   name="password"
                   value={values.password}
                   onChange={handleChange}
-                  className={`w-full px-6 py-4 bg-white border ${error.password ? 'border-rose-300' : 'border-[#ECA468]/20'} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
+                  className={`w-full px-6 py-4 bg-white border ${error.password ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
                 />
                 <ShieldCheck size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500" />
               </div>

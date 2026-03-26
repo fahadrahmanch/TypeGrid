@@ -33,9 +33,9 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
       setIsLoading(true);
       setError(null);
       try {
-      const response=await fetchContestResults(contestId)
-      const data=response.data.data
-      setResults(data)
+      const response=await fetchContestResults(contestId);
+      const data=response.data.data;
+      setResults(data);
       } catch (err: any) {
      
         setError("An error occurred while fetching results.");
@@ -140,7 +140,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                   <div
                     key={result.userId || index}
                     className={`grid grid-cols-12 gap-4 px-6 py-4 rounded-xl border items-center transition-all duration-200 hover:shadow-md
-                      ${isTop3 ? 'bg-white border-[#FADDB8] shadow-sm' : 'bg-gray-50/50 border-gray-100 hover:bg-white'}`}
+                      ${isTop3 ? "bg-white border-[#FADDB8] shadow-sm" : "bg-gray-50/50 border-gray-100 hover:bg-white"}`}
                   >
                     {/* Rank */}
                     <div className="col-span-1 flex justify-center">
@@ -157,11 +157,11 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                         />
                       ) : (
                         <div className="w-10 h-10 rounded-full bg-[#FFF4EC] text-[#D0864B] flex items-center justify-center font-bold text-sm border-2 border-white shadow-sm">
-                          {result.name?.charAt(0) || '?'}
+                          {result.name?.charAt(0) || "?"}
                         </div>
                       )}
                       <div>
-                        <p className={`font-bold text-sm ${isTop3 ? 'text-gray-900' : 'text-gray-700'}`}>
+                        <p className={`font-bold text-sm ${isTop3 ? "text-gray-900" : "text-gray-700"}`}>
                           {result.name || "Unknown Player"}
                         </p>
                         <p className="text-xs text-gray-500 font-medium">
@@ -172,7 +172,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
 
                     {/* WPM */}
                     <div className="col-span-2 flex flex-col items-center justify-center">
-                      <span className={`text-xl font-black ${isTop3 ? 'text-[#D0864B]' : 'text-gray-900'} leading-none mb-0.5`}>
+                      <span className={`text-xl font-black ${isTop3 ? "text-[#D0864B]" : "text-gray-900"} leading-none mb-0.5`}>
                         {result.wpm}
                       </span>
                       <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">WPM</span>
@@ -180,7 +180,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
 
                     {/* Accuracy */}
                     <div className="col-span-2 flex flex-col items-center justify-center">
-                      <span className={`text-lg font-bold ${isTop3 ? 'text-emerald-500' : 'text-gray-700'} leading-none mb-0.5`}>
+                      <span className={`text-lg font-bold ${isTop3 ? "text-emerald-500" : "text-gray-700"} leading-none mb-0.5`}>
                         {result.accuracy || 0}%
                       </span>
                       <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Acc</span>
@@ -190,10 +190,10 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                     <div className="col-span-3 flex justify-end items-center">
                       {(result.prize || prize) ? (
                         <div className={`px-3 py-1.5 rounded-lg font-bold text-sm flex items-center gap-1.5 whitespace-nowrap
-                          ${rank === 1 ? 'bg-yellow-50 text-yellow-700 border border-yellow-200 shadow-sm' : 
-                            rank === 2 ? 'bg-gray-100 text-gray-700 border border-gray-200' : 
-                            rank === 3 ? 'bg-amber-50 text-amber-700 border border-amber-200' :
-                            'bg-green-50 text-green-700 border border-green-200'}`}
+                          ${rank === 1 ? "bg-yellow-50 text-yellow-700 border border-yellow-200 shadow-sm" : 
+                            rank === 2 ? "bg-gray-100 text-gray-700 border border-gray-200" : 
+                            rank === 3 ? "bg-amber-50 text-amber-700 border border-amber-200" :
+                            "bg-green-50 text-green-700 border border-green-200"}`}
                         >
                           <span className="opacity-80">🏆</span> {result.prize || prize}
                         </div>
