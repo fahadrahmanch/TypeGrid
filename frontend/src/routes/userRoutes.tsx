@@ -22,6 +22,9 @@ import GroupPlay from "../pages/user/group/groupPlay";
 import SoloPlay from "../pages/user/solo/SoloPlay";
 import QuickPlay from "../pages/user/quick-play/quickPlay";
 import ChangePassword from "../pages/user/changePassword";
+import DailyChallenge from "../pages/user/DailyChallenge/dailyChallenge";
+import DailyChallengeArea from "../pages/user/DailyChallenge/dailyChallengeArea";
+
 export default function UserRoutes() {
   const location = useLocation();
 
@@ -62,6 +65,10 @@ export default function UserRoutes() {
 
         {/* Quick */}
         <Route path="quick-play" element={<QuickPlay />} />
+
+        {/* Daily Challenge */}
+        <Route path="daily-challenge" element={<DailyChallenge />} />
+        <Route path="daily-challenge/:id" element={<DailyChallengeArea />} />
       </Route>
 
     </Routes>
