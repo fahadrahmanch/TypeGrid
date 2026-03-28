@@ -232,7 +232,7 @@ export interface IDailyChallengeDocument {
   createdAt?: Date;
   updatedAt?: Date;
 }
-export interface IUserStreakDocument  {
+export interface IStreakDocument  {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   currentStreak: number;
@@ -270,10 +270,13 @@ export interface ICompanyUserStatsDocument {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   companyId: Types.ObjectId;
+  totalScore: number;
+  weeklyScore: number;
+  monthlyScore: number;
   wpm: number;
   accuracy: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 

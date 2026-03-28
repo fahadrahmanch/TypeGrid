@@ -177,5 +177,6 @@ export const Routes = {
     GET_CHALLENGES: "/challenges",
     CHALLENGE_ACCEPT: "/challenge/accept/:challengeId",
     GET_CHALLENGE_GAME_DATA: "/challenge/game-data/:challengeId",
+    LEADERBOARD: "/leaderboard/:limit",
   },
 };

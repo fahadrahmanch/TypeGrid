@@ -16,7 +16,6 @@ export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDoma
       populate?: { path: string; select?: string };
     },
   ): Promise<TDomain[]> {
-    console.log("filter",filter)
     let query = this.model.find(filter);
     if (options?.populate) {
       query = query.populate(options.populate.path, options.populate.select);

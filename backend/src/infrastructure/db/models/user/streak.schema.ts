@@ -1,11 +1,11 @@
-// src/infrastructure/database/models/user-streak.model.ts
+// src/infrastructure/database/models/streak.model.ts
 
 import mongoose, { Schema, Document } from 'mongoose';
-import { IUserStreakDocument } from '../../types/documents';
+import { IStreakDocument } from '../../types/documents';
 
 
 
-const UserStreakSchema = new Schema<IUserStreakDocument>(
+const StreakSchema = new Schema<IStreakDocument>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
     currentStreak: { type: Number, default: 0 },
@@ -15,7 +15,7 @@ const UserStreakSchema = new Schema<IUserStreakDocument>(
   { timestamps: true }
 );
 
-export const UserStreak = mongoose.model<IUserStreakDocument>(
-  'UserStreak',
-  UserStreakSchema
+export const Streak = mongoose.model<IStreakDocument>(
+  'Streak',
+  StreakSchema
 );

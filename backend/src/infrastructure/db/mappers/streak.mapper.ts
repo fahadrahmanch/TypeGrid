@@ -1,9 +1,9 @@
-import { IUserStreakDocument } from "../types/documents";
-import { UserStreakEntity } from "../../../domain/entities/user-streak.entity";
+import { IStreakDocument } from "../types/documents";
+import { StreakEntity } from "../../../domain/entities/streak.entity";
 
-export class UserStreakMapper {
-  static toDomain(doc: IUserStreakDocument): UserStreakEntity {
-    return new UserStreakEntity({
+export class StreakMapper {
+  static toDomain(doc: IStreakDocument): StreakEntity {
+    return new StreakEntity({
       _id: doc._id?.toString() ?? "",
       userId: doc.userId.toString(),
       currentStreak: doc.currentStreak,

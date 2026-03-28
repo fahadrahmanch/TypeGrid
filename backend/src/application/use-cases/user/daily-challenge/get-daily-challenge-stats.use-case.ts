@@ -1,13 +1,13 @@
 import { DailyChallengeStatsDTO } from "../../../DTOs/user/daily-challenge-stats.dto";
 import { IGetDailyChallengeStatsUseCase } from "../../interfaces/user/daily-challenge/get-daily-challenge-stats.interface";
 import { IDailyChallengeProgressRepository } from "../../../../domain/interfaces/repository/user/daily-challenge-progress-repository.interface";
-import { IUserStreakRepository } from "../../../../domain/interfaces/repository/user/user-streak-repository.interface";
+import { IStreakRepository } from "../../../../domain/interfaces/repository/user/streak-repository.interface";
 import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
 
 export class GetDailyChallengeStatsUseCase implements IGetDailyChallengeStatsUseCase {
   constructor(
     private readonly _dailyChallengeProgressRepository: IDailyChallengeProgressRepository,
-    private readonly _userStreakRepository: IUserStreakRepository,
+    private readonly _streakRepository: IStreakRepository,
     private readonly _dailyChallengeRepository: IDailyAssignChallengeRepository,
   ) { }
 
@@ -30,7 +30,7 @@ export class GetDailyChallengeStatsUseCase implements IGetDailyChallengeStatsUse
       date: { $gte: startOfMonth, $lte: endOfMonth }
     });
 
-    const streak = await this._userStreakRepository.findOne({ userId });
+    const streak = await this._streakRepository.findOne({ userId });
 
     const totalCompletedCount = await this._dailyChallengeProgressRepository.find({
       userId,

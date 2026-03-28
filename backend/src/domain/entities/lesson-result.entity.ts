@@ -5,6 +5,7 @@ export type LessonResultStatus =
   | "expired";
 
 export class LessonResult {
+  private readonly _id: string|undefined;
   private readonly companyId: string;
   private readonly assignmentId: string;
   private readonly userId: string;
@@ -19,6 +20,7 @@ export class LessonResult {
   private readonly createdAt: Date;
 
   constructor(params: {
+    _id?: string;
     companyId: string;
     assignmentId: string;
     userId: string;
@@ -32,7 +34,7 @@ export class LessonResult {
     if (params.wpm < 0) throw new Error("WPM cannot be negative");
     if (params.accuracy < 0 || params.accuracy > 100)
       throw new Error("Accuracy must be between 0 and 100");
-
+    this._id = params._id;
     this.companyId = params.companyId;
     this.assignmentId = params.assignmentId;
     this.userId = params.userId;
@@ -44,6 +46,10 @@ export class LessonResult {
     this.status = params.status;
 
     this.createdAt = params.createdAt ?? new Date();
+  }
+
+  getId() {
+    return this._id;
   }
 
   getCompanyId() {
@@ -92,6 +98,7 @@ export class LessonResult {
 
   toPersistence() {
     return {
+      _id: this._id,
       companyId: this.companyId,
       assignmentId: this.assignmentId,
       userId: this.userId,

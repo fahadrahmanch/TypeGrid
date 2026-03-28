@@ -155,7 +155,9 @@ export class ContestEntity {
       (p) => p.toString() !== userId.toString(),
     );
   }
-
+  getDifficulty(){
+    return this.difficulty;
+  }
   completeContest() {
     this.status = "completed";
   }

@@ -15,7 +15,6 @@ export class DailyChallengeController{
     async getTodayChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
         try {
             const dailyChallenge = await this._getTodayChallengeUseCase.execute();
-            console.log("daily challenge in controller",dailyChallenge)
             logger.info("Daily challenge fetched successfully", { userId:req.user?.userId, dailyChallengeId: dailyChallenge._id });
             res.status(HttpStatus.OK).json({
                 success: true,
@@ -29,21 +28,18 @@ export class DailyChallengeController{
     async dailyChallengeFinished(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
         try {
             const {wpm,accuracy} = req.body;
-            console.log("wpm",wpm,"accuracy",accuracy)
              await this._dailyChallengeFinishedUseCase.execute(req.user?.userId!,wpm!,accuracy!);
             res.status(HttpStatus.OK).json({
                 success: true,
                
             });
         } catch (error: any) {
-            console.log("error",error)
             next(error);
         }
     }
     async getStatistics(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
         try {
             const stats = await this._getDailyChallengeStatsUseCase.execute(req.user?.userId!);
-            console.log("stats",stats)
             res.status(HttpStatus.OK).json({
                 success: true,
                 message: "Daily challenge statistics fetched successfully",

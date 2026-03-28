@@ -19,13 +19,11 @@ export class MyLessonsController {
       const userId = req.user?.userId as string;
 
       const myLessons = await this._getMyLessonsUseCase.execute(userId);
-      console.log("my lessons",myLessons)
       res.status(HttpStatus.OK).json({
         success: true,
         data: myLessons,
       });
     } catch (error: any) {
-      console.log(error)
       next(error);
     } 
   }
@@ -88,6 +86,7 @@ export class MyLessonsController {
         message: "Lesson result saved successfully",
       });
     } catch (error: any) {
+      console.log("error",error)
       next(error);
     }
   }

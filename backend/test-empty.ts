@@ -23,7 +23,6 @@ import { User } from "./src/infrastructure/db/models/user/user.schema";
   }
 
   const afterGame = await Competition.findById(testGame._id);
-  console.log("Game after leave execution:", afterGame ? "EXISTS" : "GONE");
   if (afterGame) {
      console.log("Status:", afterGame.status);
      console.log("Participants:", afterGame.participants);  

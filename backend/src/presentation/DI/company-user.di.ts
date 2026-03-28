@@ -31,6 +31,12 @@ import { GetSentChallengeUseCase } from "../../application/use-cases/company-use
 import { GetChallengesUseCase } from "../../application/use-cases/company-user/challenges/get-challenges.use-case";
 import { AcceptChallengeUseCase } from "../../application/use-cases/company-user/challenges/accept-challenge.use-case";
 import { GetChallengeGameDataUseCase } from "../../application/use-cases/company-user/challenges/get-challenge-game-data.use-case";
+import { LeaderBoardController } from "../controllers/company-user/company-leaderboard.controller";
+import { CompanyUserStatsRepository } from "../../infrastructure/db/repositories/company/company-user-stats.repository";
+import { CompanyUserStats } from "../../infrastructure/db/models/company/company-user-stats.schema";
+import { GetCompanyLeaderboardUseCase } from "../../application/use-cases/company-user/stats/get-company-leaderboard.use-case";
+import { StreakRepository } from "../../infrastructure/db/repositories/user/streak.repository";
+import { Streak } from "../../infrastructure/db/models/user/streak.schema";
 
 const lessonAssignmentRepository = new LessonAssignmentRepository(
   LessonAssignment,
@@ -40,6 +46,7 @@ const lessonRepository = new LessonRepository(Lesson);
 const lessonResultRepository = new LessonResultRepository(LessonResult);
 const challengeRepository = new CompanyChallengeRepository(CompanyChallenge);
 const competitionRepository = new CompetitionRepository(Competition);
+const companyUserStatsRepository = new CompanyUserStatsRepository(CompanyUserStats);
 
 const getAssignLessonUseCaseInstance = new GetAssignLessonUseCase(
   lessonAssignmentRepository,
@@ -53,6 +60,8 @@ const getMyLessonsUseCaseInstance = new GetMyLessonsUseCase(
 const saveLessonResultUseCaseInstance = new SaveLessonResultUseCase(
   lessonResultRepository,
   lessonAssignmentRepository,
+  lessonRepository,
+  companyUserStatsRepository,
 );
 const contestRepositoryInstance = new ContestRepository(Contest);
 const getOpenContestsUseCaseInstance = new GetOpenContestsUseCase(
@@ -101,6 +110,11 @@ const getChallengeGameDataUseCaseInstance = new GetChallengeGameDataUseCase(
   lessonRepository,
 );
 
+const getCompanyLeaderboardUseCaseInstance = new GetCompanyLeaderboardUseCase(
+  companyUserStatsRepository,
+  userRepository,
+);
+
 export const injectChallengesController = new ChallengesController(
   getCompanyUsersUseCaseInstance,
   makeChallengeUseCaseInstance,
@@ -120,4 +134,7 @@ export const injectMyLessonsController = new MyLessonsController(
   getMyLessonsUseCaseInstance,
   getAssignLessonUseCaseInstance,
   saveLessonResultUseCaseInstance,
+);
+export const injectLeaderBoardController = new LeaderBoardController(
+  getCompanyLeaderboardUseCaseInstance,
 );

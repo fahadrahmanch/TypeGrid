@@ -22,7 +22,6 @@ export class GetTodayChallengeUseCase implements IGetTodayChallengeUseCase {
         const endOfDay = new Date(today);
         endOfDay.setHours(23, 59, 59, 999);
         const dailyChallenge = await this._dailyChallengeRepository.getTodayChallenge(startOfDay, endOfDay);
-        console.log("hy", dailyChallenge)
         if (!dailyChallenge) {
             throw new Error(MESSAGES.DAILY_CHALLENGE_NOT_FOUND);
         }

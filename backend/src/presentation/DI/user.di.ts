@@ -48,8 +48,8 @@ import { GoalRepository } from "../../infrastructure/db/repositories/admin/goal.
 import { Goal } from "../../infrastructure/db/models/admin/goal.schema";
 import { RewardRepository } from "../../infrastructure/db/repositories/admin/reward.repository";
 import { Reward } from "../../infrastructure/db/models/admin/reward.schema";
-import { UserStreakRepository } from "../../infrastructure/db/repositories/user/user-streak.repository";
-import { UserStreak } from "../../infrastructure/db/models/user/user-streak.schema";
+import { StreakRepository } from "../../infrastructure/db/repositories/user/streak.repository";
+import { Streak } from "../../infrastructure/db/models/user/streak.schema";
 import { DailyChallengeProgress } from "../../infrastructure/db/models/user/daily-challenge-progess.schema";
 import { DailyChallengeProgressRepository } from "../../infrastructure/db/repositories/user/daily-challenge-progress.repository";
 import { DailyChallengeFinishedUseCase } from "../../application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case";
@@ -172,12 +172,12 @@ export const injectUserController = new UserController(
 
 // daily challenge
 const dailyChallengeRepository = new DailyAssignChallengeRepository(DailyChallenge);
-const userStreakRepository = new UserStreakRepository(UserStreak);
+const streakRepository = new StreakRepository(Streak);
 const challengeRepository = new ChallengeRepository(AdminChallenge);
 const goalRepository = new GoalRepository(Goal);
 const dailyChallengeProgressRepository = new DailyChallengeProgressRepository(DailyChallengeProgress);
 const rewardRepository = new RewardRepository(Reward);
 const getTodayChallengeUseCaseInstance = new GetTodayChallengeUseCase(dailyChallengeRepository,challengeRepository,goalRepository,rewardRepository,lessonRepository);
-const dailyChallengeFinishedUseCaseInstance = new DailyChallengeFinishedUseCase(dailyChallengeRepository,challengeRepository,goalRepository,rewardRepository,dailyChallengeProgressRepository,userStreakRepository);
-const getDailyChallengeStatsUseCaseInstance = new GetDailyChallengeStatsUseCase(dailyChallengeProgressRepository, userStreakRepository, dailyChallengeRepository);
+const dailyChallengeFinishedUseCaseInstance = new DailyChallengeFinishedUseCase(dailyChallengeRepository,challengeRepository,goalRepository,rewardRepository,dailyChallengeProgressRepository,streakRepository);
+const getDailyChallengeStatsUseCaseInstance = new GetDailyChallengeStatsUseCase(dailyChallengeProgressRepository, streakRepository, dailyChallengeRepository);
 export const injectDailyChallengeController = new DailyChallengeController(getTodayChallengeUseCaseInstance,dailyChallengeFinishedUseCaseInstance, getDailyChallengeStatsUseCaseInstance);

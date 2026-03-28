@@ -32,7 +32,6 @@ export class GoalManageController {
         try {
             const {search,page,limit} = req.query;
             const goals = await this._getGoalsUseCase.execute(search as string,Number(page),Number(limit));
-            console.log("goals",goals.goals)
             logger.info("Goals fetched successfully", goals);
             res.status(200).json({
                 message: "Goals fetched successfully",

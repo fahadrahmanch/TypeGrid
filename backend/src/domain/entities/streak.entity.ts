@@ -1,4 +1,4 @@
-export type UserStreakProps = {
+export type StreakProps = {
   _id?: string;
   userId: string;
   currentStreak: number;
@@ -8,7 +8,7 @@ export type UserStreakProps = {
   updatedAt?: Date;
 };
 
-export class UserStreakEntity {
+export class StreakEntity {
   private _id?: string;
   private userId: string;
   private currentStreak: number;
@@ -17,7 +17,7 @@ export class UserStreakEntity {
   private createdAt?: Date;
   private updatedAt?: Date;
 
-  constructor(attrs: UserStreakProps) {
+  constructor(attrs: StreakProps) {
     this._id = attrs._id;
     this.userId = attrs.userId;
     this.currentStreak = attrs.currentStreak;

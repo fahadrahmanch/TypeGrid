@@ -4,6 +4,7 @@ import { checkRoleBasedMiddleware } from "../middlewares/check-role-based.middle
 import { injectMyLessonsController } from "../DI/company-user.di";
 import { injectContestController } from "../DI/company-user.di";
 import { injectChallengesController } from "../DI/company-user.di";
+import { injectLeaderBoardController } from "../DI/company-user.di";
 export class companyUserRoutes {
   private router: express.Router;
   constructor() {
@@ -109,6 +110,13 @@ export class companyUserRoutes {
       checkRoleBasedMiddleware(["companyAdmin", "companyUser"]),
       (req: Request, res: Response, next: NextFunction) => {
         injectChallengesController.getChallengeGameData(req, res, next);
+      },
+    );
+    this.router.get(
+      Routes.COMPANY_USER.LEADERBOARD,
+      checkRoleBasedMiddleware(["companyAdmin", "companyUser"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectLeaderBoardController.getLeaderboard(req, res, next);
       },
     );
   }

@@ -4,6 +4,7 @@ import { LessonResult } from "../../../domain/entities/lesson-result.entity";
 export class LessonResultMapper {
   static toDomain(doc: ILessonResultDocument): LessonResult {
     return new LessonResult({
+      _id: doc?._id?.toString(),
       companyId: doc?.companyId?.toString(),
       assignmentId: doc?.assignmentId?.toString(),
       userId: doc?.userId?.toString(),

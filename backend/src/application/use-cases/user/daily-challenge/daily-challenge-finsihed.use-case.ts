@@ -7,8 +7,8 @@ import { IChallengeRepository } from "../../../../domain/interfaces/repository/a
 import { IGoalRepository } from "../../../../domain/interfaces/repository/admin/goal-repository.interface";
 import { IRewardRepository } from "../../../../domain/interfaces/repository/admin/reward-repository.interface";
 import { DailyChallengeProgressEntity } from "../../../../domain/entities/daily-challenge-progress.entity";
-import { IUserStreakRepository } from "../../../../domain/interfaces/repository/user/user-streak-repository.interface";
-import { UserStreakEntity } from "../../../../domain/entities/user-streak.entity";
+import { IStreakRepository } from "../../../../domain/interfaces/repository/user/streak-repository.interface";
+import { StreakEntity } from "../../../../domain/entities/streak.entity";
 export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUseCase {
     constructor(
         private readonly _dailyChallengeRepository: IDailyAssignChallengeRepository,
@@ -16,10 +16,9 @@ export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUse
         private readonly _goalRepository: IGoalRepository,
         private readonly _rewardRepository: IRewardRepository,
         private readonly _dailyChallengeProgressRepository: IDailyChallengeProgressRepository,
-        private readonly _userStreakRepository: IUserStreakRepository,
+        private readonly _streakRepository: IStreakRepository,
     ) { }
     async execute(userId: string, wpm: number, accuracy: number): Promise<void> {
-        console.log("userId",userId,'wpm',wpm,'accuracy',accuracy)
         const today = new Date()
         const startOfDay = new Date(today);
         startOfDay.setHours(0, 0, 0, 0);
@@ -68,35 +67,35 @@ export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUse
             dailyChallengeProgress.setCompletedAt(today);
             await this._dailyChallengeProgressRepository.update(dailyChallengeProgress);
         }
-        if(isComplete){
-            const streak=await this._userStreakRepository.findOne({userId});
-            if(!streak){
-               const streak=new UserStreakEntity({
+        if (isComplete) {
+            const streak = await this._streakRepository.findOne({ userId });
+            if (!streak) {
+                const streak = new StreakEntity({
                     userId,
                     currentStreak: 1,
                     longestStreak: 1,
                     lastCompletedDate: today,
                 })
-                await this._userStreakRepository.create(streak);
-            }else{
+                await this._streakRepository.create(streak);
+            } else {
                 const fromDay = new Date(streak.getLastCompletedDate()!);
                 fromDay.setHours(0, 0, 0, 0);
                 const toDay = new Date(today);
                 toDay.setHours(0, 0, 0, 0);
                 const diffDays = Math.round((toDay.getTime() - fromDay.getTime()) / (1000 * 60 * 60 * 24));
 
-                if (diffDays === 0) return; 
+                if (diffDays === 0) return;
 
                 const newStreak = diffDays === 1
-                    ? streak.getCurrentStreak() + 1 
-                    : 1; 
+                    ? streak.getCurrentStreak() + 1
+                    : 1;
 
                 streak.setCurrentStreak(newStreak);
                 streak.setLongestStreak(Math.max(streak.getLongestStreak(), newStreak));
                 streak.setLastCompletedDate(today);
-                await this._userStreakRepository.update(streak);
+                await this._streakRepository.update(streak);
             }
         }
-        
+
     }
 }

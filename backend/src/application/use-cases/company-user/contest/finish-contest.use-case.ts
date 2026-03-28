@@ -1,11 +1,12 @@
 import { IFinishContestUseCase } from "../../interfaces/companyUser/finish-contest.interface";
 import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
 import { IResultRepository } from "../../../../domain/interfaces/repository/result-repository.interface";
+import { ICompanyUserStatsRepository } from "../../../../domain/interfaces/repository/company/company-user-stats-repository.interface";
 import { ResultEntity } from "../../../../domain/entities/result.entity";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
-
+import { updateCompanyUserStats } from "../../../services/company-user-stats.service";
 /**
  * Use case for finishing a contest and storing results.
  */
@@ -13,6 +14,7 @@ export class FinishContestUseCase implements IFinishContestUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
     private readonly _resultRepository: IResultRepository,
+    private readonly _statsRepository: ICompanyUserStatsRepository,
   ) {}
 
   /**
@@ -27,6 +29,7 @@ export class FinishContestUseCase implements IFinishContestUseCase {
     contest.completeContest();
 
     const rewards = contest.getRewards();
+    const companyId = contest.toObject().CompanyId;
 
     const finalResult = result.map((item) => {
       const reward = rewards.find((r) => r.rank === item.rank);
@@ -51,6 +54,18 @@ export class FinishContestUseCase implements IFinishContestUseCase {
         },
       });
       await this._resultRepository.create(resultEntity.toObject());
+      
+      if(companyId){
+        const score=await updateCompanyUserStats(res.wpm, Number(res.accuracy),contest.getDifficulty(), "contest");
+        await this._statsRepository.updateStats(companyId, res.userId, {
+          wpm: res.wpm,
+          accuracy: Number(res.accuracy),
+          totalScore: score,
+          weeklyScore: score,
+          monthlyScore: score,
+        });
+      }
+     
     }
 
     await this._contestRepository.update(contest.toObject());

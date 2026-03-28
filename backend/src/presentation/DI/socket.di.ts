@@ -23,12 +23,18 @@ import { CompanyChallenge } from "../../infrastructure/db/models/company/company
 import { CompanyChallengeRepository } from "../../infrastructure/db/repositories/company/company-challenge.repository";
 import { LeaveQuickPlayUseCase } from "../../application/use-cases/user/quick-play/leave-quick-play.use-case";
 import { SaveChallengeResultUseCase } from "../../application/use-cases/company-user/challenges/save-challenge-result.use.case";
+import { CompanyUserStats } from "../../infrastructure/db/models/company/company-user-stats.schema";
+import { CompanyUserStatsRepository } from "../../infrastructure/db/repositories/company/company-user-stats.repository";
+import { Lesson } from "../../infrastructure/db/models/admin/lesson.schema";
+import { LessonRepository } from "../../infrastructure/db/repositories/admin/lesson.repository";
 const competitionRepository = new CompetitionRepository(Competition);
 const groupRepository = new GroupRepository(Group);
 const userRepository = new UserRepository(User);
 const resultRepository = new ResultRepository(Result);
 const contestRepository = new ContestRepository(Contest);
 const challengeRepository = new CompanyChallengeRepository(CompanyChallenge);
+const companyUserStatsRepository = new CompanyUserStatsRepository(CompanyUserStats);
+const lessonRepository = new LessonRepository(Lesson);
 
 const removeMemberUseCase = new RemoveMemberGroupPlayGroupUseCase(
   groupRepository,
@@ -58,6 +64,7 @@ const leaveQuickPlayUseCaseInstance = new LeaveQuickPlayUseCase(
 const finishContestUseCaseInstance = new FinishContestUseCase(
   contestRepository,
   resultRepository,
+  companyUserStatsRepository,
 );
 const startChallengeUseCaseInstance = new StartChallengeUseCase(
   challengeRepository,
@@ -67,6 +74,8 @@ const saveChallengeResultUseCaseInstance = new SaveChallengeResultUseCase(
   challengeRepository,
   competitionRepository,
   resultRepository,
+  companyUserStatsRepository,
+  lessonRepository,
 );
 export const injectChallengeSocketController = new ChallengeSocketController(
   startChallengeUseCaseInstance,

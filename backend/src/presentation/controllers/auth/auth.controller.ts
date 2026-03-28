@@ -154,9 +154,7 @@ export class AuthController {
   async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { tokenName } = getRoleConfig(req.baseUrl);
-      console.log("tokenname",tokenName)
       const token = req.cookies[tokenName];
-      console.log("token",token)
 
       if (!token) {
         res.status(HttpStatus.UNAUTHORIZED).json({
@@ -347,7 +345,6 @@ export class AuthController {
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { tokenName, path } = getRoleConfig(req.baseUrl);
-      console.log("tokenName",tokenName)
       
       res.clearCookie(tokenName, { httpOnly: true, secure: true, sameSite: "strict", path });
       res.status(HttpStatus.OK).json({
