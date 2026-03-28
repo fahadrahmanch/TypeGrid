@@ -19,6 +19,7 @@ const CompanyUserNavbar: React.FC = () => {
   const navItems = [
     { name: "Dashboard", icon: House, path: "/company/user/dashboard" },
     { name: "Lessons", icon: BookOpen, path: "/company/user/lessons" },
+    { name: "Leaderboard", icon: Trophy, path: "/company/user/leaderboard" },
     { name: "Contests", icon: Trophy, path: "/company/user/contests" },
     {
       name: "Challenges",

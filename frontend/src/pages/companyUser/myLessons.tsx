@@ -10,7 +10,7 @@ import {
   PlayCircle,
   Circle,
 } from "lucide-react";
-import StreakModal from "../../components/companyUser/lessons/StreakModal";
+// import StreakModal from "../../components/companyUser/lessons/StreakModal";
 import { toast } from "react-toastify";
 import { myLessons } from "../../api/companyUser/lessons";
 import { useNavigate } from "react-router-dom";
@@ -150,13 +150,13 @@ const MyLessons: React.FC = () => {
               {MyLessons?.total} lessons assigned
             </p>
           </div>
-          <button
+          {/* <button
             onClick={() => setIsStreakModalOpen(true)}
             className="flex items-center gap-2 bg-[#B09886] hover:bg-[#967d6c] text-white px-5 py-2.5 rounded-xl transition-colors shadow-sm"
           >
             <Trophy className="w-4 h-4" />
             <span className="text-sm font-semibold">View Streak</span>
-          </button>
+          </button> */}
         </div>
 
         {/* Progress Bar Section */}
@@ -317,10 +317,10 @@ const MyLessons: React.FC = () => {
       </main>
 
       {/* Streak Modal */}
-      <StreakModal
+      {/* <StreakModal
         isOpen={isStreakModalOpen}
         onClose={() => setIsStreakModalOpen(false)}
-      />
+      /> */}
     </div>
   );
 };

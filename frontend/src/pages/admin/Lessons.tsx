@@ -21,8 +21,10 @@ import {
 const Lessons: React.FC = () => {
   const [isOpen, setOpen] = useState(false);
   const [searchText,setSearchText]=useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(searchText);
   const [filter,setFilter]=useState("All");
   const [limit]=useState(5);
+  const [page, setPage] = useState(1);
   const [values, setValues] = useState({
     title: "",
     level: "",
@@ -62,10 +64,19 @@ const Lessons: React.FC = () => {
   const [lessons, setLessons] = useState<any[]>([]);
   const [isEditOpen, setEditOpen] = useState(false);
 
-  useEffect(() => {
+   useEffect(() => {
+          const timer = setTimeout(() => {
+              setDebouncedSearch(searchText);
+              setPage(1);
+          }, 500);
+          return () => clearTimeout(timer);
+      }, [searchText]);
+      useEffect(() => {
+          fetchLessons();
+      }, [debouncedSearch, page]);
     const fetchLessons = async () => {
       try {
-        const response = await LessonsAPI(searchText,filter,limit,1);
+        const response = await LessonsAPI(debouncedSearch,filter,limit,page);
         if (response && response.data.data) {
           setLessons(response.data.data);
         }
@@ -74,7 +85,6 @@ const Lessons: React.FC = () => {
       }
     };
     fetchLessons();
-  }, []);
 
   function handleChange(e: any) {
     const { name, value } = e.target;

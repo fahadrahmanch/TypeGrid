@@ -13,8 +13,18 @@ const CompanyList: React.FC = () => {
   const [limit] = useState(8);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
+      const [debouncedSearch, setDebouncedSearch] = useState(searchText);
+  
+   useEffect(() => {
+         const timer = setTimeout(() => {
+             setDebouncedSearch(searchText);
+             setPage(1);
+         }, 500);
+         return () => clearTimeout(timer);
+     }, [searchText]);
+     useEffect(() => {
+         fetchCompanies();
+     }, [debouncedSearch, page]);
     async function fetchCompanies() {
       try {
         const res = await companies(searchText,status,page, limit);
@@ -27,7 +37,6 @@ const CompanyList: React.FC = () => {
       }
     }
     fetchCompanies();
-  }, [searchText,status,page, limit]);
 
  
   return (

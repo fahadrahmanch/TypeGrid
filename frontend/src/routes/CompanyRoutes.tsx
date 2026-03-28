@@ -20,6 +20,7 @@ import ContestLobby from "../pages/companyUser/contestLobby";
 import ContestArea from "../pages/companyUser/contestArea";
 import Challenge from "../pages/companyUser/challenge";
 import ChallengeArea from "../pages/companyUser/ChallengeArea";
+import CompanyLeaderBoard from "../pages/companyUser/companyLeaderBoard";
 
 export default function CompanyRoutes() {
   return (
@@ -48,6 +49,7 @@ export default function CompanyRoutes() {
         <Route path="user/lessons" element={<MyLessons />} />
         <Route path="user/contests" element={<Contests />} />
         <Route path="user/challenges" element={<Challenge />} />
+        <Route path="user/leaderboard" element={<CompanyLeaderBoard />} />
         <Route path="user/challenge/:challengeId" element={<ChallengeArea />} />
         <Route path="user/contests/lobby/:contestId" element={<ContestLobby />} />
         <Route path="user/contest/:contestId" element={<ContestArea />} />
