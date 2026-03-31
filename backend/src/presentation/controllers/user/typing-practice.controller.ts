@@ -37,7 +37,7 @@ export class TypingPracticeController {
         message: MESSAGES.FETCH_SUCCESS,
         lesson,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -66,7 +66,7 @@ export class TypingPracticeController {
         message: MESSAGES.FETCH_SUCCESS,
         lesson,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

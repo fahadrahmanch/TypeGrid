@@ -23,7 +23,7 @@ export class GoalManageController {
                 message: "Goal created successfully",
                 goal
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -40,7 +40,7 @@ export class GoalManageController {
                 
                 
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -53,7 +53,7 @@ export class GoalManageController {
                 message: "Goal fetched successfully",
                 goal
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -66,7 +66,7 @@ export class GoalManageController {
                 message: "Goal updated successfully",
                 goal
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -79,7 +79,7 @@ export class GoalManageController {
                 message: "Goal deleted successfully",
                 goal
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }

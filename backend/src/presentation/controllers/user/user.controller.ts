@@ -47,7 +47,7 @@ export class UserController {
         message: MESSAGES.FETCH_SUCCESS,
         user: userProfile,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -85,7 +85,7 @@ export class UserController {
         success: true,
         message: MESSAGES.UPDATE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -117,7 +117,7 @@ export class UserController {
         success: true,
         message: MESSAGES.PASSWORD_UPDATE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

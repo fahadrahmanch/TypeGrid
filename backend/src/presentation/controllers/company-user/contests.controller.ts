@@ -34,7 +34,7 @@ export class ContestsController {
         message: "Contests fetched successfully",
         data: contests,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -54,7 +54,7 @@ export class ContestsController {
         message: "Group contests fetched successfully",
         data: groupContests,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -82,7 +82,7 @@ export class ContestsController {
         success: true,
         data: contest,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -112,7 +112,7 @@ export class ContestsController {
         success: true,
         data: contest,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -140,7 +140,7 @@ export class ContestsController {
         message: `Contest ${action} successfully`,
         data: contest,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

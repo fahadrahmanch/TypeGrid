@@ -7,8 +7,8 @@ export async function sendChallengeApi(userId: string) {
 export async function checkalreadySendChallenge() {
   return companyAPI.get("/challenge/check-challenge-sent");
 }
-export async function companyUsers() {
-  return companyAPI.get("/company/users");
+export async function companyUsers(searchText:string) {
+  return companyAPI.get("/company/users",{params:{search:searchText}});
 }
 export async function getAllChallenges() {
   return companyAPI.get("/challenges");
@@ -18,4 +18,7 @@ export async function challengeAccept(challengeId: string) {
 }
 export async function getChallengeGameData(challengeId: string) {
   return companyAPI.get(`/challenge/game-data/${challengeId}`);
+}
+export async function challengeReject(challengeId: string) {
+  return companyAPI.put(`/challenge/reject/${challengeId}`);
 }

@@ -5,7 +5,8 @@ import { GetCompaniesUseCase } from "../../application/use-cases/admin/company-m
 import { CompanyRepository } from "../../infrastructure/db/repositories/company/company.repository";
 import { Company } from "../../infrastructure/db/models/company/company.schema";
 import { CompanyManageController } from "../controllers/admin/company-manage.controller";
-import { CompanyApproveRejectUseCase } from "../../application/use-cases/admin/company-management/company-approve-reject.use-case";
+import { ApproveCompanyUseCase } from "../../application/use-cases/admin/company-management/approve-company.use-case";
+import { RejectCompanyUseCase } from "../../application/use-cases/admin/company-management/reject-company.use-case";
 import { User } from "../../infrastructure/db/models/user/user.schema";
 import { UserRepository } from "../../infrastructure/db/repositories/user/user.repository";
 import { BlockUserUseCase } from "../../application/use-cases/admin/users/block-user.use-case";
@@ -58,9 +59,13 @@ const companyRepository = new CompanyRepository(Company);
 const getUsersUseCase = new GetUsersUseCase(authRepo);
 const getCompaniesUseCase = new GetCompaniesUseCase(companyRepository);
 const emailService = new EmailService();
-const companyApproveRejectUseCase = new CompanyApproveRejectUseCase(
+const approveCompanyUseCase = new ApproveCompanyUseCase(
   companyRepository,
   userRepository,
+  emailService,
+);
+const rejectCompanyUseCase = new RejectCompanyUseCase(
+  companyRepository,
   emailService,
 );
 const lessonRepository = new LessonRepository(Lesson);
@@ -78,7 +83,8 @@ const deleteRewardUseCase = new DeleteRewardUseCase(rewardRepository);
 export const injectRewardManageController = new RewardManageController(createRewardUseCase,getRewardsUseCase,getRewardByIdUseCase,updateRewardUseCase,deleteRewardUseCase);
 export const injectCompanyManageController = new CompanyManageController(
   getCompaniesUseCase,
-  companyApproveRejectUseCase,
+  approveCompanyUseCase,
+  rejectCompanyUseCase,
 );
 export const injectUserManageController = new UserManageController(
   getUsersUseCase,

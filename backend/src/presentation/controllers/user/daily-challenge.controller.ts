@@ -21,7 +21,7 @@ export class DailyChallengeController{
                 message: "Daily challenge fetched successfully",
                 data:dailyChallenge,
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -33,7 +33,7 @@ export class DailyChallengeController{
                 success: true,
                
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -45,7 +45,7 @@ export class DailyChallengeController{
                 message: "Daily challenge statistics fetched successfully",
                 data: stats,
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             next(error);
         }
     }

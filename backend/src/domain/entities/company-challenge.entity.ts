@@ -38,6 +38,10 @@ export class CompanyChallengeEntity {
     this.validate();
   }
 
+  setStatus(status: ChallengeStatus) {
+    this.status = status;
+  }
+
   private validate() {
     if (this.senderId === this.receiverId) {
       throw new Error("You cannot challenge yourself");

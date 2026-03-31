@@ -29,7 +29,7 @@ export class LeaderBoardController {
         success: true,
         data: leaderboard,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

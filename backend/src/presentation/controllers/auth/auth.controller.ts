@@ -53,7 +53,7 @@ export class AuthController {
         success: true,
         message: MESSAGES.OTP_SENT_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -67,7 +67,7 @@ export class AuthController {
         success: true,
         message: MESSAGES.AUTH_REGISTER_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
    
     }
@@ -89,7 +89,7 @@ export class AuthController {
         success: true,
         message: MESSAGES.OTP_RESENT_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -146,7 +146,7 @@ export class AuthController {
         accessToken,
         user: safeUser,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -193,7 +193,7 @@ export class AuthController {
         accessToken,
         user: mapToSafeUser(user),
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -262,7 +262,7 @@ export class AuthController {
         user: safeUser,
         accessToken,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -310,7 +310,7 @@ export class AuthController {
         success: true,
         message: MESSAGES.OTP_SENT_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -323,7 +323,7 @@ export class AuthController {
         success: true,
         message: MESSAGES.OTP_VERIFIED_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -337,7 +337,7 @@ export class AuthController {
         success: true,
         message: MESSAGES.PASSWORD_UPDATE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -351,7 +351,7 @@ export class AuthController {
         success: true,
         message: MESSAGES.AUTH_LOGOUT_SUCCESS
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -408,7 +408,7 @@ export class AuthController {
         accessToken,
         user: safeAdmin,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -475,7 +475,7 @@ export class AuthController {
         user: safeUser,
         company,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

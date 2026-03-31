@@ -23,7 +23,7 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(
   ({ isOpen, onClose, lessonId, setLessons }) => {
     const [values, setValues] = useState({
       title: "",
-      description: "",
+      // description: "",
       level: "",
       wpm: "",
       text: "",
@@ -50,7 +50,6 @@ const EditLessonModal: React.FC<EditLessonModalProps> = React.memo(
           const lessonData = response.data.lesson || response.data;
           setValues({
             title: lessonData.title || "",
-            description: lessonData.description || "",
             level: lessonData.level || "",
             wpm: lessonData.wpm?.toString() || "",
             text: lessonData.text || "",

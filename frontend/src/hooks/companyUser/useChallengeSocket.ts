@@ -70,9 +70,11 @@ export function useChallengeSocket({
                         ? {
                             ...p,
                             ...data,
-                            progress: totalLength
-                                ? Math.min(100, Math.round((data.typedLength / totalLength) * 100))
-                                : 0,
+                            progress: (data.status === "FINISHED" || (totalLength && data.typedLength === totalLength))
+                                ? 100 
+                                : totalLength
+                                    ? Math.min(100, Math.round((data.typedLength / totalLength) * 100))
+                                    : 0,
                         }
                         : p,
                 ) ?? null,
@@ -84,7 +86,7 @@ export function useChallengeSocket({
         return () => {
             socket.off("typing-progress-update-challenge", handler);
         };
-    }, [challengeId]);
+    }, [challengeId, totalLength, onPlayersUpdate]);
 
 
     const hasLeftRef = useRef(false);

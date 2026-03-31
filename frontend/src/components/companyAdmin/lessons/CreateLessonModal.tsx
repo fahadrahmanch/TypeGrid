@@ -25,7 +25,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
 }) => {
   const [values, setValues] = useState({
     title: "",
-    description: "",
+    // description: "",
     level: "",
     wpm: "",
     text: "",

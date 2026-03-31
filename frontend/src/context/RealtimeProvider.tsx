@@ -6,10 +6,20 @@ const RealtimeContext = createContext<any>(null);
 export const RealtimeProvider = ({ children }: any) => {
   const [challengeModal, setChallengeModal] = useState<any>(null);
   const [incomingChallenge, setIncomingChallenge] = useState<any>(null);
+  const [rejectedChallenge, setRejectedChallenge] = useState<any>(null);
 
   const companyUser = useSelector((state: any) => state.auth.user);
   useEffect(() => {
-
+    socket.on("challenge-rejected", (data) => {
+      setChallengeModal(null);
+      setRejectedChallenge({
+        open: true,
+        challengeId: data?.challengeId || data,
+      });
+      return () => {
+        socket.off("challenge-rejected");
+      };
+    });
     socket.on("challenge-status-updated", (data) => {
       setChallengeModal({
         open: true,
@@ -28,6 +38,8 @@ export const RealtimeProvider = ({ children }: any) => {
     return () => {
       socket.off("challenge-status-updated");
     };
+
+
   }, []);
 
   useEffect(() => {
@@ -59,7 +71,7 @@ export const RealtimeProvider = ({ children }: any) => {
 
   return (
     <RealtimeContext.Provider
-      value={{ socket, challengeModal, setChallengeModal, incomingChallenge, setIncomingChallenge }}
+      value={{ socket, challengeModal, setChallengeModal, incomingChallenge, setIncomingChallenge, rejectedChallenge, setRejectedChallenge }}
     >
       {children}
     </RealtimeContext.Provider>

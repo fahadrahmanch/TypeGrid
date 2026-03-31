@@ -15,6 +15,7 @@ import { injectChallengeManageController } from "../DI/admin.di";
 import { injectDailyAssignChallengeManageController } from "../DI/admin.di";
 import { challengeValidation } from "../middlewares/validations/challenge.validation";
 import { dailyAssignChallengeValidation } from "../middlewares/validations/daily-assign-challenge.validation";
+import { lessonValidation } from "../middlewares/validations/lessson.validation";
 export class adminRouter {
   private router: express.Router;
   constructor() {
@@ -59,7 +60,7 @@ export class adminRouter {
     //lesson management routes
     this.router.post(
       Routes.ADMIN.CREATE_LESSON,
-      checkRoleBasedMiddleware(["admin"]),
+      checkRoleBasedMiddleware(["admin"]),validate(lessonValidation.createLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectLessonManageController.createLesson(req, res, next);
       },
@@ -80,7 +81,7 @@ export class adminRouter {
     );
     this.router.put(
       Routes.ADMIN.UPDATE_LESSON,
-      checkRoleBasedMiddleware(["admin"]),
+      checkRoleBasedMiddleware(["admin"]),validate(lessonValidation.updateLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectLessonManageController.updateLesson(req, res, next);
       },

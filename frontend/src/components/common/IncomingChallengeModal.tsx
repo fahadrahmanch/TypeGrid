@@ -3,7 +3,7 @@ import { useRealtime } from "../../context/RealtimeProvider";
 import { socket } from "../../socket";
 import { Swords, X } from "lucide-react";
 import { challengeAccept } from "../../api/companyUser/challenge";
-
+import { challengeReject } from "../../api/companyUser/challenge";
 const IncomingChallengeModal = () => {
   const { incomingChallenge, setIncomingChallenge } = useRealtime();
 
@@ -22,11 +22,8 @@ const IncomingChallengeModal = () => {
     
   };
 
-  const handleReject = () => {
-    socket.emit("challenge-response", {
-      challengeId: challenge.id,
-      status: "rejected",
-    });
+  const handleReject = async() => {
+    await challengeReject(challenge?.challenge?.id);
     setIncomingChallenge(null);
   };
 

@@ -73,7 +73,8 @@ const Lessons: React.FC = () => {
       }, [searchText]);
       useEffect(() => {
           fetchLessons();
-      }, [debouncedSearch, page]);
+      }, [debouncedSearch, page,filter]);
+      console.log("filter",filter)
     const fetchLessons = async () => {
       try {
         const response = await LessonsAPI(debouncedSearch,filter,limit,page);
@@ -84,7 +85,7 @@ const Lessons: React.FC = () => {
         console.log("Error fetching lessons:", err);
       }
     };
-    fetchLessons();
+
 
   function handleChange(e: any) {
     const { name, value } = e.target;
@@ -101,7 +102,8 @@ const Lessons: React.FC = () => {
 
     setFormErrors((prev) => ({ ...prev, [name]: err }));
   }
-
+console.log("Search text",searchText)
+console.log("filter",filter)
   function handleEdiChange(e: any) {
     const { name, value } = e.target;
     setEditValues((prev) => ({ ...prev, [name]: value }));
@@ -269,6 +271,8 @@ const Lessons: React.FC = () => {
               <div className="relative flex-1 min-w-[300px]">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                value={searchText}
+                onChange={(e)=>setSearchText(e.target.value)}
                   type="text"
                   placeholder="Search lessons by title or content..."
                   className="w-full pl-12 pr-4 py-3 bg-white/70 rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium"
@@ -279,9 +283,10 @@ const Lessons: React.FC = () => {
                 <div className="relative">
                   <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D0864B]" />
                   <select onChange={(e)=>setFilter(e.target.value)} className="pl-10 pr-8 py-2.5 bg-white/70 rounded-xl border border-gray-100 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] appearance-none cursor-pointer">
-                    <option value="">All Modes</option>
-                    <option value="sentence">Sentence</option> 
-                    <option value="paragraph">Paragraph</option>
+                    <option value="">All </option>
+                    <option value="beginner">Beginner</option> 
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
                   </select>
                 </div>
 

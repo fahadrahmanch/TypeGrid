@@ -5,6 +5,9 @@ import { checkRoleBasedMiddleware } from "../middlewares/check-role-based.middle
 import { injectCompanyLessonManageController } from "../DI/company-admin.di";
 import { injectCompanyGroupController } from "../DI/company-admin.di";
 import { injectCompanyContestManagementController } from "../DI/company-admin.di";
+import { validate } from "../middlewares/validate.middleware";
+import { companyUserValidation } from "../middlewares/validations/company-user.validation";
+import { lessonValidation } from "../middlewares/validations/lessson.validation";
 export class companyAdminRouter {
   private router: express.Router;
   constructor() {
@@ -14,7 +17,7 @@ export class companyAdminRouter {
   initializeRoutes() {
     this.router.post(
       Routes.COMPANY_ADMIN.ADD_USER,
-      checkRoleBasedMiddleware(["companyAdmin"]),
+      checkRoleBasedMiddleware(["companyAdmin"]),validate(companyUserValidation.addCompanyUser),
       (req: Request, res: Response, next: NextFunction) => {
         injectCompanyUserController.addUser(req, res, next);
       },
@@ -37,7 +40,7 @@ export class companyAdminRouter {
     //lessons
     this.router.post(
       Routes.COMPANY_ADMIN.CREATE_LESSON,
-      checkRoleBasedMiddleware(["companyAdmin"]),
+      checkRoleBasedMiddleware(["companyAdmin"]),validate(lessonValidation.createLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectCompanyLessonManageController.createLesson(req, res, next);
       },
@@ -60,7 +63,7 @@ export class companyAdminRouter {
     );
     this.router.put(
       Routes.COMPANY_ADMIN.UPDATE_LESSON,
-      checkRoleBasedMiddleware(["companyAdmin"]),
+      checkRoleBasedMiddleware(["companyAdmin"]),validate(lessonValidation.updateLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectCompanyLessonManageController.updateLesson(req, res, next);
       },

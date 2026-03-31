@@ -22,7 +22,7 @@ export class RewardManageController {
                 message: "Reward created successfully",
                 reward
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -36,7 +36,7 @@ export class RewardManageController {
                 message: "Rewards fetched successfully",
                 rewards
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -49,7 +49,7 @@ export class RewardManageController {
                 message: "Reward fetched successfully",
                 reward
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -62,7 +62,7 @@ export class RewardManageController {
                 message: "Reward updated successfully",
                 reward
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -75,7 +75,7 @@ export class RewardManageController {
                 message: "Reward deleted successfully",
                 reward
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }

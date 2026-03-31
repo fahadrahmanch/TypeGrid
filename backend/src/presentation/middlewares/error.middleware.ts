@@ -3,33 +3,56 @@ import logger from "../../utils/logger";
 import { MESSAGES } from "../../domain/constants/messages";
 import { CustomError } from "../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../domain/enums/http-status-codes.enum";
+import { AuthRequest } from "../../types/AuthRequest";
+
+function narrowError(error: unknown): {
+  message: string;
+  status: number;
+  stack?: string;
+} {
+  if (error instanceof CustomError) {
+    return {
+      message: error.message,
+      status: error.statusCode,
+      stack: error.stack,
+    };
+  }
+
+  if (error instanceof Error) {
+    return {
+      message: error.message,
+      status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      stack: error.stack,
+    };
+  }
+
+  return {
+    message: MESSAGES.INTERNAL_SERVER_ERROR,
+    status: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+  };
+}
 
 export const errorMiddleware = (
   err: any,
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) => {
-  // Determine status code
-  const status =
-    err instanceof CustomError
-      ? err.statusCode
-      : err.status || HttpStatusCodes.INTERNAL_SERVER_ERROR;
+   const { message, status, stack } = narrowError(err); 
 
   // Log error with context
   logger.error("API Error", {
-    message: err.message,
+    message,
     status,
-    stack: err.stack,
+    stack,
     path: req.path,
     method: req.method,
     body: req.body,
     params: req.params,
     query: req.query,
-    user: (req as any).user?.userId,
+    user: req.user?.userId,
   });
 
-  const message = err.message || MESSAGES.INTERNAL_SERVER_ERROR;
 
   res.status(status).json({
     success: false,

@@ -24,6 +24,7 @@ export class LessonManageController {
   async createLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const values = req.body;
+      console.log("values",values);
       if (!values || Object.keys(values).length === 0) {
         res.status(HttpStatus.BAD_REQUEST).json({
           success: false,
@@ -38,7 +39,7 @@ export class LessonManageController {
         success: true,
         message: MESSAGES.CREATE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -47,15 +48,16 @@ export class LessonManageController {
 
   async getLessons(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { status, searchText, page, limit } = req.query;
-      const lessons = await this._getLessonsUseCase.execute(status as string,searchText as string,Number(page),Number(limit));
+      const { filter, searchText, page, limit } = req.query;
+      console.log(filter,searchText,page,limit);
+      const lessons = await this._getLessonsUseCase.execute(filter as string,searchText as string,Number(page),Number(limit));
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.FETCH_SUCCESS,
         total:lessons.total,
         data: lessons.lessons,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -81,7 +83,7 @@ export class LessonManageController {
         message: MESSAGES.FETCH_SUCCESS,
         data: lesson,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -120,7 +122,7 @@ export class LessonManageController {
         message: MESSAGES.UPDATE_SUCCESS,
         data: updatedLesson,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -145,7 +147,7 @@ export class LessonManageController {
         success: true,
         message: MESSAGES.DELETE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

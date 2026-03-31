@@ -37,6 +37,7 @@ import { CompanyUserStats } from "../../infrastructure/db/models/company/company
 import { GetCompanyLeaderboardUseCase } from "../../application/use-cases/company-user/stats/get-company-leaderboard.use-case";
 import { StreakRepository } from "../../infrastructure/db/repositories/user/streak.repository";
 import { Streak } from "../../infrastructure/db/models/user/streak.schema";
+import { RejectChallengeUseCase } from "../../application/use-cases/company-user/challenges/reiect-challenge.use-case";
 
 const lessonAssignmentRepository = new LessonAssignmentRepository(
   LessonAssignment,
@@ -115,6 +116,10 @@ const getCompanyLeaderboardUseCaseInstance = new GetCompanyLeaderboardUseCase(
   userRepository,
 );
 
+const rejectChallengeUseCaseInstance = new RejectChallengeUseCase(
+  challengeRepository,
+);
+
 export const injectChallengesController = new ChallengesController(
   getCompanyUsersUseCaseInstance,
   makeChallengeUseCaseInstance,
@@ -122,6 +127,7 @@ export const injectChallengesController = new ChallengesController(
   getChallengesUseCaseInstance,
   acceptChallengeUseCaseInstance,
   getChallengeGameDataUseCaseInstance,
+  rejectChallengeUseCaseInstance,
 );
 export const injectContestController = new ContestsController(
   getOpenContestsUseCaseInstance,

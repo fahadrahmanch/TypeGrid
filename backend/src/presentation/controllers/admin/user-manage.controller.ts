@@ -22,7 +22,7 @@ export class UserManageController {
         users: data.users||[],
         total:data.total,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -47,7 +47,7 @@ export class UserManageController {
         success: true,
         message: MESSAGES.UPDATE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

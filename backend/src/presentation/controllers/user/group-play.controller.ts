@@ -51,7 +51,7 @@ export class GroupPlayController {
         message: "Room created successfully",
         group,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -96,7 +96,7 @@ export class GroupPlayController {
         message: "Group fetched successfully",
         group,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -146,7 +146,7 @@ export class GroupPlayController {
         success: true,
         message: "Group edited successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -184,7 +184,7 @@ export class GroupPlayController {
         success: true,
         message: "Joined group successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -224,7 +224,7 @@ export class GroupPlayController {
         message: "Member removed successfully",
         group,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -265,7 +265,7 @@ export class GroupPlayController {
         success: true,
         message: "Game started successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -312,7 +312,7 @@ export class GroupPlayController {
         success: true,
         message: "New Game started successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

@@ -29,7 +29,7 @@ export class SoloPlayController {
         message: "Solo play created successfully",
         data: soloPlay,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -59,7 +59,7 @@ export class SoloPlayController {
         success: true,
         message: "Solo play result saved successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

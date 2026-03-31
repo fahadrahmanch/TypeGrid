@@ -29,6 +29,7 @@ export class CompanyLessonManageController {
     try {
       const { title, description, level, wpm, text, accuracy, category } =
         req.body;
+      console.log(req.body);
       const userId = req.user?.userId;
       if (!userId) {
         res.status(HttpStatus.NOT_FOUND).json({
@@ -53,6 +54,7 @@ export class CompanyLessonManageController {
         accuracy,
         category,
       };
+      
       const lesson = await this._createLessonUseCase.execute(userId, lessonData);
       if (!lesson) {
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -68,7 +70,7 @@ export class CompanyLessonManageController {
       });
       logger.info("Company lesson created successfully", { userId });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -98,7 +100,7 @@ export class CompanyLessonManageController {
         message: MESSAGES.FETCH_SUCCESS,
         lessons,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -128,7 +130,7 @@ export class CompanyLessonManageController {
         message: MESSAGES.FETCH_SUCCESS,
         lesson,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -163,7 +165,7 @@ export class CompanyLessonManageController {
         lesson,
       });
       logger.info("Company lesson updated successfully", { userId: req.user?.userId, lessonId });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -186,7 +188,7 @@ export class CompanyLessonManageController {
         message: MESSAGES.DELETE_SUCCESS,
       });
       logger.info("Company lesson deleted successfully", { userId: req.user?.userId, lessonId });
-    } catch (error: any) {
+    } catch (error: unknown) {
     
         next(error);
       
@@ -218,7 +220,7 @@ export class CompanyLessonManageController {
         message: MESSAGES.FETCH_SUCCESS,
         lessons,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -249,7 +251,7 @@ export class CompanyLessonManageController {
         success: true,
         message: MESSAGES.UPDATE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       
         next(error);
       

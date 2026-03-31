@@ -24,7 +24,7 @@ export class DailyAssignChallengeManageController {
         message: "Daily challenge created successfully",
         data: dailyChallenge
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -41,7 +41,7 @@ export class DailyAssignChallengeManageController {
         message: "Daily challenge fetched successfully",
         data: dailyChallenge
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -59,7 +59,7 @@ export class DailyAssignChallengeManageController {
         message: "Daily challenge updated successfully",
         data: dailyChallenge
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -71,7 +71,7 @@ export class DailyAssignChallengeManageController {
       res.status(200).json({
         message: "Daily challenge deleted successfully"
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -88,7 +88,7 @@ export class DailyAssignChallengeManageController {
         data: result.dailyChallenges,
         total: result.total
       });
-    } catch (error) {
+    } catch (error: unknown) {
       next(error);
     }
   }

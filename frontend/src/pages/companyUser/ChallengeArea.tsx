@@ -135,7 +135,7 @@ export default function ChallengeArea() {
           errors: 0,
           progress: 0,
           typedLength: 0,
-          userId: player.id,
+          userId: player.id || player._id,
           timeTaken: player.timeTaken || "00:00",
           color: player.color || "bg-orange-400",
         }));
@@ -169,6 +169,37 @@ export default function ChallengeArea() {
   setElapsedTime,
   setIsFinished,
 });
+
+  useEffect(() => {
+    if (!user?._id || !challengeData?.lesson?.text?.length) return;
+    setPlayers((prev) =>
+      prev?.map((p) =>
+        p.userId === (user?._id || user?.id)
+          ? {
+              ...p,
+              typedLength: typedText.length,
+              wpm: wpm || 0,
+              accuracy: accuracy || 0,
+              errors: errors,
+              progress: isFinished 
+                ? 100 
+                : Math.min(
+                    100,
+                    Math.round((typedText.length / challengeData.lesson.text.length) * 100)
+                  ),
+            }
+          : p
+      ) ?? null
+    );
+  }, [
+    typedText.length,
+    wpm,
+    accuracy,
+    errors,
+    isFinished,
+    challengeData?.lesson?.text?.length,
+    user?._id,
+  ]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -343,7 +374,7 @@ export default function ChallengeArea() {
                       <div>
                         <p className="font-bold text-gray-900 text-sm flex items-center gap-2">
                           {result.name}
-                          {result.userId === user?._id && (
+                          {(result.userId === (user?._id || user?.id)) && (
                             <span className="text-[10px] text-orange-500 ml-1">(You)</span>
                           )}
                           {result.status === "LEFT" && (
@@ -502,7 +533,7 @@ export default function ChallengeArea() {
                         Progress
                       </span>
                       <span className="text-[9px] md:text-[10px] font-bold text-orange-500">
-                        {player.progress}%
+                        {Math.round(player.progress)}%
                       </span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden shadow-inner flex">

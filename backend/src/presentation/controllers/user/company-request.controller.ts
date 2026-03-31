@@ -51,7 +51,7 @@ export class CompanyRequestController {
         message: MESSAGES.COMPANY_REQUEST_SUBMITTED_SUCCESS,
         data: result,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -88,7 +88,7 @@ export class CompanyRequestController {
         success: true,
         message: "Company details re-applied successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -125,7 +125,7 @@ export class CompanyRequestController {
         message: MESSAGES.COMPANY_STATUS_FETCHED_SUCCESS,
         company,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

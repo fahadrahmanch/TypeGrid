@@ -48,7 +48,7 @@ export class CompanyContestManagementController {
         success: true,
         message: MESSAGES.CREATE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -71,7 +71,7 @@ export class CompanyContestManagementController {
         message: MESSAGES.FETCH_SUCCESS,
         data: contests,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -97,7 +97,7 @@ export class CompanyContestManagementController {
         message: MESSAGES.UPDATE_SUCCESS,
         status: status,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -127,7 +127,7 @@ export class CompanyContestManagementController {
         success: true,
         data: participants,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -156,7 +156,7 @@ export class CompanyContestManagementController {
         success: true,
         data: contest,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -186,7 +186,7 @@ export class CompanyContestManagementController {
         message: MESSAGES.UPDATE_SUCCESS,
         data: updatedContest,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -211,7 +211,7 @@ export class CompanyContestManagementController {
         success: true,
         message: MESSAGES.DELETE_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -232,7 +232,7 @@ export class CompanyContestManagementController {
         success: true,
         data: result,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
       
     }

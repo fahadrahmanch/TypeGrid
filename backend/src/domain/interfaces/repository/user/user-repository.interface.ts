@@ -20,4 +20,5 @@ export interface IUserRepository {
   findOne(filter?: any): Promise<UserEntity | null>;
   delete(_id: string): Promise<UserEntity | null>;
   updateById(_id: string, updateQuery: any): Promise<UserEntity | null>;
+  getCompanyUsers(search:string,companyId:string): Promise<UserEntity[]>;
 }

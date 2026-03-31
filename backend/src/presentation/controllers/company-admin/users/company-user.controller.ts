@@ -84,7 +84,7 @@ export class CompanyUserController {
         message: MESSAGES.USER_ADDED_SUCCESS,
         data: newUser,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -110,7 +110,7 @@ export class CompanyUserController {
         message: MESSAGES.COMPANY_USERS_FETCHED_SUCCESS,
         data: companyUsers,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -133,7 +133,7 @@ export class CompanyUserController {
         success: true,
         message: MESSAGES.USER_DELETED_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

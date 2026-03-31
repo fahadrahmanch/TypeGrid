@@ -12,12 +12,14 @@ const ChallengeArena = ({
 }) => {
  const [users, setUsers] = useState<Teammate[]>([]);
 const [challengeStatuses, setChallengeStatuses] = useState<Record<string, string>>({});
+const [searchText,setSearchText]=useState("");
+
 const companyUser = useSelector((state: any) => state.auth.user);
 useEffect(() => {
   async function fetchData() {
     try {
       const [usersRes, challengesRes] = await Promise.all([
-        companyUsers(),
+        companyUsers(searchText),
         checkalreadySendChallenge(),
       ]);
 
@@ -35,7 +37,7 @@ useEffect(() => {
     }
   }
   fetchData();
-}, []);
+}, [searchText]);
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header Area */}
@@ -71,12 +73,13 @@ useEffect(() => {
         <div className="flex-1 relative">
           <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
+          onChange={((e)=>setSearchText(e.target.value))}
             type="text"
-            placeholder="Search by name or designation..."
+            placeholder="Search by name..."
             className="w-full bg-[#FAF5EC] border border-[#EBE3D5] rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B09D89]/50 transition-all font-medium placeholder:text-gray-400 text-gray-700"
           />
         </div>
-        <div className="w-56 relative group">
+        {/* <div className="w-56 relative group">
           <select className="w-full bg-[#FAF5EC] border border-[#EBE3D5] rounded-xl pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B09D89]/50 appearance-none font-semibold text-gray-700 cursor-pointer">
             <option>All Designations</option>
             <option>Senior Developer</option>
@@ -91,7 +94,7 @@ useEffect(() => {
             <option>Pro (Above 90 WPM)</option>
           </select>
           <ChevronDown className="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
-        </div>
+        </div> */}
       </div>
 
       {/* Grid */}

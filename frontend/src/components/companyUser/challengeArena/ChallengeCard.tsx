@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { CheckCircle2, Clock, Zap, Target, Swords } from "lucide-react";
-import { challengeAccept } from "../../../api/companyUser/challenge";
+import { challengeAccept, challengeReject } from "../../../api/companyUser/challenge";
 import { socket } from "../../../socket";
 import { useNavigate } from "react-router-dom";
+
 const ChallengeCard = ({
   challenge,
 }: {
@@ -70,6 +71,19 @@ const ChallengeCard = ({
     }
   }
 
+
+  async function handleReject(challengeId: string) {
+    try {
+      const response = await challengeReject(challengeId);
+
+      if (response?.data?.success) {
+        setHasJoined(false);
+        setLocalAccepted(false);
+      }
+    } catch (error) {
+      console.error("Error rejecting challenge:", error);
+    }
+  }
   if (isOngoing) return null;
 
   return (
@@ -188,7 +202,9 @@ const ChallengeCard = ({
         </div>
       ) : isPending && isReceived ? (
         <div className="mt-auto flex gap-3">
-          <button className="flex-1 py-3 bg-white border-2 border-[#EBE3D5] text-gray-600 hover:bg-gray-50 rounded-xl font-bold text-sm transition-colors">
+          <button
+          onClick={()=>handleReject(challenge.id)}
+           className="flex-1 py-3 bg-white border-2 border-[#EBE3D5] text-gray-600 hover:bg-gray-50 rounded-xl font-bold text-sm transition-colors">
             Decline
           </button>
           <button

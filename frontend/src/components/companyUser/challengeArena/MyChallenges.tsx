@@ -65,12 +65,12 @@ const MyChallenges = ({
 
       {/* Tabs */}
       <div className="bg-white/80 backdrop-blur-md border border-[#EBE3D5] rounded-2xl p-2 flex gap-2 shadow-sm mb-10 w-full">
-        <button
+        {/* <button
           onClick={() => setActiveTab("all")}
           className={`flex-1 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${activeTab === "all" ? "bg-[#AD9B8E] text-white shadow-md" : "text-gray-600 hover:bg-gray-50"}`}
         >
           <LayoutList className="w-4 h-4" /> All Challenges
-        </button>
+        </button> */}
         <button
           onClick={() => setActiveTab("sent")}
           className={`flex-1 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${activeTab === "sent" ? "bg-[#AD9B8E] text-white shadow-md" : "text-gray-600 hover:bg-gray-50"}`}
@@ -83,12 +83,12 @@ const MyChallenges = ({
         >
           <Inbox className="w-4 h-4" /> Received
         </button>
-        <button
+        {/* <button
           onClick={() => setActiveTab("completed")}
           className={`flex-1 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${activeTab === "completed" ? "bg-[#AD9B8E] text-white shadow-md" : "text-gray-600 hover:bg-gray-50"}`}
         >
           <CheckCircle2 className="w-4 h-4" /> Completed
-        </button>
+        </button> */}
       </div>
 
       {/* Grid */}

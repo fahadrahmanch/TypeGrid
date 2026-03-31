@@ -27,7 +27,7 @@ export class CompanyGroupController {
         success: true,
         message: MESSAGES.GROUP_CREATED_SUCCESS,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -46,7 +46,7 @@ export class CompanyGroupController {
         message: MESSAGES.GROUPS_FETCHED_SUCCESS,
         groups,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

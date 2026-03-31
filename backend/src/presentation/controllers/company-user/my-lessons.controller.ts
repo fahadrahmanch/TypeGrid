@@ -23,7 +23,7 @@ export class MyLessonsController {
         success: true,
         data: myLessons,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     } 
   }
@@ -55,7 +55,7 @@ export class MyLessonsController {
         success: true,
         data: assignedLesson,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -85,7 +85,7 @@ export class MyLessonsController {
         success: true,
         message: "Lesson result saved successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("error",error)
       next(error);
     }

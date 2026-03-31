@@ -11,6 +11,7 @@ import AdminRoutes from "./routes/AdminRoutes";
 import CompanyRoutes from "./routes/CompanyRoutes";
 import ChallengeModal from "./components/common/ChallengeModal";
 import IncomingChallengeModal from "./components/common/IncomingChallengeModal";
+import ChallengeRejectedModal from "./components/common/ChallengeRejectedModal";
 import { authConfig } from "./config/authConfig";
 import { setAccessToken, setAuthLoaded, logout } from "./store/slices/auth/authSlice";
 import { useSelector } from "react-redux";
@@ -53,6 +54,7 @@ useEffect(() => {
       </Routes>
       <ChallengeModal />
       <IncomingChallengeModal />
+      <ChallengeRejectedModal />
     </>
   );
 }

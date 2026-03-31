@@ -23,7 +23,7 @@ export class ChallengeManageController {
                 message: "Challenge created successfully",
                 challenge
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -38,7 +38,7 @@ export class ChallengeManageController {
                 challenges: result.challenges,
                 total: result.total
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -52,7 +52,7 @@ export class ChallengeManageController {
                 message: "Challenge fetched successfully",
                 challenge
             })
-        } catch (error) {
+        } catch (error: unknown) {  
             next(error);
         }
     }
@@ -66,7 +66,7 @@ export class ChallengeManageController {
                 message: "Challenge updated successfully",
                 challenge
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }
@@ -79,7 +79,7 @@ export class ChallengeManageController {
             res.status(200).json({
                 message: "Challenge deleted successfully"
             })
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
     }

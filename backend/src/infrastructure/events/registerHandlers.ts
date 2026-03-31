@@ -1,1 +1,1 @@
-import "./handlers/ChallengeCreateHandler";
+import "./handlers/ChallengeHandler";

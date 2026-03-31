@@ -35,7 +35,7 @@ export class QuickPlayController {
         message: "Quick play started successfully",
         quickPlay,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }
@@ -65,7 +65,7 @@ export class QuickPlayController {
         success: true,
         message: "Quick play status changed successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       next(error);
     }
   }

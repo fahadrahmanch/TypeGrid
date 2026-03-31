@@ -119,6 +119,13 @@ export class companyUserRoutes {
         injectLeaderBoardController.getLeaderboard(req, res, next);
       },
     );
+    this.router.put(
+      Routes.COMPANY_USER.REJECT_CHALLENGE,
+      checkRoleBasedMiddleware(["companyAdmin", "companyUser"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectChallengesController.rejectChallenge(req, res, next);
+      },
+    );
   }
 
   getRouter() {
