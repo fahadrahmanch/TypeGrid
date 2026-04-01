@@ -1,12 +1,14 @@
 import { userAPI } from "../axios/userAPI";
-export const TodayChallenge = async()=>{
-    return userAPI.get("/today-challenge");
+import { API_ROUTES } from "../../constants/apiRoutes";
+
+export const TodayChallenge = async () => {
+  return userAPI.get(API_ROUTES.DAILY_CHALLENGE.TODAY);
 };
 
-export const challengeFinished = async(data:any)=>{
-    return userAPI.post("/daily-challenge-finished",data);
+export const challengeFinished = async (data: any) => {
+  return userAPI.post(API_ROUTES.DAILY_CHALLENGE.FINISHED, data);
 };
 
-export const ChallengeStatistics = async()=>{
-    return userAPI.get("/daily-challenge/statistics");
+export const ChallengeStatistics = async () => {
+  return userAPI.get(API_ROUTES.DAILY_CHALLENGE.STATISTICS);
 };

@@ -1,42 +1,48 @@
 import { companyAPI } from "../axios/companyAPI";
 import { AxiosResponse } from "axios";
+import { API_ROUTES } from "../../constants/apiRoutes";
 
 export async function createLesson(lessonData: any): Promise<AxiosResponse> {
-  return companyAPI.post("/lesson", lessonData);
+  return companyAPI.post(API_ROUTES.LESSONS.ADMIN.LESSON, lessonData);
 }
 
 export async function getLesson() {
-  return companyAPI.get("/lessons");
+  return companyAPI.get(API_ROUTES.LESSONS.ADMIN.BASE);
 }
 
 export async function getLessonById(id: string) {
-  return companyAPI.get(`/lesson/${id}`);
+  return companyAPI.get(API_ROUTES.LESSONS.ADMIN.BY_ID(id));
 }
 
 export async function updateLesson(id: string, lessonData: any) {
-  return companyAPI.put(`/lesson/${id}`, lessonData);
+  return companyAPI.put(API_ROUTES.LESSONS.ADMIN.BY_ID(id), lessonData);
 }
+
 export async function deleteLesson(id: string) {
-  return companyAPI.delete(`/lesson/${id}`);
+  return companyAPI.delete(API_ROUTES.LESSONS.ADMIN.BY_ID(id));
 }
+
 export async function getCompanyUsers() {
-  return companyAPI.get("/users");
+  return companyAPI.get(API_ROUTES.ADMIN.USERS.COMPANY_USERS);
 }
+
 export async function getAdminLessons() {
-  return companyAPI.get("/admin-lessons");
+  return companyAPI.get(API_ROUTES.LESSONS.ADMIN.ADMIN_ONLY);
 }
 
 export async function saveLessonResult(id: string, resultData: any) {
-  return companyAPI.post(`/lesson/${id}/result`, resultData);
+  return companyAPI.post(API_ROUTES.LESSONS.ADMIN.RESULT(id), resultData);
 }
+
 export async function assignLesson(
   selectedUsers: string[],
   selectedLessons: string[],
   deadline: string,
 ) {
-  return companyAPI.post("/lesson-assignments", {
+  return companyAPI.post(API_ROUTES.LESSONS.ADMIN.ASSIGNMENTS, {
     users: selectedUsers,
     lessons: selectedLessons,
     deadline,
   });
 }
+

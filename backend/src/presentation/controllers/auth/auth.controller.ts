@@ -15,6 +15,7 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { HttpStatus } from "../../constants/httpStatus";
 import { getRoleConfig } from "../../helpers/auth-role.helper";
 import { mapToSafeUser } from "../../../application/mappers/auth/auth.mapper";
+import { Status } from "../../../domain/enums/status.enum";
 
 export class AuthController {
   constructor(
@@ -175,7 +176,7 @@ export class AuthController {
         return;
       }
 
-      if (user.status === "block") {
+      if (user.status === Status.BLOCK) {
         res.status(HttpStatus.FORBIDDEN).json({
           success: false,
           message: MESSAGES.ACCOUNT_BLOCKED_ACCESS_DENIED,

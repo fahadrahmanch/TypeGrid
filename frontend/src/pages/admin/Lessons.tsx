@@ -74,7 +74,6 @@ const Lessons: React.FC = () => {
       useEffect(() => {
           fetchLessons();
       }, [debouncedSearch, page,filter]);
-      console.log("filter",filter)
     const fetchLessons = async () => {
       try {
         const response = await LessonsAPI(debouncedSearch,filter,limit,page);
@@ -102,8 +101,7 @@ const Lessons: React.FC = () => {
 
     setFormErrors((prev) => ({ ...prev, [name]: err }));
   }
-console.log("Search text",searchText)
-console.log("filter",filter)
+
   function handleEdiChange(e: any) {
     const { name, value } = e.target;
     setEditValues((prev) => ({ ...prev, [name]: value }));

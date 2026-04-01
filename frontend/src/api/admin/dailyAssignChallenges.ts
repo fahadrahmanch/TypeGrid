@@ -1,25 +1,24 @@
 import { adminAPI } from "../axios/adminAPI";
-export const fetchAssignChallenges = (date:string,limit:number,page:number)=>{
- 
-    
-    return adminAPI.get("/daily-assign-challenges", {
+import { API_ROUTES } from "../../constants/apiRoutes";
+
+export const fetchAssignChallenges = (date: string, limit: number, page: number) => {
+    return adminAPI.get(API_ROUTES.ADMIN.DAILY_ASSIGN.CHALLENGES, {
         params: {
             date,
             limit,
             page,
-        },  
+        },
     });
 };
 
 export const createAssignChallenge = (data: any) => {
-    console.log("datat",data);
-    return adminAPI.post("/daily-assign-challenge", data);
+    return adminAPI.post(API_ROUTES.ADMIN.DAILY_ASSIGN.CHALLENGE, data);
 };
 
 export const updateAssignChallenge = (id: string, data: any) => {
-    return adminAPI.put(`/daily-assign-challenge/${id}`, data);
+    return adminAPI.put(API_ROUTES.ADMIN.DAILY_ASSIGN.BY_ID(id), data);
 };
 
 export const deleteAssignChallenge = (id: string) => {
-    return adminAPI.delete(`/daily-assign-challenge/${id}`);
+    return adminAPI.delete(API_ROUTES.ADMIN.DAILY_ASSIGN.BY_ID(id));
 };

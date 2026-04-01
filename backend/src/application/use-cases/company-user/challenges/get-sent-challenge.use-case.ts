@@ -35,6 +35,8 @@ export class GetSentChallengeUseCase implements IGetSentChallengeUseCase {
 
     if (!challenges.length) return [];
 
-    return challenges.map(mapSentChallengeToDTO);
+    return challenges.map((challenge) =>
+      mapSentChallengeToDTO(challenge.toObject())
+    );
   }
-}
+} 

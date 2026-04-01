@@ -5,7 +5,7 @@ import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 export class ChangeStatusUseCase implements IChangeStatusUseCase {
   constructor(
-    private readonly _BasecompetitionRepository: ICompetitionRepository,
+    private readonly _competitionRepository: ICompetitionRepository,
   ) {}
 
   async execute(competitionId: string, status: string): Promise<void> {
@@ -23,14 +23,14 @@ export class ChangeStatusUseCase implements IChangeStatusUseCase {
       );
     }
     const competition =
-      await this._BasecompetitionRepository.findById(competitionId);
+      await this._competitionRepository.findById(competitionId);
     if (!competition) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
         MESSAGES.COMPETITION_NOT_FOUND,
       );
     }
-    (competition as any).status = status;
-    await this._BasecompetitionRepository.update(competition);
+    competition.setStatus(status);
+    await this._competitionRepository.update(competition.toObject());
   }
 }

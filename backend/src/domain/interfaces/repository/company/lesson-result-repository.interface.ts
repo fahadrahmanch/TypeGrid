@@ -1,4 +1,3 @@
-import { ILessonResultDocument } from "../../../../infrastructure/db/types/documents";
 
 export interface ILessonResultRepository {
   create(data: any): Promise<any>;

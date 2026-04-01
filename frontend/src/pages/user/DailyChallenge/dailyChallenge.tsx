@@ -80,7 +80,6 @@ const DailyChallenge: React.FC = () => {
     const fetchTodayChallenge = async()=>{
       try{
         const response = await TodayChallenge();
-        console.log("Challenge Data:", response.data.data);
         setChallenge(response.data.data);
       }catch(error){
         console.log(error);

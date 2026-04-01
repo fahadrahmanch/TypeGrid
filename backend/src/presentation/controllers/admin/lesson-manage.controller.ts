@@ -7,6 +7,7 @@ import { IUpdateLessonUseCase } from "../../../application/use-cases/interfaces/
 import { IDeleteLessonUseCase } from "../../../application/use-cases/interfaces/admin/delete-lesson.interface";
 import { IGetLessonsUseCase } from "../../../application/use-cases/interfaces/admin/get-lessons.interface";
 import logger from "../../../utils/logger";
+import { Status } from "../../../domain/enums/status.enum";
 
 //lesson management controller
 
@@ -24,7 +25,6 @@ export class LessonManageController {
   async createLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const values = req.body;
-      console.log("values",values);
       if (!values || Object.keys(values).length === 0) {
         res.status(HttpStatus.BAD_REQUEST).json({
           success: false,
@@ -49,7 +49,6 @@ export class LessonManageController {
   async getLessons(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { filter, searchText, page, limit } = req.query;
-      console.log(filter,searchText,page,limit);
       const lessons = await this._getLessonsUseCase.execute(filter as string,searchText as string,Number(page),Number(limit));
       res.status(HttpStatus.OK).json({
         success: true,

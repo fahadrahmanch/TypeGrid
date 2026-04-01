@@ -5,6 +5,7 @@ import { BaseRepository } from "../../base/base.repository";
 import { IUserDocument } from "../../types/documents";
 import AuthUserEntity from "../../../../domain/entities/auth-user.entity";
 import { AuthMapper } from "../../mappers/auth.mapper";
+import { Status } from "../../../../domain/enums/status.enum";
 
 export class AuthRepository
   extends BaseRepository<IUserDocument, AuthUserEntity>
@@ -32,7 +33,7 @@ export class AuthRepository
         { email: { $regex: "^" + search, $options: "i" } },
       ];
     }
-    if (status && status !== "All") {
+    if (status && status !== Status.ALL) {
       query.status = status === "Block" ? "block" : "active";
     }
 

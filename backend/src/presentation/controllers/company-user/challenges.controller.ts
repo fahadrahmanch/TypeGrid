@@ -27,7 +27,6 @@ export class ChallengesController {
     try {
       const userId = req.user?.userId;
       const {search}=req.query as {search:string}
-      console.log("search",search)
       if (!userId) {
         res.status(HttpStatus.UNAUTHORIZED).json({
           success: false,
@@ -209,7 +208,6 @@ export class ChallengesController {
   async rejectChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const challengeId = req.params.challengeId;
-      console.log("challengeID",challengeId)
 
       if (!challengeId) {
         res.status(HttpStatus.NOT_FOUND).json({

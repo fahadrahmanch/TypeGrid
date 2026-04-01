@@ -3,7 +3,7 @@ import Navbar from "../../../components/user/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import {  startGame } from "../../../api/user/quick";
+import {  statusChange } from "../../../api/user/quick";
 import { useGameTimer } from "../../../hooks/useGameTimer";
 import { useTypingScroll } from "../../../hooks/useTypingScroll";
 import { useTypingStats } from "../../../hooks/useTypingStats";
@@ -164,11 +164,24 @@ const QuickPlay: React.FC = () => {
   );
   const startGameAPI = async (competitionId: string) => {
     try {
-      await startGame(competitionId, "ongoing");
+      await statusChange(competitionId, "ongoing");
     } catch (error) {
       toast.error("Failed to start game");
     }
   };
+
+  const completeGameAPI = async (competitionId: string) => {
+    try {
+      await statusChange(competitionId, "completed");
+    } catch (error) {
+      toast.error("Failed to complete game");
+    }
+  }
+  useEffect(()=>{
+    if(isFinished || remainingTime===0){
+      completeGameAPI(gameData._id);
+    }
+  },[isFinished,gameData._id,remainingTime])
 
   useEffect(() => {
     if (phase === "PLAY" && !hasSentStart) {
@@ -176,6 +189,8 @@ const QuickPlay: React.FC = () => {
       startGameAPI(gameData._id);
     }
   }, [phase, hasSentStart, currentUser, gameData?._id]);
+
+
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);

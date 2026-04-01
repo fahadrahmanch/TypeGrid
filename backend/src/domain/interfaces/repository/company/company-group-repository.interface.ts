@@ -1,5 +1,6 @@
-
-export interface ICompanyGroupRepository {
+import { IBaseRepository } from "../base-repository.interface";
+import { CompanyGroupEntity } from "../../../entities/company-group.entity";
+export interface ICompanyGroupRepository extends IBaseRepository<CompanyGroupEntity> {
   create(data: any): Promise<any>;
   findById(
     id: string,

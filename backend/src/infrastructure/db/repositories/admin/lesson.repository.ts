@@ -4,6 +4,7 @@ import { ILessonRepository } from "../../../../domain/interfaces/repository/admi
 import { ILessonDocument } from "../../types/documents";
 import { LessonEntity } from "../../../../domain/entities/lesson.entity";
 import { LessonMapper } from "../../mappers/lesson.mapper";
+import { Status } from "../../../../domain/enums/status.enum";
 
 export class LessonRepository
   extends BaseRepository<ILessonDocument, LessonEntity>
@@ -14,8 +15,7 @@ export class LessonRepository
   }
   async getLessons(status:string,searchText:string,page:number,limit:number): Promise<{lessons:LessonEntity[],total:number}> {
     const query: any = {};
-    console.log("status,searchText,page,limit",status,searchText,page,limit);
-    if (status && status !== "All") {
+    if (status && status !== Status.ALL) {
       query.level = status;
     }
     if (searchText) {

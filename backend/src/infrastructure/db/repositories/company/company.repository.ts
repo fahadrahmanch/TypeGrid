@@ -4,6 +4,7 @@ import { ICompanyRepository } from "../../../../domain/interfaces/repository/com
 import { ICompanyDocument } from "../../types/documents";
 import { CompanyEntity } from "../../../../domain/entities";
 import { CompanyMapper } from "../../mappers/company.mapper";
+import { Status } from "../../../../domain/enums/status.enum";
 
 export class CompanyRepository
   extends BaseRepository<ICompanyDocument, CompanyEntity>
@@ -28,7 +29,7 @@ export class CompanyRepository
       ];
     }
 
-    if (status && status !== "All") {
+    if (status && status !== Status.ALL) {
       query.status = status.toLowerCase();
     }
 

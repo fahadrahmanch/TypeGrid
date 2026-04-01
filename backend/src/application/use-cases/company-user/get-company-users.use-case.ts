@@ -17,7 +17,6 @@ export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
 
     const companyId = user.CompanyId;
     const users = await this._userRepository.getCompanyUsers(search,companyId!);
-    console.log("users usecase",users)
     const onlineUsers = await redis.smembers("online:users");
     return mapCompanyUsersWithOnlineStatus(users, onlineUsers);
   }

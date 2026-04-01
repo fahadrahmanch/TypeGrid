@@ -15,7 +15,6 @@ const ProfileDiv1: React.FC = () => {
   useEffect(() => {
     async function getUserData() {
       const res = await getUserDataApi();
-       console.log("User Data",res);
       if (res?.data) {
         setUser({
           name: res.data.user.name,

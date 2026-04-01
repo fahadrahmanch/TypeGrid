@@ -23,8 +23,8 @@ export class SaveChallengeResultUseCase implements ISaveChallengeResultUseCase {
         if(!challenge){
             throw new CustomError(404,MESSAGES.CHALLENGE_NOT_FOUND);
         }
-        const competition = await this._competitionRepository.findById(challenge.getCompetitionId());
-        const lesson=await this._lessonRepository.findById(challenge.getLessonId());
+        const competition = await this._competitionRepository.findById(challenge.getCompetitionId()!);
+        const lesson=await this._lessonRepository.findById(competition?.getTextId()!);
         if(!lesson){
             throw new CustomError(404,MESSAGES.LESSON_NOT_FOUND);
         }

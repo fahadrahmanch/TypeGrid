@@ -86,7 +86,6 @@ export class MyLessonsController {
         message: "Lesson result saved successfully",
       });
     } catch (error: unknown) {
-      console.log("error",error)
       next(error);
     }
   }

@@ -29,7 +29,6 @@ export class CompanyLessonManageController {
     try {
       const { title, description, level, wpm, text, accuracy, category } =
         req.body;
-      console.log(req.body);
       const userId = req.user?.userId;
       if (!userId) {
         res.status(HttpStatus.NOT_FOUND).json({
