@@ -10,7 +10,6 @@ import { IGetContestUseCase } from "../../../application/use-cases/interfaces/co
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IUpdateContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/update-contest.interface";
 import { IDeleteContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/delete-contest.interface";
-import { CustomError } from "../../../domain/entities/custom-error.entity";
 import { IGetContestResultUseCase } from "../../../application/use-cases/interfaces/companyUser/get-contest-result.interface";
 export class CompanyContestManagementController {
   constructor(
@@ -26,7 +25,11 @@ export class CompanyContestManagementController {
 
   //create contest
 
-  async createContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async createContest(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const data = req.body;
       const userId = req.user?.userId;
@@ -55,7 +58,11 @@ export class CompanyContestManagementController {
 
   // get contests
 
-  async getContests(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getContests(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       if (!userId) {
@@ -77,7 +84,11 @@ export class CompanyContestManagementController {
   }
 
   //update contest status
-  async updateContestStatus(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async updateContestStatus(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const contestId = req.params.contestId;
       const status = req.body.status;
@@ -119,9 +130,8 @@ export class CompanyContestManagementController {
         return;
       }
 
-      const participants = await this._getContestParticipantsUseCase.execute(
-        contestId,
-      );
+      const participants =
+        await this._getContestParticipantsUseCase.execute(contestId);
 
       res.status(HttpStatus.OK).json({
         success: true,
@@ -133,7 +143,11 @@ export class CompanyContestManagementController {
   }
 
   //get contest data
-  async getContestData(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getContestData(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const contestId = req.params.contestId;
       const userId = req.user?.userId;
@@ -162,7 +176,11 @@ export class CompanyContestManagementController {
   }
 
   // update contest
-  async updateContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async updateContest(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const contestId = req.params.contestId;
       const data = req.body;
@@ -192,7 +210,11 @@ export class CompanyContestManagementController {
   }
 
   // delete contest
-  async deleteContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async deleteContest(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const contestId = req.params.contestId;
 
@@ -216,7 +238,11 @@ export class CompanyContestManagementController {
     }
   }
 
-  async getContestResult(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getContestResult(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const contestId = req.params.contestId;
       if (!contestId) {
@@ -234,7 +260,6 @@ export class CompanyContestManagementController {
       });
     } catch (error: unknown) {
       next(error);
-      
     }
   }
 }

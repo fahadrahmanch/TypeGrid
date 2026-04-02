@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import logger from "../../../utils/logger";
 import { AuthRequest } from "../../../types/AuthRequest";
 import { HttpStatus } from "../../constants/httpStatus";
@@ -14,7 +14,11 @@ export class MyLessonsController {
     private _saveLessonResultUseCase: ISaveLessonResultUseCase,
   ) {}
 
-  async myLessons(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async myLessons(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId as string;
 
@@ -25,10 +29,14 @@ export class MyLessonsController {
       });
     } catch (error: unknown) {
       next(error);
-    } 
+    }
   }
 
-  async getAssignedLessonById(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getAssignedLessonById(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { assignmentId } = req.params;
       const userId = req.user?.userId;
@@ -60,7 +68,11 @@ export class MyLessonsController {
     }
   }
 
-  async saveLessonResult(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async saveLessonResult(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       const assignmentId = req.params.id;

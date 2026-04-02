@@ -35,4 +35,7 @@ const competitionSchema = new Schema<ICompetitionDocument>(
   { timestamps: true },
 );
 
-export const Competition = model<ICompetitionDocument>("Competition", competitionSchema);
+export const Competition = model<ICompetitionDocument>(
+  "Competition",
+  competitionSchema,
+);

@@ -15,4 +15,3 @@ redis.on("error", (err) => {
 });
 
 export default redis;
-

@@ -10,14 +10,15 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 import { RealtimeProvider } from "./context/RealtimeProvider";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-  <Provider store={store}>
-    <BrowserRouter>
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <RealtimeProvider>
-          <App />
-        </RealtimeProvider>
-      </GoogleOAuthProvider>
-    </BrowserRouter>
-  </Provider>,
+    <Provider store={store}>
+      <BrowserRouter>
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          <RealtimeProvider>
+            <App />
+          </RealtimeProvider>
+        </GoogleOAuthProvider>
+      </BrowserRouter>
+    </Provider>
+    ,
   </StrictMode>,
 );

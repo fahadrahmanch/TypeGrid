@@ -8,9 +8,12 @@ export class companyAuthRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.post(Routes.AUTH.SIGNIN, (req: Request, res: Response, next: NextFunction) => {
-      injectAuthController.companySignIn(req, res, next);
-    });
+    this.router.post(
+      Routes.AUTH.SIGNIN,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.companySignIn(req, res, next);
+      },
+    );
     this.router.post(
       Routes.AUTH.REFRESH_TOKEN,
       (req: Request, res: Response, next: NextFunction) => {
@@ -35,9 +38,12 @@ export class companyAuthRouter {
         injectAuthController.resetPassword(req, res, next);
       },
     );
-    this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response, next: NextFunction) => {
-      injectAuthController.logout(req, res, next);
-    });
+    this.router.post(
+      Routes.AUTH.LOGOUT,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.logout(req, res, next);
+      },
+    );
   }
   getRouter() {
     return this.router;

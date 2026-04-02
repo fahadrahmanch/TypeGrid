@@ -23,10 +23,14 @@ export class ChallengesController {
   ) {}
 
   //company users
-  async companyUsers(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async companyUsers(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
-      const {search}=req.query as {search:string}
+      const { search } = req.query as { search: string };
       if (!userId) {
         res.status(HttpStatus.UNAUTHORIZED).json({
           success: false,
@@ -35,7 +39,7 @@ export class ChallengesController {
         return;
       }
 
-      const users = await this._getCompanyUsersUseCase.execute(userId,search);
+      const users = await this._getCompanyUsersUseCase.execute(userId, search);
       res.status(HttpStatus.OK).json({
         success: true,
         data: users,
@@ -45,7 +49,11 @@ export class ChallengesController {
     }
   }
   // make challenge
-  async makeChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async makeChallenge(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const receiverId = req.body.receiverId;
       const senderId = req.user?.userId;
@@ -66,12 +74,7 @@ export class ChallengesController {
         return;
       }
 
-      await this._makeChallengeUseCase.execute(
-        senderId,
-        receiverId,
-      );
-  
-
+      await this._makeChallengeUseCase.execute(senderId, receiverId);
 
       logger.info("Challenge made successfully", { senderId, receiverId });
       res.status(HttpStatus.CREATED).json({
@@ -89,7 +92,7 @@ export class ChallengesController {
       }
     }
   }
-//check already sent challenge
+  //check already sent challenge
   async checkAlreadySentChallenge(
     req: AuthRequest,
     res: Response,
@@ -116,8 +119,12 @@ export class ChallengesController {
       next(error);
     }
   }
-//get all challenges
-  async getAllChallenges(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  //get all challenges
+  async getAllChallenges(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
 
@@ -136,14 +143,16 @@ export class ChallengesController {
         data: challenges,
       });
     } catch (error: unknown) {
-      
-        next(error);
-      
+      next(error);
     }
   }
   //accept challenge
 
-  async acceptChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async acceptChallenge(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const challengeId = req.params.challengeId;
 
@@ -173,14 +182,16 @@ export class ChallengesController {
         message: MESSAGES.UPDATE_SUCCESS,
       });
     } catch (error: unknown) {
-    
-        next(error);
-      
+      next(error);
     }
   }
 
   //get challenge game data
-  async getChallengeGameData(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getChallengeGameData(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const challengeId = req.params.challengeId;
 
@@ -199,13 +210,15 @@ export class ChallengesController {
         data: challengeGameData,
       });
     } catch (error: unknown) {
-     
-        next(error);
-      
+      next(error);
     }
   }
   //reject challenge
-  async rejectChallenge(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async rejectChallenge(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const challengeId = req.params.challengeId;
 
@@ -235,9 +248,7 @@ export class ChallengesController {
         message: MESSAGES.UPDATE_SUCCESS,
       });
     } catch (error: unknown) {
-    
-        next(error);
-      
+      next(error);
     }
   }
 }

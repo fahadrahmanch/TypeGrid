@@ -39,11 +39,10 @@ export class QuickSocketController {
 
   async leaveQuickPlay(gameId: string, userId: string): Promise<void> {
     try {
-      if(!gameId || !userId){
+      if (!gameId || !userId) {
         throw new Error(MESSAGES.INVALID_REQUEST);
       }
       await this._leaveQuickPlayUseCase.execute(gameId, userId);
-
     } catch (error: any) {
       logger.error("Error in leaveQuickPlay socket handler", {
         error: error.message,

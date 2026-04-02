@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 type UseSoloGameTimerProps = {
   gameData: any;

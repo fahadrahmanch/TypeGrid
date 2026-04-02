@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import {
-  ArrowLeft,
-  Square,
-  RotateCcw,
-  Send,
-  Trophy,
-} from "lucide-react";
+import { ArrowLeft, Square, RotateCcw, Send, Trophy } from "lucide-react";
 import { socket } from "../../../socket";
 import { fetchContest } from "../../../api/companyAdmin/companyContextAPI";
 interface LiveMonitorModalProps {
@@ -46,7 +40,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
   onClose,
   contestId,
   contestTitle,
-  duration,
+  // duration,
 }) => {
   const [participants, setParticipants] = useState<ParticipantLiveStats[]>([]);
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
@@ -54,7 +48,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
   const [contestDetails, setContestDetails] = useState<any>({});
   const [contestStatus, setContestStatus] = useState<any>(null);
   // const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
-  const [countdown, setCountdown] = useState(0);
+  // const [countdown, setCountdown] = useState(0);
   const [remainingTime, setRemainingTime] = useState(0);
   // const [elapsedTime, setElapsedTime] = useState(0);
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
@@ -129,7 +123,12 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
   }, [contestId]);
 
   useEffect(() => {
-    if (!contestDetails?.startTime || !contestDetails?.duration||finalResult.length>0) return;
+    if (
+      !contestDetails?.startTime ||
+      !contestDetails?.duration ||
+      finalResult.length > 0
+    )
+      return;
     const startTimesamp = new Date(contestDetails.startTime).getTime();
 
     const interval = setInterval(() => {
@@ -157,7 +156,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
     contestDetails?.startTime,
     contestDetails?.duration,
     contestDetails?.countDown,
-    finalResult
+    finalResult,
   ]);
 
   useEffect(() => {
@@ -195,7 +194,6 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
       contestId: contestId,
       status: "completed",
     });
-    
   }
 
   if (!isOpen) return null;
@@ -228,7 +226,9 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                   Time Remaining
                 </p>
                 {contestDetails?.startTime ? (
-                  <p className="text-3xl font-black text-[#D0864B] tracking-tight">{formatTime(remainingTime)}</p>
+                  <p className="text-3xl font-black text-[#D0864B] tracking-tight">
+                    {formatTime(remainingTime)}
+                  </p>
                 ) : (
                   <p className="text-gray-500 font-medium">Loading timer...</p>
                 )}
@@ -242,60 +242,60 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
 
           {/* Action Buttons Card */}
           {contestStatus === "ongoing" && (
-          <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm mb-6 flex flex-col gap-4 border border-gray-100">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={handleEndContest}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#ECA468] hover:bg-[#D0864B] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
-                >
-                  <Square className="w-4 h-4 fill-current" />
-                  End Contest
-                </button>
-                <button
-                  onClick={restart}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[#7D6B5D] hover:bg-[#635449] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
-                >
-                  <RotateCcw className="w-4 h-4 stroke-[3]" />
-                  Restart
-                </button>
-                {/* <button
+            <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm mb-6 flex flex-col gap-4 border border-gray-100">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={handleEndContest}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-[#ECA468] hover:bg-[#D0864B] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
+                  >
+                    <Square className="w-4 h-4 fill-current" />
+                    End Contest
+                  </button>
+                  <button
+                    onClick={restart}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-[#7D6B5D] hover:bg-[#635449] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
+                  >
+                    <RotateCcw className="w-4 h-4 stroke-[3]" />
+                    Restart
+                  </button>
+                  {/* <button
                                     onClick={() => setIsAnnouncementOpen(!isAnnouncementOpen)}
                                     className="flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-200 outline-none"
                                 >
                                     <MessageSquare className="w-4 h-4 stroke-[2.5]" />
                                     Send Announcement
                                 </button> */}
-              </div>
+                </div>
 
-              {/* <button className="flex items-center gap-2 px-5 py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 focus:ring-4 focus:ring-purple-200 outline-none">
+                {/* <button className="flex items-center gap-2 px-5 py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 focus:ring-4 focus:ring-purple-200 outline-none">
                                 <Download className="w-4 h-4 stroke-[2.5]" />
                                 Export Data
                             </button> */}
-            </div>
-
-            {/* Expandable Announcement Section */}
-            {isAnnouncementOpen && (
-              <div className="mt-4 p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 animate-in slide-in-from-top-2 duration-200">
-                <textarea
-                  value={announcementMsg}
-                  onChange={(e) => setAnnouncementMsg(e.target.value)}
-                  placeholder="Type your announcement here..."
-                  className="w-full p-4 rounded-xl border border-indigo-200/60 shadow-inner bg-white/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none h-28 mb-4 text-gray-800 placeholder-gray-400 font-medium"
-                />
-                <div className="flex justify-start">
-                  <button
-                    onClick={handleSendAnnouncement}
-                    disabled={!announcementMsg.trim()}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold shadow-sm hover:bg-indigo-700 hover:shadow-md hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm"
-                  >
-                    <Send className="w-4 h-4 stroke-[2.5]" />
-                    Send to All Participants
-                  </button>
-                </div>
               </div>
-            )}
-          </div>
+
+              {/* Expandable Announcement Section */}
+              {isAnnouncementOpen && (
+                <div className="mt-4 p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 animate-in slide-in-from-top-2 duration-200">
+                  <textarea
+                    value={announcementMsg}
+                    onChange={(e) => setAnnouncementMsg(e.target.value)}
+                    placeholder="Type your announcement here..."
+                    className="w-full p-4 rounded-xl border border-indigo-200/60 shadow-inner bg-white/70 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none h-28 mb-4 text-gray-800 placeholder-gray-400 font-medium"
+                  />
+                  <div className="flex justify-start">
+                    <button
+                      onClick={handleSendAnnouncement}
+                      disabled={!announcementMsg.trim()}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold shadow-sm hover:bg-indigo-700 hover:shadow-md hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm"
+                    >
+                      <Send className="w-4 h-4 stroke-[2.5]" />
+                      Send to All Participants
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
           {/* Participants List Panel */}

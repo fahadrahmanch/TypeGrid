@@ -9,14 +9,14 @@ import { LessonEntity } from "../../../../domain/entities/lesson.entity";
 import { mapLessonDTOforCompanyLesson } from "../../../mappers/companyAdmin/company-lesson.mapper";
 /**
  * Use case for creating a company lesson.
- * 
+ *
  * Handles the creation of a new lesson for a company by validating the requesting user
  */
 export class CreateCompanyLessonUseCase implements ICreateCompanyLessonUseCase {
   constructor(
     private readonly _lessonRepository: ILessonRepository,
     private readonly _userRepository: IUserRepository,
-  ) { }
+  ) {}
   async execute(
     userId: string,
     data: Partial<CompanyLessonDTO>,
@@ -41,7 +41,11 @@ export class CreateCompanyLessonUseCase implements ICreateCompanyLessonUseCase {
         MESSAGES.INVALID_COMPANY_REFERENCE,
       );
     }
-    const lesson = new LessonEntity({ ...data, companyId,createdBy: "company" });
+    const lesson = new LessonEntity({
+      ...data,
+      companyId,
+      createdBy: "company",
+    });
     const createdLesson = await this._lessonRepository.create(lesson);
     return mapLessonDTOforCompanyLesson(createdLesson);
   }

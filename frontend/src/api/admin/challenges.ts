@@ -1,11 +1,14 @@
 import { adminAPI } from "../axios/adminAPI";
 import { API_ROUTES } from "../../constants/apiRoutes";
 
-export const fetchChallenges = (searchText: string, filter: string, limit: number, page: number) => {
+export const fetchChallenges = (
+  searchText: string,
+  limit: number,
+  page: number,
+) => {
   return adminAPI.get(API_ROUTES.CHALLENGE.ALL_CHALLENGES, {
     params: {
       search: searchText,
-      filter,
       limit,
       page,
     },
@@ -27,5 +30,3 @@ export const deleteChallenge = (id: string) => {
 export const fetchChallengeById = (id: string) => {
   return adminAPI.get(API_ROUTES.CHALLENGE.BY_ID(id));
 };
-
-

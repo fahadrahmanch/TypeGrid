@@ -33,7 +33,9 @@ const userRepository = new UserRepository(User);
 const resultRepository = new ResultRepository(Result);
 const contestRepository = new ContestRepository(Contest);
 const challengeRepository = new CompanyChallengeRepository(CompanyChallenge);
-const companyUserStatsRepository = new CompanyUserStatsRepository(CompanyUserStats);
+const companyUserStatsRepository = new CompanyUserStatsRepository(
+  CompanyUserStats,
+);
 const lessonRepository = new LessonRepository(Lesson);
 
 const removeMemberUseCase = new RemoveMemberGroupPlayGroupUseCase(

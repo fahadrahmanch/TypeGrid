@@ -112,10 +112,16 @@ export class CompetitionEntity {
     return this.textId;
   }
   removeParticipant(userId: string) {
-    if (!this.participants.some((participant: any) => participant.toString() === userId)) {
+    if (
+      !this.participants.some(
+        (participant: any) => participant.toString() === userId,
+      )
+    ) {
       throw new Error("User is not a participant");
     }
-    this.participants = this.participants.filter((participant: any) => participant.toString() !== userId);
+    this.participants = this.participants.filter(
+      (participant: any) => participant.toString() !== userId,
+    );
   }
   toObject() {
     return {

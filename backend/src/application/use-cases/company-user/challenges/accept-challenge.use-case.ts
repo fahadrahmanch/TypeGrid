@@ -22,7 +22,7 @@ export class AcceptChallengeUseCase implements IAcceptChallengeUseCase {
     if (!challenge) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.CHALLENGE_NOT_FOUND
+        MESSAGES.CHALLENGE_NOT_FOUND,
       );
     }
 

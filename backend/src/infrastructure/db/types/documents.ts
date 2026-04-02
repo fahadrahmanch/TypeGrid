@@ -39,8 +39,8 @@ export interface ICompanyDocument {
 
 // ────────────── Lesson ──────────────
 export interface ILessonDocument {
-  _id: Types.ObjectId
-  title: string;       
+  _id: Types.ObjectId;
+  title: string;
   text: string;
   category: "sentence" | "paragraph";
   level: "beginner" | "intermediate" | "advanced";
@@ -79,7 +79,7 @@ export interface ICompetitionDocument {
   textId?: Types.ObjectId;
   duration: number;
   countDown: number;
-  reward?: Array<{ rank?: number | null; prize?: number | null }>
+  reward?: Array<{ rank?: number | null; prize?: number | null }>;
   CompanyId?: Types.ObjectId | null;
   createdAt?: Date;
   updatedAt?: Date;
@@ -227,12 +227,12 @@ export interface IAdminChallengeDocument {
 
 export interface IDailyChallengeDocument {
   _id?: Types.ObjectId;
-  challengeId: Types.ObjectId; 
-  date: Date; 
+  challengeId: Types.ObjectId;
+  date: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
-export interface IStreakDocument  {
+export interface IStreakDocument {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   currentStreak: number;
@@ -241,7 +241,7 @@ export interface IStreakDocument  {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IDailyChallengeProgressDocument{
+export interface IDailyChallengeProgressDocument {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   dailyChallengeId: Types.ObjectId;
@@ -256,7 +256,7 @@ export interface IDailyChallengeProgressDocument{
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IStatsDocument  {
+export interface IStatsDocument {
   userId: Types.ObjectId;
   totalXp: number;
   totalCompetitions: number;
@@ -278,6 +278,3 @@ export interface ICompanyUserStatsDocument {
   createdAt: Date;
   updatedAt: Date;
 }
-
-
-

@@ -84,32 +84,31 @@ const ContestArea: React.FC = () => {
     fetchContest();
   }, [contestId]);
 
-//socket 
-useContestSocket({
-  contestId,
-  user,
-  contestData,
-  phase,
-  typedText,
-  wpm,
-  accuracy,
-  errors,
-  remainingTime,
-  elapsedTime,
-  totalTyped,
-  gameIdRef,
-  userIdRef,
-  setLivePlayers,
-  setFinalResult,
-  setContestData,
-  setTypedText,
-  setErrors,
-  setTotalTyped,
-  setElapsedTime,
-  setIsFinished,
-  finalResult
-});
-
+  //socket
+  useContestSocket({
+    contestId,
+    user,
+    contestData,
+    phase,
+    typedText,
+    wpm,
+    accuracy,
+    errors,
+    remainingTime,
+    elapsedTime,
+    totalTyped,
+    gameIdRef,
+    userIdRef,
+    setLivePlayers,
+    setFinalResult,
+    setContestData,
+    setTypedText,
+    setErrors,
+    setTotalTyped,
+    setElapsedTime,
+    setIsFinished,
+    finalResult,
+  });
 
   useEffect(() => {
     const preventZoom = (e: WheelEvent) => {
@@ -138,7 +137,6 @@ useContestSocket({
       document.body.style.overflow = "auto";
     };
   }, []);
-
 
   // Auto-scroll
   useEffect(() => {
@@ -318,18 +316,17 @@ useContestSocket({
       prev.map((p: any) =>
         p._id === user._id
           ? {
-              ...p,
-              wpm,
-              accuracy,
-              errors,
-              progress: typedText.length,
-            }
+            ...p,
+            wpm,
+            accuracy,
+            errors,
+            progress: typedText.length,
+          }
           : p,
       ),
     );
   }, [wpm, accuracy, errors, typedText, user, contestData]);
 
-  
   const progressPercentage = Math.round(
     (typedText.length / (contestData?.contestText?.length || 0)) * 100,
   );
@@ -505,7 +502,7 @@ useContestSocket({
                     </span>
                     <div className="flex items-baseline gap-1 relative z-10">
                       <span className="text-xl font-black text-slate-800 tracking-wider">
-                        {formatTime(remainingTime)}
+                        {!isNaN(remainingTime) ? formatTime(remainingTime) : "00:00"}
                       </span>
                     </div>
                   </div>
@@ -643,7 +640,7 @@ useContestSocket({
                     const pos = Math.round(
                       (player.progress /
                         (contestData?.contestText?.length || 0)) *
-                        100,
+                      100,
                     );
                     return (
                       <div
@@ -719,7 +716,8 @@ useContestSocket({
                 {/* Countdown Overlay */}
                 {phase === "COUNTDOWN" && (
                   <div className="absolute inset-0 bg-[#fff8ea]/40 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-in fade-in duration-300">
-|                    <div className="relative flex items-center justify-center group">
+                    |{" "}
+                    <div className="relative flex items-center justify-center group">
                       <div className="absolute w-48 h-48 bg-[#ECA468]/10 rounded-full blur-2xl animate-pulse"></div>
                       <div className="absolute w-32 h-32 bg-[#8CA78A]/10 rounded-full blur-xl animate-pulse delay-75"></div>
                       <span className="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-slate-800 to-slate-500 drop-shadow-md animate-pulse relative z-10">

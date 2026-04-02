@@ -7,22 +7,20 @@ import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class LoginUseCase implements ILoginUseCase {
-
   constructor(
     private readonly _authRepository: IAuthRepository,
-    private readonly _hashService: IHashService
+    private readonly _hashService: IHashService,
   ) {}
 
   async execute(
     email: string,
     password: string,
-    allowedRoles: string[]
+    allowedRoles: string[],
   ): Promise<AuthUserEntity> {
-
     if (!email || !password) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -31,28 +29,28 @@ export class LoginUseCase implements ILoginUseCase {
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.USER_DETAILS_NOT_FOUND
+        MESSAGES.USER_DETAILS_NOT_FOUND,
       );
     }
 
     if (user.status === "block") {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
-        MESSAGES.AUTH_ACCOUNT_BLOCKED
+        MESSAGES.AUTH_ACCOUNT_BLOCKED,
       );
     }
 
     if (!allowedRoles.includes(user.role)) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.AUTH_UNAUTHORIZED_ROLE
+        MESSAGES.AUTH_UNAUTHORIZED_ROLE,
       );
     }
 
     if (!user.password) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.AUTH_INCORRECT_PASSWORD
+        MESSAGES.AUTH_INCORRECT_PASSWORD,
       );
     }
 
@@ -61,7 +59,7 @@ export class LoginUseCase implements ILoginUseCase {
     if (!verified) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.AUTH_INCORRECT_PASSWORD
+        MESSAGES.AUTH_INCORRECT_PASSWORD,
       );
     }
 
@@ -74,6 +72,5 @@ export class LoginUseCase implements ILoginUseCase {
       CompanyId: user?.CompanyId?.toString(),
       role: user.role,
     });
-
   }
 }

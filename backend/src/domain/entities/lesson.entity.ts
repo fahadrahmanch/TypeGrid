@@ -21,7 +21,7 @@ export class LessonEntity extends Entity<LessonEntity> {
   category!: LessonCategory;
   level!: LessonLevel;
   title?: string;
-  
+
   wpm!: number;
   accuracy!: number;
 

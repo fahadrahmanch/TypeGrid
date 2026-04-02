@@ -51,7 +51,6 @@ const LessonTable: React.FC<{
         toast.success("Lesson deleted successfully");
       }
     } catch (error) {
-      console.log("error", error);
       toast.error("Failed to delete lesson");
     }
   }
@@ -60,7 +59,9 @@ const LessonTable: React.FC<{
     <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
       <div className="flex justify-between items-center mb-8 px-2">
         <div>
-          <h3 className="text-xl font-black text-gray-900 leading-tight">All Lessons</h3>
+          <h3 className="text-xl font-black text-gray-900 leading-tight">
+            All Lessons
+          </h3>
           <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
             {lessons.length} total lessons available
           </p>
@@ -73,8 +74,10 @@ const LessonTable: React.FC<{
             <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400">
               <th className="pb-4 px-4">Lesson Details</th>
               <th className="pb-4 px-4 text-center">Difficulty</th>
-              <th className="pb-4 px-4 text-center">Engagement</th>
-              <th className="pb-4 px-4 text-center font-bold text-[#D0864B]">Avg Performance</th>
+              {/* <th className="pb-4 px-4 text-center">Engagement</th> */}
+              {/* <th className="pb-4 px-4 text-center font-bold text-[#D0864B]">
+                Avg Performance
+              </th> */}
               <th className="pb-4 px-4 text-right">Actions</th>
             </tr>
           </thead>
@@ -84,7 +87,7 @@ const LessonTable: React.FC<{
                 key={lesson.id}
                 className="group hover:bg-white/40 transition-all duration-300"
               >
-                <td className="py-5 px-4 font-bold text-gray-800 text-sm">
+                <td className="py-5 px-6 font-bold text-gray-800 text-sm flex">
                   {lesson.title}
                 </td>
                 <td className="py-5 px-4 text-center">
@@ -94,17 +97,21 @@ const LessonTable: React.FC<{
                     {lesson?.level}
                   </span>
                 </td>
-                <td className="py-5 px-4 text-center">
+                {/* <td className="py-5 px-4 text-center">
                   <div className="inline-flex flex-col items-center">
-                    <span className="text-xs font-bold text-gray-700">{lesson.assigned} Assigned</span>
-                    <span className="text-[10px] text-gray-400 font-medium">{lesson.completed} Completed ({lesson.completionRate}%)</span>
+                    <span className="text-xs font-bold text-gray-700">
+                      {lesson.assigned} Assigned
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      {lesson.completed} Completed ({lesson.completionRate}%)
+                    </span>
                   </div>
-                </td>
-                <td className="py-5 px-4 text-center">
+                </td> */}
+                {/* <td className="py-5 px-4 text-center">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFF8EA] rounded-lg text-xs font-black text-[#D0864B] border border-[#ECA468]/20">
                     {lesson.avgWpm} WPM
                   </div>
-                </td>
+                </td> */}
                 <td className="py-5 px-4">
                   <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                     <button
@@ -132,7 +139,7 @@ const LessonTable: React.FC<{
         </table>
       </div>
 
-      {totalPages > 1 && (
+      {/* {totalPages > 1 && ( */}
         <div className="mt-10 flex justify-center items-center gap-6">
           <button
             disabled={page === 1}
@@ -143,8 +150,12 @@ const LessonTable: React.FC<{
           </button>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
-            <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">of {totalPages}</span>
+            <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
+              {page}
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
+              of {totalPages}
+            </span>
           </div>
 
           <button
@@ -155,7 +166,7 @@ const LessonTable: React.FC<{
             <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
-      )}
+      {/* )} */}
 
       <EditLessonModal
         isOpen={isOpenEditModal}

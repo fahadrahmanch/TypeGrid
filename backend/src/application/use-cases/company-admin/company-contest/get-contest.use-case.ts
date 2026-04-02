@@ -9,7 +9,7 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 
 /**
  * Use case for retrieving a contest by ID with admin-level details.
- * 
+ *
  * Validates that both the user and contest exist before returning the contest data.
  */
 export class GetContestUseCase implements IGetContestUseCase {

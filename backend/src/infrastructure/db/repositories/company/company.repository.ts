@@ -42,7 +42,7 @@ export class CompanyRepository
       .lean<ICompanyDocument[]>()
       .exec();
 
-    const companies = rawCompanies.map(doc => this.toDomain(doc));
+    const companies = rawCompanies.map((doc) => this.toDomain(doc));
 
     return { companies, total };
   }

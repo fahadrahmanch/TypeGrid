@@ -1,5 +1,4 @@
-import React from "react";
-import { Target, Zap, Swords } from "lucide-react";
+import { Swords } from "lucide-react";
 import { Teammate } from "../../../types/challenge";
 import { sendChallengeApi } from "../../../api/companyUser/challenge";
 import { toast } from "react-toastify";
@@ -22,7 +21,7 @@ const TeammateCard = ({
         toast.success("Challenge sent successfully");
         onStatusChange(teammate._id, "pending");
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     }
   };
@@ -63,7 +62,7 @@ const TeammateCard = ({
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-3 mb-6 flex-1">
+        {/* <div className="grid grid-cols-2 gap-3 mb-6 flex-1">
           <div className="bg-white/60 rounded-xl p-3 flex flex-col justify-center">
             <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-500 mb-1">
               <Zap className="w-3.5 h-3.5" />
@@ -83,10 +82,12 @@ const TeammateCard = ({
               <span className="text-base font-bold ml-0.5">%</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Action */}
-        {challengeStatus === "pending" || challengeStatus === "accepted"|| challengeStatus === "waiting" ? (
+        {challengeStatus === "pending" ||
+        challengeStatus === "accepted" ||
+        challengeStatus === "waiting" ? (
           <div className="flex gap-2 w-full">
             <button
               onClick={onViewChallenges}

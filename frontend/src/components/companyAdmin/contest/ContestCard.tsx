@@ -3,7 +3,11 @@ import { useEffect } from "react";
 import { Users, Clock, Calendar } from "lucide-react";
 import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { useState } from "react";
-import { ContestStatus, ContestLevel, ContestProps } from "../../../types/contest";
+import {
+  ContestStatus,
+  ContestLevel,
+  ContestProps,
+} from "../../../types/contest";
 import { socket } from "../../../socket";
 import ContestDetailsModal from "./ContestDetailsModal";
 import ContestLobbyModal from "./ContestLobbyModal";
@@ -49,7 +53,6 @@ const getLevelBadge = (level: ContestLevel) => {
   }
 };
 
-
 const ContestCard: React.FC<ContestProps> = ({
   title,
   status,
@@ -80,7 +83,6 @@ const ContestCard: React.FC<ContestProps> = ({
       status: "completed",
     });
   }
-  
 
   const changeStatus = async (id: string, status: ContestStatus) => {
     try {
@@ -93,7 +95,6 @@ const ContestCard: React.FC<ContestProps> = ({
           status: data.status,
         });
       }
-      
     } catch (error) {
       console.log(error);
     }
@@ -322,7 +323,7 @@ const ContestCard: React.FC<ContestProps> = ({
           isOpen={isResultsModalOpen}
           onClose={() => setIsResultsModalOpen(false)}
           contestId={id}
-          rewards={rewards||[]}
+          rewards={rewards || []}
         />
       )}
     </div>

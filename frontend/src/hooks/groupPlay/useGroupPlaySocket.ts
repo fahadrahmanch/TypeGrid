@@ -43,9 +43,8 @@ export const useGroupPlaySocket = ({
   setLeftPlayers,
   setFinalResult,
   setIsfinished,
-  hasJoinedRef
+  hasJoinedRef,
 }: Props) => {
-
   // leave game when component unmounts
   useEffect(() => {
     return () => {
@@ -56,10 +55,7 @@ export const useGroupPlaySocket = ({
         });
       }
     };
-
   }, []);
-
-
 
   // typing progress update from other players
   useEffect(() => {
@@ -68,8 +64,8 @@ export const useGroupPlaySocket = ({
         prev.map((p: any) =>
           p._id === data.userId
             ? { ...p, ...data, progress: data.typedLength }
-            : p
-        )
+            : p,
+        ),
       );
     };
 
@@ -81,8 +77,6 @@ export const useGroupPlaySocket = ({
     };
   }, [gameData?._id]);
 
-
-
   // join game room
   useEffect(() => {
     if (!gameData?._id || !currentUser?._id) return;
@@ -91,11 +85,8 @@ export const useGroupPlaySocket = ({
       gameId: gameData._id,
       userId: currentUser._id,
     });
-     hasJoinedRef.current = true;
-
+    hasJoinedRef.current = true;
   }, [gameData?._id, currentUser?._id]);
-
-
 
   // force exit
   useEffect(() => {
@@ -107,8 +98,6 @@ export const useGroupPlaySocket = ({
       socket.off("force-exit");
     };
   }, []);
-
-
 
   // handle player leave
   useEffect(() => {
@@ -149,12 +138,9 @@ export const useGroupPlaySocket = ({
     };
   }, []);
 
-
-
   // time up
   useEffect(() => {
     if (remainingTime === 0) {
-
       setIsfinished(true);
 
       socket.emit("time-up", {
@@ -176,8 +162,6 @@ export const useGroupPlaySocket = ({
     };
   }, [remainingTime]);
 
-
-
   // game finished
   useEffect(() => {
     socket.on("game-finished", (data: any) => {
@@ -188,8 +172,6 @@ export const useGroupPlaySocket = ({
       socket.off("game-finished");
     };
   }, [gameData?._id]);
-
-
 
   // send typing progress
   useEffect(() => {
@@ -204,7 +186,5 @@ export const useGroupPlaySocket = ({
       accuracy,
       errors,
     });
-
   }, [typedText, wpm, accuracy, errors, phase]);
-
 };

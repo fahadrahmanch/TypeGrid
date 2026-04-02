@@ -8,21 +8,24 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 export class GetDailyAssignChallengeUseCase implements IGetDailyAssignChallengeUseCase {
   constructor(
     private readonly _dailyAssignChallengeRepository: IDailyAssignChallengeRepository,
-    private readonly _challengeRepository: IChallengeRepository
+    private readonly _challengeRepository: IChallengeRepository,
   ) {}
 
   async execute(id: string): Promise<DailyAssignChallengeResponseDTO | null> {
-    const dailyAssignChallenge = await this._dailyAssignChallengeRepository.findById(id);
+    const dailyAssignChallenge =
+      await this._dailyAssignChallengeRepository.findById(id);
     if (!dailyAssignChallenge) return null;
 
-    const challenge = await this._challengeRepository.findById(dailyAssignChallenge.getChallengeId());
+    const challenge = await this._challengeRepository.findById(
+      dailyAssignChallenge.getChallengeId(),
+    );
     if (!challenge) {
-        throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+      throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
     }
 
     return DailyAssignChallengeMapper({
       ...dailyAssignChallenge.toObject(),
-      challengeId: { _id: challenge.getId()!, title: challenge.getTitle() }
+      challengeId: { _id: challenge.getId()!, title: challenge.getTitle() },
     });
   }
 }

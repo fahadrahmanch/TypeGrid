@@ -37,4 +37,4 @@ export const checkChallengeGameEndService = async (gameId: string) => {
     return item.status != "PLAYING";
   });
   return isComplete;
-}
+};

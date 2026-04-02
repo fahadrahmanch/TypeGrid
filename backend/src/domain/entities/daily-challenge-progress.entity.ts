@@ -42,28 +42,64 @@ export class DailyChallengeProgressEntity {
     this.updatedAt = attrs.updatedAt;
   }
 
-  setStatus(status: "not_started" | "in_progress" | "completed" | "failed") { this.status = status; }
-  setWpm(wpm: number) { this.wpm = wpm; }
-  setAccuracy(accuracy: number) { this.accuracy = accuracy; }
-  setXpEarned(xpEarned: number) { this.xpEarned = xpEarned; }
-  setStartedAt(startedAt: Date) { this.startedAt = startedAt; }
-  setCompletedAt(completedAt: Date) { this.completedAt = completedAt; }
-  setUpdatedAt(updatedAt: Date) { this.updatedAt = updatedAt; }
+  setStatus(status: "not_started" | "in_progress" | "completed" | "failed") {
+    this.status = status;
+  }
+  setWpm(wpm: number) {
+    this.wpm = wpm;
+  }
+  setAccuracy(accuracy: number) {
+    this.accuracy = accuracy;
+  }
+  setXpEarned(xpEarned: number) {
+    this.xpEarned = xpEarned;
+  }
+  setStartedAt(startedAt: Date) {
+    this.startedAt = startedAt;
+  }
+  setCompletedAt(completedAt: Date) {
+    this.completedAt = completedAt;
+  }
+  setUpdatedAt(updatedAt: Date) {
+    this.updatedAt = updatedAt;
+  }
 
-
-
-  getId(): string | undefined { return this._id; }
-  getUserId(): string { return this.userId; }
-  getDailyChallengeId(): string { return this.dailyChallengeId; }
-  getDate(): Date { return this.date; }
-  getStatus(): "not_started" | "in_progress" | "completed" | "failed" { return this.status; }
-  getWpm(): number { return this.wpm; }
-  getAccuracy(): number { return this.accuracy; }
-  getXpEarned(): number { return this.xpEarned; }
-  getStartedAt(): Date | null { return this.startedAt; }
-  getCompletedAt(): Date | null { return this.completedAt; }
-  getCreatedAt(): Date | undefined { return this.createdAt; }
-  getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  getId(): string | undefined {
+    return this._id;
+  }
+  getUserId(): string {
+    return this.userId;
+  }
+  getDailyChallengeId(): string {
+    return this.dailyChallengeId;
+  }
+  getDate(): Date {
+    return this.date;
+  }
+  getStatus(): "not_started" | "in_progress" | "completed" | "failed" {
+    return this.status;
+  }
+  getWpm(): number {
+    return this.wpm;
+  }
+  getAccuracy(): number {
+    return this.accuracy;
+  }
+  getXpEarned(): number {
+    return this.xpEarned;
+  }
+  getStartedAt(): Date | null {
+    return this.startedAt;
+  }
+  getCompletedAt(): Date | null {
+    return this.completedAt;
+  }
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
 
   toObject() {
     return {

@@ -1,7 +1,6 @@
 import { useEffect, Dispatch, SetStateAction, MutableRefObject } from "react";
 import { socket } from "../../socket";
 import { LivePlayer, GamePlayerResult } from "../../types/contest";
-import { useNavigate } from "react-router-dom";
 interface UseContestSocketProps {
   contestId?: string;
   user: any;
@@ -53,7 +52,7 @@ export const useContestSocket = ({
   setTotalTyped,
   setElapsedTime,
   setIsFinished,
-  finalResult
+  finalResult,
 }: UseContestSocketProps) => {
   // join contest
   useEffect(() => {
@@ -75,8 +74,6 @@ export const useContestSocket = ({
     };
   }, [contestId, user?._id]);
 
-
-
   // leave contest
   useEffect(() => {
     return () => {
@@ -88,8 +85,6 @@ export const useContestSocket = ({
       }
     };
   }, []);
-
-
 
   // users update
   useEffect(() => {
@@ -106,8 +101,6 @@ export const useContestSocket = ({
     };
   }, [contestId, user?._id]);
 
-
-
   // typing progress update from other players
   useEffect(() => {
     const handler = (data: any) => {
@@ -115,8 +108,8 @@ export const useContestSocket = ({
         prev.map((p) =>
           p.userId === data.userId
             ? { ...p, ...data, progress: data.typedLength }
-            : p
-        )
+            : p,
+        ),
       );
     };
 
@@ -127,8 +120,6 @@ export const useContestSocket = ({
       socket.off("typing-progress-update-contest", handler);
     };
   }, []);
-
-
 
   // game finished
   useEffect(() => {
@@ -141,13 +132,11 @@ export const useContestSocket = ({
     };
   }, []);
 
-  useEffect(()=>{
-    if(finalResult.length > 0){
+  useEffect(() => {
+    if (finalResult.length > 0) {
       setIsFinished(true);
     }
-  },[finalResult]);
-
-
+  }, [finalResult]);
 
   // restart contest
   useEffect(() => {
@@ -179,8 +168,6 @@ export const useContestSocket = ({
     };
   }, []);
 
-
-
   // send typing progress
   useEffect(() => {
     if (!contestData?._id || !user) return;
@@ -196,8 +183,6 @@ export const useContestSocket = ({
       errors,
     });
   }, [typedText, wpm, accuracy, errors, phase]);
-
-
 
   // time up
   useEffect(() => {
@@ -223,5 +208,4 @@ export const useContestSocket = ({
       socket.off("time-up-contest");
     };
   }, [remainingTime]);
-  
 };

@@ -22,7 +22,7 @@ import { GetLessonsUseCase } from "../../application/use-cases/admin/lesson-mana
 import { RewardManageController } from "../controllers/admin/reward-manage.controller";
 import { CreateRewardUseCase } from "../../application/use-cases/admin/reward/create-reward.use-case";
 import { RewardRepository } from "../../infrastructure/db/repositories/admin/reward.repository";
-import { Reward } from "../../infrastructure/db/models/admin/reward.schema";  
+import { Reward } from "../../infrastructure/db/models/admin/reward.schema";
 import { GetRewardsUseCase } from "../../application/use-cases/admin/reward/get-rewards.use-case";
 import { GetRewardByIdUseCase } from "../../application/use-cases/admin/reward/get-reward-by-id.use-case";
 import { UpdateRewardUseCase } from "../../application/use-cases/admin/reward/update-reward.use-case";
@@ -80,7 +80,13 @@ const createRewardUseCase = new CreateRewardUseCase(rewardRepository);
 const getRewardByIdUseCase = new GetRewardByIdUseCase(rewardRepository);
 const updateRewardUseCase = new UpdateRewardUseCase(rewardRepository);
 const deleteRewardUseCase = new DeleteRewardUseCase(rewardRepository);
-export const injectRewardManageController = new RewardManageController(createRewardUseCase,getRewardsUseCase,getRewardByIdUseCase,updateRewardUseCase,deleteRewardUseCase);
+export const injectRewardManageController = new RewardManageController(
+  createRewardUseCase,
+  getRewardsUseCase,
+  getRewardByIdUseCase,
+  updateRewardUseCase,
+  deleteRewardUseCase,
+);
 export const injectCompanyManageController = new CompanyManageController(
   getCompaniesUseCase,
   approveCompanyUseCase,
@@ -95,7 +101,7 @@ export const injectLessonManageController = new LessonManageController(
   getLessonUseCase,
   updateLessonUseCase,
   deleteLessonUseCase,
-  getLessonsUseCase
+  getLessonsUseCase,
 );
 
 const goalRepository = new GoalRepository(Goal);
@@ -110,7 +116,7 @@ export const injectGoalManageController = new GoalManageController(
   getGoalUseCase,
   updateGoalUseCase,
   deleteGoalUseCase,
-  getGoalsUseCase
+  getGoalsUseCase,
 );
 
 const challengeRepository = new ChallengeRepository(AdminChallenge);
@@ -125,21 +131,37 @@ export const injectChallengeManageController = new ChallengeManageController(
   getChallengeUseCase,
   updateChallengeUseCase,
   deleteChallengeUseCase,
-  getChallengesUseCase
+  getChallengesUseCase,
 );
 
-const dailyChallengeRepository = new DailyAssignChallengeRepository(DailyChallenge);
-const createDailyAssignChallengeUseCase = new CreateDailyAssignChallengeUseCase(dailyChallengeRepository,challengeRepository);
-const getDailyAssignChallengeUseCase = new GetDailyAssignChallengeUseCase(dailyChallengeRepository, challengeRepository);
-const updateDailyAssignChallengeUseCase = new UpdateDailyAssignChallengeUseCase(dailyChallengeRepository, challengeRepository);
-const deleteDailyAssignChallengeUseCase = new DeleteDailyAssignChallengeUseCase(dailyChallengeRepository);
-const getDailyAssignChallengesUseCase = new GetDailyAssignChallengesUseCase(dailyChallengeRepository, challengeRepository);
-
-
-export const injectDailyAssignChallengeManageController = new DailyAssignChallengeManageController(
-  createDailyAssignChallengeUseCase,
-  getDailyAssignChallengeUseCase,
-  updateDailyAssignChallengeUseCase,
-  deleteDailyAssignChallengeUseCase,
-  getDailyAssignChallengesUseCase
+const dailyChallengeRepository = new DailyAssignChallengeRepository(
+  DailyChallenge,
 );
+const createDailyAssignChallengeUseCase = new CreateDailyAssignChallengeUseCase(
+  dailyChallengeRepository,
+  challengeRepository,
+);
+const getDailyAssignChallengeUseCase = new GetDailyAssignChallengeUseCase(
+  dailyChallengeRepository,
+  challengeRepository,
+);
+const updateDailyAssignChallengeUseCase = new UpdateDailyAssignChallengeUseCase(
+  dailyChallengeRepository,
+  challengeRepository,
+);
+const deleteDailyAssignChallengeUseCase = new DeleteDailyAssignChallengeUseCase(
+  dailyChallengeRepository,
+);
+const getDailyAssignChallengesUseCase = new GetDailyAssignChallengesUseCase(
+  dailyChallengeRepository,
+  challengeRepository,
+);
+
+export const injectDailyAssignChallengeManageController =
+  new DailyAssignChallengeManageController(
+    createDailyAssignChallengeUseCase,
+    getDailyAssignChallengeUseCase,
+    updateDailyAssignChallengeUseCase,
+    deleteDailyAssignChallengeUseCase,
+    getDailyAssignChallengesUseCase,
+  );

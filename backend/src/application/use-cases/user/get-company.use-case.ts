@@ -8,7 +8,10 @@ export class GetCompanyUseCase implements IGetCompanyUseCase {
   async execute(companyId: string): Promise<any> {
     const company = await this.companyRepository.findById(companyId);
     if (!company) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPANY_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPANY_NOT_FOUND,
+      );
     }
     return company;
   }

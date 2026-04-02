@@ -21,11 +21,21 @@ export class RewardEntity {
     this.updatedAt = attrs.updatedAt;
   }
 
-  getId(): string | undefined { return this._id; }
-  getXp(): number { return this.xp; }
-  getDescription(): string { return this.description; }
-  getCreatedAt(): Date | undefined { return this.createdAt; }
-  getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  getId(): string | undefined {
+    return this._id;
+  }
+  getXp(): number {
+    return this.xp;
+  }
+  getDescription(): string {
+    return this.description;
+  }
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
 
   toObject() {
     return {

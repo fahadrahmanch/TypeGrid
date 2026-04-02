@@ -17,7 +17,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
   onClose,
   contestId,
   contestTitle,
-  onStartContest,
+  // onStartContest,
 }) => {
   const [participantsList, setParticipantsList] = useState<
     Array<{ name: string; email: string }>

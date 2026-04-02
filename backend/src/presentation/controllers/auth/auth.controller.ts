@@ -30,11 +30,14 @@ export class AuthController {
     private _forgotPasswordOtpVerifyUseCase: IForgotPasswordOtpVerifyUseCase,
     private _createNewPasswordUseCase: ICreateNewPasswordUseCase,
     private _companyFindUseCase: ICompanyFindUseCase,
-  ) { }
-
+  ) {}
 
   //user register
-  async register(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async register(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { name, email, password } = req.body;
       if (!name || !email || !password) {
@@ -48,7 +51,6 @@ export class AuthController {
       await this._registerUserUseCase.execute({
         name,
         email,
-        password,
       });
       res.status(HttpStatus.OK).json({
         success: true,
@@ -58,8 +60,12 @@ export class AuthController {
       next(error);
     }
   }
-//verify otp
-  async verifyOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+  //verify otp
+  async verifyOtp(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { otp, name, email, password } = req.body;
       logger.info("Verifying OTP", { email });
@@ -70,12 +76,15 @@ export class AuthController {
       });
     } catch (error: unknown) {
       next(error);
-   
     }
   }
   //resentOtp
 
-  async resentOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async resentOtp(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { name, email } = req.body;
       if (!email) {
@@ -99,7 +108,10 @@ export class AuthController {
   async signin(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password, role } = req.body.data;
-      const user = await this._loginUseCase.execute(email, password, [role,'companyAdmin']);
+      const user = await this._loginUseCase.execute(email, password, [
+        role,
+        "companyAdmin",
+      ]);
 
       if (!user || !user._id) {
         res.status(HttpStatus.NOT_FOUND).json({
@@ -152,7 +164,11 @@ export class AuthController {
     }
   }
   // refresh-token
-  async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async refreshToken(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { tokenName } = getRoleConfig(req.baseUrl);
       const token = req.cookies[tokenName];
@@ -200,7 +216,11 @@ export class AuthController {
   }
   // google-auth
 
-  async googleAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async googleAuth(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { name, email, googleId } = req.body;
       if (!name || !email || !googleId || Object.keys(req.body).length === 0) {
@@ -211,12 +231,7 @@ export class AuthController {
         return;
       }
 
-
-      const user = await this._googleAuthUseCase.execute(
-        name,
-        email,
-        googleId,
-      );
+      const user = await this._googleAuthUseCase.execute(name, email, googleId);
 
       if (!user || !user._id) {
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -247,13 +262,13 @@ export class AuthController {
       }
 
       const safeUser = mapToSafeUser(user);
-     res.cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/user",
-    });
+      res.cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/user",
+      });
 
       logger.info("Google Authentication successful", { email });
 
@@ -268,7 +283,11 @@ export class AuthController {
     }
   }
   // forgot-password user
-  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async forgotPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const base = req.baseUrl;
       const { email } = req.body;
@@ -289,7 +308,10 @@ export class AuthController {
         return;
       }
 
-      if (base.startsWith("/company") && !["companyUser", "companyAdmin"].includes(user.role)) {
+      if (
+        base.startsWith("/company") &&
+        !["companyUser", "companyAdmin"].includes(user.role)
+      ) {
         res.status(HttpStatus.FORBIDDEN).json({
           success: false,
           message: MESSAGES.ACCESS_DENIED_NOT_COMPANY,
@@ -316,7 +338,11 @@ export class AuthController {
     }
   }
   // verify-forgot-password-otp
-  async verifyForgotPasswordOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async verifyForgotPasswordOtp(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { otp, email } = req.body;
       await this._forgotPasswordOtpVerifyUseCase.execute(otp, email);
@@ -330,7 +356,11 @@ export class AuthController {
   }
   //rest password user
 
-  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async resetPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email, password } = req.body;
       await this._createNewPasswordUseCase.execute(email, password);
@@ -342,15 +372,20 @@ export class AuthController {
       next(error);
     }
   }
-//logout
+  //logout
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { tokenName, path } = getRoleConfig(req.baseUrl);
-      
-      res.clearCookie(tokenName, { httpOnly: true, secure: true, sameSite: "strict", path });
+
+      res.clearCookie(tokenName, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        path,
+      });
       res.status(HttpStatus.OK).json({
         success: true,
-        message: MESSAGES.AUTH_LOGOUT_SUCCESS
+        message: MESSAGES.AUTH_LOGOUT_SUCCESS,
       });
     } catch (error: unknown) {
       next(error);
@@ -358,11 +393,15 @@ export class AuthController {
   }
 
   //admin signin
-  async AdminSignIn(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async AdminSignIn(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email, password, role } = req.body.data;
       const admin = await this._loginUseCase.execute(email, password, [role]);
-     
+
       if (!admin || !admin._id) {
         res.status(HttpStatus.NOT_FOUND).json({
           success: false,
@@ -370,7 +409,6 @@ export class AuthController {
         });
         return;
       }
-
 
       const accessToken = await this._tokenService.generateAccessToken(
         admin?._id.toString(),
@@ -393,13 +431,13 @@ export class AuthController {
 
       const safeAdmin = mapToSafeUser(admin);
 
-       res.cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/admin",
-    })
+      res.cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/admin",
+      });
 
       logger.info("Admin signed in successfully", { email });
 
@@ -416,11 +454,18 @@ export class AuthController {
 
   //company signin
 
-  async companySignIn(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async companySignIn(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email, password } = req.body.data;
-      const user = await this._loginUseCase.execute(email, password,  ["companyAdmin", "companyUser"]);
-       
+      const user = await this._loginUseCase.execute(email, password, [
+        "companyAdmin",
+        "companyUser",
+      ]);
+
       if (!user || !user._id) {
         res.status(HttpStatus.NOT_FOUND).json({
           success: false,
@@ -460,12 +505,12 @@ export class AuthController {
       const safeUser = mapToSafeUser(user);
 
       res.cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/company",
-    });
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/company",
+      });
 
       logger.info("Company signed in successfully", { email });
 

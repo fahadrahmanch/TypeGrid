@@ -17,5 +17,3 @@ export interface CompanyLessonDTO {
   createdAt?: Date;
   createdBy?: string;
 }
-
-

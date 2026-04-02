@@ -16,23 +16,36 @@ export class StartChallengeUseCase implements IStartChallengeUseCase {
 
   async execute(challengeId: string): Promise<void> {
     if (!challengeId) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST,
+      );
     }
 
     const challenge = await this._challengeRepository.findById(challengeId);
     if (!challenge) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CHALLENGE_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CHALLENGE_NOT_FOUND,
+      );
     }
     challenge.start();
     await this._challengeRepository.update(challenge.toObject());
     const competitionId = challenge.getCompetitionId();
     if (!competitionId) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND_FOR_CHALLENGE);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND_FOR_CHALLENGE,
+      );
     }
 
-    const competition = await this._competitionRepository.findById(competitionId);
+    const competition =
+      await this._competitionRepository.findById(competitionId);
     if (!competition) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND,
+      );
     }
 
     if (competition.getStatus() !== "ongoing") {

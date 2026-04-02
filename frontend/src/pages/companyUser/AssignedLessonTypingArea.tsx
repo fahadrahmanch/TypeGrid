@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { saveLessonResult } from "../../api/companyAdmin/lessons";
+import StatCard from "../../components/common/StatCard";
 const AssignedLessonTypingArea: React.FC = () => {
   const navigate = useNavigate();
 
@@ -279,32 +280,28 @@ const AssignedLessonTypingArea: React.FC = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard
-            icon={<Clock className="w-5 h-5" />}
+            icon={<Clock className="w-5 h-5 text-blue-600" />}
             label="Time Left"
             value={`${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, "0")}`}
-            color="text-blue-600"
-            bgColor="bg-blue-50"
+            color="bg-blue-50"
           />
           <StatCard
-            icon={<Zap className="w-5 h-5" />}
+            icon={<Zap className="w-5 h-5 text-orange-500" />}
             label="WPM"
             value={wpm}
-            color="text-orange-500"
-            bgColor="bg-orange-50"
+            color="bg-orange-50"
           />
           <StatCard
-            icon={<CheckCircle2 className="w-5 h-5" />}
+            icon={<CheckCircle2 className="w-5 h-5 text-emerald-500" />}
             label="Accuracy"
             value={`${accuracy}%`}
-            color="text-emerald-500"
-            bgColor="bg-emerald-50"
+            color="bg-emerald-50"
           />
           <StatCard
-            icon={<AlertCircle className="w-5 h-5" />}
+            icon={<AlertCircle className="w-5 h-5 text-red-500" />}
             label="Errors"
             value={errors}
-            color="text-red-500"
-            bgColor="bg-red-50"
+            color="bg-red-50"
           />
         </div>
 
@@ -471,36 +468,5 @@ const AssignedLessonTypingArea: React.FC = () => {
     </div>
   );
 };
-
-// Helper Component for Stats
-const StatCard: React.FC<{
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-  color: string;
-  bgColor: string;
-}> = ({ icon, label, value, color, bgColor }) => (
-  <div className="bg-[#FFF3DB] border border-orange-50/50 p-6 rounded-2xl hover:scale-105 transition-transform duration-300 shadow-sm cursor-default group">
-    <div className="flex flex-col items-center gap-3">
-      <div
-        className={`w-10 h-10 ${bgColor} ${color} rounded-full flex items-center justify-center shadow-inner group-hover:rotate-12 transition-transform duration-500`}
-      >
-        {icon}
-      </div>
-      <div className="text-center">
-        <div
-          className={
-            "text-2xl font-bold text-gray-800 group-hover:scale-110 transition-transform duration-300 origin-bottom"
-          }
-        >
-          {value}
-        </div>
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-1">
-          {label}
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 export default AssignedLessonTypingArea;

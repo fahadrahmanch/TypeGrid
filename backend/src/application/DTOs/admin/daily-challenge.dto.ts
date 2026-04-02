@@ -2,9 +2,9 @@ export interface AssignDailyChallengeDTO {
   challengeId: string;
   date: Date;
 }
-export interface challengeDTO{
-  _id?:string,
-  title:string
+export interface challengeDTO {
+  _id?: string;
+  title: string;
 }
 
 export interface DailyAssignChallengeResponseDTO {
@@ -14,7 +14,7 @@ export interface DailyAssignChallengeResponseDTO {
   createdAt?: Date;
   updatedAt?: Date;
 }
-export interface DailyAssignChallengeDTO{
+export interface DailyAssignChallengeDTO {
   _id?: string;
   challengeId: challengeDTO;
   date: Date;

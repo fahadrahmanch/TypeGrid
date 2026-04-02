@@ -20,7 +20,14 @@ const companyChallengeSchema = new Schema<ICompanyChallengeDocument>(
     },
     status: {
       type: String,
-      enum: ["pending", "accepted", "declined", "completed", "waiting","ongoing"],
+      enum: [
+        "pending",
+        "accepted",
+        "declined",
+        "completed",
+        "waiting",
+        "ongoing",
+      ],
       default: "pending",
     },
     competitionId: { type: Schema.Types.ObjectId, ref: "Competition" },

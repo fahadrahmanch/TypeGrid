@@ -10,7 +10,11 @@ export class CompanyGroupController {
     private _getCompanyGroupsUseCase: IGetCompanyGroupsUseCase,
   ) {}
 
-  async createGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async createGroup(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
 
@@ -32,7 +36,11 @@ export class CompanyGroupController {
     }
   }
 
-  async getCompanyGroups(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getCompanyGroups(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
 

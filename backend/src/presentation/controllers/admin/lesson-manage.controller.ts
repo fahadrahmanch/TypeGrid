@@ -7,7 +7,6 @@ import { IUpdateLessonUseCase } from "../../../application/use-cases/interfaces/
 import { IDeleteLessonUseCase } from "../../../application/use-cases/interfaces/admin/delete-lesson.interface";
 import { IGetLessonsUseCase } from "../../../application/use-cases/interfaces/admin/get-lessons.interface";
 import logger from "../../../utils/logger";
-import { Status } from "../../../domain/enums/status.enum";
 
 //lesson management controller
 
@@ -18,11 +17,15 @@ export class LessonManageController {
     private _updateLessonUseCase: IUpdateLessonUseCase,
     private _deleteLessonUseCase: IDeleteLessonUseCase,
     private _getLessonsUseCase: IGetLessonsUseCase,
-  ) { }
+  ) {}
 
   //create lesson
 
-  async createLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async createLesson(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const values = req.body;
       if (!values || Object.keys(values).length === 0) {
@@ -34,7 +37,10 @@ export class LessonManageController {
       }
 
       await this._createLessonUseCase.execute(values);
-      logger.info("Lesson created successfully", { title: values.title, category: values.category });
+      logger.info("Lesson created successfully", {
+        title: values.title,
+        category: values.category,
+      });
       res.status(HttpStatus.CREATED).json({
         success: true,
         message: MESSAGES.CREATE_SUCCESS,
@@ -46,14 +52,23 @@ export class LessonManageController {
 
   //get lessons
 
-  async getLessons(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getLessons(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { filter, searchText, page, limit } = req.query;
-      const lessons = await this._getLessonsUseCase.execute(filter as string,searchText as string,Number(page),Number(limit));
+      const lessons = await this._getLessonsUseCase.execute(
+        filter as string,
+        searchText as string,
+        Number(page),
+        Number(limit),
+      );
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.FETCH_SUCCESS,
-        total:lessons.total,
+        total: lessons.total,
         data: lessons.lessons,
       });
     } catch (error: unknown) {
@@ -63,7 +78,11 @@ export class LessonManageController {
 
   //fetch lesson
 
-  async fetchLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async fetchLesson(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id: lessonId } = req.params;
 
@@ -89,7 +108,11 @@ export class LessonManageController {
 
   //update lesson
 
-  async updateLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async updateLesson(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id: lessonId } = req.params;
       const values = req.body;
@@ -128,7 +151,11 @@ export class LessonManageController {
 
   //delete lesson
 
-  async deleteLesson(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async deleteLesson(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id: lessonId } = req.params;
 

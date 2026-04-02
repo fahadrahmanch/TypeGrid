@@ -19,10 +19,19 @@ export class GetCompaniesUseCase implements IGetCompaniesUseCase {
    * Executes the use case.
    * @returns Promise containing a list of companies
    */
-  async execute(status:string,searchText:string,page:number,limit:number): Promise<{companies:CompanyEntity[],total:number}> {
-   const companies=await this._companyRepository.getCompanies(status,searchText,page,limit);
+  async execute(
+    status: string,
+    searchText: string,
+    page: number,
+    limit: number,
+  ): Promise<{ companies: CompanyEntity[]; total: number }> {
+    const companies = await this._companyRepository.getCompanies(
+      status,
+      searchText,
+      page,
+      limit,
+    );
 
     return companies;
   }
-
 }

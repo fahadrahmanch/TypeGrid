@@ -1,4 +1,12 @@
-import { Zap, Target, Keyboard, AlertCircle, Clock, Timer, Trophy } from "lucide-react";
+import {
+  Zap,
+  Target,
+  Keyboard,
+  AlertCircle,
+  Clock,
+  Timer,
+  Trophy,
+} from "lucide-react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 import { ClipboardEvent, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -102,7 +110,7 @@ export default function ChallengeArea() {
   );
   const [players, setPlayers] = useState<LivePlayer[] | null>(null);
   const [errors, setErrors] = useState(0);
- 
+
   const [elapsedTime, setElapsedTime] = useState(0);
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [countdown, setCountdown] = useState(3);
@@ -149,47 +157,50 @@ export default function ChallengeArea() {
     fetchData();
   }, [challengeId]);
 
-   const { wpm, accuracy } = useTypingStats(
+  const { wpm, accuracy } = useTypingStats(
     totalTyped,
     errors,
     elapsedTime,
     phase,
-    isFinished
+    isFinished,
   );
 
-
   useChallengeTimer({
-  startedAt: challengeData?.startedAt,
-  duration: challengeData?.duration,
-  countDown: challengeData?.countDown,
-  isFinished,
-  setPhase,
-  setCountdown,
-  setRemainingTime,
-  setElapsedTime,
-  setIsFinished,
-});
+    startedAt: challengeData?.startedAt,
+    duration: challengeData?.duration,
+    countDown: challengeData?.countDown,
+    isFinished,
+    setPhase,
+    setCountdown,
+    setRemainingTime,
+    setElapsedTime,
+    setIsFinished,
+  });
 
   useEffect(() => {
     if (!user?._id || !challengeData?.lesson?.text?.length) return;
-    setPlayers((prev) =>
-      prev?.map((p) =>
-        p.userId === (user?._id || user?.id)
-          ? {
-              ...p,
-              typedLength: typedText.length,
-              wpm: wpm || 0,
-              accuracy: accuracy || 0,
-              errors: errors,
-              progress: isFinished 
-                ? 100 
-                : Math.min(
-                    100,
-                    Math.round((typedText.length / challengeData.lesson.text.length) * 100)
-                  ),
-            }
-          : p
-      ) ?? null
+    setPlayers(
+      (prev) =>
+        prev?.map((p) =>
+          p.userId === (user?._id || user?.id)
+            ? {
+                ...p,
+                typedLength: typedText.length,
+                wpm: wpm || 0,
+                accuracy: accuracy || 0,
+                errors: errors,
+                progress: isFinished
+                  ? 100
+                  : Math.min(
+                      100,
+                      Math.round(
+                        (typedText.length / challengeData.lesson.text.length) *
+                          100,
+                      ),
+                    ),
+              }
+            : p,
+        ) ?? null,
     );
   }, [
     typedText.length,
@@ -270,160 +281,183 @@ export default function ChallengeArea() {
     }
   }, [typedText]);
 
-
   //handle key down
 
   useChallengeKeydown({
-  lessonText: challengeData?.lesson.text,
-  challengeId: challengeId,
-  currentUserId: user?._id,
-  currentUserName: user?.name,
-  currentUserImageUrl: user?.imageUrl,
-  isFinished,
-  phase,
-  hasError,
-  typedText,
-  elapsedTime,
-  wpm,
-  accuracy,
-  errors,
-  totalTyped,
-  setHasError,
-  setTypedText,
-  setTotalTyped,
-  setErrors,
-  setIsFinished,
-});
+    lessonText: challengeData?.lesson.text,
+    challengeId: challengeId,
+    currentUserId: user?._id,
+    currentUserName: user?.name,
+    currentUserImageUrl: user?.imageUrl,
+    isFinished,
+    phase,
+    hasError,
+    typedText,
+    elapsedTime,
+    wpm,
+    accuracy,
+    errors,
+    totalTyped,
+    setHasError,
+    setTypedText,
+    setTotalTyped,
+    setErrors,
+    setIsFinished,
+  });
   useChallengeSocket({
-  challengeId: challengeId,
-  currentUserId: user?._id,
-  user,
-  phase,
-  isFinished,
-  typedText,
-  wpm,
-  accuracy,
-  errors,
-  elapsedTime,
-  totalLength: challengeData?.lesson?.text?.length || 0,
-  onPlayersUpdate: setPlayers,
-  onGameFinished: setFinalResult,
-});
+    challengeId: challengeId,
+    currentUserId: user?._id,
+    user,
+    phase,
+    isFinished,
+    typedText,
+    wpm,
+    accuracy,
+    errors,
+    elapsedTime,
+    totalLength: challengeData?.lesson?.text?.length || 0,
+    onPlayersUpdate: setPlayers,
+    onGameFinished: setFinalResult,
+  });
 
- if (finalResult.length > 0) {
-  return (
-    <>
-      <CompanyUserNavbar />
-      <div className="min-h-screen bg-[#FFF8EA] font-sans text-gray-800 flex flex-col pt-24 px-4 pb-12 overflow-y-auto">
-        <div className="flex flex-col items-center justify-center gap-8 animate-in fade-in zoom-in duration-500 max-w-4xl mx-auto w-full">
-          <div className="text-center space-y-2">
-            <h1 className="text-4xl font-black text-[#111827] tracking-tight flex items-center justify-center gap-3">
-              <Trophy className="w-10 h-10 text-orange-500" />
-              Challenge Results
-              <Trophy className="w-10 h-10 text-orange-500" />
-            </h1>
-            <p className="text-gray-500 font-medium italic">
-              The race has ended! Here's how everyone performed.
-            </p>
-          </div>
-
-          <div className="w-full bg-white rounded-[2rem] shadow-xl border border-[#FDE6C6] overflow-hidden">
-            {/* Header */}
-            <div className="grid grid-cols-[60px_1fr_80px_100px_100px] gap-4 p-5 bg-orange-50/50 border-b border-[#FDE6C6] text-[10px] font-bold text-gray-500 uppercase tracking-widest">
-              <div className="text-center">Rank</div>
-              <div>Player</div>
-              <div className="text-right">WPM</div>
-              <div className="text-right">Accuracy</div>
-              <div className="text-right">Time</div>
+  if (finalResult.length > 0) {
+    return (
+      <>
+        <CompanyUserNavbar />
+        <div className="min-h-screen bg-[#FFF8EA] font-sans text-gray-800 flex flex-col pt-24 px-4 pb-12 overflow-y-auto">
+          <div className="flex flex-col items-center justify-center gap-8 animate-in fade-in zoom-in duration-500 max-w-4xl mx-auto w-full">
+            <div className="text-center space-y-2">
+              <h1 className="text-4xl font-black text-[#111827] tracking-tight flex items-center justify-center gap-3">
+                <Trophy className="w-10 h-10 text-orange-500" />
+                Challenge Results
+                <Trophy className="w-10 h-10 text-orange-500" />
+              </h1>
+              <p className="text-gray-500 font-medium italic">
+                The race has ended! Here's how everyone performed.
+              </p>
             </div>
 
-            {/* Rows */}
-            <div className="divide-y divide-orange-50">
-              {finalResult
-                .sort((a, b) => (a.rank || 999) - (b.rank || 999))
-                .map((result, index) => (
-                  <div
-                    key={result.userId}
-                    className={`grid grid-cols-[60px_1fr_80px_100px_100px] gap-4 p-5 items-center hover:bg-orange-50/20 transition-colors
+            <div className="w-full bg-white rounded-[2rem] shadow-xl border border-[#FDE6C6] overflow-hidden">
+              {/* Header */}
+              <div className="grid grid-cols-[60px_1fr_80px_100px_100px] gap-4 p-5 bg-orange-50/50 border-b border-[#FDE6C6] text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                <div className="text-center">Rank</div>
+                <div>Player</div>
+                <div className="text-right">WPM</div>
+                <div className="text-right">Accuracy</div>
+                <div className="text-right">Time</div>
+              </div>
+
+              {/* Rows */}
+              <div className="divide-y divide-orange-50">
+                {finalResult
+                  .sort((a, b) => (a.rank || 999) - (b.rank || 999))
+                  .map((result, index) => (
+                    <div
+                      key={result.userId}
+                      className={`grid grid-cols-[60px_1fr_80px_100px_100px] gap-4 p-5 items-center hover:bg-orange-50/20 transition-colors
                       ${result.userId === user?._id ? "bg-orange-50/40" : ""}
                       ${result.status === "LEFT" ? "opacity-50" : ""}
                     `}
-                  >
-                    {/* Rank */}
-                    <div className="flex justify-center">
-                      {result.status === "LEFT" ? (
-                        <span className="text-[10px] text-red-400 font-bold">LEFT</span>
-                      ) : result.rank === 1 ? (
-                        <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black shadow-sm border border-orange-200">1</div>
-                      ) : result.rank === 2 ? (
-                        <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-black shadow-sm border border-slate-200">2</div>
-                      ) : result.rank === 3 ? (
-                        <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-black shadow-sm border border-amber-100">3</div>
-                      ) : (
-                        <span className="text-gray-400 font-bold">#{result.rank || index + 1}</span>
-                      )}
-                    </div>
+                    >
+                      {/* Rank */}
+                      <div className="flex justify-center">
+                        {result.status === "LEFT" ? (
+                          <span className="text-[10px] text-red-400 font-bold">
+                            LEFT
+                          </span>
+                        ) : result.rank === 1 ? (
+                          <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black shadow-sm border border-orange-200">
+                            1
+                          </div>
+                        ) : result.rank === 2 ? (
+                          <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-black shadow-sm border border-slate-200">
+                            2
+                          </div>
+                        ) : result.rank === 3 ? (
+                          <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-black shadow-sm border border-amber-100">
+                            3
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 font-bold">
+                            #{result.rank || index + 1}
+                          </span>
+                        )}
+                      </div>
 
-                    {/* Player */}
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={result.imageUrl}
-                        alt={result.name}
-                        className="w-10 h-10 rounded-xl border-2 border-orange-100 bg-orange-50 object-cover"
-                      />
-                      <div>
-                        <p className="font-bold text-gray-900 text-sm flex items-center gap-2">
-                          {result.name}
-                          {(result.userId === (user?._id || user?.id)) && (
-                            <span className="text-[10px] text-orange-500 ml-1">(You)</span>
-                          )}
-                          {result.status === "LEFT" && (
-                            <span className="text-[10px] text-red-400 bg-red-50 px-1.5 py-0.5 rounded-md border border-red-100">
-                              Left early
-                            </span>
-                          )}
-                        </p>
+                      {/* Player */}
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={result.imageUrl}
+                          alt={result.name}
+                          className="w-10 h-10 rounded-xl border-2 border-orange-100 bg-orange-50 object-cover"
+                        />
+                        <div>
+                          <p className="font-bold text-gray-900 text-sm flex items-center gap-2">
+                            {result.name}
+                            {result.userId === (user?._id || user?.id) && (
+                              <span className="text-[10px] text-orange-500 ml-1">
+                                (You)
+                              </span>
+                            )}
+                            {result.status === "LEFT" && (
+                              <span className="text-[10px] text-red-400 bg-red-50 px-1.5 py-0.5 rounded-md border border-red-100">
+                                Left early
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* WPM */}
+                      <div className="text-right font-black text-gray-900 text-lg">
+                        {result.status === "LEFT" ? (
+                          <span className="text-gray-300 font-bold text-sm">
+                            —
+                          </span>
+                        ) : (
+                          result.wpm
+                        )}
+                      </div>
+
+                      {/* Accuracy */}
+                      <div className="text-right font-bold text-emerald-600">
+                        {result.status === "LEFT" ? (
+                          <span className="text-gray-300 font-bold text-sm">
+                            —
+                          </span>
+                        ) : (
+                          `${result.accuracy}%`
+                        )}
+                      </div>
+
+                      {/* Time */}
+                      <div className="text-right font-mono text-gray-500 text-xs">
+                        {result.status === "LEFT" ? (
+                          <span className="text-gray-300 font-bold text-sm">
+                            —
+                          </span>
+                        ) : (
+                          formatTime(result.timeTaken)
+                        )}
                       </div>
                     </div>
+                  ))}
+              </div>
+            </div>
 
-                    {/* WPM */}
-                    <div className="text-right font-black text-gray-900 text-lg">
-                      {result.status === "LEFT"
-                        ? <span className="text-gray-300 font-bold text-sm">—</span>
-                        : result.wpm}
-                    </div>
-
-                    {/* Accuracy */}
-                    <div className="text-right font-bold text-emerald-600">
-                      {result.status === "LEFT"
-                        ? <span className="text-gray-300 font-bold text-sm">—</span>
-                        : `${result.accuracy}%`}
-                    </div>
-
-                    {/* Time */}
-                    <div className="text-right font-mono text-gray-500 text-xs">
-                      {result.status === "LEFT"
-                        ? <span className="text-gray-300 font-bold text-sm">—</span>
-                        : formatTime(result.timeTaken)}
-                    </div>
-                  </div>
-                ))}
+            <div className="flex items-center gap-4 mt-4">
+              <button
+                onClick={() => navigate("/company/user/challenges")}
+                className="px-6 py-3 rounded-2xl bg-white border border-[#FDE6C6] text-gray-600 font-bold hover:bg-orange-50 transition-all flex items-center gap-2 shadow-sm"
+              >
+                Back to Challenges
+              </button>
             </div>
           </div>
-
-          <div className="flex items-center gap-4 mt-4">
-            <button
-              onClick={() => navigate("/company/user/challenges")}
-              className="px-6 py-3 rounded-2xl bg-white border border-[#FDE6C6] text-gray-600 font-bold hover:bg-orange-50 transition-all flex items-center gap-2 shadow-sm"
-            >
-              Back to Challenges
-            </button>
-          </div>
         </div>
-      </div>
-    </>
-  );
-}
+      </>
+    );
+  }
 
   return (
     <>
@@ -453,10 +487,10 @@ export default function ChallengeArea() {
             <div className="bg-white px-3 md:px-4 py-1.5 md:py-2 rounded-[1rem] border border-[#FDE6C6] shadow-sm flex items-center gap-2">
               <Timer className="w-4 h-4 md:w-5 md:h-5 text-orange-500 animate-pulse" />
               <h3 className="font-bold text-gray-800 text-sm">
-                  {phase === "COUNTDOWN"
-                    ? `Game starts in ${countdown}s`
-                    : `Time left: ${formatTime(remainingTime)}`}
-                </h3>
+                {phase === "COUNTDOWN"
+                  ? `Game starts in ${countdown}s`
+                  : `Time left: ${formatTime(remainingTime)}`}
+              </h3>
             </div>
           </div>
 

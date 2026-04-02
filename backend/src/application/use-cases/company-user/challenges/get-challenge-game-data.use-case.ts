@@ -19,22 +19,35 @@ export class GetChallengeGameDataUseCase implements IGetChallengeGameDataUseCase
 
   async execute(challengeId: string): Promise<ChallengeGameDTO> {
     if (!challengeId) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST,
+      );
     }
 
     const challenge = await this._challengeRepository.findById(challengeId);
     if (!challenge) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CHALLENGE_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CHALLENGE_NOT_FOUND,
+      );
     }
 
     const competitionId = challenge.getCompetitionId();
     if (!competitionId) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND,
+      );
     }
 
-    const competition = await this._competitionRepository.findById(competitionId);
+    const competition =
+      await this._competitionRepository.findById(competitionId);
     if (!competition) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND,
+      );
     }
 
     const updatedCompetition = await this._competitionRepository.updateById(
@@ -43,7 +56,10 @@ export class GetChallengeGameDataUseCase implements IGetChallengeGameDataUseCase
     );
 
     if (!updatedCompetition) {
-      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
+      throw new CustomError(
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        MESSAGES.SOMETHING_WENT_WRONG,
+      );
     }
 
     const [player1, player2, lesson] = await Promise.all([
@@ -53,11 +69,17 @@ export class GetChallengeGameDataUseCase implements IGetChallengeGameDataUseCase
     ]);
 
     if (!player1 || !player2) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.PLAYER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.PLAYER_NOT_FOUND,
+      );
     }
 
     if (!lesson) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND,
+      );
     }
 
     return mapChallengeGameToDTO({

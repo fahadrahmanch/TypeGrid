@@ -5,7 +5,7 @@ const resultSchema = new Schema(
   {
     type: {
       type: String,
-      enum: ["quick", "solo", "group", "contest","oneToOne"],
+      enum: ["quick", "solo", "group", "contest", "oneToOne"],
       required: true,
     },
     competitionId: {
@@ -37,7 +37,7 @@ const resultSchema = new Schema(
       prize: { type: Number, required: false },
     },
   },
-  { timestamps: true ,suppressReservedKeysWarning: true},
+  { timestamps: true, suppressReservedKeysWarning: true },
 );
 
 export const Result = model<IResultDocument>("Result", resultSchema);

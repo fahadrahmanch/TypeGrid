@@ -11,7 +11,11 @@ export class SoloPlayController {
     private _soloPlayResultUseCase: ISoloPlayResultUseCase,
   ) {}
 
-  async createSoloPlay(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async createSoloPlay(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       if (!userId) {
@@ -23,7 +27,10 @@ export class SoloPlayController {
       }
       const soloPlay = await this._createSoloPlayUseCase.execute(userId);
 
-      logger.info("Solo play created successfully", { userId, soloPlayId: soloPlay._id });
+      logger.info("Solo play created successfully", {
+        userId,
+        soloPlayId: soloPlay._id,
+      });
       res.status(HttpStatus.OK).json({
         success: true,
         message: "Solo play created successfully",
@@ -34,7 +41,11 @@ export class SoloPlayController {
     }
   }
 
-  async result(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async result(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       const gameId = req.params.gameId;

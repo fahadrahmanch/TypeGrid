@@ -584,16 +584,38 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({
             <label className="text-sm font-semibold text-gray-700">
               Maximum Participants
             </label>
-            <input
-              type="number"
-              value={maxParticipants}
-              onChange={(e) => {
-                setMaxParticipants(e.target.value);
-                if (errors.maxParticipants)
-                  setErrors({ ...errors, maxParticipants: "" });
-              }}
-              className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.maxParticipants ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
-            />
+            <div className="relative">
+              <select
+                value={maxParticipants}
+                onChange={(e) => {
+                  setMaxParticipants(e.target.value);
+                  if (errors.maxParticipants)
+                    setErrors({ ...errors, maxParticipants: "" });
+                }}
+                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm appearance-none cursor-pointer ${errors.maxParticipants ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
+              >
+                {[...Array(10)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg
+                  className="w-4 h-4 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </div>
+            </div>
             {errors.maxParticipants && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.maxParticipants}

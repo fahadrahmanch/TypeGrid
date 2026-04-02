@@ -12,7 +12,6 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
  * Resolves the company context from the requesting user's profile.
  */
 export class GetCompanyLessonsUseCase implements IGetCompanyLessonsUseCase {
-
   constructor(
     private readonly _lessonRepository: ILessonRepository,
     private readonly _userRepository: IUserRepository,
@@ -21,16 +20,22 @@ export class GetCompanyLessonsUseCase implements IGetCompanyLessonsUseCase {
   async execute(userId: string): Promise<CompanyLessonDTO[]> {
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     const companyId = user.CompanyId;
     if (!companyId) {
-      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.COMPANY_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.FORBIDDEN,
+        MESSAGES.COMPANY_NOT_FOUND,
+      );
     }
 
     const lessons = await this._lessonRepository.find({ companyId });
 
-    return lessons.map((lesson:any) => mapLessonDTOforCompanyLesson(lesson));
+    return lessons.map((lesson: any) => mapLessonDTOforCompanyLesson(lesson));
   }
 }

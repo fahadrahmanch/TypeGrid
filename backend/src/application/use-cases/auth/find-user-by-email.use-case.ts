@@ -1,7 +1,5 @@
 import { IFindUserByemailUseCase } from "../interfaces/auth/find-user-by-email.interface";
 import { IAuthRepository } from "../../../domain/interfaces/repository/user/auth-repository.interface";
-import { AuthUserEntity } from "../../../domain/entities";
-import { IUserDocument } from "../../../infrastructure/db/types/documents";
 /**
  * Finds a user by their email address.
  */

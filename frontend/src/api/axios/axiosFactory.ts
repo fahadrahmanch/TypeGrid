@@ -6,7 +6,7 @@ export function createAPI(
   getToken: () => string | null,
   refreshAPI: () => Promise<any>,
   setToken: (data: any) => any,
-  logoutAction: () => any
+  logoutAction: () => any,
 ) {
   const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL + path,
@@ -32,8 +32,11 @@ export function createAPI(
         return Promise.reject(error);
       }
 
-      if (error.response?.status === 401 && !originalRequest._retry&&
-  !originalRequest.url?.includes("signin")) {
+      if (
+        error.response?.status === 401 &&
+        !originalRequest._retry &&
+        !originalRequest.url?.includes("signin")
+      ) {
         originalRequest._retry = true;
         try {
           const res = await refreshAPI();
@@ -48,7 +51,7 @@ export function createAPI(
         }
       }
       return Promise.reject(error);
-    }
+    },
   );
 
   return api;

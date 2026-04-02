@@ -55,7 +55,6 @@ export class CompanyChallengeEntity {
   getReceiverId() {
     return this.receiverId;
   }
-  
 
   getCompanyId() {
     return this.CompanyId;

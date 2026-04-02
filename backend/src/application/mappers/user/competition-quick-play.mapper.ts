@@ -1,4 +1,7 @@
-import { CompetitionDTOQuickPlay, CompetitionMember } from "../../DTOs/user/competition-quick-play.dto";
+import {
+  CompetitionDTOQuickPlay,
+  CompetitionMember,
+} from "../../DTOs/user/competition-quick-play.dto";
 
 export interface PopulatedQuickCompetitionPayload {
   _id: any;
@@ -44,7 +47,11 @@ export const mapCompetitionToDTOQuickPlay = (
   };
 };
 
-export const mapQuickMemberToDTO = (user: { _id: any, name: string, imageUrl?: string }): CompetitionMember => {
+export const mapQuickMemberToDTO = (user: {
+  _id: any;
+  name: string;
+  imageUrl?: string;
+}): CompetitionMember => {
   return {
     _id: user._id,
     name: user.name,

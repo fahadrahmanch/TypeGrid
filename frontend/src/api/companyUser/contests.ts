@@ -12,4 +12,3 @@ export async function joinOrLeaveContestApi(contestId: string, action: string) {
 export async function groupContestApi() {
   return companyAPI.get(API_ROUTES.CONTESTS.GROUP);
 }
-

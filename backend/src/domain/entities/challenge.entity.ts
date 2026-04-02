@@ -33,15 +33,33 @@ export class ChallengeEntity {
     this.updatedAt = attrs.updatedAt;
   }
 
-  getId(): string | undefined { return this._id; }
-  getTitle(): string { return this.title; }
-  getDifficulty(): "easy" | "medium" | "hard" { return this.difficulty; }
-  getGoal(): string { return this.goal; }
-  getReward(): string { return this.reward; }
-  getDuration(): number { return this.duration; }
-  getDescription(): string { return this.description; }
-  getCreatedAt(): Date | undefined { return this.createdAt; }
-  getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  getId(): string | undefined {
+    return this._id;
+  }
+  getTitle(): string {
+    return this.title;
+  }
+  getDifficulty(): "easy" | "medium" | "hard" {
+    return this.difficulty;
+  }
+  getGoal(): string {
+    return this.goal;
+  }
+  getReward(): string {
+    return this.reward;
+  }
+  getDuration(): number {
+    return this.duration;
+  }
+  getDescription(): string {
+    return this.description;
+  }
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
 
   toObject() {
     return {

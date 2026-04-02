@@ -26,4 +26,3 @@ export const deleteGoal = (id: string) => {
 export const fetchGoalById = (id: string) => {
   return adminAPI.get(API_ROUTES.ADMIN.GOALS.BY_ID(id));
 };
-

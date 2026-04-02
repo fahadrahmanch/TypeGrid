@@ -19,24 +19,39 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
     private readonly _lessonRepository: ILessonRepository,
   ) {}
 
-  async execute(gameId: string, users: string[]): Promise<CompetitionDTOGroupPlay> {
+  async execute(
+    gameId: string,
+    users: string[],
+  ): Promise<CompetitionDTOGroupPlay> {
     const competition = await this._competitionRepository.findById(gameId);
     if (!competition) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND,
+      );
     }
 
     if (competition.getStatus() !== "completed") {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.SOMETHING_WENT_WRONG);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.SOMETHING_WENT_WRONG,
+      );
     }
 
     const groupId = competition.getGroupId();
     if (!groupId) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND,
+      );
     }
 
     const group = await this._groupRepository.findById(groupId);
     if (!group) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND,
+      );
     }
 
     group.setGroupMembers(users);
@@ -51,9 +66,15 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
 
     const level = difficultyToLevelMap[group.getDifficulty()];
 
-    const lessons = await this._lessonRepository.find({ level, createdBy: "admin" });
+    const lessons = await this._lessonRepository.find({
+      level,
+      createdBy: "admin",
+    });
     if (!lessons.length) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND,
+      );
     }
 
     const selectedLesson = mapLessonDTOforGroupPlay(
@@ -75,11 +96,13 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       newCompetitionEntity.toObject(),
     );
 
-    const populatedParticipants = (await Promise.all(
-      newCompetition.getParticipants().map((memberId: string) =>
-        this._userRepository.findById(memberId),
-      ),
-    ))
+    const populatedParticipants = (
+      await Promise.all(
+        newCompetition
+          .getParticipants()
+          .map((memberId: string) => this._userRepository.findById(memberId)),
+      )
+    )
       .filter((m): m is NonNullable<typeof m> => m !== null)
       .map((member) => ({
         _id: member._id,

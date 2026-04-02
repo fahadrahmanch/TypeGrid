@@ -7,7 +7,7 @@ const Challenge: React.FC = () => {
   const [currentView, setCurrentView] = useState<"arena" | "my-challenges">(
     "arena",
   );
-   const [challenges, setChallenges] = useState<any[]>([]);
+  const [challenges, setChallenges] = useState<any[]>([]);
 
   useMyChallengeSocket(setChallenges);
 
@@ -18,12 +18,11 @@ const Challenge: React.FC = () => {
         {currentView === "arena" ? (
           <ChallengeArena setView={setCurrentView} />
         ) : (
-                   <MyChallenges
+          <MyChallenges
             setView={setCurrentView}
             challenges={challenges}
             setChallenges={setChallenges}
           />
-
         )}
       </main>
     </div>

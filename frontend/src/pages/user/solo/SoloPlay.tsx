@@ -1,8 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../../../components/user/Navbar";
+import StatCard from "../../../components/common/StatCard";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Clock, Zap, Target, AlertCircle, Trophy, Home, RotateCcw } from "lucide-react";
+import {
+  Clock,
+  Zap,
+  Target,
+  AlertCircle,
+  Trophy,
+  Home,
+  RotateCcw,
+} from "lucide-react";
 import { saveSoloPlayResult } from "../../../api/user/solo";
 import { useTypingStats } from "../../../hooks/useTypingStats";
 import { useSoloGameTimer } from "../../../hooks/soloPlay/useSoloGameTimer";
@@ -28,7 +37,7 @@ const SoloPlay: React.FC = () => {
   const [space, setSpace] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const playStartRef = useRef<number | null>(null);
-const [totalTyped, setTotalTyped] = useState(0);
+  const [totalTyped, setTotalTyped] = useState(0);
   useEffect(() => {
     window.history.replaceState(null, "", window.location.pathname);
   }, []);
@@ -53,22 +62,21 @@ const [totalTyped, setTotalTyped] = useState(0);
     }
   }, [gameData, navigate]);
 
- 
   useSoloHandleKeyDown({
-  lesson,
-  isFinished,
-  phase,
-  space,
-  hasError,
-  typedText,
-  startTimeRef,
-  setSpace,
-  setHasError,
-  setTypedText,
-  setErrors,
-  setTotalTyped,
-  setIsfinished,
-});
+    lesson,
+    isFinished,
+    phase,
+    space,
+    hasError,
+    typedText,
+    startTimeRef,
+    setSpace,
+    setHasError,
+    setTypedText,
+    setErrors,
+    setTotalTyped,
+    setIsfinished,
+  });
 
   const renderTextWithHighlight = () => {
     if (!lesson) return null;
@@ -110,26 +118,25 @@ const [totalTyped, setTotalTyped] = useState(0);
     });
   };
 
-
   const { wpm, accuracy } = useTypingStats(
-  totalTyped,
-  errors,
-  elapsedTime,
-  phase,
-  isFinished
-);
-useSoloGameTimer({
-  gameData,
-  isFinished,
-  space,
-  startTimeRef,
-  playStartRef,
-  setPhase,
-  setCountdown,
-  setRemainingTime,
-  setElapsedTime,
-  setIsfinished,
-});
+    totalTyped,
+    errors,
+    elapsedTime,
+    phase,
+    isFinished,
+  );
+  useSoloGameTimer({
+    gameData,
+    isFinished,
+    space,
+    startTimeRef,
+    playStartRef,
+    setPhase,
+    setCountdown,
+    setRemainingTime,
+    setElapsedTime,
+    setIsfinished,
+  });
 
   useEffect(() => {
     async function endGameHandler() {
@@ -155,7 +162,7 @@ useSoloGameTimer({
       if (!response) {
         throw new Error("Solo room ID missing");
       }
-      const solo=response.data;
+      const solo = response.data;
       if (response) {
         navigate(`/solo-play/${solo._id}`, {
           state: { gameData: solo },
@@ -166,7 +173,6 @@ useSoloGameTimer({
       console.log(error);
     }
   }
-  
 
   return (
     <>
@@ -181,7 +187,9 @@ useSoloGameTimer({
                 Test Complete!
                 <Trophy className="w-10 h-10 text-amber-500 fill-amber-500" />
               </h1>
-              <p className="text-gray-500 font-medium">Here are your final results</p>
+              <p className="text-gray-500 font-medium">
+                Here are your final results
+              </p>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
@@ -300,30 +308,3 @@ useSoloGameTimer({
 };
 
 export default SoloPlay;
-
-/* Small reusable stat card */
-/* Small reusable stat card */
-interface StatsCardProps {
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-  color: string;
-}
-
-const StatCard: React.FC<StatsCardProps> = ({ icon, label, value, color }) => {
-  return (
-    <div
-      className={`flex flex-col items-center justify-center py-5 px-4 rounded-3xl border border-gray-100 shadow-sm ${color} bg-opacity-40 transition-transform hover:-translate-y-1 duration-300 group`}
-    >
-      <div className="flex items-center gap-2 mb-1.5 p-2 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
-        {icon}
-      </div>
-      <span className="text-xl font-extrabold text-gray-800 tracking-tight whitespace-nowrap">
-        {value}
-      </span>
-      <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400 mt-0.5">
-        {label}
-      </span>
-    </div>
-  );
-};

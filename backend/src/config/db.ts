@@ -10,8 +10,10 @@ export class connectDB {
       await mongoose.connect(this.DB_URL);
       logger.info("Database connected successfully");
     } catch (err: any) {
-      logger.error("MongoDB connection failed", { error: err.message, stack: err.stack });
+      logger.error("MongoDB connection failed", {
+        error: err.message,
+        stack: err.stack,
+      });
     }
   }
 }
-

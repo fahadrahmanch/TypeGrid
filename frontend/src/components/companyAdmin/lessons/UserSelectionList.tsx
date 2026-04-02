@@ -33,7 +33,10 @@ const UserSelectionList: React.FC<UserSelectionListProps> = ({
     <div className="flex flex-col h-full bg-white/40 backdrop-blur-md rounded-3xl border border-[#ECA468]/10 overflow-hidden">
       <div className="p-6 border-b border-gray-50 bg-white/40">
         <div className="relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#D0864B] transition-colors" size={18} />
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#D0864B] transition-colors"
+            size={18}
+          />
           <input
             type="text"
             placeholder="Search students..."
@@ -48,7 +51,9 @@ const UserSelectionList: React.FC<UserSelectionListProps> = ({
         {filteredUsers.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-400 opacity-60 py-12">
             <UserIcon size={48} className="mb-4" />
-            <p className="font-bold text-sm uppercase tracking-widest">No users found</p>
+            <p className="font-bold text-sm uppercase tracking-widest">
+              No users found
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
@@ -74,25 +79,34 @@ const UserSelectionList: React.FC<UserSelectionListProps> = ({
                       </div>
                     </div>
                   )}
-                  
-                  <div className={`p-3 rounded-xl transition-colors ${
-                    isSelected 
-                      ? "bg-white/20 text-white" 
-                      : "bg-[#ECA468]/10 text-[#D0864B]"
-                  }`}>
+
+                  <div
+                    className={`p-3 rounded-xl transition-colors ${
+                      isSelected
+                        ? "bg-white/20 text-white"
+                        : "bg-[#ECA468]/10 text-[#D0864B]"
+                    }`}
+                  >
                     <UserIcon size={20} />
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
-                    <h4 className={`font-black text-sm transition-colors ${
-                      isSelected ? "text-white" : "text-gray-800"
-                    }`}>
+                    <h4
+                      className={`font-black text-sm transition-colors ${
+                        isSelected ? "text-white" : "text-gray-800"
+                      }`}
+                    >
                       {userName}
                     </h4>
-                    <p className={`text-[10px] uppercase font-bold tracking-widest transition-colors ${
-                      isSelected ? "text-white/70" : "text-gray-400"
-                    }`}>
-                      {user.email || (typeof user.progress === "string" ? user.progress : "Student")}
+                    <p
+                      className={`text-[10px] uppercase font-bold tracking-widest transition-colors ${
+                        isSelected ? "text-white/70" : "text-gray-400"
+                      }`}
+                    >
+                      {user.email ||
+                        (typeof user.progress === "string"
+                          ? user.progress
+                          : "Student")}
                     </p>
                   </div>
                 </button>

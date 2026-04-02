@@ -12,5 +12,3 @@ export interface Teammate {
 
 export type ChallengeStatus = "pending" | "accepted" | "completed" | "waiting";
 export type ChallengeType = "sent" | "received" | "completed";
-
-

@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { X, BookOpen, Target, Zap, Layers, Type, AlertCircle } from "lucide-react";
+import {
+  X,
+  BookOpen,
+  Target,
+  Zap,
+  Layers,
+  Type,
+  AlertCircle,
+} from "lucide-react";
 import { createLesson } from "../../../api/companyAdmin/lessons";
 import {
   titleValidation,
@@ -53,8 +61,10 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
     if (name === "title") setError({ ...error, title: titleValidation(value) });
     if (name === "level") setError({ ...error, level: LevelValidation(value) });
     if (name === "wpm") setError({ ...error, wpm: WpmValidation(value) });
-    if (name === "accuracy") setError({ ...error, accuracy: accuracyValidation(value) });
-    if (name === "category") setError({ ...error, category: CategoryValidation(value) });
+    if (name === "accuracy")
+      setError({ ...error, accuracy: accuracyValidation(value) });
+    if (name === "category")
+      setError({ ...error, category: CategoryValidation(value) });
     if (name === "text") setError({ ...error, text: textValidation(value) });
 
     setValues((prevValues) => ({
@@ -81,7 +91,8 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
       text: textErr,
     });
 
-    if (titleErr || levelErr || wpmErr || accuracyErr || categoryErr || textErr) return;
+    if (titleErr || levelErr || wpmErr || accuracyErr || categoryErr || textErr)
+      return;
 
     setIsSubmitting(true);
     try {
@@ -92,6 +103,14 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
       }
       toast.success("Lesson created successfully");
       setLessons((prevLessons: any) => [...prevLessons, response.data.lesson]);
+      setValues({
+        title: "",
+        level: "",
+        wpm: "",
+        accuracy: "",
+        category: "",
+        text: "",
+      });
       onClose();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to create lesson");
@@ -104,29 +123,33 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-[#1A1512]/40 backdrop-blur-md animate-in fade-in duration-300" 
+      <div
+        className="absolute inset-0 bg-[#1A1512]/40 backdrop-blur-md animate-in fade-in duration-300"
         onClick={onClose}
       />
-      
+
       {/* Modal Content */}
       <div className="relative bg-[#FFF8EA] rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-white/50 animate-in zoom-in-95 duration-300 flex flex-col">
         {/* Decorative Header */}
         <div className="h-32 bg-gradient-to-br from-[#ECA468] to-[#D0864B] relative overflow-hidden shrink-0">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,#fff_0%,transparent_50%)]" />
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
-          
+
           <div className="relative h-full px-10 flex items-center justify-between">
             <div className="flex items-center gap-4 text-white">
               <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
                 <BookOpen size={28} />
               </div>
               <div>
-                <h2 className="text-3xl font-black tracking-tight">Create Lesson</h2>
-                <p className="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">Material Builder</p>
+                <h2 className="text-3xl font-black tracking-tight">
+                  Create Lesson
+                </h2>
+                <p className="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">
+                  Material Builder
+                </p>
               </div>
             </div>
-            <button 
+            <button
               onClick={onClose}
               className="p-3 hover:bg-white/20 rounded-2xl transition-all text-white/80 hover:text-white"
             >
@@ -156,7 +179,9 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                   {error.title && (
                     <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
                       <AlertCircle size={14} />
-                      <span className="text-[10px] font-black uppercase tracking-wider">{error.title}</span>
+                      <span className="text-[10px] font-black uppercase tracking-wider">
+                        {error.title}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -181,7 +206,9 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                     {error.level && (
                       <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
                         <AlertCircle size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-wider">{error.level}</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider">
+                          {error.level}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -204,7 +231,9 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                     {error.category && (
                       <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
                         <AlertCircle size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-wider">{error.category}</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider">
+                          {error.category}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -215,7 +244,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
               <div className="space-y-6">
                 <div className="bg-[#FFF8EA] rounded-3xl p-6 border border-[#ECA468]/20 relative overflow-hidden group">
                   <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-[#ECA468]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-                  
+
                   <h4 className="text-sm font-black text-[#D0864B] uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
                     <Target size={18} /> Performance Targets
                   </h4>
@@ -223,8 +252,12 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Min. WPM</span>
-                        <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">{values.wpm || 0} WPM</span>
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                          Min. WPM
+                        </span>
+                        <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">
+                          {values.wpm || 0} WPM
+                        </span>
                       </div>
                       <input
                         type="number"
@@ -234,13 +267,21 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                         placeholder="e.g. 60"
                         className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
                       />
-                      {error.wpm && <span className="text-[9px] font-bold text-red-500 ml-1">{error.wpm}</span>}
+                      {error.wpm && (
+                        <span className="text-[9px] font-bold text-red-500 ml-1">
+                          {error.wpm}
+                        </span>
+                      )}
                     </div>
 
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Accuracy %</span>
-                        <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">{values.accuracy || 0}%</span>
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                          Accuracy %
+                        </span>
+                        <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">
+                          {values.accuracy || 0}%
+                        </span>
                       </div>
                       <input
                         type="number"
@@ -250,7 +291,11 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                         placeholder="e.g. 95"
                         className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
                       />
-                      {error.accuracy && <span className="text-[9px] font-bold text-red-500 ml-1">{error.accuracy}</span>}
+                      {error.accuracy && (
+                        <span className="text-[9px] font-bold text-red-500 ml-1">
+                          {error.accuracy}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -273,7 +318,9 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
               {error.text && (
                 <div className="flex items-center gap-1.5 mt-3 ml-2 text-red-500">
                   <AlertCircle size={14} />
-                  <span className="text-[10px] font-black uppercase tracking-wider">{error.text}</span>
+                  <span className="text-[10px] font-black uppercase tracking-wider">
+                    {error.text}
+                  </span>
                 </div>
               )}
             </div>
@@ -299,7 +346,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

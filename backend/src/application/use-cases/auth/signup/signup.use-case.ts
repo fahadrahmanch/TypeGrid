@@ -21,7 +21,6 @@ export class SignupUseCase implements IAuthUseCase {
   async execute({
     name,
     email,
-    password,
   }: {
     name: string;
     email: string;

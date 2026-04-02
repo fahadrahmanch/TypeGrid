@@ -70,7 +70,6 @@ const CompanyLoginForm: React.FC = () => {
     <>
       {/* Container */}
       <div className="h-screen flex justify-center items-center flex-1 w-full relative sm:w-4/4 md:w-full lg:w-full  ">
-
         {/* SignIn Box */}
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
           <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">

@@ -112,7 +112,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
         errors,
         typedLength,
         status: "FINISHED",
-      }
+      };
       socket.to(gameId).emit("typing-progress-update", updatedData);
       const isEnd = await checkGameEndService(gameId);
       if (isEnd) {
@@ -260,6 +260,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
     socket.leave(groupId);
   });
   socket.on("leave-game", async ({ gameId, userId }) => {
+    console.log("leave-game", gameId, userId);
     await injectGroupSocketController.handleDisconnect(socket, io);
     socket.leave(gameId);
   });

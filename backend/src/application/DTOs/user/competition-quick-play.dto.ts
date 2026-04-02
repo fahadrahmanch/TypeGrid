@@ -22,7 +22,6 @@ export interface CompetitionDTOQuickPlay {
   countDown: number;
 }
 
-
 export interface QuickPlayMemberDTO {
   _id: string;
   name: string;

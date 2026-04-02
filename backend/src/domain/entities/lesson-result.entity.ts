@@ -5,7 +5,7 @@ export type LessonResultStatus =
   | "expired";
 
 export class LessonResult {
-  private readonly _id: string|undefined;
+  private readonly _id: string | undefined;
   private readonly companyId: string;
   private readonly assignmentId: string;
   private readonly userId: string;

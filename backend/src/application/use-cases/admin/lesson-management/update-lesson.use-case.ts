@@ -10,7 +10,6 @@ import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper"
  * Use case responsible for updating a lesson.
  */
 export class UpdateLessonUseCase implements IUpdateLessonUseCase {
-
   constructor(private readonly _lessonRepository: ILessonRepository) {}
 
   /**
@@ -21,23 +20,24 @@ export class UpdateLessonUseCase implements IUpdateLessonUseCase {
    * @returns A promise that resolves to the updated lesson as a LessonDTO.
    * @throws CustomError if the lesson is not found.
    */
-  async execute(lessonId: string, values: Partial<LessonDTO>): Promise<LessonDTO> {
-
+  async execute(
+    lessonId: string,
+    values: Partial<LessonDTO>,
+  ): Promise<LessonDTO> {
     const lesson = await this._lessonRepository.findById(lessonId);
 
     if (!lesson) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.LESSON_NOT_FOUND
+        MESSAGES.LESSON_NOT_FOUND,
       );
     }
 
     const updatedLesson = await this._lessonRepository.update({
       _id: lessonId,
-      ...values
+      ...values,
     });
 
     return mapLessonToDTO(updatedLesson!);
   }
-
 }

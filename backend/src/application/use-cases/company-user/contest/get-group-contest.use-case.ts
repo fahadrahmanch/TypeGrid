@@ -13,18 +13,17 @@ import { ContestEntity } from "../../../../domain/entities/company-contest.entit
 export class GetGroupContestUseCase implements IGetGroupContestsUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
-    private readonly _companyGroupRepository: ICompanyGroupRepository
+    private readonly _companyGroupRepository: ICompanyGroupRepository,
   ) {}
 
   /**
    * Get contests for groups the user belongs to.
    */
   async execute(userId: string): Promise<groupContestDTO[]> {
-
     if (!userId) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -39,6 +38,9 @@ export class GetGroupContestUseCase implements IGetGroupContestsUseCase {
 
     if (!groupContests.length) return [];
 
-    return mapGroupContestDTO(groupContests.map((c: ContestEntity) => c.toObject()), userId);
+    return mapGroupContestDTO(
+      groupContests.map((c: ContestEntity) => c.toObject()),
+      userId,
+    );
   }
 }

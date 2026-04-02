@@ -1,4 +1,3 @@
-
 export interface ILessonResultRepository {
   create(data: any): Promise<any>;
   findById(

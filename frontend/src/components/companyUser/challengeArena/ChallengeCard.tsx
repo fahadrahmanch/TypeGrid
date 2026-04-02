@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { CheckCircle2, Clock, Zap, Target, Swords } from "lucide-react";
-import { challengeAccept, challengeReject } from "../../../api/companyUser/challenge";
+import { useState } from "react";
+import { CheckCircle2, Clock, Zap, Target } from "lucide-react";
+import {
+  challengeAccept,
+  challengeReject,
+} from "../../../api/companyUser/challenge";
 import { socket } from "../../../socket";
-import { useNavigate } from "react-router-dom";
 
-const ChallengeCard = ({
-  challenge,
-}: {
-  challenge: any
-}) => {
+const ChallengeCard = ({ challenge }: { challenge: any }) => {
   const [hasJoined, setHasJoined] = useState(false);
   const [localAccepted, setLocalAccepted] = useState(false);
-  const navigate = useNavigate();
   // Determine card styling based on status
   const isCompleted = challenge.status === "completed";
   const isSent = challenge.type === "sent";
@@ -70,7 +67,6 @@ const ChallengeCard = ({
       console.error("Error joining match:", error);
     }
   }
-
 
   async function handleReject(challengeId: string) {
     try {
@@ -203,8 +199,9 @@ const ChallengeCard = ({
       ) : isPending && isReceived ? (
         <div className="mt-auto flex gap-3">
           <button
-          onClick={()=>handleReject(challenge.id)}
-           className="flex-1 py-3 bg-white border-2 border-[#EBE3D5] text-gray-600 hover:bg-gray-50 rounded-xl font-bold text-sm transition-colors">
+            onClick={() => handleReject(challenge.id)}
+            className="flex-1 py-3 bg-white border-2 border-[#EBE3D5] text-gray-600 hover:bg-gray-50 rounded-xl font-bold text-sm transition-colors"
+          >
             Decline
           </button>
           <button
@@ -218,6 +215,5 @@ const ChallengeCard = ({
     </div>
   );
 };
-
 
 export default ChallengeCard;

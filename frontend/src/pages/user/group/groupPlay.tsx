@@ -96,13 +96,13 @@ const GroupPlay: React.FC = () => {
   const [errors, setErrors] = useState(0);
   // const [wpm, setWpm] = useState(0);
   // const [accuracy, setAccuracy] = useState<number | null>(null);
-  
+
   const [elapsedTime, setElapsedTime] = useState(0);
   const [livePlayers, setLivePlayers] = useState<PlayerState[]>(players);
   const [leftPlayers, setLeftPlayers] = useState<GameData["participants"]>([]);
   const gameIdRef = useRef(gameData?._id);
   const userIdRef = useRef(user?._id);
-  
+
   const [totalTyped, setTotalTyped] = useState(0);
   const { wpm, accuracy } = useTypingStats(
     totalTyped,
@@ -111,7 +111,7 @@ const GroupPlay: React.FC = () => {
     phase,
     isFinished,
   );
-  
+
   const [currentUser, setCurrentUser] = useState<
     | {
         _id: string;
@@ -124,7 +124,6 @@ const GroupPlay: React.FC = () => {
   const hasJoinedRef = useRef(false);
 
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
-  
 
   //set status of current user
   useEffect(() => {
@@ -150,28 +149,25 @@ const GroupPlay: React.FC = () => {
     userIdRef.current = currentUser?._id;
   }, [gameData?._id, currentUser?._id]);
 
-
-
-
   useGroupPlaySocket({
-  gameData,
-  currentUser,
-  typedText,
-  wpm,
-  accuracy,
-  errors,
-  phase,
-  remainingTime,
-  elapsedTime,
-  navigate,
-  gameIdRef,
-  userIdRef,
-  setLivePlayers,
-  setLeftPlayers,
-  setFinalResult,
-  setIsfinished,
-  hasJoinedRef
-});
+    gameData,
+    currentUser,
+    typedText,
+    wpm,
+    accuracy,
+    errors,
+    phase,
+    remainingTime,
+    elapsedTime,
+    navigate,
+    gameIdRef,
+    userIdRef,
+    setLivePlayers,
+    setLeftPlayers,
+    setFinalResult,
+    setIsfinished,
+    hasJoinedRef,
+  });
 
   //redirect to home if no game data
   useEffect(() => {
@@ -196,21 +192,21 @@ const GroupPlay: React.FC = () => {
 
   // Auto-scroll effect
   useTypingScroll({
-  activeCharRef,
-  snippetContainerRef,
-  typedText,
-});
+    activeCharRef,
+    snippetContainerRef,
+    typedText,
+  });
 
   //countdown and game timer
   useGameTimer(
-  gameData,
-  finalResult,
-  setPhase,
-  setCountdown,
-  setRemainingTime,
-  setElapsedTime,
-  setIsfinished
-);
+    gameData,
+    finalResult,
+    setPhase,
+    setCountdown,
+    setRemainingTime,
+    setElapsedTime,
+    setIsfinished,
+  );
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -293,25 +289,24 @@ const GroupPlay: React.FC = () => {
   //handle key down
 
   useTypingInput({
-  lesson,
-  isFinished,
-  phase,
-  hasError,
-  setHasError,
-  typedText,
-  setTypedText,
-  setErrors,
-  setTotalTyped,
-  setIsfinished,
-  gameId: gameData?._id,
-  currentUser,
-  elapsedTime,
-  wpm,
-  accuracy,
-  errors,
-});
+    lesson,
+    isFinished,
+    phase,
+    hasError,
+    setHasError,
+    typedText,
+    setTypedText,
+    setErrors,
+    setTotalTyped,
+    setIsfinished,
+    gameId: gameData?._id,
+    currentUser,
+    elapsedTime,
+    wpm,
+    accuracy,
+    errors,
+  });
 
-  
   async function handleNewGame() {
     try {
       const currentUsers = await livePlayers.map((p) => p._id);
@@ -351,7 +346,7 @@ const GroupPlay: React.FC = () => {
     setLeftPlayers([]);
     setTypedText("");
     setErrors(0);
-  
+
     setTotalTyped(0);
     setHasError(false);
     setIsfinished(false);

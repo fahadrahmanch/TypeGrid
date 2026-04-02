@@ -118,13 +118,18 @@ const Lessons: React.FC = () => {
               <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">
                 Lesson Management
               </h1>
-              <p className="text-gray-500 font-medium">Create, manage and assign lessons to your students.</p>
+              <p className="text-gray-500 font-medium">
+                Create, manage and assign lessons to your students.
+              </p>
             </div>
             <button
               onClick={() => setIsCreateModalOpen(true)}
               className="flex items-center gap-2 bg-[#D0864B] hover:bg-[#B36E39] text-white px-6 py-3 rounded-2xl transition-all shadow-lg shadow-[#D0864B]/20 font-bold group"
             >
-              <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+              <Plus
+                size={20}
+                className="group-hover:rotate-90 transition-transform duration-300"
+              />
               <span>Create New Lesson</span>
             </button>
           </div>
@@ -141,8 +146,12 @@ const Lessons: React.FC = () => {
                 <Plus size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-gray-900 leading-tight">Assign Lessons</h2>
-                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">Management Console</p>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight">
+                  Assign Lessons
+                </h2>
+                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+                  Management Console
+                </p>
               </div>
             </div>
 
@@ -180,7 +189,9 @@ const Lessons: React.FC = () => {
             </div>
 
             <div className="mt-12 pt-12 border-t border-gray-50 text-center">
-              <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8">Select Practice Material</h4>
+              <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8">
+                Select Practice Material
+              </h4>
               <LessonSelectionGrid
                 lessons={lessons.concat(adminLessons)}
                 selectedLessons={selectedLessons}

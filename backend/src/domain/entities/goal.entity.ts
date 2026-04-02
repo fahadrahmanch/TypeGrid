@@ -27,13 +27,27 @@ export class GoalEntity {
     this.updatedAt = attrs.updatedAt;
   }
 
-  getId(): string | undefined { return this._id; }
-  getTitle(): string { return this.title; }
-  getWpm(): number { return this.wpm; }
-  getAccuracy(): number { return this.accuracy; }
-  getDescription(): string { return this.description; }
-  getCreatedAt(): Date | undefined { return this.createdAt; }
-  getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  getId(): string | undefined {
+    return this._id;
+  }
+  getTitle(): string {
+    return this.title;
+  }
+  getWpm(): number {
+    return this.wpm;
+  }
+  getAccuracy(): number {
+    return this.accuracy;
+  }
+  getDescription(): string {
+    return this.description;
+  }
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
 
   toObject() {
     return {

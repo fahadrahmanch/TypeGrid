@@ -17,18 +17,24 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
     private readonly _userRepository: IUserRepository,
     private readonly _competitionRepository: ICompetitionRepository,
     private readonly _lessonRepository: ILessonRepository,
-  ) { }
+  ) {}
 
   async execute(senderId: string, receiverId: string): Promise<ChallengeDTO> {
     if (senderId === receiverId) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.CANNOT_CHALLENGE_SELF);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.CANNOT_CHALLENGE_SELF,
+      );
     }
 
     const sender = await this._userRepository.findById(senderId);
     const receiver = await this._userRepository.findById(receiverId);
 
     if (!sender || !receiver) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.SENDER_OR_RECEIVER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.SENDER_OR_RECEIVER_NOT_FOUND,
+      );
     }
 
     const existingChallenge = await this._challengeRepository.findOne({
@@ -42,7 +48,7 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
     if (existingChallenge) {
       throw new CustomError(
         HttpStatusCodes.CONFLICT,
-        MESSAGES.CHALLENGE_ALREADY_EXISTS
+        MESSAGES.CHALLENGE_ALREADY_EXISTS,
       );
     }
 
@@ -50,7 +56,10 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
       !sender.CompanyId ||
       sender.CompanyId.toString() !== receiver.CompanyId?.toString()
     ) {
-      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USERS_MUST_BELONG_TO_SAME_COMPANY);
+      throw new CustomError(
+        HttpStatusCodes.FORBIDDEN,
+        MESSAGES.USERS_MUST_BELONG_TO_SAME_COMPANY,
+      );
     }
 
     const levels = ["beginner", "intermediate", "advanced"];
@@ -58,7 +67,10 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
 
     const lesson = await this._lessonRepository.findOne({ level });
     if (!lesson) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND,
+      );
     }
 
     // Creating new record — new CompetitionEntity() is correct here
@@ -89,7 +101,6 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
     const savedChallenge = await this._challengeRepository.create(
       challengeEntity.toObject(),
     );
-
 
     const challegeDTO = mapChallengeToDTO({
       ...savedChallenge.toObject(),

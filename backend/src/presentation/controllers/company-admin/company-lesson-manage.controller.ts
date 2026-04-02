@@ -10,7 +10,6 @@ import { IUpdateCompanyLessonUseCase } from "../../../application/use-cases/inte
 import { IDeleteCompanyLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/delete-company-lesson.interface";
 import { IGetAdminLessonsUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-admin-lesson.interface";
 import { IAssignLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/assign-lesson.interface";
-import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class CompanyLessonManageController {
   constructor(
@@ -25,7 +24,11 @@ export class CompanyLessonManageController {
 
   //create lesson
 
-  async createLesson(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async createLesson(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { title, description, level, wpm, text, accuracy, category } =
         req.body;
@@ -53,8 +56,11 @@ export class CompanyLessonManageController {
         accuracy,
         category,
       };
-      
-      const lesson = await this._createLessonUseCase.execute(userId, lessonData);
+
+      const lesson = await this._createLessonUseCase.execute(
+        userId,
+        lessonData,
+      );
       if (!lesson) {
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           success: false,
@@ -68,7 +74,6 @@ export class CompanyLessonManageController {
         lesson,
       });
       logger.info("Company lesson created successfully", { userId });
-
     } catch (error: unknown) {
       next(error);
     }
@@ -76,7 +81,11 @@ export class CompanyLessonManageController {
 
   // get lessons
 
-  async getLessons(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getLessons(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       if (!userId) {
@@ -106,7 +115,11 @@ export class CompanyLessonManageController {
 
   // get lesson
 
-  async getLesson(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getLesson(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const lessonId = req.params.id;
       if (!lessonId) {
@@ -136,7 +149,11 @@ export class CompanyLessonManageController {
 
   // update lesson
 
-  async updateLesson(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async updateLesson(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const lessonId = req.params.id;
       const lessonData = req.body;
@@ -163,7 +180,10 @@ export class CompanyLessonManageController {
         message: MESSAGES.UPDATE_SUCCESS,
         lesson,
       });
-      logger.info("Company lesson updated successfully", { userId: req.user?.userId, lessonId });
+      logger.info("Company lesson updated successfully", {
+        userId: req.user?.userId,
+        lessonId,
+      });
     } catch (error: unknown) {
       next(error);
     }
@@ -171,7 +191,11 @@ export class CompanyLessonManageController {
 
   // delete lesson
 
-  async deleteLesson(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async deleteLesson(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const lessonId = req.params.id;
       if (!lessonId) {
@@ -186,17 +210,22 @@ export class CompanyLessonManageController {
         success: true,
         message: MESSAGES.DELETE_SUCCESS,
       });
-      logger.info("Company lesson deleted successfully", { userId: req.user?.userId, lessonId });
+      logger.info("Company lesson deleted successfully", {
+        userId: req.user?.userId,
+        lessonId,
+      });
     } catch (error: unknown) {
-    
-        next(error);
-      
+      next(error);
     }
   }
 
   // get admin lessons
 
-  async getAdminLessons(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getAdminLessons(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       if (!userId) {
@@ -226,7 +255,11 @@ export class CompanyLessonManageController {
 
   // assign lessons
 
-  async assignLessons(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async assignLessons(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const users: string[] = req.body.users;
       const userId = req.user?.userId;
@@ -251,9 +284,7 @@ export class CompanyLessonManageController {
         message: MESSAGES.UPDATE_SUCCESS,
       });
     } catch (error: unknown) {
-      
-        next(error);
-      
+      next(error);
     }
   }
 }

@@ -36,18 +36,27 @@ const completeSignup = new CompleteSignupUseCase(
   hashService,
   authRepositoryInstance,
 );
-const registerUser = new SignupUseCase(authRepositoryInstance, otpService, emailService);
+const registerUser = new SignupUseCase(
+  authRepositoryInstance,
+  otpService,
+  emailService,
+);
 const loginUseCase = new LoginUseCase(authRepositoryInstance, hashService);
 const tokenService = new TokenService();
 const forgotPasswordOtpVerify = new ForgotPasswordOtpVerifyUseCase(otpService);
 const googleAuthUseCase = new GoogleAuthUseCase(authRepositoryInstance);
-const findUserByEmailUseCase = new FindUserByEmailUseCase(authRepositoryInstance);
+const findUserByEmailUseCase = new FindUserByEmailUseCase(
+  authRepositoryInstance,
+);
 const forgotPassword = new ForgotPasswordUseCase(
   otpService,
   emailService,
   authRepositoryInstance,
 );
-const createNewPassword = new CreateNewPasswordUseCase(authRepositoryInstance, hashService);
+const createNewPassword = new CreateNewPasswordUseCase(
+  authRepositoryInstance,
+  hashService,
+);
 const companyFindUseCase = new CompanyFindUseCase(companyRepository);
 
 export const injectAuthController = new AuthController(

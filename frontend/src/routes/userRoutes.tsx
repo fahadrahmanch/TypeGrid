@@ -30,14 +30,55 @@ export default function UserRoutes() {
 
   return (
     <Routes location={location} key={location.pathname}>
-
       {/* Auth Pages */}
-      <Route path="signup" element={<IsloggedUser><Signup /></IsloggedUser>} />
-      <Route path="Signin" element={<IsloggedUser><SignIn /></IsloggedUser>} />
-      <Route path="otp" element={<IsloggedUser><Otp /></IsloggedUser>} />
-      <Route path="forgot/password" element={<IsloggedUser><ForgotPassword /></IsloggedUser>} />
-      <Route path="forgot/password/otp" element={<IsloggedUser><OtpForgotPassword /></IsloggedUser>} />
-      <Route path="create/new/password" element={<IsloggedUser><NewPasswordForm /></IsloggedUser>} />
+      <Route
+        path="signup"
+        element={
+          <IsloggedUser>
+            <Signup />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="Signin"
+        element={
+          <IsloggedUser>
+            <SignIn />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="otp"
+        element={
+          <IsloggedUser>
+            <Otp />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="forgot/password"
+        element={
+          <IsloggedUser>
+            <ForgotPassword />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="forgot/password/otp"
+        element={
+          <IsloggedUser>
+            <OtpForgotPassword />
+          </IsloggedUser>
+        }
+      />
+      <Route
+        path="create/new/password"
+        element={
+          <IsloggedUser>
+            <NewPasswordForm />
+          </IsloggedUser>
+        }
+      />
 
       {/* Protected Pages */}
       <Route element={<ProtectRouteUser />}>
@@ -48,13 +89,25 @@ export default function UserRoutes() {
 
         {/* Subscription */}
         <Route path="subscription/company" element={<CompanySubscription />} />
-        <Route path="subscription/company/verify" element={<CompanyVerification />} />
-        <Route path="subscription/company/verify/status" element={<CompanyVerificationStatus />} />
-        <Route path="subscription/company/re-verify" element={<CompanyVerificationReapply />} />
+        <Route
+          path="subscription/company/verify"
+          element={<CompanyVerification />}
+        />
+        <Route
+          path="subscription/company/verify/status"
+          element={<CompanyVerificationStatus />}
+        />
+        <Route
+          path="subscription/company/re-verify"
+          element={<CompanyVerificationReapply />}
+        />
 
         {/* Typing */}
         <Route path="typing/practice" element={<PracticeTyping />} />
-        <Route path="typing/practice/:lessonId" element={<TypingPracticeArea />} />
+        <Route
+          path="typing/practice/:lessonId"
+          element={<TypingPracticeArea />}
+        />
 
         {/* Group */}
         <Route path="group-play/group/:joinLink" element={<GroupLobby />} />
@@ -70,7 +123,6 @@ export default function UserRoutes() {
         <Route path="daily-challenge" element={<DailyChallenge />} />
         <Route path="daily-challenge/:id" element={<DailyChallengeArea />} />
       </Route>
-
     </Routes>
   );
 }

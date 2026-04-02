@@ -10,7 +10,6 @@ import { mapLessonToDTO } from "../../../mappers/admin/lesson-management.mapper"
  * Use case responsible for retrieving a lesson by ID.
  */
 export class GetLessonUseCase implements IGetLessonUseCase {
-
   constructor(private readonly _lessonRepository: ILessonRepository) {}
 
   /**
@@ -18,17 +17,15 @@ export class GetLessonUseCase implements IGetLessonUseCase {
    * @param lessonId - The ID of the lesson to retrieve.
    */
   async execute(lessonId: string): Promise<LessonDTO> {
-
     const lesson = await this._lessonRepository.findById(lessonId);
 
     if (!lesson) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.LESSON_NOT_FOUND
+        MESSAGES.LESSON_NOT_FOUND,
       );
     }
 
     return mapLessonToDTO(lesson);
   }
-
 }

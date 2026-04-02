@@ -7,7 +7,7 @@ export class FinishQuickPlayUseCase {
   constructor(
     private competitionRepository: ICompetitionRepository,
     private resultRepository: IResultRepository,
-  ) { }
+  ) {}
   async execute(gameId: string, resultArray: QuicKPlayResult[]): Promise<void> {
     const competition = await this.competitionRepository.findById(gameId);
     const competitionEntity = new CompetitionEntity({

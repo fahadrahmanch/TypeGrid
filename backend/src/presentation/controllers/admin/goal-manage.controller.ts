@@ -7,80 +7,105 @@ import { IDeleteGoalUseCase } from "../../../application/use-cases/interfaces/ad
 import logger from "../../../utils/logger";
 
 export class GoalManageController {
-    constructor(
-        private readonly _createGoalUseCase: ICreateGoalUseCase,
-        private readonly _getGoalUseCase: IGetGoalUseCase,
-        private readonly _updateGoalUseCase: IUpdateGoalUseCase,
-        private readonly _deleteGoalUseCase: IDeleteGoalUseCase,
-        private readonly _getGoalsUseCase: IGetGoalsUseCase,
-    ) { }
+  constructor(
+    private readonly _createGoalUseCase: ICreateGoalUseCase,
+    private readonly _getGoalUseCase: IGetGoalUseCase,
+    private readonly _updateGoalUseCase: IUpdateGoalUseCase,
+    private readonly _deleteGoalUseCase: IDeleteGoalUseCase,
+    private readonly _getGoalsUseCase: IGetGoalsUseCase,
+  ) {}
 
-    async createGoal(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const goal = await this._createGoalUseCase.execute(req.body);
-            logger.info("Goal created successfully", goal);
-            res.status(201).json({
-                message: "Goal created successfully",
-                goal
-            })
-        } catch (error: unknown) {
-            next(error);
-        }
+  async createGoal(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const goal = await this._createGoalUseCase.execute(req.body);
+      logger.info("Goal created successfully", goal);
+      res.status(201).json({
+        message: "Goal created successfully",
+        goal,
+      });
+    } catch (error: unknown) {
+      next(error);
     }
+  }
 
-    async getGoals(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const {search,page,limit} = req.query;
-            const goals = await this._getGoalsUseCase.execute(search as string,Number(page),Number(limit));
-            logger.info("Goals fetched successfully", goals);
-            res.status(200).json({
-                message: "Goals fetched successfully",
-                goals:goals.goals,
-                total:goals.total,
-                
-                
-            })
-        } catch (error: unknown) {
-            next(error);
-        }
+  async getGoals(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { search, page, limit } = req.query;
+      const goals = await this._getGoalsUseCase.execute(
+        search as string,
+        Number(page),
+        Number(limit),
+      );
+      logger.info("Goals fetched successfully", goals);
+      res.status(200).json({
+        message: "Goals fetched successfully",
+        goals: goals.goals,
+        total: goals.total,
+      });
+    } catch (error: unknown) {
+      next(error);
     }
-    async getGoalById(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const {id} = req.params;
-            const goal = await this._getGoalUseCase.execute(id as string);
-            logger.info("Goal fetched successfully", goal);
-            res.status(200).json({
-                message: "Goal fetched successfully",
-                goal
-            })
-        } catch (error: unknown) {
-            next(error);
-        }
+  }
+  async getGoalById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const goal = await this._getGoalUseCase.execute(id as string);
+      logger.info("Goal fetched successfully", goal);
+      res.status(200).json({
+        message: "Goal fetched successfully",
+        goal,
+      });
+    } catch (error: unknown) {
+      next(error);
     }
-    async updateGoal(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const {id} = req.params;
-            const goal = await this._updateGoalUseCase.execute(id as string,req.body);
-            logger.info("Goal updated successfully", goal);
-            res.status(200).json({
-                message: "Goal updated successfully",
-                goal
-            })
-        } catch (error: unknown) {
-            next(error);
-        }
+  }
+  async updateGoal(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const goal = await this._updateGoalUseCase.execute(
+        id as string,
+        req.body,
+      );
+      logger.info("Goal updated successfully", goal);
+      res.status(200).json({
+        message: "Goal updated successfully",
+        goal,
+      });
+    } catch (error: unknown) {
+      next(error);
     }
-    async deleteGoal(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const {id} = req.params;
-            const goal = await this._deleteGoalUseCase.execute(id as string);
-            logger.info("Goal deleted successfully", goal);
-            res.status(200).json({
-                message: "Goal deleted successfully",
-                goal
-            })
-        } catch (error: unknown) {
-            next(error);
-        }
+  }
+  async deleteGoal(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const goal = await this._deleteGoalUseCase.execute(id as string);
+      logger.info("Goal deleted successfully", goal);
+      res.status(200).json({
+        message: "Goal deleted successfully",
+        goal,
+      });
+    } catch (error: unknown) {
+      next(error);
     }
+  }
 }

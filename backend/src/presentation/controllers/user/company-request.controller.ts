@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import logger from "../../../utils/logger";
 import { HttpStatus } from "../../constants/httpStatus";
 import { AuthRequest } from "../../../types/AuthRequest";
@@ -17,7 +17,11 @@ export class CompanyRequestController {
     private _getCompanyStatusUseCase: IGetCompanyUseCase,
     private _companyReApplyUseCase: ICompanyReApplyUseCase,
   ) {}
-  async companyRequestDetails(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async companyRequestDetails(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       if (!userId) {
@@ -45,7 +49,10 @@ export class CompanyRequestController {
         email,
         number,
       );
-      logger.info("Company request submitted successfully", { userId, companyName });
+      logger.info("Company request submitted successfully", {
+        userId,
+        companyName,
+      });
       res.status(HttpStatus.CREATED).json({
         success: true,
         message: MESSAGES.COMPANY_REQUEST_SUBMITTED_SUCCESS,
@@ -56,7 +63,11 @@ export class CompanyRequestController {
     }
   }
 
-  async reApplyCompanyDetails(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async reApplyCompanyDetails(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
 
@@ -83,7 +94,10 @@ export class CompanyRequestController {
         number,
         address,
       });
-      logger.info("Company details re-applied successfully", { userId, companyName });
+      logger.info("Company details re-applied successfully", {
+        userId,
+        companyName,
+      });
       res.status(HttpStatus.OK).json({
         success: true,
         message: "Company details re-applied successfully",
@@ -93,7 +107,11 @@ export class CompanyRequestController {
     }
   }
 
-  async getCompanyStatus(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getCompanyStatus(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const email = req.user?.email;
       if (!email) {

@@ -22,7 +22,10 @@ export class GetContestParticipantsUseCase implements IGetContestParticipantsUse
     const contest = await this._contestRepository.findById(contestId);
 
     if (!contest) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
 
     const participants = await Promise.all(
@@ -30,7 +33,10 @@ export class GetContestParticipantsUseCase implements IGetContestParticipantsUse
         const user = await this._userRepository.findById(participantId);
 
         if (!user) {
-          throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+          throw new CustomError(
+            HttpStatusCodes.NOT_FOUND,
+            MESSAGES.AUTH_USER_NOT_FOUND,
+          );
         }
 
         return {

@@ -13,7 +13,10 @@ export class CompanyUserStatsRepository
     super(model, CompanyUserStatsMapper.toDomain);
   }
 
-  async getLeaderboard(companyId: string, limit: number): Promise<CompanyUserStatsEntity[]> {
+  async getLeaderboard(
+    companyId: string,
+    limit: number,
+  ): Promise<CompanyUserStatsEntity[]> {
     const rawStats = await this.model
       .find({ companyId })
       .sort({ wpm: -1, accuracy: -1 })
@@ -21,7 +24,7 @@ export class CompanyUserStatsRepository
       .lean<ICompanyUserStatsDocument[]>()
       .exec();
 
-    return rawStats.map(doc => this.toDomain(doc));
+    return rawStats.map((doc) => this.toDomain(doc));
   }
 
   async updateStats(
@@ -33,27 +36,35 @@ export class CompanyUserStatsRepository
       totalScore?: number;
       weeklyScore?: number;
       monthlyScore?: number;
-    }
+    },
   ): Promise<void> {
-    const { wpm, accuracy, totalScore = 0, weeklyScore = 0, monthlyScore = 0} = data;
+    const {
+      wpm,
+      accuracy,
+      totalScore = 0,
+      weeklyScore = 0,
+      monthlyScore = 0,
+    } = data;
 
-    await this.model.findOneAndUpdate(
-      { companyId, userId },
-      {
-        $inc: {
-          totalScore,
-          weeklyScore,
-          monthlyScore,
+    await this.model
+      .findOneAndUpdate(
+        { companyId, userId },
+        {
+          $inc: {
+            totalScore,
+            weeklyScore,
+            monthlyScore,
+          },
+          $max: {
+            wpm,
+            accuracy,
+          },
         },
-        $max: {
-          wpm,
-          accuracy,
+        {
+          upsert: true,
+          new: true,
         },
-      },
-      {
-        upsert: true,
-        new: true,
-      }
-    ).exec();
+      )
+      .exec();
   }
 }

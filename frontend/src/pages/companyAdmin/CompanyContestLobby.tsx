@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowLeft, Play, MessageSquare, User } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Dummy data for participants
 const participants = [
@@ -12,7 +12,7 @@ const participants = [
 
 const CompanyContestLobby: React.FC = () => {
   // In a real app, you would fetch contest details using the ID
-  const { contestId } = useParams();
+  // const { contestId } = useParams();
 
   return (
     <div className="min-h-screen bg-[#FFF8EA] p-8 font-sans">

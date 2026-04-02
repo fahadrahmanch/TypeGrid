@@ -13,18 +13,17 @@ import { ContestEntity } from "../../../../domain/entities/company-contest.entit
 export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
-    private readonly _userRepository: IUserRepository
+    private readonly _userRepository: IUserRepository,
   ) {}
 
   /**
    * Get upcoming open contests for the user's company.
    */
   async execute(userId: string): Promise<openContestDTO[]> {
-
     if (!userId) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -33,7 +32,7 @@ export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND
+        MESSAGES.AUTH_USER_NOT_FOUND,
       );
     }
 
@@ -46,6 +45,9 @@ export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
       date: { $gt: now },
     });
 
-    return mapOpenContestDTO(contests.map((c: ContestEntity) => c.toObject()), userId);
+    return mapOpenContestDTO(
+      contests.map((c: ContestEntity) => c.toObject()),
+      userId,
+    );
   }
 }

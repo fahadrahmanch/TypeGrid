@@ -25,17 +25,26 @@ export class JoinOrLeaveContestUseCase implements IJoinOrLeaveContestUseCase {
     action: "join" | "cancel",
   ): Promise<openContestDTO> {
     if (!userId || !contestId) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST,
+      );
     }
 
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     const contest = await this._contestRepository.findById(contestId);
     if (!contest) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
 
     if (action === "join") {
@@ -44,9 +53,14 @@ export class JoinOrLeaveContestUseCase implements IJoinOrLeaveContestUseCase {
       contest.unJoin(userId);
     }
 
-    const updatedContest = await this._contestRepository.update(contest.toObject());
+    const updatedContest = await this._contestRepository.update(
+      contest.toObject(),
+    );
     if (!updatedContest) {
-      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
+      throw new CustomError(
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        MESSAGES.SOMETHING_WENT_WRONG,
+      );
     }
 
     return mapContestDTO(updatedContest.toObject(), userId);

@@ -19,10 +19,16 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
     private readonly _userRepository: IUserRepository,
   ) {}
 
-  async execute(groupId: string, countDown: number): Promise<CompetitionDTOGroupPlay> {
+  async execute(
+    groupId: string,
+    countDown: number,
+  ): Promise<CompetitionDTOGroupPlay> {
     const group = await this._groupRepository.findById(groupId);
     if (!group) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND,
+      );
     }
 
     const difficultyToLevelMap: Record<string, string> = {
@@ -33,9 +39,15 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
 
     const level = difficultyToLevelMap[group.getDifficulty()];
 
-    const lessons = await this._lessonRepository.find({ level, createdBy: "admin" });
+    const lessons = await this._lessonRepository.find({
+      level,
+      createdBy: "admin",
+    });
     if (!lessons.length) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND,
+      );
     }
 
     const selectedLesson = mapLessonDTOforGroupPlay(
@@ -57,17 +69,19 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       competitionEntity.toObject(),
     );
 
-  const populatedParticipants = (await Promise.all(
-  competition.getParticipants().map((memberId: string) =>
-    this._userRepository.findById(memberId),
-  ),
-))
-  .filter((m): m is NonNullable<typeof m> => m !== null)
-  .map((member) => ({
-    _id: member._id,
-    name: member.name,
-    imageUrl: member.imageUrl,
-  }));
+    const populatedParticipants = (
+      await Promise.all(
+        competition
+          .getParticipants()
+          .map((memberId: string) => this._userRepository.findById(memberId)),
+      )
+    )
+      .filter((m): m is NonNullable<typeof m> => m !== null)
+      .map((member) => ({
+        _id: member._id,
+        name: member.name,
+        imageUrl: member.imageUrl,
+      }));
 
     return mapCompetitionToDTOGroupPlay(
       {

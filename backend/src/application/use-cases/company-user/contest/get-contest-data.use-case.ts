@@ -13,18 +13,17 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 export class GetContestDataUseCase implements IGetContestDataUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
-    private readonly _userRepository: IUserRepository
-  ) { }
+    private readonly _userRepository: IUserRepository,
+  ) {}
 
   /**
    * Get contest data if the user has joined the contest.
    */
   async execute(contestId: string, userId: string): Promise<ContestProps> {
-
     if (!contestId || !userId) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -33,7 +32,7 @@ export class GetContestDataUseCase implements IGetContestDataUseCase {
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND
+        MESSAGES.AUTH_USER_NOT_FOUND,
       );
     }
 
@@ -42,15 +41,12 @@ export class GetContestDataUseCase implements IGetContestDataUseCase {
     if (!contest) {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
-        MESSAGES.USER_NOT_JOINED_CONTEST
+        MESSAGES.USER_NOT_JOINED_CONTEST,
       );
     }
 
     if (contest.getStatus() !== "ongoing") {
-      throw new CustomError(
-        HttpStatusCodes.FORBIDDEN,
-        MESSAGES.GROUP_EXPIRED
-      );
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.GROUP_EXPIRED);
     }
 
     return mapContestDTO(contest.toObject(), userId);

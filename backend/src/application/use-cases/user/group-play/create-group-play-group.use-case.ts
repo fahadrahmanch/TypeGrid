@@ -20,11 +20,14 @@ export class CreateGroupPlayRoomUseCase implements ICreateGroupPlayRoomUseCase {
 
   async execute(hostUserId: string): Promise<groupDTO> {
     if (!hostUserId) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     const joinCode = generateJoinCode(); // no need for await — not async
-    
+
     const group = new GroupEntity({
       name: "Group Play Room",
       ownerId: hostUserId,
@@ -42,7 +45,8 @@ export class CreateGroupPlayRoomUseCase implements ICreateGroupPlayRoomUseCase {
           userId: member._id?.toString() ?? memberId,
           name: member.name,
           imageUrl: member.imageUrl,
-          isHost: member._id?.toString() === groupCreated.getOwnerId().toString(),
+          isHost:
+            member._id?.toString() === groupCreated.getOwnerId().toString(),
         };
       }),
     );

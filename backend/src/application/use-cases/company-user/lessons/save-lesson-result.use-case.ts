@@ -10,8 +10,6 @@ import { LessonResultDTO } from "../../../DTOs/companyUser/lesson-result.dto";
 import { ICompanyUserStatsRepository } from "../../../../domain/interfaces/repository/company/company-user-stats-repository.interface";
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { updateCompanyUserStats } from "../../../services/company-user-stats.service";
-import { IStreakRepository } from "../../../../domain/interfaces/repository/user/streak-repository.interface";
-
 
 export class SaveLessonResultUseCase implements ISaveLessonResultUseCase {
   constructor(
@@ -24,13 +22,14 @@ export class SaveLessonResultUseCase implements ISaveLessonResultUseCase {
   async execute(
     userId: string,
     assignmentId: string,
-    result: LessonResultDTO
+    result: LessonResultDTO,
   ): Promise<void> {
-    const assignment = await this._lessonAssignmentRepository.findById(assignmentId);
+    const assignment =
+      await this._lessonAssignmentRepository.findById(assignmentId);
     if (!assignment) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.ASSIGNED_LESSON_NOT_FOUND
+        MESSAGES.ASSIGNED_LESSON_NOT_FOUND,
       );
     }
 
@@ -52,25 +51,28 @@ export class SaveLessonResultUseCase implements ISaveLessonResultUseCase {
     });
 
     if (!existingResult) {
-      const created = await this._lessonResultRepository.create(lessonResult.toPersistence());
+      const created = await this._lessonResultRepository.create(
+        lessonResult.toPersistence(),
+      );
 
       if (!created) {
         throw new CustomError(
           HttpStatusCodes.INTERNAL_SERVER_ERROR,
-          MESSAGES.LESSON_RESULT_SAVE_FAILED
+          MESSAGES.LESSON_RESULT_SAVE_FAILED,
         );
       }
     } else {
-
       if (assignment.getStatus() === "completed") {
         logger.info("Lesson already completed");
         return;
       }
-      const updated = await this._lessonResultRepository.update(lessonResult.toPersistence());
+      const updated = await this._lessonResultRepository.update(
+        lessonResult.toPersistence(),
+      );
       if (!updated) {
         throw new CustomError(
           HttpStatusCodes.INTERNAL_SERVER_ERROR,
-          MESSAGES.LESSON_RESULT_SAVE_FAILED
+          MESSAGES.LESSON_RESULT_SAVE_FAILED,
         );
       }
     }
@@ -80,35 +82,36 @@ export class SaveLessonResultUseCase implements ISaveLessonResultUseCase {
       status,
     });
     if (status === "completed") {
-        const lesson = await this._lessonRepository.findById(assignment.getLessonId());
-        if (lesson && assignment.getCompanyId()) {
-            const levelMapping: Record<string, "easy" | "medium" | "hard"> = {
-                "beginner": "easy",
-                "intermediate": "medium",
-                "advanced": "hard"
-            };
-            const difficulty = levelMapping[lesson.level] || "easy";
+      const lesson = await this._lessonRepository.findById(
+        assignment.getLessonId(),
+      );
+      if (lesson && assignment.getCompanyId()) {
+        const levelMapping: Record<string, "easy" | "medium" | "hard"> = {
+          beginner: "easy",
+          intermediate: "medium",
+          advanced: "hard",
+        };
+        const difficulty = levelMapping[lesson.level] || "easy";
 
-            const score = await updateCompanyUserStats(
-                result.wpm,
-                result.accuracy,
-                difficulty,
-                "lesson"
-            );
+        const score = await updateCompanyUserStats(
+          result.wpm,
+          result.accuracy,
+          difficulty,
+          "lesson",
+        );
 
-            await this._statsRepository.updateStats(
-                assignment.getCompanyId()!,
-                userId,
-                {
-                    wpm: result.wpm,
-                    accuracy: result.accuracy,
-                    totalScore: score,
-                    weeklyScore: score,
-                    monthlyScore: score,
-                }
-            );
-        }
-        
+        await this._statsRepository.updateStats(
+          assignment.getCompanyId()!,
+          userId,
+          {
+            wpm: result.wpm,
+            accuracy: result.accuracy,
+            totalScore: score,
+            weeklyScore: score,
+            monthlyScore: score,
+          },
+        );
+      }
     }
   }
 }

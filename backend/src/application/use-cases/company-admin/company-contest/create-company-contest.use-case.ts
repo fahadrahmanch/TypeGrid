@@ -22,34 +22,51 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
     private readonly _companyGroupRepository: ICompanyGroupRepository,
     private readonly _contestRepository: IContestRepository,
     private readonly _lessonRepository: ILessonRepository,
-  ) { }
-/**
- * 
- * @param data 
- * @param userId 
- * @returns 
- */
-  async execute(data: CreateContestDTO, userId: string): Promise<CreateContestDTO> {
+  ) {}
+  /**
+   *
+   * @param data
+   * @param userId
+   * @returns
+   */
+  async execute(
+    data: CreateContestDTO,
+    userId: string,
+  ): Promise<CreateContestDTO> {
     const user = await this._userRepository.findById(userId);
 
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     if (!user.CompanyId) {
-      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_NO_COMPANY_ASSIGNED);
+      throw new CustomError(
+        HttpStatusCodes.FORBIDDEN,
+        MESSAGES.USER_NO_COMPANY_ASSIGNED,
+      );
     }
 
     if (!data.date || !data.startTime) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.DATE_OR_START_TIME_REQUIRED);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.DATE_OR_START_TIME_REQUIRED,
+      );
     }
 
     if (data.textSource === "random") {
       const difficulty = this.mapDifficulty(data.difficulty);
-      const lesson = await this._lessonRepository.findOne({ level: difficulty });
+      const lesson = await this._lessonRepository.findOne({
+        level: difficulty,
+      });
 
       if (!lesson) {
-        throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+        throw new CustomError(
+          HttpStatusCodes.NOT_FOUND,
+          MESSAGES.LESSON_NOT_FOUND,
+        );
       }
 
       data.contestText = lesson.text;
@@ -57,13 +74,21 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
 
     if (data.contestMode === "group") {
       if (!data.targetGroup) {
-        throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+        throw new CustomError(
+          HttpStatusCodes.NOT_FOUND,
+          MESSAGES.GROUP_NOT_FOUND,
+        );
       }
 
-      const group = await this._companyGroupRepository.findById(data.targetGroup);
+      const group = await this._companyGroupRepository.findById(
+        data.targetGroup,
+      );
 
       if (!group) {
-        throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+        throw new CustomError(
+          HttpStatusCodes.NOT_FOUND,
+          MESSAGES.GROUP_NOT_FOUND,
+        );
       }
     }
 
@@ -74,7 +99,10 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       duration: Number(data.duration) * 60,
       maxParticipants: Number(data.maxParticipants),
       groupId: data.targetGroup ?? null,
-      rewards: data.rewards.map((r) => ({ rank: r.rank, prize: Number(r.prize) })),
+      rewards: data.rewards.map((r) => ({
+        rank: r.rank,
+        prize: Number(r.prize),
+      })),
       CompanyId: user.CompanyId,
       countDown: 10,
     });

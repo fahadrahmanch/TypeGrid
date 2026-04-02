@@ -1,4 +1,3 @@
-
 export interface IRejectChallengeUseCase {
-    execute(challengeId: string): Promise<void>;
+  execute(challengeId: string): Promise<void>;
 }

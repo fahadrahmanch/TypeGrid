@@ -13,10 +13,6 @@ import { joinOrLeaveContestApi } from "../../../api/companyUser/contests";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-type User = {
-  _id: string;
-};
-
 export interface RewardResponseDTO {
   rank: number;
   prize: number;
@@ -88,7 +84,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
 }) => {
   const [isJoined, setIsJoined] = useState(joined);
   // const [participantList, setParticipantList] = useState<User[]>([]);
-  const [isHovered, setIsHovered] = useState(false);
+  // const [isHovered, setIsHovered] = useState(false);
   const [participantsCount, setParticipantsCount] = useState<number>(
     participants.length,
   );

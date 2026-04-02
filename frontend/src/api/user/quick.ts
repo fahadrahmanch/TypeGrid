@@ -8,4 +8,3 @@ export async function createQuick() {
 export async function statusChange(competitionId: string, status: string) {
   return userAPI.post(API_ROUTES.QUICK_PLAY.STATUS(competitionId), { status });
 }
-

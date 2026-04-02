@@ -1,7 +1,14 @@
 import { updateCompanyStatus } from "../../../api/admin/company";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { X, Building2, Mail, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
+import {
+  X,
+  Building2,
+  Mail,
+  CheckCircle2,
+  AlertCircle,
+  Calendar,
+} from "lucide-react";
 
 interface CompanyDetailsModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -70,11 +77,15 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
               <Building2 className="w-6 h-6 text-[#ECA468]" />
             </div>
             <div>
-              <h2 className="text-2xl font-black text-gray-900 leading-tight">Company Details</h2>
-              <p className="text-sm text-gray-500 font-medium">Review and verify registration details</p>
+              <h2 className="text-2xl font-black text-gray-900 leading-tight">
+                Company Details
+              </h2>
+              <p className="text-sm text-gray-500 font-medium">
+                Review and verify registration details
+              </p>
             </div>
           </div>
-          <button 
+          <button
             onClick={() => setOpen(false)}
             className="p-2 text-gray-400 hover:text-gray-700 transition-colors"
           >
@@ -85,20 +96,34 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-[#FDFBF7]">
           <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
-            <h3 className="text-4xl font-black text-gray-900 tracking-tight">{company.companyName}</h3>
-            
-            <span className={`px-4 py-1.5 text-xs font-black uppercase tracking-widest rounded-xl border-2
-              ${isApproved ? "bg-emerald-50 text-emerald-600 border-emerald-100" : 
-                isRejected ? "bg-red-50 text-red-600 border-red-100" : 
-                "bg-amber-50 text-amber-600 border-amber-100"}`}>
-              {isApproved ? "Approved" : isRejected ? "Rejected" : "Pending Approval"}
+            <h3 className="text-4xl font-black text-gray-900 tracking-tight">
+              {company.companyName}
+            </h3>
+
+            <span
+              className={`px-4 py-1.5 text-xs font-black uppercase tracking-widest rounded-xl border-2
+              ${
+                isApproved
+                  ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                  : isRejected
+                    ? "bg-red-50 text-red-600 border-red-100"
+                    : "bg-amber-50 text-amber-600 border-amber-100"
+              }`}
+            >
+              {isApproved
+                ? "Approved"
+                : isRejected
+                  ? "Rejected"
+                  : "Pending Approval"}
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">Registration Email</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">
+                  Registration Email
+                </label>
                 <div className="flex items-center gap-3 text-gray-800 font-bold bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
                   <Mail className="w-4 h-4 text-[#ECA468]" />
                   {company.email}
@@ -106,13 +131,15 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
               </div>
 
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">Registration Date</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">
+                  Registration Date
+                </label>
                 <div className="flex items-center gap-3 text-gray-800 font-bold bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
                   <Calendar className="w-4 h-4 text-[#ECA468]" />
                   {new Date(company.createdAt).toLocaleDateString(undefined, {
                     year: "numeric",
                     month: "long",
-                    day: "numeric"
+                    day: "numeric",
                   })}
                 </div>
               </div>
@@ -120,14 +147,18 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
 
             <div className="space-y-6">
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">Company ID</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">
+                  Company ID
+                </label>
                 <div className="flex items-center gap-3 text-gray-500 font-mono text-xs bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
                   {company._id}
                 </div>
               </div>
 
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">Admin Status</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">
+                  Admin Status
+                </label>
                 <div className="flex items-center gap-3 text-gray-800 font-bold bg-white p-4 rounded-2xl border border-gray-100 shadow-sm capitalize">
                   {isApproved ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-500" />
@@ -145,8 +176,8 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
 
         {/* Footer */}
         <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-4 shadow-inner">
-          <button 
-            onClick={() => setOpen(false)} 
+          <button
+            onClick={() => setOpen(false)}
             className="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-600 transition-colors"
           >
             Close
@@ -180,7 +211,9 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
                 <div className="bg-red-50 p-2 rounded-xl">
                   <AlertCircle className="w-5 h-5 text-red-500" />
                 </div>
-                <h3 className="text-xl font-black text-gray-900 leading-tight tracking-tight">Reject Registration</h3>
+                <h3 className="text-xl font-black text-gray-900 leading-tight tracking-tight">
+                  Reject Registration
+                </h3>
               </div>
 
               <textarea

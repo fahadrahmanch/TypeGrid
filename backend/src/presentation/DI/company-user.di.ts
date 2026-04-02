@@ -35,8 +35,6 @@ import { LeaderBoardController } from "../controllers/company-user/company-leade
 import { CompanyUserStatsRepository } from "../../infrastructure/db/repositories/company/company-user-stats.repository";
 import { CompanyUserStats } from "../../infrastructure/db/models/company/company-user-stats.schema";
 import { GetCompanyLeaderboardUseCase } from "../../application/use-cases/company-user/stats/get-company-leaderboard.use-case";
-import { StreakRepository } from "../../infrastructure/db/repositories/user/streak.repository";
-import { Streak } from "../../infrastructure/db/models/user/streak.schema";
 import { RejectChallengeUseCase } from "../../application/use-cases/company-user/challenges/reiect-challenge.use-case";
 
 const lessonAssignmentRepository = new LessonAssignmentRepository(
@@ -47,7 +45,9 @@ const lessonRepository = new LessonRepository(Lesson);
 const lessonResultRepository = new LessonResultRepository(LessonResult);
 const challengeRepository = new CompanyChallengeRepository(CompanyChallenge);
 const competitionRepository = new CompetitionRepository(Competition);
-const companyUserStatsRepository = new CompanyUserStatsRepository(CompanyUserStats);
+const companyUserStatsRepository = new CompanyUserStatsRepository(
+  CompanyUserStats,
+);
 
 const getAssignLessonUseCaseInstance = new GetAssignLessonUseCase(
   lessonAssignmentRepository,
@@ -86,7 +86,9 @@ const getContestDataUseCaseInstance = new GetContestDataUseCase(
   contestRepositoryInstance,
   userRepository,
 );
-const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(userRepository);
+const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(
+  userRepository,
+);
 
 const makeChallengeUseCaseInstance = new MakeChallengeUseCase(
   challengeRepository,

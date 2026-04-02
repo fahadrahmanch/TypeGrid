@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Target, Swords, Search, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Target, Swords, Search } from "lucide-react";
 import TeammateCard from "./TeammateCard";
 import { Teammate } from "../../../types/challenge";
 import { companyUsers } from "../../../api/companyUser/challenge";
@@ -10,34 +10,36 @@ const ChallengeArena = ({
 }: {
   setView: (v: "arena" | "my-challenges") => void;
 }) => {
- const [users, setUsers] = useState<Teammate[]>([]);
-const [challengeStatuses, setChallengeStatuses] = useState<Record<string, string>>({});
-const [searchText,setSearchText]=useState("");
+  const [users, setUsers] = useState<Teammate[]>([]);
+  const [challengeStatuses, setChallengeStatuses] = useState<
+    Record<string, string>
+  >({});
+  const [searchText, setSearchText] = useState("");
 
-const companyUser = useSelector((state: any) => state.auth.user);
-useEffect(() => {
-  async function fetchData() {
-    try {
-      const [usersRes, challengesRes] = await Promise.all([
-        companyUsers(searchText),
-        checkalreadySendChallenge(),
-      ]);
+  const companyUser = useSelector((state: any) => state.auth.user);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [usersRes, challengesRes] = await Promise.all([
+          companyUsers(searchText),
+          checkalreadySendChallenge(),
+        ]);
 
-      if (usersRes.data.data) setUsers(usersRes.data.data);
+        if (usersRes.data.data) setUsers(usersRes.data.data);
 
-      if (challengesRes.data.data) {
-        const statusMap: Record<string, string> = {};
-        challengesRes.data.data.forEach((challenge: any) => {
-          statusMap[challenge.receiverId] = challenge.status;
-        });
-        setChallengeStatuses(statusMap);
+        if (challengesRes.data.data) {
+          const statusMap: Record<string, string> = {};
+          challengesRes.data.data.forEach((challenge: any) => {
+            statusMap[challenge.receiverId] = challenge.status;
+          });
+          setChallengeStatuses(statusMap);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
-  }
-  fetchData();
-}, [searchText]);
+    fetchData();
+  }, [searchText]);
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header Area */}
@@ -73,7 +75,7 @@ useEffect(() => {
         <div className="flex-1 relative">
           <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
-          onChange={((e)=>setSearchText(e.target.value))}
+            onChange={(e) => setSearchText(e.target.value)}
             type="text"
             placeholder="Search by name..."
             className="w-full bg-[#FAF5EC] border border-[#EBE3D5] rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B09D89]/50 transition-all font-medium placeholder:text-gray-400 text-gray-700"
@@ -99,19 +101,19 @@ useEffect(() => {
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-       {users
-  .filter((user) => user._id !== companyUser?._id)
-  .map((user) => (
-    <TeammateCard
-      key={user._id}
-      teammate={user}
-      challengeStatus={challengeStatuses[user._id]}
-      onStatusChange={(id, status) =>
-        setChallengeStatuses((prev) => ({ ...prev, [id]: status }))
-      }
-      onViewChallenges={() => setView("my-challenges")}
-    />
-  ))}
+        {users
+          .filter((user) => user._id !== companyUser?._id)
+          .map((user) => (
+            <TeammateCard
+              key={user._id}
+              teammate={user}
+              challengeStatus={challengeStatuses[user._id]}
+              onStatusChange={(id, status) =>
+                setChallengeStatuses((prev) => ({ ...prev, [id]: status }))
+              }
+              onViewChallenges={() => setView("my-challenges")}
+            />
+          ))}
       </div>
     </div>
   );

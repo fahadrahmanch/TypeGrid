@@ -1,12 +1,9 @@
 import { useRealtime } from "../../context/RealtimeProvider";
-import { useNavigate } from "react-router-dom";
 import { getAllChallenges } from "../../api/companyUser/challenge";
 import { useState, useEffect } from "react";
-import { Swords, X, Zap, Clock, Target } from "lucide-react";
 import { socket } from "../../socket";
 const ChallengeModal = () => {
   const { challengeModal, setChallengeModal } = useRealtime();
-  const navigate = useNavigate();
 
   const [challenge, setChallenge] = useState<any>(null);
   const [waiting, setWaiting] = useState(false);
@@ -37,7 +34,10 @@ const ChallengeModal = () => {
     setWaiting(true);
     const roomId = String(challengeModal.challengeId);
 
-    socket.emit("join-match", { challengeId: roomId,receiverId:challenge.receiverId });
+    socket.emit("join-match", {
+      challengeId: roomId,
+      receiverId: challenge.receiverId,
+    });
   };
   if (!challengeModal?.open) return null;
 
@@ -54,26 +54,25 @@ const ChallengeModal = () => {
         >
           <X className="w-5 h-5" />
         </button>
-{!challengeModal.waiting?(
-        <div className="mb-4 pr-6">
-          <h3 className="font-extrabold text-gray-900 text-lg leading-tight flex items-center gap-2">
-            <span className="text-xl">⚔️</span> Challenge Accepted!
-          </h3>
-          <p className="text-sm font-medium text-gray-500 mt-1">
-            Opponent accepted your challenge. Join the match now.
-          </p>
-        </div>
-
-):(
-  <div className="mb-4 pr-6">
-    <h3 className="font-extrabold text-gray-900 text-lg leading-tight flex items-center gap-2">
-      <span className="text-xl">⚔️</span> Waiting for opponent...
-    </h3>
-    <p className="text-sm font-medium text-gray-500 mt-1">
-      Oppent joined the match
-    </p>
-  </div>
-)}
+        {!challengeModal.waiting ? (
+          <div className="mb-4 pr-6">
+            <h3 className="font-extrabold text-gray-900 text-lg leading-tight flex items-center gap-2">
+              <span className="text-xl">⚔️</span> Challenge Accepted!
+            </h3>
+            <p className="text-sm font-medium text-gray-500 mt-1">
+              Opponent accepted your challenge. Join the match now.
+            </p>
+          </div>
+        ) : (
+          <div className="mb-4 pr-6">
+            <h3 className="font-extrabold text-gray-900 text-lg leading-tight flex items-center gap-2">
+              <span className="text-xl">⚔️</span> Waiting for opponent...
+            </h3>
+            <p className="text-sm font-medium text-gray-500 mt-1">
+              Oppent joined the match
+            </p>
+          </div>
+        )}
 
         {/* User Info & Badge */}
         {challenge ? (
@@ -100,7 +99,7 @@ const ChallengeModal = () => {
             </div>
 
             {/* Details Row */}
-            <div className="flex justify-between items-center bg-white/80 rounded-lg p-2.5">
+            {/* <div className="flex justify-between items-center bg-white/80 rounded-lg p-2.5">
               <div className="flex flex-col items-center flex-1 border-r border-gray-200 last:border-0 text-center px-1">
                 <Zap className="w-3.5 h-3.5 text-indigo-500 mb-0.5" />
                 <span className="text-[10px] font-bold text-indigo-600 capitalize">
@@ -122,7 +121,7 @@ const ChallengeModal = () => {
                   {challenge.type || "Challenge"}
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
         ) : (
           <div className="flex justify-center items-center py-6 mb-2">

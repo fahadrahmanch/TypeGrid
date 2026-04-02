@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
-import ContestStatsCards from "../../components/companyAdmin/contest/ContestStatsCards";
 import ContestCard from "../../components/companyAdmin/contest/ContestCard";
 import { ContestProps } from "../../types/contest";
 import CreateContestModal from "../../components/companyAdmin/contest/CreateContestModal";
@@ -18,27 +17,26 @@ const CompanyContestManagement: React.FC = () => {
       setContests(data);
     };
     fetchContests();
-
   }, []);
 
- useEffect(() => {
-  socket.emit("company-admin-contest");
-}, []);
+  useEffect(() => {
+    socket.emit("company-admin-contest");
+  }, []);
 
   useEffect(() => {
     socket.on("contest-updated-admin", ({ contestId, status }) => {
       if (!status) return;
       setContests((prev) =>
         prev.map((contest) =>
-          contest._id === contestId ? { ...contest, status } : contest
-        )
+          contest._id === contestId ? { ...contest, status } : contest,
+        ),
       );
     });
     return () => {
       socket.off("contest-updated-admin");
     };
   }, []);
-  
+
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
       {/* Fixed Sidebar */}

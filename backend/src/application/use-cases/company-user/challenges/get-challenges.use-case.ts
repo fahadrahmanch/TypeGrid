@@ -13,7 +13,7 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 export class GetChallengesUseCase implements IGetChallengesUseCase {
   constructor(
     private readonly challengeRepository: ICompanyChallengeRepository,
-    private readonly userRepository: IUserRepository
+    private readonly userRepository: IUserRepository,
   ) {}
 
   /**
@@ -21,11 +21,10 @@ export class GetChallengesUseCase implements IGetChallengesUseCase {
    * @param userId - User identifier
    */
   async execute(userId: string): Promise<ChallengeDTO[]> {
-
     if (!userId) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -36,12 +35,11 @@ export class GetChallengesUseCase implements IGetChallengesUseCase {
 
     const processChallenges = async (
       challenges: any[],
-      type: "sent" | "received"
+      type: "sent" | "received",
     ) => {
       return Promise.all(
         challenges.map(async (item) => {
-          const opponentId =
-            type === "sent" ? item.receiverId : item.senderId;
+          const opponentId = type === "sent" ? item.receiverId : item.senderId;
 
           const opponent = await this.userRepository.findById(opponentId);
 
@@ -50,7 +48,7 @@ export class GetChallengesUseCase implements IGetChallengesUseCase {
             type: item.status === "completed" ? "completed" : type,
             opponent,
           };
-        })
+        }),
       );
     };
 

@@ -13,13 +13,12 @@ export class UpdateCompanyLessonUseCase implements IUpdateCompanyLessonUseCase {
 
   async execute(
     lessonId: string,
-    lessonData: Partial<CompanyLessonDTO>
+    lessonData: Partial<CompanyLessonDTO>,
   ): Promise<CompanyLessonDTO> {
-
     if (!lessonId || !lessonData) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -28,7 +27,7 @@ export class UpdateCompanyLessonUseCase implements IUpdateCompanyLessonUseCase {
     if (!lesson) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.COMPANY_LESSON_NOT_FOUND
+        MESSAGES.COMPANY_LESSON_NOT_FOUND,
       );
     }
 
@@ -42,7 +41,7 @@ export class UpdateCompanyLessonUseCase implements IUpdateCompanyLessonUseCase {
     if (!updatedLesson) {
       throw new CustomError(
         HttpStatusCodes.INTERNAL_SERVER_ERROR,
-        MESSAGES.LESSON_UPDATE_FAILED
+        MESSAGES.LESSON_UPDATE_FAILED,
       );
     }
 

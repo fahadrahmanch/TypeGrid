@@ -7,7 +7,7 @@ export function useGameTimer(
   setCountdown: any,
   setRemainingTime: any,
   setElapsedTime: any,
-  setIsfinished: any
+  setIsfinished: any,
 ) {
   useEffect(() => {
     if (!gameData?.startedAt || !gameData?.duration || finalResult.length)
@@ -39,6 +39,6 @@ export function useGameTimer(
     gameData?.startedAt,
     gameData?.duration,
     gameData?.countDown,
-    finalResult
+    finalResult,
   ]);
 }

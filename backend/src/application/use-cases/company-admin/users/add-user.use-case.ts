@@ -11,7 +11,6 @@ import { IAuthRepository } from "../../../../domain/interfaces/repository/user/a
  * Use case responsible for creating a new company user.
  */
 
-
 export class AddUserUseCase implements IAddUserUseCase {
   constructor(
     private readonly _authRepository: IAuthRepository,
@@ -21,7 +20,10 @@ export class AddUserUseCase implements IAddUserUseCase {
   async addUser(data: AddUserDTO): Promise<AuthUserEntity> {
     const existingUser = await this._authRepository.findByEmail(data.email);
     if (existingUser) {
-      throw new CustomError(HttpStatusCodes.CONFLICT, MESSAGES.AUTH_EMAIL_EXISTS);
+      throw new CustomError(
+        HttpStatusCodes.CONFLICT,
+        MESSAGES.AUTH_EMAIL_EXISTS,
+      );
     }
 
     const hashedPassword = await this._hashService.hash(data.password);

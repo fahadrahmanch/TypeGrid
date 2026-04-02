@@ -75,6 +75,7 @@ export const quickplayHandlers = (socket: Socket, io: Server) => {
         await redis.expire(key, 3600);
       }
     } catch (error) {
+      console.log(error);
       socket.emit("quick-join-error", {
         message: "Unable to join quick play",
       });

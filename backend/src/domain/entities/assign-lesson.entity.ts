@@ -99,7 +99,6 @@ export class LessonAssignmentEntity {
     this.status = "expired";
   }
 
-
   toObject() {
     return {
       id: this.id,

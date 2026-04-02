@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { X, User, Mail, Lock, ShieldCheck, AlertCircle, Plus } from "lucide-react";
+import {
+  X,
+  User,
+  Mail,
+  Lock,
+  ShieldCheck,
+  AlertCircle,
+  Plus,
+} from "lucide-react";
 import {
   nameValidation,
   emailValidation,
@@ -75,33 +83,39 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-300"
         onClick={() => setOpen(false)}
       />
-      
+
       {/* Modal Container */}
       <div className="bg-[#FFF8EA] rounded-[2.5rem] shadow-2xl w-full max-w-2xl relative overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-300">
-        
         {/* Decorative Header Area */}
         <div className="bg-gradient-to-r from-[#ECA468] to-[#D0864B] p-10 relative overflow-hidden text-start">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           <div className="relative z-10">
-            <h2 className="text-3xl font-black text-white tracking-tight mb-2">Engage New Talent</h2>
-            <p className="text-white/80 font-medium tracking-tight">Create a new student profile and get them started on their journey.</p>
+            <h2 className="text-3xl font-black text-white tracking-tight mb-2">
+              Engage New Talent
+            </h2>
+            <p className="text-white/80 font-medium tracking-tight">
+              Create a new student profile and get them started on their
+              journey.
+            </p>
           </div>
           <button
             onClick={() => setOpen(false)}
             className="absolute top-8 right-8 p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-white group"
           >
-            <X size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+            <X
+              size={20}
+              className="group-hover:rotate-90 transition-transform duration-300"
+            />
           </button>
         </div>
 
         {/* Form Body */}
         <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
           <form onSubmit={handleSubmit} className="space-y-8">
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Full Name */}
               <div className="space-y-3">
@@ -124,7 +138,11 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                     </div>
                   )}
                 </div>
-                {error.name && <p className="text-xs font-bold text-rose-500 ml-1">{error.name}</p>}
+                {error.name && (
+                  <p className="text-xs font-bold text-rose-500 ml-1">
+                    {error.name}
+                  </p>
+                )}
               </div>
 
               {/* Email Address */}
@@ -148,7 +166,11 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                     </div>
                   )}
                 </div>
-                {error.email && <p className="text-xs font-bold text-rose-500 ml-1">{error.email}</p>}
+                {error.email && (
+                  <p className="text-xs font-bold text-rose-500 ml-1">
+                    {error.email}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -166,13 +188,20 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                   onChange={handleChange}
                   className={`w-full px-6 py-4 bg-white border ${error.password ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
                 />
-                <ShieldCheck size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500" />
+                <ShieldCheck
+                  size={18}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500"
+                />
               </div>
               <p className="text-[10px] text-gray-400 font-medium ml-1 flex items-center gap-1.5 leading-relaxed">
                 <AlertCircle size={10} />
                 New members will use this password for their initial login.
               </p>
-              {error.password && <p className="text-xs font-bold text-rose-500 ml-1">{error.password}</p>}
+              {error.password && (
+                <p className="text-xs font-bold text-rose-500 ml-1">
+                  {error.password}
+                </p>
+              )}
             </div>
 
             {/* Hint Box */}
@@ -181,8 +210,12 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                 <ShieldCheck size={20} />
               </div>
               <p className="text-xs font-medium text-gray-500 leading-relaxed text-start">
-                Accounts are initialized with <span className="font-bold text-[#D0864B] uppercase tracking-widest">Active</span> status.
-                Students can immediately access assigned materials upon successful login.
+                Accounts are initialized with{" "}
+                <span className="font-bold text-[#D0864B] uppercase tracking-widest">
+                  Active
+                </span>{" "}
+                status. Students can immediately access assigned materials upon
+                successful login.
               </p>
             </div>
           </form>
@@ -197,7 +230,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
           >
             Cancel
           </button>
-          
+
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
@@ -206,14 +239,17 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
             {isSubmitting ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              <Plus size={18} className="group-hover:scale-110 transition-transform" />
+              <Plus
+                size={18}
+                className="group-hover:scale-110 transition-transform"
+              />
             )}
             Create Profile
           </button>
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 export default AddUser;

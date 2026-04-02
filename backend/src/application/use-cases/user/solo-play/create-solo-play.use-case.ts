@@ -19,12 +19,18 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
   async execute(userId: string): Promise<CompetitionDTOSoloPlay> {
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     const lessons = await this._lessonRepository.find();
     if (!lessons.length) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND,
+      );
     }
 
     const selectedLesson = lessons[Math.floor(Math.random() * lessons.length)];
@@ -44,11 +50,13 @@ export class CreateSoloPlayUseCase implements ICreateSoloPlayUseCase {
       competitionEntity.toObject(),
     );
 
-    const populatedParticipants = (await Promise.all(
-      competition.getParticipants().map((memberId: string) =>
-        this._userRepository.findById(memberId),
-      ),
-    ))
+    const populatedParticipants = (
+      await Promise.all(
+        competition
+          .getParticipants()
+          .map((memberId: string) => this._userRepository.findById(memberId)),
+      )
+    )
       .filter((m): m is NonNullable<typeof m> => m !== null)
       .map((member) => ({
         _id: member._id,

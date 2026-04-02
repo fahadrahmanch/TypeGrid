@@ -22,11 +22,17 @@ export class AssignLessonUseCase implements IAssignLessonUseCase {
   ): Promise<void> {
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
     const companyId = user.CompanyId;
     if (!companyId) {
-      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.COMPANY_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.FORBIDDEN,
+        MESSAGES.COMPANY_NOT_FOUND,
+      );
     }
     for (let i = 0; i < users.length; i++) {
       for (let j = 0; j < lessons.length; j++) {
@@ -35,7 +41,7 @@ export class AssignLessonUseCase implements IAssignLessonUseCase {
           lessonId: lessons[j],
           status: "assigned",
           companyId: companyId,
-          deadlineAt: new Date(deadline)
+          deadlineAt: new Date(deadline),
         });
         await this._baseRepoAssignLesson.create(assigned.toObject());
       }

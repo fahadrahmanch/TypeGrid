@@ -3,7 +3,7 @@ import Navbar from "../../../components/user/Navbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import {  statusChange } from "../../../api/user/quick";
+import { statusChange } from "../../../api/user/quick";
 import { useGameTimer } from "../../../hooks/useGameTimer";
 import { useTypingScroll } from "../../../hooks/useTypingScroll";
 import { useTypingStats } from "../../../hooks/useTypingStats";
@@ -35,7 +35,6 @@ export type GamePlayerResult = {
   rank?: number;
 };
 
-
 interface Participant {
   _id: string;
   name: string;
@@ -64,8 +63,6 @@ const QuickPlay: React.FC = () => {
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [hasError, setHasError] = useState(false);
   const [errors, setErrors] = useState(0);
-  // const [wpm, setWpm] = useState(0);
-  // const [accuracy, setAccuracy] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [livePlayers, setLivePlayers] = useState<Participant[]>(players || []);
   const [chatMessage, setChatMessage] = useState("");
@@ -86,19 +83,13 @@ const QuickPlay: React.FC = () => {
   );
   const [currentUser, setCurrentUser] = useState<
     | {
-      _id: string;
-      name: string;
-      imageUrl?: string;
-      isHost: boolean;
-    }
+        _id: string;
+        name: string;
+        imageUrl?: string;
+        isHost: boolean;
+      }
     | undefined
   >(undefined);
-  // useEffect(() => {
-  //   // alert(JSON.stringify(gameData))
-  //   if (!gameData) {
-  //     navigate("/", { replace: true });
-  //   }
-  // }, [gameData, navigate]);
 
   useQuickPlaySocket(
     gameData,
@@ -117,15 +108,12 @@ const QuickPlay: React.FC = () => {
     totalTyped,
     gameIdRef,
     userIdRef,
-    
-    
-
   );
   useEffect(() => {
-  if (!gameData) {
-    navigate("/", { replace: true });
-  }
-}, []);
+    if (!gameData) {
+      navigate("/", { replace: true });
+    }
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -134,12 +122,12 @@ const QuickPlay: React.FC = () => {
       prev.map((p) =>
         p._id === user._id
           ? {
-            ...p,
-            wpm,
-            accuracy,
-            errors,
-            progress: typedText.length,
-          }
+              ...p,
+              wpm,
+              accuracy,
+              errors,
+              progress: typedText.length,
+            }
           : p,
       ),
     );
@@ -152,7 +140,6 @@ const QuickPlay: React.FC = () => {
     }
   }, [players, user._id]);
 
-
   useGameTimer(
     gameData,
     finalResult,
@@ -160,7 +147,7 @@ const QuickPlay: React.FC = () => {
     setCountdown,
     setRemainingTime,
     setElapsedTime,
-    setIsfinished
+    setIsfinished,
   );
   const startGameAPI = async (competitionId: string) => {
     try {
@@ -176,12 +163,12 @@ const QuickPlay: React.FC = () => {
     } catch (error) {
       toast.error("Failed to complete game");
     }
-  }
-  useEffect(()=>{
-    if(isFinished || remainingTime===0){
+  };
+  useEffect(() => {
+    if (isFinished || remainingTime === 0) {
       completeGameAPI(gameData._id);
     }
-  },[isFinished,gameData._id,remainingTime])
+  }, [isFinished, gameData._id, remainingTime]);
 
   useEffect(() => {
     if (phase === "PLAY" && !hasSentStart) {
@@ -190,14 +177,11 @@ const QuickPlay: React.FC = () => {
     }
   }, [phase, hasSentStart, currentUser, gameData?._id]);
 
-
-
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
-
 
   const renderTextWithHighlight = () => {
     if (!lesson) return null;
@@ -218,11 +202,6 @@ const QuickPlay: React.FC = () => {
         isCurrentChar && phase === "PLAY" && !isFinished
           ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]"
           : "";
-
-      // ** Ghost Cursors Logic **
-      //   const playersHere = livePlayers.filter(
-      //     (p) => p._id !== currentUser?._id && p.progress === index
-      //   );
 
       return (
         <span
@@ -248,26 +227,26 @@ const QuickPlay: React.FC = () => {
   });
 
   //handle key down
-useQuickPlayHandleKeyDown({
-  lesson,
-  isFinished,
-  phase,
-  typedText,
-  hasError,
-  setHasError,
-  setTypedText,
-  setErrors,
-  setTotalTyped,
-  setIsfinished,
-  gameData,
-  currentUser,
-  elapsedTime,
-  wpm,
-  accuracy,
-  errors,
-  totalTyped,
-});
- 
+  useQuickPlayHandleKeyDown({
+    lesson,
+    isFinished,
+    phase,
+    typedText,
+    hasError,
+    setHasError,
+    setTypedText,
+    setErrors,
+    setTotalTyped,
+    setIsfinished,
+    gameData,
+    currentUser,
+    elapsedTime,
+    wpm,
+    accuracy,
+    errors,
+    totalTyped,
+  });
+
   return (
     <div className="min-h-screen bg-[#FFF8EA] font-sans text-gray-800 flex flex-col">
       <Navbar />
@@ -379,9 +358,9 @@ useQuickPlayHandleKeyDown({
               <h2 className="text-xl font-bold text-gray-700">
                 Active Players
               </h2>
-              <div className="px-3 py-1 bg-emerald-100/50 text-emerald-600 text-xs font-bold rounded-full border border-emerald-100">
+              {/* <div className="px-3 py-1 bg-emerald-100/50 text-emerald-600 text-xs font-bold rounded-full border border-emerald-100">
                 5 Online
-              </div>
+              </div> */}
             </div>
 
             {/* Players Cards Row */}
@@ -389,27 +368,29 @@ useQuickPlayHandleKeyDown({
               {livePlayers.map((player) => (
                 <div
                   key={player._id}
-                  className={`bg-white rounded-2xl p-4 shadow-sm border ${player.rank === 1
+                  className={`bg-white rounded-2xl p-4 shadow-sm border ${
+                    player.rank === 1
                       ? "border-amber-200 shadow-amber-50 ring-1 ring-amber-100"
                       : player.rank === 2
                         ? "border-gray-200 shadow-gray-50 ring-1 ring-gray-100"
                         : player.rank === 3
                           ? "border-orange-200 shadow-orange-50 ring-1 ring-orange-100"
                           : "border-gray-100"
-                    } flex flex-col gap-4 relative overflow-hidden transition-all hover:shadow-md hover:-translate-y-1`}
+                  } flex flex-col gap-4 relative overflow-hidden transition-all hover:shadow-md hover:-translate-y-1`}
                 >
                   {/* Rank Badge */}
                   {player.rank && (
                     <div
                       className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm z-10
-                                    ${player.rank === 1
-                          ? "bg-gradient-to-br from-amber-400 to-amber-600"
-                          : player.rank === 2
-                            ? "bg-gradient-to-br from-gray-300 to-gray-500"
-                            : player.rank === 3
-                              ? "bg-gradient-to-br from-orange-400 to-orange-600"
-                              : "bg-gray-100 text-gray-400"
-                        }`}
+                                    ${
+                                      player.rank === 1
+                                        ? "bg-gradient-to-br from-amber-400 to-amber-600"
+                                        : player.rank === 2
+                                          ? "bg-gradient-to-br from-gray-300 to-gray-500"
+                                          : player.rank === 3
+                                            ? "bg-gradient-to-br from-orange-400 to-orange-600"
+                                            : "bg-gray-100 text-gray-400"
+                                    }`}
                     >
                       {player.rank}
                     </div>
@@ -461,15 +442,33 @@ useQuickPlayHandleKeyDown({
                     </div>
                   </div>
 
+                  {/* Progress Bar */}
+                  <div className="pt-2 flex flex-col gap-1.5">
+                    <div className="flex justify-between items-center px-1">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Progress</span>
+                      <span className="text-[10px] font-black text-emerald-600">
+                        {Math.round((((player as any).progress || 0) / (lesson?.length || 1)) * 100)}%
+                      </span>
+                    </div>
+                    <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+                        style={{ 
+                          width: `${Math.round((((player as any).progress || 0) / (lesson?.length || 1)) * 100)}%` 
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+
                   {/* Secondary Stats (Time & Errors) */}
                   <div className="grid grid-cols-2 gap-2 pt-2 border-t border-dashed border-gray-100">
                     <div className="flex items-center justify-between px-2">
                       <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-bold">
                         <Clock className="w-3 h-3" /> Time
                       </div>
-                      <div className="text-xs font-bold text-gray-700">
-                        {player.time || "0:00"}
-                      </div>
+                      {/* <div className="text-xs font-bold text-gray-700">
+                        {player.timeTaken}
+                      </div> */}
                     </div>
                     <div className="flex items-center justify-between px-2 border-l border-gray-100 pl-2">
                       <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-bold">
@@ -503,7 +502,7 @@ useQuickPlayHandleKeyDown({
                     : "Race in progress"}
                 </p>
 
-                <div className="mt-8 space-y-2 text-[10px] font-mono font-medium text-gray-400">
+                {/* <div className="mt-8 space-y-2 text-[10px] font-mono font-medium text-gray-400">
                   <div className="flex items-center gap-2 bg-white px-2 py-1 rounded border border-orange-100">
                     <kbd className="bg-gray-100 px-1 rounded text-gray-600">
                       Ctrl
@@ -520,7 +519,7 @@ useQuickPlayHandleKeyDown({
                     </kbd>{" "}
                     to focus input
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Center: Snippet */}
@@ -542,14 +541,14 @@ useQuickPlayHandleKeyDown({
                 </div>
 
                 {/* Typing Input Area */}
-                <div className="bg-[#FEFCE8] rounded-2xl p-6 border border-orange-50 shadow-sm">
+                {/* <div className="bg-[#FEFCE8] rounded-2xl p-6 border border-orange-50 shadow-sm">
                   <h4 className="text-xs font-bold text-gray-600 mb-3 uppercase tracking-wide">
                     Type here when the game begins...
                   </h4>
                   <div className="font-mono text-gray-400 text-sm">
                     Start typing when the race begins...
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Right: Chat */}

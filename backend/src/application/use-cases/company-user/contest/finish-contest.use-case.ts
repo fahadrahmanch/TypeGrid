@@ -23,7 +23,10 @@ export class FinishContestUseCase implements IFinishContestUseCase {
   async execute(contestId: string, result: any[]): Promise<void> {
     const contest = await this._contestRepository.findById(contestId);
     if (!contest) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
 
     contest.completeContest();
@@ -54,9 +57,14 @@ export class FinishContestUseCase implements IFinishContestUseCase {
         },
       });
       await this._resultRepository.create(resultEntity.toObject());
-      
-      if(companyId){
-        const score=await updateCompanyUserStats(res.wpm, Number(res.accuracy),contest.getDifficulty(), "contest");
+
+      if (companyId) {
+        const score = await updateCompanyUserStats(
+          res.wpm,
+          Number(res.accuracy),
+          contest.getDifficulty(),
+          "contest",
+        );
         await this._statsRepository.updateStats(companyId, res.userId, {
           wpm: res.wpm,
           accuracy: Number(res.accuracy),
@@ -65,7 +73,6 @@ export class FinishContestUseCase implements IFinishContestUseCase {
           monthlyScore: score,
         });
       }
-     
     }
 
     await this._contestRepository.update(contest.toObject());

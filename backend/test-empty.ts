@@ -16,7 +16,7 @@ import { User } from "./src/infrastructure/db/models/user/user.schema";
 
   const testGame = await Competition.findOne();
   if(!testGame) process.exit(0);
-
+  
   const parts = [...testGame.participants];
   for(const p of parts) {
       await useCase.execute(testGame._id.toString(), p.toString());

@@ -27,18 +27,40 @@ export class StreakEntity {
     this.updatedAt = attrs.updatedAt;
   }
 
-  setCurrentStreak(currentStreak: number) { this.currentStreak = currentStreak; }
-  setLongestStreak(longestStreak: number) { this.longestStreak = longestStreak; }
-  setLastCompletedDate(lastCompletedDate: Date | null) { this.lastCompletedDate = lastCompletedDate; }
-  setUpdatedAt(updatedAt: Date) { this.updatedAt = updatedAt; }
+  setCurrentStreak(currentStreak: number) {
+    this.currentStreak = currentStreak;
+  }
+  setLongestStreak(longestStreak: number) {
+    this.longestStreak = longestStreak;
+  }
+  setLastCompletedDate(lastCompletedDate: Date | null) {
+    this.lastCompletedDate = lastCompletedDate;
+  }
+  setUpdatedAt(updatedAt: Date) {
+    this.updatedAt = updatedAt;
+  }
 
-  getId(): string | undefined { return this._id; }
-  getUserId(): string { return this.userId; }
-  getCurrentStreak(): number { return this.currentStreak; }
-  getLongestStreak(): number { return this.longestStreak; }
-  getLastCompletedDate(): Date | null { return this.lastCompletedDate; }
-  getCreatedAt(): Date | undefined { return this.createdAt; }
-  getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  getId(): string | undefined {
+    return this._id;
+  }
+  getUserId(): string {
+    return this.userId;
+  }
+  getCurrentStreak(): number {
+    return this.currentStreak;
+  }
+  getLongestStreak(): number {
+    return this.longestStreak;
+  }
+  getLastCompletedDate(): Date | null {
+    return this.lastCompletedDate;
+  }
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
 
   toObject() {
     return {

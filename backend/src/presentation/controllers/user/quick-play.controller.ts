@@ -5,13 +5,16 @@ import { HttpStatus } from "../../constants/httpStatus";
 import { MESSAGES } from "../../../domain/constants/messages";
 import { IStartQuickPlayUseCase } from "../../../application/use-cases/interfaces/user/quick-play/start-quick-play.interface";
 import { IChangeStatusUseCase } from "../../../application/use-cases/interfaces/user/quick-play/change-status.interface";
-import redis from "../../../config/redis";
 export class QuickPlayController {
   constructor(
     private _startQuickPlayUseCase: IStartQuickPlayUseCase,
     private _changeStatusUseCase: IChangeStatusUseCase,
   ) {}
-  async startQuickPlay(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async startQuickPlay(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const userId = req.user?.userId;
       if (!userId) {
@@ -29,7 +32,10 @@ export class QuickPlayController {
         });
         return;
       }
-      logger.info("Quick play started successfully", { userId, quickPlayId: quickPlay._id });
+      logger.info("Quick play started successfully", {
+        userId,
+        quickPlayId: quickPlay._id,
+      });
       res.status(HttpStatus.OK).json({
         success: true,
         message: "Quick play started successfully",
@@ -40,7 +46,11 @@ export class QuickPlayController {
     }
   }
 
-  async changeStatus(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async changeStatus(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const competitionId = req.params.competitionId;
       const userId = req.user?.userId;
@@ -69,5 +79,4 @@ export class QuickPlayController {
       next(error);
     }
   }
- 
 }

@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import UserContestCard, {
-} from "../../components/companyUser/contests/UserContestCard";
+import UserContestCard from "../../components/companyUser/contests/UserContestCard";
 import { openContestApi } from "../../api/companyUser/contests";
 import { useState } from "react";
 import { groupContestApi } from "../../api/companyUser/contests";
@@ -34,11 +33,10 @@ const Contests: React.FC = () => {
   const navigate = useNavigate();
   const [openContests, setOpenContests] = useState<ContestResponseDTO[]>([]);
   const [groupContests, setGroupContests] = useState<ContestResponseDTO[]>([]);
- 
+
   useEffect(() => {
     async function fetchGroupContestApi() {
       const openContests = await openContestApi();
-      console.log("open",openContests);
       const data = openContests.data.data;
       setOpenContests(data);
     }

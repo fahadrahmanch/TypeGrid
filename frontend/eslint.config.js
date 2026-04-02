@@ -31,10 +31,12 @@ export default [
 
       // Hooks rules
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
+      "react-hooks/exhaustive-deps": "off",
 
       // TS rules
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": ["warn", { 
+        "caughtErrors": "none" 
+      }],
     },
   },
 ];

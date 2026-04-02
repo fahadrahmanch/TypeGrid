@@ -23,9 +23,13 @@ export class GroupPlayController {
     private _startGameGroupPlayGroupUseCase: IStartGameGroupPlayGroupUseCase,
     private _changeGroupStatusUseCase: IChangeGroupStatusUseCase,
     private _newGroupPlayUseCase: INewGroupPlayUseCase,
-  ) { }
+  ) {}
 
-  async createGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async createGroup(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const hostUserId = req.user?.userId;
       if (!hostUserId) {
@@ -45,7 +49,10 @@ export class GroupPlayController {
         return;
       }
 
-      logger.info("Room created successfully", { groupId: group.id, hostId: hostUserId });
+      logger.info("Room created successfully", {
+        groupId: group.id,
+        hostId: hostUserId,
+      });
       res.status(HttpStatus.CREATED).json({
         success: true,
         message: "Room created successfully",
@@ -56,7 +63,11 @@ export class GroupPlayController {
     }
   }
 
-  async getGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getGroup(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const joinLink = req.params.joinLink;
       const userId = req.user?.userId;
@@ -101,7 +112,11 @@ export class GroupPlayController {
     }
   }
 
-  async editGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async editGroup(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { difficulty, maxPlayers } = req.body;
       const groupId = req.params.groupId;
@@ -151,7 +166,11 @@ export class GroupPlayController {
     }
   }
 
-  async joinGroup(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async joinGroup(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const joinLink = req.params.joinLink;
       const userId = req.user?.userId;
@@ -189,7 +208,11 @@ export class GroupPlayController {
     }
   }
 
-  async removeMember(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async removeMember(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const groupId = req.params.groupId;
       const userId = req.params.playerId;
@@ -229,7 +252,11 @@ export class GroupPlayController {
     }
   }
 
-  async startGame(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async startGame(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const groupId = req.params.groupId;
       const { countDown } = req.body;
@@ -242,7 +269,8 @@ export class GroupPlayController {
         return;
       }
 
-      const startCompetition = await this._startGameGroupPlayGroupUseCase.execute(groupId, countDown);
+      const startCompetition =
+        await this._startGameGroupPlayGroupUseCase.execute(groupId, countDown);
 
       if (!startCompetition) {
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -270,7 +298,11 @@ export class GroupPlayController {
     }
   }
 
-  async newGame(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async newGame(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const gameId = req.params.gameId;
       const users = req.body.currentUsers;

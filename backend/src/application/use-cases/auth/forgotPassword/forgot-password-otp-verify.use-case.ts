@@ -9,15 +9,13 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
  * Throws BAD_REQUEST if inputs are missing or OTP is invalid.
  */
 export class ForgotPasswordOtpVerifyUseCase implements IForgotPasswordOtpVerifyUseCase {
-
   constructor(private readonly _otpService: IOtpService) {}
 
   async execute(otp: string, email: string): Promise<void> {
-
     if (!otp || !email) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -26,10 +24,8 @@ export class ForgotPasswordOtpVerifyUseCase implements IForgotPasswordOtpVerifyU
     if (!verified) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.OTP_VERIFICATION_FAILED
+        MESSAGES.OTP_VERIFICATION_FAILED,
       );
     }
-
   }
-
 }

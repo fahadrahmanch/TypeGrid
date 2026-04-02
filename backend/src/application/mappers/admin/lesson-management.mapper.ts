@@ -1,6 +1,5 @@
 import { LessonDTO } from "../../DTOs/admin/lesson-management.dto";
 import { LessonLevel } from "../../../domain/entities/lesson.entity";
-import { GetLessonDTO } from "../../DTOs/admin/lesson-management.dto";
 import { LessonEntity } from "../../../domain/entities/lesson.entity";
 export const mapLessonToDTO = (lesson: LessonEntity): LessonDTO => {
   return {

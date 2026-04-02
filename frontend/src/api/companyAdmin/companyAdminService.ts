@@ -15,5 +15,3 @@ export async function fetchCompanyUsers() {
 export async function deleteCompanyUser(userId: string) {
   return companyAPI.delete(API_ROUTES.ADMIN.USERS.BY_ID(userId));
 }
-
-

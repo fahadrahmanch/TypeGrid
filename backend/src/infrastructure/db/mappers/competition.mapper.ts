@@ -14,10 +14,11 @@ export class CompetitionMapper {
       duration: doc.duration,
       countDown: doc.countDown,
       CompanyId: doc.CompanyId?.toString(),
-      reward: doc.reward?.map((r) => ({
-        rank: r.rank ?? 0,
-        prize: String(r.prize ?? 0),
-      })) ?? [],
+      reward:
+        doc.reward?.map((r) => ({
+          rank: r.rank ?? 0,
+          prize: String(r.prize ?? 0),
+        })) ?? [],
       startedAt: doc.startedAt ?? undefined,
     });
   }

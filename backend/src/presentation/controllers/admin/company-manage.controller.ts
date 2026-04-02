@@ -11,19 +11,28 @@ export class CompanyManageController {
     private _getCompaniesUseCase: IGetCompaniesUseCase,
     private _approveCompanyUseCase: IApproveCompanyUseCase,
     private _rejectCompanyUseCase: IRejectCompanyUseCase,
-  ) { }
-  
+  ) {}
+
   //company management
 
-  async getCompanies(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getCompanies(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
-      const {status,searchText,page,limit}=req.query
-      const companies = await this._getCompaniesUseCase.execute(status as string,searchText as string,Number(page) ,Number(limit));
+      const { status, searchText, page, limit } = req.query;
+      const companies = await this._getCompaniesUseCase.execute(
+        status as string,
+        searchText as string,
+        Number(page),
+        Number(limit),
+      );
       logger.info("Companies fetched successfully by admin");
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.COMPANIES_FETCHED_SUCCESS,
-        total:companies.total,
+        total: companies.total,
         data: companies.companies,
       });
     } catch (error: unknown) {
@@ -32,7 +41,11 @@ export class CompanyManageController {
   }
 
   //company approval
-  async updateCompanyRequestStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async updateCompanyRequestStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { companyId } = req.params;
       const { status, reason } = req.body;
@@ -67,7 +80,10 @@ export class CompanyManageController {
 
         await this._rejectCompanyUseCase.execute(companyId, reason);
 
-        logger.info("Company request rejected successfully", { companyId, reason });
+        logger.info("Company request rejected successfully", {
+          companyId,
+          reason,
+        });
         res.status(HttpStatus.OK).json({
           success: true,
           message: MESSAGES.COMPANY_REJECTED_SUCCESS,

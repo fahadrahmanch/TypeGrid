@@ -6,9 +6,7 @@ import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
-export class RemoveMemberGroupPlayGroupUseCase
-  implements IRemoveMemberGroupPlayGroupUseCase
-{
+export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlayGroupUseCase {
   constructor(
     private readonly _groupRepository: IGroupRepository,
     private readonly _userRepository: IUserRepository,
@@ -21,12 +19,18 @@ export class RemoveMemberGroupPlayGroupUseCase
   ): Promise<groupDTO> {
     const groupEntity = await this._groupRepository.findById(groupId);
     if (!groupEntity) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND,
+      );
     }
 
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     if (groupEntity.getOwnerId().toString() === userId) {
@@ -65,7 +69,8 @@ export class RemoveMemberGroupPlayGroupUseCase
           userId: member._id?.toString() ?? memberId,
           name: member.name,
           imageUrl: member.imageUrl,
-          isHost: member._id?.toString() === updatedGroup.getOwnerId().toString(),
+          isHost:
+            member._id?.toString() === updatedGroup.getOwnerId().toString(),
         };
       }),
     );

@@ -10,7 +10,9 @@ export async function checkalreadySendChallenge() {
 }
 
 export async function companyUsers(searchText: string) {
-  return companyAPI.get(API_ROUTES.CHALLENGE.COMPANY_USERS, { params: { search: searchText } });
+  return companyAPI.get(API_ROUTES.CHALLENGE.COMPANY_USERS, {
+    params: { search: searchText },
+  });
 }
 
 export async function getAllChallenges() {
@@ -28,4 +30,3 @@ export async function getChallengeGameData(challengeId: string) {
 export async function challengeReject(challengeId: string) {
   return companyAPI.put(API_ROUTES.CHALLENGE.REJECT(challengeId));
 }
-

@@ -16,7 +16,7 @@ export class DailyAssignChallengeRepository
   async getDailyAssignChallenges(
     date: string,
     page: number,
-    limit: number
+    limit: number,
   ): Promise<{ dailyChallenges: DailyAssignChallengeEntity[]; total: number }> {
     const filter: Record<string, unknown> = {};
 
@@ -46,10 +46,14 @@ export class DailyAssignChallengeRepository
     };
   }
 
-  async getTodayChallenge(startOfDay: Date, endOfDay: Date): Promise<DailyAssignChallengeEntity | null> {
-    const  doc=await this.model.findOne({date:{$gte:startOfDay,$lte:endOfDay}}).lean<IDailyChallengeDocument>().exec();
-    return doc?this.toDomain(doc):null;
+  async getTodayChallenge(
+    startOfDay: Date,
+    endOfDay: Date,
+  ): Promise<DailyAssignChallengeEntity | null> {
+    const doc = await this.model
+      .findOne({ date: { $gte: startOfDay, $lte: endOfDay } })
+      .lean<IDailyChallengeDocument>()
+      .exec();
+    return doc ? this.toDomain(doc) : null;
   }
-    
-
 }

@@ -5,16 +5,23 @@ import { IChallengeRepository } from "../../../../domain/interfaces/repository/a
 import { Model } from "mongoose";
 import { ChallengeMapper } from "../../mappers/challenge.mapper";
 
-export class ChallengeRepository extends BaseRepository<IAdminChallengeDocument, ChallengeEntity> implements IChallengeRepository {
+export class ChallengeRepository
+  extends BaseRepository<IAdminChallengeDocument, ChallengeEntity>
+  implements IChallengeRepository
+{
   constructor(model: Model<IAdminChallengeDocument>) {
     super(model, ChallengeMapper.toDomain);
   }
 
-  async getChallenges(searchText: string, page: number, limit: number): Promise<{ challenges: ChallengeEntity[]; total: number }> {
+  async getChallenges(
+    searchText: string,
+    page: number,
+    limit: number,
+  ): Promise<{ challenges: ChallengeEntity[]; total: number }> {
     const filter = searchText
       ? {
           $or: [
-            { title: { $regex: "^"+searchText, $options: "i" } },
+            { title: { $regex: "^" + searchText, $options: "i" } },
             // { description: { $regex: searchText, $options: "i" } },
           ],
         }

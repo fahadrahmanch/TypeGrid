@@ -7,7 +7,8 @@ import { StreakMapper } from "../../mappers/streak.mapper";
 
 export class StreakRepository
   extends BaseRepository<IStreakDocument, StreakEntity>
-  implements IStreakRepository {
+  implements IStreakRepository
+{
   constructor(model: Model<IStreakDocument>) {
     super(model, StreakMapper.toDomain);
   }

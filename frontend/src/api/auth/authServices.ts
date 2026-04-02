@@ -126,4 +126,3 @@ export async function companyResetPasswordApi(
 export async function companyLogoutApi() {
   return companyAPI.post(API_ROUTES.AUTH.LOGOUT);
 }
-

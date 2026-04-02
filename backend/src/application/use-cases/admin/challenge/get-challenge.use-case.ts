@@ -6,12 +6,15 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class GetChallengeUseCase implements IGetChallengeUseCase {
-    constructor(private readonly _challengeRepository: IChallengeRepository) {}
-    async execute(id: string): Promise<ChallengeResponseDTO> {
-        const challenge = await this._challengeRepository.findById(id);
-        if (!challenge) {
-            throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CHALLENGE_NOT_FOUND);
-        }
-        return challenge.toObject() as ChallengeResponseDTO;
+  constructor(private readonly _challengeRepository: IChallengeRepository) {}
+  async execute(id: string): Promise<ChallengeResponseDTO> {
+    const challenge = await this._challengeRepository.findById(id);
+    if (!challenge) {
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CHALLENGE_NOT_FOUND,
+      );
     }
+    return challenge.toObject() as ChallengeResponseDTO;
+  }
 }

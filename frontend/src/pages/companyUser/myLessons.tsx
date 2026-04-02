@@ -5,7 +5,6 @@ import {
   Calendar,
   Clock,
   Trophy,
-  ChevronDown,
   CheckCircle2,
   PlayCircle,
   Circle,
@@ -32,7 +31,7 @@ export interface MyLessons {
 }
 
 const MyLessons: React.FC = () => {
-  const [isStreakModalOpen, setIsStreakModalOpen] = useState(false);
+  // const [isStreakModalOpen, setIsStreakModalOpen] = useState(false);
   const [MyLessons, setMyLessons] = useState<MyLessons>({
     lessons: [],
     completed: 0,
@@ -80,10 +79,9 @@ const MyLessons: React.FC = () => {
     async function fetchMyLessons() {
       try {
         const response = await myLessons();
-        
+
         const data = response.data.data;
-        const mappedLessons: Lesson[] = data.lessons.map((item: any) => (
-          {
+        const mappedLessons: Lesson[] = data.lessons.map((item: any) => ({
           id: item.assignmentId,
           title: item.lesson.title,
           level:
@@ -94,7 +92,7 @@ const MyLessons: React.FC = () => {
                 : "Advanced",
           assignedDate: new Date(item.assignedAt).toLocaleDateString(),
           targetWpm: item.lesson.wpm,
-          time: "5 min", 
+          time: "5 min",
           status:
             item.status === "completed"
               ? "Completed"
@@ -108,7 +106,7 @@ const MyLessons: React.FC = () => {
             selectedLevel === "All" ||
             lesson.level.toLowerCase() === selectedLevel.toLowerCase();
 
-          const statusOk = 
+          const statusOk =
             selectedStatus === "All" ||
             lesson.status.toLowerCase() === selectedStatus.toLowerCase();
 

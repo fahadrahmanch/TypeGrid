@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import logger from "../../../utils/logger";
 import { AuthRequest } from "../../../types/AuthRequest";
 import { HttpStatus } from "../../constants/httpStatus";
@@ -59,7 +59,11 @@ export class ContestsController {
     }
   }
 
-  async getContest(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getContest(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const contestId = req.params.contestId;
       const userId = req.user?.userId;
@@ -86,7 +90,11 @@ export class ContestsController {
       next(error);
     }
   }
-  async getContestData(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  async getContestData(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const contestId = req.params.contestId;
       const userId = req.user?.userId;
@@ -117,7 +125,11 @@ export class ContestsController {
     }
   }
 
-  async joinOrLeaveContest(req: AuthRequest, res: Response, next: NextFunction) {
+  async joinOrLeaveContest(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
       const userId = req.user?.userId;
       const contestId = req.params.contestId;

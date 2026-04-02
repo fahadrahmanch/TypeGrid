@@ -19,16 +19,16 @@ export const Routes = {
   // },
   AUTH: {
     // user & admin authentication (mounted under /admin or /user separately)
-    
+
     SIGNUP: "/signup",
     SIGNIN: "/signin",
     LOGOUT: "/logout",
     REFRESH_TOKEN: "/refresh-token",
-    
+
     // OTP
     VERIFY_OTP: "/otp/verify",
     RESEND_OTP: "/otp/resend",
-    
+
     // Social login
     GOOGLE_AUTH: "/google",
 
@@ -42,13 +42,13 @@ export const Routes = {
     //get
     GET_USERS: "/users",
     GET_COMPANYS: "/companies",
-    
+
     //post
     // APPROVE_COMPANY:"/approve/company",
     // REJECT_COMPANY:"/reject/company",
-    
+
     UPDATE_COMPANY_STATUS: "/companies/:companyId/status",
-    
+
     CREATE_LESSON: "/lessons",
     FETCH_LESSONS: "/lessons",
     FETCH_LESSON: "/lesson/:id",
@@ -57,35 +57,32 @@ export const Routes = {
     //patch
     UPDATE_USER_STATUS: "/users/:userId/status",
     //reward
-    CREATE_REWARD:"/rewards",
-    FETCH_REWARS:"/rewards",
-    FETCH_REWARD_BY_ID:"/rewards/:id",
-    UPDATE_REWARD:"/rewards/:id",
-    DELETE_REWARD:"/rewards/:id",
-    
+    CREATE_REWARD: "/rewards",
+    FETCH_REWARS: "/rewards",
+    FETCH_REWARD_BY_ID: "/rewards/:id",
+    UPDATE_REWARD: "/rewards/:id",
+    DELETE_REWARD: "/rewards/:id",
+
     //goals
-    CREATE_GOAL:"/goals",
-    FETCH_GOALS:"/goals",
-    FETCH_GOAL_BY_ID:"/goals/:id",
-    UPDATE_GOAL:"/goals/:id",
-    DELETE_GOAL:"/goals/:id",
+    CREATE_GOAL: "/goals",
+    FETCH_GOALS: "/goals",
+    FETCH_GOAL_BY_ID: "/goals/:id",
+    UPDATE_GOAL: "/goals/:id",
+    DELETE_GOAL: "/goals/:id",
 
     //challenge
-    CREATE_CHALLENGE:"/challenges",
-    FETCH_CHALLENGES:"/challenges",
-    FETCH_CHALLENGE_BY_ID:"/challenges/:id",
-    UPDATE_CHALLENGE:"/challenges/:id",
-    DELETE_CHALLENGE:"/challenges/:id",
+    CREATE_CHALLENGE: "/challenges",
+    FETCH_CHALLENGES: "/challenges",
+    FETCH_CHALLENGE_BY_ID: "/challenges/:id",
+    UPDATE_CHALLENGE: "/challenges/:id",
+    DELETE_CHALLENGE: "/challenges/:id",
 
     //daily assign challenge
-    CREATE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge",
-    FETCH_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenges",
-    FETCH_DAILY_ASSIGN_CHALLENGE_BY_ID:"/daily-assign-challenge/:id",
-    UPDATE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge/:id",
-    DELETE_DAILY_ASSIGN_CHALLENGE:"/daily-assign-challenge/:id",
-
-    
-    
+    CREATE_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenge",
+    FETCH_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenges",
+    FETCH_DAILY_ASSIGN_CHALLENGE_BY_ID: "/daily-assign-challenge/:id",
+    UPDATE_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenge/:id",
+    DELETE_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenge/:id",
   },
 
   USERS: {
@@ -123,7 +120,7 @@ export const Routes = {
     },
 
     //challenge
-    GET_TODAY_CHALLENGE:"/today-challenge",
+    GET_TODAY_CHALLENGE: "/today-challenge",
     //daily challenge  user
     DAILY_CHALLENGE_FINISHED: "/daily-challenge-finished",
     DAILY_CHALLENGE_STATISTICS: "/daily-challenge/statistics",
@@ -178,8 +175,6 @@ export const Routes = {
     CHALLENGE_ACCEPT: "/challenge/accept/:challengeId",
     GET_CHALLENGE_GAME_DATA: "/challenge/game-data/:challengeId",
     REJECT_CHALLENGE: "/challenge/reject/:challengeId",
-
-
 
     LEADERBOARD: "/leaderboard/:limit",
   },

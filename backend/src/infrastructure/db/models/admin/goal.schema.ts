@@ -8,7 +8,7 @@ const GoalSchema = new Schema<IGoalDocument>(
     accuracy: { type: Number, required: true },
     description: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Goal = mongoose.model<IGoalDocument>("Goal", GoalSchema);

@@ -11,21 +11,26 @@ import { RewardResponseDTO } from "../../../DTOs/admin/reward.dto";
  * use case for create new reward
  */
 export class CreateRewardUseCase implements ICreateRewardUseCase {
-    constructor(
-        private readonly _rewardRepository: IRewardRepository
-    ) { }
-    /**
-     * 
-     * @param reward 
-     * @returns newReward
-     */
-    async execute(reward: CreateRewardDTO): Promise<RewardResponseDTO | any> {
-        const isRewardExist = await this._rewardRepository.findOne({ xp: reward.xp });
-        if (isRewardExist) {
-            throw new CustomError(HttpStatusCodes.CONFLICT, MESSAGES.REWARD_ALREADY_EXISTS);
-        }
-        const rewardEntity = new RewardEntity(reward);
-        const newReward = (await this._rewardRepository.create(rewardEntity.toObject())).toObject();
-        return mapToReward(newReward);
+  constructor(private readonly _rewardRepository: IRewardRepository) {}
+  /**
+   *
+   * @param reward
+   * @returns newReward
+   */
+  async execute(reward: CreateRewardDTO): Promise<RewardResponseDTO | any> {
+    const isRewardExist = await this._rewardRepository.findOne({
+      xp: reward.xp,
+    });
+    if (isRewardExist) {
+      throw new CustomError(
+        HttpStatusCodes.CONFLICT,
+        MESSAGES.REWARD_ALREADY_EXISTS,
+      );
     }
+    const rewardEntity = new RewardEntity(reward);
+    const newReward = (
+      await this._rewardRepository.create(rewardEntity.toObject())
+    ).toObject();
+    return mapToReward(newReward);
+  }
 }

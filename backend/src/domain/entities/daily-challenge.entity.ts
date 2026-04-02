@@ -21,11 +21,21 @@ export class DailyAssignChallengeEntity {
     this.updatedAt = attrs.updatedAt;
   }
 
-  getId(): string | undefined { return this._id; }
-  getChallengeId(): string { return this.challengeId; }
-  getDate(): Date { return this.date; }
-  getCreatedAt(): Date | undefined { return this.createdAt; }
-  getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  getId(): string | undefined {
+    return this._id;
+  }
+  getChallengeId(): string {
+    return this.challengeId;
+  }
+  getDate(): Date {
+    return this.date;
+  }
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
 
   toObject() {
     return {

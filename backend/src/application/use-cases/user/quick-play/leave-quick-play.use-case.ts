@@ -13,17 +13,26 @@ export class LeaveQuickPlayUseCase implements ILeaveQuickPlayUseCase {
 
   async execute(gameId: string, userId: string): Promise<void> {
     if (!gameId || !userId) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.INVALID_REQUEST,
+      );
     }
 
     const competition = await this._competitionRepository.findById(gameId);
     if (!competition) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND,
+      );
     }
 
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     competition.removeParticipant(userId);

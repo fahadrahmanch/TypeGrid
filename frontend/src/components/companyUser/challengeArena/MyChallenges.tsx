@@ -1,16 +1,10 @@
-import  { useEffect, useState } from "react";
-import {
-  ChevronLeft,
-  LayoutList,
-  Send,
-  Inbox,
-  CheckCircle2,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronLeft, Send, Inbox } from "lucide-react";
 import ChallengeCard from "./ChallengeCard";
 import { getAllChallenges } from "../../../api/companyUser/challenge";
 import { useMyChallengeSocket } from "../../../hooks/companyUser/useMyChallenges";
 const MyChallenges = ({
-    setView,
+  setView,
   challenges,
   setChallenges,
 }: {

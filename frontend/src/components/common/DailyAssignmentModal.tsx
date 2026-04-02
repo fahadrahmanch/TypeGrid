@@ -24,7 +24,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
   values,
   challenges,
   onChange,
-  onSubmit
+  onSubmit,
 }) => {
   if (!isOpen) return null;
 
@@ -34,7 +34,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
         {/* Header */}
         <div className="px-8 py-6 flex justify-between items-center bg-white/40">
           <h2 className="text-xl font-bold text-gray-800">{title}</h2>
-          <button 
+          <button
             onClick={onClose}
             className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
           >
@@ -46,8 +46,10 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
         <div className="flex-1 overflow-y-auto px-8 py-8 space-y-6 custom-scrollbar">
           {/* Date Field */}
           <div className="space-y-1.5">
-            <label className="text-xs font-black uppercase tracking-widest text-gray-500">Date</label>
-            <CustomCalendar 
+            <label className="text-xs font-black uppercase tracking-widest text-gray-500">
+              Date
+            </label>
+            <CustomCalendar
               selectedDate={values.date}
               onSelect={(date) => onChange("date", date)}
             />
@@ -55,7 +57,9 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
 
           {/* Challenge Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-black uppercase tracking-widest text-gray-500">Challenge</label>
+            <label className="text-xs font-black uppercase tracking-widest text-gray-500">
+              Challenge
+            </label>
             <div className="relative">
               <select
                 value={values.challengeId}
@@ -70,8 +74,18 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
                 ))}
               </select>
               <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
@@ -84,7 +98,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
               className={`w-12 h-6 rounded-full relative transition-all duration-300 cursor-pointer ${values.isActive ? 'bg-[#ECA468]' : 'bg-gray-300'}`}
             >
               <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 transform ${values.isActive ? 'translate-x-7' : 'translate-x-1'}`} />
-            </div> */}  
+            </div> */}
             {/* <span className="text-xs font-black uppercase tracking-widest text-gray-500">
               {values.isActive ? 'Active' : 'Inactive'}
             </span> */}
@@ -107,7 +121,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
           </div>
         </div>
       </div>
-      
+
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;

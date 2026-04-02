@@ -1,5 +1,4 @@
 export interface CreateRewardDTO {
-    
   xp: number;
   description: string;
 }

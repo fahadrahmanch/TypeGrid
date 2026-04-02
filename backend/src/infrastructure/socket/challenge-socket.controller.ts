@@ -7,7 +7,7 @@ export class ChallengeSocketController {
   constructor(
     private readonly _startChallengeUseCase: IStartChallengeUseCase,
     private readonly _saveChallengeResultUseCase: ISaveChallengeResultUseCase,
-  ) { }
+  ) {}
 
   async execute(challengeId: string): Promise<void> {
     if (!challengeId) {
@@ -20,11 +20,16 @@ export class ChallengeSocketController {
       logger.info("Challenge started successfully", { challengeId });
     } catch (err) {
       if (err instanceof CustomError) {
-        logger.error("Challenge start failed", { challengeId, message: err.message });
+        logger.error("Challenge start failed", {
+          challengeId,
+          message: err.message,
+        });
         return;
       }
-      logger.error("Unexpected error in ChallengeSocketController", { challengeId, err });
-     
+      logger.error("Unexpected error in ChallengeSocketController", {
+        challengeId,
+        err,
+      });
     }
   }
 
@@ -37,11 +42,16 @@ export class ChallengeSocketController {
       logger.info("Challenge play result saved successfully", { gameId });
     } catch (err) {
       if (err instanceof CustomError) {
-        logger.error("Challenge play result save failed", { gameId, message: err.message });
+        logger.error("Challenge play result save failed", {
+          gameId,
+          message: err.message,
+        });
         return;
       }
-      logger.error("Unexpected error in ChallengeSocketController", { gameId, err });
+      logger.error("Unexpected error in ChallengeSocketController", {
+        gameId,
+        err,
+      });
     }
   }
-
 }

@@ -9,7 +9,7 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 
 /**
  * Use case for retrieving all contests associated with a company.
- * 
+ *
  * This class fetches contests for a company by first validating that the user exists,
  * then retrieving all contests linked to the user's company ID.
  */
@@ -40,6 +40,6 @@ export class GetCompanyContestsUseCase implements IGetCompanyContestsUsecase {
       );
     }
 
-    return mapCompanyContestDTO(contests.map(c => c.toObject()));
+    return mapCompanyContestDTO(contests.map((c) => c.toObject()));
   }
 }

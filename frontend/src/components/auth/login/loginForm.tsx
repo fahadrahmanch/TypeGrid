@@ -31,7 +31,7 @@ export const SignInForm: React.FC = () => {
 
     // 2. DISABLE CHROME BFCache FOR THIS PAGE
     // This dummy listener forces Chrome to NOT cache this page in memory
-    const handleUnload = () => { };
+    const handleUnload = () => {};
     window.addEventListener("unload", handleUnload);
 
     return () => {
@@ -152,10 +152,11 @@ export const SignInForm: React.FC = () => {
                 onClick={handleSubmit}
                 disabled={loading}
                 className={`w-full text-white rounded-md py-2 mt-2 transition 
-               ${loading
-                    ? "bg-gray-700 cursor-not-allowed"
-                    : "bg-gray-900 hover:bg-gray-800"
-                  }`}
+               ${
+                 loading
+                   ? "bg-gray-700 cursor-not-allowed"
+                   : "bg-gray-900 hover:bg-gray-800"
+               }`}
               >
                 {loading ? "Signing in..." : "Sign In"}
               </button>

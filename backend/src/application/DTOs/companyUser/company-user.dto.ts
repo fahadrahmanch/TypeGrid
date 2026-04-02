@@ -8,4 +8,3 @@ export interface companyUserDTO {
   companyRole?: string;
   online: boolean;
 }
-

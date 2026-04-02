@@ -1,14 +1,14 @@
 import React from "react";
 import {
-  House,
+  LayoutDashboard,
   BookOpen,
   Trophy,
+  Medal,
   Swords,
   Keyboard,
-  Sparkles,
+  Dumbbell,
   Bell,
   User,
-  // Gamepad2
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../../assets/Icon/logo.png";
@@ -17,9 +17,9 @@ const CompanyUserNavbar: React.FC = () => {
 
   // Mapping for navigation items
   const navItems = [
-    { name: "Dashboard", icon: House, path: "/company/user/dashboard" },
+    { name: "Dashboard", icon: LayoutDashboard, path: "/company/user/dashboard" },
     { name: "Lessons", icon: BookOpen, path: "/company/user/lessons" },
-    { name: "Leaderboard", icon: Trophy, path: "/company/user/leaderboard" },
+    { name: "Leaderboard", icon: Medal, path: "/company/user/leaderboard" },
     { name: "Contests", icon: Trophy, path: "/company/user/contests" },
     {
       name: "Challenges",
@@ -28,7 +28,7 @@ const CompanyUserNavbar: React.FC = () => {
       badge: true,
     },
     { name: "Keyboard", icon: Keyboard, path: "/company/user/my-keyboard" },
-    { name: "Practice", icon: Sparkles, path: "/company/user/my-practice" },
+    { name: "Practice", icon: Dumbbell, path: "/company/user/my-practice" },
     {
       name: "Notifications",
       icon: Bell,

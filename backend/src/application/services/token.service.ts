@@ -5,13 +5,21 @@ import { HttpStatusCodes } from "../../domain/enums/http-status-codes.enum";
 export class TokenService implements ITokenService {
   private accessSecret: string;
   private refreshSecret: string;
-constructor() {
-  if (!process.env.ACCESS_SECRET) throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, "ACCESS_SECRET is required");
-  if (!process.env.REFRESH_SECRET) throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, "REFRESH_SECRET is required");
-  
-  this.accessSecret = process.env.ACCESS_SECRET;
-  this.refreshSecret = process.env.REFRESH_SECRET;
-}
+  constructor() {
+    if (!process.env.ACCESS_SECRET)
+      throw new CustomError(
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        "ACCESS_SECRET is required",
+      );
+    if (!process.env.REFRESH_SECRET)
+      throw new CustomError(
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        "REFRESH_SECRET is required",
+      );
+
+    this.accessSecret = process.env.ACCESS_SECRET;
+    this.refreshSecret = process.env.REFRESH_SECRET;
+  }
 
   async generateAccessToken(
     userId: string,
@@ -21,8 +29,10 @@ constructor() {
     return jwt.sign(
       { userId: userId, email: email, role: role },
       this.accessSecret,
-          { expiresIn: (process.env.ACCESS_EXPIRY || "7h") as jwt.SignOptions["expiresIn"] },
-
+      {
+        expiresIn: (process.env.ACCESS_EXPIRY ||
+          "7h") as jwt.SignOptions["expiresIn"],
+      },
     );
   }
 
@@ -34,8 +44,10 @@ constructor() {
     return jwt.sign(
       { userId: userId, email: email, role: role },
       this.refreshSecret,
-         { expiresIn: (process.env.REFRESH_EXPIRY || "7d") as jwt.SignOptions["expiresIn"] },
-
+      {
+        expiresIn: (process.env.REFRESH_EXPIRY ||
+          "7d") as jwt.SignOptions["expiresIn"],
+      },
     );
   }
 

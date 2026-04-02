@@ -13,9 +13,11 @@ export type CompanyLessonPayload = {
   companyId?: any;
 };
 
-export const mapLessonDTOforCompanyLesson = (lesson: CompanyLessonPayload): CompanyLessonDTO => {
+export const mapLessonDTOforCompanyLesson = (
+  lesson: CompanyLessonPayload,
+): CompanyLessonDTO => {
   return {
-    id: lesson._id?.toString()??"",
+    id: lesson._id?.toString() ?? "",
     title: lesson.title,
     text: lesson.text,
     category: lesson.category as any,

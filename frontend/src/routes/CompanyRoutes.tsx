@@ -25,41 +25,83 @@ import CompanyLeaderBoard from "../pages/companyUser/companyLeaderBoard";
 export default function CompanyRoutes() {
   return (
     <Routes>
-
       {/* Auth */}
-      <Route path="signin" element={<IsloggedCompany><CompanySignin /></IsloggedCompany>} />
-      <Route path="forgot/password" element={<IsloggedCompany><CompanyForgotPasswordPage /></IsloggedCompany>} />
-      <Route path="forgot/password/otp" element={<IsloggedCompany><OtpCompanyForgotPasswordPage /></IsloggedCompany>} />
-      <Route path="create/new/password" element={<IsloggedCompany><CompanyNewPasswordPage /></IsloggedCompany>} />
+      <Route
+        path="signin"
+        element={
+          <IsloggedCompany>
+            <CompanySignin />
+          </IsloggedCompany>
+        }
+      />
+      <Route
+        path="forgot/password"
+        element={
+          <IsloggedCompany>
+            <CompanyForgotPasswordPage />
+          </IsloggedCompany>
+        }
+      />
+      <Route
+        path="forgot/password/otp"
+        element={
+          <IsloggedCompany>
+            <OtpCompanyForgotPasswordPage />
+          </IsloggedCompany>
+        }
+      />
+      <Route
+        path="create/new/password"
+        element={
+          <IsloggedCompany>
+            <CompanyNewPasswordPage />
+          </IsloggedCompany>
+        }
+      />
 
       {/* Admin Routes */}
       <Route element={<ProtectRouteCompany allowedRoles={["companyAdmin"]} />}>
         <Route path="admin/dashboard" element={<CompanyAdminDashboard />} />
         <Route path="admin/users" element={<CompanyUsers />} />
         <Route path="admin/lessons" element={<Lessons />} />
-        <Route path="admin/contest-management" element={<CompanyContestManagement />} />
-        <Route path="admin/contest-management/lobby/:contestId" element={<CompanyContestLobby />} />
+        <Route
+          path="admin/contest-management"
+          element={<CompanyContestManagement />}
+        />
+        <Route
+          path="admin/contest-management/lobby/:contestId"
+          element={<CompanyContestLobby />}
+        />
         <Route path="admin/groups" element={<GroupsManagement />} />
         <Route path="admin/groups/:groupId" element={<GroupDetails />} />
       </Route>
 
       {/* Admin + User Routes */}
-      <Route element={<ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]} />}>
+      <Route
+        element={
+          <ProtectRouteCompany allowedRoles={["companyUser", "companyAdmin"]} />
+        }
+      >
         <Route path="user/dashboard" element={<CompanyUserDashboard />} />
         <Route path="user/lessons" element={<MyLessons />} />
         <Route path="user/contests" element={<Contests />} />
         <Route path="user/challenges" element={<Challenge />} />
         <Route path="user/leaderboard" element={<CompanyLeaderBoard />} />
         <Route path="user/challenge/:challengeId" element={<ChallengeArea />} />
-        <Route path="user/contests/lobby/:contestId" element={<ContestLobby />} />
+        <Route
+          path="user/contests/lobby/:contestId"
+          element={<ContestLobby />}
+        />
         <Route path="user/contest/:contestId" element={<ContestArea />} />
       </Route>
 
       {/* User Only */}
       <Route element={<ProtectRouteCompany allowedRoles={["companyUser"]} />}>
-        <Route path="user/assigned-lessons/:assignedLessonId" element={<AssignedLessonTypingArea />} />
+        <Route
+          path="user/assigned-lessons/:assignedLessonId"
+          element={<AssignedLessonTypingArea />}
+        />
       </Route>
-
     </Routes>
   );
 }

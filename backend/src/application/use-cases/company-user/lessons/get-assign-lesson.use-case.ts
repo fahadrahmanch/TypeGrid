@@ -13,28 +13,37 @@ export class GetAssignLessonUseCase implements IGetAssignLessonUseCase {
   ) {}
 
   async execute(assignmentId: string): Promise<AssignedLessonDTO> {
-    const assignment = await this._lessonAssignmentRepository.findById(assignmentId);
+    const assignment =
+      await this._lessonAssignmentRepository.findById(assignmentId);
     if (!assignment) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.ASSIGNED_LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.ASSIGNED_LESSON_NOT_FOUND,
+      );
     }
 
-    const lesson = await this._lessonRepository.findById(assignment.getLessonId());
+    const lesson = await this._lessonRepository.findById(
+      assignment.getLessonId(),
+    );
     if (!lesson) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND,
+      );
     }
 
-   return {
-  id: assignment.getId() ?? "",
-  status: assignment.getStatus(),
-  deadlineAt: assignment.getDeadlineAt(),
-  lesson: {
-    id: lesson._id ?? "",
-    title: lesson.title ?? "",
-    text: lesson.text,
-    level: lesson.level,
-    wpm: lesson.wpm,
-    accuracy: lesson.accuracy,
-  },
-};
+    return {
+      id: assignment.getId() ?? "",
+      status: assignment.getStatus(),
+      deadlineAt: assignment.getDeadlineAt(),
+      lesson: {
+        id: lesson._id ?? "",
+        title: lesson.title ?? "",
+        text: lesson.text,
+        level: lesson.level,
+        wpm: lesson.wpm,
+        accuracy: lesson.accuracy,
+      },
+    };
   }
 }

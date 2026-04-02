@@ -13,11 +13,17 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 export class UpdateContestUseCase implements IUpdateContestUseCase {
   constructor(private readonly _contestRepository: IContestRepository) {}
 
-  async execute(contestId: string, data: CreateContestDTO): Promise<CreateContestDTO> {
+  async execute(
+    contestId: string,
+    data: CreateContestDTO,
+  ): Promise<CreateContestDTO> {
     const contest = await this._contestRepository.findById(contestId);
 
     if (!contest) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
 
     if (data.date && data.startTime) {
@@ -29,8 +35,11 @@ export class UpdateContestUseCase implements IUpdateContestUseCase {
       ...data,
     });
     if (!updatedContest) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
-    return mapContestDTOAdmin(updatedContest.toObject()); 
+    return mapContestDTOAdmin(updatedContest.toObject());
   }
 }

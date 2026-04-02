@@ -8,4 +8,3 @@ export async function myLessons() {
 export async function getAssignedLessonByAssignmentId(assignmentId: string) {
   return companyAPI.get(API_ROUTES.LESSONS.MY_LESSON_BY_ID(assignmentId));
 }
-

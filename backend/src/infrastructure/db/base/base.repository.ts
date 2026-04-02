@@ -1,7 +1,10 @@
-import { Model, Document } from "mongoose";
+import { Model } from "mongoose";
 import { IBaseRepository } from "../../../domain/interfaces/repository/base-repository.interface";
 
-export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDomain> {
+export class BaseRepository<
+  TDocument,
+  TDomain,
+> implements IBaseRepository<TDomain> {
   protected model: Model<TDocument>;
   protected toDomain: (doc: any) => TDomain;
 
@@ -22,7 +25,7 @@ export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDoma
     }
 
     const docs = await query.lean<TDocument[]>().exec();
-    return docs.map(doc => this.toDomain(doc));
+    return docs.map((doc) => this.toDomain(doc));
   }
 
   async findOne(filter: any = {}): Promise<TDomain | null> {
@@ -51,8 +54,6 @@ export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDoma
     return doc ? this.toDomain(doc) : null;
   }
 
-
-
   async update(data: any): Promise<any> {
     const { _id, ...updateFields } = data;
     const doc = await this.model
@@ -63,11 +64,10 @@ export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDoma
   }
 
   async updateById(_id: string, updateQuery: any): Promise<TDomain | null> {
-    const doc = await this.model.findByIdAndUpdate(
-      _id,
-      { $set: updateQuery },
-      { new: true },
-    ).lean<TDocument>().exec();
+    const doc = await this.model
+      .findByIdAndUpdate(_id, { $set: updateQuery }, { new: true })
+      .lean<TDocument>()
+      .exec();
     return doc ? this.toDomain(doc) : null;
   }
 

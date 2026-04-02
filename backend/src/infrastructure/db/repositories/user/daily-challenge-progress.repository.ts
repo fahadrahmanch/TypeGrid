@@ -6,7 +6,10 @@ import { IDailyChallengeProgressRepository } from "../../../../domain/interfaces
 import { DailyChallengeProgressMapper } from "../../mappers/daily-challenge-progress.mapper";
 
 export class DailyChallengeProgressRepository
-  extends BaseRepository<IDailyChallengeProgressDocument, DailyChallengeProgressEntity>
+  extends BaseRepository<
+    IDailyChallengeProgressDocument,
+    DailyChallengeProgressEntity
+  >
   implements IDailyChallengeProgressRepository
 {
   constructor(model: Model<IDailyChallengeProgressDocument>) {

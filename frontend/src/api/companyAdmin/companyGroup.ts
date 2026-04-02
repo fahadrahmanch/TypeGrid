@@ -8,4 +8,3 @@ export const createCompanyGroup = async (groupData: any) => {
 export const getCompanyGroups = async () => {
   return await companyAPI.get(API_ROUTES.ADMIN.COMPANY_GROUPS);
 };
-

@@ -76,9 +76,8 @@ const changePasswordUseCaseInstance = new ChangePasswordUseCase(
   hashService,
 );
 // typing practice dependencies
-const getPracticeTypingContentUseCaseInstance = new GetPracticeTypingContentUseCase(
-  lessonRepository,
-);
+const getPracticeTypingContentUseCaseInstance =
+  new GetPracticeTypingContentUseCase(lessonRepository);
 
 // group play
 const groupRepository = new GroupRepository(Group);
@@ -96,17 +95,18 @@ const joinGroupPlayGroupUseCaseInstance = new JoinGroupPlayGroupUseCase(
   groupRepository,
   userRepository,
 );
-const removeMemberGroupPlayGroupUseCaseInstance = new RemoveMemberGroupPlayGroupUseCase(
+const removeMemberGroupPlayGroupUseCaseInstance =
+  new RemoveMemberGroupPlayGroupUseCase(groupRepository, userRepository);
+const startGameGroupPlayGroupUseCaseInstance =
+  new StartGameGroupPlayGroupUseCase(
+    competitionRepository,
+    groupRepository,
+    lessonRepository,
+    userRepository,
+  );
+const changeGroupStatusUseCaseInstance = new ChangeGroupStatusUseCase(
   groupRepository,
-  userRepository,
 );
-const startGameGroupPlayGroupUseCaseInstance = new StartGameGroupPlayGroupUseCase(
-  competitionRepository,
-  groupRepository,
-  lessonRepository,
-  userRepository,
-);
-const changeGroupStatusUseCaseInstance = new ChangeGroupStatusUseCase(groupRepository);
 const newGroupPlayUseCaseInstance = new NewGroupPlayUseCase(
   groupRepository,
   userRepository,
@@ -137,7 +137,9 @@ const startQuickPlayUseCaseInstance = new StartQuickPlayUseCase(
   userRepository,
   lessonRepository,
 );
-const changeStatusUseCaseInstance = new ChangeStatusUseCase(competitionRepository);
+const changeStatusUseCaseInstance = new ChangeStatusUseCase(
+  competitionRepository,
+);
 export const injectQuickPlayController = new QuickPlayController(
   startQuickPlayUseCaseInstance,
   changeStatusUseCaseInstance,
@@ -171,13 +173,38 @@ export const injectUserController = new UserController(
 );
 
 // daily challenge
-const dailyChallengeRepository = new DailyAssignChallengeRepository(DailyChallenge);
+const dailyChallengeRepository = new DailyAssignChallengeRepository(
+  DailyChallenge,
+);
 const streakRepository = new StreakRepository(Streak);
 const challengeRepository = new ChallengeRepository(AdminChallenge);
 const goalRepository = new GoalRepository(Goal);
-const dailyChallengeProgressRepository = new DailyChallengeProgressRepository(DailyChallengeProgress);
+const dailyChallengeProgressRepository = new DailyChallengeProgressRepository(
+  DailyChallengeProgress,
+);
 const rewardRepository = new RewardRepository(Reward);
-const getTodayChallengeUseCaseInstance = new GetTodayChallengeUseCase(dailyChallengeRepository,challengeRepository,goalRepository,rewardRepository,lessonRepository);
-const dailyChallengeFinishedUseCaseInstance = new DailyChallengeFinishedUseCase(dailyChallengeRepository,challengeRepository,goalRepository,rewardRepository,dailyChallengeProgressRepository,streakRepository);
-const getDailyChallengeStatsUseCaseInstance = new GetDailyChallengeStatsUseCase(dailyChallengeProgressRepository, streakRepository, dailyChallengeRepository);
-export const injectDailyChallengeController = new DailyChallengeController(getTodayChallengeUseCaseInstance,dailyChallengeFinishedUseCaseInstance, getDailyChallengeStatsUseCaseInstance);
+const getTodayChallengeUseCaseInstance = new GetTodayChallengeUseCase(
+  dailyChallengeRepository,
+  challengeRepository,
+  goalRepository,
+  rewardRepository,
+  lessonRepository,
+);
+const dailyChallengeFinishedUseCaseInstance = new DailyChallengeFinishedUseCase(
+  dailyChallengeRepository,
+  challengeRepository,
+  goalRepository,
+  rewardRepository,
+  dailyChallengeProgressRepository,
+  streakRepository,
+);
+const getDailyChallengeStatsUseCaseInstance = new GetDailyChallengeStatsUseCase(
+  dailyChallengeProgressRepository,
+  streakRepository,
+  dailyChallengeRepository,
+);
+export const injectDailyChallengeController = new DailyChallengeController(
+  getTodayChallengeUseCaseInstance,
+  dailyChallengeFinishedUseCaseInstance,
+  getDailyChallengeStatsUseCaseInstance,
+);

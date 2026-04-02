@@ -5,7 +5,6 @@ import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { CompanyEntity } from "../../../../domain/entities";
 export class CompanyFindUseCase implements ICompanyFindUseCase {
-
   constructor(private readonly companyRepository: ICompanyRepository) {}
 
   /**
@@ -17,25 +16,22 @@ export class CompanyFindUseCase implements ICompanyFindUseCase {
    * @throws CustomError if company is inactive
    */
   async execute(companyId: string): Promise<CompanyEntity> {
-
     const company = await this.companyRepository.findById(companyId);
 
     if (!company) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.INVALID_COMPANY_REFERENCE
+        MESSAGES.INVALID_COMPANY_REFERENCE,
       );
     }
 
     if (company.status !== "active") {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
-        MESSAGES.COMPANY_ACCOUNT_INACTIVE
+        MESSAGES.COMPANY_ACCOUNT_INACTIVE,
       );
     }
 
     return company;
-
   }
-
 }

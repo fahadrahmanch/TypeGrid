@@ -38,8 +38,6 @@ export const RealtimeProvider = ({ children }: any) => {
     return () => {
       socket.off("challenge-status-updated");
     };
-
-
   }, []);
 
   useEffect(() => {
@@ -71,7 +69,15 @@ export const RealtimeProvider = ({ children }: any) => {
 
   return (
     <RealtimeContext.Provider
-      value={{ socket, challengeModal, setChallengeModal, incomingChallenge, setIncomingChallenge, rejectedChallenge, setRejectedChallenge }}
+      value={{
+        socket,
+        challengeModal,
+        setChallengeModal,
+        incomingChallenge,
+        setIncomingChallenge,
+        rejectedChallenge,
+        setRejectedChallenge,
+      }}
     >
       {children}
     </RealtimeContext.Provider>

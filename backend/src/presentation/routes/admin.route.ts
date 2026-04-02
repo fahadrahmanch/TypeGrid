@@ -39,7 +39,6 @@ export class adminRouter {
       },
     );
 
-
     //company management routes
     this.router.get(
       Routes.ADMIN.GET_COMPANYS,
@@ -53,14 +52,19 @@ export class adminRouter {
       "/companies/:companyId/status",
       checkRoleBasedMiddleware(["admin"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectCompanyManageController.updateCompanyRequestStatus(req, res, next);
+        injectCompanyManageController.updateCompanyRequestStatus(
+          req,
+          res,
+          next,
+        );
       },
     );
 
     //lesson management routes
     this.router.post(
       Routes.ADMIN.CREATE_LESSON,
-      checkRoleBasedMiddleware(["admin"]),validate(lessonValidation.createLesson),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(lessonValidation.createLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectLessonManageController.createLesson(req, res, next);
       },
@@ -81,7 +85,8 @@ export class adminRouter {
     );
     this.router.put(
       Routes.ADMIN.UPDATE_LESSON,
-      checkRoleBasedMiddleware(["admin"]),validate(lessonValidation.updateLesson),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(lessonValidation.updateLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectLessonManageController.updateLesson(req, res, next);
       },
@@ -97,7 +102,8 @@ export class adminRouter {
 
     this.router.post(
       Routes.ADMIN.CREATE_REWARD,
-      checkRoleBasedMiddleware(["admin"]), validate(createRewardSchema),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(createRewardSchema),
       (req: Request, res: Response, next: NextFunction) => {
         injectRewardManageController.createReward(req, res, next);
       },
@@ -119,22 +125,24 @@ export class adminRouter {
     );
     this.router.put(
       Routes.ADMIN.UPDATE_REWARD,
-      checkRoleBasedMiddleware(["admin"]), validate(updateRewardSchema),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(updateRewardSchema),
       (req: Request, res: Response, next: NextFunction) => {
         injectRewardManageController.updateReward(req, res, next);
       },
     );
-      this.router.delete(
-        Routes.ADMIN.DELETE_REWARD,
-        checkRoleBasedMiddleware(["admin"]),
-        (req: Request, res: Response, next: NextFunction) => {
-          injectRewardManageController.deleteReward(req, res, next);
-        },
-      );
+    this.router.delete(
+      Routes.ADMIN.DELETE_REWARD,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectRewardManageController.deleteReward(req, res, next);
+      },
+    );
     //goals
     this.router.post(
       Routes.ADMIN.CREATE_GOAL,
-      checkRoleBasedMiddleware(["admin"]),validate(createGoalSchema),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(createGoalSchema),
       (req: Request, res: Response, next: NextFunction) => {
         injectGoalManageController.createGoal(req, res, next);
       },
@@ -155,7 +163,8 @@ export class adminRouter {
     );
     this.router.put(
       Routes.ADMIN.UPDATE_GOAL,
-      checkRoleBasedMiddleware(["admin"]),validate(updateGoalSchema),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(updateGoalSchema),
       (req: Request, res: Response, next: NextFunction) => {
         injectGoalManageController.updateGoal(req, res, next);
       },
@@ -171,7 +180,8 @@ export class adminRouter {
     //challenges
     this.router.post(
       Routes.ADMIN.CREATE_CHALLENGE,
-      checkRoleBasedMiddleware(["admin"]), validate(challengeValidation.create),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(challengeValidation.create),
       (req: Request, res: Response, next: NextFunction) => {
         injectChallengeManageController.createChallenge(req, res, next);
       },
@@ -192,7 +202,8 @@ export class adminRouter {
     );
     this.router.put(
       Routes.ADMIN.UPDATE_CHALLENGE,
-      checkRoleBasedMiddleware(["admin"]), validate(challengeValidation.update),
+      checkRoleBasedMiddleware(["admin"]),
+      validate(challengeValidation.update),
       (req: Request, res: Response, next: NextFunction) => {
         injectChallengeManageController.updateChallenge(req, res, next);
       },
@@ -211,7 +222,11 @@ export class adminRouter {
       checkRoleBasedMiddleware(["admin"]),
       validate(dailyAssignChallengeValidation.create),
       (req: Request, res: Response, next: NextFunction) => {
-        injectDailyAssignChallengeManageController.createDailyAssignChallenge(req, res, next);
+        injectDailyAssignChallengeManageController.createDailyAssignChallenge(
+          req,
+          res,
+          next,
+        );
       },
     );
 
@@ -219,7 +234,11 @@ export class adminRouter {
       Routes.ADMIN.FETCH_DAILY_ASSIGN_CHALLENGE,
       checkRoleBasedMiddleware(["admin"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectDailyAssignChallengeManageController.getDailyAssignChallenges(req, res, next);
+        injectDailyAssignChallengeManageController.getDailyAssignChallenges(
+          req,
+          res,
+          next,
+        );
       },
     );
 
@@ -227,7 +246,11 @@ export class adminRouter {
       Routes.ADMIN.FETCH_DAILY_ASSIGN_CHALLENGE_BY_ID,
       checkRoleBasedMiddleware(["admin"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectDailyAssignChallengeManageController.getDailyAssignChallengeById(req, res, next);
+        injectDailyAssignChallengeManageController.getDailyAssignChallengeById(
+          req,
+          res,
+          next,
+        );
       },
     );
 
@@ -236,7 +259,11 @@ export class adminRouter {
       checkRoleBasedMiddleware(["admin"]),
       validate(dailyAssignChallengeValidation.update),
       (req: Request, res: Response, next: NextFunction) => {
-        injectDailyAssignChallengeManageController.updateDailyAssignChallenge(req, res, next);
+        injectDailyAssignChallengeManageController.updateDailyAssignChallenge(
+          req,
+          res,
+          next,
+        );
       },
     );
 
@@ -244,10 +271,13 @@ export class adminRouter {
       Routes.ADMIN.DELETE_DAILY_ASSIGN_CHALLENGE,
       checkRoleBasedMiddleware(["admin"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectDailyAssignChallengeManageController.deleteDailyAssignChallenge(req, res, next);
+        injectDailyAssignChallengeManageController.deleteDailyAssignChallenge(
+          req,
+          res,
+          next,
+        );
       },
     );
-
   }
   getRouter() {
     return this.router;

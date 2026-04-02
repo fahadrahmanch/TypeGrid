@@ -5,29 +5,41 @@ import { IBlockUserUseCase } from "../../../application/use-cases/interfaces/adm
 import { MESSAGES } from "../../../domain/constants/messages";
 import logger from "../../../utils/logger";
 
-
 export class UserManageController {
   constructor(
     private _getUsersUseCase: IGetUsersUseCase,
     private _blockUserUseCase: IBlockUserUseCase,
-  ) { }
+  ) {}
 
-  async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getUsers(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
-      const {search,status,page,limit}=req.query
-      const data = await this._getUsersUseCase.execute(search as string,status as string,Number(page),Number(limit));
+      const { search, status, page, limit } = req.query;
+      const data = await this._getUsersUseCase.execute(
+        search as string,
+        status as string,
+        Number(page),
+        Number(limit),
+      );
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.USERS_FETCHED_SUCCESS,
-        users: data.users||[],
-        total:data.total,
+        users: data.users || [],
+        total: data.total,
       });
     } catch (error: unknown) {
       next(error);
     }
   }
 
-  async updateUserStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async updateUserStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { userId } = req.params;
 
@@ -51,6 +63,4 @@ export class UserManageController {
       next(error);
     }
   }
-
-
 }

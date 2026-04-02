@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { HttpStatus } from "../../constants/httpStatus";
 import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/find-user.interface";
 import { IUserUpdateUseCase } from "../../../application/use-cases/interfaces/user/user-update.interface";
@@ -6,7 +6,6 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { AuthRequest } from "../../../types/AuthRequest";
 import { IChangePasswordUseCase } from "../../../application/use-cases/interfaces/user/change-password.interface";
 import { mapToUserProfileDTO } from "../../../application/mappers/user/user.mapper";
-import logger from "../../../utils/logger";
 
 export class UserController {
   constructor(
@@ -33,7 +32,6 @@ export class UserController {
       const user = await this._findUserUseCase.execute(email);
       if (!user) {
         res.status(HttpStatus.NOT_FOUND).json({
-
           success: false,
           message: MESSAGES.USER_DETAILS_NOT_FOUND,
         });

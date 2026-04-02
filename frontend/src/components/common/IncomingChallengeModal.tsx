@@ -10,19 +10,18 @@ const IncomingChallengeModal = () => {
   if (!incomingChallenge?.open) return null;
 
   const { challenge } = incomingChallenge;
-  const handleAccept = async() => {
-   const response = await challengeAccept(challenge?.challenge?.id);
-     if (response?.data?.success) {
-           socket.emit("challenge-accepted", {
-                    challengeId:challenge?.challenge?.id,
-                    senderId:challenge?.challenge?.senderId,
-                  });
-         }
+  const handleAccept = async () => {
+    const response = await challengeAccept(challenge?.challenge?.id);
+    if (response?.data?.success) {
+      socket.emit("challenge-accepted", {
+        challengeId: challenge?.challenge?.id,
+        senderId: challenge?.challenge?.senderId,
+      });
+    }
     setIncomingChallenge(null);
-    
   };
 
-  const handleReject = async() => {
+  const handleReject = async () => {
     await challengeReject(challenge?.challenge?.id);
     setIncomingChallenge(null);
   };

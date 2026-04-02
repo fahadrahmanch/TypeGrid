@@ -18,12 +18,18 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
 
   async execute(userId: string): Promise<CompetitionDTOQuickPlay> {
     if (!userId) {
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.USER_ID_REQUIRED_QUICK_PLAY);
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        MESSAGES.USER_ID_REQUIRED_QUICK_PLAY,
+      );
     }
 
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
     const competition = await this._competitionRepository.findOne({
@@ -35,24 +41,27 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
     if (competition) {
       competition.addParticipant(userId);
 
-      await this._competitionRepository.updateById(competition.getId()!.toString(), {
-        participants: competition.getParticipants(),
-      });
+      await this._competitionRepository.updateById(
+        competition.getId()!.toString(),
+        {
+          participants: competition.getParticipants(),
+        },
+      );
 
       const lesson = await this._lessonRepository.findById(
         competition.getTextId()!.toString(),
       );
 
-     const populatedParticipants = await Promise.all(
-  competition.getParticipants().map(async (id: string) => {
-    const member = await this._userRepository.findById(id);
-    return {
-      _id: member!._id,
-      name: member!.name,
-      imageUrl: member!.imageUrl,
-    };
-  }),
-);
+      const populatedParticipants = await Promise.all(
+        competition.getParticipants().map(async (id: string) => {
+          const member = await this._userRepository.findById(id);
+          return {
+            _id: member!._id,
+            name: member!.name,
+            imageUrl: member!.imageUrl,
+          };
+        }),
+      );
 
       return mapCompetitionToDTOQuickPlay({
         ...competition.toObject(),
@@ -75,7 +84,10 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
     });
 
     if (!lessons.length) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.LESSON_NOT_FOUND,
+      );
     }
 
     const selectedLesson = lessons[Math.floor(Math.random() * lessons.length)];
@@ -94,16 +106,16 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
       competitionEntity.toObject(),
     );
 
-const populatedParticipants = await Promise.all(
-  createdCompetition.getParticipants().map(async (id: string) => {
-    const member = await this._userRepository.findById(id);
-    return {
-      _id: member!._id,
-      name: member!.name,
-      imageUrl: member!.imageUrl,
-    };
-  }),
-);
+    const populatedParticipants = await Promise.all(
+      createdCompetition.getParticipants().map(async (id: string) => {
+        const member = await this._userRepository.findById(id);
+        return {
+          _id: member!._id,
+          name: member!.name,
+          imageUrl: member!.imageUrl,
+        };
+      }),
+    );
 
     return mapCompetitionToDTOQuickPlay({
       ...createdCompetition.toObject(),

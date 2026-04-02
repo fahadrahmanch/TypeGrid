@@ -39,4 +39,3 @@ export function newGameAPI(gameId: string, currentUsers: string[]) {
     currentUsers,
   });
 }
-

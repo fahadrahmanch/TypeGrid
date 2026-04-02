@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Navigate,Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { ReactNode } from "react";
 interface Props {
   allowedRoles: string[];
@@ -8,9 +8,10 @@ interface PropsIsloggedCompany {
   children: ReactNode;
 }
 
-
 export default function ProtectRouteCompany({ allowedRoles }: Props) {
-  const { accessToken, user, authLoaded } = useSelector((state: any) => state.auth);
+  const { accessToken, user, authLoaded } = useSelector(
+    (state: any) => state.auth,
+  );
 
   if (!authLoaded) {
     return <div>Loading...</div>;
@@ -28,7 +29,7 @@ export default function ProtectRouteCompany({ allowedRoles }: Props) {
 }
 export function IsloggedCompany({ children }: PropsIsloggedCompany) {
   const { accessToken, authLoaded, user } = useSelector(
-    (state: any) => state.auth
+    (state: any) => state.auth,
   );
 
   if (!authLoaded) {

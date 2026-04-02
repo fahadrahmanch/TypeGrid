@@ -76,10 +76,11 @@ const ForgotPassWordForm: React.FC = () => {
               onClick={handleSubmit}
               disabled={loading}
               className={`w-full text-white rounded-md py-2 mt-2 transition 
-    ${loading
-                  ? "bg-gray-700 cursor-not-allowed"
-                  : "bg-gray-900 hover:bg-gray-800"
-                }`}
+    ${
+      loading
+        ? "bg-gray-700 cursor-not-allowed"
+        : "bg-gray-900 hover:bg-gray-800"
+    }`}
             >
               {loading ? "Sending..." : "Submit"}
             </button>

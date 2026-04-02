@@ -53,7 +53,9 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
     async ({ challengeId, userId, name, imageUrl }) => {
       const key = `challenge:game:${challengeId}`;
 
-      const isFinished = await redis.exists(`challenge:finished:${challengeId}`);
+      const isFinished = await redis.exists(
+        `challenge:finished:${challengeId}`,
+      );
       if (isFinished) {
         socket.emit("challenge-already-finished");
         return;

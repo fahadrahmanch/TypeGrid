@@ -7,6 +7,6 @@ export interface IAuthRepository extends IBaseRepository<AuthUserEntity> {
     search: string,
     status: string,
     page: number,
-    limit: number
+    limit: number,
   ): Promise<{ users: AuthUserEntity[]; total: number }>;
 }

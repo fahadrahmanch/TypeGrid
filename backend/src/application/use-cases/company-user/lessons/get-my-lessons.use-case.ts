@@ -11,37 +11,43 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
     private _baseAssignmentLessonRepository: ILessonAssignmentRepository,
     private _userRepository: IUserRepository,
     private _lessonRepository: ILessonRepository,
-  ) { }
+  ) {}
   async execute(userId: string): Promise<GetMyLessonsResponseDTO> {
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
-   
 
-    const assignedLessons = await this._baseAssignmentLessonRepository.find(
-      { userId },
-    );
+    const assignedLessons = await this._baseAssignmentLessonRepository.find({
+      userId,
+    });
     const lessons = await Promise.all(
       assignedLessons.map(async (assignedLesson) => {
-        const lesson = await this._lessonRepository.findById(assignedLesson.getLessonId());
+        const lesson = await this._lessonRepository.findById(
+          assignedLesson.getLessonId(),
+        );
         return {
           assignmentId: assignedLesson.getId(),
           status: assignedLesson.getStatus(),
           deadlineAt: assignedLesson.getDeadlineAt(),
           assignedAt: assignedLesson.getAssignedAt(),
-          lesson: lesson ? {
-            id: lesson._id,
-            text: lesson.text,
-            wpm: lesson.wpm,
-            accuracy: lesson.accuracy,
-            level: lesson.level,
-            title: lesson.title,
-            category: lesson.category,
-            createdBy: lesson.createdBy,
-          } : null
+          lesson: lesson
+            ? {
+                id: lesson._id,
+                text: lesson.text,
+                wpm: lesson.wpm,
+                accuracy: lesson.accuracy,
+                level: lesson.level,
+                title: lesson.title,
+                category: lesson.category,
+                createdBy: lesson.createdBy,
+              }
+            : null,
         };
-      })
+      }),
     );
 
     const completed = assignedLessons.reduce((acc, curr) => {

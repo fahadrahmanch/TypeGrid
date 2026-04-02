@@ -8,7 +8,8 @@ import { ContestMapper } from "../../mappers/contest.mapper";
 
 export class ContestRepository
   extends BaseRepository<IContestDocument, ContestEntity>
-  implements IContestRepository {
+  implements IContestRepository
+{
   constructor(model: Model<IContestDocument>) {
     super(model, ContestMapper.toDomain);
   }
@@ -26,7 +27,10 @@ export class ContestRepository
     return docs.map(ContestMapper.toDomain);
   }
 
-  async isJoined(contestId: string, userId: string): Promise<ContestEntity | null> {
+  async isJoined(
+    contestId: string,
+    userId: string,
+  ): Promise<ContestEntity | null> {
     const doc = await this.model
       .findOne({
         _id: new mongoose.Types.ObjectId(contestId),

@@ -14,7 +14,10 @@ export class CompanyReApplyUseCase implements ICompanyReApplyUseCase {
   async execute(data: CompanyReApplyDTO): Promise<void> {
     const user = await this.userRepository.findById(data.userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
     const company = new CompanyEntity({
       _id: (user as any).CompanyId,

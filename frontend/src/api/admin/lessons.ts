@@ -1,8 +1,15 @@
 import { adminAPI } from "../axios/adminAPI";
 import { API_ROUTES } from "../../constants/apiRoutes";
 
-export async function LessonsAPI(searchText: string, filter: string, limit: number, page: number) {
-  return adminAPI.get(API_ROUTES.LESSONS.ADMIN.BASE, { params: { searchText, filter, limit, page } });
+export async function LessonsAPI(
+  searchText: string,
+  filter: string,
+  limit: number,
+  page: number,
+) {
+  return adminAPI.get(API_ROUTES.LESSONS.ADMIN.BASE, {
+    params: { searchText, filter, limit, page },
+  });
 }
 
 // create lesson
@@ -21,4 +28,3 @@ export async function fetchLesson(id: string) {
 export async function updateLesson(id: string, lessonData: any) {
   return adminAPI.put(API_ROUTES.LESSONS.ADMIN.BY_ID(id), lessonData);
 }
-

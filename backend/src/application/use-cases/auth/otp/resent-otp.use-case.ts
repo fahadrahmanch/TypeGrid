@@ -6,7 +6,7 @@ import { IResentOtpUseCase } from "../../interfaces/resent-otp.interface";
 /**
  * Resends an OTP to the user's email for sign up verification.
  */
-export class ResentOtpUseCase implements IResentOtpUseCase{
+export class ResentOtpUseCase implements IResentOtpUseCase {
   constructor(
     private _otpService: IOtpService,
     private _emailService: IEmailService,

@@ -13,7 +13,9 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
   selectedLessons,
   onToggleLesson,
 }) => {
-  const [filter, setFilter] = React.useState<"all" | "company" | "admin">("all");
+  const [filter, setFilter] = React.useState<"all" | "company" | "admin">(
+    "all",
+  );
 
   const filteredLessons = lessons.filter((lesson) => {
     if (filter === "all") return true;
@@ -69,34 +71,42 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
                 </div>
               )}
 
-              <div className={`p-2.5 rounded-xl inline-block mb-4 transition-colors ${
-                isSelected 
-                  ? "bg-white/20 text-white" 
-                  : "bg-[#ECA468]/10 text-[#D0864B]"
-              }`}>
-                <BookOpen size={18} />
-              </div>
-              
-              <h4 className={`font-black text-sm mb-2 transition-colors ${
-                isSelected ? "text-white" : "text-gray-800"
-              }`}>
-                {lesson.title}
-              </h4>
-              
-              <div className="flex items-center gap-2">
-                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+              <div
+                className={`p-2.5 rounded-xl inline-block mb-4 transition-colors ${
                   isSelected
                     ? "bg-white/20 text-white"
-                    : "bg-gray-50 text-gray-400 border border-gray-100"
-                }`}>
+                    : "bg-[#ECA468]/10 text-[#D0864B]"
+                }`}
+              >
+                <BookOpen size={18} />
+              </div>
+
+              <h4
+                className={`font-black text-sm mb-2 transition-colors ${
+                  isSelected ? "text-white" : "text-gray-800"
+                }`}
+              >
+                {lesson.title}
+              </h4>
+
+              <div className="flex items-center gap-2">
+                <span
+                  className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                    isSelected
+                      ? "bg-white/20 text-white"
+                      : "bg-gray-50 text-gray-400 border border-gray-100"
+                  }`}
+                >
                   {lesson.level}
                 </span>
                 {lesson.is_admin && (
-                  <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
-                    isSelected
-                      ? "bg-rose-100/20 text-white"
-                      : "bg-rose-50 text-rose-500 border border-rose-100"
-                  }`}>
+                  <span
+                    className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                      isSelected
+                        ? "bg-rose-100/20 text-white"
+                        : "bg-rose-50 text-rose-500 border border-rose-100"
+                    }`}
+                  >
                     Library
                   </span>
                 )}
@@ -105,10 +115,12 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
           );
         })}
       </div>
-      
+
       {filteredLessons.length === 0 && (
         <div className="py-20 text-center">
-          <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">No lessons found in this category</p>
+          <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">
+            No lessons found in this category
+          </p>
         </div>
       )}
     </div>

@@ -14,7 +14,10 @@ export class UpdateCompanyContestStatusUseCase implements IUpdateCompanyContestS
     const contest = await this._contestRepository.findById(contestId);
 
     if (!contest) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.CONTEST_NOT_FOUND,
+      );
     }
 
     contest.updateStatus(status);

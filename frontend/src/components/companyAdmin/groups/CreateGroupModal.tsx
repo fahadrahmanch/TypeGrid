@@ -43,7 +43,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   if (!isOpen) return null;
   async function handleSubmit() {
     try {
-      const response = await createCompanyGroup({
+      await createCompanyGroup({
         groupName,
         groupType,
         // groupingMethod,

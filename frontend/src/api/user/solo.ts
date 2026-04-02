@@ -18,4 +18,3 @@ export async function saveSoloPlayResult(gameId: string, result: TypingResult) {
     console.log(error);
   }
 }
-

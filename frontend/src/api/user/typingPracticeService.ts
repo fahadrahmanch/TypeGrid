@@ -11,4 +11,3 @@ export async function getTypingPracticeContent(
 export async function getTypiingPracticeLessonById(lessonId: string) {
   return userAPI.get(API_ROUTES.TYPING.LESSON_BY_ID(lessonId));
 }
-

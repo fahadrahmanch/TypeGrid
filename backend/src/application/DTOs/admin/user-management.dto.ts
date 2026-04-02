@@ -12,5 +12,3 @@ export interface UserDTO {
   gender?: string;
   role: "user" | "admin" | "companyUser" | "companyAdmin";
 }
-
-

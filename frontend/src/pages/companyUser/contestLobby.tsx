@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   Clock,
@@ -6,7 +6,6 @@ import {
   Users,
   CheckCircle2,
   Timer,
- 
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
@@ -127,9 +126,6 @@ const ContestLobby = () => {
   }, [contestDetails?.startTime, contestStatus]);
 
   const formatTime = (time: number) => time.toString().padStart(2, "0");
-  if (!contestDetails) {
-    return;
-  }
   useEffect(() => {
     if (contestStatus === "waiting") {
       setTimeLeft({
@@ -192,6 +188,9 @@ const ContestLobby = () => {
       document.body.style.touchAction = "";
     };
   }, []);
+  if (!contestDetails) {
+    return;
+  }
 
   return (
     <div className="fixed inset-0 w-screen h-screen bg-[#FDF9F2] font-sans selection:bg-[#ECA468]/30 selection:text-[#ECA468] flex flex-col text-slate-800 overflow-hidden z-[100]">
@@ -294,7 +293,9 @@ const ContestLobby = () => {
                           Status
                         </span>
                         <span className="text-sm font-bold text-slate-600 text-center leading-snug">
-                          Waiting for host<br/>to start
+                          Waiting for host
+                          <br />
+                          to start
                         </span>
                       </div>
                     ) : (
@@ -308,17 +309,23 @@ const ContestLobby = () => {
                           {timeLeft.days > 0 && (
                             <>
                               <span>{formatTime(timeLeft.days)}</span>
-                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">:</span>
+                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">
+                                :
+                              </span>
                             </>
                           )}
                           {(timeLeft.days > 0 || timeLeft.hours > 0) && (
                             <>
                               <span>{formatTime(timeLeft.hours)}</span>
-                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">:</span>
+                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">
+                                :
+                              </span>
                             </>
                           )}
                           <span>{formatTime(timeLeft.minutes)}</span>
-                          <span className="text-[#ECA468] opacity-60 mx-1 mb-1">:</span>
+                          <span className="text-[#ECA468] opacity-60 mx-1 mb-1">
+                            :
+                          </span>
                           <span>{formatTime(timeLeft.seconds)}</span>
                         </div>
                       </>
@@ -357,7 +364,8 @@ const ContestLobby = () => {
                       Waiting Lobby
                     </h3>
                     <p className="text-xs text-slate-500 font-bold uppercase tracking-widest opacity-70">
-                      {lobbyParticipants.length} / {contestDetails.maxParticipants} Ready to Race
+                      {lobbyParticipants.length} /{" "}
+                      {contestDetails.maxParticipants} Ready to Race
                     </p>
                   </div>
                 </div>

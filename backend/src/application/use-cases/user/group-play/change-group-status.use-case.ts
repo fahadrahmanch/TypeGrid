@@ -10,7 +10,10 @@ export class ChangeGroupStatusUseCase implements IChangeGroupStatusUseCase {
   async changeGroupStatus(groupId: string, status: string): Promise<void> {
     const group = await this._groupRepository.findById(groupId);
     if (!group) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND,
+      );
     }
 
     group.setStatus(status);

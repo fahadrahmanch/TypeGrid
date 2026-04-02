@@ -1,4 +1,9 @@
-import { SentChallengeDTO, OpponentDTO, ChallengeDTO, ChallengeGameDTO } from "../../DTOs/companyUser/challenge.dto";
+import {
+  SentChallengeDTO,
+  OpponentDTO,
+  ChallengeDTO,
+  ChallengeGameDTO,
+} from "../../DTOs/companyUser/challenge.dto";
 
 export type ChallengeOpponentPayload = {
   _id: any;
@@ -27,7 +32,9 @@ export type ChallengePayload = {
   updatedAt?: Date;
 };
 
-export const mapSentChallengeToDTO = (challenge: SentChallengePayload): SentChallengeDTO => {
+export const mapSentChallengeToDTO = (
+  challenge: SentChallengePayload,
+): SentChallengeDTO => {
   return {
     challengeId: challenge._id!.toString(),
     receiverId: challenge.receiverId.toString(),
@@ -35,7 +42,9 @@ export const mapSentChallengeToDTO = (challenge: SentChallengePayload): SentChal
   };
 };
 
-export const mapOpponentToDTO = (user: ChallengeOpponentPayload): OpponentDTO => {
+export const mapOpponentToDTO = (
+  user: ChallengeOpponentPayload,
+): OpponentDTO => {
   return {
     id: user._id!.toString(),
     name: user.name,
@@ -45,14 +54,18 @@ export const mapOpponentToDTO = (user: ChallengeOpponentPayload): OpponentDTO =>
   };
 };
 
-export const mapChallengeToDTO = (challenge: ChallengePayload): ChallengeDTO => {
+export const mapChallengeToDTO = (
+  challenge: ChallengePayload,
+): ChallengeDTO => {
   return {
     id: challenge._id!.toString(),
     companyId: challenge.CompanyId.toString(),
     senderId: challenge.senderId.toString(),
     receiverId: challenge.receiverId.toString(),
     status: challenge.status,
-    competitionId: challenge.competitionId ? challenge.competitionId.toString() : "",
+    competitionId: challenge.competitionId
+      ? challenge.competitionId.toString()
+      : "",
     type: challenge.type as "sent" | "received" | "completed",
     opponent: mapOpponentToDTO(challenge.opponent),
     createdAt: challenge.createdAt!,
@@ -84,13 +97,17 @@ export interface ChallengeGamePayload {
   }[];
 }
 
-export const mapChallengeGameToDTO = (data: ChallengeGamePayload): ChallengeGameDTO => {
+export const mapChallengeGameToDTO = (
+  data: ChallengeGamePayload,
+): ChallengeGameDTO => {
   return {
     id: data.competition._id!.toString(),
     startedAt: data.competition.startedAt!,
     status: data.competition.status,
     duration: data.competition.duration,
-    companyId: data.competition.CompanyId ? data.competition.CompanyId.toString() : "",
+    companyId: data.competition.CompanyId
+      ? data.competition.CompanyId.toString()
+      : "",
     countDown: data.competition.countDown,
     lesson: {
       id: data.lesson._id!.toString(),

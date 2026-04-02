@@ -16,9 +16,13 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
   ) {}
 
   async execute(gameId: string, resultArray: GroupPlayResult[]): Promise<void> {
-    const competitionEntity = await this._competitionRepository.findById(gameId);
+    const competitionEntity =
+      await this._competitionRepository.findById(gameId);
     if (!competitionEntity) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND,
+      );
     }
 
     competitionEntity.setStatus("completed");
@@ -26,12 +30,18 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
 
     const groupId = competitionEntity.getGroupId();
     if (!groupId) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND,
+      );
     }
 
     const groupEntity = await this._groupRepository.findById(groupId);
     if (!groupEntity) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND,
+      );
     }
 
     groupEntity.setStatus("completed");

@@ -15,7 +15,10 @@ export class GetGroupPlayGroupUseCase implements IGetGroupPlayGroupUseCase {
   async execute(joinLink: string, userId: string): Promise<groupDTO> {
     const group = await this._groupRepository.findOne({ joinLink });
     if (!group) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND_WITH_JOIN_ID);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.GROUP_NOT_FOUND_WITH_JOIN_ID,
+      );
     }
 
     const members = await Promise.all(

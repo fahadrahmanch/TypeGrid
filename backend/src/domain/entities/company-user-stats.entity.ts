@@ -37,24 +37,56 @@ export class CompanyUserStatsEntity {
   }
 
   // Getters
-  getId(): string | undefined { return this._id; }
-  getUserId(): string { return this.userId; }
-  getCompanyId(): string { return this.companyId; }
-  getTotalScore(): number { return this.totalScore; }
-  getWeeklyScore(): number { return this.weeklyScore; }
-  getMonthlyScore(): number { return this.monthlyScore; }
-  getWpm(): number { return this.wpm; }
-  getAccuracy(): number { return this.accuracy; }
-  getCreatedAt(): Date | undefined { return this.createdAt; }
-  getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  getId(): string | undefined {
+    return this._id;
+  }
+  getUserId(): string {
+    return this.userId;
+  }
+  getCompanyId(): string {
+    return this.companyId;
+  }
+  getTotalScore(): number {
+    return this.totalScore;
+  }
+  getWeeklyScore(): number {
+    return this.weeklyScore;
+  }
+  getMonthlyScore(): number {
+    return this.monthlyScore;
+  }
+  getWpm(): number {
+    return this.wpm;
+  }
+  getAccuracy(): number {
+    return this.accuracy;
+  }
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+  getUpdatedAt(): Date | undefined {
+    return this.updatedAt;
+  }
 
   // Setters
-  setTotalScore(score: number) { this.totalScore = score; }
-  setWeeklyScore(score: number) { this.weeklyScore = score; }
-  setMonthlyScore(score: number) { this.monthlyScore = score; }
-  setWpm(wpm: number) { this.wpm = wpm; }
-  setAccuracy(accuracy: number) { this.accuracy = accuracy; }
-  setUpdatedAt(updatedAt: Date) { this.updatedAt = updatedAt; }
+  setTotalScore(score: number) {
+    this.totalScore = score;
+  }
+  setWeeklyScore(score: number) {
+    this.weeklyScore = score;
+  }
+  setMonthlyScore(score: number) {
+    this.monthlyScore = score;
+  }
+  setWpm(wpm: number) {
+    this.wpm = wpm;
+  }
+  setAccuracy(accuracy: number) {
+    this.accuracy = accuracy;
+  }
+  setUpdatedAt(updatedAt: Date) {
+    this.updatedAt = updatedAt;
+  }
 
   toObject(): CompanyUserStatsProps {
     return {

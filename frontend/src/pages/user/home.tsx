@@ -1,6 +1,4 @@
-import { logout } from "../../store/slices/auth/authSlice";
-import { useDispatch } from "react-redux";
-import { logoutApi } from "../../api/auth/authServices";
+
 import Navbar from "../../components/user/Navbar";
 import WelcomeSection from "../../components/user/home/WelcomeSection";
 import GameModes from "../../components/user/home/GameModes";
@@ -14,16 +12,9 @@ import { createSoloRoom } from "../../api/user/solo";
 import { createQuick } from "../../api/user/quick";
 
 const Home: React.FC = () => {
-  const dispatch = useDispatch();
+ 
   const navigate = useNavigate();
-  async function handleLogout() {
-    try {
-      await logoutApi();
-      dispatch(logout());
-    } catch (error) {
-      console.log(error);
-    }
-  }
+
 
   async function handleGameModeClick(mode: string) {
     // Implement navigation or other actions based on the selected game mode;
@@ -102,14 +93,7 @@ const Home: React.FC = () => {
           </div> */}
         </div>
 
-        <div className="mt-8 text-center opacity-50 hover:opacity-100">
-          <button
-            className="text-red-500 underline text-sm"
-            onClick={() => handleLogout()}
-          >
-            Temporary Logout
-          </button>
-        </div>
+     
       </main>
     </div>
   );

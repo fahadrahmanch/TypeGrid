@@ -10,17 +10,15 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
  * This use case toggles the user's status between "block" and "active".
  */
 export class BlockUserUseCase implements IBlockUserUseCase {
-
   constructor(private readonly _userRepository: IUserRepository) {}
 
   async execute(userId: string): Promise<void> {
-
     const user = await this._userRepository.findById(userId);
 
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND
+        MESSAGES.AUTH_USER_NOT_FOUND,
       );
     }
 
@@ -28,7 +26,5 @@ export class BlockUserUseCase implements IBlockUserUseCase {
     user.status = user.status === "block" ? "active" : "block";
 
     await this._userRepository.update(user);
-
   }
-
 }

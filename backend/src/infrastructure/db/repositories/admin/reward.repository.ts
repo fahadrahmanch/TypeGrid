@@ -13,14 +13,23 @@ export class RewardRepository
     super(model, RewardMapper.toDomain);
   }
 
-  async getRewards(searchText:string,page:number,limit:number): Promise<{rewards:RewardEntity[],total:number}> {
+  async getRewards(
+    searchText: string,
+    page: number,
+    limit: number,
+  ): Promise<{ rewards: RewardEntity[]; total: number }> {
     const query: any = {};
     if (searchText) {
-      query.description = { $regex: "^"+searchText, $options: "i" };
+      query.description = { $regex: "^" + searchText, $options: "i" };
     }
-    const rawRewards = await this.model.find(query).skip((page - 1) * limit).limit(limit).lean<IRewardDocument[]>().exec();
-    const rewards = rawRewards.map(doc => this.toDomain(doc));
+    const rawRewards = await this.model
+      .find(query)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean<IRewardDocument[]>()
+      .exec();
+    const rewards = rawRewards.map((doc) => this.toDomain(doc));
     const total = await this.model.countDocuments(query);
-    return {rewards,total};
+    return { rewards, total };
   }
 }

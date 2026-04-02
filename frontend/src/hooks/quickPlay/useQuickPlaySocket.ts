@@ -21,8 +21,7 @@ export const useQuickPlaySocket = (
   gameIdRef: React.MutableRefObject<string | undefined>,
   userIdRef: React.MutableRefObject<string | undefined>,
 ) => {
-    const user = useSelector((state: any) => state.auth.user);
-
+  const user = useSelector((state: any) => state.auth.user);
 
   // send live stats
   useEffect(() => {
@@ -47,8 +46,8 @@ export const useQuickPlaySocket = (
         prev.map((p: any) =>
           p._id === data.userId
             ? { ...p, ...data, progress: data.typedLength }
-            : p
-        )
+            : p,
+        ),
       );
     };
 
@@ -63,7 +62,7 @@ export const useQuickPlaySocket = (
   // quick join
   useEffect(() => {
     if (!gameData) return;
-  
+
     socket.emit("quick-join", {
       competitionId: gameData._id,
       userId: user?._id,
@@ -74,15 +73,17 @@ export const useQuickPlaySocket = (
       navigate("/", { replace: true });
     });
 
-    return () => {socket.off("force-exit-quick");};
-}, []);
+    return () => {
+      socket.off("force-exit-quick");
+    };
+  }, []);
 
   // user join
   useEffect(() => {
     const handleUserJoin = (data: any) => {
       setLivePlayers((prev: any) => {
         const exists = prev.some(
-          (player: any) => player._id === data.member._id
+          (player: any) => player._id === data.member._id,
         );
 
         if (exists) return prev;
@@ -146,12 +147,12 @@ export const useQuickPlaySocket = (
   const mountedRef = useRef(false);
 
   useEffect(() => {
-     if (!mountedRef.current) {
-    mountedRef.current = true;
-    return;
-  }
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
     return () => {
-       if (!mountedRef.current) return;
+      if (!mountedRef.current) return;
       if (gameIdRef.current && userIdRef.current) {
         // Emit event to server that this user is leaving
         socket.emit("leave-game-quick", {
@@ -161,35 +162,29 @@ export const useQuickPlaySocket = (
       }
     };
   }, []);
-const userRef = useRef(user);
-const gameDataRef = useRef(gameData);
+  const userRef = useRef(user);
+  const gameDataRef = useRef(gameData);
 
-useEffect(() => {
-  userRef.current = user;
-}, [user]);
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
-useEffect(() => {
-  gameDataRef.current = gameData;
-}, [gameData]);
+  useEffect(() => {
+    gameDataRef.current = gameData;
+  }, [gameData]);
 
-useEffect(() => {
-  const handler = ({ userId }: any) => {
+  useEffect(() => {
+    const handler = ({ userId }: any) => {
+      setLivePlayers((prev: any) => prev.filter((p: any) => p._id !== userId));
+      if (userId === user?._id) {
+        navigate("/", { replace: true });
+      }
+    };
 
-    setLivePlayers((prev: any) =>
-      prev.filter((p: any) => p._id !== userId)
-    );
-    if(userId === user?._id){
-      navigate("/", { replace: true });
-    }
-  };
-  
+    socket.on("player-left-quick", handler);
 
-  socket.on("player-left-quick", handler);
-
-  return () => {
-    socket.off("player-left-quick", handler);
-  };
-}, []);
-
-
+    return () => {
+      socket.off("player-left-quick", handler);
+    };
+  }, []);
 };

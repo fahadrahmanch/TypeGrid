@@ -60,21 +60,21 @@ export const getIO = () => {
   return io;
 };
 
-function calculateStats({
-  totalTyped,
-  errors,
-  timeTaken,
-}: {
-  totalTyped: number;
-  errors: number;
-  timeTaken: number;
-}) {
-  const correctChars = Math.max(totalTyped - errors, 0);
-  const minutes = Math.max(timeTaken / 60, 0.01);
+// function calculateStats({
+//   totalTyped,
+//   errors,
+//   timeTaken,
+// }: {
+//   totalTyped: number;
+//   errors: number;
+//   timeTaken: number;
+// }) {
+//   const correctChars = Math.max(totalTyped - errors, 0);
+//   const minutes = Math.max(timeTaken / 60, 0.01);
 
-  const wpm = Math.round(correctChars / 5 / minutes);
-  const accuracy =
-    totalTyped === 0 ? 0 : Math.round((correctChars / totalTyped) * 100);
+//   const wpm = Math.round(correctChars / 5 / minutes);
+//   const accuracy =
+//     totalTyped === 0 ? 0 : Math.round((correctChars / totalTyped) * 100);
 
-  return { wpm, accuracy };
-}
+//   return { wpm, accuracy };
+// }

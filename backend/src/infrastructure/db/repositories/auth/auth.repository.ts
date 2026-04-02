@@ -1,4 +1,3 @@
-import { Model } from "mongoose";
 import { User } from "../../models/user/user.schema";
 import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
 import { BaseRepository } from "../../base/base.repository";
@@ -15,7 +14,10 @@ export class AuthRepository
     super(User, AuthMapper.toDomain);
   }
   async findByEmail(email: string): Promise<AuthUserEntity | null> {
-    const doc = await this.model.findOne({ email }).lean<IUserDocument>().exec();
+    const doc = await this.model
+      .findOne({ email })
+      .lean<IUserDocument>()
+      .exec();
     return doc ? this.toDomain(doc) : null;
   }
 
@@ -23,7 +25,7 @@ export class AuthRepository
     search: string,
     status: string,
     page: number,
-    limit: number
+    limit: number,
   ): Promise<{ users: AuthUserEntity[]; total: number }> {
     let query: any = {};
 

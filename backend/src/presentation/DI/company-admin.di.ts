@@ -3,7 +3,6 @@ import { AddUserUseCase } from "../../application/use-cases/company-admin/users/
 import { User } from "../../infrastructure/db/models/user/user.schema";
 import { UserRepository } from "../../infrastructure/db/repositories/user/user.repository";
 import { HashService } from "../../application/services/hash.service";
-import { TokenService } from "../../application/services/token.service";
 import { FindUserUseCase } from "../../application/use-cases/user/find-user.use-case";
 import { GetCompanyUsersUseCase } from "../../application/use-cases/company-admin/users/get-company-users.use-case";
 import { DeleteUserUseCase } from "../../application/use-cases/company-admin/users/delete-user.use-case";
@@ -39,12 +38,13 @@ import { ResultRepository } from "../../infrastructure/db/repositories/result.re
 import { Result } from "../../infrastructure/db/models/user/result.schema";
 import { AuthRepository } from "../../infrastructure/db/repositories/auth/auth.repository";
 const userRepository = new UserRepository(User);
-const tokenService = new TokenService();
 const hashService = new HashService();
 const authRepository = new AuthRepository();
 const findUserUseCaseInstance = new FindUserUseCase(authRepository);
 const addUserUseCaseInstance = new AddUserUseCase(authRepository, hashService);
-const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(userRepository);
+const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(
+  userRepository,
+);
 const deleteUserUseCaseInstance = new DeleteUserUseCase(userRepository);
 
 //lesson
@@ -68,7 +68,9 @@ const updateCompanyLessonUseCaseInstance = new UpdateCompanyLessonUseCase(
 const deleteCompanyLessonUseCaseInstance = new DeleteCompanyLessonUseCase(
   lessonRepository,
 );
-const getAdminLessonsUseCaseInstance = new GetAdminLessonUseCase(lessonRepository);
+const getAdminLessonsUseCaseInstance = new GetAdminLessonUseCase(
+  lessonRepository,
+);
 const assignLessonUseCaseInstance = new AssignLessonUseCase(
   lessonAssignmentRepository,
   userRepository,
@@ -93,9 +95,8 @@ const createCompanyContestUseCaseInstance = new CreateCompanyContestUseCase(
   contestRepository,
   lessonRepository,
 );
-const updateCompanyContestStatusUseCaseInstance = new UpdateCompanyContestStatusUseCase(
-  contestRepository,
-);
+const updateCompanyContestStatusUseCaseInstance =
+  new UpdateCompanyContestStatusUseCase(contestRepository);
 const getContestParticipantsUseCaseInstance = new GetContestParticipantsUseCase(
   contestRepository,
   userRepository,
@@ -104,8 +105,12 @@ const getCompanyContestUseInstance = new GetContestUseCase(
   contestRepository,
   userRepository,
 );
-const updateContestUseCaseInstance = new UpdateContestUseCase(contestRepository);
-const deleteContestUseCaseInstance = new DeleteContestUseCase(contestRepository);
+const updateContestUseCaseInstance = new UpdateContestUseCase(
+  contestRepository,
+);
+const deleteContestUseCaseInstance = new DeleteContestUseCase(
+  contestRepository,
+);
 const resultRepository = new ResultRepository(Result);
 const getContestResultUseCaseInstance = new GetContestResultUseCase(
   contestRepository,

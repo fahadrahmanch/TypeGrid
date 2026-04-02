@@ -8,13 +8,10 @@ export class adminAuthRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
-    this.router.post(Routes.AUTH.SIGNIN, (req: Request, res: Response, next: NextFunction) => {
-      injectAuthController.AdminSignIn(req, res, next);
-    });
     this.router.post(
-      Routes.AUTH.REFRESH_TOKEN,
+      Routes.AUTH.SIGNIN,
       (req: Request, res: Response, next: NextFunction) => {
-        injectAuthController.refreshToken(req, res, next);
+        injectAuthController.AdminSignIn(req, res, next);
       },
     );
     this.router.post(
@@ -23,9 +20,18 @@ export class adminAuthRouter {
         injectAuthController.refreshToken(req, res, next);
       },
     );
-    this.router.post(Routes.AUTH.LOGOUT, (req: Request, res: Response, next: NextFunction) => {
-      injectAuthController.logout(req, res, next);
-    });
+    this.router.post(
+      Routes.AUTH.REFRESH_TOKEN,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.refreshToken(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.AUTH.LOGOUT,
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAuthController.logout(req, res, next);
+      },
+    );
   }
   getRouter() {
     return this.router;

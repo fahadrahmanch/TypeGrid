@@ -19,12 +19,19 @@ export class GetJoinMemberUseCase implements IGetJoinMemberUseCase {
   ): Promise<QuickPlayMemberDTO> {
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.AUTH_USER_NOT_FOUND,
+      );
     }
 
-    const competition = await this._competitionRepository.findById(competitionId);
+    const competition =
+      await this._competitionRepository.findById(competitionId);
     if (!competition) {
-      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.COMPETITION_NOT_FOUND,
+      );
     }
 
     const isParticipant = competition
@@ -32,7 +39,10 @@ export class GetJoinMemberUseCase implements IGetJoinMemberUseCase {
       .some((participant: string) => participant.toString() === userId);
 
     if (!isParticipant) {
-      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_NOT_PARTICIPANT);
+      throw new CustomError(
+        HttpStatusCodes.FORBIDDEN,
+        MESSAGES.USER_NOT_PARTICIPANT,
+      );
     }
 
     return mapQuickMemberToDTO({

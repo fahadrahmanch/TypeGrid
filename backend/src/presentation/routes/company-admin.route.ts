@@ -17,7 +17,8 @@ export class companyAdminRouter {
   initializeRoutes() {
     this.router.post(
       Routes.COMPANY_ADMIN.ADD_USER,
-      checkRoleBasedMiddleware(["companyAdmin"]),validate(companyUserValidation.addCompanyUser),
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(companyUserValidation.addCompanyUser),
       (req: Request, res: Response, next: NextFunction) => {
         injectCompanyUserController.addUser(req, res, next);
       },
@@ -40,7 +41,8 @@ export class companyAdminRouter {
     //lessons
     this.router.post(
       Routes.COMPANY_ADMIN.CREATE_LESSON,
-      checkRoleBasedMiddleware(["companyAdmin"]),validate(lessonValidation.createLesson),
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(lessonValidation.createLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectCompanyLessonManageController.createLesson(req, res, next);
       },
@@ -63,7 +65,8 @@ export class companyAdminRouter {
     );
     this.router.put(
       Routes.COMPANY_ADMIN.UPDATE_LESSON,
-      checkRoleBasedMiddleware(["companyAdmin"]),validate(lessonValidation.updateLesson),
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(lessonValidation.updateLesson),
       (req: Request, res: Response, next: NextFunction) => {
         injectCompanyLessonManageController.updateLesson(req, res, next);
       },
@@ -131,7 +134,11 @@ export class companyAdminRouter {
       Routes.COMPANY_ADMIN.CONTEST_STATUS,
       checkRoleBasedMiddleware(["companyAdmin", "companyUser"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectCompanyContestManagementController.updateContestStatus(req, res, next);
+        injectCompanyContestManagementController.updateContestStatus(
+          req,
+          res,
+          next,
+        );
       },
     );
     this.router.get(
@@ -170,7 +177,11 @@ export class companyAdminRouter {
       Routes.COMPANY_ADMIN.FETCH_CONTEST_RESULT,
       checkRoleBasedMiddleware(["companyAdmin"]),
       (req: Request, res: Response, next: NextFunction) => {
-        injectCompanyContestManagementController.getContestResult(req, res, next);
+        injectCompanyContestManagementController.getContestResult(
+          req,
+          res,
+          next,
+        );
       },
     );
   }

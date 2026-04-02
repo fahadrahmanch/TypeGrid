@@ -11,7 +11,7 @@ import { MESSAGES } from "../../../../domain/constants/messages";
  */
 export class GetSentChallengeUseCase implements IGetSentChallengeUseCase {
   constructor(
-    private readonly _challengeRepository: ICompanyChallengeRepository
+    private readonly _challengeRepository: ICompanyChallengeRepository,
   ) {}
 
   /**
@@ -20,11 +20,10 @@ export class GetSentChallengeUseCase implements IGetSentChallengeUseCase {
    * @returns List of sent challenges
    */
   async execute(userId: string): Promise<SentChallengeDTO[]> {
-
     if (!userId) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST
+        MESSAGES.INVALID_REQUEST,
       );
     }
 
@@ -36,7 +35,7 @@ export class GetSentChallengeUseCase implements IGetSentChallengeUseCase {
     if (!challenges.length) return [];
 
     return challenges.map((challenge) =>
-      mapSentChallengeToDTO(challenge.toObject())
+      mapSentChallengeToDTO(challenge.toObject()),
     );
   }
-} 
+}

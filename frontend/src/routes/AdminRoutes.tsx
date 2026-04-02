@@ -12,7 +12,6 @@ import DailyAssignment from "../pages/admin/DailyAssignment";
 export default function AdminRoutes() {
   return (
     <Routes>
-
       {/* Auth */}
       <Route
         path="signin"
@@ -33,7 +32,6 @@ export default function AdminRoutes() {
         <Route path="goals" element={<Goals />} />
         <Route path="daily-assignment" element={<DailyAssignment />} />
       </Route>
-
     </Routes>
   );
 }

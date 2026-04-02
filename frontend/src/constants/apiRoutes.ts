@@ -101,7 +101,6 @@ export const API_ROUTES = {
       BY_ID: (userId: string) => `/users/${userId}`,
       STATUS: (userId: string) => `/users/${userId}/status`,
       COMPANY_USERS: "/users",
-
     },
     COMPANY_CONTESTS: {
       BASE: "/company/contest",
@@ -110,7 +109,8 @@ export const API_ROUTES = {
       AREA: (contestId: string) => `/company/contest-area/${contestId}`,
       LIST: "/company/contests",
       STATUS: (contestId: string) => `/company/contest/${contestId}/status`,
-      PARTICIPANTS: (contestId: string) => `/company/contest/${contestId}/participants`,
+      PARTICIPANTS: (contestId: string) =>
+        `/company/contest/${contestId}/participants`,
       RESULTS: (contestId: string) => `/company/contest/${contestId}/results`,
     },
     COMPANY_GROUPS: "/company-groups",
