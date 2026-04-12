@@ -15,13 +15,18 @@ import CompanyContestManagement from "../pages/companyAdmin/companyContestManage
 import CompanyContestLobby from "../pages/companyAdmin/CompanyContestLobby";
 import GroupsManagement from "../pages/companyAdmin/groupsManagement";
 import GroupDetails from "../pages/companyAdmin/GroupDetails";
+import NotificationPage from "../pages/companyAdmin/notification";
 import Contests from "../pages/companyUser/Contests";
 import ContestLobby from "../pages/companyUser/contestLobby";
 import ContestArea from "../pages/companyUser/contestArea";
 import Challenge from "../pages/companyUser/challenge";
 import ChallengeArea from "../pages/companyUser/ChallengeArea";
 import CompanyLeaderBoard from "../pages/companyUser/companyLeaderBoard";
-
+import TypingPracticeLLM from "../pages/companyUser/typingPractice";
+import PracticeTypingArea from "../pages/companyUser/PracticeTypingArea";
+import CompanyUserProfile from "../components/companyUser/companyUserProfile";
+import Notifications from "../pages/companyUser/Notifications";
+import KeyboardLayout from "../pages/companyUser/KeyboardLayout";
 export default function CompanyRoutes() {
   return (
     <Routes>
@@ -74,6 +79,7 @@ export default function CompanyRoutes() {
         />
         <Route path="admin/groups" element={<GroupsManagement />} />
         <Route path="admin/groups/:groupId" element={<GroupDetails />} />
+        <Route path="admin/notifications" element={<NotificationPage />} />
       </Route>
 
       {/* Admin + User Routes */}
@@ -93,14 +99,19 @@ export default function CompanyRoutes() {
           element={<ContestLobby />}
         />
         <Route path="user/contest/:contestId" element={<ContestArea />} />
+        <Route path="user/my-practice" element={<TypingPracticeLLM />} />
+        <Route path="user/practice-area" element={<PracticeTypingArea />} />
+        <Route path="user/my-notifications" element={<Notifications />} />
+        <Route path="user/my-keyboard" element={<KeyboardLayout />} />
       </Route>
 
       {/* User Only */}
-      <Route element={<ProtectRouteCompany allowedRoles={["companyUser"]} />}>
+      <Route element={<ProtectRouteCompany allowedRoles={["companyUser","companyAdmin"]} />}>
         <Route
           path="user/assigned-lessons/:assignedLessonId"
           element={<AssignedLessonTypingArea />}
         />
+        <Route path="user/profile"  element={<CompanyUserProfile />} />
       </Route>
     </Routes>
   );

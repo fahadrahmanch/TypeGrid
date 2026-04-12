@@ -2,6 +2,7 @@ import { useRealtime } from "../../context/RealtimeProvider";
 import { getAllChallenges } from "../../api/companyUser/challenge";
 import { useState, useEffect } from "react";
 import { socket } from "../../socket";
+import { X } from "lucide-react";
 const ChallengeModal = () => {
   const { challengeModal, setChallengeModal } = useRealtime();
 

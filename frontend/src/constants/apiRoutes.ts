@@ -114,5 +114,24 @@ export const API_ROUTES = {
       RESULTS: (contestId: string) => `/company/contest/${contestId}/results`,
     },
     COMPANY_GROUPS: "/company-groups",
+    COMPANY_GROUPS_AUTO: "/company/groups-auto",
+    REMOVE_MEMBER_FROM_GROUP: (groupId: string, memberId: string) => `/company-groups/${groupId}/members/${memberId}`,
+    ADD_MEMBER_TO_GROUP: (groupId: string, memberId: string) => `/company-groups/${groupId}/members-add/${memberId}`,
+    COMPANY_GROUP_BY_ID: (id: string) => `/company-groups/${id}`,
+   
   },
+  GET_COMPANY_USER_PROFILE:(userId:string)=> `/profile/${userId}`,
+  UPDATE_COMPANY_PASSWORD:(userId:string)=> `/profile/${userId}/password`,
+  COMPANY_USERS_WITH_STATUS: "/users/company-users-with-status",
+  //notification
+  NOTIFICATION:{
+    INDIVIDUAL:"/notification/individual",
+    GROUP:"/notification/group",
+    ALL:"/notification/all",
+    GET_USER_NOTIFICATIONS: "/notifications",
+    GET_NOTIFICATION_HISTORY: "/notifications/history",
+    MARK_AS_READ: (id: string) => `/notifications/${id}/read`,
+  },
+  // keyboard
+  SET_KEYBOARD_LAYOUT: "/keyboard/set-keyboard-layout",
 } as const;

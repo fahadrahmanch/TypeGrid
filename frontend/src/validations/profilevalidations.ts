@@ -23,3 +23,20 @@ export function bioValidation(bio: string) {
   if (bio.trim().length > 200) return "Bio must be less than 200 characters";
   return "";
 }
+
+export function oldPasswordValidation(password: string) {
+  if (!password) return "Current password is required";
+  return "";
+}
+
+export function newPasswordValidation(password: string) {
+  if (!password) return "New password is required";
+  if (password.length < 6) return "Password must be at least 6 characters";
+  return "";
+}
+
+export function confirmPasswordValidation(newPass: string, confirmPass: string) {
+  if (!confirmPass) return "Confirm password is required";
+  if (newPass !== confirmPass) return "Passwords do not match";
+  return "";
+}

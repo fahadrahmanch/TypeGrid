@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   UsersRound,
+  Bell,
 } from "lucide-react";
 
 // Define navigation items with their respective icons and paths
@@ -29,6 +30,11 @@ const navItems = [
     icon: Trophy,
   },
   { path: "/company/admin/groups", label: "Groups", icon: UsersRound },
+  {
+    path: "/company/admin/notifications",
+    label: "Notifications",
+    icon: Bell,
+  },
   { path: "/company/admin/settings", label: "Settings", icon: Settings },
 ];
 

@@ -424,11 +424,10 @@ const AssignedLessonTypingArea: React.FC = () => {
                       <div className="flex gap-4">
                         <button
                           onClick={resetTest}
-                          className={`px-6 py-2.5 rounded-xl border-2 font-bold transition-all ${
-                            isPassed
+                          className={`px-6 py-2.5 rounded-xl border-2 font-bold transition-all ${isPassed
                               ? "border-gray-200 text-gray-600 hover:bg-gray-50"
                               : "bg-red-500 text-white hover:bg-red-600 border-transparent shadow-lg shadow-red-200"
-                          }`}
+                            }`}
                         >
                           {isPassed ? "Try Again" : "Try Again"}
                         </button>

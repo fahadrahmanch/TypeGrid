@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { fetchCompanyUsers } from "../../../api/companyAdmin/companyAdminService";
-import { createCompanyGroup } from "../../../api/companyAdmin/companyGroup";
+import { createCompanyGroup, createCompanyGroupAuto } from "../../../api/companyAdmin/companyGroup";
 interface CreateGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onGroupCreated?: () => void;
 }
 
 const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   isOpen,
   onClose,
+  onGroupCreated,
 }) => {
   const [groupName, setGroupName] = useState("");
   const [groupType, setGroupType] = useState("beginner");
@@ -21,9 +23,11 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   const [minWpm, setMinWpm] = useState("0");
   const [maxWpm, setMaxWpm] = useState("50");
   const [minAccuracy, setMinAccuracy] = useState("0");
+  const [maxAccuracy, setMaxAccuracy] = useState("100");
   const [users, setUsers] = useState<any[]>([]);
   // Manual Selection State
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleUserSelect = (id: string) => {
     setSelectedUsers((prev) =>
@@ -41,17 +45,57 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
     fetchUsers();
   }, []);
   if (!isOpen) return null;
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!groupName.trim()) {
+      newErrors.groupName = "Group name is required";
+    } else if (groupName.trim().length < 3) {
+      newErrors.groupName = "Group name must be at least 3 characters";
+    }
+
+    if (groupingMethod === "auto") {
+      if (parseFloat(minWpm) < 0) newErrors.minWpm = "Min WPM cannot be negative";
+      if (parseFloat(maxWpm) < parseFloat(minWpm))
+        newErrors.maxWpm = "Max WPM cannot be less than Min WPM";
+      if (parseFloat(minAccuracy) < 0 || parseFloat(minAccuracy) > 100)
+        newErrors.minAccuracy = "Accuracy must be between 0 and 100";
+      if (parseFloat(maxAccuracy) < parseFloat(minAccuracy))
+        newErrors.maxAccuracy = "Max Accuracy cannot be less than Min Accuracy";
+      if (parseFloat(maxAccuracy) > 100)
+        newErrors.maxAccuracy = "Accuracy cannot exceed 100";
+    } else {
+      if (selectedUsers.length === 0) {
+        newErrors.users = "Please select at least one user";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   async function handleSubmit() {
+    if (!validate()) return;
+
     try {
-      await createCompanyGroup({
-        groupName,
-        groupType,
-        // groupingMethod,
-        // minWpm,
-        // maxWpm,
-        // minAccuracy,
-        selectedUsers,
-      });
+      if (groupingMethod === "auto") {
+        await createCompanyGroupAuto({
+          groupName,
+          groupType,
+          minWpm,
+          maxWpm,
+          minAccuracy,
+          maxAccuracy,
+        });
+      } else {
+        await createCompanyGroup({
+          groupName,
+          groupType,
+          selectedUsers,
+        });
+      }
+      if (onGroupCreated) onGroupCreated();
+      onClose();
     } catch (error) {
       console.log("Error", error);
     }
@@ -82,9 +126,21 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
               type="text"
               placeholder="Enter group name"
               value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
+              onChange={(e) => {
+                setGroupName(e.target.value);
+                if (errors.groupName) {
+                  setErrors((prev) => ({ ...prev, groupName: "" }));
+                }
+              }}
+              className={`w-full px-4 py-3 rounded-xl bg-gray-50 border transition-all text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+                errors.groupName
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-200 focus:border-blue-500"
+              }`}
             />
+            {errors.groupName && (
+              <p className="text-xs text-red-500 font-medium">{errors.groupName}</p>
+            )}
           </div>
 
           {/* Group Type */}
@@ -185,9 +241,17 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                     <input
                       type="number"
                       value={minWpm}
-                      onChange={(e) => setMinWpm(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                      onChange={(e) => {
+                        setMinWpm(e.target.value);
+                        setErrors((prev) => ({ ...prev, minWpm: "" }));
+                      }}
+                      className={`w-full px-3 py-2 bg-white border rounded-lg text-sm focus:outline-none transition-colors ${
+                        errors.minWpm ? "border-red-500" : "border-gray-200 focus:border-blue-500"
+                      }`}
                     />
+                    {errors.minWpm && (
+                      <p className="text-[10px] text-red-500">{errors.minWpm}</p>
+                    )}
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -196,22 +260,59 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                     <input
                       type="number"
                       value={maxWpm}
-                      onChange={(e) => setMaxWpm(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                      onChange={(e) => {
+                        setMaxWpm(e.target.value);
+                        setErrors((prev) => ({ ...prev, maxWpm: "" }));
+                      }}
+                      className={`w-full px-3 py-2 bg-white border rounded-lg text-sm focus:outline-none transition-colors ${
+                        errors.maxWpm ? "border-red-500" : "border-gray-200 focus:border-blue-500"
+                      }`}
                     />
+                    {errors.maxWpm && (
+                      <p className="text-[10px] text-red-500">{errors.maxWpm}</p>
+                    )}
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Min Accuracy (%)
-                  </label>
-                  <input
-                    type="number"
-                    value={minAccuracy}
-                    onChange={(e) => setMinAccuracy(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Min Accuracy (%)
+                    </label>
+                    <input
+                      type="number"
+                      value={minAccuracy}
+                      onChange={(e) => {
+                        setMinAccuracy(e.target.value);
+                        setErrors((prev) => ({ ...prev, minAccuracy: "" }));
+                      }}
+                      className={`w-full px-3 py-2 bg-white border rounded-lg text-sm focus:outline-none transition-colors ${
+                        errors.minAccuracy ? "border-red-500" : "border-gray-200 focus:border-blue-500"
+                      }`}
+                    />
+                    {errors.minAccuracy && (
+                      <p className="text-[10px] text-red-500">{errors.minAccuracy}</p>
+                    )}
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Max Accuracy (%)
+                    </label>
+                    <input
+                      type="number"
+                      value={maxAccuracy}
+                      onChange={(e) => {
+                        setMaxAccuracy(e.target.value);
+                        setErrors((prev) => ({ ...prev, maxAccuracy: "" }));
+                      }}
+                      className={`w-full px-3 py-2 bg-white border rounded-lg text-sm focus:outline-none transition-colors ${
+                        errors.maxAccuracy ? "border-red-500" : "border-gray-200 focus:border-blue-500"
+                      }`}
+                    />
+                    {errors.maxAccuracy && (
+                      <p className="text-[10px] text-red-500">{errors.maxAccuracy}</p>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : (
@@ -262,6 +363,11 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                     </label>
                   ))}
                 </div>
+                {errors.users && (
+                  <p className="text-xs text-red-500 font-medium mt-2 text-center">
+                    {errors.users}
+                  </p>
+                )}
               </div>
             )}
           </div>

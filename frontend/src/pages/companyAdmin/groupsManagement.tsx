@@ -1,33 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
 import { Plus } from "lucide-react";
 import GroupListTable from "../../components/companyAdmin/groups/GroupListTable";
 import { Group } from "../../types/group";
 import CreateGroupModal from "../../components/companyAdmin/groups/CreateGroupModal";
-
-// Dummy data
-const groupsData: Group[] = [
-  {
-    id: "1",
-    name: "Starter Squad",
-    type: "Beginner Users",
-    usersCount: 2,
-    avgWpm: 42.5,
-    avgAccuracy: 90.0,
-  },
-  {
-    id: "2",
-    name: "Speed Demons",
-    type: "Advanced Users",
-    usersCount: 5,
-    avgWpm: 92.5,
-    avgAccuracy: 98.0,
-  },
-];
+import { getCompanyGroups } from "../../api/companyAdmin/companyGroup";
 
 const GroupsManagement: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("All Groups");
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchGroups = async () => {
+    try {
+      setLoading(true);
+      const response = await getCompanyGroups();
+      setGroups(response.data.groups || []);
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
@@ -67,11 +66,10 @@ const GroupsManagement: React.FC = () => {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                    activeTab === tab
+                  className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${activeTab === tab
                       ? "bg-blue-600 text-white shadow-md shadow-blue-200"
                       : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
-                  }`}
+                    }`}
                 >
                   {tab}
                 </button>
@@ -80,13 +78,23 @@ const GroupsManagement: React.FC = () => {
           </div>
 
           {/* Groups List */}
-          <GroupListTable groups={groupsData} />
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+          ) : (
+            <GroupListTable 
+              groups={groups} 
+              onDeleteSuccess={fetchGroups} 
+            />
+          )}
         </div>
 
         {/* Create Group Modal */}
         <CreateGroupModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
+          onGroupCreated={fetchGroups}
         />
       </div>
     </div>

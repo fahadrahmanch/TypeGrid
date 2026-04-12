@@ -1,26 +1,56 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { X, Search } from "lucide-react";
+import { addMemberToGroup, getCompanyUsersWithStatus } from "../../../api/companyAdmin/companyGroup";
+import { GroupMember } from "../../../types/group";
+import { toast } from "react-toastify";
+
 
 interface AddUsersModalProps {
   isOpen: boolean;
   onClose: () => void;
+  groupId: string;
+  onUserAdded?: () => void;
 }
 
-// Dummy users to search/add
-const dummyUsers = [
-  { id: 1, name: "Bob Smith", wpm: 75, accuracy: 95, initial: "B" },
-  { id: 2, name: "Carol White", wpm: 95, accuracy: 98, initial: "C" },
-  { id: 3, name: "David Brown", wpm: 40, accuracy: 88, initial: "D" },
-  { id: 4, name: "Eve Davis", wpm: 60, accuracy: 92, initial: "E" },
-];
+// Users list will be fetched from the backend
 
-const AddUsersModal: React.FC<AddUsersModalProps> = ({ isOpen, onClose }) => {
+const AddUsersModal: React.FC<AddUsersModalProps> = ({ isOpen, onClose, groupId, onUserAdded }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [users, setUsers] = useState<GroupMember[]>([]);
+  const [addingUser, setAddingUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (!isOpen) return;
+      try {
+        const response = await getCompanyUsersWithStatus();
+        setUsers(response.data.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchUsers();
+  }, [isOpen]);
+
+  const handleAddUser = async (userId: string) => {
+    try {
+      setAddingUser(userId);
+      await addMemberToGroup(groupId, userId);
+      toast.success("User added to group");
+      if (onUserAdded) onUserAdded();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to add user");
+    } finally {
+      setAddingUser(null);
+    }
+  };
+
 
   if (!isOpen) return null;
 
-  const filteredUsers = dummyUsers.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -55,31 +85,41 @@ const AddUsersModal: React.FC<AddUsersModalProps> = ({ isOpen, onClose }) => {
 
           {/* Users List */}
           <div className="space-y-3 max-h-60 overflow-y-auto custom-scrollbar pr-1">
-            {filteredUsers.map((user) => (
-              <div
-                key={user.id}
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold border border-pink-200">
-                    {user.initial}
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
+                <div
+                  key={user._id}
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold border border-pink-200">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-900 text-sm">
+                        {user.name}
+                      </span>
+                      <span className="text-xs text-gray-500 font-medium">
+                        WPM: <span className="text-gray-700">{user.wpm || 0}</span>{" "}
+                        <span className="mx-1">|</span> Accuracy:{" "}
+                        <span className="text-gray-700">{user.accuracy || 0}%</span>
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-gray-900 text-sm">
-                      {user.name}
-                    </span>
-                    <span className="text-xs text-gray-500 font-medium">
-                      WPM: <span className="text-gray-700">{user.wpm}</span>{" "}
-                      <span className="mx-1">|</span> Accuracy:{" "}
-                      <span className="text-gray-700">{user.accuracy}%</span>
-                    </span>
-                  </div>
+                  <button 
+                    disabled={addingUser === user._id}
+                    onClick={() => handleAddUser(user._id)}
+                    className="px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-lg shadow-sm shadow-blue-200 hover:bg-blue-700 hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {addingUser === user._id ? "Adding..." : "Add"}
+                  </button>
                 </div>
-                <button className="px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-lg shadow-sm shadow-blue-200 hover:bg-blue-700 hover:shadow-md transition-all">
-                  Add
-                </button>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500 text-sm font-medium">
+                No users found.
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

@@ -42,7 +42,6 @@ const MyLessons: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const navigate = useNavigate();
 
-  // Mock Data
   const completed = MyLessons.completed;
   const total = MyLessons.total;
 
@@ -79,27 +78,32 @@ const MyLessons: React.FC = () => {
     async function fetchMyLessons() {
       try {
         const response = await myLessons();
-
+        
         const data = response.data.data;
-        const mappedLessons: Lesson[] = data.lessons.map((item: any) => ({
-          id: item.assignmentId,
-          title: item.lesson.title,
-          level:
-            item.lesson.level === "beginner"
-              ? "Beginner"
-              : item.lesson.level === "intermediate"
-                ? "Intermediate"
-                : "Advanced",
-          assignedDate: new Date(item.assignedAt).toLocaleDateString(),
-          targetWpm: item.lesson.wpm,
-          time: "5 min",
-          status:
-            item.status === "completed"
-              ? "Completed"
-              : item.status === "progress"
-                ? "In Progress"
-                : "Not Started",
-        }));
+
+        console.log("Data",data)
+       const mappedLessons: Lesson[] = data.lessons
+  .filter((item: any) => item.lesson !== null)
+  .map((item: any) => ({
+    id: item.assignmentId,
+    title: item.lesson.title,
+    level:
+      item.lesson.level === "beginner"
+        ? "Beginner"
+        : item.lesson.level === "intermediate"
+        ? "Intermediate"
+        : "Advanced",
+    assignedDate: new Date(item.assignedAt).toLocaleDateString(),
+    targetWpm: item.lesson.wpm,
+    time: "5 min",
+    status:
+      item.status === "completed"
+        ? "Completed"
+        : item.status === "progress"
+        ? "In Progress"
+        : "Not Started",
+  }));
+        console.log("mappedlessons",mappedLessons)
 
         const filtered = mappedLessons.filter((lesson) => {
           const levelOk =
@@ -112,21 +116,25 @@ const MyLessons: React.FC = () => {
 
           return levelOk && statusOk;
         });
+        console.log("mappedlessons",filtered)
 
         setMyLessons({
-          lessons: mappedLessons,
+          lessons: filtered,
           completed: data.completed,
           total: data.total,
         });
 
         setFilteredLessons(filtered);
       } catch (error: any) {
+        console.log(error)
         toast.error(error?.response?.data?.message || "Something went wrong");
       }
     }
 
     fetchMyLessons();
   }, [selectedLevel, selectedStatus]);
+  console.log("my leson",MyLessons)
+  console.log("filter",filteredLessons)
   async function handleLessonClick(assignedId: string) {
     navigate(`/company/user/assigned-lessons/${assignedId}`);
   }
