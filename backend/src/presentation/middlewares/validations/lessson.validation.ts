@@ -6,8 +6,9 @@ export const lessonValidation = {
     text: Joi.string().required(),
     category: Joi.string().required(),
     level: Joi.string().required(),
-    wpm: Joi.string().required(),
-    accuracy: Joi.string().required(),
+   
+    wpm: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
+    accuracy: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
   }),
   updateLesson: Joi.object({
     id: Joi.string(),
@@ -15,7 +16,8 @@ export const lessonValidation = {
     text: Joi.string(),
     category: Joi.string(),
     level: Joi.string(),
-    wpm: Joi.number(),
-    accuracy: Joi.string(),
+    
+    wpm: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
+    accuracy: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
   }),
 };

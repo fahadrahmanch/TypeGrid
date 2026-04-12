@@ -5,6 +5,7 @@ import { IGetChallengesUseCase } from "../../../application/use-cases/interfaces
 import { IUpdateChallengeUseCase } from "../../../application/use-cases/interfaces/admin/update-challenge.interface";
 import { IDeleteChallengeUseCase } from "../../../application/use-cases/interfaces/admin/delete-challenge.interface";
 import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
 
 export class ChallengeManageController {
   constructor(
@@ -23,7 +24,7 @@ export class ChallengeManageController {
     try {
       const challenge = await this._createChallengeUseCase.execute(req.body);
       logger.info("Challenge created successfully", challenge);
-      res.status(201).json({
+      res.status(HttpStatus.CREATED).json({
         message: "Challenge created successfully",
         challenge,
       });
@@ -45,7 +46,7 @@ export class ChallengeManageController {
         Number(limit),
       );
       logger.info("Challenges fetched successfully", result);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Challenges fetched successfully",
         challenges: result.challenges,
         total: result.total,
@@ -64,7 +65,7 @@ export class ChallengeManageController {
       const { id } = req.params;
       const challenge = await this._getChallengeUseCase.execute(id as string);
       logger.info("Challenge fetched successfully", challenge);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Challenge fetched successfully",
         challenge,
       });
@@ -85,7 +86,7 @@ export class ChallengeManageController {
         req.body,
       );
       logger.info("Challenge updated successfully", challenge);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Challenge updated successfully",
         challenge,
       });
@@ -103,7 +104,7 @@ export class ChallengeManageController {
       const { id } = req.params;
       await this._deleteChallengeUseCase.execute(id as string);
       logger.info("Challenge deleted successfully", { id });
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Challenge deleted successfully",
       });
     } catch (error: unknown) {

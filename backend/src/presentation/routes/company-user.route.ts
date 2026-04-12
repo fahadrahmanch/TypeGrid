@@ -5,6 +5,11 @@ import { injectMyLessonsController } from "../DI/company-user.di";
 import { injectContestController } from "../DI/company-user.di";
 import { injectChallengesController } from "../DI/company-user.di";
 import { injectLeaderBoardController } from "../DI/company-user.di";
+import { injectCompanyUserController } from "../DI/company-user.di";
+import { injectTypingPracticeController } from "../DI/company-user.di";
+import { injectNotificationController } from "../DI/company-user.di";
+import { injectSetKeyboardLayoutController } from "../DI/company-user.di";
+
 export class companyUserRoutes {
   private router: express.Router;
   constructor() {
@@ -126,9 +131,56 @@ export class companyUserRoutes {
         injectChallengesController.rejectChallenge(req, res, next);
       },
     );
+    //profile
+    this.router.get(
+      Routes.COMPANY_USER.PROFILE,
+      checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyUserController.getProfile(req, res, next);
+      },
+    );
+    this.router.put(
+      Routes.COMPANY_USER.UPDATE_PASSWORD,
+      checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyUserController.changePassword(req, res, next);
+      },
+    );
+    //typing practice
+    this.router.post(
+      Routes.COMPANY_USER.GENERATE_TYPING_TEXT,
+      checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectTypingPracticeController.generateTypingText(req, res, next);
+      },
+    );
+    //notifications
+    this.router.get(
+      Routes.COMPANY_USER.GET_NOTIFICATIONS,
+      checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectNotificationController.getNotifications(req, res, next);
+      },
+    );
+    this.router.put(
+      Routes.COMPANY_USER.MARK_NOTIFICATION_AS_READ,
+      checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectNotificationController.markAsRead(req, res, next);
+      },
+    );
+    this.router.put(
+      Routes.COMPANY_USER.SET_KEYBOARD_LAYOUT,
+      checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSetKeyboardLayoutController.execute(req, res, next);
+      },
+    );
+
   }
 
   getRouter() {
     return this.router;
   }
 }
+ 

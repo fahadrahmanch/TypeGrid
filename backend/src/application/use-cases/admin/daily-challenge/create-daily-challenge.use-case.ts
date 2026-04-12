@@ -4,11 +4,14 @@ import { DailyAssignChallengeResponseDTO } from "../../../DTOs/admin/daily-chall
 import { DailyAssignChallengeEntity } from "../../../../domain/entities/daily-challenge.entity";
 import { DailyAssignChallengeMapper } from "../../../mappers/admin/daily-assign-challenge.mapper";
 import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { IDailyChallengeProgressRepository } from "../../../../domain/interfaces/repository/user/daily-challenge-progress-repository.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
+
 export class CreateDailyAssignChallengeUseCase implements ICreateDailyAssignChallengeUseCase {
   constructor(
     private readonly _dailyAssignChallengeRepository: IDailyAssignChallengeRepository,
     private readonly _challengeRepository: IChallengeRepository,
+    
   ) {}
   /**
    *
@@ -25,6 +28,7 @@ export class CreateDailyAssignChallengeUseCase implements ICreateDailyAssignChal
     if (isExist) {
       throw new Error(MESSAGES.DAILY_CHALLENGE_ALREADY_EXIST);
     }
+
     const dailyAssignChallengeEntity = new DailyAssignChallengeEntity(data);
     const dailyAssignChallenge =
       await this._dailyAssignChallengeRepository.create(

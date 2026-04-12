@@ -54,6 +54,9 @@ import { DailyChallengeProgress } from "../../infrastructure/db/models/user/dail
 import { DailyChallengeProgressRepository } from "../../infrastructure/db/repositories/user/daily-challenge-progress.repository";
 import { DailyChallengeFinishedUseCase } from "../../application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case";
 import { GetDailyChallengeStatsUseCase } from "../../application/use-cases/user/daily-challenge/get-daily-challenge-stats.use-case";
+import { StatsRepository } from "../../infrastructure/db/repositories/user/stats.repository";
+import { StatsModel } from "../../infrastructure/db/models/stats.schema";
+const statsRepository = new StatsRepository(StatsModel);
 const userRepository = new UserRepository(User);
 const authRepository = new AuthRepository();
 const companyRepository = new CompanyRepository(Company);
@@ -197,6 +200,7 @@ const dailyChallengeFinishedUseCaseInstance = new DailyChallengeFinishedUseCase(
   rewardRepository,
   dailyChallengeProgressRepository,
   streakRepository,
+  statsRepository,
 );
 const getDailyChallengeStatsUseCaseInstance = new GetDailyChallengeStatsUseCase(
   dailyChallengeProgressRepository,

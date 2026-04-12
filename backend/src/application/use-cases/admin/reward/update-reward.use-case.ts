@@ -7,6 +7,7 @@ import {
   UpdateRewardDTO,
   RewardResponseDTO,
 } from "../../../DTOs/admin/reward.dto";
+import { mapToReward } from "../../../mappers/admin/reward-management.mapper";
 
 export class UpdateRewardUseCase implements IUpdateRewardUseCase {
   constructor(private readonly _rewardRepository: IRewardRepository) {}
@@ -45,10 +46,6 @@ export class UpdateRewardUseCase implements IUpdateRewardUseCase {
       );
     }
 
-    return {
-      _id: updatedReward.getId(),
-      xp: updatedReward.getXp(),
-      description: updatedReward.getDescription(),
-    };
+    return mapToReward(updatedReward.toObject());
   }
 }

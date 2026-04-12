@@ -4,6 +4,7 @@ import { GoalResponseDTO } from "../../../DTOs/admin/goal.dto";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToGoalDTO } from "../../../mappers/admin/goal-management.mapper";
 
 export class GetGoalUseCase implements IGetGoalUseCase {
   constructor(private readonly _goalRepository: IGoalRepository) {}
@@ -12,6 +13,6 @@ export class GetGoalUseCase implements IGetGoalUseCase {
     if (!goal) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GOAL_NOT_FOUND);
     }
-    return goal.toObject() as GoalResponseDTO;
+    return mapToGoalDTO(goal);
   }
 }

@@ -4,6 +4,7 @@ import { ChallengeResponseDTO } from "../../../DTOs/admin/challenge.dto";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToChallengeDTO } from "../../../mappers/admin/challenge-management.mapper";
 
 export class GetChallengeUseCase implements IGetChallengeUseCase {
   constructor(private readonly _challengeRepository: IChallengeRepository) {}
@@ -15,6 +16,6 @@ export class GetChallengeUseCase implements IGetChallengeUseCase {
         MESSAGES.CHALLENGE_NOT_FOUND,
       );
     }
-    return challenge.toObject() as ChallengeResponseDTO;
+    return mapToChallengeDTO(challenge);
   }
 }

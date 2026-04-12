@@ -21,12 +21,12 @@ export class MyLessonsController {
   ): Promise<void> {
     try {
       const userId = req.user?.userId as string;
-
       const myLessons = await this._getMyLessonsUseCase.execute(userId);
       res.status(HttpStatus.OK).json({
         success: true,
         data: myLessons,
       });
+
     } catch (error: unknown) {
       next(error);
     }

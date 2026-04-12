@@ -183,4 +183,5 @@ export const MESSAGES = {
   DAILY_CHALLENGE_ALREADY_EXIST:
     "Daily challenge already exists with this date",
   DAILY_CHALLENGE_NOT_FOUND: "Daily challenge not found",
+  PROFILE_FETCHED_SUCCESSFULLY: "Profile fetched successfully",
 };

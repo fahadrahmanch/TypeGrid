@@ -5,6 +5,7 @@ import { IGetGoalsUseCase } from "../../../application/use-cases/interfaces/admi
 import { IUpdateGoalUseCase } from "../../../application/use-cases/interfaces/admin/update-goal.interface";
 import { IDeleteGoalUseCase } from "../../../application/use-cases/interfaces/admin/delete-goal.interface";
 import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
 
 export class GoalManageController {
   constructor(
@@ -23,7 +24,7 @@ export class GoalManageController {
     try {
       const goal = await this._createGoalUseCase.execute(req.body);
       logger.info("Goal created successfully", goal);
-      res.status(201).json({
+      res.status(HttpStatus.CREATED).json({
         message: "Goal created successfully",
         goal,
       });
@@ -45,7 +46,7 @@ export class GoalManageController {
         Number(limit),
       );
       logger.info("Goals fetched successfully", goals);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Goals fetched successfully",
         goals: goals.goals,
         total: goals.total,
@@ -63,7 +64,7 @@ export class GoalManageController {
       const { id } = req.params;
       const goal = await this._getGoalUseCase.execute(id as string);
       logger.info("Goal fetched successfully", goal);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Goal fetched successfully",
         goal,
       });
@@ -83,7 +84,7 @@ export class GoalManageController {
         req.body,
       );
       logger.info("Goal updated successfully", goal);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Goal updated successfully",
         goal,
       });
@@ -100,7 +101,7 @@ export class GoalManageController {
       const { id } = req.params;
       const goal = await this._deleteGoalUseCase.execute(id as string);
       logger.info("Goal deleted successfully", goal);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Goal deleted successfully",
         goal,
       });

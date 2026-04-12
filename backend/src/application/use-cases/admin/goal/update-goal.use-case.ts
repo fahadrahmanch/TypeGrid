@@ -4,6 +4,7 @@ import { GoalResponseDTO, UpdateGoalDTO } from "../../../DTOs/admin/goal.dto";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToGoalDTO } from "../../../mappers/admin/goal-management.mapper";
 
 export class UpdateGoalUseCase implements IUpdateGoalUseCase {
   constructor(private readonly _goalRepository: IGoalRepository) {}
@@ -36,6 +37,6 @@ export class UpdateGoalUseCase implements IUpdateGoalUseCase {
       );
     }
 
-    return updatedGoal.toObject() as GoalResponseDTO;
+    return mapToGoalDTO(updatedGoal);
   }
 }

@@ -4,7 +4,6 @@ import { ICompanyUserStatsRepository } from "../../../../domain/interfaces/repos
 import { ICompanyUserStatsDocument } from "../../types/documents";
 import { CompanyUserStatsEntity } from "../../../../domain/entities";
 import { CompanyUserStatsMapper } from "../../mappers/company-user-stats.mapper";
-
 export class CompanyUserStatsRepository
   extends BaseRepository<ICompanyUserStatsDocument, CompanyUserStatsEntity>
   implements ICompanyUserStatsRepository
@@ -66,5 +65,15 @@ export class CompanyUserStatsRepository
         },
       )
       .exec();
+  }
+
+  async getCompanyUserStatsBasedOnCriteria(companyId: string, minWpm:number,maxWpm:number,minAccuracy:number,maxAccuracy:number): Promise<string[]> {
+    const rawStats = await this.model
+      .find({ companyId, wpm: { $gte: minWpm, $lte: maxWpm }, accuracy: { $gte: minAccuracy, $lte: maxAccuracy } },{userId:1})
+      .sort({ wpm: -1, accuracy: -1 })
+      .lean<ICompanyUserStatsDocument[]>()
+      .exec();
+
+    return rawStats.map((doc) => doc.userId.toString());
   }
 }

@@ -16,4 +16,5 @@ export interface ILessonResultRepository {
   findOne(filter?: any): Promise<any | null>;
   delete(_id: string): Promise<any | null>;
   updateById(_id: string, updateQuery: any): Promise<any | null>;
+  countCompletedLessons(userId: string): Promise<number>;
 }

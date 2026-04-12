@@ -36,8 +36,28 @@ import { CompanyUserStatsRepository } from "../../infrastructure/db/repositories
 import { CompanyUserStats } from "../../infrastructure/db/models/company/company-user-stats.schema";
 import { GetCompanyLeaderboardUseCase } from "../../application/use-cases/company-user/stats/get-company-leaderboard.use-case";
 import { RejectChallengeUseCase } from "../../application/use-cases/company-user/challenges/reiect-challenge.use-case";
+import { Company } from "../../infrastructure/db/models/company/company.schema";
+import { CompanyRepository } from "../../infrastructure/db/repositories/company/company.repository";
+import { CompanyUserController } from "../controllers/company-user/company-user.controller";
+import { GetProfileUseCase } from "../../application/use-cases/company-user/get-profile.use-case";
+import { HashService } from "../../application/services/hash.service";
+import { UpdateCompanyPasswordUseCase } from "../../application/use-cases/company-user/update-password.use-case";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { LLMService } from "../../infrastructure/services/llm.service";
+import { GetPracticeTypingContentUseCase } from "../../application/use-cases/company-user/Practice/get-practice-typing-content.use-case";
+import { TypingPracticeController } from "../controllers/company-user/typing-practice.controller";
+import { NotificationController } from "../controllers/company-user/notification.controller";
+import { Notification } from "../../infrastructure/db/models/company/notification.schema";
+import { NotificationRepository } from "../../infrastructure/db/repositories/company/notification.repository";
+import { NotificationReceipt } from "../../infrastructure/db/models/company/notification-receipt.schema";
+import { NotificationReceiptRepository } from "../../infrastructure/db/repositories/company/notification-receipt.repository";
+import { GetNotificationsUseCase } from "../../application/use-cases/company-user/notifications/get-notifications.use-case";
+import { MarkNotificationAsReadUseCase } from "../../application/use-cases/company-user/notifications/mark-notification-as-read.use-case";
+import { SetKeyboardLayoutUseCase } from "../../application/use-cases/company-user/set-keyboard-layout.use-case";
+import { SetKeyboardLayoutController } from "../controllers/company-user/set-keyboard-layout-controller";
 
 const lessonAssignmentRepository = new LessonAssignmentRepository(
+
   LessonAssignment,
 );
 const userRepository = new UserRepository(User);
@@ -48,6 +68,12 @@ const competitionRepository = new CompetitionRepository(Competition);
 const companyUserStatsRepository = new CompanyUserStatsRepository(
   CompanyUserStats,
 );
+const companyRepository = new CompanyRepository(Company);
+const hashService = new HashService();
+
+const notificationRepository = new NotificationRepository(Notification);
+const notificationReceiptRepository = new NotificationReceiptRepository(NotificationReceipt);
+
 
 const getAssignLessonUseCaseInstance = new GetAssignLessonUseCase(
   lessonAssignmentRepository,
@@ -122,6 +148,46 @@ const rejectChallengeUseCaseInstance = new RejectChallengeUseCase(
   challengeRepository,
 );
 
+const getProfileUseCaseInstance = new GetProfileUseCase(
+  userRepository,
+  companyRepository,
+  companyUserStatsRepository,
+  lessonResultRepository,
+);
+
+const changePasswordUseCaseInstance = new UpdateCompanyPasswordUseCase(
+  userRepository,
+  hashService,
+);
+
+const getNotificationsUseCaseInstance = new GetNotificationsUseCase(
+  notificationRepository,
+  notificationReceiptRepository
+);
+
+const markNotificationAsReadUseCaseInstance = new MarkNotificationAsReadUseCase(
+  notificationReceiptRepository
+);
+
+const setKeyboardLayoutUseCaseInstance = new SetKeyboardLayoutUseCase(
+  userRepository
+);
+
+const llmService = new LLMService();
+
+
+ const getPracticeTypingContentUseCase =
+  new GetPracticeTypingContentUseCase(llmService);
+
+export const injectTypingPracticeController = new TypingPracticeController(
+    getPracticeTypingContentUseCase,
+  );
+
+export const injectCompanyUserController = new CompanyUserController(
+  getProfileUseCaseInstance,
+  changePasswordUseCaseInstance,
+);
+
 export const injectChallengesController = new ChallengesController(
   getCompanyUsersUseCaseInstance,
   makeChallengeUseCaseInstance,
@@ -146,3 +212,13 @@ export const injectMyLessonsController = new MyLessonsController(
 export const injectLeaderBoardController = new LeaderBoardController(
   getCompanyLeaderboardUseCaseInstance,
 );
+
+export const injectNotificationController = new NotificationController(
+  getNotificationsUseCaseInstance,
+  markNotificationAsReadUseCaseInstance
+);
+
+export const injectSetKeyboardLayoutController = new SetKeyboardLayoutController(
+  setKeyboardLayoutUseCaseInstance
+);
+

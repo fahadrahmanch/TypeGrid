@@ -51,7 +51,8 @@ import { GetDailyAssignChallengeUseCase } from "../../application/use-cases/admi
 import { UpdateDailyAssignChallengeUseCase } from "../../application/use-cases/admin/daily-challenge/update-daily-challenge.use-case";
 import { DeleteDailyAssignChallengeUseCase } from "../../application/use-cases/admin/daily-challenge/delete-daily-challenge.use-case";
 import { GetDailyAssignChallengesUseCase } from "../../application/use-cases/admin/daily-challenge/get-all-daily-challenges.use-case";
-
+import { DailyChallengeProgress } from "../../infrastructure/db/models/user/daily-challenge-progess.schema";
+import { DailyChallengeProgressRepository } from "../../infrastructure/db/repositories/user/daily-challenge-progress.repository";
 const authRepo = new AuthRepository();
 const userRepository = new UserRepository(User);
 const blockUserUseCase = new BlockUserUseCase(userRepository);
@@ -118,6 +119,7 @@ export const injectGoalManageController = new GoalManageController(
   deleteGoalUseCase,
   getGoalsUseCase,
 );
+const dailyChallengeProgressRepository = new DailyChallengeProgressRepository(DailyChallengeProgress);
 
 const challengeRepository = new ChallengeRepository(AdminChallenge);
 const createChallengeUseCase = new CreateChallengeUseCase(challengeRepository);

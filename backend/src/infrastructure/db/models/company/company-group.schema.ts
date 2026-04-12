@@ -15,7 +15,7 @@ const companyGroupSchema = new mongoose.Schema<ICompanyGroupDocument>(
     },
     type: {
       type: String,
-      enum: ["beginner", "intermidate", "advanced"],
+      enum: ["beginner", "intermediate", "advanced"],
       required: true,
     },
     members: [

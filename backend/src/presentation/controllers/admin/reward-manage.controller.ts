@@ -5,6 +5,7 @@ import { IGetRewardsUseCase } from "../../../application/use-cases/interfaces/ad
 import { IGetRewardByIdUseCase } from "../../../application/use-cases/interfaces/admin/get-reward-by-id.interface";
 import { IUpdateRewardUseCase } from "../../../application/use-cases/interfaces/admin/update-reward.interface";
 import { IDeleteRewardUseCase } from "../../../application/use-cases/interfaces/admin/delete-reward.interface";
+import { HttpStatus } from "../../constants/httpStatus";
 export class RewardManageController {
   constructor(
     private readonly _createRewardUseCase: ICreateRewardUseCase,
@@ -22,7 +23,7 @@ export class RewardManageController {
     try {
       const reward = await this._createRewardUseCase.execute(req.body);
       logger.info("Reward created successfully", reward);
-      res.status(201).json({
+      res.status(HttpStatus.CREATED).json({
         message: "Reward created successfully",
         reward,
       });
@@ -44,7 +45,7 @@ export class RewardManageController {
         Number(limit),
       );
       logger.info("Rewards fetched successfully", rewards);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Rewards fetched successfully",
         rewards,
       });
@@ -61,7 +62,7 @@ export class RewardManageController {
       const { id } = req.params;
       const reward = await this._getRewardByIdUseCase.execute(id as string);
       logger.info("Reward fetched successfully", reward);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Reward fetched successfully",
         reward,
       });
@@ -81,7 +82,7 @@ export class RewardManageController {
         req.body,
       );
       logger.info("Reward updated successfully", reward);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Reward updated successfully",
         reward,
       });
@@ -98,7 +99,7 @@ export class RewardManageController {
       const { id } = req.params;
       const reward = await this._deleteRewardUseCase.execute(id as string);
       logger.info("Reward deleted successfully", reward);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Reward deleted successfully",
         reward,
       });

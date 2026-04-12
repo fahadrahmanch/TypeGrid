@@ -15,4 +15,5 @@ export class UserEntity extends Entity<UserEntity> {
   gender?: string;
   googleId?: string | null;
   role!: "user" | "admin" | "companyUser" | "companyAdmin";
+  createdAt?: Date;
 }

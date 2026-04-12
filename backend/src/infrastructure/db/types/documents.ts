@@ -257,10 +257,12 @@ export interface IDailyChallengeProgressDocument {
   updatedAt: Date;
 }
 export interface IStatsDocument {
+  _id?: Types.ObjectId;
   userId: Types.ObjectId;
   totalXp: number;
   totalCompetitions: number;
-  bestWpm: number;
+  wpm: number;
+  accuracy:number;
   level: number;
   createdAt: Date;
   updatedAt: Date;
@@ -277,4 +279,68 @@ export interface ICompanyUserStatsDocument {
   accuracy: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IGameStatsDocument {
+  _id?: Types.ObjectId;
+   userId: Types.ObjectId;
+
+  quickPlay: {
+    totalSessions: number;
+    highestWpm:    number;
+  };
+
+  soloPlay: {
+    totalSessions:      number;
+    highestWpm:         number;
+    highestAccuracy:    number;
+    hasSetPersonalBest: boolean;
+  };
+
+  groupPlay: {
+    totalMatches:     number;
+    totalWins:        number;
+    currentWinStreak: number;
+  };
+
+  dailyChallenge: {
+    totalCompleted:    number;
+    currentStreak:     number;
+    perfectMonthCount: number;
+  };
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IUserAchievementDocument {
+  _id?: Types.ObjectId;
+  userId:        Types.ObjectId;
+  achievementId: string;
+  unlockedAt:    Date;
+  createdAt:     Date;
+  updatedAt:     Date;
+}
+
+// ────────────── Notification ──────────────
+export interface INotificationDocument {
+  _id?: Types.ObjectId;
+  companyId: Types.ObjectId;
+  senderId: Types.ObjectId;
+  type: "individual" | "group" | "all";
+  targetId: Types.ObjectId | null;
+  title: string;
+  message: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// ────────────── Notification Receipt ──────────────
+export interface INotificationReceiptDocument {
+  _id?: Types.ObjectId;
+  notificationId: Types.ObjectId;
+  userId: Types.ObjectId;
+  isRead: boolean;
+  readAt: Date | null;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

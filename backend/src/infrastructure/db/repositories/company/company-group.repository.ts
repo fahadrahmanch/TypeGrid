@@ -21,4 +21,6 @@ export class CompanyGroupRepositroy
       .exec();
     return docs.map(CompanyGroupMapper.toDomain);
   }
+
+ 
 }

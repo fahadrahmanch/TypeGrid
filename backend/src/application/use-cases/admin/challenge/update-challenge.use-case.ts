@@ -7,6 +7,7 @@ import {
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToChallengeDTO } from "../../../mappers/admin/challenge-management.mapper";
 
 export class UpdateChallengeUseCase implements IUpdateChallengeUseCase {
   constructor(private readonly _challengeRepository: IChallengeRepository) {}
@@ -45,6 +46,6 @@ export class UpdateChallengeUseCase implements IUpdateChallengeUseCase {
       );
     }
 
-    return updated.toObject() as ChallengeResponseDTO;
+    return mapToChallengeDTO(updated);
   }
 }

@@ -124,6 +124,7 @@ export const Routes = {
     //daily challenge  user
     DAILY_CHALLENGE_FINISHED: "/daily-challenge-finished",
     DAILY_CHALLENGE_STATISTICS: "/daily-challenge/statistics",
+    
   },
 
   COMPANY_ADMIN: {
@@ -144,7 +145,12 @@ export const Routes = {
     //companyGroup
     CREATE_COMPANY_GROUP: "/company-groups",
     GET_COMPANY_GROUPS: "/company-groups",
-
+    CREATE_COMPANY_GROUP_AUTO: "/company/groups-auto",
+    GET_COMPANY_GROUP_BY_ID: "/company-groups/:id",
+    DELETE_COMPANY_GROUP: "/company-groups/:id",
+    REMOVE_MEMBER: "/company-groups/:groupId/members/:memberId",
+    ADD_MEMBER: "/company-groups/:groupId/members-add/:memberId",
+    COMPANY_USERS_WITH_STATUS: "/users/company-users-with-status",
     //companyContest
     CREATE_COMPANY_CONTEST: "/company/contest",
     COMPANY_CONTESTS: "/company/contests",
@@ -154,9 +160,19 @@ export const Routes = {
     UPDATE_CONTEST: "/company/contest/:contestId",
     DELETE_CONTEST: "/company/contest/:contestId",
     FETCH_CONTEST_RESULT: "/company/contest/:contestId/results",
+
+    //notification
+    SEND_INDIVIDUAL_NOTIFICATION: "/notification/individual",
+    SEND_GROUP_NOTIFICATION: "/notification/group",
+     SEND_ALL_NOTIFICATION: "/notification/all",
+     GET_NOTIFICATION_HISTORY: "/notifications/history",
+
+     //keyboard
+     SET_KEYBOARD_LAYOUT: "/keyboard/set-keyboard-layout",
   },
 
   COMPANY_USER: {
+    PROFILE: "/profile/:userId",
     MY_LESSONS: "/my-lessons",
     ASSIGNED_LESSON_BY_ID: "/my-lessons/:assignmentId",
     SAVE_LESSON_RESULT: "/lesson/:id/result",
@@ -167,6 +183,7 @@ export const Routes = {
     FETCH_CONTEST: "/company/contest/:contestId",
     FETCH_CONTEST_DATA: "/company/contest-area/:contestId",
     FETCH_COMPANY_USRS: "/company/users",
+    GENERATE_TYPING_TEXT: "/typing/generate-text",
 
     ///challenge
     MAKE_CHALLENGE: "/challenge",
@@ -177,5 +194,14 @@ export const Routes = {
     REJECT_CHALLENGE: "/challenge/reject/:challengeId",
 
     LEADERBOARD: "/leaderboard/:limit",
+    UPDATE_PASSWORD: "/profile/:userId/password",
+ 
+     //notification
+     GET_NOTIFICATIONS: "/notifications",
+     MARK_NOTIFICATION_AS_READ: "/notifications/:id/read",
+     GET_NOTIFICATION_HISTORY: "/notifications/history",
+     SET_KEYBOARD_LAYOUT: "/keyboard/set-keyboard-layout",
+
+
   },
 };

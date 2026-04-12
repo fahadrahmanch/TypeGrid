@@ -12,4 +12,11 @@ export class LessonResultRepository
   constructor(model: Model<ILessonResultDocument>) {
     super(model, LessonResultMapper.toDomain);
   }
+
+  async countCompletedLessons(userId: string): Promise<number> {
+    return await this.model.countDocuments({
+      userId,
+      status: "completed",
+    });
+  }
 }

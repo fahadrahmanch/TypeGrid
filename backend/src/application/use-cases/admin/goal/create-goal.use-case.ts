@@ -5,6 +5,7 @@ import { CreateGoalDTO, GoalResponseDTO } from "../../../DTOs/admin/goal.dto";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToGoalDTO } from "../../../mappers/admin/goal-management.mapper";
 
 export class CreateGoalUseCase implements ICreateGoalUseCase {
   constructor(private readonly _goalRepository: IGoalRepository) {}
@@ -20,6 +21,6 @@ export class CreateGoalUseCase implements ICreateGoalUseCase {
     }
     const goalEntity = new GoalEntity(goal);
     const newGoal = await this._goalRepository.create(goalEntity.toObject());
-    return newGoal.toObject() as GoalResponseDTO;
+    return mapToGoalDTO(newGoal);
   }
 }

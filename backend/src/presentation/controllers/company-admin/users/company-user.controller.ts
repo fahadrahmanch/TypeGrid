@@ -5,7 +5,9 @@ import { IAddUserUseCase } from "../../../../application/use-cases/interfaces/co
 import { IFindUserUseCase } from "../../../../application/use-cases/interfaces/user/find-user.interface";
 import { IGetCompanyUsersUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/get-company-users.interface";
 import { IDeleteCompanyUserUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/delete-company-user.interface";
+import { IGetCompanyUsersWithStatusUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/get-company-users-with-status.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
+
 
 export class CompanyUserController {
   constructor(
@@ -13,7 +15,9 @@ export class CompanyUserController {
     private _findUserUseCase: IFindUserUseCase,
     private _getCompanyUsersUseCase: IGetCompanyUsersUseCase,
     private _deleteCompanyUserUseCase: IDeleteCompanyUserUseCase,
+    private _getCompanyUsersWithStatusUseCase: IGetCompanyUsersWithStatusUseCase,
   ) {}
+
 
   // get company admin info
 
@@ -167,4 +171,35 @@ export class CompanyUserController {
       next(error);
     }
   }
+
+  async getCompanyUsersWithStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const adminInfo = await this._getCompanyAdminInfo(req);
+      if (adminInfo.error) {
+        res.status(adminInfo.error.status).json({
+          success: false,
+          message: adminInfo.error.message,
+        });
+        return;
+      }
+      const adminUser = adminInfo.user;
+
+      const companyUsers = await this._getCompanyUsersWithStatusUseCase.execute(
+        adminUser.CompanyId!,
+      );
+
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: MESSAGES.COMPANY_USERS_FETCHED_SUCCESS,
+        data: companyUsers,
+      });
+    } catch (error: unknown) {
+      next(error);
+    }
+  }
 }
+

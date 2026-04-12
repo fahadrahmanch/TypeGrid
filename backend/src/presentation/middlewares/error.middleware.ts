@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response, NextFunction } from "express";
 import logger from "../../utils/logger";
 import { MESSAGES } from "../../domain/constants/messages";
 import { CustomError } from "../../domain/entities/custom-error.entity";
@@ -36,7 +36,7 @@ export const errorMiddleware = (
   err: any,
   req: AuthRequest,
   res: Response,
-  // next: NextFunction,
+  next: NextFunction,
 ) => {
   const { message, status, stack } = narrowError(err);
 

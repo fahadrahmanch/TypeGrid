@@ -4,6 +4,7 @@ import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { RewardResponseDTO } from "../../../DTOs/admin/reward.dto";
+import { mapToReward } from "../../../mappers/admin/reward-management.mapper";
 
 export class GetRewardByIdUseCase implements IGetRewardByIdUseCase {
   constructor(private readonly _rewardRepository: IRewardRepository) {}
@@ -16,6 +17,6 @@ export class GetRewardByIdUseCase implements IGetRewardByIdUseCase {
       );
     }
 
-    return reward.toObject() as RewardResponseDTO;
+    return mapToReward(reward.toObject());
   }
 }

@@ -8,6 +8,8 @@ import { IRewardRepository } from "../../../../domain/interfaces/repository/admi
 import { DailyChallengeProgressEntity } from "../../../../domain/entities/daily-challenge-progress.entity";
 import { IStreakRepository } from "../../../../domain/interfaces/repository/user/streak-repository.interface";
 import { StreakEntity } from "../../../../domain/entities/streak.entity";
+import { IStatsRepository } from "../../../../domain/interfaces/repository/user/stats-repository.interface";
+import { StatsEntity } from "../../../../domain/entities/stats.entity";
 export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUseCase {
   constructor(
     private readonly _dailyChallengeRepository: IDailyAssignChallengeRepository,
@@ -16,6 +18,7 @@ export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUse
     private readonly _rewardRepository: IRewardRepository,
     private readonly _dailyChallengeProgressRepository: IDailyChallengeProgressRepository,
     private readonly _streakRepository: IStreakRepository,
+    private readonly _statsRepository: IStatsRepository,
   ) {}
   async execute(userId: string, wpm: number, accuracy: number): Promise<void> {
     const today = new Date();
@@ -113,6 +116,18 @@ export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUse
         streak.setLongestStreak(Math.max(streak.getLongestStreak(), newStreak));
         streak.setLastCompletedDate(today);
         await this._streakRepository.update(streak);
+      }
+      const stats = await this._statsRepository.findOne({ userId });
+      if (!stats) {
+        const stats = new StatsEntity({
+          userId,
+          totalXp: reward.getXp(),
+          level: 1,
+        });
+        await this._statsRepository.create(stats.toObject());
+      } else {
+        stats.addXp(reward.getXp());
+        await this._statsRepository.update(stats.toObject());
       }
     }
   }

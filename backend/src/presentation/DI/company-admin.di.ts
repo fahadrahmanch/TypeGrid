@@ -37,6 +37,27 @@ import { GetContestResultUseCase } from "../../application/use-cases/company-adm
 import { ResultRepository } from "../../infrastructure/db/repositories/result.repository";
 import { Result } from "../../infrastructure/db/models/user/result.schema";
 import { AuthRepository } from "../../infrastructure/db/repositories/auth/auth.repository";
+import { CreateCompanyGroupAutoUseCase } from "../../application/use-cases/company-admin/company-group/create-company-group-auto.use-case";
+import { CompanyUserStatsRepository } from "../../infrastructure/db/repositories/company/company-user-stats.repository";
+import { CompanyUserStats } from "../../infrastructure/db/models/company/company-user-stats.schema";
+import { GetCompanyGroupByIdUseCase } from "../../application/use-cases/company-admin/company-group/get-company-group-by-id.use-case";
+import { RemoveCompanyGroupMemberUseCase } from "../../application/use-cases/company-admin/company-group/remove-company-group-member.use-case";
+import { AddCompanyGroupMemberUseCase } from "../../application/use-cases/company-admin/company-group/add-company-group-member.use-case";
+import { DeleteCompanyGroupUseCase } from "../../application/use-cases/company-admin/company-group/delete-company-group.use-case";
+import { GetCompanyUsersWithStatusUseCase } from "../../application/use-cases/company-admin/users/get-company-users-with-status.use-case";
+import { NotificationController } from "../controllers/company-admin/notification.controller";
+import { Notification } from "../../infrastructure/db/models/company/notification.schema";
+import { NotificationRepository } from "../../infrastructure/db/repositories/company/notification.repository";
+import { NotificationReceipt } from "../../infrastructure/db/models/company/notification-receipt.schema";
+import { NotificationReceiptRepository } from "../../infrastructure/db/repositories/company/notification-receipt.repository";
+import { IndividualNotificationUseCase } from "../../application/use-cases/company-admin/notification/individual-notification.use-case";
+import { GroupNotificationUseCase } from "../../application/use-cases/company-admin/notification/group-notification.use-case";
+import { AllNotificationUseCase } from "../../application/use-cases/company-admin/notification/all-notification.use-case";
+import { NotificationHistoryUseCase } from "../../application/use-cases/company-admin/notification/notification-history.use-case";
+
+
+
+
 const userRepository = new UserRepository(User);
 const hashService = new HashService();
 const authRepository = new AuthRepository();
@@ -46,6 +67,14 @@ const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(
   userRepository,
 );
 const deleteUserUseCaseInstance = new DeleteUserUseCase(userRepository);
+const companyUserStatsRepository = new CompanyUserStatsRepository(
+  CompanyUserStats,
+);
+const getCompanyUsersWithStatusUseCaseInstance = new GetCompanyUsersWithStatusUseCase(
+  userRepository,
+  companyUserStatsRepository,
+);
+
 
 //lesson
 const lessonRepository = new LessonRepository(Lesson);
@@ -81,10 +110,34 @@ const createCompanyGroupUseCaseInstance = new CreateCompanyGroupUseCase(
   userRepository,
   companyGroupRepository,
 );
+const createCompanyGroupAutoUseCaseInstance = new CreateCompanyGroupAutoUseCase(
+  userRepository,
+  companyGroupRepository,
+  companyUserStatsRepository,
+);
 const getCompanygroupUseCaseInstance = new GetCompanyGroupsUseCase(
   userRepository,
   companyGroupRepository,
 );
+const getCompanyGroupByIdUseCaseInstance = new GetCompanyGroupByIdUseCase(
+  userRepository,
+  companyGroupRepository,
+  companyUserStatsRepository,
+);
+const removeCompanyGroupMemberUseCaseInstance = new RemoveCompanyGroupMemberUseCase(
+  userRepository,
+  companyGroupRepository,
+);
+const addCompanyGroupMemberUseCaseInstance = new AddCompanyGroupMemberUseCase(
+  userRepository,
+  companyGroupRepository,
+);
+const deleteCompanyGroupUseCaseInstance = new DeleteCompanyGroupUseCase(
+  userRepository,
+  companyGroupRepository,
+);
+
+
 const getCompanyContestsUseCaseInstance = new GetCompanyContestsUseCase(
   contestRepository,
   userRepository,
@@ -118,6 +171,49 @@ const getContestResultUseCaseInstance = new GetContestResultUseCase(
   userRepository,
 );
 
+//notification
+const notificationRepository = new NotificationRepository(Notification);
+const notificationReceiptRepository = new NotificationReceiptRepository(
+  NotificationReceipt,
+);
+
+const individualNotificationUseCaseInstance = new IndividualNotificationUseCase(
+  notificationRepository,
+  notificationReceiptRepository,
+  userRepository,
+);
+
+const groupNotificationUseCaseInstance = new GroupNotificationUseCase(
+  notificationRepository,
+  notificationReceiptRepository,
+  userRepository,
+  companyGroupRepository,
+);
+
+const allNotificationUseCaseInstance = new AllNotificationUseCase(
+  notificationRepository,
+  notificationReceiptRepository,
+  userRepository,
+);
+
+const notificationHistoryUseCaseInstance = new NotificationHistoryUseCase(
+  notificationRepository,
+  userRepository,
+);
+
+
+
+
+export const injectNotificationController = new NotificationController(
+  individualNotificationUseCaseInstance,
+  groupNotificationUseCaseInstance,
+  allNotificationUseCaseInstance,
+  notificationHistoryUseCaseInstance,
+);
+
+
+
+
 export const injectCompanyContestManagementController =
   new CompanyContestManagementController(
     createCompanyContestUseCaseInstance,
@@ -132,7 +228,14 @@ export const injectCompanyContestManagementController =
 export const injectCompanyGroupController = new CompanyGroupController(
   createCompanyGroupUseCaseInstance,
   getCompanygroupUseCaseInstance,
+  createCompanyGroupAutoUseCaseInstance,
+  getCompanyGroupByIdUseCaseInstance,
+  removeCompanyGroupMemberUseCaseInstance,
+  addCompanyGroupMemberUseCaseInstance,
+  deleteCompanyGroupUseCaseInstance
 );
+
+
 export const injectCompanyLessonManageController =
   new CompanyLessonManageController(
     createCompanyLessonUseCaseInstance,
@@ -148,4 +251,6 @@ export const injectCompanyUserController = new CompanyUserController(
   findUserUseCaseInstance,
   getCompanyUsersUseCaseInstance,
   deleteUserUseCaseInstance,
+  getCompanyUsersWithStatusUseCaseInstance,
 );
+

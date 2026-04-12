@@ -8,6 +8,7 @@ import {
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToChallengeDTO } from "../../../mappers/admin/challenge-management.mapper";
 
 export class CreateChallengeUseCase implements ICreateChallengeUseCase {
   constructor(private readonly _challengeRepository: IChallengeRepository) {}
@@ -25,6 +26,6 @@ export class CreateChallengeUseCase implements ICreateChallengeUseCase {
     const newChallenge = await this._challengeRepository.create(
       challengeEntity.toObject(),
     );
-    return newChallenge.toObject() as ChallengeResponseDTO;
+    return mapToChallengeDTO(newChallenge);
   }
 }

@@ -6,6 +6,7 @@ import { IDeleteDailyAssignChallengeUseCase } from "../../../application/use-cas
 import { IGetDailyAssignChallengesUseCase } from "../../../application/use-cases/interfaces/admin/get-daily-challenges.interface";
 
 import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
 
 export class DailyAssignChallengeManageController {
   constructor(
@@ -25,7 +26,7 @@ export class DailyAssignChallengeManageController {
       const dailyChallenge =
         await this._createDailyAssignChallengeUseCase.execute(req.body);
       logger.info("Daily challenge created successfully", dailyChallenge);
-      res.status(201).json({
+      res.status(HttpStatus.CREATED).json({
         message: "Daily challenge created successfully",
         data: dailyChallenge,
       });
@@ -44,11 +45,11 @@ export class DailyAssignChallengeManageController {
         req.params.id,
       );
       if (!dailyChallenge) {
-        res.status(404).json({ message: "Daily challenge not found" });
+        res.status(HttpStatus.NOT_FOUND).json({ message: "Daily challenge not found" });
         return;
       }
       logger.info("Daily challenge fetched successfully", dailyChallenge);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Daily challenge fetched successfully",
         data: dailyChallenge,
       });
@@ -67,11 +68,11 @@ export class DailyAssignChallengeManageController {
       const dailyChallenge =
         await this._updateDailyAssignChallengeUseCase.execute(id, req.body);
       if (!dailyChallenge) {
-        res.status(404).json({ message: "Daily challenge not found" });
+        res.status(HttpStatus.NOT_FOUND).json({ message: "Daily challenge not found" });
         return;
       }
       logger.info("Daily challenge updated successfully", dailyChallenge);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Daily challenge updated successfully",
         data: dailyChallenge,
       });
@@ -90,7 +91,7 @@ export class DailyAssignChallengeManageController {
       logger.info("Daily challenge deleted successfully", {
         id: req.params.id,
       });
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Daily challenge deleted successfully",
       });
     } catch (error: unknown) {
@@ -113,7 +114,7 @@ export class DailyAssignChallengeManageController {
         limit,
       );
       logger.info("Daily challenges fetched successfully", result);
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: "Daily challenges fetched successfully",
         data: result.dailyChallenges,
         total: result.total,

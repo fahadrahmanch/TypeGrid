@@ -16,4 +16,5 @@ export interface ICompanyUserStatsRepository extends IBaseRepository<CompanyUser
       monthlyScore?: number;
     },
   ): Promise<void>;
+  getCompanyUserStatsBasedOnCriteria(companyId: string, minWpm:number,maxWpm:number,minAccuracy:number,maxAccuracy:number): Promise<string[]>;
 }

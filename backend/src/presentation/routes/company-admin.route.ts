@@ -8,6 +8,7 @@ import { injectCompanyContestManagementController } from "../DI/company-admin.di
 import { validate } from "../middlewares/validate.middleware";
 import { companyUserValidation } from "../middlewares/validations/company-user.validation";
 import { lessonValidation } from "../middlewares/validations/lessson.validation";
+import { injectNotificationController } from "../DI/company-admin.di";
 export class companyAdminRouter {
   private router: express.Router;
   constructor() {
@@ -100,6 +101,7 @@ export class companyAdminRouter {
         injectCompanyLessonManageController.assignLessons(req, res, next);
       },
     );
+    // group
     this.router.post(
       Routes.COMPANY_ADMIN.CREATE_COMPANY_GROUP,
       checkRoleBasedMiddleware(["companyAdmin"]),
@@ -107,11 +109,54 @@ export class companyAdminRouter {
         injectCompanyGroupController.createGroup(req, res, next);
       },
     );
+
+    this.router.post(
+      Routes.COMPANY_ADMIN.CREATE_COMPANY_GROUP_AUTO,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyGroupController.createGroupAuto(req, res, next);
+      },
+    );
+    this.router.get(
+      Routes.COMPANY_ADMIN.COMPANY_USERS_WITH_STATUS,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyUserController.getCompanyUsersWithStatus(req, res, next);
+      },
+    );
     this.router.get(
       Routes.COMPANY_ADMIN.GET_COMPANY_GROUPS,
       checkRoleBasedMiddleware(["companyAdmin"]),
       (req: Request, res: Response, next: NextFunction) => {
         injectCompanyGroupController.getCompanyGroups(req, res, next);
+      },
+    );
+    this.router.get(
+      Routes.COMPANY_ADMIN.GET_COMPANY_GROUP_BY_ID,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyGroupController.getCompanyGroupById(req, res, next);
+      },
+    );
+    this.router.delete(
+      Routes.COMPANY_ADMIN.DELETE_COMPANY_GROUP,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyGroupController.deleteGroup(req, res, next);
+      },
+    );
+    this.router.patch(
+      Routes.COMPANY_ADMIN.REMOVE_MEMBER,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyGroupController.removeMember(req, res, next);
+      },
+    );
+    this.router.patch(
+      Routes.COMPANY_ADMIN.ADD_MEMBER,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyGroupController.addMember(req, res, next);
       },
     );
 
@@ -184,6 +229,37 @@ export class companyAdminRouter {
         );
       },
     );
+
+    //notification
+    this.router.post(
+      Routes.COMPANY_ADMIN.SEND_INDIVIDUAL_NOTIFICATION,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectNotificationController.sendIndividualNotification(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.COMPANY_ADMIN.SEND_GROUP_NOTIFICATION,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectNotificationController.sendGroupNotification(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.COMPANY_ADMIN.SEND_ALL_NOTIFICATION,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectNotificationController.sendAllNotification(req, res, next);
+      },
+    );
+    this.router.get(
+      Routes.COMPANY_ADMIN.GET_NOTIFICATION_HISTORY,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectNotificationController.getNotificationHistory(req, res, next);
+      },
+    );
+  
   }
   getRouter() {
     return this.router;
