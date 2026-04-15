@@ -8,6 +8,10 @@ import { injectGroupPlayController } from "../DI/user.di";
 import { injectSoloPlayController } from "../DI/user.di";
 import { injectQuickPlayController } from "../DI/user.di";
 import { injectDailyChallengeController } from "../DI/user.di";
+import { injectLeaderboardController } from "../DI/user.di";
+import { injectSubscriptionController } from "../DI/user.di";
+import { injectPaymentController } from "../DI/user.di";
+import { checkFeatureMiddleware } from "../DI/user.di";
 export class UserRoutes {
   private router: express.Router;
   constructor() {
@@ -82,6 +86,7 @@ export class UserRoutes {
     this.router.post(
       Routes.USERS.GROUP_PLAY.CREATE_GROUP,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      checkFeatureMiddleware("Group Play"),
       (req: Request, res: Response, next: NextFunction) => {
         injectGroupPlayController.createGroup(req, res, next);
       },
@@ -134,6 +139,7 @@ export class UserRoutes {
     this.router.post(
       Routes.USERS.SOLO_PLAY.SOLO_CREATE,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      checkFeatureMiddleware("Solo Play"),
       (req: Request, res: Response, next: NextFunction) => {
         injectSoloPlayController.createSoloPlay(req, res, next);
       },
@@ -150,6 +156,7 @@ export class UserRoutes {
     this.router.post(
       Routes.USERS.QUICK_PLAY.START_QUICK_PLAY,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      checkFeatureMiddleware("Quick Play"),
       (req: Request, res: Response, next: NextFunction) => {
         injectQuickPlayController.startQuickPlay(req, res, next);
       },
@@ -157,6 +164,7 @@ export class UserRoutes {
     this.router.post(
       Routes.USERS.QUICK_PLAY.CHANGE_STATUS,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      checkFeatureMiddleware("Quick Play"),
       (req: Request, res: Response, next: NextFunction) => {
         injectQuickPlayController.changeStatus(req, res, next);
       },
@@ -182,6 +190,52 @@ export class UserRoutes {
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
       (req: Request, res: Response, next: NextFunction) => {
         injectDailyChallengeController.getStatistics(req as any, res, next);
+      },
+    );
+
+    // leaderboard
+    this.router.get(
+      Routes.USERS.LEADERBOARD,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectLeaderboardController.getLeaderboard(req, res, next);
+      },
+    );
+
+    //subscription
+    this.router.get(
+      Routes.USERS.SUBSCRIPTION,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionController.getNormalSubscriptionPlans(req, res, next);
+      },
+    );
+    this.router.get(
+      Routes.USERS.COMPANY_PLANS,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionController.getCompanySubscriptionPlans(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.USERS.CREATE_SESSION,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectPaymentController.createSession(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.USERS.CONFIRM_SUBSCRIPTION,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectPaymentController.confirmSubscription(req, res, next);
+      },
+    );
+    this.router.post(
+      Routes.USERS.CREATE_COMPANY_SESSION,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectPaymentController.createCompanySession(req, res, next);
       },
     );
   }

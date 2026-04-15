@@ -259,7 +259,13 @@ export class companyAdminRouter {
         injectNotificationController.getNotificationHistory(req, res, next);
       },
     );
-  
+    this.router.get(
+      Routes.COMPANY_ADMIN.GET_COMPANY_DETAILS,
+      checkRoleBasedMiddleware(["companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectCompanyUserController.companyDetailswithSubcitptionDetails(req, res, next);
+      },
+    );
   }
   getRouter() {
     return this.router;

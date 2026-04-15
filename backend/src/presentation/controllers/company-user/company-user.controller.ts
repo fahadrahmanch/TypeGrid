@@ -3,7 +3,6 @@ import { MESSAGES } from "../../../domain/constants/messages";
 import { IGetProfileUseCase } from "../../../application/use-cases/interfaces/companyUser/get-profile.interface";
 import { IUpdateCompanyPasswordUseCase } from "../../../application/use-cases/interfaces/companyUser/update-password.interface";
 import { HttpStatus } from "../../constants/httpStatus";
-
 export class CompanyUserController {
   constructor(
     private readonly _getProfileUseCase: IGetProfileUseCase,
@@ -14,7 +13,6 @@ export class CompanyUserController {
     try {
       const userId = req.params.userId;
       const profile = await this._getProfileUseCase.getProfile(userId);
-      console.log(profile);
       if (!profile) {
          res.status(HttpStatus.NOT_FOUND).json({
           success: false,
@@ -29,7 +27,6 @@ export class CompanyUserController {
         data: profile,
       });
     } catch (error) {
-        console.log("error",error)
       next(error);
     }
   }
@@ -55,11 +52,12 @@ export class CompanyUserController {
 
       res.status(HttpStatus.OK).json({
         success: true,
-        message: MESSAGES.PASSWORD_UPDATE_SUCCESS,
+        message: MESSAGES.PASSWORD_UPDATE_SUCCESS,  
       });
     } catch (error) {
-      console.log("error", error);
       next(error);
     }
   }
+
+
 }

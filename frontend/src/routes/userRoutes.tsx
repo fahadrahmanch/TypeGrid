@@ -11,9 +11,14 @@ import Home from "../pages/user/home";
 import Profile from "../pages/user/profile";
 import EditProfile from "../pages/user/editProfile";
 import CompanySubscription from "../pages/user/Subscription/companySubscription";
+import SubscriptionPlans from "../pages/user/Subscription/SubscriptionPlans";
 import CompanyVerification from "../pages/user/Subscription/CompanyVerification";
 import CompanyVerificationStatus from "../pages/user/Subscription/CompanyVerificationStatus";
 import CompanyVerificationReapply from "../pages/user/Subscription/companyVerificationReapply";
+import PaymentSuccess from "../pages/user/Subscription/PaymentSuccess";
+import CompanyPaymentSuccess from "../pages/user/Subscription/CompanyPaymentSuccess";
+import CompanyPaymentFailed from "../pages/user/Subscription/CompanyPaymentFailed";
+import PaymentCancel from "../pages/user/Subscription/PaymentCancel";
 import { useLocation } from "react-router-dom";
 import PracticeTyping from "../pages/user/practiceTyping/practiceTyping";
 import TypingPracticeArea from "../pages/user/practiceTyping/typingPracticeArea";
@@ -22,8 +27,9 @@ import GroupPlay from "../pages/user/group/groupPlay";
 import SoloPlay from "../pages/user/solo/SoloPlay";
 import QuickPlay from "../pages/user/quick-play/quickPlay";
 import ChangePassword from "../pages/user/changePassword";
-import DailyChallenge from "../pages/user/DailyChallenge/dailyChallenge";
+import DailyChallengeLayout from "../pages/user/DailyChallenge/dailyChallenge";
 import DailyChallengeArea from "../pages/user/DailyChallenge/dailyChallengeArea";
+import LeaderBoard from "../pages/user/leaderBoard";
 
 export default function UserRoutes() {
   const location = useLocation();
@@ -88,9 +94,10 @@ export default function UserRoutes() {
         <Route path="change/password" element={<ChangePassword />} />
 
         {/* Subscription */}
+        <Route path="subscription" element={<SubscriptionPlans />} />
         <Route path="subscription/company" element={<CompanySubscription />} />
         <Route
-          path="subscription/company/verify"
+          path="subscription/company/verify/:id"
           element={<CompanyVerification />}
         />
         <Route
@@ -101,6 +108,16 @@ export default function UserRoutes() {
           path="subscription/company/re-verify"
           element={<CompanyVerificationReapply />}
         />
+        <Route path="success" element={<PaymentSuccess />} />
+        <Route
+          path="subscription/company/success"
+          element={<CompanyPaymentSuccess />}
+        />
+        <Route
+          path="subscription/company/failed"
+          element={<CompanyPaymentFailed />}
+        />
+        <Route path="cancel" element={<PaymentCancel />} />
 
         {/* Typing */}
         <Route path="typing/practice" element={<PracticeTyping />} />
@@ -120,8 +137,9 @@ export default function UserRoutes() {
         <Route path="quick-play" element={<QuickPlay />} />
 
         {/* Daily Challenge */}
-        <Route path="daily-challenge" element={<DailyChallenge />} />
+        <Route path="daily-challenge" element={<DailyChallengeLayout />} />
         <Route path="daily-challenge/:id" element={<DailyChallengeArea />} />
+        <Route path="highscores" element={<LeaderBoard />} />
       </Route>
     </Routes>
   );

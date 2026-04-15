@@ -10,7 +10,7 @@ export class LoginUseCase implements ILoginUseCase {
   constructor(
     private readonly _authRepository: IAuthRepository,
     private readonly _hashService: IHashService,
-  ) {}
+  ) { }
 
   async execute(
     email: string,

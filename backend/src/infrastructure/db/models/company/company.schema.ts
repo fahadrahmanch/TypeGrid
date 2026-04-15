@@ -38,7 +38,12 @@ const companySchema = new Schema<ICompanyDocument>(
     status: {
       type: String,
       enum: ["active", "inactive", "pending", "reject"],
-      default: "active",
+      default: "pending",
+    },
+    planId: {
+      type: Schema.Types.ObjectId,
+      ref: "SubscriptionPlan",
+      required: false,
     },
   },
   { timestamps: true },

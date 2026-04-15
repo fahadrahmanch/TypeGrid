@@ -14,6 +14,7 @@ export const checkQuickGameEndService = async (gameId: string) => {
   const key = `quick:game:${gameId}`;
   const allPlayers = await redis.hgetall(key);
   const players = Object.values(allPlayers).map((p) => JSON.parse(p));
+  console.log("players", players);
   const isComplete = players.every((item) => {
     return item.status != "PLAYING";
   });

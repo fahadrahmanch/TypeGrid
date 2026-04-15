@@ -38,7 +38,6 @@ export class CompanyGroupController {
       }
 
       const groupData = req.body;
-      console.log("groupData", groupData)
 
       await this._createCompanyGroupUseCase.execute(groupData, userId);
 
@@ -65,7 +64,6 @@ export class CompanyGroupController {
       }
 
       const groupData: CreateCompanyGroupAutoDTO = req.body;
-      console.log("groupData auto", groupData)
 
       await this._createCompanyGroupAutoUseCase.execute(groupData, userId);
 
@@ -118,7 +116,6 @@ export class CompanyGroupController {
       }
 
       const group = await this._getCompanyGroupByIdUseCase.execute(groupId, userId);
-      console.log("group in controller", group)
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.GROUPS_FETCHED_SUCCESS,

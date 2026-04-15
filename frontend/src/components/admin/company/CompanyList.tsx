@@ -34,6 +34,7 @@ const CompanyList: React.FC = () => {
   useEffect(() => {
     fetchCompanies();
   }, [debouncedSearch, page]);
+
   async function fetchCompanies() {
     try {
       const res = await companies(searchText, status, page, limit);
@@ -45,7 +46,9 @@ const CompanyList: React.FC = () => {
       console.error("Error fetching companies:", error);
     }
   }
-  fetchCompanies();
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
 
   return (
     <>
@@ -87,6 +90,7 @@ const CompanyList: React.FC = () => {
                 <option value="All">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
                 <option value="reject">Reject</option>
               </select>
             </div>
@@ -132,8 +136,10 @@ const CompanyList: React.FC = () => {
                 <tbody className="divide-y divide-gray-50">
                   {company.map((item: any) => {
                     const st = item?.status;
-                    const isApproved = st === "approved" || st === "active";
-                    const isRejected = st === "rejected" || st === "reject";
+                    const isActive = st === "active";
+                    const isRejected = st === "reject";
+                    const isInactive = st === "inactive";
+                    const isPending = st === "pending";
 
                     return (
                       <tr
@@ -160,18 +166,22 @@ const CompanyList: React.FC = () => {
                           <span
                             className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
                             ${
-                              isApproved
+                              isActive
                                 ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                                 : isRejected
                                   ? "bg-red-50 text-red-600 border-red-100"
-                                  : "bg-amber-50 text-amber-600 border-amber-100"
+                                  : isInactive
+                                    ? "bg-gray-50 text-gray-600 border-gray-100"
+                                    : "bg-amber-50 text-amber-600 border-amber-100"
                             }`}
                           >
-                            {isApproved
-                              ? "Approved"
+                            {isActive
+                              ? "Active"
                               : isRejected
                                 ? "Rejected"
-                                : "Pending"}
+                                : isInactive
+                                  ? "Inactive"
+                                  : "Pending"}
                           </span>
                         </td>
                         <td className="py-5 px-4">

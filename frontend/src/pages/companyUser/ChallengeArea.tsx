@@ -16,6 +16,7 @@ import { useChallengeSocket } from "../../hooks/companyUser/useChallengeSocket";
 import { useChallengeKeydown } from "../../hooks/companyUser/useChallengeKeydown";
 import { useChallengeTimer } from "../../hooks/companyUser/useChallengeTimer";
 import { useTypingStats } from "../../hooks/useTypingStats";
+import { getMappedKey } from "../../utils/keyboardLayouts";
 export type GamePlayerResult = {
   userId: string;
   wpm: number;
@@ -124,6 +125,7 @@ export default function ChallengeArea() {
   const user = useSelector((state: any) => state.auth.user);
 
   const [hasError, setHasError] = useState(false);
+  const keyboardLayout = useSelector((state: any) => state.auth.keyboardLayout);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -219,47 +221,40 @@ export default function ChallengeArea() {
   };
 
   const renderTextWithHighlight = () => {
-    if (!challengeData?.lesson?.text) return null;
-    return challengeData?.lesson?.text
-      .split("")
-      .map((char: string, index: number) => {
-        let className = "text-gray-300";
+  if (!challengeData?.lesson?.text) return null;
 
-        if (index < typedText.length) {
-          if (typedText[index] === char) {
-            className = "text-emerald-600 bg-emerald-50/50";
-          } else {
-            className = "text-red-500 bg-red-100 underline decoration-red-400";
-          }
-        }
+  return challengeData.lesson.text.split("").map((char, index) => {
+    let className = "text-gray-300";
 
-        // Cursor logic
-        const isCurrentChar = index === typedText.length;
-        const cursorClass =
-          isCurrentChar && phase === "PLAY" && !isFinished
-            ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]"
-            : "";
+    if (index < typedText.length) {
+      const rawKey = typedText[index];
+      const mappedKey = getMappedKey(rawKey, keyboardLayout);
 
-        // ** Ghost Cursors Logic **
-        //   const playersHere = livePlayers.filter(
-        //     (p) => p._id !== currentUser?._id && p.progress === index
-        //   );
+      if (mappedKey === char) {
+        className = "text-emerald-600 bg-emerald-50/50";
+      } else {
+        className = "text-red-500 bg-red-100 underline decoration-red-400";
+      }
+    }
 
-        return (
-          <span
-            key={index}
-            ref={isCurrentChar ? activeCharRef : null}
-            className={`
-               ${cursorClass}
-               ${className}
-              relative transition-colors duration-100
-            `}
-          >
-            {char}
-          </span>
-        );
-      });
-  };
+    const isCurrentChar = index === typedText.length;
+
+    const cursorClass =
+      isCurrentChar && phase === "PLAY" && !isFinished
+        ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]"
+        : "";
+
+    return (
+      <span
+        key={index}
+        ref={isCurrentChar ? activeCharRef : null}
+        className={`${cursorClass} ${className} relative transition-colors duration-100`}
+      >
+        {char}
+      </span>
+    );
+  });
+};
   useEffect(() => {
     if (activeCharRef.current && snippetContainerRef.current) {
       const container = snippetContainerRef.current;
@@ -303,6 +298,7 @@ export default function ChallengeArea() {
     setTotalTyped,
     setErrors,
     setIsFinished,
+    keyboardLayout,
   });
   useChallengeSocket({
     challengeId: challengeId,

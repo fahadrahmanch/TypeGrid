@@ -34,7 +34,7 @@ export class ApproveCompanyUseCase implements IApproveCompanyUseCase {
       );
     }
     user.role = "companyAdmin";
-    company.status = "active";
+    company.status = "inactive";
 
     await this.userRepository.update(user);
     await this.companyRepository.update(company);
@@ -42,17 +42,17 @@ export class ApproveCompanyUseCase implements IApproveCompanyUseCase {
     await this._emailService.sendMail({
       from: process.env.EMAIL_USER as string,
       to: user.email,
-      subject: "🎉 Company Approved",
+      subject: "🎉 Company Approved please payment for activate your company",
       text: `Hello ${user.name}, your company has been approved successfully.`,
       html: `
       <div style="font-family: Arial, sans-serif; line-height:1.6;">
-        <h2 style="color:#27ae60;">Company Approved ✅</h2>
+        <h2 style="color:#27ae60;">Company Approved but inactive ✅</h2>
 
         <p>Hello <strong>${user.name}</strong>,</p>
 
         <p>
           Congratulations! Your company <strong>${company.companyName}</strong>
-          has been approved successfully.
+          has been approved successfully.but it is inactive please payment for activate your company
         </p>
 
         <p>

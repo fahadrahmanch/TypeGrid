@@ -6,7 +6,6 @@ export class LLMService implements ILlmService {
 
   constructor() {
     const apiKey = process.env.GROK_API_KEY;
-    console.log("apiKey", apiKey); 
     if (!apiKey) {
       throw new Error("GROK_API_KEY is not defined in environment variables");
     }

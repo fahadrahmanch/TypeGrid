@@ -75,7 +75,6 @@ export const quickplayHandlers = (socket: Socket, io: Server) => {
         await redis.expire(key, 3600);
       }
     } catch (error) {
-      console.log(error);
       socket.emit("quick-join-error", {
         message: "Unable to join quick play",
       });
@@ -92,26 +91,32 @@ export const quickplayHandlers = (socket: Socket, io: Server) => {
 
     const key = `quick:game:${gameId}`;
 
-    const raw = await redis.hget(key, userId);
+  const raw = await redis.hget(key, userId);
 
-    if (raw) {
-      const existing = JSON.parse(raw);
-      if (existing.status === "FINISHED" || existing.status === "TIMES_UP") {
-        return;
-      }
-    }
-    await redis.hset(
-      key,
-      userId,
-      JSON.stringify({
-        wpm,
-        accuracy,
-        errors,
-        typedLength,
-        status: "PLAYING",
-        updatedAt: Date.now(),
-      }),
-    );
+if (raw) {
+  const existing = JSON.parse(raw);
+
+  if (
+    existing.status === "FINISHED" ||
+    existing.status === "TIMES_UP" ||
+    existing.status === "LEFT"
+  ) {
+    return;
+  }
+  await redis.hset(
+    key,
+    userId,
+    JSON.stringify({
+      ...existing,
+      wpm,
+      accuracy,
+      errors,
+      typedLength,
+      status: "PLAYING",
+      updatedAt: Date.now(),
+    })
+  );
+}
     await redis.expire(key, 600);
 
     socket.to(gameId).emit("typing-progress-update-quick", data);

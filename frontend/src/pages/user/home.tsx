@@ -25,27 +25,26 @@ const Home: React.FC = () => {
           const joinLink = response?.data?.group?.joinLink;
           navigate(`/group-play/group/${joinLink}`);
         }
-      } catch (error) {
-        toast.error("Failed to create group room. Please try again.");
-        console.log(error);
+      } catch (error: any) {
+        console.error("Group creation error:", error);
+        toast.error(error.response?.data?.message || "Failed to create group room. Please try again.");
       }
     } else if (mode === "solo") {
       try {
         const response = await createSoloRoom();
-        const data = response?.data;
-        if (!data?._id) {
-          throw new Error("Solo room ID missing");
-        }
-
-        const soloId = data?._id;
         if (response) {
+          const data = response.data.data;
+          if (!data?._id) {
+            throw new Error("Solo room ID missing");
+          }
+          const soloId = data?._id;
           navigate(`/solo-play/${soloId}`, {
             state: { gameData: data },
           });
         }
-      } catch (error) {
-        toast.error("Failed to create solo room. Please try again.");
-        console.log(error);
+      } catch (error: any) {
+        console.error("Solo creation error:", error);
+        toast.error(error.response?.data?.message || "Failed to create solo room. Please try again.");
       }
     } else if (mode === "practice") {
       navigate("/typing/practice");
@@ -59,9 +58,9 @@ const Home: React.FC = () => {
           state: { gameData: response.data.quickPlay },
           replace: true,
         });
-      } catch (error) {
-        toast.error("Failed to start quick play. Please try again.");
-        console.log(error);
+      } catch (error: any) {
+        console.error("Quick play error:", error);
+        toast.error(error.response?.data?.message || "Failed to start quick play. Please try again.");
       }
     }
   }

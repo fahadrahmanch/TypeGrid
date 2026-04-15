@@ -2,6 +2,7 @@ import { useState } from "react";
 import { verifyCompanyApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 import {
   nameValidation,
   emailValidation,
@@ -10,6 +11,8 @@ import {
 } from "../../../validations/companyRequestFormValidations";
 const CompanyVerificationFormDiv: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  
   const [values, setValues] = useState({
     companyName: "",
     address: "",
@@ -41,7 +44,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
 
     if (nameErr || emailErr || addressErr || numberErr) return;
     try {
-      const response = await verifyCompanyApi(values);
+      const response = await verifyCompanyApi({...values,planId:id});
       toast.success(response?.data?.message || "Company details submitted!");
       navigate("/subscription/company/verify/status");
     } catch (error: any) {

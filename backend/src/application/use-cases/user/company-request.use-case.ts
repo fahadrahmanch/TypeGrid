@@ -16,6 +16,7 @@ export class CompanyRequestUseCase implements ICompanyRequestUseCase {
     address: string,
     email: string,
     number: string,
+    planId: string,
   ): Promise<void> {
     const company = new CompanyEntity({
       companyName,
@@ -23,6 +24,7 @@ export class CompanyRequestUseCase implements ICompanyRequestUseCase {
       email,
       OwnerId,
       number,
+      planId,
       status: "pending",
     });
     const exists = await this.companyRepository.find({ OwnerId });

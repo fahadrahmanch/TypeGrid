@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
+import { getMappedKey, KeyboardLayoutType } from "../../utils/keyboardLayouts";
 import {
   ArrowLeft,
   RotateCcw,
@@ -24,6 +26,7 @@ const PracticeTypingArea: React.FC = () => {
     type: "default"
   };
 
+  const keyboardLayout = useSelector((state: any) => state.auth.keyboardLayout) as KeyboardLayoutType;
   const [typedText, setTypedText] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -54,38 +57,58 @@ const PracticeTypingArea: React.FC = () => {
     return () => clearInterval(interval);
   }, [isActive, isFinished, startTime]);
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isFinished) return;
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isFinished) return;
 
-    const value = e.target.value;
+      // Start the timer on first character (excluding backspace)
+      if (!isActive && e.key.length === 1) {
+        setIsActive(true);
+        setStartTime(Date.now());
+      }
 
-    // Start the timer on first character
-    if (!isActive && value.length > 0) {
-      setIsActive(true);
-      setStartTime(Date.now());
-    }
+      if (!isActive && !isFinished && e.key === " ") {
+          // If we want space to start, but here character starts.
+          // Let's stick to "any character starts" as in previous logic.
+      }
 
-    if (value.length > initialText.length) return;
+      const key = e.key;
 
-    // Accuracy and Error tracking
-    if (value.length > typedText.length) {
-      const lastCharIndex = value.length - 1;
-      const isCorrect = value[lastCharIndex] === initialText[lastCharIndex];
+      if (key === "Backspace") {
+        setTypedText((prev) => prev.slice(0, -1));
+        setTotalTyped((prev) => Math.max(0, prev - 1));
+        return;
+      }
+
+      if (key.length > 1 && key !== " ") return;
+      if (typedText.length >= initialText.length) return;
+
+      e.preventDefault();
+
+      const mappedKey = getMappedKey(key, keyboardLayout);
+      const index = typedText.length;
+      const expectedChar = initialText[index];
+
+      const isCorrect = mappedKey === expectedChar;
 
       setTotalTyped(prev => prev + 1);
       if (!isCorrect) {
         setErrors(prev => prev + 1);
       }
-    }
 
-    setTypedText(value);
+      const nextText = typedText + key;
+      setTypedText(nextText);
 
-    // Finish condition
-    if (value.length === initialText.length) {
-      setIsFinished(true);
-      setIsActive(false);
-    }
-  };
+      // Finish condition
+      if (nextText.length === initialText.length) {
+        setIsFinished(true);
+        setIsActive(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isActive, isFinished, typedText, initialText, keyboardLayout]);
 
   const resetPractice = () => {
     setTypedText("");
@@ -103,7 +126,11 @@ const PracticeTypingArea: React.FC = () => {
 
   const getCharClass = (index: number) => {
     if (index >= typedText.length) return "text-gray-400";
-    return typedText[index] === initialText[index]
+    
+    const rawKey = typedText[index];
+    const mappedKey = getMappedKey(rawKey, keyboardLayout);
+    
+    return mappedKey === initialText[index]
       ? "text-emerald-600 bg-emerald-50/50"
       : "text-red-500 bg-red-100 underline decoration-red-200";
   };
@@ -228,10 +255,9 @@ const PracticeTypingArea: React.FC = () => {
             <input
               ref={inputRef}
               type="text"
-              autoFocus
               className="absolute inset-0 opacity-0 cursor-default"
               value={typedText}
-              onChange={handleInput}
+              onChange={() => {}}
               onPaste={(e) => e.preventDefault()}
               disabled={isFinished}
             />

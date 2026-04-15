@@ -55,7 +55,7 @@ import { GetNotificationsUseCase } from "../../application/use-cases/company-use
 import { MarkNotificationAsReadUseCase } from "../../application/use-cases/company-user/notifications/mark-notification-as-read.use-case";
 import { SetKeyboardLayoutUseCase } from "../../application/use-cases/company-user/set-keyboard-layout.use-case";
 import { SetKeyboardLayoutController } from "../controllers/company-user/set-keyboard-layout-controller";
-
+import { GetCompanyDetailsUseCase } from "../../application/use-cases/company-admin/get-company-detatils.use-case";
 const lessonAssignmentRepository = new LessonAssignmentRepository(
 
   LessonAssignment,
@@ -176,12 +176,13 @@ const setKeyboardLayoutUseCaseInstance = new SetKeyboardLayoutUseCase(
 const llmService = new LLMService();
 
 
- const getPracticeTypingContentUseCase =
+const getPracticeTypingContentUseCase =
   new GetPracticeTypingContentUseCase(llmService);
 
 export const injectTypingPracticeController = new TypingPracticeController(
-    getPracticeTypingContentUseCase,
-  );
+  getPracticeTypingContentUseCase,
+);
+
 
 export const injectCompanyUserController = new CompanyUserController(
   getProfileUseCaseInstance,

@@ -137,11 +137,10 @@ const CompanyLeaderBoard: React.FC = () => {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                  filter === f
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${filter === f
                     ? "bg-orange-500 text-white shadow-md"
                     : "text-gray-500 hover:bg-orange-50 hover:text-orange-600"
-                }`}
+                  }`}
               >
                 {f === "all"
                   ? "All Time"
@@ -223,15 +222,14 @@ const CompanyLeaderBoard: React.FC = () => {
                           <span
                             className={`
                             w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm
-                            ${
-                              index === 0
+                            ${index === 0
                                 ? "bg-orange-100 text-orange-600 border border-orange-200 shadow-sm"
                                 : index === 1
                                   ? "bg-slate-100 text-slate-600 border border-slate-200"
                                   : index === 2
                                     ? "bg-amber-50 text-amber-600 border border-amber-100"
                                     : "text-gray-400"
-                            }
+                              }
                           `}
                           >
                             {index + 1}

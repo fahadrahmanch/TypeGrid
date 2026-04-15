@@ -25,7 +25,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
   const [rejectReason, setRejectReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleCompanyStatus(status: "active" | "reject") {
+  async function handleCompanyStatus(status: "active" | "reject" | "inactive") {
     try {
       if (!company?._id) return;
       setIsSubmitting(true);
@@ -38,7 +38,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
 
       const updatedStatus =
         response?.data?.data?.status ||
-        (status === "active" ? "approved" : "rejected");
+        (status === "active" ? "active" : status === "reject" ? "reject" : "inactive");
 
       toast.success(
         response?.data?.message || `Company ${updatedStatus} successfully`,
@@ -62,9 +62,10 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
   }
 
   const st = company?.status;
-  const isApproved = st === "approved" || st === "active";
-  const isRejected = st === "rejected" || st === "reject";
-  const isPending = !isApproved && !isRejected;
+  const isActive = st === "active";
+  const isRejected = st === "reject";
+  const isInactive = st === "inactive";
+  const isPending = st === "pending";
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm animate-in fade-in duration-200 p-4 sm:p-8">
@@ -103,18 +104,22 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
             <span
               className={`px-4 py-1.5 text-xs font-black uppercase tracking-widest rounded-xl border-2
               ${
-                isApproved
+                isActive
                   ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                   : isRejected
                     ? "bg-red-50 text-red-600 border-red-100"
-                    : "bg-amber-50 text-amber-600 border-amber-100"
+                    : isInactive
+                      ? "bg-gray-50 text-gray-600 border-gray-100"
+                      : "bg-amber-50 text-amber-600 border-amber-100"
               }`}
             >
-              {isApproved
-                ? "Approved"
+              {isActive
+                ? "Active"
                 : isRejected
                   ? "Rejected"
-                  : "Pending Approval"}
+                  : isInactive
+                    ? "Inactive"
+                    : "Pending Approval"}
             </span>
           </div>
 
@@ -160,10 +165,12 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
                   Admin Status
                 </label>
                 <div className="flex items-center gap-3 text-gray-800 font-bold bg-white p-4 rounded-2xl border border-gray-100 shadow-sm capitalize">
-                  {isApproved ? (
+                  {isActive ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                   ) : isRejected ? (
                     <AlertCircle className="w-4 h-4 text-red-500" />
+                  ) : isInactive ? (
+                    <div className="w-2 h-2 rounded-full bg-gray-400" />
                   ) : (
                     <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                   )}

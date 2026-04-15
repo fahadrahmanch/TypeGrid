@@ -5,5 +5,6 @@ export interface ICompanyRequestUseCase {
     address: string,
     email: string,
     number: string,
+    planId: string,
   ): Promise<void>;
 }

@@ -9,7 +9,7 @@ export class CompanyEntity extends Entity<CompanyEntity> {
   address?: string;
   number?: string;
   OwnerId?: string;
-  // subscriptionPlansId!: string;
+  planId?: string;
   rejectionReason?: string;
   status?: "active" | "inactive" | "pending" | "reject";
 }

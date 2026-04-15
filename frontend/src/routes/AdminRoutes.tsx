@@ -9,6 +9,9 @@ import Challenges from "../pages/admin/Challenges";
 import Reward from "../pages/admin/Reward";
 import Goals from "../pages/admin/Goals";
 import DailyAssignment from "../pages/admin/DailyAssignment";
+import SubscriptionPlans from "../pages/admin/SubscriptionPlans";
+import Achievements from "../pages/admin/Achievements";
+
 export default function AdminRoutes() {
   return (
     <Routes>
@@ -31,6 +34,8 @@ export default function AdminRoutes() {
         <Route path="reward" element={<Reward />} />
         <Route path="goals" element={<Goals />} />
         <Route path="daily-assignment" element={<DailyAssignment />} />
+        <Route path="subscription-plans" element={<SubscriptionPlans />} />
+        <Route path="achievements" element={<Achievements />} />
       </Route>
     </Routes>
   );

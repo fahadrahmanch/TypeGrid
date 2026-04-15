@@ -29,6 +29,7 @@ export class QuickSocketController {
     try {
       await this._finishQuickPlayResultUseCase.execute(gameId, resultArray);
     } catch (error: any) {
+      console.log("error in saveQuickPlayResult socket handler", error);
       logger.error("Error in saveQuickPlayResult socket handler", {
         error: error.message,
         stack: error.stack,

@@ -32,8 +32,8 @@ export class CompanyRequestController {
         return;
       }
 
-      const { companyName, address, email, number } = req.body;
-
+      const { companyName, address, email, number,planId } = req.body;
+      
       if (!companyName || !address || !email || !number) {
         res.status(HttpStatus.BAD_REQUEST).json({
           success: false,
@@ -48,6 +48,7 @@ export class CompanyRequestController {
         address,
         email,
         number,
+        planId,
       );
       logger.info("Company request submitted successfully", {
         userId,

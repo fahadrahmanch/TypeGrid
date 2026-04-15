@@ -80,7 +80,6 @@ export class NotificationController {
     async getNotificationHistory(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             const senderId = req.user?.userId;
-           console.log("notification history")
             if (!senderId) {
                 return res.status(401).json({ message: "Unauthorized" });
             }

@@ -23,7 +23,6 @@ export class CreateCompanyGroupAutoUseCase implements ICreateCompanyGroupAutoUse
     if(users.length===0){
         throw new Error("No users found based on the criteria");
     }
-    console.log("users",users)
       const companyGroup = new CompanyGroupEntity({
           companyId: user.CompanyId!,
           name: groupData.groupName,

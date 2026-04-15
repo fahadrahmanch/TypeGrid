@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
   X,
@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   AlertCircle,
   Plus,
+  Users,
 } from "lucide-react";
 import {
   nameValidation,
@@ -16,10 +17,17 @@ import {
 } from "../../../validations/authValidations";
 import { toast } from "react-toastify";
 import { companyAddUser } from "../../../api/companyAdmin/companyAdminService";
+import { getCompanyDetailsApi } from "../../../api/companyAdmin/company";
 
 interface AddUserProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setUsers: any;
+}
+
+interface SubscriptionInfo {
+  planName: string;
+  userLimit: number;
+  duration: number;
 }
 
 const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
@@ -30,6 +38,8 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
   });
   const [error, setError] = useState({ name: "", email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [subscriptionInfo, setSubscriptionInfo] =
+    useState<SubscriptionInfo | null>(null);
 
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
@@ -80,6 +90,34 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
     }
   };
 
+  async function fetchCompanyDetails() {
+    try {
+      const response = await getCompanyDetailsApi();
+      const { subscription } = response.data.data;
+      if (subscription) {
+        setSubscriptionInfo({
+          planName: subscription.name,
+          userLimit: subscription.userLimit,
+          duration: subscription.duration,
+        });
+      }
+    } catch (error: any) {
+      console.error(
+        error?.response?.data?.message || "Failed to fetch company details."
+      );
+    }
+  }
+
+  useEffect(() => {
+    fetchCompanyDetails();
+  }, []);
+
+  const formatDuration = (days: number) => {
+    if (days >= 365) return `${Math.round(days / 365)} Year`;
+    if (days >= 30) return `${Math.round(days / 30)} Month`;
+    return `${days} Days`;
+  };
+
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -112,6 +150,57 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
             />
           </button>
         </div>
+
+        {/* Subscription Limit Banner */}
+        {subscriptionInfo && (
+          <div className="mx-8 mt-6 bg-white border border-[#ECA468]/30 rounded-2xl overflow-hidden shadow-sm">
+            {/* Banner header */}
+            <div className="bg-gradient-to-r from-[#ECA468]/10 to-[#D0864B]/5 px-5 py-2.5 border-b border-[#ECA468]/20 flex items-center gap-2">
+              <ShieldCheck size={13} className="text-[#D0864B]" />
+              <span className="text-[10px] font-black text-[#D0864B] uppercase tracking-widest">
+                Plan Limitations
+              </span>
+            </div>
+            {/* Stats row */}
+            <div className="flex items-center divide-x divide-[#ECA468]/15">
+              {/* Plan Name */}
+              <div className="flex-1 px-5 py-4">
+                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                  Active Plan
+                </p>
+                <p className="text-sm font-black text-gray-800 truncate">
+                  {subscriptionInfo.planName}
+                </p>
+              </div>
+              {/* User Limit */}
+              <div className="flex-1 px-5 py-4 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[#ECA468]/15 flex items-center justify-center shrink-0">
+                  <Users size={15} className="text-[#D0864B]" />
+                </div>
+                <div>
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
+                    User Limit
+                  </p>
+                  <p className="text-xl font-black text-[#D0864B] leading-none">
+                    {subscriptionInfo.userLimit}
+                    <span className="text-xs text-gray-400 font-bold ml-1">
+                      users
+                    </span>
+                  </p>
+                </div>
+              </div>
+              {/* Duration */}
+              <div className="flex-1 px-5 py-4">
+                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                  Duration
+                </p>
+                <p className="text-sm font-black text-gray-800">
+                  {formatDuration(subscriptionInfo.duration)}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Form Body */}
         <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">

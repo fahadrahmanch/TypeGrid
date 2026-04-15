@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { socket } from "../../socket";
 import { fetchContestAreaDetails } from "../../api/companyAdmin/companyContextAPI";
+import { getMappedKey } from "../../utils/keyboardLayouts";
 import { Crown, Trophy, Users } from "lucide-react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 // type PlayerStatus = "PLAYING" | "DISCONNECTED" | "FINISHED" | "LEFT";
@@ -28,6 +29,7 @@ const ContestArea: React.FC = () => {
   const [contestData, setContestData] = useState<ContestRecord | null>();
 
   const user = useSelector((state: any) => state.auth.user);
+  const keyboardLayout = useSelector((state: any) => state.auth.keyboardLayout);
 
   const [hasError, setHasError] = useState(false);
 
@@ -227,7 +229,10 @@ const ContestArea: React.FC = () => {
       let className = "text-gray-300";
 
       if (index < typedText.length) {
-        if (typedText[index] === char) {
+        const rawKey = typedText[index];
+        const mappedKey = getMappedKey(rawKey, keyboardLayout);
+
+        if (mappedKey === char) {
           className = "text-emerald-600 bg-emerald-100/20";
         } else {
           className = "text-red-500 bg-red-100/40 underline decoration-red-400";
@@ -275,10 +280,11 @@ const ContestArea: React.FC = () => {
 
         if (hasError) return;
 
+        const mappedKey = getMappedKey(e.key, keyboardLayout);
         const expectedChar = lesson[typedText.length];
         setTotalTyped((prev) => prev + 1);
 
-        if (e.key !== expectedChar) {
+        if (mappedKey !== expectedChar) {
           setErrors((prev) => prev + 1);
           setHasError(true);
           setTypedText((prev) => prev + e.key);
@@ -307,7 +313,7 @@ const ContestArea: React.FC = () => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lesson, isFinished, typedText, phase, hasError, contestData?._id]);
+  }, [lesson, isFinished, typedText, phase, hasError, contestData?._id, keyboardLayout]);
 
   useEffect(() => {
     if (!user) return;

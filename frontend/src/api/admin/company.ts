@@ -14,7 +14,7 @@ export async function companies(
 
 export async function updateCompanyStatus(
   companyId: string,
-  status: "active" | "reject",
+  status: "active" | "reject" | "inactive",
   reason?: string,
 ) {
   return adminAPI.patch(API_ROUTES.ADMIN.COMPANIES.STATUS(companyId), {

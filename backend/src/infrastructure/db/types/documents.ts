@@ -33,6 +33,7 @@ export interface ICompanyDocument {
   description?: string;
   rejectionReason?: string;
   status?: "active" | "inactive" | "pending" | "reject";
+  planId?: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -261,8 +262,11 @@ export interface IStatsDocument {
   userId: Types.ObjectId;
   totalXp: number;
   totalCompetitions: number;
+  totalScore: number;
+  weeklyScore: number;
+  monthlyScore: number;
   wpm: number;
-  accuracy:number;
+  accuracy: number;
   level: number;
   createdAt: Date;
   updatedAt: Date;
@@ -283,42 +287,55 @@ export interface ICompanyUserStatsDocument {
 
 export interface IGameStatsDocument {
   _id?: Types.ObjectId;
-   userId: Types.ObjectId;
+  userId: Types.ObjectId;
 
   quickPlay: {
     totalSessions: number;
-    highestWpm:    number;
+    highestWpm: number;
   };
 
   soloPlay: {
-    totalSessions:      number;
-    highestWpm:         number;
-    highestAccuracy:    number;
+    totalSessions: number;
+    highestWpm: number;
+    highestAccuracy: number;
     hasSetPersonalBest: boolean;
   };
 
   groupPlay: {
-    totalMatches:     number;
-    totalWins:        number;
+    totalMatches: number;
+    totalWins: number;
     currentWinStreak: number;
   };
 
   dailyChallenge: {
-    totalCompleted:    number;
-    currentStreak:     number;
+    totalCompleted: number;
+    currentStreak: number;
     perfectMonthCount: number;
   };
 
   createdAt: Date;
   updatedAt: Date;
 }
+export interface IAchievementDocument {
+  _id?: Types.ObjectId;
+  title: string;
+  description: string;
+  imageUrl: string;
+  minWpm?: number;
+  minAccuracy?: number;
+  minGame?: number;
+  xp: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface IUserAchievementDocument {
   _id?: Types.ObjectId;
-  userId:        Types.ObjectId;
-  achievementId: string;
-  unlockedAt:    Date;
-  createdAt:     Date;
-  updatedAt:     Date;
+  userId: Types.ObjectId;
+  achievementId: Types.ObjectId;
+  unlockedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 // ────────────── Notification ──────────────
@@ -341,6 +358,45 @@ export interface INotificationReceiptDocument {
   userId: Types.ObjectId;
   isRead: boolean;
   readAt: Date | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// ────────────── Subscription Plan ──────────────
+export interface ISubscriptionPlanDocument {
+  _id?: Types.ObjectId;
+  name: string;
+  price: number;
+  duration: number; // in days
+  features: string[];
+  type: "normal" | "company";
+  userLimit?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// ────────────── Payment ──────────────
+export interface IPaymentDocument {
+  _id?: Types.ObjectId;
+  userId: Types.ObjectId;
+  amount: number;
+  currency: string;
+  status: "pending" | "completed" | "failed" | "refunded";
+  provider: string; // e.g., 'stripe'
+  providerTransactionId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// ────────────── User Subscription ──────────────
+export interface IUserSubscriptionDocument {
+  _id?: Types.ObjectId;
+  userId: Types.ObjectId;
+  subscriptionPlanId: Types.ObjectId;
+  status: "active" | "expired" | "pending";
+  startDate?: Date;
+  endDate?: Date;
+  paymentId?: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }

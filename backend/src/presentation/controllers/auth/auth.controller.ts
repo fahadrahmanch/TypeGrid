@@ -30,7 +30,7 @@ export class AuthController {
     private _forgotPasswordOtpVerifyUseCase: IForgotPasswordOtpVerifyUseCase,
     private _createNewPasswordUseCase: ICreateNewPasswordUseCase,
     private _companyFindUseCase: ICompanyFindUseCase,
-  ) {}
+  ) { }
 
   //user register
   async register(

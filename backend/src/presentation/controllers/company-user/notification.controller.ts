@@ -17,7 +17,6 @@ export class NotificationController {
       }
 
       const notifications = await this.getNotificationsUseCase.execute(userId);
-      console.log("npt", notifications)
       res.status(200).json({
         success: true,
         data: notifications,
@@ -31,7 +30,6 @@ export class NotificationController {
     try {
 
       const { id } = req.params;
-      console.log("id", id)
       if (!id) {
          return res.status(400).json({ message: "Notification ID is required" });
       }

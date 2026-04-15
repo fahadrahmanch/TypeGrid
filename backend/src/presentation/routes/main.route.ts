@@ -83,6 +83,14 @@ export const Routes = {
     FETCH_DAILY_ASSIGN_CHALLENGE_BY_ID: "/daily-assign-challenge/:id",
     UPDATE_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenge/:id",
     DELETE_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenge/:id",
+    CREATE_SUBSCRIPTION_PLAN: "/subscription",
+
+    //acheivements
+    CREATE_ACHIVEMENT: "/acheivement",
+    FETCH_ACHIVEMENTS: "/acheivements",
+    FETCH_ACHIVEMENT_BY_ID: "/acheivement/:id",
+    UPDATE_ACHIVEMENT: "/acheivement/:id",
+    DELETE_ACHIVEMENT: "/acheivement/:id",
   },
 
   USERS: {
@@ -124,7 +132,14 @@ export const Routes = {
     //daily challenge  user
     DAILY_CHALLENGE_FINISHED: "/daily-challenge-finished",
     DAILY_CHALLENGE_STATISTICS: "/daily-challenge/statistics",
-    
+    LEADERBOARD: "/leaderboard",
+
+    //subscription
+    SUBSCRIPTION: "/subscription/plans",
+    COMPANY_PLANS: "/subscription/company-plans",
+    CREATE_SESSION: "/subscription/create-session",
+    CREATE_COMPANY_SESSION: "/subscription/create-company-session",
+    CONFIRM_SUBSCRIPTION: "/subscription/confirm",
   },
 
   COMPANY_ADMIN: {
@@ -169,6 +184,8 @@ export const Routes = {
 
      //keyboard
      SET_KEYBOARD_LAYOUT: "/keyboard/set-keyboard-layout",
+
+     GET_COMPANY_DETAILS: "/company/details",
   },
 
   COMPANY_USER: {

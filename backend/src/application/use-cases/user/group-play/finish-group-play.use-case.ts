@@ -7,12 +7,17 @@ import { ResultEntity } from "../../../../domain/entities/result.entity";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
-
+import { updateUserStats } from "../../../services/user-stats.service";
+import { IStatsRepository } from "../../../../domain/interfaces/repository/user/stats-repository.interface";
+import { StatsEntity } from "../../../../domain/entities/stats.entity";
 export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
   constructor(
     private readonly _competitionRepository: ICompetitionRepository,
     private readonly _groupRepository: IGroupRepository,
     private readonly _resultRepository: IResultRepository,
+    private readonly _statsRepository: IStatsRepository,
+
+
   ) {}
 
   async execute(gameId: string, resultArray: GroupPlayResult[]): Promise<void> {
@@ -60,6 +65,32 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
           rank: result.rank,
         },
       });
+
+      let stats = await this._statsRepository.findByUserId(result.userId);
+
+      if (!stats) {
+        stats = new StatsEntity({
+          userId: result.userId,
+        });
+      }
+
+      const score = await updateUserStats(
+        result.wpm,
+        Number(result.accuracy),
+        groupEntity.getDifficulty(),
+        "group",
+      );
+
+      stats.incrementCompetitions();
+      stats.updatePerformance(result.wpm, Number(result.accuracy));
+      stats.updateScores(score);
+
+      if (stats.getId()) {
+        await this._statsRepository.updateStats(result.userId,stats.toObject());
+      } else {
+        await this._statsRepository.create(stats.toObject());
+      }
+
       await this._resultRepository.create(resultEntity.toObject());
     }
   }

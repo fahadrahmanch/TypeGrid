@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAssignedLessonByAssignmentId } from "../../api/companyUser/lessons";
+import { getMappedKey } from "../../utils/keyboardLayouts";
 import {
   ArrowLeft,
   Clock,
@@ -15,9 +16,10 @@ import {
 import { useParams } from "react-router-dom";
 import { saveLessonResult } from "../../api/companyAdmin/lessons";
 import StatCard from "../../components/common/StatCard";
+import { useSelector } from "react-redux";
 const AssignedLessonTypingArea: React.FC = () => {
   const navigate = useNavigate();
-
+  const keyboardLayout = useSelector((state: any) => state.auth.keyboardLayout);
   type AssignmentStatus = "assigned" | "progress" | "completed" | "expired";
 
   interface Lesson {
@@ -104,46 +106,63 @@ const AssignedLessonTypingArea: React.FC = () => {
   }, [typedText, assignedLesson?.lesson.text.length, isTimeUp]);
 
   // Start on Space key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isActive && !isFinished && e.code === "Space") {
-        e.preventDefault();
-        setIsActive(true);
-        setCountDown(Date.now());
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      }
-    };
+ useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!assignedLesson) return;
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isActive, isFinished]);
-
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isFinished || !assignedLesson || !isActive || isTimeUp) return;
-
-    const value = e.target.value;
-
-    if (value.length > assignedLesson.lesson.text.length) return;
-
-    if (value.length > typedText.length) {
-      const index = value.length - 1;
-      const isWrong = value[index] !== assignedLesson.lesson.text[index];
-
-      const newTotal = totalTyped + 1;
-      const newErrors = isWrong ? errors + 1 : errors;
-
-      const correctChars = Math.max(0, newTotal - newErrors);
-      const acc = Math.round((correctChars / newTotal) * 100);
-
-      setTotalTyped(newTotal);
-      setErrors(newErrors);
-      setAccuracy(acc);
+    if (!isActive && !isFinished && e.code === "Space") {
+      e.preventDefault();
+      setIsActive(true);
+      setCountDown(Date.now());
+      inputRef.current?.focus();
+      return;
     }
 
-    setTypedText(value);
+    if (!isActive || isFinished || isTimeUp) return;
+
+    const key = e.key;
+
+    if (key === "Backspace") {
+      setTypedText((prev) => prev.slice(0, -1));
+      setTotalTyped((prev) => Math.max(0, prev - 1));
+      return;
+    }
+
+    if (key.length > 1 && key !== " ") return;
+
+    const mappedKey = getMappedKey(key, keyboardLayout);
+    console.log("mapped key in area", mappedKey);
+    const index = typedText.length;
+    const expectedChar = assignedLesson.lesson.text[index];
+
+    const isWrong = mappedKey !== expectedChar;
+    console.log("expected char in area", expectedChar);
+    const newTotal = totalTyped + 1;
+    const newErrors = isWrong ? errors + 1 : errors;
+
+    const correctChars = Math.max(0, newTotal - newErrors);
+    const acc = Math.round((correctChars / newTotal) * 100);
+
+    setTotalTyped(newTotal);
+    setErrors(newErrors);
+    setAccuracy(acc);
+
+    setTypedText((prev) => prev + key);
   };
+
+  window.addEventListener("keydown", handleKeyDown);
+
+  return () => window.removeEventListener("keydown", handleKeyDown);
+}, [
+  isActive,
+  isFinished,
+  isTimeUp,
+  assignedLesson,
+  typedText,
+  totalTyped,
+  errors,
+  keyboardLayout
+]);
 
   const resetTest = () => {
     setIsActive(false);
@@ -177,13 +196,20 @@ const AssignedLessonTypingArea: React.FC = () => {
     document.addEventListener("mousedown", keepFocus);
     return () => document.removeEventListener("mousedown", keepFocus);
   }, [isActive, isFinished]);
+const getCharClass = (index: number) => {
+  if (!assignedLesson) return "text-gray-400";
 
-  const getCharClass = (index: number) => {
-    if (index >= typedText.length) return "text-gray-400";
-    return typedText[index] === assignedLesson?.lesson.text[index]
-      ? "text-emerald-600 bg-emerald-50/50"
-      : "text-red-500 bg-red-100 underline decoration-red-400";
-  };
+  if (index >= typedText.length) return "text-gray-400";
+
+  const rawKey = typedText[index];
+  const mappedKey = getMappedKey(rawKey, keyboardLayout);
+
+  const expectedChar = assignedLesson.lesson.text[index];
+
+  return mappedKey === expectedChar
+    ? "text-emerald-600 bg-emerald-50/50"
+    : "text-red-500 bg-red-100 underline decoration-red-400";
+};
 
   // Progress percentage
   const progress = Math.min(
@@ -373,13 +399,13 @@ const AssignedLessonTypingArea: React.FC = () => {
 
             {/* Hidden Input */}
             <div className="relative z-30 flex justify-between items-center mb-8 border-b border-orange-100/50 pb-4">
-              <input
-                ref={inputRef}
-                type="text"
-                className="absolute opacity-0 top-0 left-0 w-full h-full z-20 cursor-default"
-                value={typedText}
-                onChange={handleInput}
-              />
+             <input
+  ref={inputRef}
+  type="text"
+  className="absolute opacity-0 top-0 left-0 w-full h-full z-20 cursor-default"
+  value={typedText}
+  onChange={() => {}}
+/>
             </div>
 
             {/* Finished State Overlay */}

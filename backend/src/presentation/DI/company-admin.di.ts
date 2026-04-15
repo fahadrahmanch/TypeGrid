@@ -54,15 +54,28 @@ import { IndividualNotificationUseCase } from "../../application/use-cases/compa
 import { GroupNotificationUseCase } from "../../application/use-cases/company-admin/notification/group-notification.use-case";
 import { AllNotificationUseCase } from "../../application/use-cases/company-admin/notification/all-notification.use-case";
 import { NotificationHistoryUseCase } from "../../application/use-cases/company-admin/notification/notification-history.use-case";
-
-
-
-
+import { GetCompanyDetailsUseCase } from "../../application/use-cases/company-admin/get-company-detatils.use-case";
+import { CompanyRepository } from "../../infrastructure/db/repositories/company/company.repository";
+import { Company } from "../../infrastructure/db/models/company/company.schema";
+import { SubscriptionPlanRepository } from "../../infrastructure/db/repositories/admin/subscription-plan.repository";
+import { SubscriptionPlan } from "../../infrastructure/db/models/admin/subscription-plan.schema";
+import { UserSubscriptionRepository } from "../../infrastructure/db/repositories/user/user-subscription.repository";
+import { UserSubscription } from "../../infrastructure/db/models/user/user.subscription.schema";
 const userRepository = new UserRepository(User);
 const hashService = new HashService();
 const authRepository = new AuthRepository();
+const subscriptionRepository = new SubscriptionPlanRepository(SubscriptionPlan);
+const companyRepository = new CompanyRepository(Company);
 const findUserUseCaseInstance = new FindUserUseCase(authRepository);
-const addUserUseCaseInstance = new AddUserUseCase(authRepository, hashService);
+const userSubscriptionRepository = new UserSubscriptionRepository(UserSubscription);
+const addUserUseCaseInstance = new AddUserUseCase(
+  authRepository,
+  hashService,
+  companyRepository,
+  userSubscriptionRepository,
+  subscriptionRepository,
+  userRepository,
+);
 const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(
   userRepository,
 );
@@ -246,11 +259,19 @@ export const injectCompanyLessonManageController =
     getAdminLessonsUseCaseInstance,
     assignLessonUseCaseInstance,
   );
+
+
+const getCompanyDetailsUseCaseInstance = new GetCompanyDetailsUseCase(
+  companyRepository,
+  subscriptionRepository,
+  userRepository,
+);
 export const injectCompanyUserController = new CompanyUserController(
   addUserUseCaseInstance,
   findUserUseCaseInstance,
   getCompanyUsersUseCaseInstance,
   deleteUserUseCaseInstance,
   getCompanyUsersWithStatusUseCaseInstance,
+  getCompanyDetailsUseCaseInstance,
 );
 

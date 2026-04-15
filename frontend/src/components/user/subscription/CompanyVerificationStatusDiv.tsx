@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
 import { getCompanyStatusApi } from "../../../api/user/userService";
+import { createCompanySubscriptionSession } from "../../../api/user/subcription";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Loader2, CreditCard } from "lucide-react";
+
 const CompanyVerificationStatusDiv1: React.FC = () => {
   const [company, setCompany] = useState<any>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     async function fetchCompanyDetails() {
@@ -24,6 +29,30 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
     navigate("/subscription/company/re-verify");
   };
 
+  const handlePayment = async () => {
+    try {
+      if (!company?.planId) {
+        toast.error("No plan associated with this company");
+        return;
+      }
+      setIsSubmitting(true);
+      const response = await createCompanySubscriptionSession(company.planId);
+      console.log("response", response);
+      if (response.data?.url) {
+        window.location.href = response.data.url;
+      } else {
+        toast.error("Failed to create payment session");
+      }
+    } catch (error: any) {
+      console.error("Payment error:", error);
+      toast.error(
+        error.response?.data?.message || "Something went wrong creating payment session",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen mt-12 flex flex-col items-center pt-10 px-4">
@@ -31,15 +60,52 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
           {/* 1. Yellow Status Banner */}
           {company?.status === "pending" && (
             <div className="bg-[#FFFBEB] border-2 border-[#FEF3C7] rounded-xl p-6 flex items-start gap-5 shadow-sm">
-              <div className="text-4xl">⏳</div>
+              <div className="text-4xl text-amber-500 animate-pulse">⏳</div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">
                   Verification Pending
                 </h2>
                 <p className="text-gray-600 mt-1">
                   Your company verification is in progress. Please wait for
-                  approval.
+                  approval from the administration.
                 </p>
+              </div>
+            </div>
+          )}
+
+          {/* 1.1 Inactive Status Banner (Approved but not paid) */}
+          {company?.status === "inactive" && (
+            <div className="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-6 flex items-start gap-5 shadow-sm">
+              <div className="text-4xl">✅</div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Approval Successful!
+                    </h2>
+                    <p className="text-gray-600 mt-1">
+                      Your company details have been verified. Please complete
+                      the payment to activate your account.
+                    </p>
+                  </div>
+                  <button
+                    disabled={isSubmitting}
+                    onClick={handlePayment}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg hover:shadow-indigo-200 active:scale-95 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="w-5 h-5" />
+                        Pay Now to Activate
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           )}

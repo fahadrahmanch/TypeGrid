@@ -10,6 +10,7 @@ function narrowError(error: unknown): {
   status: number;
   stack?: string;
 } {
+  console.log(error);
   if (error instanceof CustomError) {
     return {
       message: error.message,
@@ -38,6 +39,7 @@ export const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log(err);
   const { message, status, stack } = narrowError(err);
 
   // Log error with context

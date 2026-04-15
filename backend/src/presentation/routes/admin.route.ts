@@ -12,10 +12,12 @@ import { injectGoalManageController } from "../DI/admin.di";
 import { createGoalSchema } from "../middlewares/validations/goal.validation";
 import { updateGoalSchema } from "../middlewares/validations/goal.validation";
 import { injectChallengeManageController } from "../DI/admin.di";
-import { injectDailyAssignChallengeManageController } from "../DI/admin.di";
+import { injectDailyAssignChallengeManageController, injectSubscriptionPlanController } from "../DI/admin.di";
 import { challengeValidation } from "../middlewares/validations/challenge.validation";
 import { dailyAssignChallengeValidation } from "../middlewares/validations/daily-assign-challenge.validation";
 import { lessonValidation } from "../middlewares/validations/lessson.validation";
+import { injectAchievementManageController } from "../DI/admin.di";
+import { achievementValidation } from "../middlewares/validations/achievement.validation";
 export class adminRouter {
   private router: express.Router;
   constructor() {
@@ -276,6 +278,58 @@ export class adminRouter {
           res,
           next,
         );
+      },
+    );
+
+    // Subscription routes
+    this.router.post(
+      Routes.ADMIN.CREATE_SUBSCRIPTION_PLAN,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionPlanController.createSubscriptionPlan(req, res, next);
+      },
+    );
+
+    //achievement management routes
+    this.router.post(
+      Routes.ADMIN.CREATE_ACHIVEMENT,
+      checkRoleBasedMiddleware(["admin"]),
+      validate(achievementValidation.create),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAchievementManageController.createAchievement(req, res, next);
+      },
+    );
+
+    this.router.get(
+      Routes.ADMIN.FETCH_ACHIVEMENTS,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAchievementManageController.getAllAchievements(req, res, next);
+      },
+    );
+
+    this.router.get(
+      Routes.ADMIN.FETCH_ACHIVEMENT_BY_ID,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAchievementManageController.getAchievementById(req, res, next);
+      },
+    );
+
+    this.router.put(
+      Routes.ADMIN.UPDATE_ACHIVEMENT,
+      checkRoleBasedMiddleware(["admin"]),
+      validate(achievementValidation.update),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAchievementManageController.updateAchievement(req, res, next);
+      },
+    );
+
+    this.router.delete(
+      Routes.ADMIN.DELETE_ACHIVEMENT,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectAchievementManageController.deleteAchievement(req, res, next);
       },
     );
   }

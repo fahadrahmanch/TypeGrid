@@ -66,20 +66,13 @@ export const useQuickPlayHandleKeyDown = ({
         }
 
         const nextText = typedText + e.key;
+        const newTotal = totalTyped + 1;
         setTypedText(nextText);
 
         if (nextText.length === lesson.length) {
           setIsfinished(true);
 
-          socket.emit("typing-progress-quick", {
-            gameId: gameData?._id,
-            userId: currentUser?._id,
-            typedLength: nextText.length,
-            wpm,
-            status: "FINISHED",
-            accuracy,
-            errors,
-          });
+         
 
           socket.emit("player-finished-quick-play", {
             gameId: gameData?._id,
@@ -91,7 +84,7 @@ export const useQuickPlayHandleKeyDown = ({
             accuracy,
             errors,
             typedLength: nextText.length,
-            totalTyped,
+            totalTyped:newTotal,
             status: "FINISHED",
           });
         }

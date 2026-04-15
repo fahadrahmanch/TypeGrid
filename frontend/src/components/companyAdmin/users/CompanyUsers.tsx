@@ -45,7 +45,7 @@ const UsersTable: React.FC = () => {
     }
     fetchUsers();
   }, []);
-
+ 
   useEffect(() => {
     let filtered = [...users];
 

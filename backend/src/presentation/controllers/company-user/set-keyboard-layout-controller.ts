@@ -11,10 +11,8 @@ export class SetKeyboardLayoutController {
 
   async execute(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-        console.log("set keyboard layout")
       const userId = req.user?.userId;
       const { keyboardLayout } = req.body;
-      console.log("keyboard layout", keyboardLayout);
 
       if (!userId || !keyboardLayout) {
         res.status(HttpStatus.BAD_REQUEST).json({

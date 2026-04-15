@@ -1,4 +1,6 @@
 import { CompanyRequestController } from "../controllers/user/company-request.controller";
+import { SetKeyboardLayoutController } from "../controllers/company-user/set-keyboard-layout-controller";
+import { SetKeyboardLayoutUseCase } from "../../application/use-cases/company-user/set-keyboard-layout.use-case";
 import { CompanyRequestUseCase } from "../../application/use-cases/user/company-request.use-case";
 import { CompanyRepository } from "../../infrastructure/db/repositories/company/company.repository";
 import { UserRepository } from "../../infrastructure/db/repositories/user/user.repository";
@@ -56,6 +58,22 @@ import { DailyChallengeFinishedUseCase } from "../../application/use-cases/user/
 import { GetDailyChallengeStatsUseCase } from "../../application/use-cases/user/daily-challenge/get-daily-challenge-stats.use-case";
 import { StatsRepository } from "../../infrastructure/db/repositories/user/stats.repository";
 import { StatsModel } from "../../infrastructure/db/models/stats.schema";
+import { GetLeaderboardUseCase } from "../../application/use-cases/user/leaderboard/get-leaderboard.use-case";
+import { LeaderboardController } from "../controllers/user/leaderboard.controller";
+import { SubscriptionController } from "../controllers/user/subscription.controller";
+import { SubscriptionPlanRepository } from "../../infrastructure/db/repositories/admin/subscription-plan.repository";
+import { SubscriptionPlan } from "../../infrastructure/db/models/admin/subscription-plan.schema";
+import { GetNormalPlansUseCase } from "../../application/use-cases/user/subsciption/get-normal-plans.use-case";
+import { GetCompanyPlansUseCase } from "../../application/use-cases/user/subsciption/get-company-plans.use-case";
+import { CreateSubscriptionSessionUseCase } from "../../application/use-cases/user/subsciption/create-subscription-session.use-case";
+import { ConfirmSubscriptionUseCase } from "../../application/use-cases/user/subsciption/confirm-subscription.use-case";
+import { UserSubscriptionRepository } from "../../infrastructure/db/repositories/user/user-subscription.repository";
+import { UserSubscription } from "../../infrastructure/db/models/user/user.subscription.schema";
+import { StripeService } from "../../infrastructure/services/stripe.service";
+import { PaymentController } from "../controllers/user/payment.controller";
+import { CheckFeatureAccessUseCase } from "../../application/use-cases/user/check-feature-access-use.case";
+import { createCheckFeature } from "../middlewares/check-feature.middleware";
+import { ConfirmCompanySubscriptionUseCase } from "../../application/use-cases/user/subsciption/confirm-company-subcription.use-case";
 const statsRepository = new StatsRepository(StatsModel);
 const userRepository = new UserRepository(User);
 const authRepository = new AuthRepository();
@@ -128,6 +146,8 @@ const soloPlayResultUseCaseInstance = new SoloPlayResultUseCase(
   competitionRepository,
   userRepository,
   resultRepository,
+  statsRepository,
+  lessonRepository,
 );
 export const injectSoloPlayController = new SoloPlayController(
   createSoloPlayUseCaseInstance,
@@ -212,3 +232,51 @@ export const injectDailyChallengeController = new DailyChallengeController(
   dailyChallengeFinishedUseCaseInstance,
   getDailyChallengeStatsUseCaseInstance,
 );
+
+// leaderboard
+const getLeaderboardUseCaseInstance = new GetLeaderboardUseCase(
+  statsRepository,
+  userRepository,
+);
+const subscriptionRepository = new SubscriptionPlanRepository(SubscriptionPlan);
+const getNormalPlansUseCaseInstance = new GetNormalPlansUseCase(
+  subscriptionRepository,
+);
+const getCompanyPlansUseCaseInstance = new GetCompanyPlansUseCase(
+  subscriptionRepository,
+);
+export const injectSubscriptionController = new SubscriptionController(
+  getNormalPlansUseCaseInstance,
+  getCompanyPlansUseCaseInstance,
+);
+const userSubscriptionRepository = new UserSubscriptionRepository(UserSubscription);
+const confirmSubscriptionUseCaseInstance = new ConfirmSubscriptionUseCase(
+  subscriptionRepository,
+  userSubscriptionRepository,
+  userRepository
+);
+const stripeService = new StripeService();
+const createSubscriptionSessionUseCaseInstance =
+  new CreateSubscriptionSessionUseCase(subscriptionRepository, stripeService);
+const confirmCompanySubscriptionUseCaseInstance = new ConfirmCompanySubscriptionUseCase(
+  subscriptionRepository,
+  userSubscriptionRepository,
+  userRepository,
+  companyRepository
+);
+export const injectPaymentController = new PaymentController(
+  createSubscriptionSessionUseCaseInstance,
+  confirmSubscriptionUseCaseInstance,
+  confirmCompanySubscriptionUseCaseInstance
+);
+export const injectLeaderboardController = new LeaderboardController(
+  getLeaderboardUseCaseInstance,
+);
+
+const checkFeatureAccessUseCaseInstance = new CheckFeatureAccessUseCase(
+  userSubscriptionRepository,
+  subscriptionRepository
+);
+
+export const checkFeatureMiddleware = createCheckFeature(checkFeatureAccessUseCaseInstance);
+

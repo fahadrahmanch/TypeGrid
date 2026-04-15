@@ -10,7 +10,7 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
  * Creates a new user if not found, or returns the existing user.
  */
 export class GoogleAuthUseCase implements IGoogleAuthUseCase {
-  constructor(private readonly _authRepository: IAuthRepository) {}
+  constructor(private readonly _authRepository: IAuthRepository) { }
 
   async execute(
     name: string,

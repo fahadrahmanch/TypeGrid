@@ -7,7 +7,8 @@ import { IGetCompanyUsersUseCase } from "../../../../application/use-cases/inter
 import { IDeleteCompanyUserUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/delete-company-user.interface";
 import { IGetCompanyUsersWithStatusUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/get-company-users-with-status.interface";
 import { MESSAGES } from "../../../../domain/constants/messages";
-
+import { IGetCompanyDetailsUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/get-company-details.interface";
+import { AuthRequest } from "../../../../types/AuthRequest";
 
 export class CompanyUserController {
   constructor(
@@ -16,6 +17,7 @@ export class CompanyUserController {
     private _getCompanyUsersUseCase: IGetCompanyUsersUseCase,
     private _deleteCompanyUserUseCase: IDeleteCompanyUserUseCase,
     private _getCompanyUsersWithStatusUseCase: IGetCompanyUsersWithStatusUseCase,
+    private _getCompanyDetailsUseCase: IGetCompanyDetailsUseCase,
   ) {}
 
 
@@ -198,6 +200,19 @@ export class CompanyUserController {
         data: companyUsers,
       });
     } catch (error: unknown) {
+      next(error);
+    }
+  }
+    async companyDetailswithSubcitptionDetails(req:AuthRequest,res:Response,next:NextFunction) {
+    try {
+      const userId = req.user?.userId;
+      const companyDetails = await this._getCompanyDetailsUseCase.execute(userId!);
+      res.status(HttpStatus.OK).json({
+        success: true,
+        message: "Company details fetched successfully",
+        data: companyDetails,
+      });
+    } catch (error:unknown) {
       next(error);
     }
   }

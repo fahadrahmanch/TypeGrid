@@ -18,7 +18,6 @@ export class GroupNotificationUseCase implements IGroupNotificationUseCase {
 
     async execute(data: GroupNotificationDTO, senderId: string): Promise<void> {
         const { title, message, selectedGroup } = data;
-        console.log(data);
         const sender = await this.userRepository.findById(senderId);
         if (!sender) {
             throw new CustomError(404, "Sender not found");

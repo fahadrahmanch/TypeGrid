@@ -6,7 +6,6 @@ export class SetKeyboardLayoutUseCase implements ISetKeyboardLayoutUseCase {
 
   async execute(userId: string, keyboardLayout: string): Promise<void> {
     
-    console.log("keyboard layout", keyboardLayout);
     await this.userRepository.updateById(userId, { KeyBoardLayout: keyboardLayout });
   }
 }

@@ -17,6 +17,14 @@ export const API_ROUTES = {
     RE_VERIFY_COMPANY: "/company/verification/retry",
     COMPANY_STATUS: "/company/status",
     CHANGE_PASSWORD: "/password",
+    LEADERBOARD: "/leaderboard",
+    //subscription
+    SUBSCRIPTION: "/subscription/plans",
+    COMPANY_PLANS: "/subscription/company-plans",
+    CREATE_SUBSCRIPTION_SESSION: "/subscription/create-session",
+    CREATE_COMPANY_SUBSCRIPTION_SESSION: "/subscription/create-company-session",
+    CONFIRM_SUBSCRIPTION: "/subscription/confirm",
+    CONFIRM_COMPANY_SUBSCRIPTION: "/subscription/confirm-company",
   },
   QUICK_PLAY: {
     START: "/quick-play/start",
@@ -78,6 +86,10 @@ export const API_ROUTES = {
     },
   },
   ADMIN: {
+    SUBSCRIPTION: {
+      BASE: "/subscription",
+      BY_ID: (id: string) => `/subscription/${id}`,
+    },
     REWARDS: {
       BASE: "/rewards",
       BY_ID: (id: string) => `/rewards/${id}`,
@@ -134,4 +146,7 @@ export const API_ROUTES = {
   },
   // keyboard
   SET_KEYBOARD_LAYOUT: "/keyboard/set-keyboard-layout",
+
+  //company admin
+  GET_COMPANY_DETAILS: "/company/details",
 } as const;

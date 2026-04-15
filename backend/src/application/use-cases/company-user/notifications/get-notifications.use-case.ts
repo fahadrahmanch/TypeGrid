@@ -27,7 +27,6 @@ export class GetNotificationsUseCase implements IGetNotificationsUseCase {
                 };
             })
         );
-        console.log(notificationsWithReceipts);
         notificationsWithReceipts.sort((a, b) => {
             const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
             const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;

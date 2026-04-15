@@ -27,6 +27,8 @@ import { CompanyUserStats } from "../../infrastructure/db/models/company/company
 import { CompanyUserStatsRepository } from "../../infrastructure/db/repositories/company/company-user-stats.repository";
 import { Lesson } from "../../infrastructure/db/models/admin/lesson.schema";
 import { LessonRepository } from "../../infrastructure/db/repositories/admin/lesson.repository";
+import { StatsModel } from "../../infrastructure/db/models/stats.schema";
+import { StatsRepository } from "../../infrastructure/db/repositories/user/stats.repository";
 const competitionRepository = new CompetitionRepository(Competition);
 const groupRepository = new GroupRepository(Group);
 const userRepository = new UserRepository(User);
@@ -46,10 +48,12 @@ const validateGroupPlayMemberUseCase = new ValidateGroupPlayMemberUseCase(
   groupRepository,
   competitionRepository,
 );
+const statsRepository = new StatsRepository(StatsModel);
 const finishGroupPlayUseCaseInstance = new FinishGroupPlayUseCase(
   competitionRepository,
   groupRepository,
   resultRepository,
+  statsRepository,
 );
 const getJoinMemberUseCaseInstance = new GetJoinMemberUseCase(
   competitionRepository,
@@ -58,6 +62,8 @@ const getJoinMemberUseCaseInstance = new GetJoinMemberUseCase(
 const finishQuickPlayUseCaseInstance = new FinishQuickPlayUseCase(
   competitionRepository,
   resultRepository,
+  statsRepository,
+  lessonRepository,
 );
 const leaveQuickPlayUseCaseInstance = new LeaveQuickPlayUseCase(
   competitionRepository,

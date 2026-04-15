@@ -14,6 +14,7 @@ export class connectDB {
         error: err.message,
         stack: err.stack,
       });
+      throw err; 
     }
   }
 }

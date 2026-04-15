@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { socket } from "../../socket";
+import { getMappedKey, KeyboardLayoutType } from "../../utils/keyboardLayouts";
 
 interface UseChallengeKeydownProps {
   lessonText: string | undefined;
@@ -21,6 +22,7 @@ interface UseChallengeKeydownProps {
   setTotalTyped: React.Dispatch<React.SetStateAction<number>>;
   setErrors: React.Dispatch<React.SetStateAction<number>>;
   setIsFinished: (v: boolean) => void;
+  keyboardLayout: KeyboardLayoutType;
 }
 
 export function useChallengeKeydown({
@@ -43,56 +45,77 @@ export function useChallengeKeydown({
   setTotalTyped,
   setErrors,
   setIsFinished,
+  keyboardLayout,
 }: UseChallengeKeydownProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lessonText || isFinished || phase !== "PLAY") return;
 
-      if (e.key === "Backspace") {
+      const key = e.key;
+
+      if (key === "Backspace") {
         setHasError(false);
         setTypedText((prev) => prev.slice(0, -1));
+        setTotalTyped((prev) => Math.max(0, prev - 1));
         return;
       }
 
-      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        e.preventDefault();
+      if (key.length > 1 && key !== " ") return;
 
-        if (hasError) return;
+      e.preventDefault();
 
-        const expectedChar = lessonText[typedText.length];
-        setTotalTyped((prev) => prev + 1);
+      if (hasError) return;
 
-        if (e.key !== expectedChar) {
-          setErrors((prev) => prev + 1);
-          setHasError(true);
-          setTypedText((prev) => prev + e.key);
-          return;
-        }
+      const mappedKey = getMappedKey(key, keyboardLayout);
 
-        const nextText = typedText + e.key;
-        setTypedText(nextText);
+      const index = typedText.length;
+      const expectedChar = lessonText[index];
 
-        if (nextText.length === lessonText.length) {
-          setIsFinished(true);
+      const newTotal = totalTyped + 1;
 
-          socket.emit("player-finished-challenge", {
-            challengeId,
-            userId: currentUserId,
-            name: currentUserName,
-            imageUrl: currentUserImageUrl,
-            timeTaken: elapsedTime,
-            wpm,
-            accuracy,
-            errors,
-            typedLength: nextText.length,
-            totalTyped,
-            status: "FINISHED",
-          });
-        }
+      if (mappedKey !== expectedChar) {
+        setErrors((prev) => prev + 1);
+        setHasError(true);
+        setTotalTyped(newTotal);
+
+        setTypedText((prev) => prev + key);
+        return;
+      }
+
+      const nextText = typedText + key;
+
+      setTypedText(nextText);
+      setTotalTyped(newTotal);
+
+      if (nextText.length === lessonText.length) {
+        setIsFinished(true);
+
+        socket.emit("player-finished-challenge", {
+          challengeId,
+          userId: currentUserId,
+          name: currentUserName,
+          imageUrl: currentUserImageUrl,
+          timeTaken: elapsedTime,
+          wpm,
+          accuracy,
+          errors,
+          typedLength: nextText.length,
+          totalTyped: newTotal,
+          status: "FINISHED",
+        });
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
+
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lessonText, isFinished, typedText, phase, hasError, challengeId]);
+  }, [
+    lessonText,
+    isFinished,
+    typedText,
+    phase,
+    hasError,
+    challengeId,
+    keyboardLayout, 
+  ]);
 }

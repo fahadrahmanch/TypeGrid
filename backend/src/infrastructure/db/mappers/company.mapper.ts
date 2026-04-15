@@ -7,6 +7,7 @@ export class CompanyMapper {
       ...doc,
       _id: doc?._id?.toString(),
       OwnerId: doc?.OwnerId?.toString(),
+      planId: doc?.planId?.toString(),
     });
   }
 }

@@ -53,6 +53,18 @@ import { DeleteDailyAssignChallengeUseCase } from "../../application/use-cases/a
 import { GetDailyAssignChallengesUseCase } from "../../application/use-cases/admin/daily-challenge/get-all-daily-challenges.use-case";
 import { DailyChallengeProgress } from "../../infrastructure/db/models/user/daily-challenge-progess.schema";
 import { DailyChallengeProgressRepository } from "../../infrastructure/db/repositories/user/daily-challenge-progress.repository";
+import { SubscriptionPlanRepository } from "../../infrastructure/db/repositories/admin/subscription-plan.repository";
+import { SubscriptionController } from "../controllers/admin/subscription.controller";
+import { SubscriptionPlan } from "../../infrastructure/db/models/admin/subscription-plan.schema";
+import { CreateSubscriptionPlanUseCase } from "../../application/use-cases/admin/subscription/create-subscription-plan.use-case";
+import { AchievementModel } from "../../infrastructure/db/models/admin/acheivment.schema";
+import { AchievementRepository } from "../../infrastructure/db/repositories/user/achievement.repository";
+import { CreateAchievementUseCase } from "../../application/use-cases/admin/acheivment/create-acheivement.use-case";
+import { GetAchievementsUseCase } from "../../application/use-cases/admin/acheivment/get-achievements.use-case";
+import { GetAchievementByIdUseCase } from "../../application/use-cases/admin/acheivment/get-achievement-by-id.use-case";
+import { UpdateAchievementUseCase } from "../../application/use-cases/admin/acheivment/update-achievement.use-case";
+import { DeleteAchievementUseCase } from "../../application/use-cases/admin/acheivment/delete-achievement.use-case";
+import { AchievementManageController } from "../controllers/admin/acheivement-manage.controller";
 const authRepo = new AuthRepository();
 const userRepository = new UserRepository(User);
 const blockUserUseCase = new BlockUserUseCase(userRepository);
@@ -81,6 +93,7 @@ const createRewardUseCase = new CreateRewardUseCase(rewardRepository);
 const getRewardByIdUseCase = new GetRewardByIdUseCase(rewardRepository);
 const updateRewardUseCase = new UpdateRewardUseCase(rewardRepository);
 const deleteRewardUseCase = new DeleteRewardUseCase(rewardRepository);
+
 export const injectRewardManageController = new RewardManageController(
   createRewardUseCase,
   getRewardsUseCase,
@@ -159,6 +172,22 @@ const getDailyAssignChallengesUseCase = new GetDailyAssignChallengesUseCase(
   challengeRepository,
 );
 
+
+const subscriptionPlanRepository = new SubscriptionPlanRepository(SubscriptionPlan);
+const createSubscriptionPlanUseCase = new CreateSubscriptionPlanUseCase(subscriptionPlanRepository);
+// const getSubscriptionPlanUseCase = new GetSubscriptionPlanUseCase(subscriptionPlanRepository);
+// const updateSubscriptionPlanUseCase = new UpdateSubscriptionPlanUseCase(subscriptionPlanRepository);
+// const deleteSubscriptionPlanUseCase = new DeleteSubscriptionPlanUseCase(subscriptionPlanRepository);
+// const getSubscriptionPlansUseCase = new GetSubscriptionPlansUseCase(subscriptionPlanRepository);
+
+export const injectSubscriptionPlanController = new SubscriptionController(
+  createSubscriptionPlanUseCase,
+  // getSubscriptionPlanUseCase,
+  // updateSubscriptionPlanUseCase,
+  // deleteSubscriptionPlanUseCase,
+  // getSubscriptionPlansUseCase,
+);
+
 export const injectDailyAssignChallengeManageController =
   new DailyAssignChallengeManageController(
     createDailyAssignChallengeUseCase,
@@ -167,3 +196,18 @@ export const injectDailyAssignChallengeManageController =
     deleteDailyAssignChallengeUseCase,
     getDailyAssignChallengesUseCase,
   );
+
+const achievementRepository = new AchievementRepository(AchievementModel);
+const createAchievementUseCase = new CreateAchievementUseCase(achievementRepository);
+const getAchievementsUseCase = new GetAchievementsUseCase(achievementRepository);
+const getAchievementByIdUseCase = new GetAchievementByIdUseCase(achievementRepository);
+const updateAchievementUseCase = new UpdateAchievementUseCase(achievementRepository);
+const deleteAchievementUseCase = new DeleteAchievementUseCase(achievementRepository);
+
+export const injectAchievementManageController = new AchievementManageController(
+  createAchievementUseCase,
+  getAchievementsUseCase,
+  getAchievementByIdUseCase,
+  updateAchievementUseCase,
+  deleteAchievementUseCase,
+);

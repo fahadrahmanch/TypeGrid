@@ -260,7 +260,6 @@ export const groupHandlers = (socket: Socket, io: Server) => {
     socket.leave(groupId);
   });
   socket.on("leave-game", async ({ gameId, userId }) => {
-    console.log("leave-game", gameId, userId);
     await injectGroupSocketController.handleDisconnect(socket, io);
     socket.leave(gameId);
   });
