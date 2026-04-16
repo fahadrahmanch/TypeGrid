@@ -1,5 +1,5 @@
 import React from "react";
-import { Eye, Pencil, Trash } from "lucide-react";
+import { Eye, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { Group } from "../../../types/group";
@@ -31,24 +31,12 @@ const GroupListTable: React.FC<GroupListTableProps> = ({ groups, onDeleteSuccess
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-gray-50/50 border-b border-gray-100">
-            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Group Name
-            </th>
-            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Group Type
-            </th>
-            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Users
-            </th>
-            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Avg WPM
-            </th>
-            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Avg Accuracy
-            </th>
-            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Max Accuracy
-            </th>
+            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Group Name</th>
+            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Group Type</th>
+            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Users</th>
+            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Avg WPM</th>
+            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Avg Accuracy</th>
+            <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Max Accuracy</th>
             <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">
               Actions
             </th>
@@ -68,9 +56,7 @@ const GroupListTable: React.FC<GroupListTableProps> = ({ groups, onDeleteSuccess
                 className="group hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-none"
               >
                 <td className="px-6 py-4">
-                  <span className="font-semibold text-gray-900 capitalize">
-                    {group.name}
-                  </span>
+                  <span className="font-semibold text-gray-900 capitalize">{group.name}</span>
                 </td>
                 <td className="px-6 py-4">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100 capitalize">
@@ -92,9 +78,7 @@ const GroupListTable: React.FC<GroupListTableProps> = ({ groups, onDeleteSuccess
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-3">
                     <button
-                      onClick={() =>
-                        navigate(`/company/admin/groups/${group.id}`)
-                      }
+                      onClick={() => navigate(`/company/admin/groups/${group.id}`)}
                       className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       title="View Details"
                     >

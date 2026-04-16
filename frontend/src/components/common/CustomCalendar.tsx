@@ -1,37 +1,24 @@
 import React, { useState } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Calendar as CalendarIcon,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 
 interface CustomCalendarProps {
   selectedDate: string;
   onSelect: (date: string) => void;
 }
 
-const CustomCalendar: React.FC<CustomCalendarProps> = ({
-  selectedDate,
-  onSelect,
-}) => {
+const CustomCalendar: React.FC<CustomCalendarProps> = ({ selectedDate, onSelect }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
 
-  const daysInMonth = (year: number, month: number) =>
-    new Date(year, month + 1, 0).getDate();
-  const startDayOfMonth = (year: number, month: number) =>
-    new Date(year, month, 1).getDay();
+  const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const startDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
 
   const handlePrevMonth = () => {
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1),
-    );
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(
-      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1),
-    );
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
   };
 
   const handleDateClick = (day: number) => {
@@ -75,7 +62,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
             }`}
         >
           {d}
-        </button>,
+        </button>
       );
     }
 
@@ -118,29 +105,20 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
       {isOpen && (
         <div className="absolute top-full mt-2 right-0 z-[110] w-72 bg-white rounded-3xl shadow-2xl border border-gray-100 p-4 animate-in fade-in zoom-in-95 duration-200">
           <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={handlePrevMonth}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-all text-gray-400"
-            >
+            <button onClick={handlePrevMonth} className="p-2 hover:bg-gray-100 rounded-lg transition-all text-gray-400">
               <ChevronLeft className="w-4 h-4" />
             </button>
             <h4 className="text-sm font-black text-gray-800 tracking-tight">
               {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
             </h4>
-            <button
-              onClick={handleNextMonth}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-all text-gray-400"
-            >
+            <button onClick={handleNextMonth} className="p-2 hover:bg-gray-100 rounded-lg transition-all text-gray-400">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
           <div className="grid grid-cols-7 gap-1 text-center mb-2">
             {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-              <span
-                key={d}
-                className="text-[10px] font-black uppercase text-gray-400 tracking-widest"
-              >
+              <span key={d} className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
                 {d}
               </span>
             ))}

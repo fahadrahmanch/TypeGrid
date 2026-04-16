@@ -19,9 +19,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
   contestTitle,
   // onStartContest,
 }) => {
-  const [participantsList, setParticipantsList] = useState<
-    Array<{ name: string; email: string }>
-  >([]);
+  const [participantsList, setParticipantsList] = useState<Array<{ name: string; email: string }>>([]);
   const [isStarting, setIsStarting] = useState(false);
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
   const [announcementMsg, setAnnouncementMsg] = useState("");
@@ -88,9 +86,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
           {/* Top Header Card */}
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm mb-6 flex justify-between items-center border border-gray-100">
             <div>
-              <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
-                Lobby Area
-              </h1>
+              <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Lobby Area</h1>
               <p className="text-gray-500 font-medium">{contestTitle}</p>
             </div>
           </div>
@@ -152,9 +148,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
             <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
               Participants{" "}
-              <span className="text-[#D0864B] text-lg font-black tracking-tighter">
-                ( {participantsList.length} )
-              </span>
+              <span className="text-[#D0864B] text-lg font-black tracking-tighter">( {participantsList.length} )</span>
             </h2>
 
             {participantsList.length > 0 ? (
@@ -168,13 +162,9 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
                       <div className="w-10 h-10 rounded-full bg-[#FFF4EC] flex items-center justify-center text-[#D0864B] font-bold shadow-inner border border-[#FADDB8]/30">
                         {participant.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="font-bold text-slate-800">
-                        {participant.name}
-                      </span>
+                      <span className="font-bold text-slate-800">{participant.name}</span>
                     </div>
-                    <span className="text-xs text-gray-400 font-medium">
-                      {participant.email}
-                    </span>
+                    <span className="text-xs text-gray-400 font-medium">{participant.email}</span>
                   </div>
                 ))}
               </div>
@@ -184,9 +174,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
                 <p className="font-bold text-gray-400 uppercase tracking-widest text-xs">
                   No participants have joined yet
                 </p>
-                <p className="text-xs mt-2 text-gray-400">
-                  They will appear here once they connect to the lobby
-                </p>
+                <p className="text-xs mt-2 text-gray-400">They will appear here once they connect to the lobby</p>
               </div>
             )}
           </div>
@@ -200,7 +188,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
             `}</style>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };
 

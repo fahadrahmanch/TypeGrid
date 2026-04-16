@@ -30,20 +30,12 @@ const AssignmentSummary: React.FC<AssignmentSummaryProps> = ({
       <div className="space-y-8 relative">
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded-2xl border border-[#ECA468]/10 shadow-sm">
-            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">
-              Students
-            </span>
-            <span className="text-2xl font-black text-gray-900">
-              {selectedUserCount}
-            </span>
+            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Students</span>
+            <span className="text-2xl font-black text-gray-900">{selectedUserCount}</span>
           </div>
           <div className="bg-white p-4 rounded-2xl border border-[#ECA468]/10 shadow-sm">
-            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">
-              Materials
-            </span>
-            <span className="text-2xl font-black text-gray-900">
-              {selectedLessonCount}
-            </span>
+            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Materials</span>
+            <span className="text-2xl font-black text-gray-900">{selectedLessonCount}</span>
           </div>
         </div>
 
@@ -52,10 +44,7 @@ const AssignmentSummary: React.FC<AssignmentSummaryProps> = ({
             Deadline Date
           </label>
           <div className="relative">
-            <Clock
-              size={16}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#D0864B]"
-            />
+            <Clock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#D0864B]" />
             <input
               type="date"
               value={deadlineAt}

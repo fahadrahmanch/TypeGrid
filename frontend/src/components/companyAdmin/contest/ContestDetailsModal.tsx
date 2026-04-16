@@ -26,15 +26,8 @@ interface ContestDetailsModalProps {
   setContests: React.Dispatch<React.SetStateAction<ContestProps[]>>;
 }
 
-const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
-  isOpen,
-  onClose,
-  contestData,
-  setContests,
-}) => {
-  const [participantsList, setParticipantsList] = useState<
-    Array<{ name: string; email: string }>
-  >([]);
+const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({ isOpen, onClose, contestData, setContests }) => {
+  const [participantsList, setParticipantsList] = useState<Array<{ name: string; email: string }>>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   useEffect(() => {
     const fetchContest = async () => {
@@ -54,9 +47,7 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
     try {
       const response = await deleteContest(contestData.id);
       if (response.status === 200) {
-        setContests((prev: any) =>
-          prev.filter((contest: any) => contest._id !== contestData.id),
-        );
+        setContests((prev: any) => prev.filter((contest: any) => contest._id !== contestData.id));
       }
       onClose();
     } catch (error) {
@@ -69,12 +60,9 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-start">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-1">
-              {contestData.title}
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">{contestData.title}</h2>
             <p className="text-sm text-gray-500">
-              {contestData.description ||
-                "Test your typing speed and accuracy in this exciting competition"}
+              {contestData.description || "Test your typing speed and accuracy in this exciting competition"}
             </p>
           </div>
           <button
@@ -90,70 +78,40 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
           {/* Stats Grid */}
           <div className="bg-gray-50 rounded-xl p-6 grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Mode
-              </span>
-              <span className="text-sm font-bold text-gray-900">
-                {contestData.mode}
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Mode</span>
+              <span className="text-sm font-bold text-gray-900">{contestData.mode}</span>
             </div>
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Difficulty
-              </span>
-              <span className="text-sm font-bold text-gray-900 capitalize">
-                {contestData.difficulty}
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Difficulty</span>
+              <span className="text-sm font-bold text-gray-900 capitalize">{contestData.difficulty}</span>
             </div>
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Date
-              </span>
-              <span className="text-sm font-bold text-gray-900">
-                {contestData.date || "-"}
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Date</span>
+              <span className="text-sm font-bold text-gray-900">{contestData.date || "-"}</span>
             </div>
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Time
-              </span>
-              <span className="text-sm font-bold text-gray-900">
-                {contestData.time || "-"}
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Time</span>
+              <span className="text-sm font-bold text-gray-900">{contestData.time || "-"}</span>
             </div>
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Duration
-              </span>
-              <span className="text-sm font-bold text-gray-900">
-                {contestData.duration} minutes
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Duration</span>
+              <span className="text-sm font-bold text-gray-900">{contestData.duration} minutes</span>
             </div>
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Participants
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Participants</span>
               <span className="text-sm font-bold text-gray-900">
                 {contestData.participantsCount} / {contestData.maxParticipants}
               </span>
             </div>
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Reward
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Reward</span>
               <span className="text-sm font-bold text-gray-900">
-                {typeof contestData.reward === "number"
-                  ? `$${contestData.reward}`
-                  : contestData.reward}
+                {typeof contestData.reward === "number" ? `$${contestData.reward}` : contestData.reward}
               </span>
             </div>
             <div>
-              <span className="text-xs font-medium text-gray-400 mb-1 block">
-                Status
-              </span>
-              <span className="text-sm font-bold text-gray-900">
-                {contestData.status}
-              </span>
+              <span className="text-xs font-medium text-gray-400 mb-1 block">Status</span>
+              <span className="text-sm font-bold text-gray-900">{contestData.status}</span>
             </div>
           </div>
 
@@ -176,16 +134,12 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
                       key={idx}
                       className="px-4 py-3 grid grid-cols-2 text-sm items-center hover:bg-gray-50 transition-colors"
                     >
-                      <div className="font-medium text-gray-900">
-                        {participant.name}
-                      </div>
+                      <div className="font-medium text-gray-900">{participant.name}</div>
                       <div className="text-gray-500">{participant.email}</div>
                     </div>
                   ))
                 ) : (
-                  <div className="px-4 py-8 text-center text-gray-500 text-sm">
-                    No participants yet.
-                  </div>
+                  <div className="px-4 py-8 text-center text-gray-500 text-sm">No participants yet.</div>
                 )}
               </div>
             </div>
@@ -246,7 +200,7 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({
         setContests={setContests}
       />
     </div>,
-    document.body,
+    document.body
   );
 };
 

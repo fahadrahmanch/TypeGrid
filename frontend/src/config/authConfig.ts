@@ -1,14 +1,6 @@
 // src/config/authConfig.ts
-import {
-  userRefreshAPI,
-  adminRefreshAPI,
-  companyRefreshAPI,
-} from "../api/auth/authServices";
-import {
-  setAccessToken,
-  setAuthLoaded,
-  logout,
-} from "../store/slices/auth/authSlice";
+import { userRefreshAPI, adminRefreshAPI, companyRefreshAPI } from "../api/auth/authServices";
+import { setAccessToken, setAuthLoaded, logout } from "../store/slices/auth/authSlice";
 
 export const authConfig: Record<
   string,

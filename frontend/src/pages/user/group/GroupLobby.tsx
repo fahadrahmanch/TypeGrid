@@ -66,13 +66,7 @@ const GroupLobby: React.FC = () => {
   }, [group?.id, user._id]);
 
   useEffect(() => {
-    const handleUserLeave = ({
-      members,
-      newHostId,
-    }: {
-      members: Player[];
-      newHostId: string;
-    }) => {
+    const handleUserLeave = ({ members, newHostId }: { members: Player[]; newHostId: string }) => {
       const updatedMembers = [...members];
 
       setPlayers(updatedMembers);
@@ -84,7 +78,7 @@ const GroupLobby: React.FC = () => {
               ownerId: newHostId,
               members: updatedMembers,
             }
-          : prev,
+          : prev
       );
     };
 
@@ -125,7 +119,7 @@ const GroupLobby: React.FC = () => {
               difficulty: data.difficulty,
               maximumPlayers: data.maximumPlayers,
             }
-          : prev,
+          : prev
       );
     };
 
@@ -223,11 +217,7 @@ const GroupLobby: React.FC = () => {
 
   async function editGroup(newDifficulty?: string, newMaxPlayers?: number) {
     if (!group?.id) return;
-    await editGroupAPI(
-      group.id,
-      newDifficulty ?? difficulty,
-      newMaxPlayers ?? maximumPlayers,
-    );
+    await editGroupAPI(group.id, newDifficulty ?? difficulty, newMaxPlayers ?? maximumPlayers);
   }
 
   async function startGame() {
@@ -250,9 +240,7 @@ const GroupLobby: React.FC = () => {
         <div className="w-full max-w-[1600px] grid grid-cols-12 gap-8">
           {/* LEFT – SETTINGS */}
           <div className="col-span-3 bg-[#FFF1D8] rounded-2xl p-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
-              ⚙️ Settings
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">⚙️ Settings</h2>
 
             {/* Difficulty */}
             <div className="mb-8">
@@ -278,16 +266,8 @@ const GroupLobby: React.FC = () => {
                         editGroup(value, undefined);
                       }}
                       className={`text-base py-2 rounded-lg border transition
-            ${
-              value === group?.difficulty
-                ? "bg-[#7A6A5D] text-white"
-                : "bg-white text-gray-700"
-            }
-            ${
-              !isHost
-                ? "cursor-not-allowed opacity-50"
-                : "hover:bg-[#7A6A5D] hover:text-white"
-            }
+            ${value === group?.difficulty ? "bg-[#7A6A5D] text-white" : "bg-white text-gray-700"}
+            ${!isHost ? "cursor-not-allowed opacity-50" : "hover:bg-[#7A6A5D] hover:text-white"}
           `}
                     >
                       {d}
@@ -296,11 +276,7 @@ const GroupLobby: React.FC = () => {
                 })}
               </div>
 
-              {!isHost && (
-                <p className="text-xs text-gray-500">
-                  Only the host can change difficulty
-                </p>
-              )}
+              {!isHost && <p className="text-xs text-gray-500">Only the host can change difficulty</p>}
             </div>
 
             {/* Max Players */}
@@ -324,16 +300,8 @@ const GroupLobby: React.FC = () => {
                       editGroup(undefined, num);
                     }}
                     className={`text-base py-2 rounded-lg border transition
-          ${
-            num === Number(group?.maximumPlayers)
-              ? "bg-[#7A6A5D] text-white"
-              : "bg-white"
-          }
-          ${
-            !isHost
-              ? "cursor-not-allowed opacity-50"
-              : "hover:bg-[#7A6A5D] hover:text-white"
-          }
+          ${num === Number(group?.maximumPlayers) ? "bg-[#7A6A5D] text-white" : "bg-white"}
+          ${!isHost ? "cursor-not-allowed opacity-50" : "hover:bg-[#7A6A5D] hover:text-white"}
         `}
                   >
                     {num}
@@ -341,19 +309,13 @@ const GroupLobby: React.FC = () => {
                 ))}
               </div>
 
-              {!isHost && (
-                <p className="text-xs text-gray-500 mt-2">
-                  Only the host can change lobby settings
-                </p>
-              )}
+              {!isHost && <p className="text-xs text-gray-500 mt-2">Only the host can change lobby settings</p>}
             </div>
 
             {/* Start Time */}
             <div>
               <p className="text-base font-medium mb-2">Start Time</p>
-              <p className="text-sm text-gray-500 mb-3">
-                Time in seconds before the match starts (default: 10)
-              </p>
+              <p className="text-sm text-gray-500 mb-3">Time in seconds before the match starts (default: 10)</p>
 
               <input
                 type="text"
@@ -366,11 +328,7 @@ const GroupLobby: React.FC = () => {
                 className="w-full border rounded-lg px-4 py-3"
               />
 
-              {!isHost && (
-                <p className="text-xs text-gray-500 mt-2">
-                  Only the host can change start time
-                </p>
-              )}
+              {!isHost && <p className="text-xs text-gray-500 mt-2">Only the host can change start time</p>}
             </div>
           </div>
 
@@ -425,13 +383,8 @@ const GroupLobby: React.FC = () => {
                   {showShareMenu && (
                     <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-white border rounded-xl shadow-lg p-4 z-10 w-64 animate-fade-in-up">
                       <div className="flex justify-between items-center mb-3 pb-2 border-b">
-                        <h4 className="text-sm font-semibold text-gray-700">
-                          Share via
-                        </h4>
-                        <button
-                          onClick={() => setShowShareMenu(false)}
-                          className="text-gray-400 hover:text-gray-600"
-                        >
+                        <h4 className="text-sm font-semibold text-gray-700">Share via</h4>
+                        <button onClick={() => setShowShareMenu(false)} className="text-gray-400 hover:text-gray-600">
                           <FaTimes />
                         </button>
                       </div>
@@ -476,31 +429,21 @@ const GroupLobby: React.FC = () => {
                   ▶ START GAME
                 </button>
               ) : (
-                <p className="text-sm text-gray-500 text-center mt-4">
-                  ⏳ Waiting for host to start the game…
-                </p>
+                <p className="text-sm text-gray-500 text-center mt-4">⏳ Waiting for host to start the game…</p>
               )}
             </div>
 
             {/* CHAT */}
             <div className="bg-[#FFF1D8] rounded-2xl p-8">
-              <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
-                💬 Chat
-              </h3>
+              <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">💬 Chat</h3>
 
               <div className="bg-white rounded-lg border p-4 text-base text-gray-600 mb-4 h-32">
-                <span className="text-orange-500">spider man</span> has joined
-                the lobby.
+                <span className="text-orange-500">spider man</span> has joined the lobby.
               </div>
 
               <div className="flex gap-3">
-                <input
-                  placeholder="Write a message..."
-                  className="flex-1 border rounded-lg px-4 py-3 text-base"
-                />
-                <button className="px-6 py-3 rounded-lg bg-[#7A6A5D] text-white text-base">
-                  Send
-                </button>
+                <input placeholder="Write a message..." className="flex-1 border rounded-lg px-4 py-3 text-base" />
+                <button className="px-6 py-3 rounded-lg bg-[#7A6A5D] text-white text-base">Send</button>
               </div>
             </div>
           </div>
@@ -513,10 +456,7 @@ const GroupLobby: React.FC = () => {
 
             <div className="space-y-4">
               {players.map((p, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between bg-[#FFF6E8] rounded-xl px-4 py-3"
-                >
+                <div key={i} className="flex items-center justify-between bg-[#FFF6E8] rounded-xl px-4 py-3">
                   {/* LEFT SIDE */}
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     {/* Avatar */}

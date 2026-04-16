@@ -1,9 +1,6 @@
 // import lines from "../../../assets/images/auth/login/lines.png";
 import kid2 from "../../../assets/images/auth/login/Kid2.png";
-import {
-  emailValidation,
-  passwordValidation,
-} from "../../../validations/authValidations";
+import { emailValidation, passwordValidation } from "../../../validations/authValidations";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -60,9 +57,7 @@ const CompanyLoginForm: React.FC = () => {
       }
       toast.success(response.data.message);
     } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
     }
   };
@@ -72,9 +67,7 @@ const CompanyLoginForm: React.FC = () => {
       <div className="h-screen flex justify-center items-center flex-1 w-full relative sm:w-4/4 md:w-full lg:w-full  ">
         {/* SignIn Box */}
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">
-            Company Login
-          </h2>
+          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">Company Login</h2>
           <p className="text-sm pb-8">Sign in to your account to continue</p>
 
           {/* Divider */}
@@ -101,11 +94,7 @@ const CompanyLoginForm: React.FC = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
               >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible size={20} />
-                ) : (
-                  <AiOutlineEye size={20} />
-                )}
+                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
               </span>
             </div>
             <p className="text-left text-red-500 text-sm">{error.password}</p>
@@ -117,10 +106,7 @@ const CompanyLoginForm: React.FC = () => {
               Sign In
             </button>
           </form>
-          <a
-            href="/company/forgot/password"
-            className="text-gray-900 font-sans  hover:underline"
-          >
+          <a href="/company/forgot/password" className="text-gray-900 font-sans  hover:underline">
             forgot password
           </a>
         </div>

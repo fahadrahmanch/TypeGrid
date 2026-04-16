@@ -1,10 +1,7 @@
 import { useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../../socket";
-import type {
-  LivePlayer,
-  GamePlayerResult,
-} from "../../pages/companyUser/ChallengeArea";
+import type { LivePlayer, GamePlayerResult } from "../../pages/companyUser/ChallengeArea";
 
 interface UseChallengeSocketProps {
   challengeId: string | undefined;
@@ -18,9 +15,7 @@ interface UseChallengeSocketProps {
   errors: number;
   elapsedTime: number;
   totalLength: number;
-  onPlayersUpdate: (
-    updater: (prev: LivePlayer[] | null) => LivePlayer[] | null,
-  ) => void;
+  onPlayersUpdate: (updater: (prev: LivePlayer[] | null) => LivePlayer[] | null) => void;
   onGameFinished: (results: GamePlayerResult[]) => void;
 }
 
@@ -55,8 +50,7 @@ export function useChallengeSocket({
   // Emit live typing progress
   useEffect(() => {
     if (!challengeId || !currentUserId) return;
-    if (phase !== "PLAY" || (isFinished && typedText.length !== totalLength))
-      return;
+    if (phase !== "PLAY" || (isFinished && typedText.length !== totalLength)) return;
 
     socket.emit("typing-progress-challenge", {
       challengeId: challengeId,
@@ -68,17 +62,7 @@ export function useChallengeSocket({
       errors,
       timeTaken: elapsedTime,
     });
-  }, [
-    typedText,
-    wpm,
-    accuracy,
-    errors,
-    phase,
-    isFinished,
-    elapsedTime,
-    challengeId,
-    currentUserId,
-  ]);
+  }, [typedText, wpm, accuracy, errors, phase, isFinished, elapsedTime, challengeId, currentUserId]);
 
   // Listen for other players' progress
   useEffect(() => {
@@ -91,18 +75,14 @@ export function useChallengeSocket({
                   ...p,
                   ...data,
                   progress:
-                    data.status === "FINISHED" ||
-                    (totalLength && data.typedLength === totalLength)
+                    data.status === "FINISHED" || (totalLength && data.typedLength === totalLength)
                       ? 100
                       : totalLength
-                        ? Math.min(
-                            100,
-                            Math.round((data.typedLength / totalLength) * 100),
-                          )
+                        ? Math.min(100, Math.round((data.typedLength / totalLength) * 100))
                         : 0,
                 }
-              : p,
-          ) ?? null,
+              : p
+          ) ?? null
       );
     };
     socket.off("typing-progress-update-challenge");

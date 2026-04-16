@@ -47,8 +47,7 @@ export const API_ROUTES = {
     GROUP_DETAILS: (joinLink: string) => `/group-play/groups/${joinLink}`,
     EDIT_GROUP: (groupId: string) => `/group-play/groups/${groupId}`,
     JOIN_GROUP: (joinLink: string) => `/group-play/groups/join/${joinLink}`,
-    REMOVE_PLAYER: (groupId: string, playerId: string) =>
-      `/group-play/groups/${groupId}/players/${playerId}`,
+    REMOVE_PLAYER: (groupId: string, playerId: string) => `/group-play/groups/${groupId}/players/${playerId}`,
     START_GAME: (gameId: string) => `/group-play/groups/${gameId}/start`,
     NEW_GAME: (gameId: string) => `/group-play/${gameId}/new-game`,
   },
@@ -57,8 +56,7 @@ export const API_ROUTES = {
     RESULT: (gameId: string) => `/solo-result${gameId}`,
   },
   TYPING: {
-    PRACTICE: (level: string, category: string) =>
-      `/typing/practice?level=${level}&category=${category}`,
+    PRACTICE: (level: string, category: string) => `/typing/practice?level=${level}&category=${category}`,
     LESSON_BY_ID: (lessonId: string) => `/typing/practice/${lessonId}`,
   },
   DAILY_CHALLENGE: {
@@ -137,8 +135,7 @@ export const API_ROUTES = {
       AREA: (contestId: string) => `/company/contest-area/${contestId}`,
       LIST: "/company/contests",
       STATUS: (contestId: string) => `/company/contest/${contestId}/status`,
-      PARTICIPANTS: (contestId: string) =>
-        `/company/contest/${contestId}/participants`,
+      PARTICIPANTS: (contestId: string) => `/company/contest/${contestId}/participants`,
       RESULTS: (contestId: string) => `/company/contest/${contestId}/results`,
     },
     COMPANY_GROUPS: "/company-groups",
@@ -151,16 +148,16 @@ export const API_ROUTES = {
       ALL: "/achievements",
       BY_ID: (id: string) => `/achievement/${id}`,
       DELETE: (id: string) => `/achievement/${id}`,
-    }
+    },
   },
-  GET_COMPANY_USER_PROFILE:(userId:string)=> `/profile/${userId}`,
-  UPDATE_COMPANY_PASSWORD:(userId:string)=> `/profile/${userId}/password`,
+  GET_COMPANY_USER_PROFILE: (userId: string) => `/profile/${userId}`,
+  UPDATE_COMPANY_PASSWORD: (userId: string) => `/profile/${userId}/password`,
   COMPANY_USERS_WITH_STATUS: "/users/company-users-with-status",
   //notification
-  NOTIFICATION:{
-    INDIVIDUAL:"/notification/individual",
-    GROUP:"/notification/group",
-    ALL:"/notification/all",
+  NOTIFICATION: {
+    INDIVIDUAL: "/notification/individual",
+    GROUP: "/notification/group",
+    ALL: "/notification/all",
     GET_USER_NOTIFICATIONS: "/notifications",
     GET_NOTIFICATION_HISTORY: "/notifications/history",
     MARK_AS_READ: (id: string) => `/notifications/${id}/read`,

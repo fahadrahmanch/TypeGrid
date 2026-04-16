@@ -12,12 +12,7 @@ export async function signup(data: SignupData) {
   return userAPI.post(API_ROUTES.AUTH.SIGNUP, data);
 }
 // verify OTP (after signup)
-export async function verifyOtp(
-  otp: string,
-  name: string,
-  email: string,
-  password: string,
-) {
+export async function verifyOtp(otp: string, name: string, email: string, password: string) {
   return userAPI.post(API_ROUTES.AUTH.OTP_VERIFY, {
     otp,
     name,
@@ -57,10 +52,7 @@ export async function forgotPasswordApi(email: string) {
 }
 
 // verify forgot-password OTP
-export async function forgotPasswordOtpVerification(
-  otp: string,
-  email: string,
-) {
+export async function forgotPasswordOtpVerification(otp: string, email: string) {
   return userAPI.post(API_ROUTES.AUTH.PASSWORD_OTP_VERIFY, { otp, email });
 }
 
@@ -104,18 +96,12 @@ export async function companyForgotPasswordApi(email: string) {
 }
 
 // verify forgot-password OTP
-export async function companyForgotPasswordOtpVerification(
-  otp: string,
-  email: string,
-) {
+export async function companyForgotPasswordOtpVerification(otp: string, email: string) {
   return companyAPI.post(API_ROUTES.AUTH.PASSWORD_OTP_VERIFY, { otp, email });
 }
 
 // reset password 812
-export async function companyResetPasswordApi(
-  email: string,
-  newPassword: string,
-) {
+export async function companyResetPasswordApi(email: string, newPassword: string) {
   return companyAPI.post(API_ROUTES.AUTH.PASSWORD_RESET, {
     email,
     password: newPassword,

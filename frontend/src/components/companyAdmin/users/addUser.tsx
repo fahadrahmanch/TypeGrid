@@ -1,20 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import {
-  X,
-  User,
-  Mail,
-  Lock,
-  ShieldCheck,
-  AlertCircle,
-  Plus,
-  Users,
-} from "lucide-react";
-import {
-  nameValidation,
-  emailValidation,
-  passwordValidation,
-} from "../../../validations/authValidations";
+import { X, User, Mail, Lock, ShieldCheck, AlertCircle, Plus, Users } from "lucide-react";
+import { nameValidation, emailValidation, passwordValidation } from "../../../validations/authValidations";
 import { toast } from "react-toastify";
 import { companyAddUser } from "../../../api/companyAdmin/companyAdminService";
 import { getCompanyDetailsApi } from "../../../api/companyAdmin/company";
@@ -38,8 +25,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
   });
   const [error, setError] = useState({ name: "", email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [subscriptionInfo, setSubscriptionInfo] =
-    useState<SubscriptionInfo | null>(null);
+  const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo | null>(null);
 
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
@@ -81,9 +67,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
       setOpen(false);
       toast.success(response.data.message);
     } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -102,9 +86,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
         });
       }
     } catch (error: any) {
-      console.error(
-        error?.response?.data?.message || "Failed to fetch company details."
-      );
+      console.error(error?.response?.data?.message || "Failed to fetch company details.");
     }
   }
 
@@ -132,22 +114,16 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
         <div className="bg-gradient-to-r from-[#ECA468] to-[#D0864B] p-10 relative overflow-hidden text-start">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           <div className="relative z-10">
-            <h2 className="text-3xl font-black text-white tracking-tight mb-2">
-              Engage New Talent
-            </h2>
+            <h2 className="text-3xl font-black text-white tracking-tight mb-2">Engage New Talent</h2>
             <p className="text-white/80 font-medium tracking-tight">
-              Create a new student profile and get them started on their
-              journey.
+              Create a new student profile and get them started on their journey.
             </p>
           </div>
           <button
             onClick={() => setOpen(false)}
             className="absolute top-8 right-8 p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-white group"
           >
-            <X
-              size={20}
-              className="group-hover:rotate-90 transition-transform duration-300"
-            />
+            <X size={20} className="group-hover:rotate-90 transition-transform duration-300" />
           </button>
         </div>
 
@@ -157,20 +133,14 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
             {/* Banner header */}
             <div className="bg-gradient-to-r from-[#ECA468]/10 to-[#D0864B]/5 px-5 py-2.5 border-b border-[#ECA468]/20 flex items-center gap-2">
               <ShieldCheck size={13} className="text-[#D0864B]" />
-              <span className="text-[10px] font-black text-[#D0864B] uppercase tracking-widest">
-                Plan Limitations
-              </span>
+              <span className="text-[10px] font-black text-[#D0864B] uppercase tracking-widest">Plan Limitations</span>
             </div>
             {/* Stats row */}
             <div className="flex items-center divide-x divide-[#ECA468]/15">
               {/* Plan Name */}
               <div className="flex-1 px-5 py-4">
-                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                  Active Plan
-                </p>
-                <p className="text-sm font-black text-gray-800 truncate">
-                  {subscriptionInfo.planName}
-                </p>
+                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Active Plan</p>
+                <p className="text-sm font-black text-gray-800 truncate">{subscriptionInfo.planName}</p>
               </div>
               {/* User Limit */}
               <div className="flex-1 px-5 py-4 flex items-center gap-3">
@@ -178,25 +148,17 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                   <Users size={15} className="text-[#D0864B]" />
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
-                    User Limit
-                  </p>
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">User Limit</p>
                   <p className="text-xl font-black text-[#D0864B] leading-none">
                     {subscriptionInfo.userLimit}
-                    <span className="text-xs text-gray-400 font-bold ml-1">
-                      users
-                    </span>
+                    <span className="text-xs text-gray-400 font-bold ml-1">users</span>
                   </p>
                 </div>
               </div>
               {/* Duration */}
               <div className="flex-1 px-5 py-4">
-                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                  Duration
-                </p>
-                <p className="text-sm font-black text-gray-800">
-                  {formatDuration(subscriptionInfo.duration)}
-                </p>
+                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Duration</p>
+                <p className="text-sm font-black text-gray-800">{formatDuration(subscriptionInfo.duration)}</p>
               </div>
             </div>
           </div>
@@ -227,11 +189,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                     </div>
                   )}
                 </div>
-                {error.name && (
-                  <p className="text-xs font-bold text-rose-500 ml-1">
-                    {error.name}
-                  </p>
-                )}
+                {error.name && <p className="text-xs font-bold text-rose-500 ml-1">{error.name}</p>}
               </div>
 
               {/* Email Address */}
@@ -255,11 +213,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                     </div>
                   )}
                 </div>
-                {error.email && (
-                  <p className="text-xs font-bold text-rose-500 ml-1">
-                    {error.email}
-                  </p>
-                )}
+                {error.email && <p className="text-xs font-bold text-rose-500 ml-1">{error.email}</p>}
               </div>
             </div>
 
@@ -277,20 +231,13 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
                   onChange={handleChange}
                   className={`w-full px-6 py-4 bg-white border ${error.password ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
                 />
-                <ShieldCheck
-                  size={18}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500"
-                />
+                <ShieldCheck size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500" />
               </div>
               <p className="text-[10px] text-gray-400 font-medium ml-1 flex items-center gap-1.5 leading-relaxed">
                 <AlertCircle size={10} />
                 New members will use this password for their initial login.
               </p>
-              {error.password && (
-                <p className="text-xs font-bold text-rose-500 ml-1">
-                  {error.password}
-                </p>
-              )}
+              {error.password && <p className="text-xs font-bold text-rose-500 ml-1">{error.password}</p>}
             </div>
 
             {/* Hint Box */}
@@ -300,11 +247,8 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
               </div>
               <p className="text-xs font-medium text-gray-500 leading-relaxed text-start">
                 Accounts are initialized with{" "}
-                <span className="font-bold text-[#D0864B] uppercase tracking-widest">
-                  Active
-                </span>{" "}
-                status. Students can immediately access assigned materials upon
-                successful login.
+                <span className="font-bold text-[#D0864B] uppercase tracking-widest">Active</span> status. Students can
+                immediately access assigned materials upon successful login.
               </p>
             </div>
           </form>
@@ -328,17 +272,14 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
             {isSubmitting ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              <Plus
-                size={18}
-                className="group-hover:scale-110 transition-transform"
-              />
+              <Plus size={18} className="group-hover:scale-110 transition-transform" />
             )}
             Create Profile
           </button>
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };
 export default AddUser;

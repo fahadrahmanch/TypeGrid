@@ -37,17 +37,13 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
       }
       setIsSubmitting(true);
       const response = await createCompanySubscriptionSession(company.planId);
-      console.log("response", response);
       if (response.data?.url) {
         window.location.href = response.data.url;
       } else {
         toast.error("Failed to create payment session");
       }
     } catch (error: any) {
-      console.error("Payment error:", error);
-      toast.error(
-        error.response?.data?.message || "Something went wrong creating payment session",
-      );
+      toast.error(error.response?.data?.message || "Something went wrong creating payment session");
     } finally {
       setIsSubmitting(false);
     }
@@ -62,12 +58,9 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
             <div className="bg-[#FFFBEB] border-2 border-[#FEF3C7] rounded-xl p-6 flex items-start gap-5 shadow-sm">
               <div className="text-4xl text-amber-500 animate-pulse">⏳</div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">
-                  Verification Pending
-                </h2>
+                <h2 className="text-xl font-bold text-gray-900">Verification Pending</h2>
                 <p className="text-gray-600 mt-1">
-                  Your company verification is in progress. Please wait for
-                  approval from the administration.
+                  Your company verification is in progress. Please wait for approval from the administration.
                 </p>
               </div>
             </div>
@@ -80,12 +73,9 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
               <div className="flex-1">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900">
-                      Approval Successful!
-                    </h2>
+                    <h2 className="text-xl font-bold text-gray-900">Approval Successful!</h2>
                     <p className="text-gray-600 mt-1">
-                      Your company details have been verified. Please complete
-                      the payment to activate your account.
+                      Your company details have been verified. Please complete the payment to activate your account.
                     </p>
                   </div>
                   <button
@@ -113,12 +103,9 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
             <div className="bg-[#ECFDF5] border-2 border-[#A7F3D0] rounded-xl p-6 flex items-start gap-5 shadow-sm">
               <div className="text-4xl">🎉</div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">
-                  Company Approved!
-                </h2>
+                <h2 className="text-xl font-bold text-gray-900">Company Approved!</h2>
                 <p className="text-gray-600 mt-1">
-                  Your company is now active. You can continue using your
-                  dashboard features.
+                  Your company is now active. You can continue using your dashboard features.
                 </p>
               </div>
             </div>
@@ -130,23 +117,16 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
               </div> */}
 
               <div className="flex-1">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Verification Failed
-                </h2>
+                <h2 className="text-lg font-semibold text-gray-900">Verification Failed</h2>
 
                 <p className="text-sm text-gray-600 mt-1">
-                  Your company verification was rejected. Please review the
-                  reason and re-apply after fixing the issues.
+                  Your company verification was rejected. Please review the reason and re-apply after fixing the issues.
                 </p>
 
                 {company?.rejectionReason && (
                   <div className="mt-4 bg-white border border-red-100 rounded-xl p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-red-600">
-                      Reason for rejection
-                    </p>
-                    <p className="text-sm text-gray-700 mt-1">
-                      {company.rejectionReason}
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-red-600">Reason for rejection</p>
+                    <p className="text-sm text-gray-700 mt-1">{company.rejectionReason}</p>
                   </div>
                 )}
 
@@ -165,25 +145,19 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
 
           {/* 2. Information Card */}
           <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">
-              Submitted Information
-            </h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-6">Submitted Information</h3>
 
             <div className="flex flex-col">
               {/* Row 1 */}
               <div className="flex justify-between items-start py-4 border-b border-gray-100">
                 <span className="text-gray-400 font-medium">Company Name</span>
-                <span className="text-gray-900 font-semibold text-right">
-                  {company?.companyName}
-                </span>
+                <span className="text-gray-900 font-semibold text-right">{company?.companyName}</span>
               </div>
 
               {/* Row 2 */}
               <div className="flex justify-between items-start py-4 border-b border-gray-100">
                 <span className="text-gray-400 font-medium">Address</span>
-                <span className="text-gray-900 font-semibold text-right max-w-[60%]">
-                  {company?.address}
-                </span>
+                <span className="text-gray-900 font-semibold text-right max-w-[60%]">{company?.address}</span>
               </div>
 
               {/* Row 3 */}
@@ -199,25 +173,20 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
               {/* Row 4 */}
               <div className="flex justify-between items-start py-4 border-b border-gray-100">
                 <span className="text-gray-400 font-medium">Email</span>
-                <span className="text-gray-900 font-semibold text-right">
-                  {company?.email}
-                </span>
+                <span className="text-gray-900 font-semibold text-right">{company?.email}</span>
               </div>
 
               {/* Row 5 */}
               <div className="flex justify-between items-start py-4 border-b border-gray-100">
                 <span className="text-gray-400 font-medium">Phone</span>
-                <span className="text-gray-900 font-semibold text-right">
-                  {company?.number}
-                </span>
+                <span className="text-gray-900 font-semibold text-right">{company?.number}</span>
               </div>
 
               {/* Row 6 */}
               <div className="flex justify-between items-start py-4">
                 <span className="text-gray-400 font-medium">Submitted</span>
                 <span className="text-gray-900 font-semibold text-right">
-                  {company?.createdAt &&
-                    new Date(company.createdAt).toLocaleString()}
+                  {company?.createdAt && new Date(company.createdAt).toLocaleString()}
                 </span>
               </div>
             </div>

@@ -6,8 +6,7 @@ export function titleValidation(title: string) {
 
 export function DescriptionValidation(Description: string) {
   if (!Description.trim()) return "Description is required";
-  if (Description.trim().length < 10)
-    return "Description must be at least 10 characters";
+  if (Description.trim().length < 10) return "Description must be at least 10 characters";
   return "";
 }
 

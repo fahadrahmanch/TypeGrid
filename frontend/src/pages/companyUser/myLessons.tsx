@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import {
-  BookOpen,
-  Calendar,
-  Clock,
-  Trophy,
-  CheckCircle2,
-  PlayCircle,
-  Circle,
-} from "lucide-react";
+import { BookOpen, Calendar, Clock, Trophy, CheckCircle2, PlayCircle, Circle } from "lucide-react";
 // import StreakModal from "../../components/companyUser/lessons/StreakModal";
 import { toast } from "react-toastify";
 import { myLessons } from "../../api/companyUser/lessons";
@@ -47,8 +39,7 @@ const MyLessons: React.FC = () => {
 
   const remaining = total - completed;
 
-  const progressPercent =
-    total === 0 ? 0 : Math.round((completed / total) * 100);
+  const progressPercent = total === 0 ? 0 : Math.round((completed / total) * 100);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -78,45 +69,34 @@ const MyLessons: React.FC = () => {
     async function fetchMyLessons() {
       try {
         const response = await myLessons();
-        
+
         const data = response.data.data;
 
-        console.log("Data",data)
-       const mappedLessons: Lesson[] = data.lessons
-  .filter((item: any) => item.lesson !== null)
-  .map((item: any) => ({
-    id: item.assignmentId,
-    title: item.lesson.title,
-    level:
-      item.lesson.level === "beginner"
-        ? "Beginner"
-        : item.lesson.level === "intermediate"
-        ? "Intermediate"
-        : "Advanced",
-    assignedDate: new Date(item.assignedAt).toLocaleDateString(),
-    targetWpm: item.lesson.wpm,
-    time: "5 min",
-    status:
-      item.status === "completed"
-        ? "Completed"
-        : item.status === "progress"
-        ? "In Progress"
-        : "Not Started",
-  }));
-        console.log("mappedlessons",mappedLessons)
+        const mappedLessons: Lesson[] = data.lessons
+          .filter((item: any) => item.lesson !== null)
+          .map((item: any) => ({
+            id: item.assignmentId,
+            title: item.lesson.title,
+            level:
+              item.lesson.level === "beginner"
+                ? "Beginner"
+                : item.lesson.level === "intermediate"
+                  ? "Intermediate"
+                  : "Advanced",
+            assignedDate: new Date(item.assignedAt).toLocaleDateString(),
+            targetWpm: item.lesson.wpm,
+            time: "5 min",
+            status:
+              item.status === "completed" ? "Completed" : item.status === "progress" ? "In Progress" : "Not Started",
+          }));
 
         const filtered = mappedLessons.filter((lesson) => {
-          const levelOk =
-            selectedLevel === "All" ||
-            lesson.level.toLowerCase() === selectedLevel.toLowerCase();
+          const levelOk = selectedLevel === "All" || lesson.level.toLowerCase() === selectedLevel.toLowerCase();
 
-          const statusOk =
-            selectedStatus === "All" ||
-            lesson.status.toLowerCase() === selectedStatus.toLowerCase();
+          const statusOk = selectedStatus === "All" || lesson.status.toLowerCase() === selectedStatus.toLowerCase();
 
           return levelOk && statusOk;
         });
-        console.log("mappedlessons",filtered)
 
         setMyLessons({
           lessons: filtered,
@@ -126,15 +106,13 @@ const MyLessons: React.FC = () => {
 
         setFilteredLessons(filtered);
       } catch (error: any) {
-        console.log(error)
         toast.error(error?.response?.data?.message || "Something went wrong");
       }
     }
 
     fetchMyLessons();
   }, [selectedLevel, selectedStatus]);
-  console.log("my leson",MyLessons)
-  console.log("filter",filteredLessons)
+
   async function handleLessonClick(assignedId: string) {
     navigate(`/company/user/assigned-lessons/${assignedId}`);
   }
@@ -151,9 +129,7 @@ const MyLessons: React.FC = () => {
               <BookOpen className="w-6 h-6 text-gray-700" />
               <h1 className="text-2xl font-bold text-gray-900">My Lessons</h1>
             </div>
-            <p className="text-sm text-gray-500 ml-9">
-              {MyLessons?.total} lessons assigned
-            </p>
+            <p className="text-sm text-gray-500 ml-9">{MyLessons?.total} lessons assigned</p>
           </div>
           {/* <button
             onClick={() => setIsStreakModalOpen(true)}
@@ -167,13 +143,9 @@ const MyLessons: React.FC = () => {
         {/* Progress Bar Section */}
         <div className="bg-[#B09886] rounded-2xl p-6 text-white mb-8 relative overflow-hidden">
           <div className="flex justify-between items-center mb-4 relative z-10">
-            <span className="text-xs font-semibold tracking-wide opacity-90">
-              Overall Progress
-            </span>
+            <span className="text-xs font-semibold tracking-wide opacity-90">Overall Progress</span>
 
-            <span className="text-xs font-bold opacity-90">
-              {progressPercent} %
-            </span>
+            <span className="text-xs font-bold opacity-90">{progressPercent} %</span>
           </div>
 
           {/* Progress bar */}
@@ -187,13 +159,7 @@ const MyLessons: React.FC = () => {
           {/* Stats */}
           <div className="flex items-center gap-2 text-xs relative z-10 opacity-90">
             <span className="flex items-center gap-1">
-              <svg
-                width="10"
-                height="8"
-                viewBox="0 0 10 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M1 4L3.5 6.5L9 1"
                   stroke="currentColor"
@@ -223,15 +189,7 @@ const MyLessons: React.FC = () => {
           <div className="relative">
             <select
               value={selectedLevel}
-              onChange={(e) =>
-                setSelectedLevel(
-                  e.target.value as
-                    | "All"
-                    | "Beginner"
-                    | "Intermediate"
-                    | "Advanced",
-                )
-              }
+              onChange={(e) => setSelectedLevel(e.target.value as "All" | "Beginner" | "Intermediate" | "Advanced")}
               className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
             >
               <option value="All">All Levels</option>
@@ -245,15 +203,7 @@ const MyLessons: React.FC = () => {
           <div className="relative">
             <select
               value={selectedStatus}
-              onChange={(e) =>
-                setSelectedStatus(
-                  e.target.value as
-                    | "All"
-                    | "Completed"
-                    | "In Progress"
-                    | "Not Started",
-                )
-              }
+              onChange={(e) => setSelectedStatus(e.target.value as "All" | "Completed" | "In Progress" | "Not Started")}
               className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
             >
               <option value="All">All Status</option>
@@ -275,13 +225,9 @@ const MyLessons: React.FC = () => {
               <div className="bg-[#FEFCE8]/50 absolute inset-0 rounded-2xl -z-10"></div>
 
               <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-gray-900 text-lg leading-tight w-[70%]">
-                  {lesson.title}
-                </h3>
+                <h3 className="font-bold text-gray-900 text-lg leading-tight w-[70%]">{lesson.title}</h3>
                 <span
-                  className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${getLevelColor(
-                    lesson.level,
-                  )}`}
+                  className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${getLevelColor(lesson.level)}`}
                 >
                   {lesson.level}
                 </span>

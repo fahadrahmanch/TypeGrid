@@ -61,11 +61,7 @@ export const useGroupPlaySocket = ({
   useEffect(() => {
     const handler = (data: any) => {
       setLivePlayers((prev: any) =>
-        prev.map((p: any) =>
-          p._id === data.userId
-            ? { ...p, ...data, progress: data.typedLength }
-            : p,
-        ),
+        prev.map((p: any) => (p._id === data.userId ? { ...p, ...data, progress: data.typedLength } : p))
       );
     };
 
@@ -101,13 +97,7 @@ export const useGroupPlaySocket = ({
 
   // handle player leave
   useEffect(() => {
-    const handleLeave = ({
-      userId,
-      newHostId,
-    }: {
-      userId: string;
-      newHostId?: string;
-    }) => {
+    const handleLeave = ({ userId, newHostId }: { userId: string; newHostId?: string }) => {
       let leavingPlayer: any = null;
 
       setLivePlayers((prev: any) => {

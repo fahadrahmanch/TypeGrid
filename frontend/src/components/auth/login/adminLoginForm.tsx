@@ -1,9 +1,6 @@
 // import lines from "../../../assets/images/auth/login/lines.png";
 import kid2 from "../../../assets/images/auth/login/Kid2.png";
-import {
-  emailValidation,
-  passwordValidation,
-} from "../../../validations/authValidations";
+import { emailValidation, passwordValidation } from "../../../validations/authValidations";
 import { adminSigninApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -57,9 +54,7 @@ const AdminLoginForm: React.FC = () => {
       navigate("/admin/users");
       toast.success(response.data.message);
     } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
     }
   };
@@ -76,9 +71,7 @@ const AdminLoginForm: React.FC = () => {
                     </div> */}
         {/* SignIn Box */}
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">
-            Admin Login
-          </h2>
+          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">Admin Login</h2>
           <p className="text-sm pb-8">Sign in to your account to continue</p>
 
           {/* Divider */}
@@ -105,11 +98,7 @@ const AdminLoginForm: React.FC = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
               >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible size={20} />
-                ) : (
-                  <AiOutlineEye size={20} />
-                )}
+                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
               </span>
             </div>
             <p className="text-left text-red-500 text-sm">{error.password}</p>

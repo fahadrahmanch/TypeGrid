@@ -1,12 +1,4 @@
-import {
-  Zap,
-  Target,
-  Keyboard,
-  AlertCircle,
-  Clock,
-  Timer,
-  Trophy,
-} from "lucide-react";
+import { Zap, Target, Keyboard, AlertCircle, Clock, Timer, Trophy } from "lucide-react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 import { ClipboardEvent, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -106,9 +98,7 @@ export default function ChallengeArea() {
 
   const { challengeId } = useParams();
   const navigate = useNavigate();
-  const [challengeData, setChallengeData] = useState<ChallengeGame | null>(
-    null,
-  );
+  const [challengeData, setChallengeData] = useState<ChallengeGame | null>(null);
   const [players, setPlayers] = useState<LivePlayer[] | null>(null);
   const [errors, setErrors] = useState(0);
 
@@ -159,13 +149,7 @@ export default function ChallengeArea() {
     fetchData();
   }, [challengeId]);
 
-  const { wpm, accuracy } = useTypingStats(
-    totalTyped,
-    errors,
-    elapsedTime,
-    phase,
-    isFinished,
-  );
+  const { wpm, accuracy } = useTypingStats(totalTyped, errors, elapsedTime, phase, isFinished);
 
   useChallengeTimer({
     startedAt: challengeData?.startedAt,
@@ -193,26 +177,12 @@ export default function ChallengeArea() {
                 errors: errors,
                 progress: isFinished
                   ? 100
-                  : Math.min(
-                      100,
-                      Math.round(
-                        (typedText.length / challengeData.lesson.text.length) *
-                          100,
-                      ),
-                    ),
+                  : Math.min(100, Math.round((typedText.length / challengeData.lesson.text.length) * 100)),
               }
-            : p,
-        ) ?? null,
+            : p
+        ) ?? null
     );
-  }, [
-    typedText.length,
-    wpm,
-    accuracy,
-    errors,
-    isFinished,
-    challengeData?.lesson?.text?.length,
-    user?._id,
-  ]);
+  }, [typedText.length, wpm, accuracy, errors, isFinished, challengeData?.lesson?.text?.length, user?._id]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -221,40 +191,38 @@ export default function ChallengeArea() {
   };
 
   const renderTextWithHighlight = () => {
-  if (!challengeData?.lesson?.text) return null;
+    if (!challengeData?.lesson?.text) return null;
 
-  return challengeData.lesson.text.split("").map((char, index) => {
-    let className = "text-gray-300";
+    return challengeData.lesson.text.split("").map((char, index) => {
+      let className = "text-gray-300";
 
-    if (index < typedText.length) {
-      const rawKey = typedText[index];
-      const mappedKey = getMappedKey(rawKey, keyboardLayout);
+      if (index < typedText.length) {
+        const rawKey = typedText[index];
+        const mappedKey = getMappedKey(rawKey, keyboardLayout);
 
-      if (mappedKey === char) {
-        className = "text-emerald-600 bg-emerald-50/50";
-      } else {
-        className = "text-red-500 bg-red-100 underline decoration-red-400";
+        if (mappedKey === char) {
+          className = "text-emerald-600 bg-emerald-50/50";
+        } else {
+          className = "text-red-500 bg-red-100 underline decoration-red-400";
+        }
       }
-    }
 
-    const isCurrentChar = index === typedText.length;
+      const isCurrentChar = index === typedText.length;
 
-    const cursorClass =
-      isCurrentChar && phase === "PLAY" && !isFinished
-        ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]"
-        : "";
+      const cursorClass =
+        isCurrentChar && phase === "PLAY" && !isFinished ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]" : "";
 
-    return (
-      <span
-        key={index}
-        ref={isCurrentChar ? activeCharRef : null}
-        className={`${cursorClass} ${className} relative transition-colors duration-100`}
-      >
-        {char}
-      </span>
-    );
-  });
-};
+      return (
+        <span
+          key={index}
+          ref={isCurrentChar ? activeCharRef : null}
+          className={`${cursorClass} ${className} relative transition-colors duration-100`}
+        >
+          {char}
+        </span>
+      );
+    });
+  };
   useEffect(() => {
     if (activeCharRef.current && snippetContainerRef.current) {
       const container = snippetContainerRef.current;
@@ -267,10 +235,7 @@ export default function ChallengeArea() {
       const relativeBottom = elementRect.bottom - containerRect.top;
 
       // Keep cursor in middle-ish of view
-      if (
-        relativeBottom > containerRect.height / 2 ||
-        relativeTop < containerRect.height / 3
-      ) {
+      if (relativeBottom > containerRect.height / 2 || relativeTop < containerRect.height / 3) {
         element.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
@@ -328,9 +293,7 @@ export default function ChallengeArea() {
                 Challenge Results
                 <Trophy className="w-10 h-10 text-orange-500" />
               </h1>
-              <p className="text-gray-500 font-medium italic">
-                The race has ended! Here's how everyone performed.
-              </p>
+              <p className="text-gray-500 font-medium italic">The race has ended! Here's how everyone performed.</p>
             </div>
 
             <div className="w-full bg-white rounded-[2rem] shadow-xl border border-[#FDE6C6] overflow-hidden">
@@ -358,9 +321,7 @@ export default function ChallengeArea() {
                       {/* Rank */}
                       <div className="flex justify-center">
                         {result.status === "LEFT" ? (
-                          <span className="text-[10px] text-red-400 font-bold">
-                            LEFT
-                          </span>
+                          <span className="text-[10px] text-red-400 font-bold">LEFT</span>
                         ) : result.rank === 1 ? (
                           <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black shadow-sm border border-orange-200">
                             1
@@ -374,9 +335,7 @@ export default function ChallengeArea() {
                             3
                           </div>
                         ) : (
-                          <span className="text-gray-400 font-bold">
-                            #{result.rank || index + 1}
-                          </span>
+                          <span className="text-gray-400 font-bold">#{result.rank || index + 1}</span>
                         )}
                       </div>
 
@@ -391,9 +350,7 @@ export default function ChallengeArea() {
                           <p className="font-bold text-gray-900 text-sm flex items-center gap-2">
                             {result.name}
                             {result.userId === (user?._id || user?.id) && (
-                              <span className="text-[10px] text-orange-500 ml-1">
-                                (You)
-                              </span>
+                              <span className="text-[10px] text-orange-500 ml-1">(You)</span>
                             )}
                             {result.status === "LEFT" && (
                               <span className="text-[10px] text-red-400 bg-red-50 px-1.5 py-0.5 rounded-md border border-red-100">
@@ -407,9 +364,7 @@ export default function ChallengeArea() {
                       {/* WPM */}
                       <div className="text-right font-black text-gray-900 text-lg">
                         {result.status === "LEFT" ? (
-                          <span className="text-gray-300 font-bold text-sm">
-                            —
-                          </span>
+                          <span className="text-gray-300 font-bold text-sm">—</span>
                         ) : (
                           result.wpm
                         )}
@@ -418,9 +373,7 @@ export default function ChallengeArea() {
                       {/* Accuracy */}
                       <div className="text-right font-bold text-emerald-600">
                         {result.status === "LEFT" ? (
-                          <span className="text-gray-300 font-bold text-sm">
-                            —
-                          </span>
+                          <span className="text-gray-300 font-bold text-sm">—</span>
                         ) : (
                           `${result.accuracy}%`
                         )}
@@ -429,9 +382,7 @@ export default function ChallengeArea() {
                       {/* Time */}
                       <div className="text-right font-mono text-gray-500 text-xs">
                         {result.status === "LEFT" ? (
-                          <span className="text-gray-300 font-bold text-sm">
-                            —
-                          </span>
+                          <span className="text-gray-300 font-bold text-sm">—</span>
                         ) : (
                           formatTime(result.timeTaken)
                         )}
@@ -476,16 +427,13 @@ export default function ChallengeArea() {
                 Live Challenge
               </h1>
               <p className="text-gray-500 text-xs md:text-sm font-medium flex items-center gap-1.5">
-                <Keyboard className="w-3.5 h-3.5" /> First to finish wins the
-                match!
+                <Keyboard className="w-3.5 h-3.5" /> First to finish wins the match!
               </p>
             </div>
             <div className="bg-white px-3 md:px-4 py-1.5 md:py-2 rounded-[1rem] border border-[#FDE6C6] shadow-sm flex items-center gap-2">
               <Timer className="w-4 h-4 md:w-5 md:h-5 text-orange-500 animate-pulse" />
               <h3 className="font-bold text-gray-800 text-sm">
-                {phase === "COUNTDOWN"
-                  ? `Game starts in ${countdown}s`
-                  : `Time left: ${formatTime(remainingTime)}`}
+                {phase === "COUNTDOWN" ? `Game starts in ${countdown}s` : `Time left: ${formatTime(remainingTime)}`}
               </h3>
             </div>
           </div>
@@ -510,12 +458,8 @@ export default function ChallengeArea() {
                       <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                     </div>
                     <div>
-                      <h3 className="font-bold text-sm md:text-base text-gray-900 leading-tight">
-                        {player.name}
-                      </h3>
-                      <p className="text-[10px] md:text-xs text-gray-500 mt-0.5 font-medium">
-                        {player.companyRole}
-                      </p>
+                      <h3 className="font-bold text-sm md:text-base text-gray-900 leading-tight">{player.name}</h3>
+                      <p className="text-[10px] md:text-xs text-gray-500 mt-0.5 font-medium">{player.companyRole}</p>
                     </div>
                   </div>
 
@@ -524,9 +468,7 @@ export default function ChallengeArea() {
                       <div className="flex items-center gap-1 text-orange-500 mb-0.5 font-semibold text-[9px] md:text-[10px]">
                         <Zap className="w-3 h-3" /> WPM
                       </div>
-                      <span className="text-lg md:text-xl font-extrabold text-gray-900 leading-none">
-                        {player.wpm}
-                      </span>
+                      <span className="text-lg md:text-xl font-extrabold text-gray-900 leading-none">{player.wpm}</span>
                     </div>
                     <div className="bg-[#FFFDF9] rounded-xl p-1.5 md:p-2 border border-[#FDE6C6] flex flex-col items-center justify-center">
                       <div className="flex items-center gap-1 text-green-500 mb-0.5 font-semibold text-[9px] md:text-[10px]">
@@ -534,9 +476,7 @@ export default function ChallengeArea() {
                       </div>
                       <span className="text-lg md:text-xl font-extrabold text-gray-900 leading-none">
                         {player.accuracy}
-                        <span className="text-[9px] text-gray-400 font-bold">
-                          %
-                        </span>
+                        <span className="text-[9px] text-gray-400 font-bold">%</span>
                       </span>
                     </div>
                     <div className="bg-[#FFFDF9] rounded-xl p-1.5 md:p-2 border border-[#FDE6C6] flex flex-col items-center justify-center">
@@ -559,9 +499,7 @@ export default function ChallengeArea() {
 
                   <div className="relative z-10">
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-[9px] md:text-[10px] font-bold text-gray-600">
-                        Progress
-                      </span>
+                      <span className="text-[9px] md:text-[10px] font-bold text-gray-600">Progress</span>
                       <span className="text-[9px] md:text-[10px] font-bold text-orange-500">
                         {Math.round(player.progress)}%
                       </span>
@@ -589,9 +527,7 @@ export default function ChallengeArea() {
               ref={snippetContainerRef}
               className="relative z-10 text-[#4A5568] text-base md:text-lg leading-[1.6] font-mono tracking-wide flex-1 min-h-[50px] overflow-hidden pr-2"
             >
-              <span className="opacity-80 drop-shadow-sm pointer-events-none">
-                {renderTextWithHighlight()}
-              </span>
+              <span className="opacity-80 drop-shadow-sm pointer-events-none">{renderTextWithHighlight()}</span>
             </div>
           </div>
         </div>

@@ -1,14 +1,7 @@
 import { updateCompanyStatus } from "../../../api/admin/company";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import {
-  X,
-  Building2,
-  Mail,
-  CheckCircle2,
-  AlertCircle,
-  Calendar,
-} from "lucide-react";
+import { X, Building2, Mail, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
 
 interface CompanyDetailsModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,11 +9,7 @@ interface CompanyDetailsModalProps {
   setCompany: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
-  setOpen,
-  company,
-  setCompany,
-}) => {
+const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({ setOpen, company, setCompany }) => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,31 +19,19 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
       if (!company?._id) return;
       setIsSubmitting(true);
 
-      const response = await updateCompanyStatus(
-        company._id,
-        status,
-        status === "reject" ? rejectReason : undefined,
-      );
+      const response = await updateCompanyStatus(company._id, status, status === "reject" ? rejectReason : undefined);
 
       const updatedStatus =
-        response?.data?.data?.status ||
-        (status === "active" ? "active" : status === "reject" ? "reject" : "inactive");
+        response?.data?.data?.status || (status === "active" ? "active" : status === "reject" ? "reject" : "inactive");
 
-      toast.success(
-        response?.data?.message || `Company ${updatedStatus} successfully`,
-      );
+      toast.success(response?.data?.message || `Company ${updatedStatus} successfully`);
 
-      setCompany((prev) =>
-        prev.map((c) =>
-          c._id === company._id ? { ...c, status: updatedStatus } : c,
-        ),
-      );
+      setCompany((prev) => prev.map((c) => (c._id === company._id ? { ...c, status: updatedStatus } : c)));
 
       setShowRejectModal(false);
       setOpen(false);
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || "Something went wrong";
+      const errorMessage = error?.response?.data?.message || "Something went wrong";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -78,18 +55,11 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
               <Building2 className="w-6 h-6 text-[#ECA468]" />
             </div>
             <div>
-              <h2 className="text-2xl font-black text-gray-900 leading-tight">
-                Company Details
-              </h2>
-              <p className="text-sm text-gray-500 font-medium">
-                Review and verify registration details
-              </p>
+              <h2 className="text-2xl font-black text-gray-900 leading-tight">Company Details</h2>
+              <p className="text-sm text-gray-500 font-medium">Review and verify registration details</p>
             </div>
           </div>
-          <button
-            onClick={() => setOpen(false)}
-            className="p-2 text-gray-400 hover:text-gray-700 transition-colors"
-          >
+          <button onClick={() => setOpen(false)} className="p-2 text-gray-400 hover:text-gray-700 transition-colors">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -97,9 +67,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-10 custom-scrollbar bg-[#FDFBF7]">
           <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
-            <h3 className="text-4xl font-black text-gray-900 tracking-tight">
-              {company.companyName}
-            </h3>
+            <h3 className="text-4xl font-black text-gray-900 tracking-tight">{company.companyName}</h3>
 
             <span
               className={`px-4 py-1.5 text-xs font-black uppercase tracking-widest rounded-xl border-2
@@ -113,13 +81,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
                       : "bg-amber-50 text-amber-600 border-amber-100"
               }`}
             >
-              {isActive
-                ? "Active"
-                : isRejected
-                  ? "Rejected"
-                  : isInactive
-                    ? "Inactive"
-                    : "Pending Approval"}
+              {isActive ? "Active" : isRejected ? "Rejected" : isInactive ? "Inactive" : "Pending Approval"}
             </span>
           </div>
 
@@ -218,9 +180,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({
                 <div className="bg-red-50 p-2 rounded-xl">
                   <AlertCircle className="w-5 h-5 text-red-500" />
                 </div>
-                <h3 className="text-xl font-black text-gray-900 leading-tight tracking-tight">
-                  Reject Registration
-                </h3>
+                <h3 className="text-xl font-black text-gray-900 leading-tight tracking-tight">Reject Registration</h3>
               </div>
 
               <textarea

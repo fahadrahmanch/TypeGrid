@@ -13,9 +13,7 @@ const RecentMatches: React.FC = () => {
 
   return (
     <div className="bg-[#FFF5E0] p-6 rounded-3xl h-full shadow-sm">
-      <h2 className="text-xl font-bold mb-6 text-gray-900 font-serif">
-        Recent Matches
-      </h2>
+      <h2 className="text-xl font-bold mb-6 text-gray-900 font-serif">Recent Matches</h2>
       <div className="space-y-4">
         {matches.map((match, index) => (
           <div
@@ -23,20 +21,14 @@ const RecentMatches: React.FC = () => {
             className="flex items-center justify-between border-b border-orange-200 pb-3 last:border-0 last:pb-0"
           >
             <div className="flex items-center gap-4">
-              <span className="text-lg font-normal text-gray-600 w-4">
-                {match.rank}.
-              </span>
+              <span className="text-lg font-normal text-gray-600 w-4">{match.rank}.</span>
               <div>
                 <p className="font-bold text-gray-800 text-sm">{match.user}</p>
-                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">
-                  {match.time}
-                </p>
+                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">{match.time}</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-xs font-medium text-gray-500">
-                {match.wpm} WPM
-              </p>
+              <p className="text-xs font-medium text-gray-500">{match.wpm} WPM</p>
             </div>
           </div>
         ))}

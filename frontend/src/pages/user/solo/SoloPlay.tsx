@@ -3,15 +3,7 @@ import Navbar from "../../../components/user/Navbar";
 import StatCard from "../../../components/common/StatCard";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import {
-  Clock,
-  Zap,
-  Target,
-  AlertCircle,
-  Trophy,
-  Home,
-  RotateCcw,
-} from "lucide-react";
+import { Clock, Zap, Target, AlertCircle, Trophy, Home, RotateCcw } from "lucide-react";
 import { saveSoloPlayResult } from "../../../api/user/solo";
 import { useTypingStats } from "../../../hooks/useTypingStats";
 import { useSoloGameTimer } from "../../../hooks/soloPlay/useSoloGameTimer";
@@ -24,9 +16,7 @@ const SoloPlay: React.FC = () => {
   const gameData = location.state?.gameData;
   const lesson = gameData?.lesson;
   const [countdown, setCountdown] = useState<number>(gameData?.startTime || 10);
-  const [remainingTime, setRemainingTime] = useState<number>(
-    gameData?.duration || 300,
-  );
+  const [remainingTime, setRemainingTime] = useState<number>(gameData?.duration || 300);
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [hasError, setHasError] = useState(false);
   const [errors, setErrors] = useState(0);
@@ -118,13 +108,7 @@ const SoloPlay: React.FC = () => {
     });
   };
 
-  const { wpm, accuracy } = useTypingStats(
-    totalTyped,
-    errors,
-    elapsedTime,
-    phase,
-    isFinished,
-  );
+  const { wpm, accuracy } = useTypingStats(totalTyped, errors, elapsedTime, phase, isFinished);
   useSoloGameTimer({
     gameData,
     isFinished,
@@ -187,9 +171,7 @@ const SoloPlay: React.FC = () => {
                 Test Complete!
                 <Trophy className="w-10 h-10 text-amber-500 fill-amber-500" />
               </h1>
-              <p className="text-gray-500 font-medium">
-                Here are your final results
-              </p>
+              <p className="text-gray-500 font-medium">Here are your final results</p>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
@@ -240,9 +222,7 @@ const SoloPlay: React.FC = () => {
           <>
             {/* Header */}
             <h1 className="text-2xl font-bold">Solo Play</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Start typing to begin the test
-            </p>
+            <p className="text-sm text-gray-500 mt-1">Start typing to begin the test</p>
 
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl mt-6">

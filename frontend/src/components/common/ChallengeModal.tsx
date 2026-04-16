@@ -15,9 +15,7 @@ const ChallengeModal = () => {
         const response = await getAllChallenges();
         if (response.data?.data) {
           const findChallenge = response.data.data.find(
-            (c: any) =>
-              c._id === challengeModal.challengeId ||
-              c.id === challengeModal.challengeId,
+            (c: any) => c._id === challengeModal.challengeId || c.id === challengeModal.challengeId
           );
           setChallenge(findChallenge);
         }
@@ -69,9 +67,7 @@ const ChallengeModal = () => {
             <h3 className="font-extrabold text-gray-900 text-lg leading-tight flex items-center gap-2">
               <span className="text-xl">⚔️</span> Waiting for opponent...
             </h3>
-            <p className="text-sm font-medium text-gray-500 mt-1">
-              Oppent joined the match
-            </p>
+            <p className="text-sm font-medium text-gray-500 mt-1">Oppent joined the match</p>
           </div>
         )}
 
@@ -80,21 +76,14 @@ const ChallengeModal = () => {
           <div className="bg-white/60 rounded-xl p-3 mb-4 shadow-sm border border-white/40">
             <div className="flex gap-4 items-center mb-3">
               <img
-                src={
-                  challenge.opponent?.avatar ||
-                  "https://api.dicebear.com/7.x/avataaars/svg?seed=fallback"
-                }
+                src={challenge.opponent?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=fallback"}
                 alt={challenge.opponent?.name || "Opponent"}
                 className="w-14 h-14 rounded-xl object-cover border-2 border-white shadow-sm"
               />
               <div>
-                <h3 className="font-bold text-gray-900 leading-tight">
-                  {challenge.opponent?.name || "Opponent"}
-                </h3>
+                <h3 className="font-bold text-gray-900 leading-tight">{challenge.opponent?.name || "Opponent"}</h3>
                 <p className="text-xs font-semibold text-indigo-500 line-clamp-1">
-                  {challenge.opponent?.companyRole ||
-                    challenge.opponent?.role ||
-                    "Challenger"}
+                  {challenge.opponent?.companyRole || challenge.opponent?.role || "Challenger"}
                 </p>
               </div>
             </div>

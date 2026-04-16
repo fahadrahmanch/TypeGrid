@@ -9,11 +9,7 @@ export async function getGroupRoomDetails(joinLink: string) {
   return userAPI.get(API_ROUTES.GROUP_PLAY.GROUP_DETAILS(joinLink));
 }
 
-export async function editGroupAPI(
-  groupId: string,
-  difficulty?: string,
-  maxPlayers?: number,
-) {
+export async function editGroupAPI(groupId: string, difficulty?: string, maxPlayers?: number) {
   return userAPI.patch(API_ROUTES.GROUP_PLAY.EDIT_GROUP(groupId), {
     difficulty,
     maxPlayers,

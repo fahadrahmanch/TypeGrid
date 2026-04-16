@@ -1,11 +1,7 @@
 import { adminAPI } from "../axios/adminAPI";
 import { API_ROUTES } from "../../constants/apiRoutes";
 
-export const fetchAssignChallenges = (
-  date: string,
-  limit: number,
-  page: number,
-) => {
+export const fetchAssignChallenges = (date: string, limit: number, page: number) => {
   return adminAPI.get(API_ROUTES.ADMIN.DAILY_ASSIGN.CHALLENGES, {
     params: {
       date,

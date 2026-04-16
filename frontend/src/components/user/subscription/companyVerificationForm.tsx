@@ -12,7 +12,7 @@ import {
 const CompanyVerificationFormDiv: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  
+
   const [values, setValues] = useState({
     companyName: "",
     address: "",
@@ -44,7 +44,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
 
     if (nameErr || emailErr || addressErr || numberErr) return;
     try {
-      const response = await verifyCompanyApi({...values,planId:id});
+      const response = await verifyCompanyApi({ ...values, planId: id });
       toast.success(response?.data?.message || "Company details submitted!");
       navigate("/subscription/company/verify/status");
     } catch (error: any) {
@@ -59,20 +59,14 @@ const CompanyVerificationFormDiv: React.FC = () => {
         <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8 border border-gray-100">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Company Details
-            </h1>
-            <p className="text-gray-500 text-sm">
-              Submit your information for verification
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Company Details</h1>
+            <p className="text-gray-500 text-sm">Submit your information for verification</p>
           </div>
           {/* Form Fields */}
           <form className="space-y-5">
             {/* Company Name */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">
-                Company Name *
-              </label>
+              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">Company Name *</label>
               <input
                 type="text"
                 name="companyName"
@@ -80,15 +74,11 @@ const CompanyVerificationFormDiv: React.FC = () => {
                 placeholder="Your company name"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all placeholder-gray-400 text-gray-700"
               />
-              <p className="text-left text-red-500 text-sm">
-                {error.companyName}
-              </p>
+              <p className="text-left text-red-500 text-sm">{error.companyName}</p>
             </div>
             {/* Address */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">
-                Address *
-              </label>
+              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">Address *</label>
               <input
                 type="text"
                 name="address"
@@ -101,9 +91,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
 
             {/* Contact Email */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">
-                Contact Email *
-              </label>
+              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">Contact Email *</label>
               <input
                 type="email"
                 name="email"
@@ -115,9 +103,7 @@ const CompanyVerificationFormDiv: React.FC = () => {
             </div>
             {/* Contact Phone */}
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">
-                Contact Phone *
-              </label>
+              <label className="block text-sm font-bold text-gray-900 mb-2 text-start">Contact Phone *</label>
               <input
                 type="tel"
                 name="number"

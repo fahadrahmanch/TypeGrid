@@ -2,16 +2,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import CompanyDetailsModal from "./CompanyDetailsModal";
 import { companies } from "../../../api/admin/company";
-import {
-  Search,
-  Filter,
-  Eye,
-  ChevronLeft,
-  ChevronRight,
-  Building2,
-  Mail,
-  Calendar,
-} from "lucide-react";
+import { Search, Filter, Eye, ChevronLeft, ChevronRight, Building2, Mail, Calendar } from "lucide-react";
 
 const CompanyList: React.FC = () => {
   const [status, setStatus] = useState("All");
@@ -56,12 +47,8 @@ const CompanyList: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
           <div className="mb-10">
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
-              Company Management
-            </h1>
-            <p className="text-gray-500 font-medium">
-              Manage and verify company registrations on the platform.
-            </p>
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Company Management</h1>
+            <p className="text-gray-500 font-medium">Manage and verify company registrations on the platform.</p>
           </div>
 
           {/* Search & Filters */}
@@ -100,9 +87,7 @@ const CompanyList: React.FC = () => {
           <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
             <div className="flex justify-between items-center mb-8 px-2">
               <div>
-                <h3 className="text-xl font-black text-gray-900 leading-tight">
-                  Registrations
-                </h3>
+                <h3 className="text-xl font-black text-gray-900 leading-tight">Registrations</h3>
                 <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
                   {company.length} total applications
                 </p>
@@ -142,25 +127,15 @@ const CompanyList: React.FC = () => {
                     const isPending = st === "pending";
 
                     return (
-                      <tr
-                        key={item?._id}
-                        className="group hover:bg-white/40 transition-all duration-300"
-                      >
-                        <td className="py-5 px-4 font-bold text-gray-800 text-sm">
-                          {item?.companyName}
-                        </td>
-                        <td className="py-5 px-4 font-medium text-gray-500 text-xs italic">
-                          {item?.email}
-                        </td>
+                      <tr key={item?._id} className="group hover:bg-white/40 transition-all duration-300">
+                        <td className="py-5 px-4 font-bold text-gray-800 text-sm">{item?.companyName}</td>
+                        <td className="py-5 px-4 font-medium text-gray-500 text-xs italic">{item?.email}</td>
                         <td className="py-5 px-4 hidden sm:table-cell text-xs font-semibold text-gray-400">
-                          {new Date(item?.createdAt).toLocaleDateString(
-                            undefined,
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
+                          {new Date(item?.createdAt).toLocaleDateString(undefined, {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
                         </td>
                         <td className="py-5 px-4 text-center">
                           <span
@@ -175,13 +150,7 @@ const CompanyList: React.FC = () => {
                                     : "bg-amber-50 text-amber-600 border-amber-100"
                             }`}
                           >
-                            {isActive
-                              ? "Active"
-                              : isRejected
-                                ? "Rejected"
-                                : isInactive
-                                  ? "Inactive"
-                                  : "Pending"}
+                            {isActive ? "Active" : isRejected ? "Rejected" : isInactive ? "Inactive" : "Pending"}
                           </span>
                         </td>
                         <td className="py-5 px-4">
@@ -216,9 +185,7 @@ const CompanyList: React.FC = () => {
               </button>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
-                  {page}
-                </span>
+                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
                 <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
                   of {totalPages}
                 </span>
@@ -238,12 +205,8 @@ const CompanyList: React.FC = () => {
         {/* Company Details Modal - Using Portal */}
         {isOpen &&
           createPortal(
-            <CompanyDetailsModal
-              setOpen={setOpen}
-              company={selectedCompany}
-              setCompany={setCompany}
-            />,
-            document.body,
+            <CompanyDetailsModal setOpen={setOpen} company={selectedCompany} setCompany={setCompany} />,
+            document.body
           )}
       </div>
     </>

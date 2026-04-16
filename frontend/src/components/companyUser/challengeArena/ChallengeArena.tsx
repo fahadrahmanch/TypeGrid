@@ -5,25 +5,16 @@ import { Teammate } from "../../../types/challenge";
 import { companyUsers } from "../../../api/companyUser/challenge";
 import { useSelector } from "react-redux";
 import { checkalreadySendChallenge } from "../../../api/companyUser/challenge";
-const ChallengeArena = ({
-  setView,
-}: {
-  setView: (v: "arena" | "my-challenges") => void;
-}) => {
+const ChallengeArena = ({ setView }: { setView: (v: "arena" | "my-challenges") => void }) => {
   const [users, setUsers] = useState<Teammate[]>([]);
-  const [challengeStatuses, setChallengeStatuses] = useState<
-    Record<string, string>
-  >({});
+  const [challengeStatuses, setChallengeStatuses] = useState<Record<string, string>>({});
   const [searchText, setSearchText] = useState("");
 
   const companyUser = useSelector((state: any) => state.auth.user);
   useEffect(() => {
     async function fetchData() {
       try {
-        const [usersRes, challengesRes] = await Promise.all([
-          companyUsers(searchText),
-          checkalreadySendChallenge(),
-        ]);
+        const [usersRes, challengesRes] = await Promise.all([companyUsers(searchText), checkalreadySendChallenge()]);
 
         if (usersRes.data.data) setUsers(usersRes.data.data);
 
@@ -52,14 +43,10 @@ const ChallengeArena = ({
         <div className="w-full relative py-6">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#AD9B8E] to-transparent opacity-80 blur-sm pointer-events-none"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#AD9B8E] to-transparent pointer-events-none"></div>
-          <h1 className="text-4xl font-black text-gray-900 relative z-10 tracking-tight">
-            Challenge Your Teammates
-          </h1>
+          <h1 className="text-4xl font-black text-gray-900 relative z-10 tracking-tight">Challenge Your Teammates</h1>
         </div>
 
-        <p className="text-gray-500 font-medium mt-4 mb-8">
-          Compete with colleagues and track your typing performance
-        </p>
+        <p className="text-gray-500 font-medium mt-4 mb-8">Compete with colleagues and track your typing performance</p>
 
         <button
           onClick={() => setView("my-challenges")}
@@ -108,9 +95,7 @@ const ChallengeArena = ({
               key={user._id}
               teammate={user}
               challengeStatus={challengeStatuses[user._id]}
-              onStatusChange={(id, status) =>
-                setChallengeStatuses((prev) => ({ ...prev, [id]: status }))
-              }
+              onStatusChange={(id, status) => setChallengeStatuses((prev) => ({ ...prev, [id]: status }))}
               onViewChallenges={() => setView("my-challenges")}
             />
           ))}

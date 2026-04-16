@@ -13,17 +13,13 @@ import ChallengeModal from "./components/common/ChallengeModal";
 import IncomingChallengeModal from "./components/common/IncomingChallengeModal";
 import ChallengeRejectedModal from "./components/common/ChallengeRejectedModal";
 import { authConfig } from "./config/authConfig";
-import {
-  setAccessToken,
-  setAuthLoaded,
-  logout,
-} from "./store/slices/auth/authSlice";
+import { setAccessToken, setAuthLoaded, logout } from "./store/slices/auth/authSlice";
 // import { useSelector } from "react-redux";
 function App() {
   // const user = useSelector((state: any) => state.auth.user);
   const dispatch = useDispatch();
   const location = useLocation();
- 
+
   useEffect(() => {
     const segment = location.pathname.split("/")[1];
     const config = authConfig[segment] ?? authConfig["user"];

@@ -4,9 +4,7 @@ import ChallengeArena from "../../components/companyUser/challengeArena/Challeng
 import MyChallenges from "../../components/companyUser/challengeArena/MyChallenges";
 import { useMyChallengeSocket } from "../../hooks/companyUser/useMyChallenges";
 const Challenge: React.FC = () => {
-  const [currentView, setCurrentView] = useState<"arena" | "my-challenges">(
-    "arena",
-  );
+  const [currentView, setCurrentView] = useState<"arena" | "my-challenges">("arena");
   const [challenges, setChallenges] = useState<any[]>([]);
 
   useMyChallengeSocket(setChallenges);
@@ -18,11 +16,7 @@ const Challenge: React.FC = () => {
         {currentView === "arena" ? (
           <ChallengeArena setView={setCurrentView} />
         ) : (
-          <MyChallenges
-            setView={setCurrentView}
-            challenges={challenges}
-            setChallenges={setChallenges}
-          />
+          <MyChallenges setView={setCurrentView} challenges={challenges} setChallenges={setChallenges} />
         )}
       </main>
     </div>

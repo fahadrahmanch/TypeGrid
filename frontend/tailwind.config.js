@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // This is the important line
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}', // This is the important line
   ],
   theme: {
     extend: {
       fontFamily: {
-        jaini: ["Jaini", "cursive"],
+        jaini: ['Jaini', 'cursive'],
       },
     },
   },

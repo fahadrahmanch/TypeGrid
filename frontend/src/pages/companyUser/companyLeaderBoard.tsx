@@ -70,8 +70,7 @@ const CompanyLeaderBoard: React.FC = () => {
   const sortedRankings = [...rankings].sort((a, b) => {
     if (filter === "all") return (b.totalScore || 0) - (a.totalScore || 0);
     if (filter === "weekly") return (b.weeklyScore || 0) - (a.weeklyScore || 0);
-    if (filter === "monthly")
-      return (b.monthlyScore || 0) - (a.monthlyScore || 0);
+    if (filter === "monthly") return (b.monthlyScore || 0) - (a.monthlyScore || 0);
     return 0;
   });
 
@@ -99,13 +98,9 @@ const CompanyLeaderBoard: React.FC = () => {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Trophy className="w-6 h-6 text-orange-500 fill-orange-500/20" />
-                <h1 className="text-3xl font-black text-[#111827] tracking-tight">
-                  Company Leaderboard
-                </h1>
+                <h1 className="text-3xl font-black text-[#111827] tracking-tight">Company Leaderboard</h1>
               </div>
-              <p className="text-gray-500 font-medium">
-                The absolute fastest typists in your organization.
-              </p>
+              <p className="text-gray-500 font-medium">The absolute fastest typists in your organization.</p>
 
               {/* Added Top Summary */}
               <div
@@ -117,10 +112,7 @@ const CompanyLeaderBoard: React.FC = () => {
                   <Target className="w-3.5 h-3.5 text-blue-400" />
                 </div>
                 <p className="text-[11px] font-bold text-orange-800/80 uppercase tracking-wider flex items-center gap-1.5">
-                  Calculation:{" "}
-                  <span className="text-gray-400 font-black">
-                    WPM × ACC × Multipliers
-                  </span>
+                  Calculation: <span className="text-gray-400 font-black">WPM × ACC × Multipliers</span>
                   <button
                     onClick={() => setIsModalOpen(true)}
                     className="ml-1 text-orange-500 hover:text-orange-600 underline underline-offset-2 decoration-orange-300 transition-colors"
@@ -137,16 +129,13 @@ const CompanyLeaderBoard: React.FC = () => {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${filter === f
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                  filter === f
                     ? "bg-orange-500 text-white shadow-md"
                     : "text-gray-500 hover:bg-orange-50 hover:text-orange-600"
-                  }`}
+                }`}
               >
-                {f === "all"
-                  ? "All Time"
-                  : f === "weekly"
-                    ? "This Week"
-                    : "This Month"}
+                {f === "all" ? "All Time" : f === "weekly" ? "This Week" : "This Month"}
               </button>
             ))}
           </div>
@@ -188,18 +177,14 @@ const CompanyLeaderBoard: React.FC = () => {
           {isLoading ? (
             <div className="py-32 flex flex-col items-center justify-center gap-4">
               <Loader2 className="w-10 h-10 text-orange-400 animate-spin" />
-              <p className="text-gray-400 font-bold animate-pulse">
-                Calculating rankings...
-              </p>
+              <p className="text-gray-400 font-bold animate-pulse">Calculating rankings...</p>
             </div>
           ) : sortedRankings.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-orange-50/50 border-b border-[#FDE6C6]">
-                    <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                      Rank
-                    </th>
+                    <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Rank</th>
                     <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
                       Typist
                     </th>
@@ -222,14 +207,15 @@ const CompanyLeaderBoard: React.FC = () => {
                           <span
                             className={`
                             w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm
-                            ${index === 0
+                            ${
+                              index === 0
                                 ? "bg-orange-100 text-orange-600 border border-orange-200 shadow-sm"
                                 : index === 1
                                   ? "bg-slate-100 text-slate-600 border border-slate-200"
                                   : index === 2
                                     ? "bg-amber-50 text-amber-600 border border-amber-100"
                                     : "text-gray-400"
-                              }
+                            }
                           `}
                           >
                             {index + 1}
@@ -281,9 +267,7 @@ const CompanyLeaderBoard: React.FC = () => {
                             <span className="text-2xl font-black text-gray-900 group-hover:text-orange-500 transition-colors tracking-tight">
                               {getScore(user)}
                             </span>
-                            <span className="text-[10px] font-black text-gray-400 uppercase">
-                              PTS
-                            </span>
+                            <span className="text-[10px] font-black text-gray-400 uppercase">PTS</span>
                           </div>
                           <div className="h-1 w-24 bg-gray-100 rounded-full mt-2 overflow-hidden">
                             <div
@@ -303,12 +287,9 @@ const CompanyLeaderBoard: React.FC = () => {
           ) : (
             <div className="py-24 text-center">
               <Trophy className="w-16 h-16 text-gray-100 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
-                No rankings yet!
-              </h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">No rankings yet!</h3>
               <p className="text-gray-400 max-w-xs mx-auto">
-                Complete your first lesson or contest to appear on the
-                leaderboard.
+                Complete your first lesson or contest to appear on the leaderboard.
               </p>
             </div>
           )}
@@ -331,9 +312,7 @@ const CompanyLeaderBoard: React.FC = () => {
                   <div className="p-3 bg-orange-100 rounded-2xl">
                     <Info className="w-6 h-6 text-orange-600" />
                   </div>
-                  <h2 className="text-2xl font-black text-[#111827]">
-                    Leaderboard Scoring
-                  </h2>
+                  <h2 className="text-2xl font-black text-[#111827]">Leaderboard Scoring</h2>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
@@ -349,8 +328,7 @@ const CompanyLeaderBoard: React.FC = () => {
                   <div className="flex-1">
                     <div className="space-y-6">
                       <p className="text-gray-600 leading-relaxed font-medium text-lg">
-                        Your rank is determined by a comprehensive scoring
-                        system that rewards both speed and accuracy.
+                        Your rank is determined by a comprehensive scoring system that rewards both speed and accuracy.
                       </p>
 
                       {/* Formula Card */}
@@ -366,9 +344,7 @@ const CompanyLeaderBoard: React.FC = () => {
                           <span className="text-orange-300">×</span>
                           <span>Multipliers</span>
                           <span className="text-orange-300">=</span>
-                          <span className="bg-white text-orange-600 px-4 py-1 rounded-xl shadow-sm">
-                            Score
-                          </span>
+                          <span className="bg-white text-orange-600 px-4 py-1 rounded-xl shadow-sm">Score</span>
                         </div>
                       </div>
 
@@ -386,8 +362,7 @@ const CompanyLeaderBoard: React.FC = () => {
                             <Target className="w-4 h-4" /> Accuracy
                           </h4>
                           <p className="text-sm text-blue-700/70 font-medium leading-normal">
-                            Precision matters. Higher accuracy yields a higher
-                            final score multiplier.
+                            Precision matters. Higher accuracy yields a higher final score multiplier.
                           </p>
                         </div>
                       </div>
@@ -406,11 +381,7 @@ const CompanyLeaderBoard: React.FC = () => {
                           <Trophy className="w-3 h-3" /> Activity Type
                         </p>
                         <div className="space-y-4">
-                          <MultiplierItem
-                            icon={<BookOpen className="w-4 h-4" />}
-                            label="Lessons"
-                            multiplier="1.0x"
-                          />
+                          <MultiplierItem icon={<BookOpen className="w-4 h-4" />} label="Lessons" multiplier="1.0x" />
                           <MultiplierItem
                             icon={<UserCheck className="w-4 h-4" />}
                             label="1v1 Challenges"
@@ -537,16 +508,11 @@ const PodiumCard: React.FC<{
         `}
         >
           <img
-            src={
-              user.imageUrl ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-            }
+            src={user.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`}
             alt={user.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 bg-gray-100"
           />
-          <div
-            className={`absolute bottom-0 left-0 w-full ${style.bg} h-1.5 opacity-80`}
-          />
+          <div className={`absolute bottom-0 left-0 w-full ${style.bg} h-1.5 opacity-80`} />
         </div>
         <div
           className={`
@@ -559,12 +525,8 @@ const PodiumCard: React.FC<{
       </div>
 
       <div className="text-center">
-        <h3 className="font-black text-gray-900 text-lg leading-none mb-2">
-          {user.name}
-        </h3>
-        <div
-          className={`flex items-center justify-center gap-1.5 ${style.text} font-black italic`}
-        >
+        <h3 className="font-black text-gray-900 text-lg leading-none mb-2">{user.name}</h3>
+        <div className={`flex items-center justify-center gap-1.5 ${style.text} font-black italic`}>
           <Icon className="w-4 h-4" />
           <span className="text-2xl tracking-tight">{score}</span>
           <span className="text-xs uppercase ml-0.5 opacity-80">PTS</span>

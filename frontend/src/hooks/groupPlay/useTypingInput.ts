@@ -70,17 +70,5 @@ export function useTypingInput({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [
-    lesson,
-    isFinished,
-    phase,
-    hasError,
-    typedText,
-    gameId,
-    currentUser,
-    elapsedTime,
-    wpm,
-    accuracy,
-    errors,
-  ]);
+  }, [lesson, isFinished, phase, hasError, typedText, gameId, currentUser, elapsedTime, wpm, accuracy, errors]);
 }

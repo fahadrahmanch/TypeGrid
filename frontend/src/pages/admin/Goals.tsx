@@ -2,31 +2,11 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
-import {
-  Search,
-  Plus,
-  Edit2,
-  Trash2,
-  X,
-  Target,
-  Zap,
-  CheckCircle,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Search, Plus, Edit2, Trash2, X, Target, Zap, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { goalValidation } from "../../validations/challengeValidation";
-import {
-  WpmValidation,
-  accuracyValidation,
-} from "../../validations/lessonValidation";
+import { WpmValidation, accuracyValidation } from "../../validations/lessonValidation";
 import ConfirmModal from "../../components/common/ConfirmModal";
-import {
-  fetchGoals,
-  createGoal,
-  updateGoal,
-  deleteGoal,
-  fetchGoalById,
-} from "../../api/admin/goals";
+import { fetchGoals, createGoal, updateGoal, deleteGoal, fetchGoalById } from "../../api/admin/goals";
 
 const Goals: React.FC = () => {
   const [goals, setGoals] = useState<any[]>([]);
@@ -88,9 +68,7 @@ const Goals: React.FC = () => {
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     setValues((prev) => ({
@@ -206,21 +184,13 @@ const Goals: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-10">
             <div>
-              <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">
-                Goals
-              </h1>
+              <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">Goals</h1>
               <div className="flex items-center gap-3">
-                <p className="text-gray-500 font-bold text-sm uppercase tracking-widest">
-                  Target Management
-                </p>
+                <p className="text-gray-500 font-bold text-sm uppercase tracking-widest">Target Management</p>
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ECA468]/40"></span>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#ECA468] font-black text-sm">
-                    {totalGoals}
-                  </span>
-                  <span className="text-gray-400 font-bold text-[10px] uppercase tracking-widest">
-                    Total Goals
-                  </span>
+                  <span className="text-[#ECA468] font-black text-sm">{totalGoals}</span>
+                  <span className="text-gray-400 font-bold text-[10px] uppercase tracking-widest">Total Goals</span>
                 </div>
               </div>
             </div>
@@ -249,18 +219,14 @@ const Goals: React.FC = () => {
               <table className="w-full">
                 <thead>
                   <tr className="bg-[#FFF8EA] text-left">
-                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                      Goal Title
-                    </th>
+                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Goal Title</th>
                     <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-center">
                       WPM
                     </th>
                     <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-center">
                       Accuracy
                     </th>
-                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                      Description
-                    </th>
+                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Description</th>
                     <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-right">
                       Actions
                     </th>
@@ -275,51 +241,35 @@ const Goals: React.FC = () => {
                     </tr>
                   ) : goals.length === 0 ? (
                     <tr>
-                      <td
-                        colSpan={5}
-                        className="py-20 text-center text-gray-400 font-medium"
-                      >
+                      <td colSpan={5} className="py-20 text-center text-gray-400 font-medium">
                         No goals found
                       </td>
                     </tr>
                   ) : (
                     goals.map((goal) => (
-                      <tr
-                        key={goal._id}
-                        className="group hover:bg-gray-50 transition-colors"
-                      >
+                      <tr key={goal._id} className="group hover:bg-gray-50 transition-colors">
                         <td className="py-4 px-6">
                           <div className="flex items-center gap-3">
                             <Target className="w-5 h-5 text-[#ECA468]" />
-                            <span className="font-bold text-gray-800 leading-tight">
-                              {goal.title}
-                            </span>
+                            <span className="font-bold text-gray-800 leading-tight">{goal.title}</span>
                           </div>
                         </td>
                         <td className="py-4 px-6 text-center">
                           <div className="flex flex-col items-center">
                             <div className="flex items-center gap-1.5 mb-0.5">
                               <Zap className="w-3.5 h-3.5 text-amber-500" />
-                              <span className="text-sm font-black text-gray-900">
-                                {goal.wpm || "-"}
-                              </span>
+                              <span className="text-sm font-black text-gray-900">{goal.wpm || "-"}</span>
                             </div>
-                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
-                              WPM
-                            </span>
+                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">WPM</span>
                           </div>
                         </td>
                         <td className="py-4 px-6 text-center">
                           <div className="flex flex-col items-center">
                             <div className="flex items-center gap-1.5 mb-0.5">
                               <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
-                              <span className="text-sm font-black text-gray-900">
-                                {goal.accuracy || "-"}%
-                              </span>
+                              <span className="text-sm font-black text-gray-900">{goal.accuracy || "-"}%</span>
                             </div>
-                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
-                              ACC
-                            </span>
+                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">ACC</span>
                           </div>
                         </td>
                         <td className="py-4 px-6 text-gray-600 font-medium text-sm max-w-xs truncate">
@@ -361,9 +311,7 @@ const Goals: React.FC = () => {
               </button>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
-                  {page}
-                </span>
+                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
                 <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
                   of {totalPages}
                 </span>
@@ -398,22 +346,15 @@ const Goals: React.FC = () => {
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 backdrop-blur-sm animate-in fade-in duration-200 p-4">
             <div className="relative w-full max-w-lg bg-[#FFF8EA] rounded-3xl shadow-xl overflow-hidden flex flex-col max-h-[95vh] animate-in zoom-in-95 duration-200">
               <div className="px-8 py-6 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-800">
-                  {isEditOpen ? "Edit Goal" : "Create Goal"}
-                </h2>
-                <button
-                  onClick={closeModals}
-                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                >
+                <h2 className="text-xl font-bold text-gray-800">{isEditOpen ? "Edit Goal" : "Create Goal"}</h2>
+                <button onClick={closeModals} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-5 custom-scrollbar">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Goal Title
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Goal Title</label>
                   <input
                     type="text"
                     name="title"
@@ -422,18 +363,12 @@ const Goals: React.FC = () => {
                     placeholder="e.g. 100 WPM & 98% Accuracy"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
                   />
-                  {formErrors.title && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.title}
-                    </p>
-                  )}
+                  {formErrors.title && <p className="text-red-400 text-xs px-1">{formErrors.title}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-gray-600">
-                      WPM
-                    </label>
+                    <label className="text-sm font-semibold text-gray-600">WPM</label>
                     <input
                       type="number"
                       name="wpm"
@@ -442,17 +377,11 @@ const Goals: React.FC = () => {
                       placeholder="e.g. 60"
                       className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
                     />
-                    {formErrors.wpm && (
-                      <p className="text-red-400 text-xs px-1">
-                        {formErrors.wpm}
-                      </p>
-                    )}
+                    {formErrors.wpm && <p className="text-red-400 text-xs px-1">{formErrors.wpm}</p>}
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-gray-600">
-                      Accuracy (%)
-                    </label>
+                    <label className="text-sm font-semibold text-gray-600">Accuracy (%)</label>
                     <input
                       type="number"
                       name="accuracy"
@@ -461,18 +390,12 @@ const Goals: React.FC = () => {
                       placeholder="e.g. 95"
                       className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
                     />
-                    {formErrors.accuracy && (
-                      <p className="text-red-400 text-xs px-1">
-                        {formErrors.accuracy}
-                      </p>
-                    )}
+                    {formErrors.accuracy && <p className="text-red-400 text-xs px-1">{formErrors.accuracy}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Description
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Description</label>
                   <textarea
                     name="description"
                     value={values.description}
@@ -500,7 +423,7 @@ const Goals: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       <style>{`

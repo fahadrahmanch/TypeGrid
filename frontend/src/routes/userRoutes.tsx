@@ -33,7 +33,6 @@ import DailyChallengeArea from "../pages/user/DailyChallenge/dailyChallengeArea"
 import LeaderBoard from "../pages/user/leaderBoard";
 import Achievements from "../pages/user/achievments";
 
-
 export default function UserRoutes() {
   const location = useLocation();
 
@@ -99,36 +98,18 @@ export default function UserRoutes() {
         {/* Subscription */}
         <Route path="subscription" element={<SubscriptionPlans />} />
         <Route path="subscription/company" element={<CompanySubscription />} />
-        <Route
-          path="subscription/company/verify/:id"
-          element={<CompanyVerification />}
-        />
-        <Route
-          path="subscription/company/verify/status"
-          element={<CompanyVerificationStatus />}
-        />
-        <Route
-          path="subscription/company/re-verify"
-          element={<CompanyVerificationReapply />}
-        />
+        <Route path="subscription/company/verify/:id" element={<CompanyVerification />} />
+        <Route path="subscription/company/verify/status" element={<CompanyVerificationStatus />} />
+        <Route path="subscription/company/re-verify" element={<CompanyVerificationReapply />} />
         <Route path="success" element={<PaymentSuccess />} />
-        <Route
-          path="subscription/company/success"
-          element={<CompanyPaymentSuccess />}
-        />
-        <Route
-          path="subscription/company/failed"
-          element={<CompanyPaymentFailed />}
-        />
+        <Route path="subscription/company/success" element={<CompanyPaymentSuccess />} />
+        <Route path="subscription/company/failed" element={<CompanyPaymentFailed />} />
         <Route path="cancel" element={<PaymentCancel />} />
         <Route path="subscription/manage" element={<SubscriptionManagement />} />
 
         {/* Typing */}
         <Route path="typing/practice" element={<PracticeTyping />} />
-        <Route
-          path="typing/practice/:lessonId"
-          element={<TypingPracticeArea />}
-        />
+        <Route path="typing/practice/:lessonId" element={<TypingPracticeArea />} />
 
         {/* Group */}
         <Route path="group-play/group/:joinLink" element={<GroupLobby />} />
@@ -146,7 +127,6 @@ export default function UserRoutes() {
         <Route path="highscores" element={<LeaderBoard />} />
         <Route path="badges" element={<Achievements />} />
       </Route>
-
     </Routes>
   );
 }

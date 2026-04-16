@@ -2,9 +2,7 @@
 import { useEffect } from "react";
 import { socket } from "../../socket";
 
-export const useMyChallengeSocket = (
-  setChallenges: React.Dispatch<React.SetStateAction<any[]>>,
-) => {
+export const useMyChallengeSocket = (setChallenges: React.Dispatch<React.SetStateAction<any[]>>) => {
   useEffect(() => {
     const onChallengeReceived = (challenge: any) => {
       setChallenges((prev) => {
@@ -15,11 +13,7 @@ export const useMyChallengeSocket = (
     };
 
     const onStatusUpdated = (data: any) => {
-      setChallenges((prev) =>
-        prev.map((c) =>
-          c.id === data.challengeId ? { ...c, status: "accepted" } : c,
-        ),
-      );
+      setChallenges((prev) => prev.map((c) => (c.id === data.challengeId ? { ...c, status: "accepted" } : c)));
     };
 
     socket.on("challenge-received", onChallengeReceived);

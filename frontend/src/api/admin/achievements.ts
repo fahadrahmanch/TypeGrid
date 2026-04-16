@@ -18,12 +18,11 @@ export const createAchievement = (data: any) => {
 };
 
 export const updateAchievement = (id: string, data: any) => {
-      // DELETE: (id: string) => `/achievement/${id}`,
+  // DELETE: (id: string) => `/achievement/${id}`,
 
   return adminAPI.put(API_ROUTES.ADMIN.ACHIEVEMENTS.BY_ID(id), data);
 };
 
 export const deleteAchievement = (id: string) => {
- 
   return adminAPI.delete(API_ROUTES.ADMIN.ACHIEVEMENTS.DELETE(id));
 };

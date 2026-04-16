@@ -2,16 +2,7 @@ import React, { useEffect } from "react";
 import { TodayChallenge } from "../../../api/user/dailyChallenge";
 import Navbar from "../../../components/user/Navbar";
 import { useNavigate } from "react-router-dom";
-import {
-  Flame,
-  Trophy,
-  Target,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Zap,
-  Star,
-} from "lucide-react";
+import { Flame, Trophy, Target, ChevronLeft, ChevronRight, Clock, Zap, Star } from "lucide-react";
 import { ChallengeStatistics } from "../../../api/user/dailyChallenge";
 
 interface IDailyChallenge {
@@ -58,9 +49,7 @@ interface IChallengeStats {
 }
 
 const DailyChallenge: React.FC = () => {
-  const [challenge, setChallenge] = React.useState<IDailyChallenge | null>(
-    null,
-  );
+  const [challenge, setChallenge] = React.useState<IDailyChallenge | null>(null);
   const [stats, setStats] = React.useState<IChallengeStats | null>(null);
   const [loading, setLoading] = React.useState(true);
   const navigate = useNavigate();
@@ -106,9 +95,7 @@ const DailyChallenge: React.FC = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-8 pt-10">
-        <h1 className="text-4xl font-black text-gray-900 mb-10 tracking-tight">
-          Daily Challenge
-        </h1>
+        <h1 className="text-4xl font-black text-gray-900 mb-10 tracking-tight">Daily Challenge</h1>
 
         {/* Top Section */}
         <div className="flex flex-col lg:flex-row gap-8 mb-12">
@@ -117,12 +104,8 @@ const DailyChallenge: React.FC = () => {
             {!challenge && !loading ? (
               <div className="flex-1 flex flex-col items-center justify-center p-10 text-center">
                 <Trophy className="w-16 h-16 text-orange-200 mb-6" />
-                <h2 className="text-2xl font-black text-gray-800 mb-2">
-                  no have challenge
-                </h2>
-                <p className="text-gray-500 font-medium">
-                  Check back later for today's typing challenge!
-                </p>
+                <h2 className="text-2xl font-black text-gray-800 mb-2">no have challenge</h2>
+                <p className="text-gray-500 font-medium">Check back later for today's typing challenge!</p>
               </div>
             ) : (
               <>
@@ -182,8 +165,7 @@ const DailyChallenge: React.FC = () => {
                       </div>
 
                       <h2 className="text-2xl font-black text-gray-800 mb-4 tracking-tight leading-tight">
-                        {challenge?.challengeId.title ||
-                          "Daily Typing Challenge"}
+                        {challenge?.challengeId.title || "Daily Typing Challenge"}
                       </h2>
                       <p className="text-gray-500 font-medium mb-8 leading-relaxed max-w-sm">
                         {challenge?.challengeId.description ||
@@ -199,19 +181,14 @@ const DailyChallenge: React.FC = () => {
                             <div className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded-xl border border-orange-50/50">
                               <Zap className="w-3.5 h-3.5 text-orange-400" />
                               <span className="text-sm font-black text-gray-700">
-                                {challenge?.goal.wpm || 0}{" "}
-                                <span className="text-[10px] text-gray-400">
-                                  WPM
-                                </span>
+                                {challenge?.goal.wpm || 0} <span className="text-[10px] text-gray-400">WPM</span>
                               </span>
                             </div>
                             <div className="flex items-center gap-1.5 bg-white/60 px-3 py-1.5 rounded-xl border border-blue-50/50">
                               <Target className="w-3.5 h-3.5 text-blue-400" />
                               <span className="text-sm font-black text-gray-700">
                                 {challenge?.goal.accuracy || 0}
-                                <span className="text-[10px] text-gray-400">
-                                  %
-                                </span>
+                                <span className="text-[10px] text-gray-400">%</span>
                               </span>
                             </div>
                           </div>
@@ -223,17 +200,14 @@ const DailyChallenge: React.FC = () => {
                           <div className="flex items-center gap-2 bg-yellow-50/50 px-3 py-1.5 rounded-xl border border-yellow-100/50">
                             <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
                             <span className="text-sm font-black text-yellow-700">
-                              +{challenge?.reward.xp || 0}{" "}
-                              <span className="text-[10px]">XP</span>
+                              +{challenge?.reward.xp || 0} <span className="text-[10px]">XP</span>
                             </span>
                           </div>
                         </div>
                       </div>
 
                       <button
-                        onClick={() =>
-                          navigate(`/daily-challenge/${challenge?._id}`)
-                        }
+                        onClick={() => navigate(`/daily-challenge/${challenge?._id}`)}
                         className="w-fit px-10 py-4 bg-[#ECA468] hover:bg-[#D0864B] text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-lg shadow-[#ECA468]/20 transition-all hover:scale-105 active:scale-95"
                       >
                         Start Challenge
@@ -261,10 +235,7 @@ const DailyChallenge: React.FC = () => {
 
             <div className="grid grid-cols-7 gap-2 mb-4 text-center">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-                <span
-                  key={d}
-                  className="text-[10px] font-black uppercase text-gray-400 tracking-widest"
-                >
+                <span key={d} className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
                   {d}
                 </span>
               ))}
@@ -305,9 +276,7 @@ const DailyChallenge: React.FC = () => {
           <div className="bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-orange-100/50 p-8 shadow-sm flex flex-col items-center">
             <div className="flex items-center gap-2 mb-8 w-full border-b border-orange-100/30 pb-4">
               <Flame className="w-4 h-4 text-orange-500" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">
-                Streak Tracker
-              </span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">Streak Tracker</span>
             </div>
 
             <div className="relative mb-8">
@@ -317,9 +286,7 @@ const DailyChallenge: React.FC = () => {
                   <span className="text-3xl font-black text-gray-800">
                     {stats?.streakTracker.currentStreak || 0} Days
                   </span>
-                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
-                    Current Streak
-                  </span>
+                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Current Streak</span>
                 </div>
               </div>
               <div className="absolute -top-1 -right-1 w-8 h-8 bg-gray-600 border-4 border-[#FFF8EA] rounded-full flex items-center justify-center text-[10px] font-black text-white">
@@ -332,8 +299,7 @@ const DailyChallenge: React.FC = () => {
                 <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
                   <span className="text-gray-400">Next milestone</span>
                   <span className="text-orange-500">
-                    {stats?.streakTracker.currentStreak || 0}/
-                    {stats?.streakTracker.nextMilestone || 5} days
+                    {stats?.streakTracker.currentStreak || 0}/{stats?.streakTracker.nextMilestone || 5} days
                   </span>
                 </div>
                 <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -349,12 +315,8 @@ const DailyChallenge: React.FC = () => {
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div className="bg-[#FAFAFB] rounded-2xl p-4 flex flex-col items-center gap-2 border border-gray-100/50">
                   <Trophy className="w-4 h-4 text-blue-400" />
-                  <span className="text-lg font-black text-gray-800">
-                    {stats?.statistics.longestStreak || 0}
-                  </span>
-                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
-                    Best Streak
-                  </span>
+                  <span className="text-lg font-black text-gray-800">{stats?.statistics.longestStreak || 0}</span>
+                  <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Best Streak</span>
                 </div>
               </div>
             </div>
@@ -366,9 +328,7 @@ const DailyChallenge: React.FC = () => {
             <div className="bg-white/40 backdrop-blur-md rounded-[2.5rem] border border-orange-100/50 p-8 shadow-sm">
               <div className="flex items-center gap-2 mb-8 border-b border-orange-100/30 pb-4">
                 <Clock className="w-4 h-4 text-orange-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">
-                  Weekly Goal
-                </span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-orange-400">Weekly Goal</span>
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-end">
@@ -376,8 +336,7 @@ const DailyChallenge: React.FC = () => {
                     Sessions this week
                   </span>
                   <span className="text-[10px] font-black text-gray-400">
-                    {stats?.weeklyGoal.completedSessions || 0}/
-                    {stats?.weeklyGoal.targetSessions || 7}
+                    {stats?.weeklyGoal.completedSessions || 0}/{stats?.weeklyGoal.targetSessions || 7}
                   </span>
                 </div>
                 <div className="w-full h-2 bg-gray-100/50 rounded-full overflow-hidden">
@@ -389,9 +348,8 @@ const DailyChallenge: React.FC = () => {
                   />
                 </div>
                 <p className="text-[10px] font-bold text-gray-400 mt-2">
-                  {(stats?.weeklyGoal.targetSessions || 7) -
-                    (stats?.weeklyGoal.completedSessions || 0)}{" "}
-                  sessions remaining
+                  {(stats?.weeklyGoal.targetSessions || 7) - (stats?.weeklyGoal.completedSessions || 0)} sessions
+                  remaining
                 </p>
               </div>
             </div>

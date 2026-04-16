@@ -45,9 +45,7 @@ const LessonTable: React.FC<{
     try {
       const response = await deleteLesson(id);
       if (response) {
-        setLessons((prev: any) =>
-          prev.filter((lesson: any) => lesson.id !== id),
-        );
+        setLessons((prev: any) => prev.filter((lesson: any) => lesson.id !== id));
         toast.success("Lesson deleted successfully");
       }
     } catch (error) {
@@ -59,9 +57,7 @@ const LessonTable: React.FC<{
     <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
       <div className="flex justify-between items-center mb-8 px-2">
         <div>
-          <h3 className="text-xl font-black text-gray-900 leading-tight">
-            All Lessons
-          </h3>
+          <h3 className="text-xl font-black text-gray-900 leading-tight">All Lessons</h3>
           <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
             {lessons.length} total lessons available
           </p>
@@ -83,13 +79,8 @@ const LessonTable: React.FC<{
           </thead>
           <tbody className="divide-y divide-gray-50">
             {filteredLessons?.map((lesson) => (
-              <tr
-                key={lesson.id}
-                className="group hover:bg-white/40 transition-all duration-300"
-              >
-                <td className="py-5 px-6 font-bold text-gray-800 text-sm flex">
-                  {lesson.title}
-                </td>
+              <tr key={lesson.id} className="group hover:bg-white/40 transition-all duration-300">
+                <td className="py-5 px-6 font-bold text-gray-800 text-sm flex">{lesson.title}</td>
                 <td className="py-5 px-4 text-center">
                   <span
                     className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${getDifficultyColor(lesson?.level || "")}`}
@@ -140,32 +131,28 @@ const LessonTable: React.FC<{
       </div>
 
       {/* {totalPages > 1 && ( */}
-        <div className="mt-10 flex justify-center items-center gap-6">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((prev) => prev - 1)}
-            className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-          >
-            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-          </button>
+      <div className="mt-10 flex justify-center items-center gap-6">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage((prev) => prev - 1)}
+          className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+        >
+          <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+        </button>
 
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
-              {page}
-            </span>
-            <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
-              of {totalPages}
-            </span>
-          </div>
-
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((prev) => prev + 1)}
-            className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-          >
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-          </button>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">of {totalPages}</span>
         </div>
+
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage((prev) => prev + 1)}
+          className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+        >
+          <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+        </button>
+      </div>
       {/* )} */}
 
       <EditLessonModal

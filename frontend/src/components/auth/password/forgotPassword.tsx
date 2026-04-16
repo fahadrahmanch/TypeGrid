@@ -56,9 +56,7 @@ const ForgotPassWordForm: React.FC = () => {
         </div>
 
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-[30rem] shadow-lg z-20 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center justify-center">
-            FORGOT PASSWORD
-          </h2>
+          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center justify-center">FORGOT PASSWORD</h2>
 
           {/* Form */}
           <form className="flex flex-col gap-3  ">
@@ -76,11 +74,7 @@ const ForgotPassWordForm: React.FC = () => {
               onClick={handleSubmit}
               disabled={loading}
               className={`w-full text-white rounded-md py-2 mt-2 transition 
-    ${
-      loading
-        ? "bg-gray-700 cursor-not-allowed"
-        : "bg-gray-900 hover:bg-gray-800"
-    }`}
+    ${loading ? "bg-gray-700 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"}`}
             >
               {loading ? "Sending..." : "Submit"}
             </button>
@@ -89,16 +83,8 @@ const ForgotPassWordForm: React.FC = () => {
 
         {/* Illustration */}
 
-        <img
-          src={LinesRight}
-          alt="draw"
-          className="w-24 h-60 mb-10 relative"
-        ></img>
-        <img
-          src={passwordKid}
-          alt="kid"
-          className="w-[30rem] absolute mt-28 ml-[650px]"
-        />
+        <img src={LinesRight} alt="draw" className="w-24 h-60 mb-10 relative"></img>
+        <img src={passwordKid} alt="kid" className="w-[30rem] absolute mt-28 ml-[650px]" />
       </div>
     </>
   );

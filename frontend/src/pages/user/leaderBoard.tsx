@@ -130,10 +130,7 @@ const LeaderBoard: React.FC = () => {
                   <Target className="w-3.5 h-3.5 text-blue-400" />
                 </div>
                 <p className="text-[11px] font-bold text-orange-800/80 uppercase tracking-wider flex items-center gap-1.5">
-                  Calculation:{" "}
-                  <span className="text-gray-400 font-black">
-                    WPM × ACC × Multipliers
-                  </span>
+                  Calculation: <span className="text-gray-400 font-black">WPM × ACC × Multipliers</span>
                   <button
                     onClick={() => setIsModalOpen(true)}
                     className="ml-1 text-orange-500 hover:text-orange-600 underline underline-offset-2 decoration-orange-300 transition-colors"
@@ -167,7 +164,9 @@ const LeaderBoard: React.FC = () => {
         {/* Top 3 Podium Cards */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 items-end max-w-5xl">
           {isLoading ? (
-            <div className="col-span-3 py-20 flex justify-center"><Loader2 className="w-10 h-10 animate-spin text-[#ECA468]" /></div>
+            <div className="col-span-3 py-20 flex justify-center">
+              <Loader2 className="w-10 h-10 animate-spin text-[#ECA468]" />
+            </div>
           ) : (
             <>
               {topThree[1] && (
@@ -177,7 +176,13 @@ const LeaderBoard: React.FC = () => {
               )}
               {topThree[0] && (
                 <div className="order-1 md:order-2 transform hover:-translate-y-2 transition-transform duration-500">
-                   <PodiumCard user={topThree[0]} rank={1} isPrimary badge="Global Legend" score={getScore(topThree[0])} />
+                  <PodiumCard
+                    user={topThree[0]}
+                    rank={1}
+                    isPrimary
+                    badge="Global Legend"
+                    score={getScore(topThree[0])}
+                  />
                 </div>
               )}
               {topThree[2] && (
@@ -203,31 +208,40 @@ const LeaderBoard: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#F3F4F6]">
                 {isLoading ? (
-                  <tr><td colSpan={4} className="py-20 text-center"><Loader2 className="w-8 h-8 animate-spin mx-auto text-[#ECA468]" /></td></tr>
+                  <tr>
+                    <td colSpan={4} className="py-20 text-center">
+                      <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#ECA468]" />
+                    </td>
+                  </tr>
                 ) : (
                   sortedRankings.map((user, index) => (
-                    <tr 
-                      key={user.userId} 
+                    <tr
+                      key={user.userId}
                       className={`group hover:bg-[#FDF9F2]/50 transition-colors duration-200 ${
                         user.userId === currentUser?._id ? "bg-orange-50/50" : index < 3 ? "bg-orange-50/10" : ""
                       }`}
                     >
                       <td className="py-6 pl-4">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${
-                          index < 3 ? "bg-[#1A1A1A] text-white" : "bg-[#F3F4F6] text-[#4B5563]"
-                        }`}>
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${
+                            index < 3 ? "bg-[#1A1A1A] text-white" : "bg-[#F3F4F6] text-[#4B5563]"
+                          }`}
+                        >
                           {index + 1}
                         </div>
                       </td>
                       <td className="py-6 pl-4">
                         <div className="flex items-center gap-4">
                           <div className="relative">
-                            <img 
-                              src={user.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`} 
-                              className="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover" 
-                              alt="" 
+                            <img
+                              src={
+                                user.imageUrl ||
+                                `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+                              }
+                              className="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover"
+                              alt=""
                             />
-                             {index === 0 && (
+                            {index === 0 && (
                               <div className="absolute -top-1.5 -right-1.5 bg-[#FFBB00] rounded-full p-1 border-2 border-white shadow-sm">
                                 <Star className="w-2.5 h-2.5 text-white fill-current" />
                               </div>
@@ -235,9 +249,11 @@ const LeaderBoard: React.FC = () => {
                           </div>
                           <div>
                             <div className="font-bold text-slate-900 flex items-center gap-2">
-                              {user.name} 
+                              {user.name}
                               {user.userId === currentUser?._id && (
-                                <span className="px-2 py-0.5 bg-orange-100 text-[#D0864B] rounded text-[10px] font-black uppercase tracking-tight">You</span>
+                                <span className="px-2 py-0.5 bg-orange-100 text-[#D0864B] rounded text-[10px] font-black uppercase tracking-tight">
+                                  You
+                                </span>
                               )}
                             </div>
                             <div className="text-[11px] font-medium text-slate-400">{user.badge}</div>
@@ -247,7 +263,7 @@ const LeaderBoard: React.FC = () => {
                       <td className="py-6 text-center">
                         <div className="flex flex-col items-center justify-center gap-1">
                           <div className="flex flex-wrap items-center justify-center gap-2">
-                             <span className="px-2.5 py-1 bg-[#F3F4F6] rounded-full text-[10px] font-black text-[#D0864B] flex items-center gap-1 animate-in zoom-in-50">
+                            <span className="px-2.5 py-1 bg-[#F3F4F6] rounded-full text-[10px] font-black text-[#D0864B] flex items-center gap-1 animate-in zoom-in-50">
                               <Zap className="w-3 h-3 fill-current" />
                               {user.wpm} WPM
                             </span>
@@ -259,7 +275,9 @@ const LeaderBoard: React.FC = () => {
                           <div className="flex items-center gap-3 mt-1 text-[10px] font-bold text-gray-400 uppercase tracking-tighter opacity-60">
                             <span>{user.totalCompetitions || 0} Tests</span>
                             <span>•</span>
-                            <span className="flex items-center gap-0.5"><Flame className="w-3 h-3 text-orange-400" /> {user.streak}</span>
+                            <span className="flex items-center gap-0.5">
+                              <Flame className="w-3 h-3 text-orange-400" /> {user.streak}
+                            </span>
                             <span>•</span>
                             <span className="text-[#6D8A6B]">+{user.trend} Up</span>
                           </div>
@@ -267,9 +285,11 @@ const LeaderBoard: React.FC = () => {
                       </td>
                       <td className="py-6 text-right pr-4">
                         <div className="flex flex-col items-end">
-                           <div className="flex items-baseline gap-1">
-                             <span className="text-xl font-black text-slate-900 group-hover:text-[#ECA468] transition-colors">{getScore(user)}</span>
-                             <span className="text-[10px] font-black text-gray-400 uppercase">PTS</span>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-black text-slate-900 group-hover:text-[#ECA468] transition-colors">
+                              {getScore(user)}
+                            </span>
+                            <span className="text-[10px] font-black text-gray-400 uppercase">PTS</span>
                           </div>
                           <div className="h-1 w-20 bg-gray-100 rounded-full mt-1.5 overflow-hidden">
                             <div
@@ -306,9 +326,7 @@ const LeaderBoard: React.FC = () => {
                   <div className="p-3 bg-orange-100 rounded-2xl">
                     <Info className="w-6 h-6 text-orange-600" />
                   </div>
-                  <h2 className="text-2xl font-black text-[#111827]">
-                    How Scoring Works
-                  </h2>
+                  <h2 className="text-2xl font-black text-[#111827]">How Scoring Works</h2>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
@@ -341,7 +359,9 @@ const LeaderBoard: React.FC = () => {
                           <span>Modifiers</span>
                         </div>
                         <div className="mt-4 pt-4 border-t border-white/20">
-                           <span className="text-sm opacity-90 font-bold">Accuracy  90 marks zero points multipliers.</span>
+                          <span className="text-sm opacity-90 font-bold">
+                            Accuracy 90 marks zero points multipliers.
+                          </span>
                         </div>
                       </div>
 
@@ -359,7 +379,7 @@ const LeaderBoard: React.FC = () => {
                             <Target className="w-4 h-4" /> Accuracy
                           </h4>
                           <p className="text-xs text-blue-700 font-medium">
-                             Precision is non-negotiable. Mistakes drastically reduce your point generation.
+                            Precision is non-negotiable. Mistakes drastically reduce your point generation.
                           </p>
                         </div>
                       </div>
@@ -389,12 +409,13 @@ const LeaderBoard: React.FC = () => {
                         />
                       </div>
                     </div>
-                    
+
                     <div className="bg-orange-50/30 rounded-3xl p-6 border border-orange-100/50">
-                         <h4 className="text-xs font-black uppercase tracking-widest text-[#D0864B] mb-2">Pro Tip</h4>
-                         <p className="text-xs text-gray-600 leading-relaxed font-medium font-sans">
-                            Group play sessions yield the highest point density. Mastering hard lessons in group play is the fastest way to hit the top spot.
-                         </p>
+                      <h4 className="text-xs font-black uppercase tracking-widest text-[#D0864B] mb-2">Pro Tip</h4>
+                      <p className="text-xs text-gray-600 leading-relaxed font-medium font-sans">
+                        Group play sessions yield the highest point density. Mastering hard lessons in group play is the
+                        fastest way to hit the top spot.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -432,29 +453,45 @@ const MultiplierItem: React.FC<{
   </div>
 );
 
-const PodiumCard: React.FC<{ user: LeaderboardEntry; rank: number; isPrimary?: boolean; badge: string; score: number }> = ({ user, rank, isPrimary, badge, score }) => {
+const PodiumCard: React.FC<{
+  user: LeaderboardEntry;
+  rank: number;
+  isPrimary?: boolean;
+  badge: string;
+  score: number;
+}> = ({ user, rank, isPrimary, badge, score }) => {
   const Icon = rank === 1 ? Star : rank === 2 ? Trophy : Medal;
   const rankColors = rank === 1 ? "bg-[#FFBB00]" : rank === 2 ? "bg-[#ECA468]" : "bg-[#D0864B]";
 
   return (
-    <div className={`bg-white rounded-[2.5rem] p-8 flex flex-col items-center shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-[#FDE6C6] relative ${isPrimary ? "md:-mt-12 md:pb-12 border-2 border-[#FADDB8] bg-white ring-8 ring-[#FDF9F2]" : ""}`}>
+    <div
+      className={`bg-white rounded-[2.5rem] p-8 flex flex-col items-center shadow-[0_15px_40px_rgba(0,0,0,0.03)] border border-[#FDE6C6] relative ${isPrimary ? "md:-mt-12 md:pb-12 border-2 border-[#FADDB8] bg-white ring-8 ring-[#FDF9F2]" : ""}`}
+    >
       {/* Top Icon Badge */}
-      <div className={`absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg ${rankColors}`}>
+      <div
+        className={`absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg ${rankColors}`}
+      >
         <Icon className="w-6 h-6" />
       </div>
 
       {/* Avatar Container */}
       <div className="relative mb-6 mt-2">
-        <div className={`p-1.5 rounded-full ${rank === 1 ? "bg-gradient-to-tr from-[#ECA468] to-[#FFD700]" : "bg-gray-100"}`}>
+        <div
+          className={`p-1.5 rounded-full ${rank === 1 ? "bg-gradient-to-tr from-[#ECA468] to-[#FFD700]" : "bg-gray-100"}`}
+        >
           <div className="bg-white p-1 rounded-full">
-            <img 
-              src={user.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`} 
-              className={`${isPrimary ? "w-24 h-24" : "w-16 h-16"} rounded-full object-cover shadow-inner bg-gray-50`} 
-              alt={user.name} 
+            <img
+              src={
+                user.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+              }
+              className={`${isPrimary ? "w-24 h-24" : "w-16 h-16"} rounded-full object-cover shadow-inner bg-gray-50`}
+              alt={user.name}
             />
           </div>
         </div>
-        <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-white font-black text-xs shadow-md ${rankColors}`}>
+        <div
+          className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-white font-black text-xs shadow-md ${rankColors}`}
+        >
           {rank}
         </div>
       </div>
@@ -463,19 +500,21 @@ const PodiumCard: React.FC<{ user: LeaderboardEntry; rank: number; isPrimary?: b
       <div className={`font-black text-slate-900 mb-4 transition-all ${isPrimary ? "text-3xl" : "text-2xl"}`}>
         {score} <span className="text-[10px] text-gray-400 font-bold uppercase ml-1 opacity-70">PTS</span>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-4 w-full mb-6 border-y border-gray-50 py-3">
         <div className="flex flex-col items-center">
-            <span className="text-xs font-black text-slate-700">{user.wpm}</span>
-            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">WPM</span>
+          <span className="text-xs font-black text-slate-700">{user.wpm}</span>
+          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">WPM</span>
         </div>
         <div className="flex flex-col items-center border-l border-gray-50">
-            <span className="text-xs font-black text-slate-700">{user.accuracy}%</span>
-            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Acc</span>
+          <span className="text-xs font-black text-slate-700">{user.accuracy}%</span>
+          <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Acc</span>
         </div>
       </div>
 
-      <div className={`px-5 py-2 ${rank === 1 ? "bg-orange-50 text-[#D0864B]" : "bg-[#F3F4F6] text-[#4B5563]"} rounded-full text-[10px] font-black uppercase tracking-widest`}>
+      <div
+        className={`px-5 py-2 ${rank === 1 ? "bg-orange-50 text-[#D0864B]" : "bg-[#F3F4F6] text-[#4B5563]"} rounded-full text-[10px] font-black uppercase tracking-widest`}
+      >
         {badge}
       </div>
     </div>

@@ -1,12 +1,7 @@
 import { adminAPI } from "../axios/adminAPI";
 import { API_ROUTES } from "../../constants/apiRoutes";
 
-export async function LessonsAPI(
-  searchText: string,
-  filter: string,
-  limit: number,
-  page: number,
-) {
+export async function LessonsAPI(searchText: string, filter: string, limit: number, page: number) {
   return adminAPI.get(API_ROUTES.LESSONS.ADMIN.BASE, {
     params: { searchText, filter, limit, page },
   });

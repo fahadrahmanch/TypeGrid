@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import {
-  X,
-  BookOpen,
-  Target,
-  Zap,
-  Layers,
-  Type,
-  AlertCircle,
-} from "lucide-react";
+import { X, BookOpen, Target, Zap, Layers, Type, AlertCircle } from "lucide-react";
 import { createLesson } from "../../../api/companyAdmin/lessons";
 import {
   titleValidation,
@@ -26,11 +18,7 @@ interface CreateLessonModalProps {
   setLessons: (lessons: any) => any;
 }
 
-const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
-  isOpen,
-  onClose,
-  setLessons,
-}) => {
+const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, setLessons }) => {
   const [values, setValues] = useState({
     title: "",
     // description: "",
@@ -52,19 +40,13 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === "title") setError({ ...error, title: titleValidation(value) });
     if (name === "level") setError({ ...error, level: LevelValidation(value) });
     if (name === "wpm") setError({ ...error, wpm: WpmValidation(value) });
-    if (name === "accuracy")
-      setError({ ...error, accuracy: accuracyValidation(value) });
-    if (name === "category")
-      setError({ ...error, category: CategoryValidation(value) });
+    if (name === "accuracy") setError({ ...error, accuracy: accuracyValidation(value) });
+    if (name === "category") setError({ ...error, category: CategoryValidation(value) });
     if (name === "text") setError({ ...error, text: textValidation(value) });
 
     setValues((prevValues) => ({
@@ -91,8 +73,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
       text: textErr,
     });
 
-    if (titleErr || levelErr || wpmErr || accuracyErr || categoryErr || textErr)
-      return;
+    if (titleErr || levelErr || wpmErr || accuracyErr || categoryErr || textErr) return;
 
     setIsSubmitting(true);
     try {
@@ -141,12 +122,8 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                 <BookOpen size={28} />
               </div>
               <div>
-                <h2 className="text-3xl font-black tracking-tight">
-                  Create Lesson
-                </h2>
-                <p className="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">
-                  Material Builder
-                </p>
+                <h2 className="text-3xl font-black tracking-tight">Create Lesson</h2>
+                <p className="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">Material Builder</p>
               </div>
             </div>
             <button
@@ -179,9 +156,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                   {error.title && (
                     <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
                       <AlertCircle size={14} />
-                      <span className="text-[10px] font-black uppercase tracking-wider">
-                        {error.title}
-                      </span>
+                      <span className="text-[10px] font-black uppercase tracking-wider">{error.title}</span>
                     </div>
                   )}
                 </div>
@@ -206,9 +181,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                     {error.level && (
                       <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
                         <AlertCircle size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-wider">
-                          {error.level}
-                        </span>
+                        <span className="text-[10px] font-black uppercase tracking-wider">{error.level}</span>
                       </div>
                     )}
                   </div>
@@ -231,9 +204,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                     {error.category && (
                       <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
                         <AlertCircle size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-wider">
-                          {error.category}
-                        </span>
+                        <span className="text-[10px] font-black uppercase tracking-wider">{error.category}</span>
                       </div>
                     )}
                   </div>
@@ -252,9 +223,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                          Min. WPM
-                        </span>
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Min. WPM</span>
                         <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">
                           {values.wpm || 0} WPM
                         </span>
@@ -267,11 +236,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                         placeholder="e.g. 60"
                         className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
                       />
-                      {error.wpm && (
-                        <span className="text-[9px] font-bold text-red-500 ml-1">
-                          {error.wpm}
-                        </span>
-                      )}
+                      {error.wpm && <span className="text-[9px] font-bold text-red-500 ml-1">{error.wpm}</span>}
                     </div>
 
                     <div>
@@ -292,9 +257,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
                         className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
                       />
                       {error.accuracy && (
-                        <span className="text-[9px] font-bold text-red-500 ml-1">
-                          {error.accuracy}
-                        </span>
+                        <span className="text-[9px] font-bold text-red-500 ml-1">{error.accuracy}</span>
                       )}
                     </div>
                   </div>
@@ -318,9 +281,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
               {error.text && (
                 <div className="flex items-center gap-1.5 mt-3 ml-2 text-red-500">
                   <AlertCircle size={14} />
-                  <span className="text-[10px] font-black uppercase tracking-wider">
-                    {error.text}
-                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-wider">{error.text}</span>
                 </div>
               )}
             </div>
@@ -346,7 +307,7 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };
 

@@ -12,9 +12,7 @@ const MyChallenges = ({
   challenges: any[];
   setChallenges: React.Dispatch<React.SetStateAction<any[]>>;
 }) => {
-  const [activeTab, setActiveTab] = useState<
-    "all" | "sent" | "received" | "completed"
-  >("sent");
+  const [activeTab, setActiveTab] = useState<"all" | "sent" | "received" | "completed">("sent");
 
   useEffect(() => {
     const getAllChallengesData = async () => {
@@ -48,13 +46,9 @@ const MyChallenges = ({
       <div className="flex flex-col items-center justify-center text-center mb-10 cursor-default">
         <div className="w-full max-w-2xl relative py-4">
           <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-r from-transparent via-[#4A3d36] to-transparent opacity-30 rounded-full blur-xl pointer-events-none"></div>
-          <h1 className="text-3xl font-black text-gray-900 relative z-10 tracking-tight">
-            My Challenges
-          </h1>
+          <h1 className="text-3xl font-black text-gray-900 relative z-10 tracking-tight">My Challenges</h1>
         </div>
-        <p className="text-gray-500 font-medium mt-2">
-          Track all your typing competitions in one place
-        </p>
+        <p className="text-gray-500 font-medium mt-2">Track all your typing competitions in one place</p>
       </div>
 
       {/* Tabs */}

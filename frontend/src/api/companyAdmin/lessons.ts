@@ -34,11 +34,7 @@ export async function saveLessonResult(id: string, resultData: any) {
   return companyAPI.post(API_ROUTES.LESSONS.ADMIN.RESULT(id), resultData);
 }
 
-export async function assignLesson(
-  selectedUsers: string[],
-  selectedLessons: string[],
-  deadline: string,
-) {
+export async function assignLesson(selectedUsers: string[], selectedLessons: string[], deadline: string) {
   return companyAPI.post(API_ROUTES.LESSONS.ADMIN.ASSIGNMENTS, {
     users: selectedUsers,
     lessons: selectedLessons,

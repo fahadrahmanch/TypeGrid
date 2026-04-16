@@ -31,4 +31,4 @@ export const deleteCompanyGroup = async (groupId: string) => {
 
 export const getCompanyUsersWithStatus = async () => {
   return await companyAPI.get(API_ROUTES.COMPANY_USERS_WITH_STATUS);
-}
+};

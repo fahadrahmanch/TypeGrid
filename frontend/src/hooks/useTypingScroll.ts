@@ -6,11 +6,7 @@ interface Props {
   typedText: string;
 }
 
-export const useTypingScroll = ({
-  activeCharRef,
-  snippetContainerRef,
-  typedText,
-}: Props) => {
+export const useTypingScroll = ({ activeCharRef, snippetContainerRef, typedText }: Props) => {
   useEffect(() => {
     if (!activeCharRef.current || !snippetContainerRef.current) return;
 
@@ -23,10 +19,7 @@ export const useTypingScroll = ({
     const relativeTop = elementRect.top - containerRect.top;
     const relativeBottom = elementRect.bottom - containerRect.top;
 
-    if (
-      relativeBottom > containerRect.height / 2 ||
-      relativeTop < containerRect.height / 3
-    ) {
+    if (relativeBottom > containerRect.height / 2 || relativeTop < containerRect.height / 3) {
       element.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [typedText]);

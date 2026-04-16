@@ -14,13 +14,7 @@ interface GameModeProps {
   onClick: (mode: string) => void;
 }
 
-const GameModeCard: React.FC<GameModeProps> = ({
-  title,
-  description,
-  image,
-  mode,
-  onClick,
-}) => (
+const GameModeCard: React.FC<GameModeProps> = ({ title, description, image, mode, onClick }) => (
   <div
     onClick={() => onClick(mode)}
     className={
@@ -29,17 +23,10 @@ const GameModeCard: React.FC<GameModeProps> = ({
   >
     <div className="z-10 relative">
       <div className="flex items-center gap-2 mb-1">
-        <h3 className="text-lg font-bold text-gray-900 group-hover:no-underline font-serif">
-          {title}
-        </h3>
-        <ArrowRight
-          size={20}
-          className="text-gray-900 group-hover:translate-x-1 transition-transform"
-        />
+        <h3 className="text-lg font-bold text-gray-900 group-hover:no-underline font-serif">{title}</h3>
+        <ArrowRight size={20} className="text-gray-900 group-hover:translate-x-1 transition-transform" />
       </div>
-      <p className="text-xs text-gray-800 text-start font-medium font-serif">
-        {description}
-      </p>
+      <p className="text-xs text-gray-800 text-start font-medium font-serif">{description}</p>
     </div>
     <div className="absolute bottom-0 right-0 w-32 h-32 md:w-36 md:h-36">
       <img
@@ -51,9 +38,7 @@ const GameModeCard: React.FC<GameModeProps> = ({
   </div>
 );
 
-const GameModes: React.FC<{ onGameModeClick: (mode: string) => void }> = ({
-  onGameModeClick,
-}) => {
+const GameModes: React.FC<{ onGameModeClick: (mode: string) => void }> = ({ onGameModeClick }) => {
   const modes = [
     {
       title: "Group play",

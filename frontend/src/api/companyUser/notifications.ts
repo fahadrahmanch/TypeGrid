@@ -7,4 +7,4 @@ export const fetchUserNotifications = async () => {
 
 export const markNotificationAsRead = async (id: string) => {
   return companyAPI.put(API_ROUTES.NOTIFICATION.MARK_AS_READ(id));
-}
+};

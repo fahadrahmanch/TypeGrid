@@ -1,4 +1,3 @@
-
 import Navbar from "../../components/user/Navbar";
 import WelcomeSection from "../../components/user/home/WelcomeSection";
 import GameModes from "../../components/user/home/GameModes";
@@ -12,9 +11,7 @@ import { createSoloRoom } from "../../api/user/solo";
 import { createQuick } from "../../api/user/quick";
 
 const Home: React.FC = () => {
- 
   const navigate = useNavigate();
-
 
   async function handleGameModeClick(mode: string) {
     // Implement navigation or other actions based on the selected game mode;
@@ -91,8 +88,6 @@ const Home: React.FC = () => {
             <RecentPosts />
           </div> */}
         </div>
-
-     
       </main>
     </div>
   );

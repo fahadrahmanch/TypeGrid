@@ -53,12 +53,8 @@ const TeammateCard = ({
 
         {/* Info */}
         <div className="mb-5">
-          <h3 className="text-[17px] font-bold text-gray-900 mb-0.5">
-            {teammate.name}
-          </h3>
-          <p className="text-sm font-medium text-indigo-500/80">
-            {teammate.companyRole}
-          </p>
+          <h3 className="text-[17px] font-bold text-gray-900 mb-0.5">{teammate.name}</h3>
+          <p className="text-sm font-medium text-indigo-500/80">{teammate.companyRole}</p>
         </div>
 
         {/* Stats */}
@@ -85,9 +81,7 @@ const TeammateCard = ({
         </div> */}
 
         {/* Action */}
-        {challengeStatus === "pending" ||
-        challengeStatus === "accepted" ||
-        challengeStatus === "waiting" ? (
+        {challengeStatus === "pending" || challengeStatus === "accepted" || challengeStatus === "waiting" ? (
           <div className="flex gap-2 w-full">
             <button
               onClick={onViewChallenges}

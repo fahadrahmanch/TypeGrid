@@ -1,10 +1,7 @@
 import OtpKid from "../../../assets/images/auth/otp/otp-kid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
 import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
-import {
-  forgotPasswordOtpVerification,
-  resendOtp,
-} from "../../../api/auth/authServices";
+import { forgotPasswordOtpVerification, resendOtp } from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
@@ -66,9 +63,7 @@ const OtpForgotPassword: React.FC = () => {
       localStorage.setItem("otpRequestedTime", Date.now().toString());
       setExpire(30);
     } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
     }
   }
@@ -82,9 +77,7 @@ const OtpForgotPassword: React.FC = () => {
       });
       toast.success(response.data.message);
     } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
     }
   }
@@ -98,13 +91,8 @@ const OtpForgotPassword: React.FC = () => {
         </div>
 
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-150 z-10 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center justify-center">
-            Verify Otp
-          </h2>
-          <p className="flex pb-8">
-            Enter the 6 digit code that you will receive in your registered
-            email
-          </p>
+          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center justify-center">Verify Otp</h2>
+          <p className="flex pb-8">Enter the 6 digit code that you will receive in your registered email</p>
 
           {/* Form */}
           <form className="flex flex-col gap-3 ">

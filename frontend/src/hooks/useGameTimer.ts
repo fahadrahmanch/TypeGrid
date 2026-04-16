@@ -7,11 +7,10 @@ export function useGameTimer(
   setCountdown: any,
   setRemainingTime: any,
   setElapsedTime: any,
-  setIsfinished: any,
+  setIsfinished: any
 ) {
   useEffect(() => {
-    if (!gameData?.startedAt || !gameData?.duration || finalResult.length)
-      return;
+    if (!gameData?.startedAt || !gameData?.duration || finalResult.length) return;
 
     const startTimestamp = new Date(gameData.startedAt).getTime();
 
@@ -35,10 +34,5 @@ export function useGameTimer(
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [
-    gameData?.startedAt,
-    gameData?.duration,
-    gameData?.countDown,
-    finalResult,
-  ]);
+  }, [gameData?.startedAt, gameData?.duration, gameData?.countDown, finalResult]);
 }

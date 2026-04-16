@@ -4,14 +4,7 @@ import { logout } from "../../store/slices/auth/authSlice";
 import Logo from "../../assets/Icon/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutApi } from "../../api/auth/authServices";
-import {
-  Home,
-  MessageSquare,
-  Award,
-  Trophy,
-  Target,
-  LogOut,
-} from "lucide-react";
+import { Home, MessageSquare, Award, Trophy, Target, LogOut } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const { user, accessToken } = useSelector((state: any) => state.auth);
@@ -35,11 +28,7 @@ const Navbar: React.FC = () => {
     <div className="fixed top-0 left-0 w-full h-16 bg-[#FFF8EA] border-b border-[#F0E6D2] z-50 flex items-center justify-between px-8 shadow-sm">
       {/* Logo Section */}
       <div className="flex items-center gap-3">
-        <img
-          src={Logo}
-          alt="TypeGrid logo"
-          className="w-10 h-10 object-contain"
-        />
+        <img src={Logo} alt="TypeGrid logo" className="w-10 h-10 object-contain" />
         <div className="flex flex-col">
           <p
             className="text-2xl font-bold text-gray-900 tracking-wide leading-none"
@@ -61,11 +50,7 @@ const Navbar: React.FC = () => {
               to={item.path}
               className={`
                 flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-200 group relative
-                ${
-                  isActive
-                    ? "text-[#8B7355] font-bold"
-                    : "text-gray-500 hover:text-[#8B7355] font-medium"
-                }
+                ${isActive ? "text-[#8B7355] font-bold" : "text-gray-500 hover:text-[#8B7355] font-medium"}
               `}
             >
               <item.icon
@@ -85,7 +70,10 @@ const Navbar: React.FC = () => {
 
       {/* Profile Section */}
       <div className="flex items-center gap-4">
-        <Link to="/profile" className="flex items-center gap-3 pl-4 border-l border-gray-200 transition-all hover:opacity-80">
+        <Link
+          to="/profile"
+          className="flex items-center gap-3 pl-4 border-l border-gray-200 transition-all hover:opacity-80"
+        >
           <img
             src={user?.imageUrl || "https://via.placeholder.com/150"}
             alt="User"

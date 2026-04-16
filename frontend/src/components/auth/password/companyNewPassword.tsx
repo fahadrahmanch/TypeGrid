@@ -2,10 +2,7 @@ import { useState } from "react";
 import passwordKid from "../../../assets/images/auth/password/newPasswordKid.png";
 import lines from "../../../assets/images/auth/login/lines.png";
 import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
-import {
-  passwordValidation,
-  confirmPasswordValidation,
-} from "../../../validations/authValidations";
+import { passwordValidation, confirmPasswordValidation } from "../../../validations/authValidations";
 import { useLocation } from "react-router-dom";
 import { companyResetPasswordApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
@@ -20,10 +17,7 @@ const CompanyNewPasswordForm: React.FC = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const passErr = passwordValidation(values.password);
-    const confirmErr = confirmPasswordValidation(
-      values.password,
-      values.confirmPassword,
-    );
+    const confirmErr = confirmPasswordValidation(values.password, values.confirmPassword);
     setError({
       password: passErr,
       confirmPassword: confirmErr,
@@ -89,9 +83,7 @@ const CompanyNewPasswordForm: React.FC = () => {
               placeholder="Re-Enter new password"
               className="text-center appearance-none rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
             />
-            <p className="text-left text-red-500 text-sm">
-              {error.confirmPassword}
-            </p>
+            <p className="text-left text-red-500 text-sm">{error.confirmPassword}</p>
             <button
               type="submit"
               onClick={handleSubmit}
@@ -104,16 +96,8 @@ const CompanyNewPasswordForm: React.FC = () => {
 
         {/* Illustration */}
 
-        <img
-          src={LinesRight}
-          alt="draw"
-          className="w-24 h-60 mb-10 relative"
-        ></img>
-        <img
-          src={passwordKid}
-          alt="kid"
-          className="w-[30rem] absolute mt-28 ml-[650px]"
-        />
+        <img src={LinesRight} alt="draw" className="w-24 h-60 mb-10 relative"></img>
+        <img src={passwordKid} alt="kid" className="w-[30rem] absolute mt-28 ml-[650px]" />
       </div>
     </>
   );

@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
-import { individualNotification, groupNotification, allNotification ,getNotificationHistory} from "../../api/companyAdmin/notification";
-import { 
-  Send, 
-  Users, 
-  UsersRound, 
-  Bell, 
-  LayoutGrid,
-  Eye, 
-  Search, 
-  ChevronDown,
-  Info
-} from "lucide-react";
+import {
+  individualNotification,
+  groupNotification,
+  allNotification,
+  getNotificationHistory,
+} from "../../api/companyAdmin/notification";
+import { Send, Users, UsersRound, Bell, LayoutGrid, Eye, Search, ChevronDown, Info } from "lucide-react";
 import { fetchCompanyUsers } from "../../api/companyAdmin/companyAdminService";
 import { getCompanyGroups } from "../../api/companyAdmin/companyGroup";
 import { GroupMember, Group } from "../../types/group";
@@ -32,18 +27,18 @@ const NotificationPage: React.FC = () => {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
-  
+
   // Data State
   const [users, setUsers] = useState<GroupMember[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loadingData, setLoadingData] = useState(false);
-  
+
   // Selection State
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string>("");
   const [userSearchTerm, setUserSearchTerm] = useState("");
   const [isGroupDropdownOpen, setIsGroupDropdownOpen] = useState(false);
-  const [notificationHistory,setNotificationHistory] = useState<NotificationHistoryItem[]>([])
+  const [notificationHistory, setNotificationHistory] = useState<NotificationHistoryItem[]>([]);
 
   // Mock History
   const [history] = useState<NotificationHistoryItem[]>([
@@ -52,22 +47,18 @@ const NotificationPage: React.FC = () => {
       title: "k;lk",
       message: "n,mn",
       target: "All Users",
-      timestamp: "Oct 28, 2025, 5:12 PM"
-    }
+      timestamp: "Oct 28, 2025, 5:12 PM",
+    },
   ]);
 
   useEffect(() => {
     const loadData = async () => {
       setLoadingData(true);
       try {
-        const [usersRes, groupsRes] = await Promise.all([
-          fetchCompanyUsers(),
-          getCompanyGroups()
-        ]);
+        const [usersRes, groupsRes] = await Promise.all([fetchCompanyUsers(), getCompanyGroups()]);
         setUsers(usersRes.data.data || []);
         setGroups(groupsRes.data.groups || []);
       } catch (error) {
-        console.error("Error loading data:", error);
         toast.error("Failed to load users or groups");
       } finally {
         setLoadingData(false);
@@ -77,34 +68,30 @@ const NotificationPage: React.FC = () => {
   }, []);
 
   const handleSend = async () => {
-  
     if (notificationType === "individual") {
-      const data={title,message,selectedUsers}
-      const res=await individualNotification(data)
-      if(res.data.success){
-        toast.success(res.data.message)
+      const data = { title, message, selectedUsers };
+      const res = await individualNotification(data);
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
       }
-      else{
-        toast.error(res.data.message)
-      }
-        
+
       return;
-    }else if(notificationType === "group"){
-      const res=await groupNotification({title,message,selectedGroup})
-      if(res.data.success){
-        toast.success(res.data.message)
-      }
-      else{
-        toast.error(res.data.message)
+    } else if (notificationType === "group") {
+      const res = await groupNotification({ title, message, selectedGroup });
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
       }
       return;
-    }else if(notificationType === "all"){
-      const res=await allNotification({title,message})
-      if(res.data.success){
-        toast.success(res.data.message)
-      }
-      else{
-        toast.error(res.data.message)
+    } else if (notificationType === "all") {
+      const res = await allNotification({ title, message });
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
       }
       return;
     }
@@ -123,40 +110,34 @@ const NotificationPage: React.FC = () => {
   };
 
   const toggleUserSelection = (userId: string) => {
-    setSelectedUsers(prev => 
-      prev.includes(userId) 
-        ? prev.filter(id => id !== userId) 
-        : [...prev, userId]
-    );
+    setSelectedUsers((prev) => (prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]));
   };
 
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(userSearchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(userSearchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(userSearchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(userSearchTerm.toLowerCase())
   );
 
-  useEffect(()=>{
-    const loadHistory=async()=>{
-    const res=await getNotificationHistory()
-    console.log(res.data.data)
-    if(res.data.success){
-      setNotificationHistory(res.data.data)
-    }
-    }
-    loadHistory()
-  },[])
+  useEffect(() => {
+    const loadHistory = async () => {
+      const res = await getNotificationHistory();
+      if (res.data.success) {
+        setNotificationHistory(res.data.data);
+      }
+    };
+    loadHistory();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
       <CompanyAdminSidebar />
-      
+
       <main className="flex-1 ml-64 p-8 flex gap-8">
         {/* Left Section: Form */}
         <div className="flex-1 space-y-8 max-w-4xl">
           <header className="space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight font-jaini">
-              Send Notification
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight font-jaini">Send Notification</h1>
             <p className="text-gray-500 font-medium text-sm">
               Send messages directly to individual users, groups, or all users at once.
             </p>
@@ -166,24 +147,25 @@ const NotificationPage: React.FC = () => {
             <div className="p-8 space-y-8">
               {/* Notification Type Selector */}
               <section className="space-y-3">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                  Notification Type
-                </label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Notification Type</label>
                 <div className="flex p-1 bg-gray-50 rounded-xl border border-gray-100 gap-1">
                   {(["individual", "group", "all"] as NotificationType[]).map((type) => (
                     <button
                       key={type}
                       onClick={() => setNotificationType(type)}
                       className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-all duration-200 text-sm font-semibold
-                        ${notificationType === type 
-                          ? "bg-white text-blue-600 shadow-sm border border-blue-100" 
-                          : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                        ${
+                          notificationType === type
+                            ? "bg-white text-blue-600 shadow-sm border border-blue-100"
+                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                         }`}
                     >
                       {type === "individual" && <Users className="w-4 h-4" />}
                       {type === "group" && <UsersRound className="w-4 h-4" />}
                       {type === "all" && <LayoutGrid className="w-4 h-4" />}
-                      <span className="capitalize">{type === "individual" ? "Individual User" : type === "group" ? "Group" : "All Users"}</span>
+                      <span className="capitalize">
+                        {type === "individual" ? "Individual User" : type === "group" ? "Group" : "All Users"}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -197,19 +179,18 @@ const NotificationPage: React.FC = () => {
                       <Info className="w-5 h-5" />
                     </div>
                     <p className="text-sm font-medium tracking-tight">
-                      This notification will be sent to <span className="font-bold underline">all users</span> in the system.
+                      This notification will be sent to <span className="font-bold underline">all users</span> in the
+                      system.
                     </p>
                   </div>
                 )}
 
                 {notificationType === "individual" && (
                   <section className="space-y-4">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                      Select Users
-                    </label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Select Users</label>
                     <div className="relative mb-4">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input 
+                      <input
                         type="text"
                         placeholder="Search users..."
                         value={userSearchTerm}
@@ -222,12 +203,12 @@ const NotificationPage: React.FC = () => {
                         <div className="text-center py-4 text-gray-400 text-sm">Loading users...</div>
                       ) : filteredUsers.length > 0 ? (
                         filteredUsers.map((user) => (
-                          <label 
+                          <label
                             key={user._id}
                             className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all border border-transparent
                               ${selectedUsers.includes(user._id) ? "bg-blue-50/50 border-blue-100" : "hover:bg-gray-50"}`}
                           >
-                            <input 
+                            <input
                               type="checkbox"
                               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                               checked={selectedUsers.includes(user._id)}
@@ -248,18 +229,18 @@ const NotificationPage: React.FC = () => {
 
                 {notificationType === "group" && (
                   <section className="space-y-4">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                      Select Group
-                    </label>
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Select Group</label>
                     <div className="relative">
                       <button
                         onClick={() => setIsGroupDropdownOpen(!isGroupDropdownOpen)}
                         className="w-full flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-xl text-sm font-medium text-gray-700 hover:border-blue-200 transition-all"
                       >
                         <span className={selectedGroup ? "text-gray-900" : "text-gray-400"}>
-                          {selectedGroup ? groups.find(g => g.id === selectedGroup)?.name : "Choose a group..."}
+                          {selectedGroup ? groups.find((g) => g.id === selectedGroup)?.name : "Choose a group..."}
                         </span>
-                        <ChevronDown className={`w-5 h-5 transition-transform ${isGroupDropdownOpen ? "rotate-180" : ""}`} />
+                        <ChevronDown
+                          className={`w-5 h-5 transition-transform ${isGroupDropdownOpen ? "rotate-180" : ""}`}
+                        />
                       </button>
 
                       {isGroupDropdownOpen && (
@@ -289,7 +270,7 @@ const NotificationPage: React.FC = () => {
                   <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                     Notification Title
                   </label>
-                  <input 
+                  <input
                     type="text"
                     placeholder="Enter notification title..."
                     value={title}
@@ -299,10 +280,8 @@ const NotificationPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-3">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                    Message Content
-                  </label>
-                  <textarea 
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Message Content</label>
+                  <textarea
                     placeholder="Enter your message..."
                     rows={4}
                     value={message}
@@ -317,9 +296,10 @@ const NotificationPage: React.FC = () => {
                 onClick={handleSend}
                 disabled={sending}
                 className={`w-full flex items-center justify-center gap-3 py-4 rounded-xl text-sm font-bold tracking-wide transition-all duration-300
-                  ${sending 
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed" 
-                    : "bg-[#B99F8D] hover:bg-[#a88a75] text-white shadow-lg shadow-[#B99F8D]/30 hover:-translate-y-0.5"
+                  ${
+                    sending
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-[#B99F8D] hover:bg-[#a88a75] text-white shadow-lg shadow-[#B99F8D]/30 hover:-translate-y-0.5"
                   }`}
               >
                 <Send className={`w-4 h-4 ${sending ? "animate-pulse" : ""}`} />
@@ -334,10 +314,10 @@ const NotificationPage: React.FC = () => {
           <h2 className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
             Notification History
           </h2>
-          
+
           <div className="space-y-4">
             {notificationHistory.map((item) => (
-              <div 
+              <div
                 key={item.id}
                 className="bg-white p-5 rounded-2xl border border-[#E6DCC3] shadow-sm hover:shadow-md transition-shadow group flex flex-col gap-4"
               >
@@ -356,7 +336,7 @@ const NotificationPage: React.FC = () => {
                     Preview
                   </button>
                 </div>
-                
+
                 <div className="flex items-center justify-between text-[10px] text-gray-400 font-bold uppercase tracking-widest pt-2 border-t border-gray-50">
                   <div className="flex items-center gap-1.5">
                     <Bell className="w-3 h-3" />

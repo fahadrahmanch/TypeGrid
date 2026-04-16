@@ -4,16 +4,7 @@ import Logo from "../../../assets/Icon/logo.png";
 import { companyLogoutApi } from "../../../api/auth/authServices";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../store/slices/auth/authSlice";
-import {
-  LayoutDashboard,
-  Users,
-  BookOpen,
-  Trophy,
-  Settings,
-  LogOut,
-  UsersRound,
-  Bell,
-} from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, Trophy, Settings, LogOut, UsersRound, Bell } from "lucide-react";
 
 // Define navigation items with their respective icons and paths
 const navItems = [
@@ -54,18 +45,10 @@ const CompanyAdminSidebar: React.FC = () => {
     <aside className="h-screen w-64 bg-[#FFF8EA] border-r border-[#E6DCC3] flex flex-col fixed left-0 top-0 shadow-lg z-50">
       {/* Header Section */}
       <div className="flex items-center gap-3 px-6 py-8">
-        <img
-          src={Logo}
-          alt="TypeGrid Logo"
-          className="w-10 h-10 object-contain"
-        />
+        <img src={Logo} alt="TypeGrid Logo" className="w-10 h-10 object-contain" />
         <div className="flex flex-col">
-          <h2 className="text-2xl font-bold text-gray-800 tracking-tight font-jaini leading-none">
-            TypeGrid
-          </h2>
-          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mt-1">
-            Company Admin
-          </span>
+          <h2 className="text-2xl font-bold text-gray-800 tracking-tight font-jaini leading-none">TypeGrid</h2>
+          <span className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mt-1">Company Admin</span>
         </div>
       </div>
 
@@ -87,9 +70,7 @@ const CompanyAdminSidebar: React.FC = () => {
             {({ isActive }) => (
               <>
                 {/* Active Indicator Strip */}
-                {isActive && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/20" />
-                )}
+                {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/20" />}
                 <item.icon
                   className={`w-5 h-5 transition-transform duration-200 ${
                     isActive ? "scale-105" : "group-hover:scale-110"

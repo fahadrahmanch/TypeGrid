@@ -1,11 +1,7 @@
 import { adminAPI } from "../axios/adminAPI";
 import { API_ROUTES } from "../../constants/apiRoutes";
 
-export const fetchRewards = (
-  searchText: string,
-  limit: number,
-  page: number,
-) => {
+export const fetchRewards = (searchText: string, limit: number, page: number) => {
   return adminAPI.get(API_ROUTES.ADMIN.REWARDS.BASE, {
     params: {
       search: searchText,

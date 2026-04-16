@@ -3,11 +3,7 @@ import { useEffect } from "react";
 import { Users, Clock, Calendar } from "lucide-react";
 import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { useState } from "react";
-import {
-  ContestStatus,
-  ContestLevel,
-  ContestProps,
-} from "../../../types/contest";
+import { ContestStatus, ContestLevel, ContestProps } from "../../../types/contest";
 import { socket } from "../../../socket";
 import ContestDetailsModal from "./ContestDetailsModal";
 import ContestLobbyModal from "./ContestLobbyModal";
@@ -104,13 +100,11 @@ const ContestCard: React.FC<ContestProps> = ({
     <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-[0_10px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 hover:shadow-[0_20px_50px_rgb(236,164,104,0.08)] transition-all duration-500 relative overflow-hidden group">
       {/* Contest Status Line - Top */}
       <div className="flex items-center gap-3 mb-4">
-        <h3 className="text-lg font-black text-slate-800 group-hover:text-[#ECA468] transition-colors">
-          {title}
-        </h3>
+        <h3 className="text-lg font-black text-slate-800 group-hover:text-[#ECA468] transition-colors">{title}</h3>
 
         <span
           className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-xl border ${getStatusStyle(
-            contestStatus,
+            contestStatus
           )}`}
         >
           {contestStatus}
@@ -139,12 +133,8 @@ const ContestCard: React.FC<ContestProps> = ({
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4 text-gray-400" />
           <span>
-            <span className="font-semibold text-gray-900">
-              {participantsCount}
-            </span>
-            <span className="text-gray-400">
-              /{maxParticipants} participants
-            </span>
+            <span className="font-semibold text-gray-900">{participantsCount}</span>
+            <span className="text-gray-400">/{maxParticipants} participants</span>
           </span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -228,21 +218,9 @@ const ContestCard: React.FC<ContestProps> = ({
                 className="flex items-center font-bold text-gray-900 bg-yellow-50/80 px-2.5 py-1 rounded-lg border border-yellow-200/60 shadow-sm text-xs"
               >
                 <span
-                  className={
-                    reward.rank === 1
-                      ? "mr-1 text-sm"
-                      : reward.rank === 2
-                        ? "mr-1 text-sm"
-                        : "mr-1 text-sm"
-                  }
+                  className={reward.rank === 1 ? "mr-1 text-sm" : reward.rank === 2 ? "mr-1 text-sm" : "mr-1 text-sm"}
                 >
-                  {reward.rank === 1
-                    ? "🥇"
-                    : reward.rank === 2
-                      ? "🥈"
-                      : reward.rank === 3
-                        ? "🥉"
-                        : "💰"}
+                  {reward.rank === 1 ? "🥇" : reward.rank === 2 ? "🥈" : reward.rank === 3 ? "🥉" : "💰"}
                 </span>
                 <span className="text-yellow-800/70 mr-1 text-[10px] uppercase font-bold tracking-wider">
                   {reward.rank === 1
@@ -273,9 +251,7 @@ const ContestCard: React.FC<ContestProps> = ({
           title,
           mode: type === "open" ? "Open" : "Group",
           difficulty: level,
-          date: startTime
-            ? new Date(startTime).toLocaleDateString()
-            : undefined,
+          date: startTime ? new Date(startTime).toLocaleDateString() : undefined,
           time: startTime
             ? new Date(startTime).toLocaleTimeString([], {
                 hour: "2-digit",

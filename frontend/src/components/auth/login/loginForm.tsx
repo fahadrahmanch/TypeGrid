@@ -1,7 +1,4 @@
-import {
-  emailValidation,
-  passwordValidation,
-} from "../../../validations/authValidations";
+import { emailValidation, passwordValidation } from "../../../validations/authValidations";
 import { useEffect } from "react";
 import { useState } from "react";
 import lines from "../../../assets/images/auth/login/lines.png";
@@ -68,9 +65,7 @@ export const SignInForm: React.FC = () => {
       navigate("/", { replace: true });
       toast.success(response.data.message);
     } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
     } finally {
       setLoading(false);
@@ -98,16 +93,11 @@ export const SignInForm: React.FC = () => {
           </div>
           {/* SignIn Box */}
           <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
-            <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">
-              Welcome back
-            </h2>
+            <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">Welcome back</h2>
             <p className="text-sm pb-8">Sign in to your account to continue</p>
             {/* Google Button */}
 
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-            />
+            <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
 
             {/* Divider */}
             <div className="flex items-center my-4">
@@ -139,11 +129,7 @@ export const SignInForm: React.FC = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
                 >
-                  {showPassword ? (
-                    <AiOutlineEyeInvisible size={20} />
-                  ) : (
-                    <AiOutlineEye size={20} />
-                  )}
+                  {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                 </span>
               </div>
               <p className="text-left text-red-500 text-sm">{error.password}</p>
@@ -152,11 +138,7 @@ export const SignInForm: React.FC = () => {
                 onClick={handleSubmit}
                 disabled={loading}
                 className={`w-full text-white rounded-md py-2 mt-2 transition 
-               ${
-                 loading
-                   ? "bg-gray-700 cursor-not-allowed"
-                   : "bg-gray-900 hover:bg-gray-800"
-               }`}
+               ${loading ? "bg-gray-700 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"}`}
               >
                 {loading ? "Signing in..." : "Sign In"}
               </button>
@@ -164,18 +146,12 @@ export const SignInForm: React.FC = () => {
 
             <p className="text-center text-gray-600 text-sm mt-4">
               Don t have an account ?
-              <a
-                href="/signup"
-                className="text-gray-900 font-medium hover:underline"
-              >
+              <a href="/signup" className="text-gray-900 font-medium hover:underline">
                 Sign Up
               </a>
             </p>
 
-            <a
-              href="/forgot/password"
-              className="text-gray-900 font-sans  hover:underline"
-            >
+            <a href="/forgot/password" className="text-gray-900 font-sans  hover:underline">
               forgot password
             </a>
           </div>

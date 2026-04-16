@@ -5,7 +5,7 @@ export function useTypingStats(
   errors: number,
   elapsedTime: number,
   phase: "COUNTDOWN" | "PLAY",
-  isFinished: boolean,
+  isFinished: boolean
 ) {
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState<number>(100);

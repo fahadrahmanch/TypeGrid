@@ -1,9 +1,4 @@
-export type ContestStatus =
-  | "waiting"
-  | "ongoing"
-  | "upcoming"
-  | "completed"
-  | "active";
+export type ContestStatus = "waiting" | "ongoing" | "upcoming" | "completed" | "active";
 export type ContestLevel = "easy" | "medium" | "hard";
 
 export interface ContestProps {

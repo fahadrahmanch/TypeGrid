@@ -1,12 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  ArrowLeft,
-  Clock,
-  Trophy,
-  Users,
-  CheckCircle2,
-  Timer,
-} from "lucide-react";
+import { ArrowLeft, Clock, Trophy, Users, CheckCircle2, Timer } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 import { socket } from "../../socket";
@@ -100,9 +93,7 @@ const ContestLobby = () => {
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-          ),
+          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
           minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
           seconds: Math.floor((difference % (1000 * 60)) / 1000),
         });
@@ -139,9 +130,7 @@ const ContestLobby = () => {
   }, [contestStatus]);
   useEffect(() => {
     if (contestStatus === "upcoming" && timerFinished) {
-      updateContestStatus(contestId!, "waiting").then((res) =>
-        setContestStatus(res.data.status),
-      );
+      updateContestStatus(contestId!, "waiting").then((res) => setContestStatus(res.data.status));
     }
   }, [timerFinished, contestStatus]);
 
@@ -149,10 +138,7 @@ const ContestLobby = () => {
   useEffect(() => {
     const handleEvents = (e: any) => {
       // Prevent zooming (Cmd/Ctrl +/-)
-      if (
-        (e.ctrlKey || e.metaKey) &&
-        (e.key === "+" || e.key === "-" || e.key === "=" || e.key === "0")
-      ) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "+" || e.key === "-" || e.key === "=" || e.key === "0")) {
         e.preventDefault();
       }
     };
@@ -245,11 +231,8 @@ const ContestLobby = () => {
                     <Trophy className="w-6 h-6" />
                   </div>
                   <div className="w-full pr-2">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2">
-                      Prize Pool
-                    </p>
-                    {contestDetails.rewards &&
-                    contestDetails.rewards.length > 0 ? (
+                    <p className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2">Prize Pool</p>
+                    {contestDetails.rewards && contestDetails.rewards.length > 0 ? (
                       <div className="flex flex-col gap-1.5">
                         {[...contestDetails.rewards]
                           .sort((a: any, b: any) => a.rank - b.rank)
@@ -260,17 +243,9 @@ const ContestLobby = () => {
                             >
                               <span className="font-bold text-slate-500">
                                 {reward.rank}
-                                {reward.rank === 1
-                                  ? "st"
-                                  : reward.rank === 2
-                                    ? "nd"
-                                    : reward.rank === 3
-                                      ? "rd"
-                                      : "th"}
+                                {reward.rank === 1 ? "st" : reward.rank === 2 ? "nd" : reward.rank === 3 ? "rd" : "th"}
                               </span>
-                              <span className="font-black text-[#ECA468]">
-                                ${reward.prize}
-                              </span>
+                              <span className="font-black text-[#ECA468]">${reward.prize}</span>
                             </div>
                           ))}
                       </div>
@@ -309,23 +284,17 @@ const ContestLobby = () => {
                           {timeLeft.days > 0 && (
                             <>
                               <span>{formatTime(timeLeft.days)}</span>
-                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">
-                                :
-                              </span>
+                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">:</span>
                             </>
                           )}
                           {(timeLeft.days > 0 || timeLeft.hours > 0) && (
                             <>
                               <span>{formatTime(timeLeft.hours)}</span>
-                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">
-                                :
-                              </span>
+                              <span className="text-[#ECA468] opacity-60 mx-1 mb-1">:</span>
                             </>
                           )}
                           <span>{formatTime(timeLeft.minutes)}</span>
-                          <span className="text-[#ECA468] opacity-60 mx-1 mb-1">
-                            :
-                          </span>
+                          <span className="text-[#ECA468] opacity-60 mx-1 mb-1">:</span>
                           <span>{formatTime(timeLeft.seconds)}</span>
                         </div>
                       </>
@@ -341,12 +310,8 @@ const ContestLobby = () => {
                     <Clock className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-[#6D8A6B] mb-1">
-                      Duration
-                    </p>
-                    <p className="text-xl font-black text-slate-800">
-                      {Math.round(contestDetails.duration / 60)} min
-                    </p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-[#6D8A6B] mb-1">Duration</p>
+                    <p className="text-xl font-black text-slate-800">{Math.round(contestDetails.duration / 60)} min</p>
                   </div>
                 </div>
               </div>
@@ -360,12 +325,9 @@ const ContestLobby = () => {
                     <Users className="w-5 h-5 text-slate-600" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-slate-800 leading-tight">
-                      Waiting Lobby
-                    </h3>
+                    <h3 className="text-xl font-black text-slate-800 leading-tight">Waiting Lobby</h3>
                     <p className="text-xs text-slate-500 font-bold uppercase tracking-widest opacity-70">
-                      {lobbyParticipants.length} /{" "}
-                      {contestDetails.maxParticipants} Ready to Race
+                      {lobbyParticipants.length} / {contestDetails.maxParticipants} Ready to Race
                     </p>
                   </div>
                 </div>
@@ -417,11 +379,7 @@ const ContestLobby = () => {
 
                   {/* Placeholder for missing participants */}
                   {Array.from({
-                    length: Math.min(
-                      8,
-                      contestDetails.maxParticipants -
-                        contestDetails.joinedParticipants,
-                    ),
+                    length: Math.min(8, contestDetails.maxParticipants - contestDetails.joinedParticipants),
                   }).map((_, i) => (
                     <div
                       key={`empty-${i}`}

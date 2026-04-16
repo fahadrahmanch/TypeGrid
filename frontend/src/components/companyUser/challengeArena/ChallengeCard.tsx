@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { CheckCircle2, Clock, Zap, Target ,Swords} from "lucide-react";
-import {
-  challengeAccept,
-  challengeReject,
-} from "../../../api/companyUser/challenge";
+import { CheckCircle2, Clock, Zap, Target, Swords } from "lucide-react";
+import { challengeAccept, challengeReject } from "../../../api/companyUser/challenge";
 import { socket } from "../../../socket";
 
 const ChallengeCard = ({ challenge }: { challenge: any }) => {
@@ -95,17 +92,11 @@ const ChallengeCard = ({ challenge }: { challenge: any }) => {
             className="w-14 h-14 rounded-xl object-cover border-2 border-white shadow-sm"
           />
           <div>
-            <h3 className="font-bold text-gray-900 leading-tight">
-              {challenge.opponent.name}
-            </h3>
-            <p className="text-xs font-medium text-indigo-500">
-              {challenge.opponent.role}
-            </p>
+            <h3 className="font-bold text-gray-900 leading-tight">{challenge.opponent.name}</h3>
+            <p className="text-xs font-medium text-indigo-500">{challenge.opponent.role}</p>
           </div>
         </div>
-        <div
-          className={`px-2.5 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 ${statusStyle}`}
-        >
+        <div className={`px-2.5 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5 ${statusStyle}`}>
           {statusIcon} <span className="capitalize">{statusText}</span>
         </div>
       </div>
@@ -114,31 +105,20 @@ const ChallengeCard = ({ challenge }: { challenge: any }) => {
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-white/60 rounded-xl py-3 px-2 flex flex-col items-center justify-center text-center">
           <Zap className="w-4 h-4 text-indigo-500 mb-1" />
-          <span className="text-[11px] font-bold text-gray-500 mb-0.5">
-            Difficulty
-          </span>
-          <span className="text-sm font-bold text-indigo-600 capitalize">
-            {challenge.difficulty}
-          </span>
+          <span className="text-[11px] font-bold text-gray-500 mb-0.5">Difficulty</span>
+          <span className="text-sm font-bold text-indigo-600 capitalize">{challenge.difficulty}</span>
         </div>
         <div className="bg-white/60 rounded-xl py-3 px-2 flex flex-col items-center justify-center text-center">
           <Clock className="w-4 h-4 text-purple-500 mb-1" />
-          <span className="text-[11px] font-bold text-gray-500 mb-0.5">
-            Duration
-          </span>
+          <span className="text-[11px] font-bold text-gray-500 mb-0.5">Duration</span>
           <span className="text-sm font-black text-purple-600 leading-none">
-            {challenge.durationSeconds / 60}{" "}
-            <span className="text-[10px]">m</span>
+            {challenge.durationSeconds / 60} <span className="text-[10px]">m</span>
           </span>
         </div>
         <div className="bg-white/60 rounded-xl py-3 px-2 flex flex-col items-center justify-center text-center">
           <Target className="w-4 h-4 text-pink-500 mb-1" />
-          <span className="text-[11px] font-bold text-gray-500 mb-0.5">
-            Type
-          </span>
-          <span className="text-sm font-bold text-pink-600 capitalize">
-            {challenge.type}
-          </span>
+          <span className="text-[11px] font-bold text-gray-500 mb-0.5">Type</span>
+          <span className="text-sm font-bold text-pink-600 capitalize">{challenge.type}</span>
         </div>
       </div>
 
@@ -151,24 +131,17 @@ const ChallengeCard = ({ challenge }: { challenge: any }) => {
               <span
                 className={`font-black ${(challenge as CompletedChallenge).result === "won" ? "text-green-600" : "text-red-500"}`}
               >
-                🏆 You{" "}
-                {(challenge as CompletedChallenge).result === "won"
-                  ? "Won!"
-                  : "Lost"}
+                🏆 You {(challenge as CompletedChallenge).result === "won" ? "Won!" : "Lost"}
               </span>
             </div>
             <div className="flex justify-between items-center text-sm font-bold">
               <div className="flex items-center gap-2">
                 <span className="text-gray-500 font-medium">Your WPM:</span>{" "}
-                <span className="text-gray-900">
-                  {(challenge as CompletedChallenge).yourWpm}
-                </span>
+                <span className="text-gray-900">{(challenge as CompletedChallenge).yourWpm}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-gray-500 font-medium">Their WPM:</span>{" "}
-                <span className="text-gray-900">
-                  {(challenge as CompletedChallenge).theirWpm}
-                </span>
+                <span className="text-gray-900">{(challenge as CompletedChallenge).theirWpm}</span>
               </div>
             </div>
           </div>

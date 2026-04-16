@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { Plus, Edit2, Trash2, X, AlertCircle } from "lucide-react";
-import { 
-  createSubscriptionPlan, 
-  getSubscriptionPlans, 
-  updateSubscriptionPlan, 
-  deleteSubscriptionPlan 
+import {
+  createSubscriptionPlan,
+  getSubscriptionPlans,
+  updateSubscriptionPlan,
+  deleteSubscriptionPlan,
 } from "../../api/admin/subscription";
 import {
   nameValidation,
@@ -33,7 +33,10 @@ const SubscriptionPlans: React.FC = () => {
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
-  const [planToDelete, setPlanToDelete] = useState<{id: string, name: string} | null>(null);
+  const [planToDelete, setPlanToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [newFeature, setNewFeature] = useState("");
 
   const [normalPlans, setNormalPlans] = useState<ISubscriptionPlan[]>([]);
@@ -43,10 +46,7 @@ const SubscriptionPlans: React.FC = () => {
   const fetchPlans = async () => {
     try {
       setLoading(true);
-      const [normalRes, companyRes] = await Promise.all([
-        getSubscriptionNormalPlans(),
-        getSubscriptionCompanyPlans()
-      ]);
+      const [normalRes, companyRes] = await Promise.all([getSubscriptionNormalPlans(), getSubscriptionCompanyPlans()]);
 
       const normalData = normalRes.data.subscriptionPlans || [];
       const companyData = companyRes.data.subscriptionPlans || [];
@@ -102,7 +102,6 @@ const SubscriptionPlans: React.FC = () => {
   });
 
   const NORMAL_FEATURES = ["Solo Play", "Quick Play", "Group Play"];
-  
 
   const handleCreateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -111,7 +110,7 @@ const SubscriptionPlans: React.FC = () => {
         ...prev,
         [name]: value,
         features: name === "type" && value === "company" ? [] : prev.features,
-        userLimit: name === "type" && value === "normal" ? "" : (name === "userLimit" ? value : prev.userLimit)
+        userLimit: name === "type" && value === "normal" ? "" : name === "userLimit" ? value : prev.userLimit,
       };
 
       // Real-time validation
@@ -121,11 +120,15 @@ const SubscriptionPlans: React.FC = () => {
       if (name === "duration") error = durationValidation(value);
       if (name === "type") {
         error = typeValidation(value);
-        setFormErrors(prevErr => ({ ...prevErr, userLimit: "", features: "" }));
+        setFormErrors((prevErr) => ({
+          ...prevErr,
+          userLimit: "",
+          features: "",
+        }));
       }
       if (name === "userLimit") error = userLimitValidation(updated.type, value);
 
-      setFormErrors(prevErr => ({ ...prevErr, [name]: error }));
+      setFormErrors((prevErr) => ({ ...prevErr, [name]: error }));
       return updated;
     });
   };
@@ -137,7 +140,7 @@ const SubscriptionPlans: React.FC = () => {
         ...prev,
         [name]: value,
         features: name === "type" && value === "company" ? [] : prev.features,
-        userLimit: name === "type" && value === "normal" ? "" : (name === "userLimit" ? value : prev.userLimit)
+        userLimit: name === "type" && value === "normal" ? "" : name === "userLimit" ? value : prev.userLimit,
       };
 
       // Real-time validation
@@ -147,11 +150,15 @@ const SubscriptionPlans: React.FC = () => {
       if (name === "duration") error = durationValidation(value);
       if (name === "type") {
         error = typeValidation(value);
-        setEditFormErrors(prevErr => ({ ...prevErr, userLimit: "", features: "" }));
+        setEditFormErrors((prevErr) => ({
+          ...prevErr,
+          userLimit: "",
+          features: "",
+        }));
       }
       if (name === "userLimit") error = userLimitValidation(updated.type, value);
 
-      setEditFormErrors(prevErr => ({ ...prevErr, [name]: error }));
+      setEditFormErrors((prevErr) => ({ ...prevErr, [name]: error }));
       return updated;
     });
   };
@@ -162,10 +169,10 @@ const SubscriptionPlans: React.FC = () => {
         const updatedFeatures = prev.features.includes(feature)
           ? prev.features.filter((f) => f !== feature)
           : [...prev.features, feature];
-        
+
         const error = featuresValidation(prev.type, updatedFeatures);
-        setFormErrors(prevErr => ({ ...prevErr, features: error }));
-        
+        setFormErrors((prevErr) => ({ ...prevErr, features: error }));
+
         return { ...prev, features: updatedFeatures };
       });
     } else {
@@ -173,9 +180,9 @@ const SubscriptionPlans: React.FC = () => {
         const updatedFeatures = prev.features.includes(feature)
           ? prev.features.filter((f) => f !== feature)
           : [...prev.features, feature];
-        
+
         const error = featuresValidation(prev.type, updatedFeatures);
-        setEditFormErrors(prevErr => ({ ...prevErr, features: error }));
+        setEditFormErrors((prevErr) => ({ ...prevErr, features: error }));
 
         return { ...prev, features: updatedFeatures };
       });
@@ -192,7 +199,7 @@ const SubscriptionPlans: React.FC = () => {
       features: featuresValidation(data.type, data.features),
     };
     setErrorFn(errors);
-    return !Object.values(errors).some(err => err !== "");
+    return !Object.values(errors).some((err) => err !== "");
   };
 
   const handleCreateSubmit = async () => {
@@ -246,7 +253,7 @@ const SubscriptionPlans: React.FC = () => {
       price: String(plan.price),
       userLimit: plan.userLimit ? String(plan.userLimit) : "",
     };
-    
+
     setEditValues(normalizedPlan);
     setEditFormErrors({
       name: "",
@@ -270,12 +277,8 @@ const SubscriptionPlans: React.FC = () => {
             {/* Header */}
             <div className="flex justify-between items-start mb-10">
               <div>
-                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
-                  Subscription Plans
-                </h1>
-                <p className="text-gray-500 font-medium">
-                  Manage your platform's subscription tiers and pricing
-                </p>
+                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Subscription Plans</h1>
+                <p className="text-gray-500 font-medium">Manage your platform's subscription tiers and pricing</p>
               </div>
 
               <button
@@ -322,7 +325,9 @@ const SubscriptionPlans: React.FC = () => {
                       <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Price</th>
                       <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Duration</th>
                       <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Features</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700 text-right">Actions</th>
+                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700 text-right">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-50">
@@ -331,12 +336,19 @@ const SubscriptionPlans: React.FC = () => {
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.name}</td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">${plan.price}</td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">
-                          {plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`}
+                          {plan.duration === 30
+                            ? "Monthly"
+                            : plan.duration === 365
+                              ? "Yearly"
+                              : `${plan.duration} Days`}
                         </td>
                         <td className="py-5 px-6">
                           <div className="flex flex-wrap gap-2">
                             {plan.features.map((feature, fIndex) => (
-                              <span key={fIndex} className="px-3 py-1 bg-[#F1F5F9] text-[#64748B] text-[10px] font-bold rounded-full">
+                              <span
+                                key={fIndex}
+                                className="px-3 py-1 bg-[#F1F5F9] text-[#64748B] text-[10px] font-bold rounded-full"
+                              >
                                 {feature}
                               </span>
                             ))}
@@ -350,7 +362,7 @@ const SubscriptionPlans: React.FC = () => {
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleDeleteClick(plan.id, plan.name)}
                               className="text-gray-400 hover:text-red-500 transition-colors"
                             >
@@ -390,7 +402,9 @@ const SubscriptionPlans: React.FC = () => {
                       <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Price</th>
                       <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Duration</th>
                       <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Limit</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700 text-right">Actions</th>
+                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700 text-right">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-50">
@@ -399,7 +413,11 @@ const SubscriptionPlans: React.FC = () => {
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.name}</td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">${plan.price}</td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">
-                          {plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`}
+                          {plan.duration === 30
+                            ? "Monthly"
+                            : plan.duration === 365
+                              ? "Yearly"
+                              : `${plan.duration} Days`}
                         </td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.userLimit} users</td>
                         <td className="py-5 px-6 text-right">
@@ -410,7 +428,7 @@ const SubscriptionPlans: React.FC = () => {
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleDeleteClick(plan.id, plan.name)}
                               className="text-gray-400 hover:text-red-500 transition-colors"
                             >
@@ -457,44 +475,58 @@ const SubscriptionPlans: React.FC = () => {
               <div className="flex-1 overflow-y-auto p-10 bg-[#FDFBF7] custom-scrollbar">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Plan Name</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Plan Name
+                    </label>
                     <input
                       type="text"
                       name="name"
                       value={values.name}
                       onChange={handleCreateChange}
                       placeholder="e.g. Premium"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.name ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.name ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
                     />
-                    {formErrors.name && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.name}</p>}
+                    {formErrors.name && (
+                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.name}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Price ($)</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Price ($)
+                    </label>
                     <input
                       type="number"
                       name="price"
                       value={values.price}
                       onChange={handleCreateChange}
                       placeholder="e.g. 19.99"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.price ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.price ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
                     />
-                    {formErrors.price && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.price}</p>}
+                    {formErrors.price && (
+                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.price}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Duration</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Duration
+                    </label>
                     <select
                       name="duration"
                       value={values.duration}
                       onChange={handleCreateChange}
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.duration ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer`}
+                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.duration ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer`}
                     >
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
                     </select>
-                    {formErrors.duration && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.duration}</p>}
+                    {formErrors.duration && (
+                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.duration}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Plan Type</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Plan Type
+                    </label>
                     <select
                       name="type"
                       value={values.type}
@@ -507,16 +539,20 @@ const SubscriptionPlans: React.FC = () => {
                   </div>
                   {values.type === "company" && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Number of Users</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                        Number of Users
+                      </label>
                       <input
                         type="number"
                         name="userLimit"
                         value={values.userLimit}
                         onChange={handleCreateChange}
                         placeholder="e.g. 50"
-                        className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.userLimit ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                        className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.userLimit ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
                       />
-                      {formErrors.userLimit && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.userLimit}</p>}
+                      {formErrors.userLimit && (
+                        <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.userLimit}</p>
+                      )}
                     </div>
                   )}
                   {values.type === "normal" && (
@@ -539,7 +575,9 @@ const SubscriptionPlans: React.FC = () => {
                           </button>
                         ))}
                       </div>
-                      {formErrors.features && <p className="text-red-400 text-[10px] font-bold mt-3 px-1 uppercase">{formErrors.features}</p>}
+                      {formErrors.features && (
+                        <p className="text-red-400 text-[10px] font-bold mt-3 px-1 uppercase">{formErrors.features}</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -582,44 +620,60 @@ const SubscriptionPlans: React.FC = () => {
               <div className="flex-1 overflow-y-auto p-10 bg-[#FDFBF7] custom-scrollbar">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Plan Name</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Plan Name
+                    </label>
                     <input
                       type="text"
                       name="name"
                       value={editValues.name}
                       onChange={handleEditChange}
                       placeholder="e.g. Premium"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.name ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.name ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
                     />
-                    {editFormErrors.name && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.name}</p>}
+                    {editFormErrors.name && (
+                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.name}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Price ($)</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Price ($)
+                    </label>
                     <input
                       type="number"
                       name="price"
                       value={editValues.price}
                       onChange={handleEditChange}
                       placeholder="e.g. 19.99"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.price ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.price ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
                     />
-                    {editFormErrors.price && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.price}</p>}
+                    {editFormErrors.price && (
+                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.price}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Duration</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Duration
+                    </label>
                     <select
                       name="duration"
                       value={editValues.duration}
                       onChange={handleEditChange}
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.duration ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer`}
+                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.duration ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer`}
                     >
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
                     </select>
-                    {editFormErrors.duration && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.duration}</p>}
+                    {editFormErrors.duration && (
+                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">
+                        {editFormErrors.duration}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Plan Type</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      Plan Type
+                    </label>
                     <select
                       name="type"
                       value={editValues.type}
@@ -632,16 +686,22 @@ const SubscriptionPlans: React.FC = () => {
                   </div>
                   {editValues.type === "company" && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">Number of Users</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                        Number of Users
+                      </label>
                       <input
                         type="number"
                         name="userLimit"
                         value={editValues.userLimit}
                         onChange={handleEditChange}
                         placeholder="e.g. 50"
-                        className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.userLimit ? 'border-red-400' : 'border-gray-100'} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                        className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.userLimit ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
                       />
-                      {editFormErrors.userLimit && <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.userLimit}</p>}
+                      {editFormErrors.userLimit && (
+                        <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">
+                          {editFormErrors.userLimit}
+                        </p>
+                      )}
                     </div>
                   )}
                   {editValues.type === "normal" && (
@@ -664,7 +724,11 @@ const SubscriptionPlans: React.FC = () => {
                           </button>
                         ))}
                       </div>
-                      {editFormErrors.features && <p className="text-red-400 text-[10px] font-bold mt-3 px-1 uppercase">{editFormErrors.features}</p>}
+                      {editFormErrors.features && (
+                        <p className="text-red-400 text-[10px] font-bold mt-3 px-1 uppercase">
+                          {editFormErrors.features}
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -700,8 +764,9 @@ const SubscriptionPlans: React.FC = () => {
                 </div>
                 <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">Delete Plan?</h2>
                 <p className="text-gray-500 font-medium px-4">
-                  Are you sure you want to delete <span className="text-gray-900 font-black">"{planToDelete?.name}"</span>? 
-                  This action cannot be undone.
+                  Are you sure you want to delete{" "}
+                  <span className="text-gray-900 font-black">"{planToDelete?.name}"</span>? This action cannot be
+                  undone.
                 </p>
               </div>
 

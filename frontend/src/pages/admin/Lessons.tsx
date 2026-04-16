@@ -11,13 +11,7 @@ import {
   CategoryValidation,
   textValidation,
 } from "../../validations/lessonValidation";
-import {
-  createLesson,
-  LessonsAPI,
-  fetchLesson,
-  updateLesson,
-  deleteLesson,
-} from "../../api/admin/lessons";
+import { createLesson, LessonsAPI, fetchLesson, updateLesson, deleteLesson } from "../../api/admin/lessons";
 const Lessons: React.FC = () => {
   const [isOpen, setOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -136,14 +130,7 @@ const Lessons: React.FC = () => {
       text: textError,
     });
 
-    if (
-      titleError ||
-      levelError ||
-      categoryError ||
-      wpmError ||
-      accuracyError ||
-      textError
-    ) {
+    if (titleError || levelError || categoryError || wpmError || accuracyError || textError) {
       return;
     }
 
@@ -214,9 +201,7 @@ const Lessons: React.FC = () => {
       });
       setEditOpen(true);
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Error fetching lesson details",
-      );
+      toast.error(error?.response?.data?.message || "Error fetching lesson details");
       console.log(error);
     }
   }
@@ -238,25 +223,14 @@ const Lessons: React.FC = () => {
       text: textError,
     });
 
-    if (
-      titleError ||
-      levelError ||
-      categoryError ||
-      wpmError ||
-      accuracyError ||
-      textError
-    ) {
+    if (titleError || levelError || categoryError || wpmError || accuracyError || textError) {
       return;
     }
 
     try {
       const response = await updateLesson(lessonId, editValues);
       if (response?.data?.data) {
-        setLessons((prev) =>
-          prev.map((lesson) =>
-            lesson.id === lessonId ? response.data.data : lesson,
-          ),
-        );
+        setLessons((prev) => prev.map((lesson) => (lesson.id === lessonId ? response.data.data : lesson)));
       }
       setEditOpen(false);
       toast.success("Lesson updated successfully");
@@ -277,12 +251,9 @@ const Lessons: React.FC = () => {
             {/* Header */}
             <div className="flex justify-between items-start mb-10">
               <div>
-                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
-                  Lesson Management
-                </h1>
+                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Lesson Management</h1>
                 <p className="text-gray-500 font-medium">
-                  Manage typing content for Practice, Solo Play, Quick Play, and
-                  Group Play modes.
+                  Manage typing content for Practice, Solo Play, Quick Play, and Group Play modes.
                 </p>
               </div>
 
@@ -328,9 +299,7 @@ const Lessons: React.FC = () => {
             <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
               <div className="flex justify-between items-center mb-8 px-2">
                 <div>
-                  <h3 className="text-xl font-black text-gray-900 leading-tight">
-                    Lessons List
-                  </h3>
+                  <h3 className="text-xl font-black text-gray-900 leading-tight">Lessons List</h3>
                   <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
                     {lessons.length} total lessons
                   </p>
@@ -363,19 +332,14 @@ const Lessons: React.FC = () => {
                   <tbody className="divide-y divide-gray-50">
                     {lessons &&
                       lessons.map((lesson) => (
-                        <tr
-                          key={lesson.id}
-                          className="group hover:bg-white/40 transition-all"
-                        >
+                        <tr key={lesson.id} className="group hover:bg-white/40 transition-all">
                           <td className="py-5 px-4">
                             <span
                               className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border
                             ${
-                              lesson.level === "beginner" ||
-                              lesson.level === "easy"
+                              lesson.level === "beginner" || lesson.level === "easy"
                                 ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-                                : lesson.level === "intermediate" ||
-                                    lesson.level === "medium"
+                                : lesson.level === "intermediate" || lesson.level === "medium"
                                   ? "bg-amber-50 text-amber-600 border-amber-100"
                                   : "bg-orange-50 text-[#D0864B] border-orange-100"
                             }`}
@@ -451,12 +415,8 @@ const Lessons: React.FC = () => {
               {/* Header */}
               <div className="px-10 py-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 leading-tight">
-                    Create New Lesson
-                  </h2>
-                  <p className="text-sm text-gray-500 font-medium mt-1">
-                    Add a new typing lesson to the database
-                  </p>
+                  <h2 className="text-2xl font-black text-gray-900 leading-tight">Create New Lesson</h2>
+                  <p className="text-sm text-gray-500 font-medium mt-1">Add a new typing lesson to the database</p>
                 </div>
                 <button
                   onClick={() => setOpen(false)}
@@ -615,7 +575,7 @@ const Lessons: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       {/* delete lesson confirmation */}
@@ -627,9 +587,7 @@ const Lessons: React.FC = () => {
                 <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6">
                   <Trash2 className="w-8 h-8" />
                 </div>
-                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">
-                  Delete Lesson?
-                </h2>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">Delete Lesson?</h2>
                 <p className="text-sm text-gray-500 font-medium">
                   Are you sure you want to delete this lesson? This action cannot be undone.
                 </p>
@@ -653,7 +611,7 @@ const Lessons: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       {/* edit lesson */}
@@ -665,12 +623,8 @@ const Lessons: React.FC = () => {
               {/* Header */}
               <div className="px-10 py-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 leading-tight">
-                    Edit Lesson
-                  </h2>
-                  <p className="text-sm text-gray-500 font-medium mt-1">
-                    Update existing typing lesson details
-                  </p>
+                  <h2 className="text-2xl font-black text-gray-900 leading-tight">Edit Lesson</h2>
+                  <p className="text-sm text-gray-500 font-medium mt-1">Update existing typing lesson details</p>
                 </div>
                 <button
                   onClick={() => setEditOpen(false)}
@@ -829,7 +783,7 @@ const Lessons: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
     </>
   );

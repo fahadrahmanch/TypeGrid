@@ -57,11 +57,5 @@ export const useSoloGameTimer = ({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [
-    gameData?.startedAt,
-    gameData?.duration,
-    gameData?.countDown,
-    isFinished,
-    space,
-  ]);
+  }, [gameData?.startedAt, gameData?.duration, gameData?.countDown, isFinished, space]);
 };

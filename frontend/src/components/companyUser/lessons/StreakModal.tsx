@@ -50,14 +50,9 @@ const StreakModal: React.FC<StreakModalProps> = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2">
             <Flame className="w-6 h-6 text-orange-500 fill-orange-500" />
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-              Your Typing Streak
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Your Typing Streak</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-black/5 rounded-full transition-colors"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full transition-colors">
             <X className="w-6 h-6 text-gray-400" />
           </button>
         </div>
@@ -68,9 +63,7 @@ const StreakModal: React.FC<StreakModalProps> = ({ isOpen, onClose }) => {
           <div className="bg-[#FFF8EE] rounded-2xl p-6 flex flex-col items-center justify-center border border-orange-50">
             <Flame className="w-8 h-8 text-orange-500 mb-3 stroke-[1.5]" />
             <span className="text-4xl font-bold text-orange-500 mb-1">7</span>
-            <span className="text-sm text-gray-500 font-medium">
-              Current Streak
-            </span>
+            <span className="text-sm text-gray-500 font-medium">Current Streak</span>
           </div>
 
           {/* Longest Streak */}
@@ -79,9 +72,7 @@ const StreakModal: React.FC<StreakModalProps> = ({ isOpen, onClose }) => {
               <CheckCircle2 className="w-5 h-5 text-blue-500 stroke-[2.5]" />
             </div>
             <span className="text-4xl font-bold text-blue-600 mb-1">14</span>
-            <span className="text-sm text-gray-500 font-medium">
-              Longest Streak
-            </span>
+            <span className="text-sm text-gray-500 font-medium">Longest Streak</span>
           </div>
         </div>
 
@@ -137,10 +128,7 @@ const StreakModal: React.FC<StreakModalProps> = ({ isOpen, onClose }) => {
         {/* Footer Message */}
         <div className="bg-[#F8F7FF] rounded-xl p-6 text-center">
           <h4 className="text-sm font-bold text-gray-900 mb-1">Keep it up!</h4>
-          <p className="text-xs text-gray-500">
-            Practice daily to maintain your streak and improve your typing
-            skills
-          </p>
+          <p className="text-xs text-gray-500">Practice daily to maintain your streak and improve your typing skills</p>
         </div>
       </div>
     </div>

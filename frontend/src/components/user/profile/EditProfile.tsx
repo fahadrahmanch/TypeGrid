@@ -1,9 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  getUserDataApi,
-  updateUserDataApi,
-} from "../../../api/user/userService";
+import { getUserDataApi, updateUserDataApi } from "../../../api/user/userService";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
@@ -12,20 +9,7 @@ import {
   bioValidation,
   ageValidation,
 } from "../../../validations/profilevalidations";
-import {
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  FileText,
-  Camera,
-  Save,
-  X,
-  Shield,
-  Zap,
-  Lock,
-  ChevronRight,
-} from "lucide-react";
+import { User, Mail, Phone, Calendar, FileText, Camera, Save, X, Shield, Zap, Lock, ChevronRight } from "lucide-react";
 
 const EditProfileDiv1: React.FC = () => {
   const navigate = useNavigate();
@@ -135,14 +119,10 @@ const EditProfileDiv1: React.FC = () => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", "UMS-MERN");
-      const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/dbo7vvi5z/image/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: false,
-        },
-      );
+      const res = await axios.post("https://api.cloudinary.com/v1_1/dbo7vvi5z/image/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: false,
+      });
       const data = res.data;
       imageUrl = data.secure_url;
       setUser((prev: any) => ({
@@ -199,14 +179,7 @@ const EditProfileDiv1: React.FC = () => {
                   >
                     <Camera className="w-5 h-5" />
                   </button>
-                  <input
-                    name="image"
-                    type="file"
-                    ref={inputRef}
-                    onChange={handleImageChange}
-                    hidden
-                    accept="image/*"
-                  />
+                  <input name="image" type="file" ref={inputRef} onChange={handleImageChange} hidden accept="image/*" />
                 </div>
 
                 <p className="text-sm text-center text-gray-500 px-4">
@@ -229,9 +202,7 @@ const EditProfileDiv1: React.FC = () => {
                     <User className="w-5 h-5 text-gray-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Current Plan
-                    </p>
+                    <p className="text-sm font-medium text-gray-500">Current Plan</p>
                     <p className="font-bold text-[#4A4A4A]">Free User</p>
                   </div>
                 </div>
@@ -254,12 +225,8 @@ const EditProfileDiv1: React.FC = () => {
                     <Lock className="w-6 h-6 text-[#96705B]" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#4A4A4A] text-lg">
-                      Password
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      Update your security
-                    </p>
+                    <h3 className="font-bold text-[#4A4A4A] text-lg">Password</h3>
+                    <p className="text-sm text-gray-500">Update your security</p>
                   </div>
                 </div>
                 <div className="p-2 bg-white rounded-full group-hover:translate-x-1 transition-transform">
@@ -292,9 +259,7 @@ const EditProfileDiv1: React.FC = () => {
                       className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.name ? "border-red-400 ring-2 ring-red-400" : ""}`}
                       placeholder="Enter your name"
                     />
-                    {error.name && (
-                      <p className="text-red-500 text-xs mt-1">{error.name}</p>
-                    )}
+                    {error.name && <p className="text-red-500 text-xs mt-1">{error.name}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -309,11 +274,7 @@ const EditProfileDiv1: React.FC = () => {
                       className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.number ? "border-red-400 ring-2 ring-red-400" : ""}`}
                       placeholder="Enter your number"
                     />
-                    {error.number && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {error.number}
-                      </p>
-                    )}
+                    {error.number && <p className="text-red-500 text-xs mt-1">{error.number}</p>}
                   </div>
                 </div>
 
@@ -343,9 +304,7 @@ const EditProfileDiv1: React.FC = () => {
                     className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none resize-none transition-all ${error.bio ? "border-red-400 ring-2 ring-red-400" : ""}`}
                     placeholder="Tell us a little about yourself..."
                   ></textarea>
-                  {error.bio && (
-                    <p className="text-red-500 text-xs mt-1">{error.bio}</p>
-                  )}
+                  {error.bio && <p className="text-red-500 text-xs mt-1">{error.bio}</p>}
                 </div>
 
                 {/* Row 3: Age & Gender */}
@@ -362,9 +321,7 @@ const EditProfileDiv1: React.FC = () => {
                       className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.age ? "border-red-400 ring-2 ring-red-400" : ""}`}
                       placeholder="Your age"
                     />
-                    {error.age && (
-                      <p className="text-red-500 text-xs mt-1">{error.age}</p>
-                    )}
+                    {error.age && <p className="text-red-500 text-xs mt-1">{error.age}</p>}
                   </div>
 
                   <div className="space-y-2">

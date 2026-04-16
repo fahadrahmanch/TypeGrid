@@ -38,10 +38,7 @@ const Register: React.FC = () => {
     const nameErr = nameValidation(values.name);
     const emailErr = emailValidation(values.email);
     const passErr = passwordValidation(values.password);
-    const confirmErr = confirmPasswordValidation(
-      values.password,
-      values.confirmPassword,
-    );
+    const confirmErr = confirmPasswordValidation(values.password, values.confirmPassword);
 
     setError({
       name: nameErr,
@@ -65,9 +62,7 @@ const Register: React.FC = () => {
       toast.success(response.data.message);
       localStorage.setItem("otpRequestedTime", Date.now().toString());
     } catch (error: any) {
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
       setLoading(false);
     }
@@ -101,15 +96,10 @@ const Register: React.FC = () => {
         </div>
         {/* Signup Box */}
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center">
-            Sign up
-          </h2>
+          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center">Sign up</h2>
 
           {/* Google Button */}
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleError}
-          />
+          <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
 
           {/* Divider */}
           <div className="flex items-center my-4">
@@ -148,11 +138,7 @@ const Register: React.FC = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
               >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible size={20} />
-                ) : (
-                  <AiOutlineEye size={20} />
-                )}
+                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
               </span>
             </div>
             <p className="text-left text-red-500 text-sm">{error.password}</p>
@@ -168,26 +154,16 @@ const Register: React.FC = () => {
                 onClick={() => setShowConfirm(!showConfirm)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
               >
-                {showConfirm ? (
-                  <AiOutlineEyeInvisible size={20} />
-                ) : (
-                  <AiOutlineEye size={20} />
-                )}
+                {showConfirm ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
               </span>
             </div>
-            <p className="text-left text-red-500 text-sm">
-              {error.confirmPassword}
-            </p>
+            <p className="text-left text-red-500 text-sm">{error.confirmPassword}</p>
             <button
               type="submit"
               onClick={handleSubmit}
               disabled={loading}
               className={`w-full text-white rounded-md py-2 mt-2 transition 
-    ${
-      loading
-        ? "bg-gray-700 cursor-not-allowed"
-        : "bg-gray-900 hover:bg-gray-800"
-    }`}
+    ${loading ? "bg-gray-700 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"}`}
             >
               {loading ? "Creating account..." : "Sign Up"}
             </button>
@@ -195,10 +171,7 @@ const Register: React.FC = () => {
 
           <p className="text-center text-gray-600 text-sm mt-4">
             Already have an account?{" "}
-            <a
-              href="/Signin"
-              className="text-gray-900 font-medium hover:underline"
-            >
+            <a href="/Signin" className="text-gray-900 font-medium hover:underline">
               Log in
             </a>
           </p>

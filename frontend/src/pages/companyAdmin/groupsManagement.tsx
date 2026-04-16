@@ -35,12 +35,8 @@ const GroupsManagement: React.FC = () => {
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Header */}
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              User Group Management
-            </h1>
-            <p className="text-gray-500 font-medium">
-              Organize and track user performance groups
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">User Group Management</h1>
+            <p className="text-gray-500 font-medium">Organize and track user performance groups</p>
           </div>
 
           {/* Search and Action Bar */}
@@ -61,20 +57,19 @@ const GroupsManagement: React.FC = () => {
 
           {/* Tabs */}
           <div className="flex items-center gap-2">
-            {["All Groups", "Beginner", "Intermediate", "Advanced"].map(
-              (tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${activeTab === tab
-                      ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                      : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
-                    }`}
-                >
-                  {tab}
-                </button>
-              ),
-            )}
+            {["All Groups", "Beginner", "Intermediate", "Advanced"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  activeTab === tab
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                    : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
           {/* Groups List */}
@@ -83,10 +78,7 @@ const GroupsManagement: React.FC = () => {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
           ) : (
-            <GroupListTable 
-              groups={groups} 
-              onDeleteSuccess={fetchGroups} 
-            />
+            <GroupListTable groups={groups} onDeleteSuccess={fetchGroups} />
           )}
         </div>
 

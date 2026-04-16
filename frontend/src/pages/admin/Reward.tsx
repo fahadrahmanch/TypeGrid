@@ -2,27 +2,10 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
-import {
-  Search,
-  Plus,
-  Edit2,
-  Trash2,
-  X,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Search, Plus, Edit2, Trash2, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ConfirmModal from "../../components/common/ConfirmModal";
-import {
-  xpPointsValidation,
-  rewardDescriptionValidation,
-} from "../../validations/rewardValidation";
-import {
-  fetchRewards,
-  createReward,
-  updateReward,
-  deleteReward,
-  fetchRewardById,
-} from "../../api/admin/rewards";
+import { xpPointsValidation, rewardDescriptionValidation } from "../../validations/rewardValidation";
+import { fetchRewards, createReward, updateReward, deleteReward, fetchRewardById } from "../../api/admin/rewards";
 
 const Reward: React.FC = () => {
   const [rewards, setRewards] = useState<any[]>([]);
@@ -81,9 +64,7 @@ const Reward: React.FC = () => {
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     setValues((prev) => ({
@@ -115,11 +96,7 @@ const Reward: React.FC = () => {
     try {
       if (isEditOpen && selectedRewardId) {
         const response = await updateReward(selectedRewardId, values);
-        setRewards((prev) =>
-          prev.map((reward) =>
-            reward._id === selectedRewardId ? response.data.reward : reward,
-          ),
-        );
+        setRewards((prev) => prev.map((reward) => (reward._id === selectedRewardId ? response.data.reward : reward)));
         toast.success("Reward updated successfully");
       } else {
         const response = await createReward({
@@ -163,9 +140,7 @@ const Reward: React.FC = () => {
     if (!rewardToDelete) return;
     try {
       await deleteReward(rewardToDelete);
-      setRewards((prev) =>
-        prev.filter((reward) => reward._id !== rewardToDelete),
-      );
+      setRewards((prev) => prev.filter((reward) => reward._id !== rewardToDelete));
       toast.success("Reward deleted successfully");
       loadRewards();
     } catch (err) {
@@ -198,12 +173,8 @@ const Reward: React.FC = () => {
         {/* Header Section */}
         <div className="mb-10 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-              Rewards
-            </h1>
-            <p className="text-gray-500 font-medium">
-              Manage rewards for your typing challenges
-            </p>
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Rewards</h1>
+            <p className="text-gray-500 font-medium">Manage rewards for your typing challenges</p>
           </div>
           <button
             onClick={() => setCreateOpen(true)}
@@ -228,9 +199,7 @@ const Reward: React.FC = () => {
               />
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                Total Rewards
-              </p>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Rewards</p>
               <p className="text-xl font-black text-gray-900">{totalRewards}</p>
             </div>
           </div>
@@ -239,12 +208,8 @@ const Reward: React.FC = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-[#FFF8EA] text-left">
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    XP Points
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Description
-                  </th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">XP Points</th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Description</th>
                   <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-right">
                     Actions
                   </th>
@@ -259,25 +224,15 @@ const Reward: React.FC = () => {
                   </tr>
                 ) : rewards.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan={3}
-                      className="py-20 text-center text-gray-400 font-medium"
-                    >
+                    <td colSpan={3} className="py-20 text-center text-gray-400 font-medium">
                       No rewards found
                     </td>
                   </tr>
                 ) : (
                   rewards.map((reward) => (
-                    <tr
-                      key={reward._id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="py-4 px-6 font-bold text-gray-700">
-                        {reward.xp}
-                      </td>
-                      <td className="py-4 px-6 text-gray-600 font-medium">
-                        {reward.description}
-                      </td>
+                    <tr key={reward._id} className="hover:bg-gray-50 transition-colors">
+                      <td className="py-4 px-6 font-bold text-gray-700">{reward.xp}</td>
+                      <td className="py-4 px-6 text-gray-600 font-medium">{reward.description}</td>
                       <td className="py-4 px-6">
                         <div className="flex justify-end gap-3">
                           <button
@@ -315,9 +270,7 @@ const Reward: React.FC = () => {
             </button>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
-                {page}
-              </span>
+              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
               <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
                 of {totalPages}
               </span>
@@ -342,13 +295,8 @@ const Reward: React.FC = () => {
             <div className="relative w-full max-w-lg bg-[#FFF8EA] rounded-3xl shadow-xl overflow-hidden flex flex-col max-h-[95vh] animate-in zoom-in-95 duration-200">
               {/* Header */}
               <div className="px-8 py-6 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-800">
-                  {isEditOpen ? "Edit Reward" : "Create Reward"}
-                </h2>
-                <button
-                  onClick={closeModals}
-                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                >
+                <h2 className="text-xl font-bold text-gray-800">{isEditOpen ? "Edit Reward" : "Create Reward"}</h2>
+                <button onClick={closeModals} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -356,9 +304,7 @@ const Reward: React.FC = () => {
               {/* Content */}
               <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-5 custom-scrollbar">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    XP Points
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">XP Points</label>
                   <input
                     type="text"
                     name="xp"
@@ -367,15 +313,11 @@ const Reward: React.FC = () => {
                     placeholder="e.g. 100"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
                   />
-                  {formErrors.xp && (
-                    <p className="text-red-400 text-xs px-1">{formErrors.xp}</p>
-                  )}
+                  {formErrors.xp && <p className="text-red-400 text-xs px-1">{formErrors.xp}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Description
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Description</label>
                   <textarea
                     name="description"
                     value={values.description}
@@ -384,11 +326,7 @@ const Reward: React.FC = () => {
                     placeholder="Reward description"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 resize-none placeholder:text-gray-300 font-medium leading-relaxed"
                   />
-                  {formErrors.description && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.description}
-                    </p>
-                  )}
+                  {formErrors.description && <p className="text-red-400 text-xs px-1">{formErrors.description}</p>}
                 </div>
 
                 {/* Footer Buttons */}
@@ -409,7 +347,7 @@ const Reward: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       <ConfirmModal

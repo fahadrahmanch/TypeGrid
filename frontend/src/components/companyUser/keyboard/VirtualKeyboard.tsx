@@ -13,20 +13,20 @@ const layouts: Record<KeyboardLayoutType, string[][]> = {
     ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "\\"],
     ["A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'"],
-    ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"]
+    ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
   ],
   azerty: [
     ["²", "&", "é", "\"", "'", "(", "-", "è", "_", "ç", "à", ")", "="],
     ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P", "^", "$"],
     ["Q", "S", "D", "F", "G", "H", "J", "K", "L", "M", "ù", "*"],
-    ["W", "X", "C", "V", "B", "N", ",", ";", ":", "!"]
+    ["W", "X", "C", "V", "B", "N", ",", ";", ":", "!"],
   ],
   dvorak: [
     ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "[", "]"],
     ["'", ",", ".", "P", "Y", "F", "G", "C", "R", "L", "/", "=", "\\"],
     ["A", "O", "E", "U", "I", "D", "H", "T", "N", "S", "-"],
-    [";", "Q", "J", "K", "X", "B", "M", "W", "V", "Z"]
-  ]
+    [";", "Q", "J", "K", "X", "B", "M", "W", "V", "Z"],
+  ],
 };
 
 const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ highlightKey }) => {
@@ -37,10 +37,10 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ highlightKey }) => {
     if (!highlightKey) return false;
     const normalizedKey = key.toUpperCase();
     const normalizedHighlight = highlightKey.toUpperCase();
-    
+
     // Handle special cases like space or punctuation if needed
     if (highlightKey === " " && key.toLowerCase() === "space") return true;
-    
+
     return normalizedKey === normalizedHighlight;
   };
 
@@ -50,18 +50,20 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ highlightKey }) => {
         <span className="text-[10px] font-bold text-orange-400 uppercase tracking-[0.2em]">Visual Guide</span>
         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">{selectedLayout} layout</span>
       </div>
-      
+
       {layout.map((row, rowIdx) => (
         <div key={rowIdx} className="flex gap-2 justify-center">
           {row.map((key, keyIdx) => {
             const active = isHighlighted(key);
             return (
-              <div 
-                key={keyIdx} 
+              <div
+                key={keyIdx}
                 className={`min-w-[48px] h-[48px] rounded-xl flex items-center justify-center text-sm font-bold shadow-sm transition-all duration-200
-                  ${active 
-                    ? "bg-orange-500 text-white scale-110 shadow-lg shadow-orange-500/30 z-10" 
-                    : "bg-white border border-gray-100 text-gray-400"}`}
+                  ${
+                    active
+                      ? "bg-orange-500 text-white scale-110 shadow-lg shadow-orange-500/30 z-10"
+                      : "bg-white border border-gray-100 text-gray-400"
+                  }`}
               >
                 {key}
               </div>
@@ -69,14 +71,16 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ highlightKey }) => {
           })}
         </div>
       ))}
-      
+
       {/* Space bar */}
       <div className="flex justify-center pt-2">
-        <div 
+        <div
           className={`w-[320px] h-[48px] rounded-xl flex items-center justify-center text-[10px] font-bold tracking-[0.3em] shadow-sm transition-all duration-200 uppercase
-            ${isHighlighted(" ") 
-              ? "bg-orange-500 text-white scale-105 shadow-lg shadow-orange-500/30 z-10" 
-              : "bg-white border border-gray-100 text-gray-300"}`}
+            ${
+              isHighlighted(" ")
+                ? "bg-orange-500 text-white scale-105 shadow-lg shadow-orange-500/30 z-10"
+                : "bg-white border border-gray-100 text-gray-300"
+            }`}
         >
           Space
         </div>

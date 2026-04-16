@@ -16,12 +16,7 @@ interface ContestResultsModalProps {
   rewards: Reward[];
 }
 
-const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
-  isOpen,
-  onClose,
-  contestId,
-  rewards,
-}) => {
+const ContestResultsModal: React.FC<ContestResultsModalProps> = ({ isOpen, onClose, contestId, rewards }) => {
   const [results, setResults] = useState<ContestResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -98,12 +93,8 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
               <Trophy className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 leading-tight">
-                Contest Results
-              </h2>
-              <p className="text-sm text-gray-500 font-medium">
-                Final rankings and performance stats
-              </p>
+              <h2 className="text-2xl font-bold text-gray-900 leading-tight">Contest Results</h2>
+              <p className="text-sm text-gray-500 font-medium">Final rankings and performance stats</p>
             </div>
           </div>
           <button
@@ -119,9 +110,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="w-10 h-10 border-4 border-[#FADDB8] border-t-[#ECA468] rounded-full animate-spin mb-4"></div>
-              <p className="text-gray-500 font-medium animate-pulse">
-                Loading results...
-              </p>
+              <p className="text-gray-500 font-medium animate-pulse">Loading results...</p>
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -132,12 +121,9 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
           ) : results.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
               <Trophy className="w-12 h-12 text-gray-300 mb-3" />
-              <h3 className="text-lg font-bold text-gray-900 mb-1">
-                No Results Available
-              </h3>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">No Results Available</h3>
               <p className="text-gray-500 text-sm">
-                It looks like no one participated or the results are not ready
-                yet.
+                It looks like no one participated or the results are not ready yet.
               </p>
             </div>
           ) : (
@@ -164,9 +150,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                       ${isTop3 ? "bg-white border-[#FADDB8] shadow-sm" : "bg-gray-50/50 border-gray-100 hover:bg-white"}`}
                   >
                     {/* Rank */}
-                    <div className="col-span-1 flex justify-center">
-                      {getRankBadge(rank)}
-                    </div>
+                    <div className="col-span-1 flex justify-center">{getRankBadge(rank)}</div>
 
                     {/* Player Info */}
                     <div className="col-span-4 flex items-center gap-3">
@@ -182,14 +166,11 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                         </div>
                       )}
                       <div>
-                        <p
-                          className={`font-bold text-sm ${isTop3 ? "text-gray-900" : "text-gray-700"}`}
-                        >
+                        <p className={`font-bold text-sm ${isTop3 ? "text-gray-900" : "text-gray-700"}`}>
                           {result.name || "Unknown Player"}
                         </p>
                         <p className="text-xs text-gray-500 font-medium">
-                          Time: {formatTime(result.time)} • {result.errors}{" "}
-                          Errors
+                          Time: {formatTime(result.time)} • {result.errors} Errors
                         </p>
                       </div>
                     </div>
@@ -201,9 +182,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                       >
                         {result.wpm}
                       </span>
-                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-                        WPM
-                      </span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">WPM</span>
                     </div>
 
                     {/* Accuracy */}
@@ -213,9 +192,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                       >
                         {result.accuracy || 0}%
                       </span>
-                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-                        Acc
-                      </span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Acc</span>
                     </div>
 
                     {/* Reward */}
@@ -233,13 +210,10 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
                                   : "bg-green-50 text-green-700 border border-green-200"
                           }`}
                         >
-                          <span className="opacity-80">🏆</span>{" "}
-                          {result.prize || prize}
+                          <span className="opacity-80">🏆</span> {result.prize || prize}
                         </div>
                       ) : (
-                        <span className="text-gray-400 text-sm font-medium">
-                          -
-                        </span>
+                        <span className="text-gray-400 text-sm font-medium">-</span>
                       )}
                     </div>
                   </div>
@@ -257,7 +231,7 @@ const ContestResultsModal: React.FC<ContestResultsModalProps> = ({
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
       `}</style>
     </div>,
-    document.body,
+    document.body
   );
 };
 

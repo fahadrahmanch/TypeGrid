@@ -1,21 +1,8 @@
 import { useEffect, useState } from "react";
 import AddUser from "./addUser";
-import {
-  Trash2,
-  Plus,
-  Search,
-  User as UserIcon,
-  Mail,
-  Target,
-  Zap,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Trash2, Plus, Search, User as UserIcon, Mail, Target, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "react-toastify";
-import {
-  deleteCompanyUser,
-  fetchCompanyUsers,
-} from "../../../api/companyAdmin/companyAdminService";
+import { deleteCompanyUser, fetchCompanyUsers } from "../../../api/companyAdmin/companyAdminService";
 import ConfirmModal from "../../common/ConfirmModal";
 
 const UsersTable: React.FC = () => {
@@ -45,16 +32,14 @@ const UsersTable: React.FC = () => {
     }
     fetchUsers();
   }, []);
- 
+
   useEffect(() => {
     let filtered = [...users];
 
     if (searchText.trim()) {
       const lower = searchText.toLowerCase();
       filtered = filtered.filter(
-        (u) =>
-          u.name.toLowerCase().startsWith(lower) ||
-          u.email.toLowerCase().startsWith(lower),
+        (u) => u.name.toLowerCase().startsWith(lower) || u.email.toLowerCase().startsWith(lower)
       );
     }
     const total = Math.ceil(filtered.length / limit);
@@ -75,9 +60,7 @@ const UsersTable: React.FC = () => {
       }
     } catch (error: any) {
       console.log(error);
-      const msg =
-        error?.response?.data?.message ||
-        "Something went wrong. Please try again.";
+      const msg = error?.response?.data?.message || "Something went wrong. Please try again.";
       toast.error(msg);
     }
   }
@@ -88,9 +71,7 @@ const UsersTable: React.FC = () => {
         {/* --- Header Section --- */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">
-              Team Members
-            </h1>
+            <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">Team Members</h1>
             <p className="text-gray-500 font-medium tracking-tight">
               Manage your company's students and track their typing performance.
             </p>
@@ -100,10 +81,7 @@ const UsersTable: React.FC = () => {
             onClick={() => setOpen(true)}
             className="flex items-center gap-2 bg-[#D0864B] hover:bg-[#B36E39] text-white px-6 py-3.5 rounded-2xl transition-all shadow-lg shadow-[#D0864B]/20 font-bold group"
           >
-            <Plus
-              size={20}
-              className="group-hover:rotate-90 transition-transform duration-300"
-            />
+            <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
             <span>Add New Member</span>
           </button>
         </div>
@@ -159,9 +137,7 @@ const UsersTable: React.FC = () => {
                     <td colSpan={3} className="py-20 text-center">
                       <div className="flex flex-col items-center gap-3 opacity-20">
                         <UserIcon size={48} />
-                        <p className="font-black uppercase tracking-[0.2em] text-sm">
-                          No members found
-                        </p>
+                        <p className="font-black uppercase tracking-[0.2em] text-sm">No members found</p>
                       </div>
                     </td>
                   </tr>
@@ -195,9 +171,7 @@ const UsersTable: React.FC = () => {
                           <div className="text-center group/stat">
                             <div className="flex items-center justify-center gap-1.5 text-gray-900 font-black mb-0.5">
                               <Zap size={14} className="text-amber-500" />
-                              <span className="text-base tracking-tighter">
-                                {member.wpm || 0}
-                              </span>
+                              <span className="text-base tracking-tighter">{member.wpm || 0}</span>
                             </div>
                             <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest opacity-80">
                               WPM Rate
@@ -206,9 +180,7 @@ const UsersTable: React.FC = () => {
                           <div className="text-center group/stat">
                             <div className="flex items-center justify-center gap-1.5 text-gray-900 font-black mb-0.5">
                               <Target size={14} className="text-emerald-500" />
-                              <span className="text-base tracking-tighter">
-                                {member.accuracy || 0}%
-                              </span>
+                              <span className="text-base tracking-tighter">{member.accuracy || 0}%</span>
                             </div>
                             <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest opacity-80">
                               Precision
@@ -250,9 +222,7 @@ const UsersTable: React.FC = () => {
             </button>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
-                {page}
-              </span>
+              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
               <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
                 of {totalPages}
               </span>

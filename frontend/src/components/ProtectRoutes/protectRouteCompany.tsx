@@ -9,9 +9,7 @@ interface PropsIsloggedCompany {
 }
 
 export default function ProtectRouteCompany({ allowedRoles }: Props) {
-  const { accessToken, user, authLoaded } = useSelector(
-    (state: any) => state.auth,
-  );
+  const { accessToken, user, authLoaded } = useSelector((state: any) => state.auth);
 
   if (!authLoaded) {
     return <div>Loading...</div>;
@@ -28,9 +26,7 @@ export default function ProtectRouteCompany({ allowedRoles }: Props) {
   return <Outlet />;
 }
 export function IsloggedCompany({ children }: PropsIsloggedCompany) {
-  const { accessToken, authLoaded, user } = useSelector(
-    (state: any) => state.auth,
-  );
+  const { accessToken, authLoaded, user } = useSelector((state: any) => state.auth);
 
   if (!authLoaded) {
     return <div>Loading...</div>;

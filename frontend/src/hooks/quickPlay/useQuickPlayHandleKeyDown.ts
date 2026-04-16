@@ -72,8 +72,6 @@ export const useQuickPlayHandleKeyDown = ({
         if (nextText.length === lesson.length) {
           setIsfinished(true);
 
-         
-
           socket.emit("player-finished-quick-play", {
             gameId: gameData?._id,
             userId: currentUser?._id,
@@ -84,7 +82,7 @@ export const useQuickPlayHandleKeyDown = ({
             accuracy,
             errors,
             typedLength: nextText.length,
-            totalTyped:newTotal,
+            totalTyped: newTotal,
             status: "FINISHED",
           });
         }

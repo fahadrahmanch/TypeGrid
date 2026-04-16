@@ -27,7 +27,6 @@ export function durationValidation(duration: string) {
 
 export function descriptionValidation(description: string) {
   if (!description.trim()) return "description is required";
-  if (description.trim().length < 10)
-    return "description must be at least 10 characters";
+  if (description.trim().length < 10) return "description must be at least 10 characters";
   return "";
 }

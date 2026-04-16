@@ -7,7 +7,6 @@ export function xpPointsValidation(xp: string) {
 
 export function rewardDescriptionValidation(description: string) {
   if (!description.trim()) return "Description is required";
-  if (description.trim().length < 5)
-    return "Description must be at least 5 characters";
+  if (description.trim().length < 5) return "Description must be at least 5 characters";
   return "";
 }

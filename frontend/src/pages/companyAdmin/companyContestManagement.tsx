@@ -26,11 +26,7 @@ const CompanyContestManagement: React.FC = () => {
   useEffect(() => {
     socket.on("contest-updated-admin", ({ contestId, status }) => {
       if (!status) return;
-      setContests((prev) =>
-        prev.map((contest) =>
-          contest._id === contestId ? { ...contest, status } : contest,
-        ),
-      );
+      setContests((prev) => prev.map((contest) => (contest._id === contestId ? { ...contest, status } : contest)));
     });
     return () => {
       socket.off("contest-updated-admin");
@@ -48,12 +44,8 @@ const CompanyContestManagement: React.FC = () => {
           {/* Header */}
           <div className="flex justify-between items-start mb-10">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-1">
-                Contest Management
-              </h1>
-              <p className="text-gray-500">
-                Create, monitor, and manage typing contests
-              </p>
+              <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-1">Contest Management</h1>
+              <p className="text-gray-500">Create, monitor, and manage typing contests</p>
             </div>
 
             <button

@@ -66,9 +66,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
     });
 
     socket.on("typing-progress-update-contest", (data) => {
-      setParticipants((prev) =>
-        prev.map((p) => (p.userId === data.userId ? { ...p, ...data } : p)),
-      );
+      setParticipants((prev) => prev.map((p) => (p.userId === data.userId ? { ...p, ...data } : p)));
     });
 
     socket.on("contest-users-update", (data) => {
@@ -123,12 +121,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
   }, [contestId]);
 
   useEffect(() => {
-    if (
-      !contestDetails?.startTime ||
-      !contestDetails?.duration ||
-      finalResult.length > 0
-    )
-      return;
+    if (!contestDetails?.startTime || !contestDetails?.duration || finalResult.length > 0) return;
     const startTimesamp = new Date(contestDetails.startTime).getTime();
 
     const interval = setInterval(() => {
@@ -139,9 +132,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
         setCountdown(contestDetails.countDown - elapsed);
       } else if (elapsed < contestDetails.countDown + contestDetails.duration) {
         // setPhase("PLAY");
-        setRemainingTime(
-          contestDetails.countDown + contestDetails.duration - elapsed,
-        );
+        setRemainingTime(contestDetails.countDown + contestDetails.duration - elapsed);
 
         // setElapsedTime(elapsed - contestDetails.countDown);
       } else {
@@ -152,12 +143,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [
-    contestDetails?.startTime,
-    contestDetails?.duration,
-    contestDetails?.countDown,
-    finalResult,
-  ]);
+  }, [contestDetails?.startTime, contestDetails?.duration, contestDetails?.countDown, finalResult]);
 
   useEffect(() => {
     const handleRestart = (data: any) => {
@@ -215,20 +201,14 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
           {/* Top Header Card */}
           <div className="bg-white rounded-[1.5rem] p-6 md:p-8 shadow-sm mb-6 flex justify-between items-center border border-gray-100">
             <div>
-              <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
-                Live Monitoring Panel
-              </h1>
+              <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Live Monitoring Panel</h1>
               <p className="text-gray-500 font-medium">{contestTitle}</p>
             </div>
             <div className="flex items-center gap-6">
               <div className="text-right">
-                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">
-                  Time Remaining
-                </p>
+                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Time Remaining</p>
                 {contestDetails?.startTime ? (
-                  <p className="text-3xl font-black text-[#D0864B] tracking-tight">
-                    {formatTime(remainingTime)}
-                  </p>
+                  <p className="text-3xl font-black text-[#D0864B] tracking-tight">{formatTime(remainingTime)}</p>
                 ) : (
                   <p className="text-gray-500 font-medium">Loading timer...</p>
                 )}
@@ -326,12 +306,8 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                             alt={result.name}
                           />
                           <div>
-                            <p className="font-bold text-gray-900 text-sm">
-                              {result.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {formatTime(result.timeTaken)}
-                            </p>
+                            <p className="font-bold text-gray-900 text-sm">{result.name}</p>
+                            <p className="text-xs text-gray-500">{formatTime(result.timeTaken)}</p>
                           </div>
                         </div>
                         <div className="flex gap-6 text-right">
@@ -339,34 +315,26 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                               WPM
                             </span>
-                            <span className="text-lg font-black text-[#D0864B] leading-none">
-                              {result.wpm}
-                            </span>
+                            <span className="text-lg font-black text-[#D0864B] leading-none">{result.wpm}</span>
                           </div>
                           <div className="flex flex-col">
                             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                               Accuracy
                             </span>
-                            <span className="text-lg font-bold text-emerald-500 leading-none">
-                              {result.accuracy}%
-                            </span>
+                            <span className="text-lg font-bold text-emerald-500 leading-none">{result.accuracy}%</span>
                           </div>
                           <div className="flex flex-col">
                             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                               Errors
                             </span>
-                            <span className="text-lg font-bold text-red-500 leading-none">
-                              {result.errors}
-                            </span>
+                            <span className="text-lg font-bold text-red-500 leading-none">{result.errors}</span>
                           </div>
                           <div className="flex flex-col">
                             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                               Prize
                             </span>
                             <span className="text-lg font-bold text-purple-600 leading-none">
-                              {contestDetails?.rewards?.find(
-                                (r: any) => r.rank === result.rank,
-                              )?.prize
+                              {contestDetails?.rewards?.find((r: any) => r.rank === result.rank)?.prize
                                 ? `$${contestDetails.rewards.find((r: any) => r.rank === result.rank)?.prize}`
                                 : "-"}
                             </span>
@@ -380,9 +348,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
               <>
                 <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                   Participants{" "}
-                  <span className="text-gray-500 text-lg font-bold tracking-tight">
-                    ( {participants.length} )
-                  </span>
+                  <span className="text-gray-500 text-lg font-bold tracking-tight">( {participants.length} )</span>
                 </h2>
 
                 {participants.length > 0 ? (
@@ -394,16 +360,12 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                       >
                         <div className="grid grid-cols-4 gap-4 items-center">
                           <div>
-                            <p className="font-bold text-gray-900 text-sm mb-2">
-                              {p.name || `Player ${idx + 1}`}
-                            </p>
+                            <p className="font-bold text-gray-900 text-sm mb-2">{p.name || `Player ${idx + 1}`}</p>
                             <div className="flex flex-col">
                               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                                 WPM
                               </span>
-                              <span className="text-xl font-black text-[#D0864B] leading-none">
-                                {p.wpm || "0"}
-                              </span>
+                              <span className="text-xl font-black text-[#D0864B] leading-none">{p.wpm || "0"}</span>
                             </div>
                           </div>
                           <div>
@@ -421,9 +383,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">
                                 Errors
                               </span>
-                              <span className="text-lg font-bold text-red-500 leading-none">
-                                {p.errors || "0"}
-                              </span>
+                              <span className="text-lg font-bold text-red-500 leading-none">{p.errors || "0"}</span>
                             </div>
                           </div>
                           <div className="text-right">
@@ -452,9 +412,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                   </div>
                 ) : (
                   <div className="py-12 flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
-                    <p className="font-medium text-gray-500">
-                      Waiting for live statistical updates...
-                    </p>
+                    <p className="font-medium text-gray-500">Waiting for live statistical updates...</p>
                   </div>
                 )}
               </>
@@ -470,7 +428,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
             `}</style>
     </div>,
-    document.body,
+    document.body
   );
 };
 

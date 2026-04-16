@@ -32,19 +32,18 @@ const CompanySubcriptionDiv1: React.FC = () => {
     fetchCompanyDetails();
   }, []);
 
-  useEffect(()=>{
-     const companyDetails= async()=>{
+  useEffect(() => {
+    const companyDetails = async () => {
       try {
         const response = await getCompanyDetailsApi();
-        const companyData = response.data.data
+        const companyData = response.data.data;
         console.log(companyData);
-        
       } catch (error) {
         console.error("Error fetching company details:", error);
       }
-     }
-     companyDetails();
-  },[])
+    };
+    companyDetails();
+  }, []);
   const getDurationText = (days: number) => {
     if (days >= 365) return "/year";
     if (days >= 30) return "/month";
@@ -70,12 +69,8 @@ const CompanySubcriptionDiv1: React.FC = () => {
             <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 text-purple-600 shadow-inner">
               <Building2 className="w-8 h-8" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-              Choose a Company Subscription Plan
-            </h1>
-            <p className="text-slate-500 text-lg">
-              Select the plan that fits your team size and needs
-            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">Choose a Company Subscription Plan</h1>
+            <p className="text-slate-500 text-lg">Select the plan that fits your team size and needs</p>
           </div>
 
           {/* --- Pricing Cards Grid --- */}
@@ -97,13 +92,15 @@ const CompanySubcriptionDiv1: React.FC = () => {
               ))
             ) : plans.length > 0 ? (
               plans.map((plan, index) => {
-                const isPopular = plans.length === 3 ? index === 1 : plans.length > 1 && index === Math.floor(plans.length / 2);
+                const isPopular =
+                  plans.length === 3 ? index === 1 : plans.length > 1 && index === Math.floor(plans.length / 2);
 
                 return (
                   <div
                     key={plan.id}
-                    className={`relative bg-white rounded-[32px] p-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-2 ${isPopular ? "border-purple-200 shadow-xl scale-105 z-10" : "border-slate-100 shadow-sm"
-                      }`}
+                    className={`relative bg-white rounded-[32px] p-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-2 ${
+                      isPopular ? "border-purple-200 shadow-xl scale-105 z-10" : "border-slate-100 shadow-sm"
+                    }`}
                   >
                     {isPopular && (
                       <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg shadow-purple-200">
@@ -112,13 +109,9 @@ const CompanySubcriptionDiv1: React.FC = () => {
                     )}
 
                     <div className="text-center mb-8">
-                      <h3 className="text-xl font-bold text-slate-900 mb-2 capitalize">
-                        {plan.name}
-                      </h3>
+                      <h3 className="text-xl font-bold text-slate-900 mb-2 capitalize">{plan.name}</h3>
                       <div className="flex items-baseline justify-center">
-                        <span className="text-5xl font-black text-slate-900">
-                          ${plan.price}
-                        </span>
+                        <span className="text-5xl font-black text-slate-900">${plan.price}</span>
                         <span className="text-slate-400 ml-1 font-semibold text-sm">
                           {getDurationText(plan.duration)}
                         </span>
@@ -132,12 +125,10 @@ const CompanySubcriptionDiv1: React.FC = () => {
                         </div>
                         Up to {plan.userLimit} employees
                       </li>
-                      {(plan.features.length > 0 ? plan.features : [
-                        "Access to company contests",
-                        "Team leaderboard",
-                        "Advanced analytics",
-                        "Priority support"
-                      ]).map((item, i) => (
+                      {(plan.features.length > 0
+                        ? plan.features
+                        : ["Access to company contests", "Team leaderboard", "Advanced analytics", "Priority support"]
+                      ).map((item, i) => (
                         <li key={i} className="flex items-center text-slate-600 text-sm font-medium">
                           <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center mr-3 shrink-0">
                             <Check className="w-4 h-4 text-purple-600" />
@@ -148,10 +139,13 @@ const CompanySubcriptionDiv1: React.FC = () => {
                     </ul>
 
                     <Link to={`/subscription/company/verify/${plan.id}`} className="block">
-                      <button className={`w-full py-4 font-bold rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2 ${isPopular
-                          ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-purple-100 hover:opacity-90"
-                          : "bg-slate-50 hover:bg-slate-100 text-slate-900 border border-slate-200"
-                        }`}>
+                      <button
+                        className={`w-full py-4 font-bold rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2 ${
+                          isPopular
+                            ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-purple-100 hover:opacity-90"
+                            : "bg-slate-50 hover:bg-slate-100 text-slate-900 border border-slate-200"
+                        }`}
+                      >
                         Select Plan
                         <Zap className={`w-4 h-4 ${isPopular ? "fill-current" : ""}`} />
                       </button>
@@ -177,12 +171,8 @@ const CompanySubcriptionDiv1: React.FC = () => {
               <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 text-blue-500 group-hover:scale-110 transition-transform shadow-sm">
                 <Trophy className="w-8 h-8" />
               </div>
-              <h4 className="font-bold text-slate-900 text-lg mb-2">
-                Company Contests
-              </h4>
-              <p className="text-slate-500 text-sm max-w-xs">
-                Exclusive competitions for your team members
-              </p>
+              <h4 className="font-bold text-slate-900 text-lg mb-2">Company Contests</h4>
+              <p className="text-slate-500 text-sm max-w-xs">Exclusive competitions for your team members</p>
             </div>
 
             {/* Feature 2 */}
@@ -190,12 +180,8 @@ const CompanySubcriptionDiv1: React.FC = () => {
               <div className="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mb-4 text-purple-500 group-hover:scale-110 transition-transform shadow-sm">
                 <Users className="w-8 h-8" />
               </div>
-              <h4 className="font-bold text-slate-900 text-lg mb-2">
-                Team Leaderboard
-              </h4>
-              <p className="text-slate-500 text-sm max-w-xs">
-                Track and compare team performance
-              </p>
+              <h4 className="font-bold text-slate-900 text-lg mb-2">Team Leaderboard</h4>
+              <p className="text-slate-500 text-sm max-w-xs">Track and compare team performance</p>
             </div>
 
             {/* Feature 3 */}
@@ -203,12 +189,8 @@ const CompanySubcriptionDiv1: React.FC = () => {
               <div className="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mb-4 text-green-500 group-hover:scale-110 transition-transform shadow-sm">
                 <BarChart3 className="w-8 h-8" />
               </div>
-              <h4 className="font-bold text-slate-900 text-lg mb-2">
-                Department Tracking
-              </h4>
-              <p className="text-slate-500 text-sm max-w-xs">
-                Organize contests by departments
-              </p>
+              <h4 className="font-bold text-slate-900 text-lg mb-2">Department Tracking</h4>
+              <p className="text-slate-500 text-sm max-w-xs">Organize contests by departments</p>
             </div>
           </div>
         </div>

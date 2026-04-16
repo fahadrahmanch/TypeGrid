@@ -109,13 +109,5 @@ export function useChallengeKeydown({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [
-    lessonText,
-    isFinished,
-    typedText,
-    phase,
-    hasError,
-    challengeId,
-    keyboardLayout, 
-  ]);
+  }, [lessonText, isFinished, typedText, phase, hasError, challengeId, keyboardLayout]);
 }

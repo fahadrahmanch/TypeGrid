@@ -11,11 +11,7 @@ import {
 } from "../../api/admin/dailyAssignChallenges";
 import DailyAssignmentModal from "../../components/common/DailyAssignmentModal";
 import CustomCalendar from "../../components/common/CustomCalendar";
-import {
-  Plus,
-  Edit2,
-  Trash2,
-} from "lucide-react";
+import { Plus, Edit2, Trash2 } from "lucide-react";
 import { fetchChallenges } from "../../api/admin/challenges";
 import { toast } from "react-toastify";
 
@@ -125,10 +121,7 @@ const DailyAssignment = () => {
           toast.error(response.data.message);
         }
       } else if (modalMode === "edit" && currentEditId) {
-        const response = await updateAssignChallenge(
-          currentEditId,
-          modalValues,
-        );
+        const response = await updateAssignChallenge(currentEditId, modalValues);
         if (response.data) {
           toast.success("Assignment updated successfully");
         } else {
@@ -139,9 +132,7 @@ const DailyAssignment = () => {
       setIsModalOpen(false);
     } catch (err: any) {
       console.error("Error submitting assignment:", err);
-      toast.error(
-        err.response?.data?.message || `Failed to ${modalMode} assignment`,
-      );
+      toast.error(err.response?.data?.message || `Failed to ${modalMode} assignment`);
     }
   };
 
@@ -172,9 +163,7 @@ const DailyAssignment = () => {
       <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header Section */}
         <div className="mb-10">
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">
-            Daily Challenge Assignment
-          </h1>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Daily Challenge Assignment</h1>
           <p className="text-gray-500 font-medium tracking-tight">
             Manage and schedule daily challenges to keep your users engaged.
           </p>
@@ -196,10 +185,7 @@ const DailyAssignment = () => {
         {/* Search & Actions */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div className="relative flex-1 min-w-[300px] max-w-md flex gap-4">
-            <CustomCalendar
-              selectedDate={selectedDate}
-              onSelect={(date) => setSelectedDate(date)}
-            />
+            <CustomCalendar selectedDate={selectedDate} onSelect={(date) => setSelectedDate(date)} />
           </div>
 
           <button
@@ -217,9 +203,7 @@ const DailyAssignment = () => {
             <div className="bg-white/60 backdrop-blur-md rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/5 h-full min-h-[500px]">
               <div className="flex justify-between items-center mb-8">
                 <div>
-                  <h3 className="text-lg font-black text-gray-800">
-                    Scheduled Challenges
-                  </h3>
+                  <h3 className="text-lg font-black text-gray-800">Scheduled Challenges</h3>
                   <p className="text-[#D0864B] font-bold text-sm uppercase tracking-wide">
                     All upcoming and current challenges
                   </p>
@@ -249,10 +233,7 @@ const DailyAssignment = () => {
                       </tr>
                     ) : (
                       assignChallenges.map((assign: any) => (
-                        <tr
-                          key={assign._id}
-                          className="group hover:bg-white/40 transition-all duration-300"
-                        >
+                        <tr key={assign._id} className="group hover:bg-white/40 transition-all duration-300">
                           <td className="py-5 px-4">
                             <span className="text-sm font-black text-gray-800 group-hover:text-[#ECA468] transition-colors">
                               {assign.challengeId?.title}
@@ -271,9 +252,7 @@ const DailyAssignment = () => {
                                 <Edit2 className="w-3.5 h-3.5" />
                               </button>
                               <button
-                                onClick={() =>
-                                  handleDeleteChallenge(assign._id)
-                                }
+                                onClick={() => handleDeleteChallenge(assign._id)}
                                 className="p-2 text-red-300 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-100 transition-all"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -300,9 +279,7 @@ const DailyAssignment = () => {
                 <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6">
                   <Trash2 className="w-8 h-8" />
                 </div>
-                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">
-                  Delete Assignment?
-                </h2>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">Delete Assignment?</h2>
                 <p className="text-sm text-gray-500 font-medium">
                   Are you sure you want to delete this assignment? This action cannot be undone.
                 </p>
@@ -326,7 +303,7 @@ const DailyAssignment = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       <DailyAssignmentModal

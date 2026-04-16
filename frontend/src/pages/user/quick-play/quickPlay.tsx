@@ -10,17 +10,7 @@ import { useTypingStats } from "../../../hooks/useTypingStats";
 import { useQuickPlaySocket } from "../../../hooks/quickPlay/useQuickPlaySocket";
 import { useQuickPlayHandleKeyDown } from "../../../hooks/quickPlay/useQuickPlayHandleKeyDown";
 import { toast } from "react-toastify";
-import {
-  Zap,
-  Target,
-  Clock,
-  AlertCircle,
-  Send,
-  Users,
-  Trophy,
-  Home,
-  RotateCcw,
-} from "lucide-react";
+import { Zap, Target, Clock, AlertCircle, Send, Users, Trophy, Home, RotateCcw } from "lucide-react";
 export type GamePlayerResult = {
   userId: string;
   wpm: number;
@@ -57,9 +47,7 @@ const QuickPlay: React.FC = () => {
   const [typedText, setTypedText] = useState("");
   const [isFinished, setIsfinished] = useState(false);
   const [countdown, setCountdown] = useState<number>(gameData?.countDown || 10);
-  const [remainingTime, setRemainingTime] = useState<number>(
-    gameData?.duration || 300,
-  );
+  const [remainingTime, setRemainingTime] = useState<number>(gameData?.duration || 300);
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [hasError, setHasError] = useState(false);
   const [errors, setErrors] = useState(0);
@@ -74,13 +62,7 @@ const QuickPlay: React.FC = () => {
   const gameIdRef = useRef(gameData?._id);
   const userIdRef = useRef(user?._id);
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
-  const { wpm, accuracy } = useTypingStats(
-    totalTyped,
-    errors,
-    elapsedTime,
-    phase,
-    isFinished,
-  );
+  const { wpm, accuracy } = useTypingStats(totalTyped, errors, elapsedTime, phase, isFinished);
   const [currentUser, setCurrentUser] = useState<
     | {
         _id: string;
@@ -107,7 +89,7 @@ const QuickPlay: React.FC = () => {
     elapsedTime,
     totalTyped,
     gameIdRef,
-    userIdRef,
+    userIdRef
   );
   useEffect(() => {
     if (!gameData) {
@@ -128,8 +110,8 @@ const QuickPlay: React.FC = () => {
               errors,
               progress: typedText.length,
             }
-          : p,
-      ),
+          : p
+      )
     );
   }, [wpm, accuracy, errors, typedText, currentUser, gameData]);
 
@@ -140,15 +122,7 @@ const QuickPlay: React.FC = () => {
     }
   }, [players, user._id]);
 
-  useGameTimer(
-    gameData,
-    finalResult,
-    setPhase,
-    setCountdown,
-    setRemainingTime,
-    setElapsedTime,
-    setIsfinished,
-  );
+  useGameTimer(gameData, finalResult, setPhase, setCountdown, setRemainingTime, setElapsedTime, setIsfinished);
   const startGameAPI = async (competitionId: string) => {
     try {
       await statusChange(competitionId, "ongoing");
@@ -199,9 +173,7 @@ const QuickPlay: React.FC = () => {
       // Cursor logic
       const isCurrentChar = index === typedText.length;
       const cursorClass =
-        isCurrentChar && phase === "PLAY" && !isFinished
-          ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]"
-          : "";
+        isCurrentChar && phase === "PLAY" && !isFinished ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]" : "";
 
       return (
         <span
@@ -260,9 +232,7 @@ const QuickPlay: React.FC = () => {
                 Race Results
                 <Trophy className="w-10 h-10 text-amber-500 fill-amber-500" />
               </h1>
-              <p className="text-gray-500 font-medium">
-                Top performers this round
-              </p>
+              <p className="text-gray-500 font-medium">Top performers this round</p>
             </div>
 
             <div className="w-full max-w-2xl bg-white rounded-3xl shadow-xl border-4 border-orange-100 overflow-hidden">
@@ -300,9 +270,7 @@ const QuickPlay: React.FC = () => {
                             3
                           </div>
                         ) : (
-                          <span className="text-gray-400 font-bold">
-                            #{result.rank || index + 1}
-                          </span>
+                          <span className="text-gray-400 font-bold">#{result.rank || index + 1}</span>
                         )}
                       </div>
 
@@ -314,21 +282,14 @@ const QuickPlay: React.FC = () => {
                         />
                         <div>
                           <div className="font-bold text-gray-800 text-sm">
-                            {result.name}{" "}
-                            {result.userId === user?._id && "(You)"}
+                            {result.name} {result.userId === user?._id && "(You)"}
                           </div>
                         </div>
                       </div>
 
-                      <div className="text-right font-black text-gray-800 text-lg">
-                        {result.wpm}
-                      </div>
-                      <div className="text-right font-bold text-emerald-600">
-                        {result.accuracy}%
-                      </div>
-                      <div className="text-right font-mono text-gray-500 text-xs">
-                        {formatTime(result.timeTaken)}
-                      </div>
+                      <div className="text-right font-black text-gray-800 text-lg">{result.wpm}</div>
+                      <div className="text-right font-bold text-emerald-600">{result.accuracy}%</div>
+                      <div className="text-right font-mono text-gray-500 text-xs">{formatTime(result.timeTaken)}</div>
                     </div>
                   ))}
               </div>
@@ -355,9 +316,7 @@ const QuickPlay: React.FC = () => {
           <>
             {/* Active Players Header */}
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold text-gray-700">
-                Active Players
-              </h2>
+              <h2 className="text-xl font-bold text-gray-700">Active Players</h2>
               {/* <div className="px-3 py-1 bg-emerald-100/50 text-emerald-600 text-xs font-bold rounded-full border border-emerald-100">
                 5 Online
               </div> */}
@@ -407,12 +366,8 @@ const QuickPlay: React.FC = () => {
                       <div className="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full bg-emerald-500"></div>
                     </div>
                     <div>
-                      <div className="font-bold text-sm text-gray-800 line-clamp-1">
-                        {player.name}
-                      </div>
-                      <div className="text-[10px] items-center gap-1.5 flex font-medium text-emerald-600">
-                        Online
-                      </div>
+                      <div className="font-bold text-sm text-gray-800 line-clamp-1">{player.name}</div>
+                      <div className="text-[10px] items-center gap-1.5 flex font-medium text-emerald-600">Online</div>
                     </div>
                   </div>
 
@@ -421,24 +376,16 @@ const QuickPlay: React.FC = () => {
                     <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center border border-gray-100">
                       <div className="flex items-center gap-1 text-gray-400 mb-0.5">
                         <Zap className="w-3 h-3 text-amber-500" />
-                        <span className="text-[10px] font-bold uppercase">
-                          WPM
-                        </span>
+                        <span className="text-[10px] font-bold uppercase">WPM</span>
                       </div>
-                      <div className="text-xl font-black text-gray-800">
-                        {player.wpm || 0}
-                      </div>
+                      <div className="text-xl font-black text-gray-800">{player.wpm || 0}</div>
                     </div>
                     <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center border border-gray-100">
                       <div className="flex items-center gap-1 text-gray-400 mb-0.5">
                         <Target className="w-3 h-3 text-emerald-500" />
-                        <span className="text-[10px] font-bold uppercase">
-                          ACC
-                        </span>
+                        <span className="text-[10px] font-bold uppercase">ACC</span>
                       </div>
-                      <div className="text-xl font-black text-gray-800">
-                        {player.accuracy || 0}%
-                      </div>
+                      <div className="text-xl font-black text-gray-800">{player.accuracy || 0}%</div>
                     </div>
                   </div>
 
@@ -453,8 +400,8 @@ const QuickPlay: React.FC = () => {
                     <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-emerald-500 rounded-full transition-all duration-300"
-                        style={{ 
-                          width: `${Math.round((((player as any).progress || 0) / (lesson?.length || 1)) * 100)}%` 
+                        style={{
+                          width: `${Math.round((((player as any).progress || 0) / (lesson?.length || 1)) * 100)}%`,
                         }}
                       ></div>
                     </div>
@@ -474,9 +421,7 @@ const QuickPlay: React.FC = () => {
                       <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-bold">
                         <AlertCircle className="w-3 h-3 text-red-400" /> Errors
                       </div>
-                      <div className="text-xs font-bold text-gray-700">
-                        {player.errors || 0}
-                      </div>
+                      <div className="text-xs font-bold text-gray-700">{player.errors || 0}</div>
                     </div>
                   </div>
                 </div>
@@ -492,14 +437,10 @@ const QuickPlay: React.FC = () => {
                 </div>
 
                 <h3 className="font-bold text-gray-800 text-sm">
-                  {phase === "COUNTDOWN"
-                    ? `Game starts in ${countdown}s`
-                    : `Time left: ${formatTime(remainingTime)}`}
+                  {phase === "COUNTDOWN" ? `Game starts in ${countdown}s` : `Time left: ${formatTime(remainingTime)}`}
                 </h3>
                 <p className="text-[11px] text-gray-500 font-medium">
-                  {phase === "COUNTDOWN"
-                    ? "Waiting for players"
-                    : "Race in progress"}
+                  {phase === "COUNTDOWN" ? "Waiting for players" : "Race in progress"}
                 </p>
 
                 {/* <div className="mt-8 space-y-2 text-[10px] font-mono font-medium text-gray-400">
@@ -559,9 +500,7 @@ const QuickPlay: React.FC = () => {
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 mb-4 pr-2">
                   <div className="text-xs">
-                    <span className="font-bold text-gray-500 mr-2">
-                      System:
-                    </span>
+                    <span className="font-bold text-gray-500 mr-2">System:</span>
                     <span className="text-gray-700">Welcome to TypeGrid!</span>
                   </div>
                   <div className="text-xs">

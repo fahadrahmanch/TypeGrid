@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
 import { Plus } from "lucide-react";
-import LessonTable, {
-  Lesson,
-} from "../../components/companyAdmin/lessons/LessonTable";
-import UserSelectionList, {
-  User,
-} from "../../components/companyAdmin/lessons/UserSelectionList";
+import LessonTable, { Lesson } from "../../components/companyAdmin/lessons/LessonTable";
+import UserSelectionList, { User } from "../../components/companyAdmin/lessons/UserSelectionList";
 import AssignmentSummary from "../../components/companyAdmin/lessons/AssignmentSummary";
 import LessonSelectionGrid from "../../components/companyAdmin/lessons/LessonSelectionGrid";
 import CreateLessonModal from "../../components/companyAdmin/lessons/CreateLessonModal";
@@ -41,27 +37,19 @@ const Lessons: React.FC = () => {
 
   const toggleUserSelection = (userId: string) => {
     setSelectedUsers((prev: any) =>
-      prev.includes(userId)
-        ? prev.filter((id: string) => id !== userId)
-        : [...prev, userId],
+      prev.includes(userId) ? prev.filter((id: string) => id !== userId) : [...prev, userId]
     );
   };
 
   const toggleLessonSelection = (lessonId: string) => {
     setSelectedLessons((prev: any) =>
-      prev.includes(lessonId)
-        ? prev.filter((id: string) => id !== lessonId)
-        : [...prev, lessonId],
+      prev.includes(lessonId) ? prev.filter((id: string) => id !== lessonId) : [...prev, lessonId]
     );
   };
 
   const handleAssign = async () => {
     try {
-      const response = await assignLesson(
-        selectedUsers,
-        selectedLessons,
-        deadlineAt,
-      );
+      const response = await assignLesson(selectedUsers, selectedLessons, deadlineAt);
       toast.success(response.data.message);
     } catch (error: any) {
       toast.error(error.data.message);
@@ -115,21 +103,14 @@ const Lessons: React.FC = () => {
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
             <div>
-              <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">
-                Lesson Management
-              </h1>
-              <p className="text-gray-500 font-medium">
-                Create, manage and assign lessons to your students.
-              </p>
+              <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2">Lesson Management</h1>
+              <p className="text-gray-500 font-medium">Create, manage and assign lessons to your students.</p>
             </div>
             <button
               onClick={() => setIsCreateModalOpen(true)}
               className="flex items-center gap-2 bg-[#D0864B] hover:bg-[#B36E39] text-white px-6 py-3 rounded-2xl transition-all shadow-lg shadow-[#D0864B]/20 font-bold group"
             >
-              <Plus
-                size={20}
-                className="group-hover:rotate-90 transition-transform duration-300"
-              />
+              <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
               <span>Create New Lesson</span>
             </button>
           </div>
@@ -146,12 +127,8 @@ const Lessons: React.FC = () => {
                 <Plus size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-gray-900 leading-tight">
-                  Assign Lessons
-                </h2>
-                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
-                  Management Console
-                </p>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight">Assign Lessons</h2>
+                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">Management Console</p>
               </div>
             </div>
 

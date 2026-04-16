@@ -41,10 +41,7 @@ const IncomingChallengeModal = () => {
         </h3>
 
         <p className="text-sm text-gray-500 mb-4">
-          <span className="font-bold text-gray-700">
-            {challenge.opponent?.name}
-          </span>{" "}
-          challenged you to a typing match.
+          <span className="font-bold text-gray-700">{challenge.opponent?.name}</span> challenged you to a typing match.
         </p>
 
         <div className="flex gap-2">

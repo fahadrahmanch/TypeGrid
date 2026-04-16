@@ -34,10 +34,7 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
         {/* Header */}
         <div className="px-8 py-6 flex justify-between items-center bg-white/40">
           <h2 className="text-xl font-bold text-gray-800">{title}</h2>
-          <button
-            onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-          >
+          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -46,20 +43,13 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
         <div className="flex-1 overflow-y-auto px-8 py-8 space-y-6 custom-scrollbar">
           {/* Date Field */}
           <div className="space-y-1.5">
-            <label className="text-xs font-black uppercase tracking-widest text-gray-500">
-              Date
-            </label>
-            <CustomCalendar
-              selectedDate={values.date}
-              onSelect={(date) => onChange("date", date)}
-            />
+            <label className="text-xs font-black uppercase tracking-widest text-gray-500">Date</label>
+            <CustomCalendar selectedDate={values.date} onSelect={(date) => onChange("date", date)} />
           </div>
 
           {/* Challenge Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-black uppercase tracking-widest text-gray-500">
-              Challenge
-            </label>
+            <label className="text-xs font-black uppercase tracking-widest text-gray-500">Challenge</label>
             <div className="relative">
               <select
                 value={values.challengeId}
@@ -74,18 +64,8 @@ const DailyAssignmentModal: React.FC<DailyAssignmentModalProps> = ({
                 ))}
               </select>
               <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </div>

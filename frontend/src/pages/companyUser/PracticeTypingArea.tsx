@@ -3,27 +3,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 import { getMappedKey, KeyboardLayoutType } from "../../utils/keyboardLayouts";
-import {
-  ArrowLeft,
-  RotateCcw,
-  Zap,
-  Target,
-  AlertCircle,
-  Keyboard,
-  Trophy,
-  Home,
-  Sparkles
-} from "lucide-react";
+import { ArrowLeft, RotateCcw, Zap, Target, AlertCircle, Keyboard, Trophy, Home, Sparkles } from "lucide-react";
 import StatCard from "../../components/common/StatCard";
 import { useTypingStats } from "../../hooks/useTypingStats";
 
 const PracticeTypingArea: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { text: initialText, title, type } = location.state || {
+  const {
+    text: initialText,
+    title,
+    type,
+  } = location.state || {
     text: "The quick brown fox jumps over the lazy dog.",
     title: "Default Practice",
-    type: "default"
+    type: "default",
   };
 
   const keyboardLayout = useSelector((state: any) => state.auth.keyboardLayout) as KeyboardLayoutType;
@@ -68,8 +62,8 @@ const PracticeTypingArea: React.FC = () => {
       }
 
       if (!isActive && !isFinished && e.key === " ") {
-          // If we want space to start, but here character starts.
-          // Let's stick to "any character starts" as in previous logic.
+        // If we want space to start, but here character starts.
+        // Let's stick to "any character starts" as in previous logic.
       }
 
       const key = e.key;
@@ -91,9 +85,9 @@ const PracticeTypingArea: React.FC = () => {
 
       const isCorrect = mappedKey === expectedChar;
 
-      setTotalTyped(prev => prev + 1);
+      setTotalTyped((prev) => prev + 1);
       if (!isCorrect) {
-        setErrors(prev => prev + 1);
+        setErrors((prev) => prev + 1);
       }
 
       const nextText = typedText + key;
@@ -126,10 +120,10 @@ const PracticeTypingArea: React.FC = () => {
 
   const getCharClass = (index: number) => {
     if (index >= typedText.length) return "text-gray-400";
-    
+
     const rawKey = typedText[index];
     const mappedKey = getMappedKey(rawKey, keyboardLayout);
-    
+
     return mappedKey === initialText[index]
       ? "text-emerald-600 bg-emerald-50/50"
       : "text-red-500 bg-red-100 underline decoration-red-200";
@@ -208,7 +202,6 @@ const PracticeTypingArea: React.FC = () => {
           </div>
 
           <div className="bg-[#FEFCE8] rounded-[2.3rem] p-8 md:p-12 min-h-[350px] border border-orange-50 relative overflow-hidden flex flex-col justify-center">
-
             {/* Main Text Content */}
             <div
               className="relative font-mono text-xl md:text-2xl lg:text-3xl leading-relaxed tracking-wide text-gray-300 select-none outline-none z-10"
@@ -275,17 +268,24 @@ const PracticeTypingArea: React.FC = () => {
 
                   <div className="space-y-2">
                     <h2 className="text-4xl font-black text-gray-800">Excellent!</h2>
-                    <p className="text-gray-500 font-medium">You completed the practice session with {accuracy}% accuracy.</p>
+                    <p className="text-gray-500 font-medium">
+                      You completed the practice session with {accuracy}% accuracy.
+                    </p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-orange-50 p-4 rounded-2xl border border-orange-100">
                       <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">Final Speed</p>
-                      <p className="text-2xl font-black text-orange-600">{Math.round(wpm)} <span className="text-xs">WPM</span></p>
+                      <p className="text-2xl font-black text-orange-600">
+                        {Math.round(wpm)} <span className="text-xs">WPM</span>
+                      </p>
                     </div>
                     <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
                       <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">Time Taken</p>
-                      <p className="text-2xl font-black text-emerald-600">{Math.round(elapsedTime)}<span className="text-xs">s</span></p>
+                      <p className="text-2xl font-black text-emerald-600">
+                        {Math.round(elapsedTime)}
+                        <span className="text-xs">s</span>
+                      </p>
                     </div>
                   </div>
 
@@ -313,7 +313,8 @@ const PracticeTypingArea: React.FC = () => {
         <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-4 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
           <p className="text-sm text-blue-700">
-            <b>Tip:</b> Focus on accuracy first. Speed will naturally follow as you build muscle memory. Avoid looking at your keyboard!
+            <b>Tip:</b> Focus on accuracy first. Speed will naturally follow as you build muscle memory. Avoid looking
+            at your keyboard!
           </p>
         </div>
       </div>

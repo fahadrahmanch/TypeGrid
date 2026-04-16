@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../components/user/Navbar";
 import { toast } from "react-toastify";
-import {
-  passwordValidation,
-  confirmPasswordValidation,
-} from "../../validations/authValidations";
+import { passwordValidation, confirmPasswordValidation } from "../../validations/authValidations";
 import { changePasswordApi } from "../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 import { Lock, Eye, EyeOff, Check, X, ShieldCheck } from "lucide-react";
@@ -54,14 +51,9 @@ const ChangePassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const currentPassErr = values.currentPassword.trim()
-      ? ""
-      : "Current password is required";
+    const currentPassErr = values.currentPassword.trim() ? "" : "Current password is required";
     const newPassErr = passwordValidation(values.newPassword);
-    const confirmPassErr = confirmPasswordValidation(
-      values.newPassword,
-      values.confirmPassword,
-    );
+    const confirmPassErr = confirmPasswordValidation(values.newPassword, values.confirmPassword);
 
     setErrors({
       currentPassword: currentPassErr,
@@ -99,14 +91,10 @@ const ChangePassword: React.FC = () => {
       }
     } catch (error: any) {
       console.error("Change password error:", error);
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to change password. Please try again.",
-        {
-          position: "top-center",
-          theme: "colored",
-        },
-      );
+      toast.error(error?.response?.data?.message || "Failed to change password. Please try again.", {
+        position: "top-center",
+        theme: "colored",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -122,9 +110,7 @@ const ChangePassword: React.FC = () => {
         className={`mt-2 transition-all duration-300 overflow-hidden ${hasValue ? "max-h-20 opacity-100" : "max-h-0 opacity-0"}`}
       >
         <div className="text-xs space-y-1 pl-1">
-          <div
-            className={`flex items-center ${minLength ? "text-green-500" : "text-gray-400"}`}
-          >
+          <div className={`flex items-center ${minLength ? "text-green-500" : "text-gray-400"}`}>
             {minLength ? (
               <Check size={12} className="mr-1" />
             ) : (
@@ -153,12 +139,8 @@ const ChangePassword: React.FC = () => {
                 <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm mb-3 shadow-inner ring-1 ring-white/30">
                   <ShieldCheck className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-white tracking-wide font-jaini">
-                  Change Password
-                </h2>
-                <p className="text-[#EFE6E0] text-sm mt-1 font-medium">
-                  Secure your account
-                </p>
+                <h2 className="text-2xl font-bold text-white tracking-wide font-jaini">Change Password</h2>
+                <p className="text-[#EFE6E0] text-sm mt-1 font-medium">Secure your account</p>
               </div>
             </div>
 
@@ -189,15 +171,9 @@ const ChangePassword: React.FC = () => {
                     />
                     <div
                       className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400 hover:text-[#8C7362] dark:hover:text-gray-200 transition-colors"
-                      onClick={() =>
-                        setShowCurrentPassword(!showCurrentPassword)
-                      }
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                     >
-                      {showCurrentPassword ? (
-                        <EyeOff className="h-5 w-5" />
-                      ) : (
-                        <Eye className="h-5 w-5" />
-                      )}
+                      {showCurrentPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </div>
                   </div>
                   {errors.currentPassword && (
@@ -235,11 +211,7 @@ const ChangePassword: React.FC = () => {
                       className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400 hover:text-[#8C7362] dark:hover:text-gray-200 transition-colors"
                       onClick={() => setShowNewPassword(!showNewPassword)}
                     >
-                      {showNewPassword ? (
-                        <EyeOff className="h-5 w-5" />
-                      ) : (
-                        <Eye className="h-5 w-5" />
-                      )}
+                      {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </div>
                   </div>
                   <PasswordRequirements />
@@ -276,15 +248,9 @@ const ChangePassword: React.FC = () => {
                     />
                     <div
                       className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400 hover:text-[#8C7362] dark:hover:text-gray-200 transition-colors"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
-                      {showConfirmPassword ? (
-                        <EyeOff className="h-5 w-5" />
-                      ) : (
-                        <Eye className="h-5 w-5" />
-                      )}
+                      {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </div>
                   </div>
                   {errors.confirmPassword && (
@@ -328,9 +294,7 @@ const ChangePassword: React.FC = () => {
                       Processing...
                     </span>
                   ) : (
-                    <span className="relative z-10 flex items-center justify-center">
-                      Change Password
-                    </span>
+                    <span className="relative z-10 flex items-center justify-center">Change Password</span>
                   )}
                 </button>
 

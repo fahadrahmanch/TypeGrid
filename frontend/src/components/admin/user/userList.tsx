@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 import { updateUserStatus, filterUsersAPI } from "../../../api/admin/users";
 import ConfirmModal from "../../common/ConfirmModal";
-import {
-  Search,
-  Filter,
-  Shield,
-  ShieldOff,
-  User,
-  Mail,
-  ChevronLeft,
-  ChevronRight,
-  Hash,
-  Trophy,
-} from "lucide-react";
+import { Search, Filter, Shield, ShieldOff, User, Mail, ChevronLeft, ChevronRight, Hash, Trophy } from "lucide-react";
 
 const UserList: React.FC = () => {
   const [status, setStatus] = useState("All");
@@ -42,8 +31,8 @@ const UserList: React.FC = () => {
                   ...u,
                   status: u.status === "active" ? "blocked" : "active",
                 }
-              : u,
-          ),
+              : u
+          )
         );
       }
     } catch (error) {
@@ -76,12 +65,8 @@ const UserList: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
           <div className="mb-10">
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
-              User Management
-            </h1>
-            <p className="text-gray-500 font-medium">
-              Monitor and manage all TypeGrid platform users.
-            </p>
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">User Management</h1>
+            <p className="text-gray-500 font-medium">Monitor and manage all TypeGrid platform users.</p>
           </div>
 
           {/* Search & Filters */}
@@ -118,9 +103,7 @@ const UserList: React.FC = () => {
           <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
             <div className="flex justify-between items-center mb-8 px-2">
               <div>
-                <h3 className="text-xl font-black text-gray-900 leading-tight">
-                  Platform Users
-                </h3>
+                <h3 className="text-xl font-black text-gray-900 leading-tight">Platform Users</h3>
                 <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
                   {users.length} total registered users
                 </p>
@@ -151,19 +134,14 @@ const UserList: React.FC = () => {
                     const isActive = user.status === "active";
 
                     return (
-                      <tr
-                        key={user._id}
-                        className="group hover:bg-white/40 transition-all duration-300"
-                      >
+                      <tr key={user._id} className="group hover:bg-white/40 transition-all duration-300">
                         <td className="py-5 px-4">
                           <div className="flex items-center gap-4">
                             <div className="hidden sm:flex w-10 h-10 rounded-2xl bg-[#ECA468]/10 items-center justify-center text-[#ECA468] font-black text-lg">
                               {user.name.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                              <p className="font-bold text-gray-800 text-sm">
-                                {user.name}
-                              </p>
+                              <p className="font-bold text-gray-800 text-sm">{user.name}</p>
                               <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-medium">
                                 <Mail className="w-3 h-3" />
                                 {user.email}
@@ -199,11 +177,7 @@ const UserList: React.FC = () => {
                               }`}
                               title={isActive ? "Block User" : "Unblock User"}
                             >
-                              {isActive ? (
-                                <ShieldOff className="w-4 h-4" />
-                              ) : (
-                                <Shield className="w-4 h-4" />
-                              )}
+                              {isActive ? <ShieldOff className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
                             </button>
                           </div>
                         </td>
@@ -248,18 +222,10 @@ const UserList: React.FC = () => {
                             totalPages - 3,
                             totalPages - 2,
                             totalPages - 1,
-                            totalPages,
+                            totalPages
                           );
                         } else {
-                          pages.push(
-                            1,
-                            "...",
-                            page - 1,
-                            page,
-                            page + 1,
-                            "...",
-                            totalPages,
-                          );
+                          pages.push(1, "...", page - 1, page, page + 1, "...", totalPages);
                         }
                       }
 
@@ -283,7 +249,7 @@ const UserList: React.FC = () => {
                           >
                             {p}
                           </button>
-                        ),
+                        )
                       );
                     })()}
                   </div>
@@ -312,15 +278,11 @@ const UserList: React.FC = () => {
         {/* Confirm Modal */}
         <ConfirmModal
           isOpen={showModal}
-          title={
-            selectedUser?.status === "active" ? "Block User" : "Unblock User"
-          }
+          title={selectedUser?.status === "active" ? "Block User" : "Unblock User"}
           message={`Are you sure you want to ${
             selectedUser?.status === "active" ? "block" : "unblock"
           } this user? This will affect their ability to participate in contests.`}
-          confirmText={
-            selectedUser?.status === "active" ? "Block User" : "Unblock User"
-          }
+          confirmText={selectedUser?.status === "active" ? "Block User" : "Unblock User"}
           onConfirm={confirmBlockAction}
           onCancel={() => setShowModal(false)}
         />

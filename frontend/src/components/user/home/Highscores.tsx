@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 
 const Highscores: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"ALL" | "WEEKLY" | "MONTHLY">(
-    "ALL",
-  );
+  const [activeTab, setActiveTab] = useState<"ALL" | "WEEKLY" | "MONTHLY">("ALL");
 
   const scores = [
     {
@@ -83,16 +81,12 @@ const Highscores: React.FC = () => {
           <button
             key={tab}
             className={`pb-2 text-xs font-bold tracking-wider transition-colors relative ${
-              activeTab === tab
-                ? "text-blue-500"
-                : "text-gray-400 hover:text-gray-600"
+              activeTab === tab ? "text-blue-500" : "text-gray-400 hover:text-gray-600"
             }`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}
-            {activeTab === tab && (
-              <span className="absolute bottom-0 left-0 w-full h-[2px] bg-blue-500"></span>
-            )}
+            {activeTab === tab && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-blue-500"></span>}
           </button>
         ))}
       </div>
@@ -113,26 +107,18 @@ const Highscores: React.FC = () => {
                 key={index}
                 className="border-b border-orange-100 last:border-0 hover:bg-orange-50/50 transition-colors"
               >
-                <td className="py-3 pl-2 font-bold text-gray-700">
-                  {score.rank}.
-                </td>
+                <td className="py-3 pl-2 font-bold text-gray-700">{score.rank}.</td>
                 <td className="py-3">
                   <div className="font-bold text-gray-800">{score.name}</div>
                   <div className="text-[10px] text-gray-400 mt-0.5">
-                    <span
-                      className={`font-bold ${score.mode === "easy" ? "text-green-600" : "text-red-500"}`}
-                    >
+                    <span className={`font-bold ${score.mode === "easy" ? "text-green-600" : "text-red-500"}`}>
                       {score.mode}
                     </span>
                     , {score.time}
                   </div>
                 </td>
-                <td className="py-3 text-right text-gray-500 font-medium">
-                  {score.accuracy}
-                </td>
-                <td className="py-3 text-right text-gray-800 font-bold">
-                  {score.wpm}
-                </td>
+                <td className="py-3 text-right text-gray-500 font-medium">{score.accuracy}</td>
+                <td className="py-3 text-right text-gray-800 font-bold">{score.wpm}</td>
               </tr>
             ))}
           </tbody>

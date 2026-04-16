@@ -6,10 +6,7 @@ export const createCompanyContest = (data: any) => {
 };
 
 export const updateCompanyContest = (contestId: string, data: any) => {
-  return companyAPI.put(
-    API_ROUTES.ADMIN.COMPANY_CONTESTS.BY_ID(contestId),
-    data,
-  );
+  return companyAPI.put(API_ROUTES.ADMIN.COMPANY_CONTESTS.BY_ID(contestId), data);
 };
 
 export const fetchContestDetails = (contestId: string) => {
@@ -35,9 +32,7 @@ export const updateContestStatus = (contestId: string, status: string) => {
 };
 
 export const fetchContestParticipants = (contestId: string) => {
-  return companyAPI.get(
-    API_ROUTES.ADMIN.COMPANY_CONTESTS.PARTICIPANTS(contestId),
-  );
+  return companyAPI.get(API_ROUTES.ADMIN.COMPANY_CONTESTS.PARTICIPANTS(contestId));
 };
 
 export const deleteContest = (contestId: string) => {

@@ -1,16 +1,5 @@
 import React from "react";
-import {
-  LayoutDashboard,
-  BookOpen,
-  Trophy,
-  Medal,
-  Swords,
-  LogOut,
-  Keyboard,
-  Dumbbell,
-  Bell,
-  User,
-} from "lucide-react";
+import { LayoutDashboard, BookOpen, Trophy, Medal, Swords, LogOut, Keyboard, Dumbbell, Bell, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../store/slices/auth/authSlice";
@@ -24,7 +13,11 @@ const CompanyUserNavbar: React.FC = () => {
 
   // Mapping for navigation items
   const navItems = [
-    { name: "Dashboard", icon: LayoutDashboard, path: "/company/user/dashboard" },
+    {
+      name: "Dashboard",
+      icon: LayoutDashboard,
+      path: "/company/user/dashboard",
+    },
     { name: "Lessons", icon: BookOpen, path: "/company/user/lessons" },
     { name: "Leaderboard", icon: Medal, path: "/company/user/leaderboard" },
     { name: "Contests", icon: Trophy, path: "/company/user/contests" },
@@ -57,11 +50,7 @@ const CompanyUserNavbar: React.FC = () => {
     <div className="fixed top-0 left-0 w-full h-16 bg-[#FFF8EA] border-b border-[#F0E6D2] z-50 flex items-center justify-between px-8 shadow-sm">
       {/* Logo Section */}
       <Link to="/company/user/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-        <img
-          src={logo}
-          alt="TypeGrid logo"
-          className="w-10 h-10 object-contain"
-        />
+        <img src={logo} alt="TypeGrid logo" className="w-10 h-10 object-contain" />
         <div className="flex flex-col">
           <p
             className="text-2xl font-bold text-gray-900 tracking-wide leading-none"
@@ -97,7 +86,7 @@ const CompanyUserNavbar: React.FC = () => {
                   ${isActive ? "text-[#8B7355]" : "text-gray-400 group-hover:text-[#8B7355]"}
                 `}
               />
-              
+
               {item.badge && (
                 <span className="absolute -top-1 -right-1 flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
@@ -122,9 +111,7 @@ const CompanyUserNavbar: React.FC = () => {
             className="w-9 h-9 rounded-xl bg-white border-2 border-orange-100 shadow-sm object-cover"
           />
           <div className="hidden lg:block text-sm">
-            <p className="font-bold text-gray-900 leading-tight truncate max-w-[120px]">
-              {user?.name || "User"}
-            </p>
+            <p className="font-bold text-gray-900 leading-tight truncate max-w-[120px]">{user?.name || "User"}</p>
             <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">
               {user?.companyRole || "Member"}
             </p>

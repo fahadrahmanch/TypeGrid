@@ -83,15 +83,12 @@ const Achievements: React.FC = () => {
       }
     } catch (err: any) {
       console.error("Error fetching achievements:", err);
-   
     } finally {
       setLoading(false);
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
     setFormErrors((prev: any) => ({ ...prev, [name]: "" }));
@@ -113,14 +110,10 @@ const Achievements: React.FC = () => {
         formData.append("file", file);
         formData.append("upload_preset", "UMS-MERN");
 
-        const res = await axios.post(
-          "https://api.cloudinary.com/v1_1/dbo7vvi5z/image/upload",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-            withCredentials: false,
-          },
-        );
+        const res = await axios.post("https://api.cloudinary.com/v1_1/dbo7vvi5z/image/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: false,
+        });
 
         const data = res.data;
         const imageUrl = data.secure_url;
@@ -177,10 +170,7 @@ const Achievements: React.FC = () => {
         xp: Number(values.xp) || 0,
       };
 
-      console.log("Sending Achievement Payload (including image):", {
-        ...payload,
-        imageUrl: payload.imageUrl ? `${payload.imageUrl.substring(0, 30)}...` : "EMPTY"
-      });
+    
 
       if (isEditOpen && selectedId) {
         await updateAchievement(selectedId, payload);
@@ -201,7 +191,7 @@ const Achievements: React.FC = () => {
     try {
       const response = await fetchAchievementById(id);
       if (response && response.data) {
-        const data = response.data.data
+        const data = response.data.data;
         setValues({
           title: data.title,
           description: data.description,
@@ -221,15 +211,13 @@ const Achievements: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-
     setIdToDelete(id);
     setDeleteConfirmOpen(true);
-
   };
 
   const handleConfirmDelete = async () => {
     if (!idToDelete) return;
-    try { 
+    try {
       await deleteAchievement(idToDelete);
       toast.success("Achievement deleted successfully");
       loadAchievements();
@@ -270,9 +258,7 @@ const Achievements: React.FC = () => {
               <Trophy className="w-8 h-8 text-[#A68F7A]" />
               Achievements
             </h1>
-            <p className="text-gray-500 font-medium">
-              Manage achievements for your typing community
-            </p>
+            <p className="text-gray-500 font-medium">Manage achievements for your typing community</p>
           </div>
           <button
             onClick={() => setCreateOpen(true)}
@@ -297,9 +283,7 @@ const Achievements: React.FC = () => {
               />
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                Total Achievements
-              </p>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Achievements</p>
               <p className="text-xl font-black text-gray-900">{totalAchievements}</p>
             </div>
           </div>
@@ -308,27 +292,13 @@ const Achievements: React.FC = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-[#FFF8EA] text-left">
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Badge
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Title
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Description
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Min WPM
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Min Accuracy
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Min Games
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    XP Reward
-                  </th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Badge</th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Title</th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Description</th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Min WPM</th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Min Accuracy</th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Min Games</th>
+                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">XP Reward</th>
                   <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-right">
                     Actions
                   </th>
@@ -343,19 +313,13 @@ const Achievements: React.FC = () => {
                   </tr>
                 ) : achievements.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan={8}
-                      className="py-20 text-center text-gray-400 font-medium"
-                    >
+                    <td colSpan={8} className="py-20 text-center text-gray-400 font-medium">
                       No achievements found
                     </td>
                   </tr>
                 ) : (
                   achievements.map((item) => (
-                    <tr
-                      key={item.id || item._id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
+                    <tr key={item.id || item._id} className="hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-6">
                         <div className="w-10 h-10 rounded-lg bg-white/80 border border-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
                           {item.imageUrl ? (
@@ -365,24 +329,14 @@ const Achievements: React.FC = () => {
                           )}
                         </div>
                       </td>
-                      <td className="py-4 px-6 font-bold text-gray-700">
-                        {item.title}
-                      </td>
-                      <td className="py-4 px-6 text-gray-600 font-medium truncate max-w-[200px]">
-                        {item.description}
-                      </td>
-                      <td className="py-4 px-6 text-gray-700 font-bold">
-                        {item.minWpm || "—"}
-                      </td>
+                      <td className="py-4 px-6 font-bold text-gray-700">{item.title}</td>
+                      <td className="py-4 px-6 text-gray-600 font-medium truncate max-w-[200px]">{item.description}</td>
+                      <td className="py-4 px-6 text-gray-700 font-bold">{item.minWpm || "—"}</td>
                       <td className="py-4 px-6 text-gray-700 font-bold">
                         {item.minAccuracy ? `${item.minAccuracy}%` : "—"}
                       </td>
-                      <td className="py-4 px-6 text-gray-700 font-bold">
-                        {item.minGame || "—"}
-                      </td>
-                      <td className="py-4 px-6 text-[#D0864B] font-bold text-nowrap">
-                        +{item.xp} XP
-                      </td>
+                      <td className="py-4 px-6 text-gray-700 font-bold">{item.minGame || "—"}</td>
+                      <td className="py-4 px-6 text-[#D0864B] font-bold text-nowrap">+{item.xp} XP</td>
                       <td className="py-4 px-6">
                         <div className="flex justify-end gap-3">
                           <button
@@ -420,9 +374,7 @@ const Achievements: React.FC = () => {
               </button>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
-                  {page}
-                </span>
+                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
                 <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
                   of {totalPages}
                 </span>
@@ -450,10 +402,7 @@ const Achievements: React.FC = () => {
                 <h2 className="text-xl font-bold text-gray-800">
                   {isEditOpen ? "Edit Achievement" : "Create Achievement"}
                 </h2>
-                <button
-                  onClick={closeModals}
-                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                >
+                <button onClick={closeModals} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -461,15 +410,13 @@ const Achievements: React.FC = () => {
               {/* Content */}
               <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-5 custom-scrollbar">
                 <div className="flex flex-col items-center gap-4 mb-2">
-                  <label className="text-sm font-semibold text-gray-600 self-start">
-                    Achievement Badge
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600 self-start">Achievement Badge</label>
                   <div className="relative group">
-                    <label 
+                    <label
                       htmlFor="achievement-badge-upload"
                       className="w-24 h-24 rounded-2xl bg-white flex items-center justify-center border-2 border-dashed border-gray-200 hover:border-[#ECA468]/50 transition-all overflow-hidden shadow-inner cursor-pointer relative"
                     >
-                      {(badgeImage || values.imageUrl) ? (
+                      {badgeImage || values.imageUrl ? (
                         <img
                           src={badgeImage || values.imageUrl}
                           alt="Badge Preview"
@@ -478,7 +425,7 @@ const Achievements: React.FC = () => {
                       ) : (
                         <ImageIcon className="w-8 h-8 text-gray-200" />
                       )}
-                      
+
                       {/* Hover Overlay */}
                       <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Upload className="w-6 h-6 text-white" />
@@ -503,9 +450,7 @@ const Achievements: React.FC = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Achievement Title
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Achievement Title</label>
                   <input
                     type="text"
                     name="title"
@@ -514,15 +459,11 @@ const Achievements: React.FC = () => {
                     placeholder="e.g. Speed Demon"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
                   />
-                  {formErrors.title && (
-                    <p className="text-red-400 text-xs px-1">{formErrors.title}</p>
-                  )}
+                  {formErrors.title && <p className="text-red-400 text-xs px-1">{formErrors.title}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Description
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Description</label>
                   <textarea
                     name="description"
                     value={values.description}
@@ -531,18 +472,12 @@ const Achievements: React.FC = () => {
                     placeholder="What is this achievement for?"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 resize-none placeholder:text-gray-300 font-medium"
                   />
-                  {formErrors.description && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.description}
-                    </p>
-                  )}
+                  {formErrors.description && <p className="text-red-400 text-xs px-1">{formErrors.description}</p>}
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-gray-600">
-                      Min WPM
-                    </label>
+                    <label className="text-sm font-semibold text-gray-600">Min WPM</label>
                     <input
                       type="number"
                       name="minWpm"
@@ -553,9 +488,7 @@ const Achievements: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-gray-600">
-                      Min Acc %
-                    </label>
+                    <label className="text-sm font-semibold text-gray-600">Min Acc %</label>
                     <input
                       type="number"
                       name="minAccuracy"
@@ -566,9 +499,7 @@ const Achievements: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-gray-600">
-                      Min Games
-                    </label>
+                    <label className="text-sm font-semibold text-gray-600">Min Games</label>
                     <input
                       type="number"
                       name="minGame"
@@ -581,9 +512,7 @@ const Achievements: React.FC = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    XP Reward
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">XP Reward</label>
                   <input
                     type="number"
                     name="xp"
@@ -592,11 +521,7 @@ const Achievements: React.FC = () => {
                     placeholder="e.g. 500"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 font-medium"
                   />
-                  {formErrors.xp && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.xp}
-                    </p>
-                  )}
+                  {formErrors.xp && <p className="text-red-400 text-xs px-1">{formErrors.xp}</p>}
                 </div>
 
                 {/* Footer Buttons */}
@@ -611,9 +536,9 @@ const Achievements: React.FC = () => {
                     onClick={handleSubmit}
                     disabled={isImageProcessing}
                     className={`px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-sm ${
-                      isImageProcessing 
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
-                      : "bg-[#A68F7A] text-white hover:bg-[#8D7763]"
+                      isImageProcessing
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-[#A68F7A] text-white hover:bg-[#8D7763]"
                     }`}
                   >
                     {isImageProcessing ? "Processing..." : isEditOpen ? "Update" : "Create"}
@@ -622,7 +547,7 @@ const Achievements: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       <ConfirmModal

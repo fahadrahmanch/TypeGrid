@@ -40,9 +40,7 @@ const ContestArea: React.FC = () => {
   // Prevent default interactions like zoom, copy, paste, and scroll
   const [loading, setLoading] = useState(true);
   const [countdown, setCountdown] = useState<number>(10);
-  const [remainingTime, setRemainingTime] = useState<number>(
-    Number(contestData?.duration),
-  );
+  const [remainingTime, setRemainingTime] = useState<number>(Number(contestData?.duration));
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [isFinished, setIsFinished] = useState<boolean>(false);
@@ -150,10 +148,7 @@ const ContestArea: React.FC = () => {
       const relativeTop = elementRect.top - containerRect.top;
       const relativeBottom = elementRect.bottom - containerRect.top;
 
-      if (
-        relativeBottom > containerRect.height / 2 ||
-        relativeTop < containerRect.height / 3
-      ) {
+      if (relativeBottom > containerRect.height / 2 || relativeTop < containerRect.height / 3) {
         element.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
@@ -178,9 +173,7 @@ const ContestArea: React.FC = () => {
         setCountdown(contestData.countDown - elapsed);
       } else if (elapsed < contestData.countDown + contestData.duration) {
         setPhase("PLAY");
-        setRemainingTime(
-          contestData.countDown + contestData.duration - elapsed,
-        );
+        setRemainingTime(contestData.countDown + contestData.duration - elapsed);
 
         setElapsedTime(elapsed - contestData.countDown);
       } else {
@@ -191,12 +184,7 @@ const ContestArea: React.FC = () => {
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [
-    contestData?.startTime,
-    contestData?.duration,
-    contestData?.countDown,
-    isFinished,
-  ]);
+  }, [contestData?.startTime, contestData?.duration, contestData?.countDown, isFinished]);
 
   //wpm
   useEffect(() => {
@@ -242,9 +230,7 @@ const ContestArea: React.FC = () => {
       // Cursor logic
       const isCurrentChar = index === typedText.length;
       const cursorClass =
-        isCurrentChar && phase === "PLAY" && !isFinished
-          ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]"
-          : "";
+        isCurrentChar && phase === "PLAY" && !isFinished ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]" : "";
 
       // ** Ghost Cursors Logic **
       //   const playersHere = livePlayers.filter(
@@ -322,26 +308,20 @@ const ContestArea: React.FC = () => {
       prev.map((p: any) =>
         p._id === user._id
           ? {
-            ...p,
-            wpm,
-            accuracy,
-            errors,
-            progress: typedText.length,
-          }
-          : p,
-      ),
+              ...p,
+              wpm,
+              accuracy,
+              errors,
+              progress: typedText.length,
+            }
+          : p
+      )
     );
   }, [wpm, accuracy, errors, typedText, user, contestData]);
 
-  const progressPercentage = Math.round(
-    (typedText.length / (contestData?.contestText?.length || 0)) * 100,
-  );
+  const progressPercentage = Math.round((typedText.length / (contestData?.contestText?.length || 0)) * 100);
   if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center text-xl font-semibold">
-        Loading Contest...
-      </div>
-    );
+    return <div className="h-screen flex items-center justify-center text-xl font-semibold">Loading Contest...</div>;
   }
   if (!contestData) return null;
   return (
@@ -361,9 +341,7 @@ const ContestArea: React.FC = () => {
                 Contest Results
                 <Trophy className="w-10 h-10 text-[#ECA468]" />
               </h1>
-              <p className="text-slate-500 font-medium">
-                Top performers this contest
-              </p>
+              <p className="text-slate-500 font-medium">Top performers this contest</p>
             </div>
 
             <div className="w-full max-w-2xl bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 overflow-hidden relative">
@@ -403,9 +381,7 @@ const ContestArea: React.FC = () => {
                             3
                           </div>
                         ) : (
-                          <span className="text-slate-400 font-bold">
-                            #{result.rank || index + 1}
-                          </span>
+                          <span className="text-slate-400 font-bold">#{result.rank || index + 1}</span>
                         )}
                       </div>
 
@@ -417,25 +393,16 @@ const ContestArea: React.FC = () => {
                         />
                         <div>
                           <div className="font-bold text-slate-800 text-sm">
-                            {result.name}{" "}
-                            {result.userId === user?._id && "(You)"}
+                            {result.name} {result.userId === user?._id && "(You)"}
                           </div>
                         </div>
                       </div>
 
-                      <div className="text-right font-black text-slate-800 text-lg">
-                        {result.wpm}
-                      </div>
-                      <div className="text-right font-bold text-[#8CA78A]">
-                        {result.accuracy}%
-                      </div>
-                      <div className="text-right font-mono text-slate-500 text-xs">
-                        {formatTime(result.timeTaken)}
-                      </div>
+                      <div className="text-right font-black text-slate-800 text-lg">{result.wpm}</div>
+                      <div className="text-right font-bold text-[#8CA78A]">{result.accuracy}%</div>
+                      <div className="text-right font-mono text-slate-500 text-xs">{formatTime(result.timeTaken)}</div>
                       <div className="text-right font-bold text-[#ECA468]">
-                        {contestData?.rewards?.find(
-                          (r) => r.rank === result.rank,
-                        )?.prize
+                        {contestData?.rewards?.find((r) => r.rank === result.rank)?.prize
                           ? `$${contestData.rewards.find((r) => r.rank === result.rank)?.prize}`
                           : "-"}
                       </div>
@@ -471,9 +438,7 @@ const ContestArea: React.FC = () => {
                       Speed (WPM)
                     </span>
                     <div className="flex items-baseline gap-1 relative z-10">
-                      <span className="text-2xl font-black text-slate-800">
-                        {wpm}
-                      </span>
+                      <span className="text-2xl font-black text-slate-800">{wpm}</span>
                     </div>
                   </div>
                   {/* Accuracy */}
@@ -482,23 +447,15 @@ const ContestArea: React.FC = () => {
                       Accuracy
                     </span>
                     <div className="flex items-baseline gap-1 relative z-10">
-                      <span className="text-2xl font-black text-slate-800">
-                        {accuracy ?? 100}
-                      </span>
-                      <span className="text-[10px] font-bold text-slate-400">
-                        %
-                      </span>
+                      <span className="text-2xl font-black text-slate-800">{accuracy ?? 100}</span>
+                      <span className="text-[10px] font-bold text-slate-400">%</span>
                     </div>
                   </div>
                   {/* Errors */}
                   <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-rose-50 transition-colors border border-[#f8e8c8]/40 group-hover:border-rose-200">
-                    <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">
-                      Errors
-                    </span>
+                    <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">Errors</span>
                     <div className="flex items-baseline gap-1 relative z-10">
-                      <span className="text-2xl font-black text-slate-800">
-                        {errors}
-                      </span>
+                      <span className="text-2xl font-black text-slate-800">{errors}</span>
                     </div>
                   </div>
                   {/* Time Left */}
@@ -551,15 +508,9 @@ const ContestArea: React.FC = () => {
                               {player.name}
                             </p>
                             {isDisconnected && (
-                              <div className="text-[8px] text-red-400 font-bold mb-1">
-                                Disconnected
-                              </div>
+                              <div className="text-[8px] text-red-400 font-bold mb-1">Disconnected</div>
                             )}
-                            {isLeft && (
-                              <div className="text-[8px] text-red-500 font-bold mb-1">
-                                Left
-                              </div>
-                            )}
+                            {isLeft && <div className="text-[8px] text-red-500 font-bold mb-1">Left</div>}
                             <div className="relative">
                               <img
                                 src={player.imageUrl}
@@ -630,12 +581,8 @@ const ContestArea: React.FC = () => {
               {/* Visual Racing Track at the top */}
               <div className="bg-white/40 backdrop-blur-md rounded-2xl p-4 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 mb-6 shrink-0 z-20">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-slate-500 uppercase">
-                    Your Progress
-                  </span>
-                  <span className="text-sm font-black text-[#ECA468]">
-                    {progressPercentage}%
-                  </span>
+                  <span className="text-xs font-bold text-slate-500 uppercase">Your Progress</span>
+                  <span className="text-sm font-black text-[#ECA468]">{progressPercentage}%</span>
                 </div>
 
                 <div className="relative h-4 bg-[#f8e8c8]/30 rounded-full overflow-hidden shadow-inner flex items-center px-1">
@@ -643,11 +590,7 @@ const ContestArea: React.FC = () => {
                     const isMe = player.userId === user?._id;
                     const isDisconnected = player.status === "DISCONNECTED";
                     const isLeft = player.status === "LEFT";
-                    const pos = Math.round(
-                      (player.progress /
-                        (contestData?.contestText?.length || 0)) *
-                      100,
-                    );
+                    const pos = Math.round((player.progress / (contestData?.contestText?.length || 0)) * 100);
                     return (
                       <div
                         key={`track-${player.userId}`}
@@ -655,10 +598,7 @@ const ContestArea: React.FC = () => {
                         style={{ left: `${Math.max(2, Math.min(pos, 98))}%` }}
                       >
                         <img
-                          src={
-                            player.imageUrl ||
-                            `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`
-                          }
+                          src={player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`}
                           className={`w-6 h-6 rounded-full border-2 ${isMe ? "border-[#ECA468] ring-2 ring-[#FADDB8]" : "border-white"} shadow-md`}
                           alt={player.name}
                         />
@@ -699,9 +639,7 @@ const ContestArea: React.FC = () => {
                         <Crown className="w-4 h-4 text-[#ECA468]" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-black text-sm leading-none">
-                          Race Finished!
-                        </span>
+                        <span className="font-black text-sm leading-none">Race Finished!</span>
                         <span className="text-[10px] uppercase font-bold tracking-wider opacity-80 mt-0.5">
                           Waiting for others...
                         </span>
@@ -734,9 +672,7 @@ const ContestArea: React.FC = () => {
                       <p className="text-[#D0864B] font-bold uppercase tracking-[0.5em] text-sm animate-pulse">
                         Prepare to type
                       </p>
-                      <p className="text-slate-400 text-xs font-semibold">
-                        Place your hands on the keyboard
-                      </p>
+                      <p className="text-slate-400 text-xs font-semibold">Place your hands on the keyboard</p>
                     </div>
                   </div>
                 )}

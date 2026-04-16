@@ -2,17 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Navbar from "../../../components/user/Navbar";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTypiingPracticeLessonById } from "../../../api/user/typingPracticeService";
-import {
-  Zap,
-  Target,
-  Clock,
-  AlertCircle,
-  RotateCcw,
-  Trophy,
-  ArrowLeft,
-  Layout,
-  BarChart3,
-} from "lucide-react";
+import { Zap, Target, Clock, AlertCircle, RotateCcw, Trophy, ArrowLeft, Layout, BarChart3 } from "lucide-react";
 
 const TypingPracticeArea = () => {
   const { lessonId } = useParams<{ lessonId?: string }>();
@@ -72,14 +62,11 @@ const TypingPracticeArea = () => {
     const elaspedTime = (Date.now() - countDown) / 1000;
     const minutes = elaspedTime / 60;
     const correctChars = typedText.length - errorCount;
-    const calculatedWpm =
-      minutes > 0 ? Math.round(correctChars / 5 / minutes) : 0;
+    const calculatedWpm = minutes > 0 ? Math.round(correctChars / 5 / minutes) : 0;
 
     setWpm(isFinite(calculatedWpm) && calculatedWpm > 0 ? calculatedWpm : 0);
 
-    const calculatedAccuracy = typedText.length
-      ? Math.floor((correctChars / typedText.length) * 100)
-      : 100;
+    const calculatedAccuracy = typedText.length ? Math.floor((correctChars / typedText.length) * 100) : 100;
     setAccuracy(calculatedAccuracy);
   }, [typedText]);
 
@@ -96,10 +83,7 @@ const TypingPracticeArea = () => {
       const relativeBottom = elementRect.bottom - containerRect.top;
 
       // Keep cursor in middle-ish of view
-      if (
-        relativeBottom > containerRect.height / 2 ||
-        relativeTop < containerRect.height / 3
-      ) {
+      if (relativeBottom > containerRect.height / 2 || relativeTop < containerRect.height / 3) {
         element.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
@@ -122,9 +106,7 @@ const TypingPracticeArea = () => {
       // Cursor logic
       const isCurrentChar = index === typedText.length;
       const cursorClass =
-        isCurrentChar && !isFinished
-          ? "border-l-[3px] border-orange-500 animate-pulse -ml-[1.5px] pl-[1.5px]"
-          : "";
+        isCurrentChar && !isFinished ? "border-l-[3px] border-orange-500 animate-pulse -ml-[1.5px] pl-[1.5px]" : "";
 
       return (
         <span
@@ -152,13 +134,7 @@ const TypingPracticeArea = () => {
         e.preventDefault();
       }
 
-      if (
-        !countDown &&
-        e.key.length === 1 &&
-        !e.ctrlKey &&
-        !e.metaKey &&
-        !e.altKey
-      ) {
+      if (!countDown && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
         setCountDown(Date.now());
       }
 
@@ -208,9 +184,7 @@ const TypingPracticeArea = () => {
             <div className="w-8 h-8 rounded-full bg-white border border-orange-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
               <ArrowLeft className="w-4 h-4" />
             </div>
-            <span className="font-bold text-sm tracking-wide uppercase">
-              Back to Menu
-            </span>
+            <span className="font-bold text-sm tracking-wide uppercase">Back to Menu</span>
           </button>
         </div>
 
@@ -224,20 +198,14 @@ const TypingPracticeArea = () => {
                   <Layout className="w-5 h-5 text-orange-500" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-lg text-gray-800 leading-tight">
-                    Practice
-                  </h3>
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">
-                    Session Info
-                  </p>
+                  <h3 className="font-extrabold text-lg text-gray-800 leading-tight">Practice</h3>
+                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Session Info</p>
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Difficulty
-                  </span>
+                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Difficulty</span>
                   <span
                     className={`
                                 px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border
@@ -254,9 +222,7 @@ const TypingPracticeArea = () => {
                   </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Category
-                  </span>
+                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Category</span>
                   <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100 uppercase tracking-wide">
                     {Content?.category || "Types"}
                   </span>
@@ -277,9 +243,7 @@ const TypingPracticeArea = () => {
                 <div className="p-2.5 bg-emerald-50 rounded-xl">
                   <BarChart3 className="w-5 h-5 text-emerald-500" />
                 </div>
-                <h3 className="font-extrabold text-lg text-gray-800">
-                  Live Stats
-                </h3>
+                <h3 className="font-extrabold text-lg text-gray-800">Live Stats</h3>
               </div>
 
               <div className="space-y-6">
@@ -300,9 +264,7 @@ const TypingPracticeArea = () => {
                     <span className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                       <Zap className="w-3.5 h-3.5 text-orange-400" /> WPM
                     </span>
-                    <span className="font-bold text-xl text-gray-800">
-                      {wpm}
-                    </span>
+                    <span className="font-bold text-xl text-gray-800">{wpm}</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                     <div
@@ -315,12 +277,9 @@ const TypingPracticeArea = () => {
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                      <Target className="w-3.5 h-3.5 text-emerald-400" />{" "}
-                      Accuracy
+                      <Target className="w-3.5 h-3.5 text-emerald-400" /> Accuracy
                     </span>
-                    <span className="font-bold text-xl text-gray-800">
-                      {accuracy}%
-                    </span>
+                    <span className="font-bold text-xl text-gray-800">{accuracy}%</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                     <div
@@ -334,9 +293,7 @@ const TypingPracticeArea = () => {
                   <span className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                     <AlertCircle className="w-3.5 h-3.5 text-red-400" /> Errors
                   </span>
-                  <span className="font-mono font-bold text-xl text-gray-800">
-                    {errors}
-                  </span>
+                  <span className="font-mono font-bold text-xl text-gray-800">{errors}</span>
                 </div>
               </div>
             </div>
@@ -346,9 +303,7 @@ const TypingPracticeArea = () => {
           <div className="bg-white rounded-3xl p-8 shadow-2xl shadow-orange-100/50 border border-orange-100 flex flex-col min-h-[600px]">
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-baseline gap-3">
-                <h2 className="text-3xl font-extrabold text-gray-800 tracking-tight">
-                  Typing Practice
-                </h2>
+                <h2 className="text-3xl font-extrabold text-gray-800 tracking-tight">Typing Practice</h2>
                 {!isFinished && !countDown && (
                   <span className="text-xs font-bold text-orange-500 uppercase tracking-wide animate-pulse">
                     Waiting to start...
@@ -356,8 +311,7 @@ const TypingPracticeArea = () => {
                 )}
                 {countDown && !isFinished && (
                   <span className="bg-green-100 text-green-700 text-[10px] uppercase font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>{" "}
-                    Live
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span> Live
                   </span>
                 )}
               </div>
@@ -379,10 +333,8 @@ const TypingPracticeArea = () => {
             <div className="mt-6 flex justify-between items-center text-xs text-gray-400 font-bold uppercase tracking-wider">
               <span>Press any key to start</span>
               <span className="flex items-center gap-2">
-                <span className="px-1.5 py-0.5 border border-gray-200 rounded bg-white shadow-sm">
-                  Tab
-                </span>{" "}
-                to reset focus
+                <span className="px-1.5 py-0.5 border border-gray-200 rounded bg-white shadow-sm">Tab</span> to reset
+                focus
               </span>
             </div>
           </div>
@@ -401,40 +353,27 @@ const TypingPracticeArea = () => {
                   <CheckCircle className="w-10 h-10 text-emerald-500" />
                 )}
               </div>
-              <h2 className="text-3xl font-extrabold text-gray-900 mb-2">
-                Session Complete!
-              </h2>
-              <p className="text-gray-500 font-medium">
-                Great work keeping up the pace.
-              </p>
+              <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Session Complete!</h2>
+              <p className="text-gray-500 font-medium">Great work keeping up the pace.</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
               <div className="bg-orange-50/50 p-4 rounded-2xl border border-orange-100 text-center">
-                <p className="text-xs text-orange-600 font-bold uppercase tracking-wider mb-1">
-                  Speed
-                </p>
+                <p className="text-xs text-orange-600 font-bold uppercase tracking-wider mb-1">Speed</p>
                 <p className="text-3xl font-black text-gray-800">
-                  {wpm}{" "}
-                  <span className="text-sm font-bold text-gray-400">WPM</span>
+                  {wpm} <span className="text-sm font-bold text-gray-400">WPM</span>
                 </p>
               </div>
               <div className="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100 text-center">
-                <p className="text-xs text-emerald-600 font-bold uppercase tracking-wider mb-1">
-                  Accuracy
-                </p>
+                <p className="text-xs text-emerald-600 font-bold uppercase tracking-wider mb-1">Accuracy</p>
                 <p className="text-3xl font-black text-gray-800">{accuracy}%</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">
-                  Time
-                </p>
+                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Time</p>
                 <p className="text-xl font-bold text-gray-800">{time}s</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">
-                  Errors
-                </p>
+                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Errors</p>
                 <p className="text-xl font-bold text-gray-800">{errors}</p>
               </div>
             </div>

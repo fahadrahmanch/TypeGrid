@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Users,
-  Clock,
-  Calendar,
-  Trophy,
-  ChevronRight,
-  Activity,
-  Zap,
-} from "lucide-react";
+import { Users, Clock, Calendar, Trophy, ChevronRight, Activity, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { joinOrLeaveContestApi } from "../../../api/companyUser/contests";
 import { useState } from "react";
@@ -85,9 +77,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
   const [isJoined, setIsJoined] = useState(joined);
   // const [participantList, setParticipantList] = useState<User[]>([]);
   // const [isHovered, setIsHovered] = useState(false);
-  const [participantsCount, setParticipantsCount] = useState<number>(
-    participants.length,
-  );
+  const [participantsCount, setParticipantsCount] = useState<number>(participants.length);
   const navigate = useNavigate();
 
   async function handleClick(contestId: string, actionLabel: string) {
@@ -150,9 +140,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
           className={`flex flex-col items-center justify-center px-3 py-1.5 rounded-lg border shadow-sm ${getLevelBadgeStyle(difficulty)}`}
         >
           <Zap className="w-3.5 h-3.5 mb-0.5" />
-          <span className="text-[11px] font-bold uppercase tracking-wider">
-            {difficulty}
-          </span>
+          <span className="text-[11px] font-bold uppercase tracking-wider">{difficulty}</span>
         </div>
       </div>
 
@@ -168,10 +156,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
       {tags && tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {tags.map((tag, index) => (
-            <span
-              key={index}
-              className={`text-[10px] font-semibold tracking-wide px-2 py-1 rounded-md ${tag.color}`}
-            >
+            <span key={index} className={`text-[10px] font-semibold tracking-wide px-2 py-1 rounded-md ${tag.color}`}>
               {tag.label}
             </span>
           ))}
@@ -198,12 +183,8 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
                   key={r.rank}
                   className="flex items-center bg-white/40 backdrop-blur-sm rounded-xl px-3 py-2 shadow-sm border border-[#f8e8c8]/40"
                 >
-                  <span className="text-xs font-black text-[#ECA468] mr-2">
-                    {getRankStr(r.rank)}
-                  </span>
-                  <span className="text-sm font-black text-slate-700">
-                    ₹{r.prize}
-                  </span>
+                  <span className="text-xs font-black text-[#ECA468] mr-2">{getRankStr(r.rank)}</span>
+                  <span className="text-sm font-black text-slate-700">₹{r.prize}</span>
                 </div>
               );
             })}

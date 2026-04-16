@@ -3,10 +3,7 @@ import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 import { X, Calendar, Clock, Trash, Plus, Users, Globe } from "lucide-react";
 import { getCompanyGroups } from "../../../api/companyAdmin/companyGroup";
-import {
-  updateCompanyContest,
-  fetchContest,
-} from "../../../api/companyAdmin/companyContextAPI";
+import { updateCompanyContest, fetchContest } from "../../../api/companyAdmin/companyContextAPI";
 import { ContestProps } from "../../../types/contest";
 interface EditContestModalProps {
   isOpen: boolean;
@@ -23,13 +20,7 @@ interface RewardRank {
   prize: string;
 }
 
-const EditContestModal: React.FC<EditContestModalProps> = ({
-  isOpen,
-  onClose,
-  contestId,
-  onUpdate,
-  setContests,
-}) => {
+const EditContestModal: React.FC<EditContestModalProps> = ({ isOpen, onClose, contestId, onUpdate, setContests }) => {
   const [contestMode, setContestMode] = useState<"group" | "open">("group");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -88,9 +79,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
           }
 
           setDuration(data.duration ? data.duration.toString() : "30");
-          setMaxParticipants(
-            data.maxParticipants ? data.maxParticipants.toString() : "10",
-          );
+          setMaxParticipants(data.maxParticipants ? data.maxParticipants.toString() : "10");
 
           if (data.rewards && data.rewards.length > 0) {
             setRewards(
@@ -99,7 +88,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 place: `${r.rank || idx + 1}${["st", "nd", "rd"][(r.rank || idx + 1) - 1] || "th"} Place`,
                 type: "Money ($)", // assuming all are money, or map type appropriately
                 prize: r.prize?.toString() || "",
-              })),
+              }))
             );
           } else if (data.prize) {
             setRewards([
@@ -144,10 +133,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
     if (contestMode === "group" && !targetGroup) {
       newErrors.targetGroup = "Please select a target group.";
     }
-    if (
-      textSource === "manual" &&
-      (!contestText.trim() || contestText.length < 10)
-    ) {
+    if (textSource === "manual" && (!contestText.trim() || contestText.length < 10)) {
       newErrors.contestText = "Contest text must be at least 10 characters.";
     }
     if (!date) {
@@ -194,16 +180,10 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
 
       try {
         const response = await updateCompanyContest(contestId, data);
-        if (
-          response.data?.success ||
-          response.status === 200 ||
-          response.data
-        ) {
+        if (response.data?.success || response.status === 200 || response.data) {
           toast.success("Contest updated successfully");
           if (onUpdate) onUpdate();
-          setContests((prev: any) =>
-            prev.map((c: any) => (c._id === contestId ? { ...c, ...data } : c)),
-          );
+          setContests((prev: any) => prev.map((c: any) => (c._id === contestId ? { ...c, ...data } : c)));
           onClose();
         } else {
           toast.error("Failed to update contest");
@@ -234,14 +214,8 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
     setRewards(rewards.filter((r) => r.rank !== rank));
   };
 
-  const handleRewardChange = (
-    rank: number,
-    field: keyof RewardRank,
-    value: string,
-  ) => {
-    setRewards(
-      rewards.map((r) => (r.rank === rank ? { ...r, [field]: value } : r)),
-    );
+  const handleRewardChange = (rank: number, field: keyof RewardRank, value: string) => {
+    setRewards(rewards.map((r) => (r.rank === rank ? { ...r, [field]: value } : r)));
   };
 
   if (!isOpen) return null;
@@ -266,27 +240,21 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
             </div>
           )}
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-gray-700 block">
-              Contest Mode
-            </label>
+            <label className="text-sm font-semibold text-gray-700 block">Contest Mode</label>
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => setContestMode("group")}
                 className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "group" ? "border-[#ECA468] bg-[#FFF4EC]/50" : "border-gray-100 hover:border-[#FADDB8] hover:bg-gray-50"}`}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Users
-                    className={`w-5 h-5 ${contestMode === "group" ? "text-[#ECA468]" : "text-gray-400"}`}
-                  />
+                  <Users className={`w-5 h-5 ${contestMode === "group" ? "text-[#ECA468]" : "text-gray-400"}`} />
                   <span
                     className={`font-black uppercase tracking-widest text-[10px] ${contestMode === "group" ? "text-[#D0864B]" : "text-gray-500"}`}
                   >
                     Group Contest
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 text-left">
-                  Only selected groups can participate
-                </p>
+                <p className="text-xs text-gray-500 text-left">Only selected groups can participate</p>
               </button>
 
               <button
@@ -294,27 +262,21 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${contestMode === "open" ? "border-[#ECA468] bg-[#FFF4EC]/50" : "border-gray-100 hover:border-[#FADDB8] hover:bg-gray-50"}`}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <Globe
-                    className={`w-5 h-5 ${contestMode === "open" ? "text-[#ECA468]" : "text-gray-400"}`}
-                  />
+                  <Globe className={`w-5 h-5 ${contestMode === "open" ? "text-[#ECA468]" : "text-gray-400"}`} />
                   <span
                     className={`font-black uppercase tracking-widest text-[10px] ${contestMode === "open" ? "text-[#D0864B]" : "text-gray-500"}`}
                   >
                     Open Contest
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 text-left">
-                  First users to book can join
-                </p>
+                <p className="text-xs text-gray-500 text-left">First users to book can join</p>
               </button>
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">
-                Contest Name
-              </label>
+              <label className="text-sm font-semibold text-gray-700">Contest Name</label>
               <input
                 type="text"
                 placeholder="Enter contest name"
@@ -325,44 +287,34 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 }}
                 className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.title ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
               />
-              {errors.title && (
-                <p className="text-red-500 text-xs mt-1">{errors.title}</p>
-              )}
+              {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">
-              Description
-            </label>
+            <label className="text-sm font-semibold text-gray-700">Description</label>
             <textarea
               placeholder="Describe the contest..."
               rows={3}
               value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
-                if (errors.description)
-                  setErrors({ ...errors, description: "" });
+                if (errors.description) setErrors({ ...errors, description: "" });
               }}
               className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none ${errors.description ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
             />
-            {errors.description && (
-              <p className="text-red-500 text-xs mt-1">{errors.description}</p>
-            )}
+            {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
           </div>
 
           {contestMode === "group" && (
             <div className="space-y-2 animate-fadeIn">
-              <label className="text-sm font-semibold text-gray-700">
-                Target Group
-              </label>
+              <label className="text-sm font-semibold text-gray-700">Target Group</label>
               <div className="relative">
                 <select
                   value={targetGroup}
                   onChange={(e) => {
                     setTargetGroup(e.target.value);
-                    if (errors.targetGroup)
-                      setErrors({ ...errors, targetGroup: "" });
+                    if (errors.targetGroup) setErrors({ ...errors, targetGroup: "" });
                   }}
                   className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm appearance-none cursor-pointer ${errors.targetGroup ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
                 >
@@ -376,33 +328,17 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                   ))}
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    ></path>
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
                 </div>
               </div>
-              {errors.targetGroup && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.targetGroup}
-                </p>
-              )}
+              {errors.targetGroup && <p className="text-red-500 text-xs mt-1">{errors.targetGroup}</p>}
             </div>
           )}
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">
-              Difficulty Level
-            </label>
+            <label className="text-sm font-semibold text-gray-700">Difficulty Level</label>
             <div className="grid grid-cols-3 gap-3">
               {["easy", "medium", "hard"].map((level) => (
                 <button
@@ -417,17 +353,13 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
           </div>
 
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-gray-700">
-              Text Source
-            </label>
+            <label className="text-sm font-semibold text-gray-700">Text Source</label>
             <div className="flex items-center gap-6">
               <label className="flex items-center gap-2 cursor-pointer group">
                 <div
                   className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${textSource === "manual" ? "border-blue-600" : "border-gray-300 group-hover:border-blue-400"}`}
                 >
-                  {textSource === "manual" && (
-                    <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
-                  )}
+                  {textSource === "manual" && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
                 </div>
                 <input
                   type="radio"
@@ -444,9 +376,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 <div
                   className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${textSource === "random" ? "border-blue-600" : "border-gray-300 group-hover:border-blue-400"}`}
                 >
-                  {textSource === "random" && (
-                    <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
-                  )}
+                  {textSource === "random" && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
                 </div>
                 <input
                   type="radio"
@@ -466,33 +396,24 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
 
           {textSource === "manual" && (
             <div className="space-y-2 animate-fadeIn">
-              <label className="text-sm font-semibold text-gray-700">
-                Contest Text
-              </label>
+              <label className="text-sm font-semibold text-gray-700">Contest Text</label>
               <textarea
                 placeholder="Enter the text that participants will type..."
                 rows={4}
                 value={contestText}
                 onChange={(e) => {
                   setContestText(e.target.value);
-                  if (errors.contestText)
-                    setErrors({ ...errors, contestText: "" });
+                  if (errors.contestText) setErrors({ ...errors, contestText: "" });
                 }}
                 className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none font-mono ${errors.contestText ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
               />
-              {errors.contestText && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.contestText}
-                </p>
-              )}
+              {errors.contestText && <p className="text-red-500 text-xs mt-1">{errors.contestText}</p>}
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">
-                Date
-              </label>
+              <label className="text-sm font-semibold text-gray-700">Date</label>
               <div className="relative">
                 <input
                   type="date"
@@ -505,14 +426,10 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 />
                 <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
-              {errors.date && (
-                <p className="text-red-500 text-xs mt-1">{errors.date}</p>
-              )}
+              {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">
-                Duration (minutes)
-              </label>
+              <label className="text-sm font-semibold text-gray-700">Duration (minutes)</label>
               <div className="relative">
                 <input
                   type="number"
@@ -525,17 +442,13 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 />
                 <Clock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
-              {errors.duration && (
-                <p className="text-red-500 text-xs mt-1">{errors.duration}</p>
-              )}
+              {errors.duration && <p className="text-red-500 text-xs mt-1">{errors.duration}</p>}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">
-                Start Time
-              </label>
+              <label className="text-sm font-semibold text-gray-700">Start Time</label>
               <input
                 type="time"
                 value={startTime}
@@ -549,16 +462,13 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">
-              Maximum Participants
-            </label>
+            <label className="text-sm font-semibold text-gray-700">Maximum Participants</label>
             <div className="relative">
               <select
                 value={maxParticipants}
                 onChange={(e) => {
                   setMaxParticipants(e.target.value);
-                  if (errors.maxParticipants)
-                    setErrors({ ...errors, maxParticipants: "" });
+                  if (errors.maxParticipants) setErrors({ ...errors, maxParticipants: "" });
                 }}
                 className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm appearance-none cursor-pointer ${errors.maxParticipants ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
               >
@@ -569,33 +479,17 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 ))}
               </select>
               <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
+                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </div>
             </div>
-            {errors.maxParticipants && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.maxParticipants}
-              </p>
-            )}
+            {errors.maxParticipants && <p className="text-red-500 text-xs mt-1">{errors.maxParticipants}</p>}
           </div>
 
           <div className="space-y-4 pt-4 border-t border-gray-100">
             <div className="flex items-center justify-between">
-              <h3 className="text-md font-bold text-gray-900">
-                Reward /Point Management
-              </h3>
+              <h3 className="text-md font-bold text-gray-900">Reward /Point Management</h3>
               <button
                 onClick={handleAddReward}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-black uppercase tracking-widest text-[#D0864B] bg-[#FFF4EC] rounded-xl hover:bg-[#FADDB8] transition-colors"
@@ -604,9 +498,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                 Add Custom Rank
               </button>
             </div>
-            {errors.rewards && (
-              <p className="text-red-500 text-xs">{errors.rewards}</p>
-            )}
+            {errors.rewards && <p className="text-red-500 text-xs">{errors.rewards}</p>}
 
             <div className="space-y-3">
               {rewards.map((reward) => (
@@ -618,9 +510,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                     <input
                       type="text"
                       value={reward.place}
-                      onChange={(e) =>
-                        handleRewardChange(reward.rank, "place", e.target.value)
-                      }
+                      onChange={(e) => handleRewardChange(reward.rank, "place", e.target.value)}
                       className="w-full bg-transparent text-sm font-medium text-gray-900 placeholder-gray-400 focus:outline-none"
                       placeholder="Rank (e.g., 1st Place)"
                     />
@@ -629,9 +519,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                   <div className="w-32">
                     <select
                       value={reward.type}
-                      onChange={(e) =>
-                        handleRewardChange(reward.rank, "type", e.target.value)
-                      }
+                      onChange={(e) => handleRewardChange(reward.rank, "type", e.target.value)}
                       className="w-full bg-transparent text-sm text-gray-600 focus:outline-none cursor-pointer"
                     >
                       <option>Money ($)</option>
@@ -643,13 +531,8 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
                       type="text"
                       value={reward.prize}
                       onChange={(e) => {
-                        handleRewardChange(
-                          reward.rank,
-                          "prize",
-                          e.target.value,
-                        );
-                        if (errors.rewards)
-                          setErrors({ ...errors, rewards: "" });
+                        handleRewardChange(reward.rank, "prize", e.target.value);
+                        if (errors.rewards) setErrors({ ...errors, rewards: "" });
                       }}
                       className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none text-right"
                       placeholder="Value"
@@ -683,7 +566,7 @@ const EditContestModal: React.FC<EditContestModalProps> = ({
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };
 

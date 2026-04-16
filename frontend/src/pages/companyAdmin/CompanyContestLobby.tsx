@@ -29,9 +29,7 @@ const CompanyContestLobby: React.FC = () => {
         {/* Lobby Header Card */}
         <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">
-              Lobby Area
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-1">Lobby Area</h1>
             <p className="text-gray-500 font-medium">Speed Typing Challenge</p>
           </div>
           <span className="px-4 py-1.5 bg-yellow-100 text-yellow-800 text-xs font-bold uppercase tracking-wider rounded-lg border border-yellow-200">
@@ -54,10 +52,7 @@ const CompanyContestLobby: React.FC = () => {
         {/* Participants Section */}
         <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 min-h-[400px]">
           <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-            Participants{" "}
-            <span className="ml-2 text-gray-400 font-normal text-lg">
-              ( {participants.length})
-            </span>
+            Participants <span className="ml-2 text-gray-400 font-normal text-lg">( {participants.length})</span>
           </h2>
 
           <div className="space-y-3">
@@ -69,9 +64,7 @@ const CompanyContestLobby: React.FC = () => {
                 <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-4 text-gray-500">
                   <User className="w-5 h-5" />
                 </div>
-                <span className="font-semibold text-gray-800">
-                  {participant.name}
-                </span>
+                <span className="font-semibold text-gray-800">{participant.name}</span>
               </div>
             ))}
           </div>

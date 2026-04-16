@@ -37,11 +37,7 @@ const ProfileDiv1: React.FC = () => {
           {/* Avatar Placeholder */}
           <div className="flex-shrink-0">
             <img
-              src={
-                user.imageUrl
-                  ? user.imageUrl
-                  : "https://via.placeholder.com/150"
-              }
+              src={user.imageUrl ? user.imageUrl : "https://via.placeholder.com/150"}
               alt="Profile"
               className="w-32 h-32 rounded-full border-4 border-[#F0E4D4] object-cover"
             />{" "}
@@ -69,15 +65,11 @@ const ProfileDiv1: React.FC = () => {
               </div>
             </div>
             {/* Level */}
-            <p className="text-[#8C6B5D] font-bold text-sm mb-1 flex">
-              Level 12
-            </p>
+            <p className="text-[#8C6B5D] font-bold text-sm mb-1 flex">Level 12</p>
             {/* Email */}
             <p className="text-gray-500 text-base mb-3 flex">{user.email}</p>
             {/* Bio Description */}
-            <p className="text-gray-600 leading-relaxed max-w-2xl flex">
-              {user.bio}
-            </p>
+            <p className="text-gray-600 leading-relaxed max-w-2xl flex">{user.bio}</p>
           </div>
         </div>
         {/* Right Side: Action Buttons */}

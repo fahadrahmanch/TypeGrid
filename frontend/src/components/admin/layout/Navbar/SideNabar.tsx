@@ -34,12 +34,7 @@ const SideNavbar: React.FC = () => {
       </div>
 
       {/* Overlay */}
-      {open && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
+      {open && <div className="fixed inset-0 bg-black/40 z-40 md:hidden" onClick={() => setOpen(false)} />}
 
       {/* Sidebar */}
       <div

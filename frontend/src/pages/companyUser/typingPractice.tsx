@@ -20,18 +20,18 @@ const TypingPracticeLLM: React.FC = () => {
     try {
       const response = await generatePracticeText(prompt);
       const generatedText = response.data?.text || "The quick brown fox jumps over the lazy dog."; // Fallback for mock
-      
-      navigate("/company/user/practice-area", { 
-        state: { 
+
+      navigate("/company/user/practice-area", {
+        state: {
           text: generatedText,
           title: "Custom Practice",
-          type: "custom"
-        } 
+          type: "custom",
+        },
       });
     } catch (error) {
       console.error("Failed to generate practice text", error);
       toast.error("Failed to generate practice. Please try again.");
-      
+
       // For development/demo purposes, navigate anyway if it fails but we want to show the area
       /*
       navigate("/company/user/practice-area", { 
@@ -47,12 +47,10 @@ const TypingPracticeLLM: React.FC = () => {
     }
   };
 
-
-
   return (
     <div className="min-h-screen bg-[#FFF8EA] pt-24 pb-12 px-4 sm:px-6 lg:px-8 font-sans">
       <CompanyUserNavbar />
-      
+
       <div className="max-w-4xl mx-auto space-y-12">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Dynamic Practice</h1>
@@ -62,7 +60,7 @@ const TypingPracticeLLM: React.FC = () => {
         {/* LLM Generator Card */}
         <div className="bg-[#FFF3DB]/50 rounded-3xl p-8 border border-orange-100 shadow-xl shadow-orange-900/5 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-200/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
-          
+
           <div className="relative z-10 space-y-6">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-orange-400 rounded-2xl shadow-lg shadow-orange-400/20">
@@ -101,8 +99,6 @@ const TypingPracticeLLM: React.FC = () => {
             </button>
           </div>
         </div>
-
-        
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ export const useQuickPlaySocket = (
   elapsedTime: number,
   totalTyped: number,
   gameIdRef: React.MutableRefObject<string | undefined>,
-  userIdRef: React.MutableRefObject<string | undefined>,
+  userIdRef: React.MutableRefObject<string | undefined>
 ) => {
   const user = useSelector((state: any) => state.auth.user);
 
@@ -43,11 +43,7 @@ export const useQuickPlaySocket = (
   useEffect(() => {
     const handler = (data: any) => {
       setLivePlayers((prev: any) =>
-        prev.map((p: any) =>
-          p._id === data.userId
-            ? { ...p, ...data, progress: data.typedLength }
-            : p,
-        ),
+        prev.map((p: any) => (p._id === data.userId ? { ...p, ...data, progress: data.typedLength } : p))
       );
     };
 
@@ -82,9 +78,7 @@ export const useQuickPlaySocket = (
   useEffect(() => {
     const handleUserJoin = (data: any) => {
       setLivePlayers((prev: any) => {
-        const exists = prev.some(
-          (player: any) => player._id === data.member._id,
-        );
+        const exists = prev.some((player: any) => player._id === data.member._id);
 
         if (exists) return prev;
 

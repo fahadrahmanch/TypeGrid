@@ -73,9 +73,7 @@ export type GamePlayerResult = {
 const GroupPlay: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [gameData, setGameData] = useState<GameData | undefined>(
-    location.state?.gameData,
-  );
+  const [gameData, setGameData] = useState<GameData | undefined>(location.state?.gameData);
 
   const [chatMessage, setChatMessage] = useState("");
   const players = gameData?.participants || [];
@@ -85,9 +83,7 @@ const GroupPlay: React.FC = () => {
 
   const user = useSelector((state: any) => state.auth.user);
   const [countdown, setCountdown] = useState<number>(gameData?.countDown || 10);
-  const [remainingTime, setRemainingTime] = useState<number>(
-    gameData?.duration || 300,
-  );
+  const [remainingTime, setRemainingTime] = useState<number>(gameData?.duration || 300);
   const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
   const [hasError, setHasError] = useState(false);
   const chatBottomRef = useRef<HTMLDivElement>(null);
@@ -104,13 +100,7 @@ const GroupPlay: React.FC = () => {
   const userIdRef = useRef(user?._id);
 
   const [totalTyped, setTotalTyped] = useState(0);
-  const { wpm, accuracy } = useTypingStats(
-    totalTyped,
-    errors,
-    elapsedTime,
-    phase,
-    isFinished,
-  );
+  const { wpm, accuracy } = useTypingStats(totalTyped, errors, elapsedTime, phase, isFinished);
 
   const [currentUser, setCurrentUser] = useState<
     | {
@@ -139,8 +129,8 @@ const GroupPlay: React.FC = () => {
               errors,
               progress: typedText.length,
             }
-          : p,
-      ),
+          : p
+      )
     );
   }, [wpm, accuracy, errors, typedText, currentUser]);
 
@@ -198,15 +188,7 @@ const GroupPlay: React.FC = () => {
   });
 
   //countdown and game timer
-  useGameTimer(
-    gameData,
-    finalResult,
-    setPhase,
-    setCountdown,
-    setRemainingTime,
-    setElapsedTime,
-    setIsfinished,
-  );
+  useGameTimer(gameData, finalResult, setPhase, setCountdown, setRemainingTime, setElapsedTime, setIsfinished);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -232,14 +214,10 @@ const GroupPlay: React.FC = () => {
       // Cursor logic
       const isCurrentChar = index === typedText.length;
       const cursorClass =
-        isCurrentChar && phase === "PLAY" && !isFinished
-          ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]"
-          : "";
+        isCurrentChar && phase === "PLAY" && !isFinished ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]" : "";
 
       // ** Ghost Cursors Logic **
-      const playersHere = livePlayers.filter(
-        (p) => p._id !== currentUser?._id && p.progress === index,
-      );
+      const playersHere = livePlayers.filter((p) => p._id !== currentUser?._id && p.progress === index);
 
       return (
         <span
@@ -256,15 +234,9 @@ const GroupPlay: React.FC = () => {
             <div className="absolute -top-5 -left-1.5 z-20 flex flex-col items-center border-none select-none pointer-events-none transition-all duration-300 ease-out">
               <div className="flex -space-x-1 isolate">
                 {playersHere.map((p) => (
-                  <div
-                    key={p._id}
-                    className="relative group pointer-events-auto"
-                  >
+                  <div key={p._id} className="relative group pointer-events-auto">
                     <img
-                      src={
-                        p.imageUrl ||
-                        `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`
-                      }
+                      src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
                       className="w-4 h-4 rounded-full border border-white/50 bg-gray-100 shadow-sm object-cover opacity-60 hover:opacity-100 hover:scale-125 transition-all cursor-help"
                       alt={p.name}
                     />
@@ -317,11 +289,7 @@ const GroupPlay: React.FC = () => {
   }
 
   useEffect(() => {
-    const handleNewGameStarted = ({
-      competition,
-    }: {
-      competition: GameData;
-    }) => {
+    const handleNewGameStarted = ({ competition }: { competition: GameData }) => {
       navigate(`/group-play/game/${competition.JoinLink!}`, {
         state: { gameData: competition },
       });
@@ -377,10 +345,7 @@ const GroupPlay: React.FC = () => {
                 <div className="flex items-center gap-4 mb-6 relative">
                   <div className="relative hover:scale-105 transition-transform duration-300">
                     <img
-                      src={
-                        currentUser?.imageUrl ||
-                        "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                      }
+                      src={currentUser?.imageUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"}
                       alt="me"
                       className="w-16 h-16 rounded-2xl object-cover shadow-md shadow-orange-900/10 ring-4 ring-white"
                     />
@@ -412,28 +377,18 @@ const GroupPlay: React.FC = () => {
                   <div
                     className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-sm ${isFinished ? "bg-emerald-500 text-white" : "bg-orange-500 text-white animate-bounce-subtle"}`}
                   >
-                    {isFinished ? (
-                      <Crown className="w-4 h-4" />
-                    ) : (
-                      <Zap className="w-4 h-4" />
-                    )}
+                    {isFinished ? <Crown className="w-4 h-4" /> : <Zap className="w-4 h-4" />}
                   </div>
                   <div>
                     <div
                       className={`text-xs font-bold uppercase tracking-wider ${isFinished ? "text-emerald-800" : "text-orange-800"}`}
                     >
-                      {phase == "COUNTDOWN"
-                        ? "wait to start"
-                        : isFinished
-                          ? " Complete"
-                          : "Race in Progress"}
+                      {phase == "COUNTDOWN" ? "wait to start" : isFinished ? " Complete" : "Race in Progress"}
                     </div>
                     <div
                       className={`text-[10px] font-medium leading-tight ${isFinished ? "text-emerald-600" : "text-orange-600"}`}
                     >
-                      {isFinished
-                        ? "Waiting for others to finish..."
-                        : "Type correctly to win!"}
+                      {isFinished ? "Waiting for others to finish..." : "Type correctly to win!"}
                     </div>
                   </div>
                 </div>
@@ -444,15 +399,11 @@ const GroupPlay: React.FC = () => {
                       <div className="p-1.5 bg-orange-100 text-orange-500 rounded-lg group-hover/stat:scale-110 transition-transform">
                         <Zap className="w-3.5 h-3.5" />
                       </div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                        Speed
-                      </span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Speed</span>
                     </div>
                     <div className="text-2xl font-black text-gray-800 pl-1">
                       {wpm}
-                      <span className="text-xs text-gray-400 font-bold ml-1">
-                        wpm
-                      </span>
+                      <span className="text-xs text-gray-400 font-bold ml-1">wpm</span>
                     </div>
                   </div>
 
@@ -461,15 +412,11 @@ const GroupPlay: React.FC = () => {
                       <div className="p-1.5 bg-emerald-100 text-emerald-500 rounded-lg group-hover/stat:scale-110 transition-transform">
                         <Target className="w-3.5 h-3.5" />
                       </div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                        Accuracy
-                      </span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Accuracy</span>
                     </div>
                     <div className="text-2xl font-black text-gray-800 pl-1">
                       {accuracy ?? "--"}
-                      <span className="text-xs text-gray-400 font-bold ml-1">
-                        %
-                      </span>
+                      <span className="text-xs text-gray-400 font-bold ml-1">%</span>
                     </div>
                   </div>
 
@@ -478,13 +425,9 @@ const GroupPlay: React.FC = () => {
                       <div className="p-1.5 bg-blue-100 text-blue-500 rounded-lg group-hover/stat:scale-110 transition-transform">
                         <Clock className="w-3.5 h-3.5" />
                       </div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                        Time
-                      </span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Time</span>
                     </div>
-                    <div className="text-xl font-black text-gray-800 pl-1">
-                      {formatTime(elapsedTime)}
-                    </div>
+                    <div className="text-xl font-black text-gray-800 pl-1">{formatTime(elapsedTime)}</div>
                   </div>
 
                   <div className="bg-gray-50/50 p-3 rounded-2xl border border-gray-100 hover:border-red-200 hover:bg-white hover:shadow-md transition-all duration-300 group/stat">
@@ -492,13 +435,9 @@ const GroupPlay: React.FC = () => {
                       <div className="p-1.5 bg-red-100 text-red-500 rounded-lg group-hover/stat:scale-110 transition-transform">
                         <AlertCircle className="w-3.5 h-3.5" />
                       </div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                        Errors
-                      </span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Errors</span>
                     </div>
-                    <div className="text-xl font-black text-gray-800 pl-1">
-                      {errors}
-                    </div>
+                    <div className="text-xl font-black text-gray-800 pl-1">{errors}</div>
                   </div>
                 </div>
               </div>
@@ -598,9 +537,7 @@ const GroupPlay: React.FC = () => {
                         {/* Top Header Section - Larger padding */}
                         <div className="bg-[#FFF8EA] px-10 py-8 border-b border-orange-100 flex items-center justify-between shrink-0">
                           <div>
-                            <h2 className="text-4xl font-black text-gray-800 tracking-tight">
-                              Game Results
-                            </h2>
+                            <h2 className="text-4xl font-black text-gray-800 tracking-tight">Game Results</h2>
                             <p className="text-gray-500 font-bold text-base mt-2 uppercase tracking-wide">
                               Final Standings & Statistics
                             </p>
@@ -608,16 +545,11 @@ const GroupPlay: React.FC = () => {
                           <div className="bg-white p-4 rounded-3xl shadow-sm border border-orange-100 flex items-center gap-4 px-6">
                             <Crown className="w-10 h-10 text-orange-500 fill-orange-500" />
                             <div className="text-right">
-                              <div className="text-xs text-gray-400 font-bold uppercase tracking-wider">
-                                Top Speed
-                              </div>
+                              <div className="text-xs text-gray-400 font-bold uppercase tracking-wider">Top Speed</div>
                               <div className="text-xl font-black text-gray-800">
                                 {Math.max(
-                                  ...(finalResult.length > 0
-                                    ? finalResult
-                                    : livePlayers
-                                  ).map((p) => p.wpm || 0),
-                                  0,
+                                  ...(finalResult.length > 0 ? finalResult : livePlayers).map((p) => p.wpm || 0),
+                                  0
                                 )}{" "}
                                 WPM
                               </div>
@@ -734,9 +666,7 @@ const GroupPlay: React.FC = () => {
                                         {/* WPM Column */}
                                         <td className="py-3 px-6 text-center">
                                           <div className="flex flex-col items-center">
-                                            <div className="font-black text-xl text-gray-800">
-                                              {p.wpm || 0}
-                                            </div>
+                                            <div className="font-black text-xl text-gray-800">{p.wpm || 0}</div>
                                             <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">
                                               WPM
                                             </div>
@@ -746,9 +676,7 @@ const GroupPlay: React.FC = () => {
                                         {/* Accuracy Column */}
                                         <td className="py-3 px-6 text-center">
                                           <div className="flex flex-col items-center">
-                                            <div className="font-bold text-lg text-gray-600">
-                                              {p.accuracy || 0}%
-                                            </div>
+                                            <div className="font-bold text-lg text-gray-600">{p.accuracy || 0}%</div>
                                             <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">
                                               Acc
                                             </div>
@@ -821,22 +749,16 @@ const GroupPlay: React.FC = () => {
                       "w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:rotate-12 transition-transform duration-500"
                     }
                   >
-                    <Clock
-                      className={`w-6 h-6 ${remainingTime <= 10 ? "text-red-500" : "text-orange-500"}`}
-                    />
+                    <Clock className={`w-6 h-6 ${remainingTime <= 10 ? "text-red-500" : "text-orange-500"}`} />
                   </div>
                   <div className="text-center">
                     <div
                       className={`text-4xl font-black ${remainingTime <= 10 ? "text-red-500" : "text-gray-800"} font-mono mt-2`}
                     >
                       {remainingTime}
-                      <span className="text-lg text-gray-400 font-medium ml-1">
-                        s
-                      </span>
+                      <span className="text-lg text-gray-400 font-medium ml-1">s</span>
                     </div>
-                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">
-                      Time Left
-                    </div>
+                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Time Left</div>
                   </div>
                 </div>
               </div>
@@ -857,12 +779,8 @@ const GroupPlay: React.FC = () => {
                   {livePlayers.map((player) => {
                     // Determine status logic
                     const isPlayerFinished =
-                      player.progress === (lesson?.text.length || 0) &&
-                      (lesson?.text.length || 0) > 0;
-                    const progressPercent = Math.round(
-                      ((player?.progress || 0) / (lesson?.text.length || 1)) *
-                        100,
-                    );
+                      player.progress === (lesson?.text.length || 0) && (lesson?.text.length || 0) > 0;
+                    const progressPercent = Math.round(((player?.progress || 0) / (lesson?.text.length || 1)) * 100);
 
                     return (
                       <div
@@ -879,10 +797,7 @@ const GroupPlay: React.FC = () => {
                         <div className="flex items-center gap-3 mb-3 mt-1">
                           <div className="relative shrink-0">
                             <img
-                              src={
-                                player.imageUrl ||
-                                `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`
-                              }
+                              src={player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`}
                               className={`w-10 h-10 rounded-xl bg-gray-50 object-cover ring-2 ${isPlayerFinished ? "ring-emerald-400" : "ring-white shadow-sm"}`}
                               alt={player.name}
                             />
@@ -896,9 +811,7 @@ const GroupPlay: React.FC = () => {
 
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between pr-8">
-                              <div className="font-bold text-gray-800 text-sm truncate">
-                                {player.name}
-                              </div>
+                              <div className="font-bold text-gray-800 text-sm truncate">{player.name}</div>
                             </div>
 
                             {/* Progress Status */}
@@ -912,9 +825,7 @@ const GroupPlay: React.FC = () => {
                               <span
                                 className={`text-[10px] font-bold uppercase ${isPlayerFinished ? "text-emerald-600" : "text-orange-400"}`}
                               >
-                                {isPlayerFinished
-                                  ? "Done"
-                                  : `${progressPercent}%`}
+                                {isPlayerFinished ? "Done" : `${progressPercent}%`}
                               </span>
                             </div>
                           </div>
@@ -926,9 +837,7 @@ const GroupPlay: React.FC = () => {
                             <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">
                               WPM
                             </div>
-                            <div className="text-xs font-black text-gray-700">
-                              {player.wpm || "-"}
-                            </div>
+                            <div className="text-xs font-black text-gray-700">{player.wpm || "-"}</div>
                           </div>
                           <div className="text-center group-hover:bg-white rounded transition-colors duration-200 p-0.5">
                             <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">
@@ -942,9 +851,7 @@ const GroupPlay: React.FC = () => {
                             <div className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">
                               ERR
                             </div>
-                            <div className="text-xs font-black text-gray-700">
-                              {player.errors || "0"}
-                            </div>
+                            <div className="text-xs font-black text-gray-700">{player.errors || "0"}</div>
                           </div>
                         </div>
 
@@ -959,9 +866,7 @@ const GroupPlay: React.FC = () => {
                   {/* Left Players Section */}
                   {leftPlayers.length > 0 && (
                     <div className="pt-2 border-t border-orange-100/50 mt-2">
-                      <div className="text-[10px] uppercase font-bold text-gray-400 mb-2 pl-1">
-                        Left Game
-                      </div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400 mb-2 pl-1">Left Game</div>
                       {leftPlayers.map((player) => (
                         <div
                           key={player._id}
@@ -971,8 +876,7 @@ const GroupPlay: React.FC = () => {
                             <div className="relative">
                               <img
                                 src={
-                                  player.imageUrl ||
-                                  `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`
+                                  player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`
                                 }
                                 className="w-8 h-8 rounded-lg bg-gray-200 object-cover ring-2 ring-gray-100"
                                 alt={player.name}
@@ -983,12 +887,8 @@ const GroupPlay: React.FC = () => {
                             </div>
 
                             <div className="min-w-0 flex-1">
-                              <div className="font-bold text-gray-500 text-xs truncate line-through">
-                                {player.name}
-                              </div>
-                              <div className="text-[9px] text-red-400 font-bold uppercase">
-                                Disconnected
-                              </div>
+                              <div className="font-bold text-gray-500 text-xs truncate line-through">{player.name}</div>
+                              <div className="text-[9px] text-red-400 font-bold uppercase">Disconnected</div>
                             </div>
                           </div>
                         </div>

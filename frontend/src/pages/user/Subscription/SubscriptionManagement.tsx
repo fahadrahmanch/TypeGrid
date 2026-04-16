@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { 
-  CreditCard, 
-  Calendar, 
-  ShieldCheck, 
-  ChevronRight, 
-  AlertCircle, 
-  ArrowUpCircle, 
-  Trash2, 
-  CheckCircle2, 
+import {
+  CreditCard,
+  Calendar,
+  ShieldCheck,
+  ChevronRight,
+  AlertCircle,
+  ArrowUpCircle,
+  Trash2,
+  CheckCircle2,
   Clock,
   Building2,
   User as UserIcon,
   X,
-  Info
+  Info,
 } from "lucide-react";
 import { getSubscriptionDetails } from "../../../api/user/subcription";
 import { createPortal } from "react-dom";
@@ -34,12 +34,12 @@ const SubscriptionManagement: React.FC = () => {
       try {
         const [userRes, companyRes] = await Promise.all([
           getUserDataApi(),
-          getCompanyStatusApi().catch(() => ({ data: null }))
+          getCompanyStatusApi().catch(() => ({ data: null })),
         ]);
-        
+
         setUserData(userRes.data.user);
         if (companyRes?.data?.company) {
-            setCompanyData(companyRes.data.company);
+          setCompanyData(companyRes.data.company);
         }
       } catch (error) {
         console.error("Error fetching subscription data:", error);
@@ -51,23 +51,22 @@ const SubscriptionManagement: React.FC = () => {
   }, []);
 
   const fetchSubscriptionData = async () => {
-    try{
-    const res = await getSubscriptionDetails();
+    try {
+      const res = await getSubscriptionDetails();
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-      console.log(error)
-    }
-  }
- useEffect(() => {
-  fetchSubscriptionData()
- },[])
+  };
+  useEffect(() => {
+    fetchSubscriptionData();
+  }, []);
 
   const cancelSubscription = async () => {
     try {
-    }catch(error:any){
+    } catch (error: any) {
       console.log(error);
     }
-  }
+  };
 
   // Mock data for missing fields to fulfill design requirements
   const subscription = {
@@ -85,15 +84,13 @@ const SubscriptionManagement: React.FC = () => {
       "Exclusive Premium Badges",
       "Ad-free Experience",
       "Advanced Performance Analytics",
-      "Custom Keyboard Layouts"
-    ]
+      "Custom Keyboard Layouts",
+    ],
   };
 
   const calculateProgress = () => {
     return (subscription.daysRemaining / subscription.totalDays) * 100;
   };
-
-
 
   if (loading) {
     return (
@@ -103,17 +100,18 @@ const SubscriptionManagement: React.FC = () => {
     );
   }
 
-
   return (
     <div className="min-h-screen bg-[#FFF8EA] pb-20">
       <Navbar />
-      
+
       <main className="max-w-6xl mx-auto pt-24 px-4 sm:px-6 lg:px-8">
         {/* Header section */}
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-4xl font-black text-gray-900 tracking-tight">Subscription</h1>
-            <p className="text-gray-500 mt-2 font-medium">Manage your plan, billing details, and company associations.</p>
+            <p className="text-gray-500 mt-2 font-medium">
+              Manage your plan, billing details, and company associations.
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold border border-emerald-100">
@@ -137,10 +135,12 @@ const SubscriptionManagement: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-2xl font-black text-gray-900">{subscription.planName}</h3>
-                      <p className="text-gray-400 font-medium">{subscription.billingCycle} Billing • {subscription.price}</p>
+                      <p className="text-gray-400 font-medium">
+                        {subscription.billingCycle} Billing • {subscription.price}
+                      </p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => navigate("/subscription")}
                     className="flex items-center gap-2 px-5 py-2.5 bg-[#FDFBF7] hover:bg-[#F5EBD8] text-[#96705B] font-bold rounded-xl border border-[#F5EBD8] transition-all"
                   >
@@ -159,7 +159,7 @@ const SubscriptionManagement: React.FC = () => {
                       <span className="text-sm font-black text-gray-900">{subscription.daysRemaining} days left</span>
                     </div>
                     <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-gradient-to-r from-[#96705B] to-[#B99F8D] rounded-full transition-all duration-1000"
                         style={{ width: `${calculateProgress()}%` }}
                       ></div>
@@ -168,11 +168,15 @@ const SubscriptionManagement: React.FC = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-5 bg-[#FDFBF7] rounded-2xl border border-[#F5EBD8]">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1">Started On</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1">
+                        Started On
+                      </span>
                       <span className="text-lg font-bold text-gray-900">{subscription.startDate}</span>
                     </div>
                     <div className="p-5 bg-[#FDFBF7] rounded-2xl border border-[#F5EBD8]">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1">Expires On</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1">
+                        Expires On
+                      </span>
                       <span className="text-lg font-bold text-gray-900">{subscription.expiryDate}</span>
                     </div>
                   </div>
@@ -213,7 +217,7 @@ const SubscriptionManagement: React.FC = () => {
               <div className="p-8 sm:p-10 pb-4">
                 <h3 className="text-xl font-black text-gray-900">Company Access</h3>
               </div>
-              
+
               <div className="p-8 sm:p-10 pt-4">
                 {companyData ? (
                   <div className="space-y-6">
@@ -223,14 +227,18 @@ const SubscriptionManagement: React.FC = () => {
                       </div>
                       <div>
                         <h4 className="font-black text-gray-900 truncate">{companyData.companyName}</h4>
-                        <span className="text-xs font-black text-indigo-600 uppercase tracking-tighter">Member Access</span>
+                        <span className="text-xs font-black text-indigo-600 uppercase tracking-tighter">
+                          Member Access
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-bold text-gray-400">Status</span>
-                        <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md uppercase">Active</span>
+                        <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md uppercase">
+                          Active
+                        </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-bold text-gray-400">Role</span>
@@ -241,9 +249,9 @@ const SubscriptionManagement: React.FC = () => {
                         <span className="text-gray-800">Enterprise</span>
                       </div>
                     </div>
-                    
+
                     <div className="pt-4 mt-2 border-t border-indigo-100/50">
-                      <button 
+                      <button
                         onClick={() => {
                           setCancelType("company");
                           setIsCancelModalOpen(true);
@@ -261,7 +269,9 @@ const SubscriptionManagement: React.FC = () => {
                       <Building2 className="w-6 h-6 text-gray-200" />
                     </div>
                     <h4 className="font-bold text-gray-400 text-sm">No Company Subscription</h4>
-                    <p className="text-[10px] text-gray-300 mt-1 uppercase font-black tracking-widest leading-tight">Join a team to get shared benefits</p>
+                    <p className="text-[10px] text-gray-300 mt-1 uppercase font-black tracking-widest leading-tight">
+                      Join a team to get shared benefits
+                    </p>
                   </div>
                 )}
               </div>
@@ -279,7 +289,7 @@ const SubscriptionManagement: React.FC = () => {
                   <ChevronRight className="w-4 h-4 text-gray-300 group-hover:translate-x-1 transition-all" />
                 </button>
                 <div className="pt-4 mt-2 border-t border-gray-100/50">
-                  <button 
+                  <button
                     onClick={() => {
                       setCancelType("personal");
                       setIsCancelModalOpen(true);
@@ -311,15 +321,24 @@ const SubscriptionManagement: React.FC = () => {
                 <div className="space-y-4 px-4">
                   <p className="text-gray-500 font-medium leading-relaxed">
                     {cancelType === "company" ? (
-                      <>Are you sure you want to cancel the <span className="text-indigo-600 font-bold">Company Subscription</span>? Your entire team will lose premium benefits immediately.</>
+                      <>
+                        Are you sure you want to cancel the{" "}
+                        <span className="text-indigo-600 font-bold">Company Subscription</span>? Your entire team will
+                        lose premium benefits immediately.
+                      </>
                     ) : (
-                      <>Are you sure you want to stop your premium access? You'll lose <span className="text-red-600 font-bold">Quick Play</span>, <span className="text-red-600 font-bold">Group Contests</span>, and your pro ranking status.</>
+                      <>
+                        Are you sure you want to stop your premium access? You'll lose{" "}
+                        <span className="text-red-600 font-bold">Quick Play</span>,{" "}
+                        <span className="text-red-600 font-bold">Group Contests</span>, and your pro ranking status.
+                      </>
                     )}
                   </p>
                   <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3 text-left">
                     <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                     <p className="text-[11px] font-bold text-amber-700 leading-normal">
-                      Note: Your current benefits remain active until the end of the billing cycle on {subscription.expiryDate}.
+                      Note: Your current benefits remain active until the end of the billing cycle on{" "}
+                      {subscription.expiryDate}.
                     </p>
                   </div>
                 </div>

@@ -105,11 +105,7 @@ export const useContestSocket = ({
   useEffect(() => {
     const handler = (data: any) => {
       setLivePlayers((prev) =>
-        prev.map((p) =>
-          p.userId === data.userId
-            ? { ...p, ...data, progress: data.typedLength }
-            : p,
-        ),
+        prev.map((p) => (p.userId === data.userId ? { ...p, ...data, progress: data.typedLength } : p))
       );
     };
 

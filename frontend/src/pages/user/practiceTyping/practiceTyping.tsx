@@ -35,13 +35,10 @@ const PracticeTyping: React.FC = () => {
       <div className="min-h-screen bg-[#FFF6E8] flex items-center justify-center">
         <div className="w-full max-w-5xl px-6 py-10 text-center">
           {/* Title */}
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            TypeGrid Practice
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">TypeGrid Practice</h1>
           <p className="text-gray-600 mb-10">
-            Improve your typing speed and accuracy with our comprehensive
-            practice system. Choose your difficulty level and practice category
-            to start practicing.
+            Improve your typing speed and accuracy with our comprehensive practice system. Choose your difficulty level
+            and practice category to start practicing.
           </p>
 
           {/* Illustration */}
@@ -51,9 +48,7 @@ const PracticeTyping: React.FC = () => {
 
           {/* Difficulty Section */}
           <div className="text-left mb-10">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              🏆 Choose Difficulty Level
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">🏆 Choose Difficulty Level</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Easy */}
@@ -105,9 +100,7 @@ const PracticeTyping: React.FC = () => {
 
           {/* Practice Category */}
           <div className="text-left mb-12">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              📘 Practice Categories
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">📘 Practice Categories</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Paragraphs */}
@@ -122,9 +115,7 @@ const PracticeTyping: React.FC = () => {
                 `}
               >
                 <h3 className="font-semibold text-gray-900 mb-1">Paragraphs</h3>
-                <p className="text-sm text-gray-600">
-                  Practice typing longer paragraphs
-                </p>
+                <p className="text-sm text-gray-600">Practice typing longer paragraphs</p>
               </div>
 
               {/* Sentences */}
@@ -139,9 +130,7 @@ const PracticeTyping: React.FC = () => {
                 `}
               >
                 <h3 className="font-semibold text-gray-900 mb-1">Sentences</h3>
-                <p className="text-sm text-gray-600">
-                  Practice typing full sentences
-                </p>
+                <p className="text-sm text-gray-600">Practice typing full sentences</p>
               </div>
             </div>
           </div>

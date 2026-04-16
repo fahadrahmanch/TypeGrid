@@ -2,16 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
-import {
-  Search,
-  Plus,
-  Edit2,
-  Trash2,
-  Trophy,
-  X,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Search, Plus, Edit2, Trash2, Trophy, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchGoals } from "../../api/admin/goals";
 import { fetchRewards } from "../../api/admin/rewards";
 import {
@@ -42,9 +33,7 @@ const Challenges: React.FC = () => {
   // Modal states
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
-  const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(
-    null,
-  );
+  const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [challengeToDelete, setChallengeToDelete] = useState<string | null>(null);
   const [goals, setGoals] = useState<any[]>([]);
@@ -96,17 +85,12 @@ const Challenges: React.FC = () => {
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
 
     setValues((prev) => ({
       ...prev,
-      [name]:
-        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
 
     // Real-time validation
@@ -238,12 +222,9 @@ const Challenges: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-10 text-center">
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">
-            Challenges Management
-          </h1>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Challenges Management</h1>
           <p className="text-gray-500 font-medium">
-            Design, deploy, and manage typing challenges to drive user
-            engagement and performance excellence.
+            Design, deploy, and manage typing challenges to drive user engagement and performance excellence.
           </p>
         </div>
 
@@ -286,9 +267,7 @@ const Challenges: React.FC = () => {
         <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-10 shadow-sm border border-[#ECA468]/10 overflow-hidden">
           <div className="flex justify-between items-center mb-10 px-2">
             <div>
-              <h3 className="text-2xl font-black text-gray-900 leading-tight">
-                Active Challenges
-              </h3>
+              <h3 className="text-2xl font-black text-gray-900 leading-tight">Active Challenges</h3>
               <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
                 {challenges.length} total modules available
               </p>
@@ -304,12 +283,8 @@ const Challenges: React.FC = () => {
                 </p> */}
               </div>
               <div className="text-center">
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                  Total
-                </p>
-                <p className="text-xl font-black text-gray-900">
-                  {challenges.length}
-                </p>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total</p>
+                <p className="text-xl font-black text-gray-900">{challenges.length}</p>
               </div>
             </div>
           </div>
@@ -348,10 +323,7 @@ const Challenges: React.FC = () => {
                   </tr>
                 ) : (
                   challenges.map((challenge) => (
-                    <tr
-                      key={challenge.id}
-                      className="group hover:bg-white/40 transition-all duration-300"
-                    >
+                    <tr key={challenge.id} className="group hover:bg-white/40 transition-all duration-300">
                       <td className="py-6 px-4 align-top">
                         <div className="flex flex-col items-start text-left">
                           <span className="text-base font-black text-gray-800 group-hover:text-[#ECA468] transition-colors leading-tight text-left">
@@ -366,11 +338,9 @@ const Challenges: React.FC = () => {
                         <span
                           className={`px-3 py-1 text-[9px] font-black uppercase tracking-wider rounded-lg border
                                                 ${
-                                                  challenge.difficulty ===
-                                                  "hard"
+                                                  challenge.difficulty === "hard"
                                                     ? "bg-red-50 text-red-600 border-red-100"
-                                                    : challenge.difficulty ===
-                                                        "medium"
+                                                    : challenge.difficulty === "medium"
                                                       ? "bg-orange-50 text-orange-600 border-orange-100"
                                                       : "bg-emerald-50 text-emerald-600 border-emerald-100"
                                                 }`}
@@ -426,32 +396,30 @@ const Challenges: React.FC = () => {
 
           {/* Pagination */}
           {/* {totalPages > 1 && ( */}
-            <div className="mt-12 flex justify-center items-center gap-6">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage((prev) => prev - 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-              </button>
+          <div className="mt-12 flex justify-center items-center gap-6">
+            <button
+              disabled={page === 1}
+              onClick={() => setPage((prev) => prev - 1)}
+              className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+            >
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
 
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">
-                  {page}
-                </span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
-                  of {totalPages}
-                </span>
-              </div>
-
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage((prev) => prev + 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-              </button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
+                of {totalPages}
+              </span>
             </div>
+
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage((prev) => prev + 1)}
+              className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
+            >
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
           {/* )} */}
         </div>
       </div>
@@ -465,9 +433,7 @@ const Challenges: React.FC = () => {
                 <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6">
                   <Trash2 className="w-8 h-8" />
                 </div>
-                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">
-                  Delete Challenge?
-                </h2>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">Delete Challenge?</h2>
                 <p className="text-sm text-gray-500 font-medium">
                   Are you sure you want to delete this challenge? This action cannot be undone.
                 </p>
@@ -491,7 +457,7 @@ const Challenges: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       {(isCreateOpen || isEditOpen) &&
@@ -503,10 +469,7 @@ const Challenges: React.FC = () => {
                 <h2 className="text-xl font-bold text-gray-800">
                   {isEditOpen ? "Edit Challenge" : "Create Challenge"}
                 </h2>
-                <button
-                  onClick={closeModals}
-                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                >
+                <button onClick={closeModals} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -514,9 +477,7 @@ const Challenges: React.FC = () => {
               {/* Content */}
               <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-5 custom-scrollbar">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Title
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Title</label>
                   <input
                     type="text"
                     name="title"
@@ -525,17 +486,11 @@ const Challenges: React.FC = () => {
                     placeholder="Challenge title"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
                   />
-                  {formErrors.title && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.title}
-                    </p>
-                  )}
+                  {formErrors.title && <p className="text-red-400 text-xs px-1">{formErrors.title}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Difficulty
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Difficulty</label>
                   <div className="relative">
                     <select
                       name="difficulty"
@@ -549,32 +504,16 @@ const Challenges: React.FC = () => {
                       <option value="hard">Hard</option>
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        />
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
                   </div>
-                  {formErrors.difficulty && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.difficulty}
-                    </p>
-                  )}
+                  {formErrors.difficulty && <p className="text-red-400 text-xs px-1">{formErrors.difficulty}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Goal
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Goal</label>
                   <div className="relative">
                     <select
                       name="goal"
@@ -590,32 +529,16 @@ const Challenges: React.FC = () => {
                       ))}
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        />
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
                   </div>
-                  {formErrors.goal && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.goal}
-                    </p>
-                  )}
+                  {formErrors.goal && <p className="text-red-400 text-xs px-1">{formErrors.goal}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Reward
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Reward</label>
                   <div className="relative">
                     <select
                       name="reward"
@@ -631,32 +554,16 @@ const Challenges: React.FC = () => {
                       ))}
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        />
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
                   </div>
-                  {formErrors.reward && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.reward}
-                    </p>
-                  )}
+                  {formErrors.reward && <p className="text-red-400 text-xs px-1">{formErrors.reward}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    duration time (sec)
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">duration time (sec)</label>
                   <div className="relative">
                     <select
                       name="duration"
@@ -671,32 +578,16 @@ const Challenges: React.FC = () => {
                       <option value="300">300</option>
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        />
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
                   </div>
-                  {formErrors.duration && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.duration}
-                    </p>
-                  )}
+                  {formErrors.duration && <p className="text-red-400 text-xs px-1">{formErrors.duration}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">
-                    Description
-                  </label>
+                  <label className="text-sm font-semibold text-gray-600">Description</label>
                   <textarea
                     name="description"
                     value={values.description}
@@ -705,11 +596,7 @@ const Challenges: React.FC = () => {
                     placeholder="Challenge description"
                     className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 resize-none placeholder:text-gray-300 font-medium leading-relaxed"
                   />
-                  {formErrors.description && (
-                    <p className="text-red-400 text-xs px-1">
-                      {formErrors.description}
-                    </p>
-                  )}
+                  {formErrors.description && <p className="text-red-400 text-xs px-1">{formErrors.description}</p>}
                 </div>
 
                 <div className="flex items-center gap-3 py-2">
@@ -740,7 +627,7 @@ const Challenges: React.FC = () => {
               </div>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
 
       <style>{`

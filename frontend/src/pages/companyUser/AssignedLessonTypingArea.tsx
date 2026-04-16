@@ -2,17 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAssignedLessonByAssignmentId } from "../../api/companyUser/lessons";
 import { getMappedKey } from "../../utils/keyboardLayouts";
-import {
-  ArrowLeft,
-  Clock,
-  Zap,
-  Target,
-  AlertCircle,
-  RotateCcw,
-  Activity,
-  CheckCircle2,
-  Trophy,
-} from "lucide-react";
+import { ArrowLeft, Clock, Zap, Target, AlertCircle, RotateCcw, Activity, CheckCircle2, Trophy } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { saveLessonResult } from "../../api/companyAdmin/lessons";
 import StatCard from "../../components/common/StatCard";
@@ -47,9 +37,7 @@ const AssignedLessonTypingArea: React.FC = () => {
   const [errors, setErrors] = useState(0);
   const [typedText, setTypedText] = useState("");
   const [countDown, setCountDown] = useState<number | null>(null);
-  const [assignedLesson, setAssignedLesson] = useState<AssignedLesson | null>(
-    null,
-  );
+  const [assignedLesson, setAssignedLesson] = useState<AssignedLesson | null>(null);
   const [totalTyped, setTotalTyped] = useState(0);
   // const assignedData
   const inputRef = useRef<HTMLInputElement>(null);
@@ -72,8 +60,7 @@ const AssignedLessonTypingArea: React.FC = () => {
     const timeElapsedMin = (Date.now() - countDown) / 60000;
     const correctChars = Math.max(0, totalTyped - errors);
 
-    const calculatedWpm =
-      timeElapsedMin > 0 ? Math.round(correctChars / 5 / timeElapsedMin) : 0;
+    const calculatedWpm = timeElapsedMin > 0 ? Math.round(correctChars / 5 / timeElapsedMin) : 0;
 
     setWpm(calculatedWpm);
   }, [totalTyped, errors, isActive, countDown]);
@@ -106,63 +93,52 @@ const AssignedLessonTypingArea: React.FC = () => {
   }, [typedText, assignedLesson?.lesson.text.length, isTimeUp]);
 
   // Start on Space key
- useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (!assignedLesson) return;
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!assignedLesson) return;
 
-    if (!isActive && !isFinished && e.code === "Space") {
-      e.preventDefault();
-      setIsActive(true);
-      setCountDown(Date.now());
-      inputRef.current?.focus();
-      return;
-    }
+      if (!isActive && !isFinished && e.code === "Space") {
+        e.preventDefault();
+        setIsActive(true);
+        setCountDown(Date.now());
+        inputRef.current?.focus();
+        return;
+      }
 
-    if (!isActive || isFinished || isTimeUp) return;
+      if (!isActive || isFinished || isTimeUp) return;
 
-    const key = e.key;
+      const key = e.key;
 
-    if (key === "Backspace") {
-      setTypedText((prev) => prev.slice(0, -1));
-      setTotalTyped((prev) => Math.max(0, prev - 1));
-      return;
-    }
+      if (key === "Backspace") {
+        setTypedText((prev) => prev.slice(0, -1));
+        setTotalTyped((prev) => Math.max(0, prev - 1));
+        return;
+      }
 
-    if (key.length > 1 && key !== " ") return;
+      if (key.length > 1 && key !== " ") return;
 
-    const mappedKey = getMappedKey(key, keyboardLayout);
-    console.log("mapped key in area", mappedKey);
-    const index = typedText.length;
-    const expectedChar = assignedLesson.lesson.text[index];
+      const mappedKey = getMappedKey(key, keyboardLayout);
+      const index = typedText.length;
+      const expectedChar = assignedLesson.lesson.text[index];
 
-    const isWrong = mappedKey !== expectedChar;
-    console.log("expected char in area", expectedChar);
-    const newTotal = totalTyped + 1;
-    const newErrors = isWrong ? errors + 1 : errors;
+      const isWrong = mappedKey !== expectedChar;
+      const newTotal = totalTyped + 1;
+      const newErrors = isWrong ? errors + 1 : errors;
 
-    const correctChars = Math.max(0, newTotal - newErrors);
-    const acc = Math.round((correctChars / newTotal) * 100);
+      const correctChars = Math.max(0, newTotal - newErrors);
+      const acc = Math.round((correctChars / newTotal) * 100);
 
-    setTotalTyped(newTotal);
-    setErrors(newErrors);
-    setAccuracy(acc);
+      setTotalTyped(newTotal);
+      setErrors(newErrors);
+      setAccuracy(acc);
 
-    setTypedText((prev) => prev + key);
-  };
+      setTypedText((prev) => prev + key);
+    };
 
-  window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
-  return () => window.removeEventListener("keydown", handleKeyDown);
-}, [
-  isActive,
-  isFinished,
-  isTimeUp,
-  assignedLesson,
-  typedText,
-  totalTyped,
-  errors,
-  keyboardLayout
-]);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isActive, isFinished, isTimeUp, assignedLesson, typedText, totalTyped, errors, keyboardLayout]);
 
   const resetTest = () => {
     setIsActive(false);
@@ -196,26 +172,23 @@ const AssignedLessonTypingArea: React.FC = () => {
     document.addEventListener("mousedown", keepFocus);
     return () => document.removeEventListener("mousedown", keepFocus);
   }, [isActive, isFinished]);
-const getCharClass = (index: number) => {
-  if (!assignedLesson) return "text-gray-400";
+  const getCharClass = (index: number) => {
+    if (!assignedLesson) return "text-gray-400";
 
-  if (index >= typedText.length) return "text-gray-400";
+    if (index >= typedText.length) return "text-gray-400";
 
-  const rawKey = typedText[index];
-  const mappedKey = getMappedKey(rawKey, keyboardLayout);
+    const rawKey = typedText[index];
+    const mappedKey = getMappedKey(rawKey, keyboardLayout);
 
-  const expectedChar = assignedLesson.lesson.text[index];
+    const expectedChar = assignedLesson.lesson.text[index];
 
-  return mappedKey === expectedChar
-    ? "text-emerald-600 bg-emerald-50/50"
-    : "text-red-500 bg-red-100 underline decoration-red-400";
-};
+    return mappedKey === expectedChar
+      ? "text-emerald-600 bg-emerald-50/50"
+      : "text-red-500 bg-red-100 underline decoration-red-400";
+  };
 
   // Progress percentage
-  const progress = Math.min(
-    100,
-    (typedText.length / assignedLesson?.lesson?.text.length!) * 100,
-  );
+  const progress = Math.min(100, (typedText.length / assignedLesson?.lesson?.text.length!) * 100);
 
   //result save
   useEffect(() => {
@@ -229,15 +202,9 @@ const getCharClass = (index: number) => {
     async function saveResult() {
       let status: AssignmentStatus = "progress";
 
-      if (
-        wpm < assignedLesson?.lesson.wpm! ||
-        accuracy < assignedLesson?.lesson.accuracy!
-      ) {
+      if (wpm < assignedLesson?.lesson.wpm! || accuracy < assignedLesson?.lesson.accuracy!) {
         status = "progress";
-      } else if (
-        wpm >= assignedLesson?.lesson.wpm! &&
-        accuracy >= assignedLesson?.lesson.accuracy!
-      ) {
+      } else if (wpm >= assignedLesson?.lesson.wpm! && accuracy >= assignedLesson?.lesson.accuracy!) {
         status = "completed";
       }
 
@@ -274,30 +241,19 @@ const getCharClass = (index: number) => {
           </button>
 
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              {assignedLesson?.lesson.title}
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{assignedLesson?.lesson.title}</h1>
             <div className="flex justify-center items-center gap-6 text-sm text-gray-500">
               <span className="flex items-center gap-1.5 px-3 py-1 bg-white/50 rounded-full border border-orange-100">
                 <Activity className="w-3.5 h-3.5 text-orange-400" />
-                Level:{" "}
-                <span className="font-semibold text-gray-700">
-                  {assignedLesson?.lesson.level}
-                </span>
+                Level: <span className="font-semibold text-gray-700">{assignedLesson?.lesson.level}</span>
               </span>
               <span className="flex items-center gap-1.5 px-3 py-1 bg-white/50 rounded-full border border-orange-100">
                 <Target className="w-3.5 h-3.5 text-blue-400" />
-                Target:{" "}
-                <span className="font-semibold text-gray-700">
-                  {assignedLesson?.lesson.wpm} WPM
-                </span>
+                Target: <span className="font-semibold text-gray-700">{assignedLesson?.lesson.wpm} WPM</span>
               </span>
               <span className="flex items-center gap-1.5 px-3 py-1 bg-white/50 rounded-full border border-orange-100">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                Accuracy:{" "}
-                <span className="font-semibold text-gray-700">
-                  {assignedLesson?.lesson.accuracy}%
-                </span>
+                Accuracy: <span className="font-semibold text-gray-700">{assignedLesson?.lesson.accuracy}%</span>
               </span>
             </div>
           </div>
@@ -311,12 +267,7 @@ const getCharClass = (index: number) => {
             value={`${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, "0")}`}
             color="bg-blue-50"
           />
-          <StatCard
-            icon={<Zap className="w-5 h-5 text-orange-500" />}
-            label="WPM"
-            value={wpm}
-            color="bg-orange-50"
-          />
+          <StatCard icon={<Zap className="w-5 h-5 text-orange-500" />} label="WPM" value={wpm} color="bg-orange-50" />
           <StatCard
             icon={<CheckCircle2 className="w-5 h-5 text-emerald-500" />}
             label="Accuracy"
@@ -390,22 +341,20 @@ const getCharClass = (index: number) => {
             {!isActive && !isFinished && typedText.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-[2px] cursor-pointer transition-opacity duration-300 z-10">
                 <div className="text-center animate-bounce">
-                  <span className="text-orange-900/50 font-medium text-lg">
-                    Press Space key to start...
-                  </span>
+                  <span className="text-orange-900/50 font-medium text-lg">Press Space key to start...</span>
                 </div>
               </div>
             )}
 
             {/* Hidden Input */}
             <div className="relative z-30 flex justify-between items-center mb-8 border-b border-orange-100/50 pb-4">
-             <input
-  ref={inputRef}
-  type="text"
-  className="absolute opacity-0 top-0 left-0 w-full h-full z-20 cursor-default"
-  value={typedText}
-  onChange={() => {}}
-/>
+              <input
+                ref={inputRef}
+                type="text"
+                className="absolute opacity-0 top-0 left-0 w-full h-full z-20 cursor-default"
+                value={typedText}
+                onChange={() => {}}
+              />
             </div>
 
             {/* Finished State Overlay */}
@@ -419,9 +368,7 @@ const getCharClass = (index: number) => {
 
                   return (
                     <>
-                      <div
-                        className={`mb-6 p-4 rounded-full ${isPassed ? "bg-green-100" : "bg-red-100"}`}
-                      >
+                      <div className={`mb-6 p-4 rounded-full ${isPassed ? "bg-green-100" : "bg-red-100"}`}>
                         {isPassed ? (
                           <Trophy className="w-12 h-12 text-green-600" />
                         ) : (
@@ -429,14 +376,8 @@ const getCharClass = (index: number) => {
                         )}
                       </div>
 
-                      <h2
-                        className={`text-3xl font-bold mb-2 ${isPassed ? "text-gray-800" : "text-red-600"}`}
-                      >
-                        {isPassed
-                          ? "Lesson Passed!"
-                          : isTimeUp
-                            ? "Time's Up!"
-                            : "Lesson Failed"}
+                      <h2 className={`text-3xl font-bold mb-2 ${isPassed ? "text-gray-800" : "text-red-600"}`}>
+                        {isPassed ? "Lesson Passed!" : isTimeUp ? "Time's Up!" : "Lesson Failed"}
                       </h2>
 
                       <p className="text-gray-600 mb-8 text-center max-w-md">
@@ -450,10 +391,11 @@ const getCharClass = (index: number) => {
                       <div className="flex gap-4">
                         <button
                           onClick={resetTest}
-                          className={`px-6 py-2.5 rounded-xl border-2 font-bold transition-all ${isPassed
+                          className={`px-6 py-2.5 rounded-xl border-2 font-bold transition-all ${
+                            isPassed
                               ? "border-gray-200 text-gray-600 hover:bg-gray-50"
                               : "bg-red-500 text-white hover:bg-red-600 border-transparent shadow-lg shadow-red-200"
-                            }`}
+                          }`}
                         >
                           {isPassed ? "Try Again" : "Try Again"}
                         </button>
@@ -484,9 +426,7 @@ const getCharClass = (index: number) => {
           </div>
 
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-400 font-medium">
-              {!isActive ? "Ready to type?" : "Keep going!"}
-            </p>
+            <p className="text-sm text-gray-400 font-medium">{!isActive ? "Ready to type?" : "Keep going!"}</p>
           </div>
         </div>
       </div>
