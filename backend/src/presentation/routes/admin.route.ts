@@ -304,6 +304,22 @@ export class adminRouter {
       },
     );
 
+    this.router.put(
+      Routes.ADMIN.UPDATE_SUBSCRIPTION_PLAN,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionPlanController.updateSubscriptionPlan(req, res, next);
+      },
+    );
+
+    this.router.delete(
+      Routes.ADMIN.DELETE_SUBSCRIPTION_PLAN,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionPlanController.deleteSubscriptionPlan(req, res, next);
+      },
+    );
+
     //achievement management routes
     this.router.post(
       Routes.ADMIN.CREATE_ACHIVEMENT,

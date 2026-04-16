@@ -10,11 +10,11 @@ export async function createSubscriptionPlan(data: any) {
 }
 
 export async function updateSubscriptionPlan(id: string, data: any) {
-    return adminAPI.put(API_ROUTES.ADMIN.SUBSCRIPTION.BY_ID(id), data);
+    return adminAPI.put(API_ROUTES.ADMIN.SUBSCRIPTION.UPDATE_SUBSCRIPTION_PLAN(id), data);
 }
 
 export async function deleteSubscriptionPlan(id: string) {
-    return adminAPI.delete(API_ROUTES.ADMIN.SUBSCRIPTION.BY_ID(id));
+    return adminAPI.delete(API_ROUTES.ADMIN.SUBSCRIPTION.DELETE_SUBSCRIPTION_PLAN(id));
 }
 
 export async function getSubscriptionPlanById(id: string) {
@@ -28,3 +28,4 @@ export async function getSubscriptionNormalPlans() {
 export async function getSubscriptionCompanyPlans() {
     return adminAPI.get(API_ROUTES.ADMIN.SUBSCRIPTION.COMPANY);
 }
+

@@ -96,7 +96,9 @@ export const Routes = {
     FETCH_SUBSCRIPTION_NORMAL_PLANS: "/subscription/normal",
     FETCH_SUBSCRIPTION_COMPANY_PLANS: "/subscription/company",
     FETCH_SUBSCRIPTION_PLAN_BY_ID: "/subscription/:id",
-    // UPDATE_SUBSCRIPTION_PLAN: "/subscription/:id",
+    UPDATE_SUBSCRIPTION_PLAN: "/subscription/:id",
+    DELETE_SUBSCRIPTION_PLAN: "/subscription/:id",
+    
     
   }, 
 

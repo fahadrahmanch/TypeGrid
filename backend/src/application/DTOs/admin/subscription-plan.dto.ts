@@ -7,6 +7,16 @@ export interface CreateSubscriptionPlanDTO {
   userLimit?: number | string;
 }
 
+export interface UpdateSubscriptionPlanDTO {
+  id: string;
+  name?: string;
+  price?: number | string;
+  duration?: "monthly" | "yearly";
+  features?: string[];
+  type?: "normal" | "company";
+  userLimit?: number | string;
+}
+
 export interface SubscriptionPlanResponseDTO {
   id: string;
   name: string;

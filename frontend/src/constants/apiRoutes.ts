@@ -97,6 +97,8 @@ export const API_ROUTES = {
       BY_ID: (id: string) => `/subscription/${id}`,
       NORMAL: "/subscription/normal",
       COMPANY: "/subscription/company",
+      UPDATE_SUBSCRIPTION_PLAN: (id: string) => `/subscription/${id}`,
+      DELETE_SUBSCRIPTION_PLAN: (id: string) => `/subscription/${id}`,
     },
     REWARDS: {
       BASE: "/rewards",

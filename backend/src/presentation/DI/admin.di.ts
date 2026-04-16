@@ -59,6 +59,8 @@ import { SubscriptionPlan } from "../../infrastructure/db/models/admin/subscript
 import { CreateSubscriptionPlanUseCase } from "../../application/use-cases/admin/subscription/create-subscription-plan.use-case";
 import { FetchNormalSubscriptionPlansUseCase } from "../../application/use-cases/admin/subscription/fetch-normal-subscription-plans.use-case";
 import { FetchCompanySubscriptionPlansUseCase } from "../../application/use-cases/admin/subscription/fetch-company-subscription-plans.use-case";
+import { UpdateSubscriptionPlanUseCase } from "../../application/use-cases/admin/subscription/update-subscription-plan.use-case";
+import { DeleteSubscriptionPlanUseCase } from "../../application/use-cases/admin/subscription/delete-subscription-plan.use-case";
 import { AchievementModel } from "../../infrastructure/db/models/admin/acheivment.schema";
 import { AchievementRepository } from "../../infrastructure/db/repositories/user/achievement.repository";
 import { CreateAchievementUseCase } from "../../application/use-cases/admin/acheivment/create-acheivement.use-case";
@@ -179,15 +181,15 @@ const subscriptionPlanRepository = new SubscriptionPlanRepository(SubscriptionPl
 const createSubscriptionPlanUseCase = new CreateSubscriptionPlanUseCase(subscriptionPlanRepository);
 const fetchNormalSubscriptionPlansUseCase = new FetchNormalSubscriptionPlansUseCase(subscriptionPlanRepository);
 const fetchCompanySubscriptionPlansUseCase = new FetchCompanySubscriptionPlansUseCase(subscriptionPlanRepository);
-// const getSubscriptionPlanUseCase = new GetSubscriptionPlanUseCase(subscriptionPlanRepository);
-// const updateSubscriptionPlanUseCase = new UpdateSubscriptionPlanUseCase(subscriptionPlanRepository);
-// const deleteSubscriptionPlanUseCase = new DeleteSubscriptionPlanUseCase(subscriptionPlanRepository);
-// const getSubscriptionPlansUseCase = new GetSubscriptionPlansUseCase(subscriptionPlanRepository);
+const updateSubscriptionPlanUseCase = new UpdateSubscriptionPlanUseCase(subscriptionPlanRepository);
+const deleteSubscriptionPlanUseCase = new DeleteSubscriptionPlanUseCase(subscriptionPlanRepository);
 
 export const injectSubscriptionPlanController = new SubscriptionController(
   createSubscriptionPlanUseCase,
   fetchNormalSubscriptionPlansUseCase,
   fetchCompanySubscriptionPlansUseCase,
+  updateSubscriptionPlanUseCase,
+  deleteSubscriptionPlanUseCase,
 );
 
 export const injectDailyAssignChallengeManageController =

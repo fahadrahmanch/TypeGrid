@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
-import { Plus, Edit2, Trash2, X } from "lucide-react";
+import { Plus, Edit2, Trash2, X, AlertCircle } from "lucide-react";
 import { 
   createSubscriptionPlan, 
   getSubscriptionPlans, 
@@ -18,13 +18,26 @@ import {
 } from "../../validations/subscriptionValidation";
 
 import { getSubscriptionNormalPlans, getSubscriptionCompanyPlans } from "../../api/admin/subscription";
+
+interface ISubscriptionPlan {
+  id: string;
+  name: string;
+  price: string | number;
+  duration: string | number;
+  type: "normal" | "company";
+  features: string[];
+  userLimit?: string | number;
+}
+
 const SubscriptionPlans: React.FC = () => {
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
+  const [isDeleteOpen, setDeleteOpen] = useState(false);
+  const [planToDelete, setPlanToDelete] = useState<{id: string, name: string} | null>(null);
   const [newFeature, setNewFeature] = useState("");
 
-  const [normalPlans, setNormalPlans] = useState<any[]>([]);
-  const [companyPlans, setCompanyPlans] = useState<any[]>([]);
+  const [normalPlans, setNormalPlans] = useState<ISubscriptionPlan[]>([]);
+  const [companyPlans, setCompanyPlans] = useState<ISubscriptionPlan[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchPlans = async () => {
@@ -207,10 +220,17 @@ const SubscriptionPlans: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this plan?")) {
+  const handleDeleteClick = (id: string, name: string) => {
+    setPlanToDelete({ id, name });
+    setDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (planToDelete) {
       try {
-        await deleteSubscriptionPlan(id);
+        await deleteSubscriptionPlan(planToDelete.id);
+        setDeleteOpen(false);
+        setPlanToDelete(null);
         fetchPlans(); // Refresh the list
       } catch (error) {
         console.error("Error deleting plan:", error);
@@ -218,12 +238,20 @@ const SubscriptionPlans: React.FC = () => {
     }
   };
 
-  const openEdit = (plan: any) => {
-    setEditValues(plan);
+  const openEdit = (plan: ISubscriptionPlan) => {
+    // Map numeric duration back to select values and ensure numbers are converted to strings for form inputs
+    const normalizedPlan = {
+      ...plan,
+      duration: plan.duration === 30 ? "monthly" : plan.duration === 365 ? "yearly" : String(plan.duration),
+      price: String(plan.price),
+      userLimit: plan.userLimit ? String(plan.userLimit) : "",
+    };
+    
+    setEditValues(normalizedPlan);
     setEditFormErrors({
       name: "",
       price: "",
-      duration: "monthly",
+      duration: "",
       type: "",
       userLimit: "",
       features: "",
@@ -323,7 +351,7 @@ const SubscriptionPlans: React.FC = () => {
                               <Edit2 className="w-4 h-4" />
                             </button>
                             <button 
-                              onClick={() => handleDelete(plan.id)}
+                              onClick={() => handleDeleteClick(plan.id, plan.name)}
                               className="text-gray-400 hover:text-red-500 transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -383,7 +411,7 @@ const SubscriptionPlans: React.FC = () => {
                               <Edit2 className="w-4 h-4" />
                             </button>
                             <button 
-                              onClick={() => handleDelete(plan.id)}
+                              onClick={() => handleDeleteClick(plan.id, plan.name)}
                               className="text-gray-400 hover:text-red-500 transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -654,6 +682,44 @@ const SubscriptionPlans: React.FC = () => {
                   className="px-10 py-3 rounded-2xl bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
                 >
                   Update Plan
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteOpen &&
+        createPortal(
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+            <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-red-100 animate-in zoom-in-95 duration-200">
+              <div className="px-10 py-10 text-center">
+                <div className="w-20 h-20 bg-red-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <AlertCircle className="w-10 h-10 text-red-500" />
+                </div>
+                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">Delete Plan?</h2>
+                <p className="text-gray-500 font-medium px-4">
+                  Are you sure you want to delete <span className="text-gray-900 font-black">"{planToDelete?.name}"</span>? 
+                  This action cannot be undone.
+                </p>
+              </div>
+
+              <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex justify-center gap-4">
+                <button
+                  onClick={() => {
+                    setDeleteOpen(false);
+                    setPlanToDelete(null);
+                  }}
+                  className="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmDelete}
+                  className="px-10 py-3 rounded-2xl bg-red-500 text-white text-xs font-black uppercase tracking-widest hover:bg-red-600 shadow-lg shadow-red-500/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
+                >
+                  Delete Plan
                 </button>
               </div>
             </div>
