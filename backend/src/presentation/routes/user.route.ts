@@ -218,6 +218,13 @@ export class UserRoutes {
         injectSubscriptionController.getCompanySubscriptionPlans(req, res, next);
       },
     );
+    this.router.get(
+      Routes.USERS.SUBSCRIPTION_DETAILS,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionController.getSubscriptionDetails(req, res, next);
+      },
+    );
     this.router.post(
       Routes.USERS.CREATE_SESSION,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),

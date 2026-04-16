@@ -12,7 +12,6 @@ export class ConfirmSubscriptionUseCase implements IConfirmSubscriptionUseCase {
     ) {}
 
     async execute(userId: string, planId: string): Promise<void> {
-        try {
             const plan = await this._subscriptionPlanRepository.findById(planId);
             if (!plan) {
                 throw new Error("Subscription plan not found");
@@ -21,6 +20,24 @@ export class ConfirmSubscriptionUseCase implements IConfirmSubscriptionUseCase {
             const startDate = new Date();
             const endDate = new Date(startDate);
             endDate.setDate(endDate.getDate() + plan.getDuration());
+
+            const existingActiveSub = await this._userSubscriptionRepository.findOne({
+                userId,
+                status: "active",
+            });
+
+            if (existingActiveSub) {
+                const subId = existingActiveSub.getId();
+                if (subId) {
+                    await this._userSubscriptionRepository.updateById(subId, {
+                        subscriptionPlanId: planId,
+                        startDate,
+                        endDate,
+                        status: "active"
+                    });
+                    return;
+                }
+            }
 
             const userSubscription = new UserSubscriptionEntity({
                 userId,
@@ -33,9 +50,6 @@ export class ConfirmSubscriptionUseCase implements IConfirmSubscriptionUseCase {
             await this._userSubscriptionRepository.create(userSubscription.toObject());
 
             
-            
-        } catch (error: unknown) {
-            throw error;
-        }
+     
     }
 }

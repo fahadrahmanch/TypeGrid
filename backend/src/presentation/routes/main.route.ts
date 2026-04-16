@@ -145,6 +145,9 @@ export const Routes = {
 
     //subscription
     SUBSCRIPTION: "/subscription/plans",
+    CANCEL_SUBSCRIPTION: "/subscription/cancel",
+    CANCEL_COMPANY_SUBSCRIPTION: "/subscription/cancel-company",
+    SUBSCRIPTION_DETAILS: "/subscription/details",
     COMPANY_PLANS: "/subscription/company-plans",
     CREATE_SESSION: "/subscription/create-session",
     CREATE_COMPANY_SESSION: "/subscription/create-company-session",
@@ -153,6 +156,7 @@ export const Routes = {
       GET_ALL: "/achievements",
       GET_USER_ACHIEVEMENTS: "/achievements/me",
     },
+    
   },
 
   COMPANY_ADMIN: {

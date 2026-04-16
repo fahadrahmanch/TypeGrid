@@ -67,6 +67,7 @@ import { GetNormalPlansUseCase } from "../../application/use-cases/user/subscipt
 import { GetCompanyPlansUseCase } from "../../application/use-cases/user/subsciption/get-company-plans.use-case";
 import { CreateSubscriptionSessionUseCase } from "../../application/use-cases/user/subsciption/create-subscription-session.use-case";
 import { ConfirmSubscriptionUseCase } from "../../application/use-cases/user/subsciption/confirm-subscription.use-case";
+import { GetSubscriptionDetailsUseCase } from "../../application/use-cases/user/subsciption/get-subscription-details.use-case";
 import { UserSubscriptionRepository } from "../../infrastructure/db/repositories/user/user-subscription.repository";
 import { UserSubscription } from "../../infrastructure/db/models/user/user.subscription.schema";
 import { StripeService } from "../../infrastructure/services/stripe.service";
@@ -257,11 +258,18 @@ const getNormalPlansUseCaseInstance = new GetNormalPlansUseCase(
 const getCompanyPlansUseCaseInstance = new GetCompanyPlansUseCase(
   subscriptionRepository,
 );
+const userSubscriptionRepository = new UserSubscriptionRepository(UserSubscription);
+const getSubscriptionDetailsUseCaseInstance = new GetSubscriptionDetailsUseCase(
+  userSubscriptionRepository,
+  companyRepository,
+  subscriptionRepository,
+  userRepository
+);
 export const injectSubscriptionController = new SubscriptionController(
   getNormalPlansUseCaseInstance,
   getCompanyPlansUseCaseInstance,
+  getSubscriptionDetailsUseCaseInstance,
 );
-const userSubscriptionRepository = new UserSubscriptionRepository(UserSubscription);
 const confirmSubscriptionUseCaseInstance = new ConfirmSubscriptionUseCase(
   subscriptionRepository,
   userSubscriptionRepository,

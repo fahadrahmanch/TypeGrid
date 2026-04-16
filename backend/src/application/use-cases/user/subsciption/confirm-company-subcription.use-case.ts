@@ -35,15 +35,32 @@ export class ConfirmCompanySubscriptionUseCase implements IConfirmCompanySubscri
             const endDate = new Date(startDate);
             endDate.setDate(endDate.getDate() + plan.getDuration());
 
-            const userSubscription = new UserSubscriptionEntity({
+            const existingActiveSub = await this._userSubscriptionRepository.findOne({
                 userId,
-                subscriptionPlanId: planId,
                 status: "active",
-                startDate,
-                endDate,
             });
 
-            await this._userSubscriptionRepository.create(userSubscription.toObject());
+            if (existingActiveSub) {
+                const subId = existingActiveSub.getId();
+                if (subId) {
+                    await this._userSubscriptionRepository.updateById(subId, {
+                        subscriptionPlanId: planId,
+                        startDate,
+                        endDate,
+                        status: "active"
+                    });
+                }
+            } else {
+                const userSubscription = new UserSubscriptionEntity({
+                    userId,
+                    subscriptionPlanId: planId,
+                    status: "active",
+                    startDate,
+                    endDate,
+                });
+
+                await this._userSubscriptionRepository.create(userSubscription.toObject());
+            }
 
             await this._companyRepository.updateById(user.CompanyId, {
                 status: "active",
