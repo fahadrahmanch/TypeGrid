@@ -1,11 +1,11 @@
-import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { IGetCompanyContestsUsecase } from "../../interfaces/companyAdmin/get-company-contests.interface";
-import { ContestProps } from "../../../DTOs/companyAdmin/company-contest.dto";
-import { mapCompanyContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { IGetCompanyContestsUsecase } from '../../interfaces/companyAdmin/get-company-contests.interface';
+import { ContestProps } from '../../../DTOs/companyAdmin/company-contest.dto';
+import { mapCompanyContestDTO } from '../../../mappers/companyAdmin/company-contest.mapper';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
 
 /**
  * Use case for retrieving all contests associated with a company.
@@ -16,17 +16,14 @@ import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum
 export class GetCompanyContestsUseCase implements IGetCompanyContestsUsecase {
   constructor(
     private readonly _contestRepository: IContestRepository,
-    private readonly _userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
 
   async execute(userId: string): Promise<ContestProps[]> {
     const user = await this._userRepository.findById(userId);
 
     if (!user) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
 
     const contests = await this._contestRepository.find({
@@ -34,10 +31,7 @@ export class GetCompanyContestsUseCase implements IGetCompanyContestsUsecase {
     });
 
     if (!contests || contests.length === 0) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.CONTESTS_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTESTS_NOT_FOUND);
     }
 
     return mapCompanyContestDTO(contests.map((c) => c.toObject()));

@@ -1,3 +1,3 @@
 export interface ICreateSubscriptionSessionUseCase {
-    execute(userId: string, planId: string): Promise<string>;
+  execute(userId: string, planId: string): Promise<string>;
 }

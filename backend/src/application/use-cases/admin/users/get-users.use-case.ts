@@ -1,7 +1,7 @@
-import { IGetUsersUseCase } from "../../interfaces/admin/get-users.interface";
-import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
-import { UserDTO } from "../../../DTOs/admin/user-management.dto";
-import { mapUserToDTO } from "../../../mappers/admin/user-manage.mapper";
+import { IGetUsersUseCase } from '../../interfaces/admin/get-users.interface';
+import { IAuthRepository } from '../../../../domain/interfaces/repository/user/auth-repository.interface';
+import { UserDTO } from '../../../DTOs/admin/user-management.dto';
+import { mapUserToDTO } from '../../../mappers/admin/user-manage.mapper';
 
 /**
  * Use case responsible for retrieving all users.
@@ -16,14 +16,9 @@ export class GetUsersUseCase implements IGetUsersUseCase {
     search: string,
     status: string,
     page: number,
-    limit: number,
+    limit: number
   ): Promise<{ users: UserDTO[]; total: number }> {
-    const data = await this.authRepository.getUsers(
-      search,
-      status,
-      page,
-      limit,
-    );
+    const data = await this.authRepository.getUsers(search, status, page, limit);
     const users = data.users.map(mapUserToDTO);
     return { users, total: data.total };
   }

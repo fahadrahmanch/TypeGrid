@@ -2,7 +2,7 @@ export interface NotificationProps {
   _id?: string;
   companyId: string;
   senderId: string;
-  type: "individual" | "group" | "all";
+  type: 'individual' | 'group' | 'all';
   targetId?: string | null;
   title: string;
   message: string;
@@ -14,7 +14,7 @@ export class NotificationEntity {
   private _id?: string;
   private companyId: string;
   private senderId: string;
-  private type: "individual" | "group" | "all";
+  private type: 'individual' | 'group' | 'all';
   private targetId?: string | null;
   private title: string;
   private message: string;

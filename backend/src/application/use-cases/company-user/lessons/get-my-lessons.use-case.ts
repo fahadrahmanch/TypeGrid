@@ -1,24 +1,21 @@
-import { IGetMyLessonsUseCase } from "../../interfaces/companyUser/get-my-lessons.interface";
-import { ILessonAssignmentRepository } from "../../../../domain/interfaces/repository/company/lesson-assignment-repository.interface";
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { GetMyLessonsResponseDTO } from "../../../DTOs/companyUser/get-my-lessons-response.dto";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { IGetMyLessonsUseCase } from '../../interfaces/companyUser/get-my-lessons.interface';
+import { ILessonAssignmentRepository } from '../../../../domain/interfaces/repository/company/lesson-assignment-repository.interface';
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { GetMyLessonsResponseDTO } from '../../../DTOs/companyUser/get-my-lessons-response.dto';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
 export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
   constructor(
     private _baseAssignmentLessonRepository: ILessonAssignmentRepository,
     private _userRepository: IUserRepository,
-    private _lessonRepository: ILessonRepository,
+    private _lessonRepository: ILessonRepository
   ) {}
   async execute(userId: string): Promise<GetMyLessonsResponseDTO> {
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
 
     const assignedLessons = await this._baseAssignmentLessonRepository.find({
@@ -26,9 +23,7 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
     });
     const lessons = await Promise.all(
       assignedLessons.map(async (assignedLesson) => {
-        const lesson = await this._lessonRepository.findById(
-          assignedLesson.getLessonId(),
-        );
+        const lesson = await this._lessonRepository.findById(assignedLesson.getLessonId());
         return {
           assignmentId: assignedLesson.getId(),
           status: assignedLesson.getStatus(),
@@ -47,11 +42,11 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
               }
             : null,
         };
-      }),
+      })
     );
 
     const completed = assignedLessons.reduce((acc, curr) => {
-      if (curr.getStatus() === "completed") {
+      if (curr.getStatus() === 'completed') {
         return acc + 1;
       }
       return acc;

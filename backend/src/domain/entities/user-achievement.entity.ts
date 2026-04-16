@@ -4,12 +4,7 @@ export class UserAchievementEntity {
   private _achievementId: string;
   private _unlockedAt: Date;
 
-  constructor(data: {
-    _id?: string;
-    userId: string;
-    achievementId: string;
-    unlockedAt?: Date;
-  }) {
+  constructor(data: { _id?: string; userId: string; achievementId: string; unlockedAt?: Date }) {
     this._id = data._id;
     this._userId = data.userId;
     this._achievementId = data.achievementId;
@@ -17,10 +12,18 @@ export class UserAchievementEntity {
   }
 
   // Getters
-  get id(): string | undefined { return this._id; }
-  get userId(): string { return this._userId; }
-  get achievementId(): string { return this._achievementId; }
-  get unlockedAt(): Date { return this._unlockedAt; }
+  get id(): string | undefined {
+    return this._id;
+  }
+  get userId(): string {
+    return this._userId;
+  }
+  get achievementId(): string {
+    return this._achievementId;
+  }
+  get unlockedAt(): Date {
+    return this._unlockedAt;
+  }
 
   toObject() {
     return {

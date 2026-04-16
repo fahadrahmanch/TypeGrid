@@ -1,12 +1,12 @@
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
-import { IGetCompanyGroupsUseCase } from "../../interfaces/companyAdmin/get-company-groups.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { CompanyGroupDTO } from "../../../DTOs/companyAdmin/company-group.dto";
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
+import { IGetCompanyGroupsUseCase } from '../../interfaces/companyAdmin/get-company-groups.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { CompanyGroupDTO } from '../../../DTOs/companyAdmin/company-group.dto';
 export class GetCompanyGroupsUseCase implements IGetCompanyGroupsUseCase {
   constructor(
     private readonly baseUserRepo: IUserRepository,
-    private readonly baseCompanyGroupRepo: ICompanyGroupRepository,
+    private readonly baseCompanyGroupRepo: ICompanyGroupRepository
   ) {}
 
   async execute(userId: string): Promise<CompanyGroupDTO[]> {

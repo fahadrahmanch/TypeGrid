@@ -1,8 +1,8 @@
-import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-import { IDeleteLessonUseCase } from "../../interfaces/admin/delete-lesson.interface";
+import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IDeleteLessonUseCase } from '../../interfaces/admin/delete-lesson.interface';
 
 /**
  * Use case responsible for deleting a lesson.
@@ -19,10 +19,7 @@ export class DeleteLessonUseCase implements IDeleteLessonUseCase {
     const lesson = await this._lessonRepository.findById(lessonId);
 
     if (!lesson) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.LESSON_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
     }
 
     await this._lessonRepository.delete(lessonId);

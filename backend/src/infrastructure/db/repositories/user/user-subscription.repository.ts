@@ -1,9 +1,9 @@
-import { Model } from "mongoose";
-import { BaseRepository } from "../../base/base.repository";
-import { IUserSubscriptionRepository } from "../../../../domain/interfaces/repository/user/user-subscription.repository.interface";
-import { IUserSubscriptionDocument } from "../../types/documents";
-import { UserSubscriptionEntity } from "../../../../domain/entities/user/user-subscription.entity";
-import { UserSubscriptionMapper } from "../../mappers/user/user-subscription.mapper";
+import { Model } from 'mongoose';
+import { BaseRepository } from '../../base/base.repository';
+import { IUserSubscriptionRepository } from '../../../../domain/interfaces/repository/user/user-subscription.repository.interface';
+import { IUserSubscriptionDocument } from '../../types/documents';
+import { UserSubscriptionEntity } from '../../../../domain/entities/user/user-subscription.entity';
+import { UserSubscriptionMapper } from '../../mappers/user/user-subscription.mapper';
 
 export class UserSubscriptionRepository
   extends BaseRepository<IUserSubscriptionDocument, UserSubscriptionEntity>
@@ -16,7 +16,7 @@ export class UserSubscriptionRepository
     try {
       const doc = await this.model.findOne({
         userId,
-        status: "active",
+        status: 'active',
         endDate: { $gt: new Date() },
       });
       return doc ? this.toDomain(doc) : null;
@@ -25,4 +25,3 @@ export class UserSubscriptionRepository
     }
   }
 }
- 

@@ -1,10 +1,10 @@
-import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
-import { Model } from "mongoose";
-import mongoose from "mongoose";
-import { BaseRepository } from "../../base/base.repository";
-import { ICompanyGroupDocument } from "../../types/documents";
-import { CompanyGroupEntity } from "../../../../domain/entities/company-group.entity";
-import { CompanyGroupMapper } from "../../mappers/company-group.mapper";
+import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
+import { Model } from 'mongoose';
+import mongoose from 'mongoose';
+import { BaseRepository } from '../../base/base.repository';
+import { ICompanyGroupDocument } from '../../types/documents';
+import { CompanyGroupEntity } from '../../../../domain/entities/company-group.entity';
+import { CompanyGroupMapper } from '../../mappers/company-group.mapper';
 
 export class CompanyGroupRepositroy
   extends BaseRepository<ICompanyGroupDocument, CompanyGroupEntity>
@@ -21,6 +21,4 @@ export class CompanyGroupRepositroy
       .exec();
     return docs.map(CompanyGroupMapper.toDomain);
   }
-
- 
 }

@@ -1,10 +1,4 @@
-export type ChallengeStatus =
-  | "pending"
-  | "accepted"
-  | "declined"
-  | "completed"
-  | "waiting"
-  | "ongoing";
+export type ChallengeStatus = 'pending' | 'accepted' | 'declined' | 'completed' | 'waiting' | 'ongoing';
 
 export interface ICompanyChallenge {
   _id?: string;
@@ -32,7 +26,7 @@ export class CompanyChallengeEntity {
     this.receiverId = data.receiverId;
     // this.difficulty = data.difficulty;
     this.CompanyId = data.CompanyId ?? null;
-    this.status = data.status ?? "pending";
+    this.status = data.status ?? 'pending';
     this.competitionId = data.competitionId ?? null;
 
     this.validate();
@@ -44,7 +38,7 @@ export class CompanyChallengeEntity {
 
   private validate() {
     if (this.senderId === this.receiverId) {
-      throw new Error("You cannot challenge yourself");
+      throw new Error('You cannot challenge yourself');
     }
   }
 
@@ -61,35 +55,35 @@ export class CompanyChallengeEntity {
   }
 
   accept() {
-    if (this.status !== "pending") {
-      throw new Error("Only pending challenge can be accepted");
+    if (this.status !== 'pending') {
+      throw new Error('Only pending challenge can be accepted');
     }
 
-    this.status = "accepted";
+    this.status = 'accepted';
   }
 
   decline() {
-    if (this.status !== "pending") {
-      throw new Error("Only pending challenge can be declined");
+    if (this.status !== 'pending') {
+      throw new Error('Only pending challenge can be declined');
     }
 
-    this.status = "declined";
+    this.status = 'declined';
   }
 
   complete() {
-    if (this.status !== "ongoing") {
-      throw new Error("Only ongoing challenge can be completed");
+    if (this.status !== 'ongoing') {
+      throw new Error('Only ongoing challenge can be completed');
     }
 
-    this.status = "completed";
+    this.status = 'completed';
   }
 
   start() {
-    if (this.status !== "accepted") {
-      throw new Error("Only accepted challenge can be started");
+    if (this.status !== 'accepted') {
+      throw new Error('Only accepted challenge can be started');
     }
 
-    this.status = "ongoing";
+    this.status = 'ongoing';
   }
 
   getStatus() {

@@ -1,18 +1,18 @@
-import { IUpdateAchievementUseCase } from "../../interfaces/admin/update-achievement.interface";
-import { IAchievementRepository } from "../../../../domain/interfaces/repository/user/achievement-repository.interface";
-import { CreateAchievementDTO, AchievementResponseDTO } from "../../../DTOs/admin/achievement.dto";
-import { achievementToResponseDTO } from "../../../mappers/admin/achievement-management.mapper";
-import { MESSAGES } from "../../../../domain/constants/messages";
+import { IUpdateAchievementUseCase } from '../../interfaces/admin/update-achievement.interface';
+import { IAchievementRepository } from '../../../../domain/interfaces/repository/user/achievement-repository.interface';
+import { CreateAchievementDTO, AchievementResponseDTO } from '../../../DTOs/admin/achievement.dto';
+import { achievementToResponseDTO } from '../../../mappers/admin/achievement-management.mapper';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
 
 export class UpdateAchievementUseCase implements IUpdateAchievementUseCase {
-  constructor(
-    private readonly _achievementRepository: IAchievementRepository,
-  ) {}
+  constructor(private readonly _achievementRepository: IAchievementRepository) {}
 
   async execute(id: string, data: Partial<CreateAchievementDTO>): Promise<AchievementResponseDTO> {
     const existing = await this._achievementRepository.findById(id);
     if (!existing) {
-      throw new Error(MESSAGES.NOT_FOUND || "Achievement not found");
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.ACHIEVEMENT_NOT_FOUND);
     }
 
     existing.update({
@@ -26,9 +26,9 @@ export class UpdateAchievementUseCase implements IUpdateAchievementUseCase {
     });
 
     const updatedEntity = await this._achievementRepository.update(existing.toObject());
-  
+
     if (!updatedEntity) {
-        throw new Error(MESSAGES.UPDATE_FAILED || "Failed to update achievement");
+      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.UPDATE_FAILED);
     }
 
     return achievementToResponseDTO(updatedEntity);

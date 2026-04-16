@@ -1,14 +1,11 @@
-import { Model } from "mongoose";
-import { BaseRepository } from "../../base/base.repository";
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { IUserDocument } from "../../types/documents";
-import { UserEntity } from "../../../../domain/entities/user.entity";
-import { UserMapper } from "../../mappers/user.mapper";
+import { Model } from 'mongoose';
+import { BaseRepository } from '../../base/base.repository';
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { IUserDocument } from '../../types/documents';
+import { UserEntity } from '../../../../domain/entities/user.entity';
+import { UserMapper } from '../../mappers/user.mapper';
 
-export class UserRepository
-  extends BaseRepository<IUserDocument, UserEntity>
-  implements IUserRepository
-{
+export class UserRepository extends BaseRepository<IUserDocument, UserEntity> implements IUserRepository {
   constructor(model: Model<IUserDocument>) {
     super(model, UserMapper.toDomain);
   }
@@ -16,13 +13,10 @@ export class UserRepository
     const user = await this.model.findOne({ email });
     return user ? UserMapper.toDomain(user) : null;
   }
-  async getCompanyUsers(
-    search: string,
-    companyId: string,
-  ): Promise<UserEntity[]> {
+  async getCompanyUsers(search: string, companyId: string): Promise<UserEntity[]> {
     const users = await this.model
       .find({
-        name: { $regex: "^" + search, $options: "i" },
+        name: { $regex: '^' + search, $options: 'i' },
         CompanyId: companyId,
       })
       .lean<IUserDocument[]>()

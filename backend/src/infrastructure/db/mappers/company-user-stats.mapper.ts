@@ -1,5 +1,5 @@
-import { ICompanyUserStatsDocument } from "../types/documents";
-import { CompanyUserStatsEntity } from "../../../domain/entities";
+import { ICompanyUserStatsDocument } from '../types/documents';
+import { CompanyUserStatsEntity } from '../../../domain/entities';
 
 export class CompanyUserStatsMapper {
   static toDomain(doc: ICompanyUserStatsDocument): CompanyUserStatsEntity {

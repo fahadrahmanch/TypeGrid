@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
-import { Competition } from "./src/infrastructure/db/models/user/competition.schema";
-import { connectDB } from "./src/config/db";
-import { LeaveQuickPlayUseCase } from "./src/application/use-cases/user/quick-play/leave-quick-play.use-case";
-import { CompetitionRepository } from "./src/infrastructure/db/repositories/user/competition.repository";
-import { UserRepository } from "./src/infrastructure/db/repositories/user/user.repository";
-import { User } from "./src/infrastructure/db/models/user/user.schema";
+import mongoose from 'mongoose';
+import { Competition } from './src/infrastructure/db/models/user/competition.schema';
+import { connectDB } from './src/config/db';
+import { LeaveQuickPlayUseCase } from './src/application/use-cases/user/quick-play/leave-quick-play.use-case';
+import { CompetitionRepository } from './src/infrastructure/db/repositories/user/competition.repository';
+import { UserRepository } from './src/infrastructure/db/repositories/user/user.repository';
+import { User } from './src/infrastructure/db/models/user/user.schema';
 
 (async () => {
   const db = new connectDB();
@@ -15,18 +15,18 @@ import { User } from "./src/infrastructure/db/models/user/user.schema";
   const useCase = new LeaveQuickPlayUseCase(competitionRepository, userRepository);
 
   const testGame = await Competition.findOne();
-  if(!testGame) process.exit(0);
-  
+  if (!testGame) process.exit(0);
+
   const parts = [...testGame.participants];
-  for(const p of parts) {
-      await useCase.execute(testGame._id.toString(), p.toString());
+  for (const p of parts) {
+    await useCase.execute(testGame._id.toString(), p.toString());
   }
 
   const afterGame = await Competition.findById(testGame._id);
   if (afterGame) {
-     console.log("Status:", afterGame.status);
-     console.log("Participants:", afterGame.participants);  
+    console.log('Status:', afterGame.status);
+    console.log('Participants:', afterGame.participants);
   }
-  
+
   process.exit();
 })();

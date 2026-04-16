@@ -1,13 +1,8 @@
-export type CompetitionType =
-  | "quick"
-  | "solo"
-  | "group"
-  | "oneToOne"
-  | "company";
+export type CompetitionType = 'quick' | 'solo' | 'group' | 'oneToOne' | 'company';
 
-export type CompetitionMode = "global" | "company";
+export type CompetitionMode = 'global' | 'company';
 
-export type CompetitionStatus = "pending" | "ongoing" | "completed";
+export type CompetitionStatus = 'pending' | 'ongoing' | 'completed';
 
 type Reward = {
   rank: number;
@@ -49,7 +44,7 @@ export class CompetitionEntity {
     this.mode = props.mode;
     this.participants = props.participants ?? [];
     this.groupId = props.groupId ?? null;
-    this.status = props.status ?? "pending";
+    this.status = props.status ?? 'pending';
     this.textId = props.textId;
     this.duration = props.duration;
     this.CompanyId = props.CompanyId || null;
@@ -78,29 +73,29 @@ export class CompetitionEntity {
 
   addParticipant(userId: string) {
     if (this.participants.includes(userId)) {
-      throw new Error("User already joined this competition");
+      throw new Error('User already joined this competition');
     }
     this.participants.push(userId);
   }
 
   startCompetition() {
-    if (this.status !== "pending") {
-      throw new Error("Competition cannot be started");
+    if (this.status !== 'pending') {
+      throw new Error('Competition cannot be started');
     }
-    this.status = "ongoing";
+    this.status = 'ongoing';
   }
   endCompetition() {
-    if (this.status !== "ongoing") {
-      throw new Error("Competition is not running");
+    if (this.status !== 'ongoing') {
+      throw new Error('Competition is not running');
     }
-    this.status = "completed";
+    this.status = 'completed';
   }
 
   completeCompetition() {
-    if (this.status !== "ongoing") {
-      throw new Error("Competition is not running");
+    if (this.status !== 'ongoing') {
+      throw new Error('Competition is not running');
     }
-    this.status = "completed";
+    this.status = 'completed';
   }
   setStatus(status: string) {
     this.status = status as CompetitionStatus;
@@ -112,16 +107,10 @@ export class CompetitionEntity {
     return this.textId;
   }
   removeParticipant(userId: string) {
-    if (
-      !this.participants.some(
-        (participant: any) => participant.toString() === userId,
-      )
-    ) {
-      throw new Error("User is not a participant");
+    if (!this.participants.some((participant: any) => participant.toString() === userId)) {
+      throw new Error('User is not a participant');
     }
-    this.participants = this.participants.filter(
-      (participant: any) => participant.toString() !== userId,
-    );
+    this.participants = this.participants.filter((participant: any) => participant.toString() !== userId);
   }
   toObject() {
     return {

@@ -1,9 +1,9 @@
-import { Response, NextFunction } from "express";
-import logger from "../../utils/logger";
-import { MESSAGES } from "../../domain/constants/messages";
-import { CustomError } from "../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../domain/enums/http-status-codes.enum";
-import { AuthRequest } from "../../types/AuthRequest";
+import { Response } from 'express';
+import logger from '../../utils/logger';
+import { MESSAGES } from '../../domain/constants/messages';
+import { CustomError } from '../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../domain/enums/http-status-codes.enum';
+import { AuthRequest } from '../../types/AuthRequest';
 
 function narrowError(error: unknown): {
   message: string;
@@ -33,17 +33,12 @@ function narrowError(error: unknown): {
   };
 }
 
-export const errorMiddleware = (
-  err: any,
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction,
-) => {
+export const errorMiddleware = (err: any, req: AuthRequest, res: Response) => {
   console.log(err);
   const { message, status, stack } = narrowError(err);
 
   // Log error with context
-  logger.error("API Error", {
+  logger.error('API Error', {
     message,
     status,
     stack,

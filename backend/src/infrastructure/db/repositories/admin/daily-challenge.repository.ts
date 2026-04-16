@@ -1,9 +1,9 @@
-import { Model } from "mongoose";
-import { BaseRepository } from "../../base/base.repository";
-import { IDailyChallengeDocument } from "../../types/documents";
-import { DailyAssignChallengeEntity } from "../../../../domain/entities/daily-challenge.entity";
-import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
-import { DailyAssignChallengeMapper } from "../../mappers/daily-challenge.mapper";
+import { Model } from 'mongoose';
+import { BaseRepository } from '../../base/base.repository';
+import { IDailyChallengeDocument } from '../../types/documents';
+import { DailyAssignChallengeEntity } from '../../../../domain/entities/daily-challenge.entity';
+import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
+import { DailyAssignChallengeMapper } from '../../mappers/daily-challenge.mapper';
 
 export class DailyAssignChallengeRepository
   extends BaseRepository<IDailyChallengeDocument, DailyAssignChallengeEntity>
@@ -16,7 +16,7 @@ export class DailyAssignChallengeRepository
   async getDailyAssignChallenges(
     date: string,
     page: number,
-    limit: number,
+    limit: number
   ): Promise<{ dailyChallenges: DailyAssignChallengeEntity[]; total: number }> {
     const filter: Record<string, unknown> = {};
 
@@ -46,10 +46,7 @@ export class DailyAssignChallengeRepository
     };
   }
 
-  async getTodayChallenge(
-    startOfDay: Date,
-    endOfDay: Date,
-  ): Promise<DailyAssignChallengeEntity | null> {
+  async getTodayChallenge(startOfDay: Date, endOfDay: Date): Promise<DailyAssignChallengeEntity | null> {
     const doc = await this.model
       .findOne({ date: { $gte: startOfDay, $lte: endOfDay } })
       .lean<IDailyChallengeDocument>()

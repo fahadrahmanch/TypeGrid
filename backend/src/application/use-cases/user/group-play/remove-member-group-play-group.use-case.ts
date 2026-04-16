@@ -1,48 +1,36 @@
-import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { IRemoveMemberGroupPlayGroupUseCase } from "../../interfaces/user/group-play/remove-member-group-play-group.interface";
-import { groupDTO, mapGroupToDTO } from "../../../DTOs/user/group.dto";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { IGroupRepository } from '../../../../domain/interfaces/repository/user/group-repository.interface';
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { IRemoveMemberGroupPlayGroupUseCase } from '../../interfaces/user/group-play/remove-member-group-play-group.interface';
+import { groupDTO, mapGroupToDTO } from '../../../DTOs/user/group.dto';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
 
 export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlayGroupUseCase {
   constructor(
     private readonly _groupRepository: IGroupRepository,
-    private readonly _userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
 
-  async execute(
-    groupId: string,
-    userId: string,
-    reason: "KICK" | "LEAVE",
-  ): Promise<groupDTO> {
+  async execute(groupId: string, userId: string, reason: 'KICK' | 'LEAVE'): Promise<groupDTO> {
     const groupEntity = await this._groupRepository.findById(groupId);
     if (!groupEntity) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.GROUP_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
     }
 
     const user = await this._userRepository.findById(userId);
     if (!user) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
 
     if (groupEntity.getOwnerId().toString() === userId) {
-      const newOwner = groupEntity
-        .getMembers()
-        .find((memberId: string) => memberId !== userId);
+      const newOwner = groupEntity.getMembers().find((memberId: string) => memberId !== userId);
       if (newOwner) {
         groupEntity.setOwner(newOwner);
       }
     }
 
-    if (reason === "KICK") {
+    if (reason === 'KICK') {
       groupEntity.kickUser(userId);
     } else {
       groupEntity.removeMember(userId);
@@ -55,10 +43,7 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
     });
 
     if (!updatedGroup) {
-      throw new CustomError(
-        HttpStatusCodes.INTERNAL_SERVER_ERROR,
-        MESSAGES.SOMETHING_WENT_WRONG,
-      );
+      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
 
     const members = await Promise.all(
@@ -69,10 +54,9 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
           userId: member._id?.toString() ?? memberId,
           name: member.name,
           imageUrl: member.imageUrl,
-          isHost:
-            member._id?.toString() === updatedGroup.getOwnerId().toString(),
+          isHost: member._id?.toString() === updatedGroup.getOwnerId().toString(),
         };
-      }),
+      })
     );
 
     return mapGroupToDTO({

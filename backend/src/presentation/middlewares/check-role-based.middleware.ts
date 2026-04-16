@@ -1,8 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
 export function checkRoleBasedMiddleware(allowedRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    
     const user = (req as any).user;
     const userRole = user?.role;
     if (allowedRoles.includes(userRole)) {

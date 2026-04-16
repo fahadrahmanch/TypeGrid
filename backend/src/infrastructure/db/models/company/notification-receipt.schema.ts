@@ -1,18 +1,18 @@
-import { Schema, model } from "mongoose";
-import { INotificationReceiptDocument } from "../../types/documents";
+import { Schema, model } from 'mongoose';
+import { INotificationReceiptDocument } from '../../types/documents';
 
 const notificationReceiptSchema = new Schema<INotificationReceiptDocument>(
   {
     notificationId: {
       type: Schema.Types.ObjectId,
-      ref: "Notification",
+      ref: 'Notification',
       required: true,
       index: true,
     },
 
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
@@ -32,12 +32,9 @@ const notificationReceiptSchema = new Schema<INotificationReceiptDocument>(
   }
 );
 
-notificationReceiptSchema.index(
-  { notificationId: 1, userId: 1 },
-  { unique: true }
-);
+notificationReceiptSchema.index({ notificationId: 1, userId: 1 }, { unique: true });
 
 export const NotificationReceipt = model<INotificationReceiptDocument>(
-  "NotificationReceipt",
+  'NotificationReceipt',
   notificationReceiptSchema
 );

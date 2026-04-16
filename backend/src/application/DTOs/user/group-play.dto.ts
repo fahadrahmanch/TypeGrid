@@ -8,7 +8,7 @@ export interface GroupPlayResult {
   errors: number;
   typedLength: number;
   rank?: number;
-  status: "FINISHED" | "TIMES_UP" | "PLAYING";
+  status: 'FINISHED' | 'TIMES_UP' | 'PLAYING';
   timeTaken: number;
   updatedAt: number;
 }

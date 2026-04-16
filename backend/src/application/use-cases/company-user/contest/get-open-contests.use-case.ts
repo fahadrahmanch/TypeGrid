@@ -1,19 +1,19 @@
-import { IGetOpenContestsUseCase } from "../../interfaces/companyUser/get-open-contests.interface";
-import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { openContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
-import { mapOpenContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
+import { IGetOpenContestsUseCase } from '../../interfaces/companyUser/get-open-contests.interface';
+import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { openContestDTO } from '../../../DTOs/companyAdmin/company-contest.dto';
+import { mapOpenContestDTO } from '../../../mappers/companyAdmin/company-contest.mapper';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { ContestEntity } from '../../../../domain/entities/company-contest.entity';
 /**
  * Use case for retrieving open contests available to the user.
  */
 export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
-    private readonly _userRepository: IUserRepository,
+    private readonly _userRepository: IUserRepository
   ) {}
 
   /**
@@ -21,33 +21,27 @@ export class GetOpenContestsUseCase implements IGetOpenContestsUseCase {
    */
   async execute(userId: string): Promise<openContestDTO[]> {
     if (!userId) {
-      throw new CustomError(
-        HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_REQUEST,
-      );
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
     }
 
     const user = await this._userRepository.findById(userId);
 
     if (!user) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.AUTH_USER_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
 
     const now = new Date();
 
     const contests = await this._contestRepository.find({
       CompanyId: user.CompanyId,
-      status: "upcoming",
-      contestMode: "open",
+      status: 'upcoming',
+      contestMode: 'open',
       date: { $gt: now },
     });
 
     return mapOpenContestDTO(
       contests.map((c: ContestEntity) => c.toObject()),
-      userId,
+      userId
     );
   }
 }

@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 // ────────────── User ──────────────
 export interface IUserDocument {
@@ -12,12 +12,12 @@ export interface IUserDocument {
   number?: string;
   CompanyId?: Types.ObjectId | null;
   CompanyRole?: string | null;
-  KeyBoardLayout: "QWERTY" | "AZERTY" | "DVORAK";
-  status?: "active" | "block";
+  KeyBoardLayout: 'QWERTY' | 'AZERTY' | 'DVORAK';
+  status?: 'active' | 'block';
   contactNumber?: number;
   gender?: string;
   googleId?: string | null;
-  role: "user" | "admin" | "companyUser" | "companyAdmin";
+  role: 'user' | 'admin' | 'companyUser' | 'companyAdmin';
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -32,7 +32,7 @@ export interface ICompanyDocument {
   OwnerId?: Types.ObjectId;
   description?: string;
   rejectionReason?: string;
-  status?: "active" | "inactive" | "pending" | "reject";
+  status?: 'active' | 'inactive' | 'pending' | 'reject';
   planId?: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
@@ -43,11 +43,11 @@ export interface ILessonDocument {
   _id: Types.ObjectId;
   title: string;
   text: string;
-  category: "sentence" | "paragraph";
-  level: "beginner" | "intermediate" | "advanced";
+  category: 'sentence' | 'paragraph';
+  level: 'beginner' | 'intermediate' | 'advanced';
   wpm: number;
   accuracy: number;
-  createdBy: "admin" | "company";
+  createdBy: 'admin' | 'company';
   companyId?: Types.ObjectId | null;
   createdAt: Date;
   updatedAt: Date;
@@ -60,9 +60,9 @@ export interface IGroupDocument {
   ownerId: Types.ObjectId;
   members: Types.ObjectId[];
   maximumPlayers: number;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: 'easy' | 'medium' | 'hard';
   joinLink?: string | null;
-  status: "waiting" | "started" | "completed";
+  status: 'waiting' | 'started' | 'completed';
   kickedUsers: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -71,12 +71,12 @@ export interface IGroupDocument {
 // ────────────── Competition ──────────────
 export interface ICompetitionDocument {
   _id?: Types.ObjectId;
-  type: "quick" | "solo" | "group" | "oneToOne" | "company";
-  mode: "global" | "company";
+  type: 'quick' | 'solo' | 'group' | 'oneToOne' | 'company';
+  mode: 'global' | 'company';
   participants: Types.ObjectId[];
   groupId?: Types.ObjectId | null;
   startedAt?: Date | null;
-  status: "pending" | "ongoing" | "completed";
+  status: 'pending' | 'ongoing' | 'completed';
   textId?: Types.ObjectId;
   duration: number;
   countDown: number;
@@ -89,7 +89,7 @@ export interface ICompetitionDocument {
 // ────────────── Result ──────────────
 export interface IResultDocument {
   _id?: Types.ObjectId;
-  type: "quick" | "solo" | "group" | "contest";
+  type: 'quick' | 'solo' | 'group' | 'contest';
   competitionId?: Types.ObjectId | null;
   contestId?: Types.ObjectId | null;
   userId: Types.ObjectId;
@@ -108,12 +108,12 @@ export interface IResultDocument {
 // ────────────── Contest ──────────────
 export interface IContestDocument {
   _id?: Types.ObjectId;
-  contestMode: "open" | "group";
+  contestMode: 'open' | 'group';
   title: string;
   description?: string;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: 'easy' | 'medium' | 'hard';
   groupId?: Types.ObjectId | null;
-  textSource: "manual" | "random";
+  textSource: 'manual' | 'random';
   participants: Types.ObjectId[];
   contestText?: string;
   date: Date;
@@ -121,7 +121,7 @@ export interface IContestDocument {
   duration: number;
   maxParticipants: number;
   rewards: Array<{ rank: number; prize: number }>;
-  status: "upcoming" | "ongoing" | "completed" | "waiting";
+  status: 'upcoming' | 'ongoing' | 'completed' | 'waiting';
   countDown?: number;
   startedAt?: Date;
   CompanyId: Types.ObjectId;
@@ -134,7 +134,7 @@ export interface ICompanyGroupDocument {
   _id?: Types.ObjectId;
   companyId: Types.ObjectId;
   name: string;
-  type: "beginner" | "intermidate" | "advanced";
+  type: 'beginner' | 'intermidate' | 'advanced';
   members: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -146,7 +146,7 @@ export interface ICompanyChallengeDocument {
   CompanyId: Types.ObjectId;
   senderId: Types.ObjectId;
   receiverId: Types.ObjectId;
-  status: "pending" | "accepted" | "declined" | "completed" | "waiting";
+  status: 'pending' | 'accepted' | 'declined' | 'completed' | 'waiting';
   competitionId?: Types.ObjectId | null;
   createdAt?: Date;
   updatedAt?: Date;
@@ -157,7 +157,7 @@ export interface ILessonAssignmentDocument {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   lessonId: Types.ObjectId;
-  status: "assigned" | "progress" | "completed" | "expired";
+  status: 'assigned' | 'progress' | 'completed' | 'expired';
   assignedAt?: Date;
   deadlineAt: Date;
   companyId: Types.ObjectId;
@@ -176,12 +176,12 @@ export interface ILessonResultDocument {
   wpm: number;
   accuracy: number;
   errors: number;
-  status: "assigned" | "progress" | "completed" | "expired";
+  status: 'assigned' | 'progress' | 'completed' | 'expired';
   createdAt?: Date;
 }
 export interface IResultDocument {
   _id?: Types.ObjectId;
-  type: "quick" | "solo" | "group" | "contest";
+  type: 'quick' | 'solo' | 'group' | 'contest';
   competitionId?: Types.ObjectId | null;
   contestId?: Types.ObjectId | null;
   userId: Types.ObjectId;
@@ -217,7 +217,7 @@ export interface IGoalDocument {
 export interface IAdminChallengeDocument {
   _id?: Types.ObjectId;
   title: string;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: 'easy' | 'medium' | 'hard';
   goal: Types.ObjectId;
   reward: Types.ObjectId;
   duration: number;
@@ -247,7 +247,7 @@ export interface IDailyChallengeProgressDocument {
   userId: Types.ObjectId;
   dailyChallengeId: Types.ObjectId;
   date: Date;
-  status: "not_started" | "in_progress" | "completed" | "failed";
+  status: 'not_started' | 'in_progress' | 'completed' | 'failed';
   wpm: number;
   accuracy: number;
   wordsTyped: number;
@@ -343,7 +343,7 @@ export interface INotificationDocument {
   _id?: Types.ObjectId;
   companyId: Types.ObjectId;
   senderId: Types.ObjectId;
-  type: "individual" | "group" | "all";
+  type: 'individual' | 'group' | 'all';
   targetId: Types.ObjectId | null;
   title: string;
   message: string;
@@ -369,7 +369,7 @@ export interface ISubscriptionPlanDocument {
   price: number;
   duration: number; // in days
   features: string[];
-  type: "normal" | "company";
+  type: 'normal' | 'company';
   userLimit?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -381,7 +381,7 @@ export interface IPaymentDocument {
   userId: Types.ObjectId;
   amount: number;
   currency: string;
-  status: "pending" | "completed" | "failed" | "refunded";
+  status: 'pending' | 'completed' | 'failed' | 'refunded';
   provider: string; // e.g., 'stripe'
   providerTransactionId: string;
   createdAt?: Date;
@@ -393,7 +393,7 @@ export interface IUserSubscriptionDocument {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   subscriptionPlanId: Types.ObjectId;
-  status: "active" | "expired" | "pending";
+  status: 'active' | 'expired' | 'pending';
   startDate?: Date;
   endDate?: Date;
   paymentId?: Types.ObjectId;

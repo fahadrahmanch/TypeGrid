@@ -1,7 +1,7 @@
-import { app } from ".";
-import { initSocket } from "./infrastructure/socket/socket";
-import http from "http";
-import logger from "./utils/logger";
+import { app } from '.';
+import { initSocket } from './infrastructure/socket/socket';
+import http from 'http';
+import logger from './utils/logger';
 
 const application = new app();
 async function startServer() {

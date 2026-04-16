@@ -1,4 +1,4 @@
-import { contestResultDTO } from "../../DTOs/companyAdmin/contest-result.dto";
+import { contestResultDTO } from '../../DTOs/companyAdmin/contest-result.dto';
 export function contestResultMapper(result: any): contestResultDTO {
   return {
     id: result._id,

@@ -19,7 +19,7 @@ export interface NotificationHistoryDTO {
   id: string;
   title: string;
   message: string;
-  type: "individual" | "group" | "all";
+  type: 'individual' | 'group' | 'all';
   targetId: string | null;
   createdAt: Date;
 }

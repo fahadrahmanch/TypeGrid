@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 export const lessonValidation = {
   createLesson: Joi.object({
@@ -6,7 +6,7 @@ export const lessonValidation = {
     text: Joi.string().required(),
     category: Joi.string().required(),
     level: Joi.string().required(),
-   
+
     wpm: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
     accuracy: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
   }),
@@ -16,7 +16,7 @@ export const lessonValidation = {
     text: Joi.string(),
     category: Joi.string(),
     level: Joi.string(),
-    
+
     wpm: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
     accuracy: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
   }),

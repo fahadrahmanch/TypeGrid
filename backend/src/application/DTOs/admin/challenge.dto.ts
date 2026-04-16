@@ -1,6 +1,6 @@
 export interface CreateChallengeDTO {
   title: string;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: 'easy' | 'medium' | 'hard';
   goal: string;
   reward: string;
   duration: number;
@@ -9,7 +9,7 @@ export interface CreateChallengeDTO {
 
 export interface UpdateChallengeDTO {
   title?: string;
-  difficulty?: "easy" | "medium" | "hard";
+  difficulty?: 'easy' | 'medium' | 'hard';
   goal?: string;
   reward?: string;
   duration?: number;
@@ -19,7 +19,7 @@ export interface UpdateChallengeDTO {
 export interface ChallengeResponseDTO {
   _id?: string;
   title: string;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: 'easy' | 'medium' | 'hard';
   goal: string;
   reward: string;
   duration: number;

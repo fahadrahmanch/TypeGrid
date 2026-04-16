@@ -1,5 +1,5 @@
-import { IAchievementDocument } from "../types/documents";
-import { AchievementEntity } from "../../../domain/entities/achievement.entity";
+import { IAchievementDocument } from '../types/documents';
+import { AchievementEntity } from '../../../domain/entities/achievement.entity';
 
 export class AchievementMapper {
   static toDomain(doc: IAchievementDocument): AchievementEntity {

@@ -1,43 +1,23 @@
-import { Request, Response, NextFunction } from "express";
-import { IGetAllAchievementsUseCase } from "../../../application/use-cases/user/achievements/get-all-achievements.use-case";
-import { AuthRequest } from "../../../types/AuthRequest";
+import { Response } from 'express';
+import { IGetAllAchievementsUseCase } from '../../../application/use-cases/user/achievements/get-all-achievements.use-case';
+import { AuthRequest } from '../../../types/AuthRequest';
+import { HttpStatus } from '../../constants/httpStatus';
+import { MESSAGES } from '../../../domain/constants/messages';
+import { CustomError } from '../../../domain/entities/custom-error.entity';
 
-export interface IUserAchievementController {
-    allAchievements(req: Request, res: Response, next: NextFunction): Promise<void>;
-    userAchievements(req: Request, res: Response, next: NextFunction): Promise<void>;
-}
+export class UserAchievementController {
+  constructor(private readonly _getAllAchievementsUseCase: IGetAllAchievementsUseCase) {}
 
-export class UserAchievementController implements IUserAchievementController {
-    constructor(
-        private readonly _getAllAchievementsUseCase: IGetAllAchievementsUseCase
-    ){}
-
-
-    async allAchievements(req:AuthRequest,res:Response, next: NextFunction):Promise<void>{
-        try{
-            const userId = req.user?.userId;
-            if(!userId){
-                throw new Error("User not found");
-            }
-            const result = await this._getAllAchievementsUseCase.execute(userId);
-            console.log("result",result);
-            res.status(200).json({
-                success:true,
-                message:"Achievements fetched successfully",
-                data:result
-            });
-        }
-        catch(error){
-            next(error);
-        }
+  allAchievements = async (req: AuthRequest, res: Response): Promise<void> => {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.AUTH_USER_NOT_FOUND);
     }
-    async userAchievements(req:Request,res:Response, next: NextFunction):Promise<void>{
-        try{
-        
-        }
-        catch(error){
-            next(error);
-        }
-    }
-
+    const result = await this._getAllAchievementsUseCase.execute(userId);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.ACHIEVEMENTS_FETCH_SUCCESS,
+      data: result,
+    });
+  };
 }

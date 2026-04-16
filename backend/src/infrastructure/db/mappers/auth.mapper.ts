@@ -1,5 +1,5 @@
-import { IUserDocument } from "../types/documents";
-import AuthUserEntity from "../../../domain/entities/auth-user.entity";
+import { IUserDocument } from '../types/documents';
+import AuthUserEntity from '../../../domain/entities/auth-user.entity';
 
 export class AuthMapper {
   static toDomain(doc: IUserDocument): AuthUserEntity {

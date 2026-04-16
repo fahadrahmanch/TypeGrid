@@ -1,7 +1,4 @@
-import { CreateContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { CreateContestDTO } from '../../../DTOs/companyAdmin/company-contest.dto';
 export interface IUpdateContestUseCase {
-  execute(
-    constestId: string,
-    data: CreateContestDTO,
-  ): Promise<CreateContestDTO>;
+  execute(constestId: string, data: CreateContestDTO): Promise<CreateContestDTO>;
 }

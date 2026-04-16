@@ -1,29 +1,29 @@
-import { Schema, model } from "mongoose";
-import { ILessonResultDocument } from "../../types/documents";
+import { Schema, model } from 'mongoose';
+import { ILessonResultDocument } from '../../types/documents';
 
 const LessonResultSchema = new Schema<ILessonResultDocument>(
   {
     companyId: {
       type: Schema.Types.ObjectId,
-      ref: "Company",
+      ref: 'Company',
       required: true,
       index: true,
     },
     assignmentId: {
       type: Schema.Types.ObjectId,
-      ref: "LessonAssignment",
+      ref: 'LessonAssignment',
       required: true,
       unique: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
     lessonId: {
       type: Schema.Types.ObjectId,
-      ref: "Lesson",
+      ref: 'Lesson',
       required: true,
     },
     wpm: {
@@ -40,16 +40,13 @@ const LessonResultSchema = new Schema<ILessonResultDocument>(
     },
     status: {
       type: String,
-      enum: ["assigned", "progress", "completed", "expired"],
+      enum: ['assigned', 'progress', 'completed', 'expired'],
       required: true,
     },
   },
   {
     timestamps: { createdAt: true, updatedAt: false },
-  },
+  }
 );
 
-export const LessonResult = model<ILessonResultDocument>(
-  "LessonResult",
-  LessonResultSchema,
-);
+export const LessonResult = model<ILessonResultDocument>('LessonResult', LessonResultSchema);

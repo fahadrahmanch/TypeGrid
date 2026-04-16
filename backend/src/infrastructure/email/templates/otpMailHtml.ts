@@ -52,7 +52,7 @@ export const HtmlforOtp = (name: string, otp: string, body: string) => {
                     ? `<p style="color:#8A796A; font-size:14px; margin:20px auto 10px; max-width:400px; line-height:1.5;">
                         ${body}
                       </p>`
-                    : ""
+                    : ''
                 }
 
                 <!-- Divider -->

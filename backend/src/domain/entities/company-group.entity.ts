@@ -1,4 +1,4 @@
-export type CompanyGroupType = "beginner" | "intermidate" | "advanced";
+export type CompanyGroupType = 'beginner' | 'intermidate' | 'advanced';
 
 export interface CompanyGroupProps {
   id?: string;

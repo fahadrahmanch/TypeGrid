@@ -1,4 +1,4 @@
-import { ParticipantsDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { ParticipantsDTO } from '../../../DTOs/companyAdmin/company-contest.dto';
 export interface IGetContestParticipantsUseCase {
   execute(contestId: string): Promise<ParticipantsDTO[]>;
 }

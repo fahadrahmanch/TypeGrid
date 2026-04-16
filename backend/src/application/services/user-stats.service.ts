@@ -1,7 +1,5 @@
-type Difficulty = "easy" | "medium" | "hard";
-type ActivityType = "quick"
-  | "solo"
-  | "group"
+type Difficulty = 'easy' | 'medium' | 'hard';
+type ActivityType = 'quick' | 'solo' | 'group';
 
 const difficultyMultiplier: Record<Difficulty, number> = {
   easy: 1.0,
@@ -10,23 +8,19 @@ const difficultyMultiplier: Record<Difficulty, number> = {
 };
 
 const activityMultiplier: Record<ActivityType, number> = {
-    solo: 1.0,
-    quick: 1.2,
-    group: 1.5,
+  solo: 1.0,
+  quick: 1.2,
+  group: 1.5,
 };
 
 export async function updateUserStats(
   wpm: number,
   accuracy: number,
   difficulty: Difficulty,
-  activityType: ActivityType,
+  activityType: ActivityType
 ) {
   const score = Math.round(
-    wpm *
-      (accuracy / 100) *
-      difficultyMultiplier[difficulty] *
-      activityMultiplier[activityType],
+    wpm * (accuracy / 100) * difficultyMultiplier[difficulty] * activityMultiplier[activityType]
   );
   return score;
-
 }

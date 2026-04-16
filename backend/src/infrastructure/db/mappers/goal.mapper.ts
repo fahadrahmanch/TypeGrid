@@ -1,10 +1,10 @@
-import { IGoalDocument } from "../types/documents";
-import { GoalEntity } from "../../../domain/entities/goal.entity";
+import { IGoalDocument } from '../types/documents';
+import { GoalEntity } from '../../../domain/entities/goal.entity';
 
 export class GoalMapper {
   static toDomain(doc: IGoalDocument): GoalEntity {
     return new GoalEntity({
-      _id: doc._id?.toString() ?? "",
+      _id: doc._id?.toString() ?? '',
       title: doc.title,
       wpm: doc.wpm,
       accuracy: doc.accuracy,

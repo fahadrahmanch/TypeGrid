@@ -1,5 +1,5 @@
-import { ISubscriptionPlanDocument } from "../../types/documents";
-import { SubscriptionPlanEntity } from "../../../../domain/entities/admin/subscription-plan.entity";
+import { ISubscriptionPlanDocument } from '../../types/documents';
+import { SubscriptionPlanEntity } from '../../../../domain/entities/admin/subscription-plan.entity';
 
 export class SubscriptionPlanMapper {
   static toDomain(doc: ISubscriptionPlanDocument): SubscriptionPlanEntity {

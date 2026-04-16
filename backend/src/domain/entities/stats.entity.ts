@@ -1,4 +1,3 @@
-
 export class StatsEntity {
   private _id?: string;
   private userId: string;

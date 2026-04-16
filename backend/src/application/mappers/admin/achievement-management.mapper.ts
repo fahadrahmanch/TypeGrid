@@ -1,5 +1,5 @@
-import { AchievementEntity } from "../../../domain/entities/achievement.entity";
-import { AchievementResponseDTO, CreateAchievementDTO } from "../../DTOs/admin/achievement.dto";
+import { AchievementEntity } from '../../../domain/entities/achievement.entity';
+import { AchievementResponseDTO, CreateAchievementDTO } from '../../DTOs/admin/achievement.dto';
 
 export const achievementToEntity = (dto: CreateAchievementDTO): AchievementEntity => {
   return new AchievementEntity({

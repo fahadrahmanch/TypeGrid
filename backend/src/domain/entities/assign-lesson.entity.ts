@@ -1,8 +1,4 @@
-export type LessonAssignmentStatus =
-  | "assigned"
-  | "progress"
-  | "completed"
-  | "expired";
+export type LessonAssignmentStatus = 'assigned' | 'progress' | 'completed' | 'expired';
 
 interface LessonAssignmentProps {
   id?: string;
@@ -34,7 +30,7 @@ export class LessonAssignmentEntity {
     this.userId = props.userId;
     this.lessonId = props.lessonId;
     this.companyId = props.companyId;
-    this.status = props.status ?? "assigned";
+    this.status = props.status ?? 'assigned';
     this.assignedAt = props.assignedAt ?? new Date();
     this.deadlineAt = props.deadlineAt;
     this.completedAt = props.completedAt;
@@ -87,16 +83,16 @@ export class LessonAssignmentEntity {
   // business methods
 
   markAsProgress(): void {
-    this.status = "progress";
+    this.status = 'progress';
   }
 
   markAsCompleted(): void {
-    this.status = "completed";
+    this.status = 'completed';
     this.completedAt = new Date();
   }
 
   markAsExpired(): void {
-    this.status = "expired";
+    this.status = 'expired';
   }
 
   toObject() {

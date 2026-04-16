@@ -1,11 +1,7 @@
-import { StatsEntity } from "../../../domain/entities/stats.entity";
-import { LeaderboardDTO } from "../../DTOs/user/leaderboard.dto";
+import { StatsEntity } from '../../../domain/entities/stats.entity';
+import { LeaderboardDTO } from '../../DTOs/user/leaderboard.dto';
 
-export function leaderboardMapper(
-  stats: StatsEntity,
-  name: string,
-  imageUrl: string,
-): LeaderboardDTO {
+export function leaderboardMapper(stats: StatsEntity, name: string, imageUrl: string): LeaderboardDTO {
   return {
     userId: stats.getUserId(),
     name,

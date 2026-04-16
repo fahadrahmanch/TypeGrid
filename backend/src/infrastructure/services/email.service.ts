@@ -1,15 +1,15 @@
-import { IEmailService } from "../../domain/interfaces/services/email-service.interface";
-import nodemailer from "nodemailer";
-import { IEmailTemplate } from "../../application/DTOs/email/email-template.dto";
-import { HtmlforOtp } from "../email/templates/otpMailHtml";
-import dotenv from "dotenv";
-import logger from "../../utils/logger";
+import { IEmailService } from '../../domain/interfaces/services/email-service.interface';
+import nodemailer from 'nodemailer';
+import { IEmailTemplate } from '../../application/DTOs/email/email-template.dto';
+import { HtmlforOtp } from '../email/templates/otpMailHtml';
+import dotenv from 'dotenv';
+import logger from '../../utils/logger';
 dotenv.config();
 export class EmailService implements IEmailService {
   private _transporter: nodemailer.Transporter;
   constructor() {
     this._transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: 'smtp.gmail.com',
       port: 465,
       secure: true,
 
@@ -20,10 +20,8 @@ export class EmailService implements IEmailService {
     });
     this._transporter
       .verify()
-      .then(() => logger.info(" Mail transporter connected successfully"))
-      .catch((err) =>
-        logger.error(" Mail transporter connection failed:", err),
-      );
+      .then(() => logger.info(' Mail transporter connected successfully'))
+      .catch((err) => logger.error(' Mail transporter connection failed:', err));
   }
 
   async sendMail(mailOptions: nodemailer.SendMailOptions): Promise<void> {
@@ -31,11 +29,7 @@ export class EmailService implements IEmailService {
   }
 
   async sentOtp(template: IEmailTemplate): Promise<void> {
-    const html = await HtmlforOtp(
-      template.name,
-      template.otp,
-      template.body ?? "",
-    );
+    const html = await HtmlforOtp(template.name, template.otp, template.body ?? '');
 
     const mailOptions: nodemailer.SendMailOptions = {
       from: process.env.EMAIL_USER,

@@ -1,10 +1,8 @@
-import { UserProfileDTO } from "../../DTOs/user/user-profile.dto";
-import { UserEntity } from "../../../domain/entities/user.entity";
-import { AuthUserEntity } from "../../../domain/entities";
+import { UserProfileDTO } from '../../DTOs/user/user-profile.dto';
+import { UserEntity } from '../../../domain/entities/user.entity';
+import { AuthUserEntity } from '../../../domain/entities';
 
-export const mapToUserProfileDTO = (
-  user: UserEntity | AuthUserEntity,
-): UserProfileDTO => {
+export const mapToUserProfileDTO = (user: UserEntity | AuthUserEntity): UserProfileDTO => {
   return {
     _id: user._id,
     name: user.name,

@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import { IUserDocument } from "../../types/documents";
+import mongoose, { Schema } from 'mongoose';
+import { IUserDocument } from '../../types/documents';
 
 const userSchema: mongoose.Schema = new Schema({
   name: { type: String, required: true },
@@ -7,14 +7,13 @@ const userSchema: mongoose.Schema = new Schema({
   password: { type: String, required: false },
   imageUrl: {
     type: String,
-    default:
-      "https://res.cloudinary.com/demo/image/upload/v1690000000/default-profile.jpg",
+    default: 'https://res.cloudinary.com/demo/image/upload/v1690000000/default-profile.jpg',
     required: false,
   },
   number: { type: String, required: false, default: null },
   CompanyId: {
     type: Schema.Types.ObjectId,
-    ref: "Company",
+    ref: 'Company',
     required: false,
     default: null,
   },
@@ -22,10 +21,10 @@ const userSchema: mongoose.Schema = new Schema({
   age: { type: String, required: false, default: null },
   CompanyRole: { type: String, required: false, default: null },
   gender: { type: String, required: false, default: null },
-  KeyBoardLayout: { type: String, required: true, default: "QWERTY" },
-  status: { type: String, required: false, default: "active" },
+  KeyBoardLayout: { type: String, required: true, default: 'QWERTY' },
+  status: { type: String, required: false, default: 'active' },
   googleId: { type: String, required: false, default: null },
-  role: { type: String, required: true, default: "user" },
+  role: { type: String, required: true, default: 'user' },
 });
 
-export const User = mongoose.model<IUserDocument>("User", userSchema);
+export const User = mongoose.model<IUserDocument>('User', userSchema);

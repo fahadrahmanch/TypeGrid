@@ -1,5 +1,5 @@
-type Difficulty = "easy" | "medium" | "hard";
-type ActivityType = "lesson" | "oneToOne" | "contest";
+type Difficulty = 'easy' | 'medium' | 'hard';
+type ActivityType = 'lesson' | 'oneToOne' | 'contest';
 
 const difficultyMultiplier: Record<Difficulty, number> = {
   easy: 1.0,
@@ -17,13 +17,10 @@ export async function updateCompanyUserStats(
   wpm: number,
   accuracy: number,
   difficulty: Difficulty,
-  activityType: ActivityType,
+  activityType: ActivityType
 ) {
   const score = Math.round(
-    wpm *
-      (accuracy / 100) *
-      difficultyMultiplier[difficulty] *
-      activityMultiplier[activityType],
+    wpm * (accuracy / 100) * difficultyMultiplier[difficulty] * activityMultiplier[activityType]
   );
   return score;
   //   await CompanyUserStats.findOneAndUpdate(

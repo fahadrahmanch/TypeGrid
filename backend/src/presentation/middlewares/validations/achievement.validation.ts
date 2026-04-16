@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 export const achievementValidation = {
   create: Joi.object({
@@ -19,4 +19,4 @@ export const achievementValidation = {
     minGame: Joi.number().min(0).optional(),
     xp: Joi.number().min(0).optional(),
   }),
-}; 
+};

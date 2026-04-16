@@ -75,16 +75,36 @@ export class AchievementEntity {
   }
 
   // Getters
-  get id(): string | undefined { return this._id; }
-  get title(): string { return this._title; }
-  get description(): string { return this._description; }
-  get imageUrl(): string { return this._imageUrl; }
-  get minWpm(): number | undefined { return this._minWpm; }
-  get minAccuracy(): number | undefined { return this._minAccuracy; }
-  get minGame(): number | undefined { return this._minGame; }
-  get xp(): number { return this._xp; }
-  get createdAt(): Date | undefined { return this._createdAt; }
-  get updatedAt(): Date | undefined { return this._updatedAt; }
+  get id(): string | undefined {
+    return this._id;
+  }
+  get title(): string {
+    return this._title;
+  }
+  get description(): string {
+    return this._description;
+  }
+  get imageUrl(): string {
+    return this._imageUrl;
+  }
+  get minWpm(): number | undefined {
+    return this._minWpm;
+  }
+  get minAccuracy(): number | undefined {
+    return this._minAccuracy;
+  }
+  get minGame(): number | undefined {
+    return this._minGame;
+  }
+  get xp(): number {
+    return this._xp;
+  }
+  get createdAt(): Date | undefined {
+    return this._createdAt;
+  }
+  get updatedAt(): Date | undefined {
+    return this._updatedAt;
+  }
 
   // Encapsulated update method
   update(data: {

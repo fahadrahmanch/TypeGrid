@@ -1,100 +1,86 @@
-import { NextFunction, Request, Response } from "express";
-import { AuthRequest } from "../../../types/AuthRequest";
-import { IIndividualNotificationUseCase } from "../../../application/use-cases/interfaces/companyAdmin/individual-notification.interface";
-import { IGroupNotificationUseCase } from "../../../application/use-cases/interfaces/companyAdmin/group-notification.interface";
-import { IAllNotificationUseCase } from "../../../application/use-cases/interfaces/companyAdmin/all-notification.interface";
-import { INotificationHistoryUseCase } from "../../../application/use-cases/interfaces/companyAdmin/notification-history.interface";
-import { IndividualNotificationDTO, GroupNotificationDTO, AllNotificationDTO } from "../../../application/DTOs/companyAdmin/notification.dto";
+import { Response } from 'express';
+import { AuthRequest } from '../../../types/AuthRequest';
+import { IIndividualNotificationUseCase } from '../../../application/use-cases/interfaces/companyAdmin/individual-notification.interface';
+import { IGroupNotificationUseCase } from '../../../application/use-cases/interfaces/companyAdmin/group-notification.interface';
+import { IAllNotificationUseCase } from '../../../application/use-cases/interfaces/companyAdmin/all-notification.interface';
+import { INotificationHistoryUseCase } from '../../../application/use-cases/interfaces/companyAdmin/notification-history.interface';
+import {
+  IndividualNotificationDTO,
+  GroupNotificationDTO,
+  AllNotificationDTO,
+} from '../../../application/DTOs/companyAdmin/notification.dto';
+import { HttpStatus } from '../../constants/httpStatus';
+import { MESSAGES } from '../../../domain/constants/messages';
+import { CustomError } from '../../../domain/entities/custom-error.entity';
 
 export class NotificationController {
-    constructor(
-        private individualNotificationUseCase: IIndividualNotificationUseCase,
-        private groupNotificationUseCase: IGroupNotificationUseCase,
-        private allNotificationUseCase: IAllNotificationUseCase,
-        private notificationHistoryUseCase: INotificationHistoryUseCase
-    ) { }
+  constructor(
+    private individualNotificationUseCase: IIndividualNotificationUseCase,
+    private groupNotificationUseCase: IGroupNotificationUseCase,
+    private allNotificationUseCase: IAllNotificationUseCase,
+    private notificationHistoryUseCase: INotificationHistoryUseCase
+  ) {}
 
-    async sendIndividualNotification(req: AuthRequest, res: Response, next: NextFunction) {
-        try {
-            const data: IndividualNotificationDTO = req.body;
-            const senderId = req.user?.userId;
+  sendIndividualNotification = async (req: AuthRequest, res: Response): Promise<void> => {
+    const data: IndividualNotificationDTO = req.body;
+    const senderId = req.user?.userId;
 
-            if (!senderId) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
-
-            await this.individualNotificationUseCase.execute(data, senderId);
-
-            res.status(200).json({
-                success: true,
-                message: "Notification sent successfully"
-            });
-        }
-        catch (error: unknown) {
-            next(error)
-        }
+    if (!senderId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
     }
 
-    async sendGroupNotification(req: AuthRequest, res: Response, next: NextFunction) {
-        try {
-            const data: GroupNotificationDTO = req.body;
-            const senderId = req.user?.userId;
+    await this.individualNotificationUseCase.execute(data, senderId);
 
-            if (!senderId) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.NOTIFICATION_SENT_SUCCESS,
+    });
+  };
 
-            await this.groupNotificationUseCase.execute(data, senderId);
+  sendGroupNotification = async (req: AuthRequest, res: Response): Promise<void> => {
+    const data: GroupNotificationDTO = req.body;
+    const senderId = req.user?.userId;
 
-            res.status(200).json({
-                success: true,
-                message: "Group notification sent successfully"
-            });
-        }
-        catch (error: unknown) {
-            next(error)
-        }
+    if (!senderId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
     }
 
-    async sendAllNotification(req: AuthRequest, res: Response, next: NextFunction) {
-        try {
-            const data: AllNotificationDTO = req.body;
-            const senderId = req.user?.userId;
+    await this.groupNotificationUseCase.execute(data, senderId);
 
-            if (!senderId) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.GROUP_NOTIFICATION_SENT_SUCCESS,
+    });
+  };
 
-            await this.allNotificationUseCase.execute(data, senderId);
+  sendAllNotification = async (req: AuthRequest, res: Response): Promise<void> => {
+    const data: AllNotificationDTO = req.body;
+    const senderId = req.user?.userId;
 
-            res.status(200).json({
-                success: true,
-                message: "Notification sent to all users successfully"
-            });
-        }
-        catch (error: unknown) {
-            next(error)
-        }
+    if (!senderId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
     }
 
-    async getNotificationHistory(req: AuthRequest, res: Response, next: NextFunction) {
-        try {
-            const senderId = req.user?.userId;
-            if (!senderId) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
+    await this.allNotificationUseCase.execute(data, senderId);
 
-            const notifications = await this.notificationHistoryUseCase.execute(senderId);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.ALL_NOTIFICATION_SENT_SUCCESS,
+    });
+  };
 
-            res.status(200).json({
-                success: true,
-                message: "Notification history fetched successfully",
-                data: notifications
-            });
-        } catch (error: unknown) {
-            next(error)
-        }
+  getNotificationHistory = async (req: AuthRequest, res: Response): Promise<void> => {
+    const senderId = req.user?.userId;
+    if (!senderId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
     }
 
-    
+    const notifications = await this.notificationHistoryUseCase.execute(senderId);
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.NOTIFICATION_HISTORY_FETCH_SUCCESS,
+      data: notifications,
+    });
+  };
 }

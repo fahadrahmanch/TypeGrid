@@ -1,10 +1,10 @@
-import { IUpdateGoalUseCase } from "../../interfaces/admin/update-goal.interface";
-import { IGoalRepository } from "../../../../domain/interfaces/repository/admin/goal-repository.interface";
-import { GoalResponseDTO, UpdateGoalDTO } from "../../../DTOs/admin/goal.dto";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { mapToGoalDTO } from "../../../mappers/admin/goal-management.mapper";
+import { IUpdateGoalUseCase } from '../../interfaces/admin/update-goal.interface';
+import { IGoalRepository } from '../../../../domain/interfaces/repository/admin/goal-repository.interface';
+import { GoalResponseDTO, UpdateGoalDTO } from '../../../DTOs/admin/goal.dto';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { mapToGoalDTO } from '../../../mappers/admin/goal-management.mapper';
 
 export class UpdateGoalUseCase implements IUpdateGoalUseCase {
   constructor(private readonly _goalRepository: IGoalRepository) {}
@@ -19,10 +19,7 @@ export class UpdateGoalUseCase implements IUpdateGoalUseCase {
         title: goalData.title,
       });
       if (isGoalExist && isGoalExist.getId() !== id) {
-        throw new CustomError(
-          HttpStatusCodes.CONFLICT,
-          MESSAGES.GOAL_ALREADY_EXISTS,
-        );
+        throw new CustomError(HttpStatusCodes.CONFLICT, MESSAGES.GOAL_ALREADY_EXISTS);
       }
     }
 
@@ -31,10 +28,7 @@ export class UpdateGoalUseCase implements IUpdateGoalUseCase {
       ...goalData,
     });
     if (!updatedGoal) {
-      throw new CustomError(
-        HttpStatusCodes.INTERNAL_SERVER_ERROR,
-        MESSAGES.SOMETHING_WENT_WRONG,
-      );
+      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
 
     return mapToGoalDTO(updatedGoal);

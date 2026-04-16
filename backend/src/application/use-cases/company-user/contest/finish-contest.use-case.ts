@@ -1,12 +1,12 @@
-import { IFinishContestUseCase } from "../../interfaces/companyUser/finish-contest.interface";
-import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
-import { IResultRepository } from "../../../../domain/interfaces/repository/result-repository.interface";
-import { ICompanyUserStatsRepository } from "../../../../domain/interfaces/repository/company/company-user-stats-repository.interface";
-import { ResultEntity } from "../../../../domain/entities/result.entity";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { updateCompanyUserStats } from "../../../services/company-user-stats.service";
+import { IFinishContestUseCase } from '../../interfaces/companyUser/finish-contest.interface';
+import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
+import { IResultRepository } from '../../../../domain/interfaces/repository/result-repository.interface';
+import { ICompanyUserStatsRepository } from '../../../../domain/interfaces/repository/company/company-user-stats-repository.interface';
+import { ResultEntity } from '../../../../domain/entities/result.entity';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { updateCompanyUserStats } from '../../../services/company-user-stats.service';
 /**
  * Use case for finishing a contest and storing results.
  */
@@ -14,7 +14,7 @@ export class FinishContestUseCase implements IFinishContestUseCase {
   constructor(
     private readonly _contestRepository: IContestRepository,
     private readonly _resultRepository: IResultRepository,
-    private readonly _statsRepository: ICompanyUserStatsRepository,
+    private readonly _statsRepository: ICompanyUserStatsRepository
   ) {}
 
   /**
@@ -23,10 +23,7 @@ export class FinishContestUseCase implements IFinishContestUseCase {
   async execute(contestId: string, result: any[]): Promise<void> {
     const contest = await this._contestRepository.findById(contestId);
     if (!contest) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.CONTEST_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
     }
 
     contest.completeContest();
@@ -46,7 +43,7 @@ export class FinishContestUseCase implements IFinishContestUseCase {
       const resultEntity = new ResultEntity({
         userId: res.userId,
         contestId,
-        type: "contest",
+        type: 'contest',
         result: {
           wpm: res.wpm,
           accuracy: Number(res.accuracy),
@@ -59,12 +56,7 @@ export class FinishContestUseCase implements IFinishContestUseCase {
       await this._resultRepository.create(resultEntity.toObject());
 
       if (companyId) {
-        const score = await updateCompanyUserStats(
-          res.wpm,
-          Number(res.accuracy),
-          contest.getDifficulty(),
-          "contest",
-        );
+        const score = await updateCompanyUserStats(res.wpm, Number(res.accuracy), contest.getDifficulty(), 'contest');
         await this._statsRepository.updateStats(companyId, res.userId, {
           wpm: res.wpm,
           accuracy: Number(res.accuracy),

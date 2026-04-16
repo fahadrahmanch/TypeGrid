@@ -1,10 +1,10 @@
-import { Entity } from "./entity";
+import { Entity } from './entity';
 
-export type LessonCategory = "sentence" | "paragraph";
+export type LessonCategory = 'sentence' | 'paragraph';
 // export type LessonLevel = "beginner" | "medium" | "hard";
-export type LessonLevel = "beginner" | "intermediate" | "advanced";
+export type LessonLevel = 'beginner' | 'intermediate' | 'advanced';
 
-export type LessonCreator = "admin" | "company";
+export type LessonCreator = 'admin' | 'company';
 // export type AssignmentStatus = "active" | "completed" | "expired";
 
 // export interface LessonAssignmentEntity {

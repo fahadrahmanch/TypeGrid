@@ -1,5 +1,5 @@
-import { IStatsDocument } from "../types/documents";
-import { StatsEntity } from "../../../domain/entities/stats.entity";
+import { IStatsDocument } from '../types/documents';
+import { StatsEntity } from '../../../domain/entities/stats.entity';
 
 export class StatsMapper {
   static toDomain(doc: IStatsDocument): StatsEntity {

@@ -1,4 +1,4 @@
-import { ChallengeResponseDTO } from "../../DTOs/admin/challenge.dto";
+import { ChallengeResponseDTO } from '../../DTOs/admin/challenge.dto';
 
 export function mapToChallengeDTO(challenge: any): ChallengeResponseDTO {
   return {

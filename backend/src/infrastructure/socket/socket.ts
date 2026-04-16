@@ -1,36 +1,36 @@
-import { Server, Socket } from "socket.io";
-import logger from "../../utils/logger";
-import redis from "../../config/redis";
-import { groupHandlers } from "./handlers/group.handler";
-import { quickplayHandlers } from "./handlers/quickplay.handler";
-import { contestHandlers } from "./handlers/contest.handler";
-import { challengeHandlers } from "./handlers/challenge.handler";
+import { Server, Socket } from 'socket.io';
+import logger from '../../utils/logger';
+import redis from '../../config/redis';
+import { groupHandlers } from './handlers/group.handler';
+import { quickplayHandlers } from './handlers/quickplay.handler';
+import { contestHandlers } from './handlers/contest.handler';
+import { challengeHandlers } from './handlers/challenge.handler';
 
 let io: Server;
 
 export const initSocket = (server: any) => {
   io = new Server(server, {
     cors: {
-      origin: "http://localhost:5173",
-      methods: ["GET", "POST"],
+      origin: 'http://localhost:5173',
+      methods: ['GET', 'POST'],
       credentials: true,
     },
   });
 
-  io.on("connection", (socket: Socket) => {
+  io.on('connection', (socket: Socket) => {
     /* ===================== USER CONNECTION ===================== */
-    socket.on("register-user", async (userId: string) => {
+    socket.on('register-user', async (userId: string) => {
       socket.data.userId = userId;
       socket.join(`user:${userId}`);
-      await redis.sadd("online:users", userId);
-      io.emit("user-status-changed", {
+      await redis.sadd('online:users', userId);
+      io.emit('user-status-changed', {
         userId,
-        status: "online",
+        status: 'online',
       });
     });
 
-    socket.on("connect_error", (err) => {
-      logger.error("Socket connection error", {
+    socket.on('connect_error', (err) => {
+      logger.error('Socket connection error', {
         error: err.message,
         stack: err.stack,
       });
@@ -42,13 +42,13 @@ export const initSocket = (server: any) => {
     challengeHandlers(socket, io);
 
     /* ===================== DISCONNECT ===================== */
-    socket.on("disconnect", async () => {
+    socket.on('disconnect', async () => {
       if (socket.data.userId) {
         const userId = socket.data.userId;
-        await redis.srem("online:users", userId);
-        io.emit("user-status-changed", {
+        await redis.srem('online:users', userId);
+        io.emit('user-status-changed', {
           userId,
-          status: "offline",
+          status: 'offline',
         });
       }
     });
@@ -56,7 +56,7 @@ export const initSocket = (server: any) => {
 };
 
 export const getIO = () => {
-  if (!io) throw new Error("Socket not initialized");
+  if (!io) throw new Error('Socket not initialized');
   return io;
 };
 

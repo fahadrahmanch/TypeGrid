@@ -19,7 +19,7 @@ export interface ChallengeDTO {
   receiverId: string;
   status: string;
   competitionId: string;
-  type: "sent" | "received" | "completed";
+  type: 'sent' | 'received' | 'completed';
   opponent: OpponentDTO;
   createdAt: Date;
   updatedAt: Date;

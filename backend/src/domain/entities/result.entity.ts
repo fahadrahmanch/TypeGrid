@@ -7,7 +7,7 @@ type Result = {
   prize?: number;
 };
 
-type CompetitionType = "solo" | "group" | "quick" | "contest" | "oneToOne";
+type CompetitionType = 'solo' | 'group' | 'quick' | 'contest' | 'oneToOne';
 
 type ResultProps = {
   _id?: string;

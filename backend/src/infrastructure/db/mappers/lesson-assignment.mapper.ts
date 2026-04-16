@@ -1,5 +1,5 @@
-import { ILessonAssignmentDocument } from "../types/documents";
-import { LessonAssignmentEntity } from "../../../domain/entities/assign-lesson.entity";
+import { ILessonAssignmentDocument } from '../types/documents';
+import { LessonAssignmentEntity } from '../../../domain/entities/assign-lesson.entity';
 
 export class LessonAssignmentMapper {
   static toDomain(doc: ILessonAssignmentDocument): LessonAssignmentEntity {

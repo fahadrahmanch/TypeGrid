@@ -1,12 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import { ICreateDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/create-daily-challenge.interface";
-import { IGetDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/get-daily-challenge.interface";
-import { IUpdateDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/update-daily-challenge.interface";
-import { IDeleteDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/delete-daily-challenge.interface";
-import { IGetDailyAssignChallengesUseCase } from "../../../application/use-cases/interfaces/admin/get-daily-challenges.interface";
+import { Request, Response } from 'express';
+import { ICreateDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/create-daily-challenge.interface';
+import { IGetDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/get-daily-challenge.interface';
+import { IUpdateDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/update-daily-challenge.interface';
+import { IDeleteDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/delete-daily-challenge.interface';
+import { IGetDailyAssignChallengesUseCase } from '../../../application/use-cases/interfaces/admin/get-daily-challenges.interface';
 
-import logger from "../../../utils/logger";
-import { HttpStatus } from "../../constants/httpStatus";
+import logger from '../../../utils/logger';
+import { HttpStatus } from '../../constants/httpStatus';
+import { MESSAGES } from '../../../domain/constants/messages';
 
 export class DailyAssignChallengeManageController {
   constructor(
@@ -14,113 +15,65 @@ export class DailyAssignChallengeManageController {
     private readonly _getDailyAssignChallengeUseCase: IGetDailyAssignChallengeUseCase,
     private readonly _updateDailyAssignChallengeUseCase: IUpdateDailyAssignChallengeUseCase,
     private readonly _deleteDailyAssignChallengeUseCase: IDeleteDailyAssignChallengeUseCase,
-    private readonly _getDailyAssignChallengesUseCase: IGetDailyAssignChallengesUseCase,
+    private readonly _getDailyAssignChallengesUseCase: IGetDailyAssignChallengesUseCase
   ) {}
 
-  async createDailyAssignChallenge(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const dailyChallenge =
-        await this._createDailyAssignChallengeUseCase.execute(req.body);
-      logger.info("Daily challenge created successfully", dailyChallenge);
-      res.status(HttpStatus.CREATED).json({
-        message: "Daily challenge created successfully",
-        data: dailyChallenge,
-      });
-    } catch (error: unknown) {
-      next(error);
-    }
-  }
+  createDailyAssignChallenge = async (req: Request, res: Response): Promise<void> => {
+    const dailyChallenge = await this._createDailyAssignChallengeUseCase.execute(req.body);
+    logger.info(MESSAGES.DAILY_CHALLENGE_CREATED_SUCCESS, dailyChallenge);
+    res.status(HttpStatus.CREATED).json({
+      message: MESSAGES.DAILY_CHALLENGE_CREATED_SUCCESS,
+      data: dailyChallenge,
+    });
+  };
 
-  async getDailyAssignChallengeById(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const dailyChallenge = await this._getDailyAssignChallengeUseCase.execute(
-        req.params.id,
-      );
-      if (!dailyChallenge) {
-        res.status(HttpStatus.NOT_FOUND).json({ message: "Daily challenge not found" });
-        return;
-      }
-      logger.info("Daily challenge fetched successfully", dailyChallenge);
-      res.status(HttpStatus.OK).json({
-        message: "Daily challenge fetched successfully",
-        data: dailyChallenge,
-      });
-    } catch (error: unknown) {
-      next(error);
+  getDailyAssignChallengeById = async (req: Request, res: Response): Promise<void> => {
+    const dailyChallenge = await this._getDailyAssignChallengeUseCase.execute(req.params.id);
+    if (!dailyChallenge) {
+      res.status(HttpStatus.NOT_FOUND).json({ message: MESSAGES.DAILY_CHALLENGE_NOT_FOUND });
+      return;
     }
-  }
+    logger.info(MESSAGES.DAILY_CHALLENGE_FETCHED_SUCCESS, dailyChallenge);
+    res.status(HttpStatus.OK).json({
+      message: MESSAGES.DAILY_CHALLENGE_FETCHED_SUCCESS,
+      data: dailyChallenge,
+    });
+  };
 
-  async updateDailyAssignChallenge(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const { id } = req.params;
-      const dailyChallenge =
-        await this._updateDailyAssignChallengeUseCase.execute(id, req.body);
-      if (!dailyChallenge) {
-        res.status(HttpStatus.NOT_FOUND).json({ message: "Daily challenge not found" });
-        return;
-      }
-      logger.info("Daily challenge updated successfully", dailyChallenge);
-      res.status(HttpStatus.OK).json({
-        message: "Daily challenge updated successfully",
-        data: dailyChallenge,
-      });
-    } catch (error: unknown) {
-      next(error);
+  updateDailyAssignChallenge = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    const dailyChallenge = await this._updateDailyAssignChallengeUseCase.execute(id, req.body);
+    if (!dailyChallenge) {
+      res.status(HttpStatus.NOT_FOUND).json({ message: MESSAGES.DAILY_CHALLENGE_NOT_FOUND });
+      return;
     }
-  }
+    logger.info(MESSAGES.DAILY_CHALLENGE_UPDATED_SUCCESS, dailyChallenge);
+    res.status(HttpStatus.OK).json({
+      message: MESSAGES.DAILY_CHALLENGE_UPDATED_SUCCESS,
+      data: dailyChallenge,
+    });
+  };
 
-  async deleteDailyAssignChallenge(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      await this._deleteDailyAssignChallengeUseCase.execute(req.params.id);
-      logger.info("Daily challenge deleted successfully", {
-        id: req.params.id,
-      });
-      res.status(HttpStatus.OK).json({
-        message: "Daily challenge deleted successfully",
-      });
-    } catch (error: unknown) {
-      next(error);
-    }
-  }
+  deleteDailyAssignChallenge = async (req: Request, res: Response): Promise<void> => {
+    await this._deleteDailyAssignChallengeUseCase.execute(req.params.id);
+    logger.info(MESSAGES.DAILY_CHALLENGE_DELETED_SUCCESS, {
+      id: req.params.id,
+    });
+    res.status(HttpStatus.OK).json({
+      message: MESSAGES.DAILY_CHALLENGE_DELETED_SUCCESS,
+    });
+  };
 
-  async getDailyAssignChallenges(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
-      const date = (req.query.date as string) || "";
-      const result = await this._getDailyAssignChallengesUseCase.execute(
-        date,
-        page,
-        limit,
-      );
-      logger.info("Daily challenges fetched successfully", result);
-      res.status(HttpStatus.OK).json({
-        message: "Daily challenges fetched successfully",
-        data: result.dailyChallenges,
-        total: result.total,
-      });
-    } catch (error: unknown) {
-      next(error);
-    }
-  }
+  getDailyAssignChallenges = async (req: Request, res: Response): Promise<void> => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const date = (req.query.date as string) || '';
+    const result = await this._getDailyAssignChallengesUseCase.execute(date, page, limit);
+    logger.info(MESSAGES.DAILY_CHALLENGES_FETCHED_SUCCESS, result);
+    res.status(HttpStatus.OK).json({
+      message: MESSAGES.DAILY_CHALLENGES_FETCHED_SUCCESS,
+      data: result.dailyChallenges,
+      total: result.total,
+    });
+  };
 }

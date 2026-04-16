@@ -1,5 +1,5 @@
-import { Schema, model } from "mongoose";
-import { ICompanyDocument } from "../../types/documents";
+import { Schema, model } from 'mongoose';
+import { ICompanyDocument } from '../../types/documents';
 
 const companySchema = new Schema<ICompanyDocument>(
   {
@@ -16,7 +16,7 @@ const companySchema = new Schema<ICompanyDocument>(
     },
     OwnerId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: false,
     },
     description: {
@@ -37,16 +37,16 @@ const companySchema = new Schema<ICompanyDocument>(
     },
     status: {
       type: String,
-      enum: ["active", "inactive", "pending", "reject"],
-      default: "pending",
+      enum: ['active', 'inactive', 'pending', 'reject'],
+      default: 'pending',
     },
     planId: {
       type: Schema.Types.ObjectId,
-      ref: "SubscriptionPlan",
+      ref: 'SubscriptionPlan',
       required: false,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export const Company = model<ICompanyDocument>("Company", companySchema);
+export const Company = model<ICompanyDocument>('Company', companySchema);

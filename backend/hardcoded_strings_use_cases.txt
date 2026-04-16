@@ -1,0 +1,263 @@
+src/application/use-cases/company-user/get-company-users.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/notifications/get-notifications.use-case.ts:            throw new CustomError(400, "User ID is required");
+src/application/use-cases/company-user/notifications/mark-notification-as-read.use-case.ts:            throw new CustomError(400, "Receipt ID is required");
+src/application/use-cases/company-user/notifications/mark-notification-as-read.use-case.ts:            throw new CustomError(404, "Notification not found");
+src/application/use-cases/company-user/contest/finish-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest.use-case.ts:      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.GROUP_EXPIRED);
+src/application/use-cases/company-user/contest/get-open-contests.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-open-contests.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-group-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/join-or-leave-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/join-or-leave-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/join-or-leave-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/join-or-leave-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/contest/get-contest-data.use-case.ts:      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.GROUP_EXPIRED);
+src/application/use-cases/company-user/update-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/update-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/stats/get-company-leaderboard.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/stats/get-company-leaderboard.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/Practice/get-practice-typing-content.use-case.ts:      throw new Error("Prompt is required");
+src/application/use-cases/company-user/challenges/get-challenge-game-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-challenge-game-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-challenge-game-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-challenge-game-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-challenge-game-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-challenge-game-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-challenge-game-data.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-sent-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/make-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/make-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/make-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/make-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/make-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/get-challenges.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/accept-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/save-challenge-result.use.case.ts:      throw new CustomError(404, MESSAGES.CHALLENGE_NOT_FOUND);
+src/application/use-cases/company-user/challenges/save-challenge-result.use.case.ts:      throw new CustomError(404, MESSAGES.LESSON_NOT_FOUND);
+src/application/use-cases/company-user/challenges/save-challenge-result.use.case.ts:      throw new CustomError(404, MESSAGES.COMPETITION_NOT_FOUND);
+src/application/use-cases/company-user/challenges/reiect-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/start-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/start-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/start-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/challenges/start-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/lessons/get-assign-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/lessons/get-assign-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/lessons/get-my-lessons.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/lessons/save-lesson-result.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-user/lessons/save-lesson-result.use-case.ts:        throw new CustomError(
+src/application/use-cases/company-user/lessons/save-lesson-result.use-case.ts:        throw new CustomError(
+src/application/use-cases/user/solo-play/solo-play-result.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/solo-play/solo-play-result.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/solo-play/create-solo-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/solo-play/create-solo-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/get-company.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/change-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/change-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/get-join-member.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/get-join-member.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/get-join-member.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/leave-quick-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/leave-quick-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/leave-quick-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/start-quick-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/start-quick-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/start-quick-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/change-status.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/change-status.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/quick-play/change-status.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/create-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/start-game-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/start-game-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/get-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/join-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/join-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/join-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/join-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/finish-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/finish-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/finish-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/change-group-status.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/remove-member-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/remove-member-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/remove-member-group-play-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/new-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/new-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/new-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/new-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/new-group-play.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/edit-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/group-play/edit-group.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/company-re-apply.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/typing-practice/get-practice-typing-content.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/typing-practice/get-practice-typing-content.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/typing-practice/get-practice-typing-content.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case.ts:      throw new Error(MESSAGES.DAILY_CHALLENGE_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case.ts:      throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case.ts:      throw new Error(MESSAGES.GOAL_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case.ts:      throw new Error(MESSAGES.REWARD_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/get-daily-challenge.use-case.ts:      throw new Error(MESSAGES.DAILY_CHALLENGE_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/get-daily-challenge.use-case.ts:      throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/get-daily-challenge.use-case.ts:      throw new Error(MESSAGES.GOAL_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/get-daily-challenge.use-case.ts:      throw new Error(MESSAGES.REWARD_NOT_FOUND);
+src/application/use-cases/user/daily-challenge/get-daily-challenge.use-case.ts:      throw new Error(MESSAGES.LESSON_NOT_FOUND);
+src/application/use-cases/user/check-feature-access-use.case.ts:        throw new Error("Active subscription required for this feature");
+src/application/use-cases/user/check-feature-access-use.case.ts:        throw new Error("Subscription plan details not found");
+src/application/use-cases/user/check-feature-access-use.case.ts:        throw new Error(`Your current plan does not include the '${feature}' feature`);
+src/application/use-cases/user/company-request.use-case.ts:      throw new CustomError(
+src/application/use-cases/user/subsciption/confirm-subscription.use-case.ts:                throw new Error("Subscription plan not found");
+src/application/use-cases/user/subsciption/confirm-company-subcription.use-case.ts:                throw new Error("Subscription plan not found");
+src/application/use-cases/user/subsciption/confirm-company-subcription.use-case.ts:                throw new Error("User not found");
+src/application/use-cases/user/subsciption/confirm-company-subcription.use-case.ts:                throw new Error("User is not associated with any company");
+src/application/use-cases/user/subsciption/confirm-company-subcription.use-case.ts:                throw new Error("Company not found");
+src/application/use-cases/user/subsciption/create-subscription-session.use-case.ts:                throw new Error("Plan not found");
+src/application/use-cases/user/subsciption/create-subscription-session.use-case.ts:                throw new Error("Failed to create checkout session");
+src/application/use-cases/company-admin/notification/group-notification.use-case.ts:            throw new CustomError(404, "Sender not found");
+src/application/use-cases/company-admin/notification/group-notification.use-case.ts:            throw new CustomError(404, "Company not found");
+src/application/use-cases/company-admin/notification/group-notification.use-case.ts:            throw new CustomError(404,"Group not found");
+src/application/use-cases/company-admin/notification/notification-history.use-case.ts:            throw new CustomError(404,"User not found");
+src/application/use-cases/company-admin/notification/notification-history.use-case.ts:            throw new CustomError(404,"Company not found");
+src/application/use-cases/company-admin/notification/all-notification.use-case.ts:            throw new CustomError(404, "Sender not found");
+src/application/use-cases/company-admin/notification/all-notification.use-case.ts:            throw new CustomError(404, "Company not found");
+src/application/use-cases/company-admin/notification/individual-notification.use-case.ts:            throw new CustomError(404, "Sender not found");
+src/application/use-cases/company-admin/notification/individual-notification.use-case.ts:            throw new CustomError(404, "Company not found");
+src/application/use-cases/company-admin/company-contest/get-contest-participants.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/get-contest-participants.use-case.ts:          throw new CustomError(
+src/application/use-cases/company-admin/company-contest/get-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/get-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/create-company-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/create-company-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/create-company-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/create-company-contest.use-case.ts:        throw new CustomError(
+src/application/use-cases/company-admin/company-contest/create-company-contest.use-case.ts:        throw new CustomError(
+src/application/use-cases/company-admin/company-contest/create-company-contest.use-case.ts:        throw new CustomError(
+src/application/use-cases/company-admin/company-contest/delete-company-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/get-contest-result-use-case.ts:      throw new Error(MESSAGES.CONTEST_NOT_FOUND);
+src/application/use-cases/company-admin/company-contest/get-contest-result-use-case.ts:      throw new Error("Result not found");
+src/application/use-cases/company-admin/company-contest/update-company-contest-status.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/update-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/update-contest.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/get-company-contests.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-contest/get-company-contests.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/get-admin-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/assign-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/assign-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/create-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/create-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/create-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/get-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/get-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/delete-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/update-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/update-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/update-company-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/get-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/company-lesson/get-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/get-company-detatils.use-case.ts:            throw new CustomError(
+src/application/use-cases/company-admin/get-company-detatils.use-case.ts:            throw new CustomError(
+src/application/use-cases/company-admin/get-company-detatils.use-case.ts:            throw new CustomError(
+src/application/use-cases/company-admin/get-company-detatils.use-case.ts:            throw new CustomError(
+src/application/use-cases/company-admin/company-group/add-company-group-member.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/add-company-group-member.use-case.ts:      throw new Error(MESSAGES.GROUP_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/add-company-group-member.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/add-company-group-member.use-case.ts:      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/add-company-group-member.use-case.ts:      throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+src/application/use-cases/company-admin/company-group/get-company-groups.use-case.ts:      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/get-company-groups.use-case.ts:      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/get-company-groups.use-case.ts:      throw new Error(MESSAGES.USER_NOT_PART_OF_ANY_COMPANY);
+src/application/use-cases/company-admin/company-group/remove-company-group-member.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/remove-company-group-member.use-case.ts:      throw new Error(MESSAGES.GROUP_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/remove-company-group-member.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/remove-company-group-member.use-case.ts:      throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+src/application/use-cases/company-admin/company-group/get-company-group-by-id.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/get-company-group-by-id.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/get-company-group-by-id.use-case.ts:      throw new Error(MESSAGES.USER_NOT_PART_OF_ANY_COMPANY);
+src/application/use-cases/company-admin/company-group/get-company-group-by-id.use-case.ts:      throw new Error(MESSAGES.GROUP_NOT_FOUND || "Group not found");
+src/application/use-cases/company-admin/company-group/get-company-group-by-id.use-case.ts:        throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/create-company-group-auto.use-case.ts:        throw new Error("User not found");
+src/application/use-cases/company-admin/company-group/create-company-group-auto.use-case.ts:        throw new Error("Company not found");
+src/application/use-cases/company-admin/company-group/create-company-group-auto.use-case.ts:        throw new Error("No users found based on the criteria");
+src/application/use-cases/company-admin/company-group/create-company-group.use-case.ts:      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/create-company-group.use-case.ts:      throw new Error(MESSAGES.GROUP_DATA_REQUIRED);
+src/application/use-cases/company-admin/company-group/create-company-group.use-case.ts:      throw new Error(MESSAGES.AUTH_USER_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/create-company-group.use-case.ts:      throw new Error(MESSAGES.USER_NOT_PART_OF_ANY_COMPANY);
+src/application/use-cases/company-admin/company-group/delete-company-group.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/delete-company-group.use-case.ts:      throw new Error(MESSAGES.GROUP_NOT_FOUND);
+src/application/use-cases/company-admin/company-group/delete-company-group.use-case.ts:      throw new Error(MESSAGES.UNAUTHORIZED);
+src/application/use-cases/company-admin/company-group/delete-company-group.use-case.ts:      throw new Error(MESSAGES.SOMETHING_WENT_WRONG);
+src/application/use-cases/company-admin/users/get-company-users.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/users/add-user.use-case.ts:      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPANY_NOT_FOUND);
+src/application/use-cases/company-admin/users/add-user.use-case.ts:      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.COMPANY_ACCOUNT_INACTIVE);
+src/application/use-cases/company-admin/users/add-user.use-case.ts:      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.SUBSCRIPTION_NOT_FOUND);
+src/application/use-cases/company-admin/users/add-user.use-case.ts:      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.SUBSCRIPTION_EXPIRED);
+src/application/use-cases/company-admin/users/add-user.use-case.ts:      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.SUBSCRIPTION_PLAN_NOT_FOUND);
+src/application/use-cases/company-admin/users/add-user.use-case.ts:        throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_LIMIT_REACHED);
+src/application/use-cases/company-admin/users/add-user.use-case.ts:      throw new CustomError(HttpStatusCodes.CONFLICT, MESSAGES.AUTH_EMAIL_EXISTS);
+src/application/use-cases/company-admin/users/get-company-users-with-status.use-case.ts:      throw new Error(MESSAGES.INVALID_REQUEST);
+src/application/use-cases/company-admin/users/delete-user.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/users/delete-user.use-case.ts:      throw new CustomError(
+src/application/use-cases/company-admin/users/delete-user.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/goal/delete-goal.use-case.ts:      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GOAL_NOT_FOUND);
+src/application/use-cases/admin/goal/create-goal.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/goal/update-goal.use-case.ts:      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GOAL_NOT_FOUND);
+src/application/use-cases/admin/goal/update-goal.use-case.ts:        throw new CustomError(
+src/application/use-cases/admin/goal/update-goal.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/goal/get-goal.use-case.ts:      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GOAL_NOT_FOUND);
+src/application/use-cases/admin/reward/get-reward-by-id.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/reward/create-reward.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/reward/update-reward.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/reward/update-reward.use-case.ts:        throw new CustomError(
+src/application/use-cases/admin/reward/update-reward.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/reward/delete-reward.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/subscription/create-subscription-plan.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/subscription/delete-subscription-plan.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/subscription/update-subscription-plan.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/subscription/update-subscription-plan.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/acheivment/get-achievement-by-id.use-case.ts:      throw new Error(MESSAGES.NOT_FOUND || "Achievement not found");
+src/application/use-cases/admin/acheivment/update-achievement.use-case.ts:      throw new Error(MESSAGES.NOT_FOUND || "Achievement not found");
+src/application/use-cases/admin/acheivment/update-achievement.use-case.ts:        throw new Error(MESSAGES.UPDATE_FAILED || "Failed to update achievement");
+src/application/use-cases/admin/acheivment/create-acheivement.use-case.ts:            throw new Error(MESSAGES.ACHIEVEMENT_ALREADY_EXISTS || "Achievement with this title already exists");
+src/application/use-cases/admin/acheivment/delete-achievement.use-case.ts:      throw new Error(MESSAGES.NOT_FOUND || "Achievement not found");
+src/application/use-cases/admin/challenge/update-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/challenge/update-challenge.use-case.ts:        throw new CustomError(
+src/application/use-cases/admin/challenge/update-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/challenge/create-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/challenge/get-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/challenge/delete-challenge.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/lesson-management/delete-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/lesson-management/create-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/lesson-management/update-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/lesson-management/get-lesson.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/daily-challenge/create-daily-challenge.use-case.ts:      throw new Error(MESSAGES.DAILY_CHALLENGE_ALREADY_EXIST);
+src/application/use-cases/admin/daily-challenge/create-daily-challenge.use-case.ts:      throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+src/application/use-cases/admin/daily-challenge/update-daily-challenge.use-case.ts:        throw new Error(MESSAGES.DAILY_CHALLENGE_ALREADY_EXIST);
+src/application/use-cases/admin/daily-challenge/update-daily-challenge.use-case.ts:      throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+src/application/use-cases/admin/daily-challenge/get-all-daily-challenges.use-case.ts:          throw new Error("Challenge not found");
+src/application/use-cases/admin/daily-challenge/get-daily-challenge.use-case.ts:      throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
+src/application/use-cases/admin/company-management/approve-company.use-case.ts:      throw new Error(MESSAGES.COMPANY_NOT_FOUND_OR_REMOVED);
+src/application/use-cases/admin/company-management/approve-company.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/company-management/approve-company.use-case.ts:      throw new CustomError(
+src/application/use-cases/admin/company-management/reject-company.use-case.ts:      throw new Error(MESSAGES.COMPANY_NOT_FOUND_OR_REMOVED);
+src/application/use-cases/admin/users/block-user.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/login/login.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/login/login.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/login/login.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/login/login.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/login/login.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/login/login.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/forgotPassword/forgot-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/forgotPassword/create-new-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/forgotPassword/create-new-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/forgotPassword/create-new-password.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/forgotPassword/forgot-password-otp-verify.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/forgotPassword/forgot-password-otp-verify.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/signup/complete-signup.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/signup/signup.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/googleAuth/google-auth.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/companyAuth/company-find.use-case.ts:      throw new CustomError(
+src/application/use-cases/auth/companyAuth/company-find.use-case.ts:      throw new CustomError(

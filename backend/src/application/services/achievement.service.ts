@@ -1,55 +1,46 @@
-import { IAchievementRepository } from "../../domain/interfaces/repository/user/achievement-repository.interface";
-import { IUserAchievementRepository } from "../../domain/interfaces/repository/user/user-achievement-repository.interface";
-import { IAchievementService } from "../../domain/interfaces/services/acheivment-service.interface";
-import { IStatsRepository } from "../../domain/interfaces/repository/user/stats-repository.interface";
-import { UserAchievementEntity } from "../../domain/entities/user-achievement.entity";
-export class AchievementService implements IAchievementService{
+import { IAchievementRepository } from '../../domain/interfaces/repository/user/achievement-repository.interface';
+import { IUserAchievementRepository } from '../../domain/interfaces/repository/user/user-achievement-repository.interface';
+import { IAchievementService } from '../../domain/interfaces/services/acheivment-service.interface';
+import { IStatsRepository } from '../../domain/interfaces/repository/user/stats-repository.interface';
+import { UserAchievementEntity } from '../../domain/entities/user-achievement.entity';
+export class AchievementService implements IAchievementService {
   constructor(
     private achievementRepo: IAchievementRepository,
     private userAchievementRepo: IUserAchievementRepository,
-    private statsRepo: IStatsRepository,
+    private statsRepo: IStatsRepository
   ) {}
 
-  async checkAndUnlockAchievements(userId: string) : Promise<any>{
-    console.log("Achievement Service",userId);
-    const stats = await this.statsRepo.findOne({userId:userId});
-    console.log("stats",stats);
+  async checkAndUnlockAchievements(userId: string): Promise<any> {
+    const stats = await this.statsRepo.findOne({ userId: userId });
     let wpm = 0;
     let accuracy = 0;
     let totalGamesPlayed = 0;
-    if(!stats) {
-        wpm = 0;
-        accuracy = 0;
-        totalGamesPlayed = 0;
-    }else{
-        wpm = stats.getWpm();
-        accuracy = stats.getAccuracy();
-        totalGamesPlayed = stats.getTotalCompetitions();
+    if (!stats) {
+      wpm = 0;
+      accuracy = 0;
+      totalGamesPlayed = 0;
+    } else {
+      wpm = stats.getWpm();
+      accuracy = stats.getAccuracy();
+      totalGamesPlayed = stats.getTotalCompetitions();
     }
-console.log("wpm",wpm);
 
-    const eligibleAchievements =
-      await this.achievementRepo.findEligible({
-        wpm,
-        accuracy,
-        totalGamesPlayed,
-      });
-    console.log("eligibleAchievements",eligibleAchievements);
+    const eligibleAchievements = await this.achievementRepo.findEligible({
+      wpm,
+      accuracy,
+      totalGamesPlayed,
+    });
     if (!eligibleAchievements.length) return [];
 
-    const unlockedIds =
-      await this.userAchievementRepo.findUnlocked(
-        userId,
-        eligibleAchievements.map((a) => a.getId()!)
-      );
+    const unlockedIds = await this.userAchievementRepo.findUnlocked(
+      userId,
+      eligibleAchievements.map((a) => a.getId()!)
+    );
     const unlockedSet = new Set(unlockedIds);
 
-    const newAchievements = eligibleAchievements.filter(
-      (a) => !unlockedSet.has(a.getId()!)
-    );
+    const newAchievements = eligibleAchievements.filter((a) => !unlockedSet.has(a.getId()!));
 
     if (!newAchievements.length) return [];
-    console.log("newAchievements",newAchievements);
     const savePromises = newAchievements.map((a) => {
       const userAchievement = new UserAchievementEntity({
         userId,

@@ -1,19 +1,19 @@
-import { IBaseRepository } from "../base-repository.interface";
-import { CompanyGroupEntity } from "../../../entities/company-group.entity";
+import { IBaseRepository } from '../base-repository.interface';
+import { CompanyGroupEntity } from '../../../entities/company-group.entity';
 export interface ICompanyGroupRepository extends IBaseRepository<CompanyGroupEntity> {
   create(data: any): Promise<any>;
   findById(
     id: string,
     options?: {
       populate?: any;
-    },
+    }
   ): Promise<any | null>;
   update(data: any): Promise<any | null>;
   find(
     filter?: any,
     options?: {
       populate?: { path: string; select?: string };
-    },
+    }
   ): Promise<any[]>;
   findOne(filter?: any): Promise<any | null>;
   delete(_id: string): Promise<any | null>;

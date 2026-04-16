@@ -1,13 +1,13 @@
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
-import { CompanyGroupEntity } from "../../../../domain/entities/company-group.entity";
-import { ICreateCompanyGroupUseCase } from "../../interfaces/companyAdmin/create-company-group.interface";
-import { CompanyGroupDTO } from "../../../DTOs/companyAdmin/company-group.dto";
-import { MESSAGES } from "../../../../domain/constants/messages";
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
+import { CompanyGroupEntity } from '../../../../domain/entities/company-group.entity';
+import { ICreateCompanyGroupUseCase } from '../../interfaces/companyAdmin/create-company-group.interface';
+import { CompanyGroupDTO } from '../../../DTOs/companyAdmin/company-group.dto';
+import { MESSAGES } from '../../../../domain/constants/messages';
 export class CreateCompanyGroupUseCase implements ICreateCompanyGroupUseCase {
   constructor(
     private readonly userRepo: IUserRepository,
-    private readonly companyGroupRepo: ICompanyGroupRepository,
+    private readonly companyGroupRepo: ICompanyGroupRepository
   ) {}
 
   async execute(groupData: CompanyGroupDTO, userId: string): Promise<void> {

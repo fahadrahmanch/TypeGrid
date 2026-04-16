@@ -1,4 +1,4 @@
-export type UserSubscriptionStatus = "active" | "expired" | "pending";
+export type UserSubscriptionStatus = 'active' | 'expired' | 'pending';
 
 export type UserSubscriptionProps = {
   id?: string;

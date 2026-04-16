@@ -1,6 +1,6 @@
 export interface DailyChallengeStatsDTO {
   calendarData: {
-    [key: string]: "completed" | "missed";
+    [key: string]: 'completed' | 'missed';
   };
   streakTracker: {
     currentStreak: number;

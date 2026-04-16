@@ -1,9 +1,9 @@
 export interface CreateSubscriptionPlanDTO {
   name: string;
   price: number | string;
-  duration: "monthly" | "yearly";
+  duration: 'monthly' | 'yearly';
   features: string[];
-  type: "normal" | "company";
+  type: 'normal' | 'company';
   userLimit?: number | string;
 }
 
@@ -11,9 +11,9 @@ export interface UpdateSubscriptionPlanDTO {
   id: string;
   name?: string;
   price?: number | string;
-  duration?: "monthly" | "yearly";
+  duration?: 'monthly' | 'yearly';
   features?: string[];
-  type?: "normal" | "company";
+  type?: 'normal' | 'company';
   userLimit?: number | string;
 }
 
@@ -23,7 +23,7 @@ export interface SubscriptionPlanResponseDTO {
   price: number;
   duration: number;
   features: string[];
-  type: "normal" | "company";
+  type: 'normal' | 'company';
   userLimit?: number;
   createdAt?: Date;
   updatedAt?: Date;

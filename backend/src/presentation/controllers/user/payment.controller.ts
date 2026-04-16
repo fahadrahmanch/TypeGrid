@@ -1,116 +1,95 @@
-import { NextFunction, Response, Request } from "express";
-import { AuthRequest } from "../../../types/AuthRequest";
-import { ICreateSubscriptionSessionUseCase } from "../../../application/use-cases/interfaces/user/subsciption/create-subscription-session.interface";
-import { IConfirmSubscriptionUseCase } from "../../../application/use-cases/interfaces/user/subsciption/confirm-subscription.interface";
-import { IConfirmCompanySubscriptionUseCase } from "../../../application/use-cases/interfaces/admin/confirm-company-subscription.interface";
+import { Response } from 'express';
+import { AuthRequest } from '../../../types/AuthRequest';
+import { ICreateSubscriptionSessionUseCase } from '../../../application/use-cases/interfaces/user/subsciption/create-subscription-session.interface';
+import { IConfirmSubscriptionUseCase } from '../../../application/use-cases/interfaces/user/subsciption/confirm-subscription.interface';
+import { IConfirmCompanySubscriptionUseCase } from '../../../application/use-cases/interfaces/admin/confirm-company-subscription.interface';
+import { HttpStatus } from '../../constants/httpStatus';
+import { MESSAGES } from '../../../domain/constants/messages';
+import { CustomError } from '../../../domain/entities/custom-error.entity';
 
 export class PaymentController {
-    constructor(
-        private _createSubscriptionSessionUseCase: ICreateSubscriptionSessionUseCase,
-        private _confirmSubscriptionUseCase: IConfirmSubscriptionUseCase,
-        private _confirmCompanySubscriptionUseCase: IConfirmCompanySubscriptionUseCase
-    ) { }
+  constructor(
+    private _createSubscriptionSessionUseCase: ICreateSubscriptionSessionUseCase,
+    private _confirmSubscriptionUseCase: IConfirmSubscriptionUseCase,
+    private _confirmCompanySubscriptionUseCase: IConfirmCompanySubscriptionUseCase
+  ) {}
 
-    async createSession(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const { planId } = req.body;
-            const userId = req.user?.userId;
+  createSession = async (req: AuthRequest, res: Response): Promise<void> => {
+    const { planId } = req.body;
+    const userId = req.user?.userId;
 
-            if (!userId) {
-                res.status(401).json({ success: false, message: "User not authenticated" });
-                return;
-            }
-
-            if (!planId) {
-                res.status(400).json({ success: false, message: "planId is required" });
-                return;
-            }
-
-            const url = await this._createSubscriptionSessionUseCase.execute(userId, planId);
-            res.status(200).json({
-                success: true,
-                message: "Checkout session created successfully",
-                url
-            });
-        } catch (error: unknown) {
-            next(error);
-        }
+    if (!userId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.USER_NOT_AUTHENTICATED);
     }
 
-    async createCompanySession(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const { planId } = req.body;
-            const userId = req.user?.userId;
-
-            if (!userId) {
-                res.status(401).json({ success: false, message: "User not authenticated" });
-                return;
-            }
-
-            if (!planId) {
-                res.status(400).json({ success: false, message: "planId is required" });
-                return;
-            }
-
-            const url = await this._createSubscriptionSessionUseCase.execute(userId, planId);
-            res.status(200).json({
-                success: true,
-                message: "Checkout session created successfully",
-                url
-            });
-        } catch (error: unknown) {
-            next(error);
-        }
+    if (!planId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
     }
 
-    async confirmSubscription(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const { planId } = req.body;
-            const userId = req.user?.userId;
+    const url = await this._createSubscriptionSessionUseCase.execute(userId, planId);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.CHECKOUT_SESSION_CREATED_SUCCESS,
+      url,
+    });
+  };
 
-            if (!userId) {
-                res.status(401).json({ success: false, message: "User not authenticated" });
-                return;
-            }
+  createCompanySession = async (req: AuthRequest, res: Response): Promise<void> => {
+    const { planId } = req.body;
+    const userId = req.user?.userId;
 
-            if (!planId) {
-                res.status(400).json({ success: false, message: "planId is required" });
-                return;
-            }
-
-            await this._confirmCompanySubscriptionUseCase.execute(userId, planId);
-
-            res.status(200).json({
-                success: true,
-                message: "Subscription confirmed successfully"
-            });
-        } catch (error: unknown) {
-            next(error);
-        }
+    if (!userId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.USER_NOT_AUTHENTICATED);
     }
-    async confirmCompanySubscription(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const { planId } = req.body;
-            const userId = req.user?.userId;
 
-            if (!userId) {
-                res.status(401).json({ success: false, message: "User not authenticated" });
-                return;
-            }
-
-            if (!planId) {
-                res.status(400).json({ success: false, message: "planId is required" });
-                return;
-            }
-
-            await this._confirmSubscriptionUseCase.execute(userId, planId);
-
-            res.status(200).json({
-                success: true,
-                message: "Subscription confirmed successfully"
-            });
-        } catch (error: unknown) {
-            next(error);
-        }
+    if (!planId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
     }
+
+    const url = await this._createSubscriptionSessionUseCase.execute(userId, planId);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.CHECKOUT_SESSION_CREATED_SUCCESS,
+      url,
+    });
+  };
+
+  confirmSubscription = async (req: AuthRequest, res: Response): Promise<void> => {
+    const { planId } = req.body;
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.USER_NOT_AUTHENTICATED);
+    }
+
+    if (!planId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
+    }
+
+    await this._confirmCompanySubscriptionUseCase.execute(userId, planId);
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.SUBSCRIPTION_CONFIRMED_SUCCESS,
+    });
+  };
+  confirmCompanySubscription = async (req: AuthRequest, res: Response): Promise<void> => {
+    const { planId } = req.body;
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.USER_NOT_AUTHENTICATED);
+    }
+
+    if (!planId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
+    }
+
+    await this._confirmSubscriptionUseCase.execute(userId, planId);
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.SUBSCRIPTION_CONFIRMED_SUCCESS,
+    });
+  };
 }

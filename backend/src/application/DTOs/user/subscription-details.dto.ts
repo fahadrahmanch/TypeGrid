@@ -4,7 +4,7 @@ export interface UserSubscriptionDetailsDTO {
   status: string;
   startDate?: Date;
   endDate?: Date;
-  type: "normal" | "company";
+  type: 'normal' | 'company';
 }
 
 export interface SubscriptionDetailsDTO {

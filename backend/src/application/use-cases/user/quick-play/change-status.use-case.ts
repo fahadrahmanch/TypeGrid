@@ -1,34 +1,22 @@
-import { IChangeStatusUseCase } from "../../interfaces/user/quick-play/change-status.interface";
-import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
-import { CustomError } from "../../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { IChangeStatusUseCase } from '../../interfaces/user/quick-play/change-status.interface';
+import { ICompetitionRepository } from '../../../../domain/interfaces/repository/user/competition-repository.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
+import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
 export class ChangeStatusUseCase implements IChangeStatusUseCase {
-  constructor(
-    private readonly _competitionRepository: ICompetitionRepository,
-  ) {}
+  constructor(private readonly _competitionRepository: ICompetitionRepository) {}
 
   async execute(competitionId: string, status: string): Promise<void> {
     if (!competitionId) {
-      throw new CustomError(
-        HttpStatusCodes.INTERNAL_SERVER_ERROR,
-        MESSAGES.SOMETHING_WENT_WRONG,
-      );
+      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
 
     if (!status) {
-      throw new CustomError(
-        HttpStatusCodes.INTERNAL_SERVER_ERROR,
-        MESSAGES.SOMETHING_WENT_WRONG,
-      );
+      throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
-    const competition =
-      await this._competitionRepository.findById(competitionId);
+    const competition = await this._competitionRepository.findById(competitionId);
     if (!competition) {
-      throw new CustomError(
-        HttpStatusCodes.NOT_FOUND,
-        MESSAGES.COMPETITION_NOT_FOUND,
-      );
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPETITION_NOT_FOUND);
     }
     competition.setStatus(status);
     await this._competitionRepository.update(competition.toObject());

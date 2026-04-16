@@ -1,6 +1,6 @@
-import { CompanyGroupEntity } from "../../../domain/entities/company-group.entity";
-import { CompanyGroupDetailsDTO, CompanyGroupMemberDTO } from "../../DTOs/companyAdmin/company-group-details.dto";
-import { UserEntity } from "../../../domain/entities/user.entity";
+import { CompanyGroupEntity } from '../../../domain/entities/company-group.entity';
+import { CompanyGroupDetailsDTO } from '../../DTOs/companyAdmin/company-group-details.dto';
+import { UserEntity } from '../../../domain/entities/user.entity';
 
 export class CompanyGroupMapper {
   static toDetailsDTO(
@@ -8,12 +8,12 @@ export class CompanyGroupMapper {
     members: (UserEntity & { wpm: number; accuracy: number })[]
   ): CompanyGroupDetailsDTO {
     return {
-      id: group.getId() || "",
+      id: group.getId() || '',
       companyId: group.getCompanyId(),
       name: group.getName(),
       type: group.getType(),
-      members: members.map(member => ({
-        _id: member._id || "",
+      members: members.map((member) => ({
+        _id: member._id || '',
         name: member.name,
         email: member.email,
         imageUrl: member.imageUrl,

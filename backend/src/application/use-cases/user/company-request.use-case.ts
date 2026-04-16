@@ -1,14 +1,14 @@
-import { ICompanyRequestUseCase } from "../interfaces/user/company-request.interface";
-import { ICompanyRepository } from "../../../domain/interfaces/repository/company/company-repository.interface";
-import { MESSAGES } from "../../../domain/constants/messages";
-import { CustomError } from "../../../domain/entities/custom-error.entity";
-import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
-import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
-import { CompanyEntity } from "../../../domain/entities";
+import { ICompanyRequestUseCase } from '../interfaces/user/company-request.interface';
+import { ICompanyRepository } from '../../../domain/interfaces/repository/company/company-repository.interface';
+import { MESSAGES } from '../../../domain/constants/messages';
+import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { HttpStatusCodes } from '../../../domain/enums/http-status-codes.enum';
+import { IUserRepository } from '../../../domain/interfaces/repository/user/user-repository.interface';
+import { CompanyEntity } from '../../../domain/entities';
 export class CompanyRequestUseCase implements ICompanyRequestUseCase {
   constructor(
     private companyRepository: ICompanyRepository,
-    private userRepository: IUserRepository,
+    private userRepository: IUserRepository
   ) {}
   async execute(
     OwnerId: string,
@@ -16,7 +16,7 @@ export class CompanyRequestUseCase implements ICompanyRequestUseCase {
     address: string,
     email: string,
     number: string,
-    planId: string,
+    planId: string
   ): Promise<void> {
     const company = new CompanyEntity({
       companyName,
@@ -25,15 +25,12 @@ export class CompanyRequestUseCase implements ICompanyRequestUseCase {
       OwnerId,
       number,
       planId,
-      status: "pending",
+      status: 'pending',
     });
     const exists = await this.companyRepository.find({ OwnerId });
 
     if (exists.length > 0) {
-      throw new CustomError(
-        HttpStatusCodes.CONFLICT,
-        MESSAGES.COMPANY_ALREADY_REGISTERED,
-      );
+      throw new CustomError(HttpStatusCodes.CONFLICT, MESSAGES.COMPANY_ALREADY_REGISTERED);
     }
     const user = await this.userRepository.findById(OwnerId);
     const companyDoc = await this.companyRepository.create(company);

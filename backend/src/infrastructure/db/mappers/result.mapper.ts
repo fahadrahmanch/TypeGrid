@@ -1,5 +1,5 @@
-import { IResultDocument } from "../types/documents";
-import { ResultEntity } from "../../../domain/entities/result.entity";
+import { IResultDocument } from '../types/documents';
+import { ResultEntity } from '../../../domain/entities/result.entity';
 
 export class ResultMapper {
   static toDomain(doc: IResultDocument): ResultEntity {

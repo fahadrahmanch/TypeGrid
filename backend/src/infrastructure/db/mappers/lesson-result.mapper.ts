@@ -1,5 +1,5 @@
-import { ILessonResultDocument } from "../types/documents";
-import { LessonResult } from "../../../domain/entities/lesson-result.entity";
+import { ILessonResultDocument } from '../types/documents';
+import { LessonResult } from '../../../domain/entities/lesson-result.entity';
 
 export class LessonResultMapper {
   static toDomain(doc: ILessonResultDocument): LessonResult {

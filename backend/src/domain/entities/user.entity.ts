@@ -1,4 +1,4 @@
-import { Entity } from "./entity";
+import { Entity } from './entity';
 export class UserEntity extends Entity<UserEntity> {
   _id?: string;
   name!: string;
@@ -9,11 +9,11 @@ export class UserEntity extends Entity<UserEntity> {
   number?: string;
   CompanyId?: string;
   CompanyRole?: string;
-  KeyBoardLayout!: "QWERTY" | "AZERTY" | "DVORAK";
-  status?: "active" | "block";
+  KeyBoardLayout!: 'QWERTY' | 'AZERTY' | 'DVORAK';
+  status?: 'active' | 'block';
   contactNumber?: number;
   gender?: string;
   googleId?: string | null;
-  role!: "user" | "admin" | "companyUser" | "companyAdmin";
+  role!: 'user' | 'admin' | 'companyUser' | 'companyAdmin';
   createdAt?: Date;
 }

@@ -1,7 +1,4 @@
-import {
-  ContestProps,
-  openContestDTO,
-} from "../../DTOs/companyAdmin/company-contest.dto";
+import { ContestProps, openContestDTO } from '../../DTOs/companyAdmin/company-contest.dto';
 
 export type ContestPayload = {
   _id?: any;
@@ -22,15 +19,12 @@ export type ContestPayload = {
   rewards: Array<{ rank: number; prize: any }>;
 };
 
-export const mapContestDTO = (
-  contest: ContestPayload,
-  userId: string,
-): openContestDTO => {
+export const mapContestDTO = (contest: ContestPayload, userId: string): openContestDTO => {
   return {
     _id: contest._id.toString(),
     contestMode: contest.contestMode,
     title: contest.title,
-    description: contest.description || "",
+    description: contest.description || '',
     difficulty: contest.difficulty,
     textSource: contest.textSource,
     contestText: contest.contestText,
@@ -43,22 +37,17 @@ export const mapContestDTO = (
     participants: (contest.participants ?? []).map((p) => ({
       userId: p.toString(),
     })),
-    joined: (contest.participants ?? []).some(
-      (p) => p.toString() === userId.toString(),
-    ),
+    joined: (contest.participants ?? []).some((p) => p.toString() === userId.toString()),
     rewards: contest.rewards.map((r) => ({ rank: r.rank, prize: r.prize })),
   };
 };
 
-export const mapOpenContestDTO = (
-  contests: ContestPayload[],
-  userId: string,
-): ContestProps[] => {
+export const mapOpenContestDTO = (contests: ContestPayload[], userId: string): ContestProps[] => {
   return contests.map((data) => ({
     _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
-    description: data.description || "",
+    description: data.description || '',
     difficulty: data.difficulty,
     countDown: data.countDown ?? 10,
     textSource: data.textSource,
@@ -71,23 +60,18 @@ export const mapOpenContestDTO = (
     participants: (data.participants ?? []).map((p) => ({
       userId: p.toString(),
     })),
-    joined: (data.participants ?? []).some(
-      (p) => p.toString() === userId.toString(),
-    ),
+    joined: (data.participants ?? []).some((p) => p.toString() === userId.toString()),
     rewards: data.rewards.map((r) => ({ rank: r.rank, prize: r.prize })),
   }));
 };
 
-export const mapGroupContestDTO = (
-  contests: ContestPayload[],
-  userId: string,
-) => {
+export const mapGroupContestDTO = (contests: ContestPayload[], userId: string) => {
   return contests.map((data) => ({
     _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
-    description: data.description || "",
-    targetGroup: data.groupId?.toString() || "",
+    description: data.description || '',
+    targetGroup: data.groupId?.toString() || '',
     difficulty: data.difficulty,
     textSource: data.textSource,
     contestText: data.contestText,
@@ -100,22 +84,18 @@ export const mapGroupContestDTO = (
     participants: (data.participants ?? []).map((p) => ({
       userId: p.toString(),
     })),
-    joined: (data.participants ?? []).some(
-      (p) => p.toString() === userId.toString(),
-    ),
+    joined: (data.participants ?? []).some((p) => p.toString() === userId.toString()),
     rewards: data.rewards.map((r) => ({ rank: r.rank, prize: r.prize })),
   }));
 };
 
-export const mapCompanyContestDTO = (
-  contests: ContestPayload[],
-): ContestProps[] => {
+export const mapCompanyContestDTO = (contests: ContestPayload[]): ContestProps[] => {
   return contests.map((data) => ({
     _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
-    description: data.description || "",
-    targetGroup: data.groupId?.toString() || "",
+    description: data.description || '',
+    targetGroup: data.groupId?.toString() || '',
     difficulty: data.difficulty,
     textSource: data.textSource,
     contestText: data.contestText,
@@ -137,8 +117,8 @@ export const mapContestDTOAdmin = (contest: ContestPayload) => {
     _id: contest._id.toString(),
     contestMode: contest.contestMode,
     title: contest.title,
-    description: contest.description || "",
-    targetGroup: contest.groupId?.toString() || "",
+    description: contest.description || '',
+    targetGroup: contest.groupId?.toString() || '',
     difficulty: contest.difficulty,
     textSource: contest.textSource,
     contestText: contest.contestText,

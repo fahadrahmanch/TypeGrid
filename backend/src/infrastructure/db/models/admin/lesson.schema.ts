@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import { ILessonDocument } from "../../types/documents";
+import mongoose, { Schema } from 'mongoose';
+import { ILessonDocument } from '../../types/documents';
 
 const lessonSchema = new Schema<ILessonDocument>(
   {
@@ -15,12 +15,12 @@ const lessonSchema = new Schema<ILessonDocument>(
     },
     category: {
       type: String,
-      enum: ["sentence", "paragraph"],
+      enum: ['sentence', 'paragraph'],
       required: true,
     },
     level: {
       type: String,
-      enum: ["beginner", "intermediate", "advanced"],
+      enum: ['beginner', 'intermediate', 'advanced'],
       required: true,
     },
     wpm: {
@@ -33,18 +33,18 @@ const lessonSchema = new Schema<ILessonDocument>(
     },
     createdBy: {
       type: String,
-      enum: ["admin", "company"],
-      default: "admin",
+      enum: ['admin', 'company'],
+      default: 'admin',
     },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Company",
+      ref: 'Company',
       default: null,
     },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export const Lesson = mongoose.model<ILessonDocument>("Lesson", lessonSchema);
+export const Lesson = mongoose.model<ILessonDocument>('Lesson', lessonSchema);

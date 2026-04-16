@@ -1,12 +1,12 @@
-import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
-import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
-import { IRemoveCompanyGroupMemberUseCase } from "../../interfaces/companyAdmin/remove-company-group-member.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
+import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
+import { IRemoveCompanyGroupMemberUseCase } from '../../interfaces/companyAdmin/remove-company-group-member.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
 
 export class RemoveCompanyGroupMemberUseCase implements IRemoveCompanyGroupMemberUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly companyGroupRepository: ICompanyGroupRepository,
+    private readonly companyGroupRepository: ICompanyGroupRepository
   ) {}
 
   async execute(groupId: string, memberId: string, adminUserId: string): Promise<void> {

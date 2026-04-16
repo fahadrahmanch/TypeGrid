@@ -1,15 +1,12 @@
-import { Model } from "mongoose";
-import { BaseRepository } from "../../base/base.repository";
-import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
-import { ICompanyDocument } from "../../types/documents";
-import { CompanyEntity } from "../../../../domain/entities";
-import { CompanyMapper } from "../../mappers/company.mapper";
-import { Status } from "../../../../domain/enums/status.enum";
+import { Model } from 'mongoose';
+import { BaseRepository } from '../../base/base.repository';
+import { ICompanyRepository } from '../../../../domain/interfaces/repository/company/company-repository.interface';
+import { ICompanyDocument } from '../../types/documents';
+import { CompanyEntity } from '../../../../domain/entities';
+import { CompanyMapper } from '../../mappers/company.mapper';
+import { Status } from '../../../../domain/enums/status.enum';
 
-export class CompanyRepository
-  extends BaseRepository<ICompanyDocument, CompanyEntity>
-  implements ICompanyRepository
-{
+export class CompanyRepository extends BaseRepository<ICompanyDocument, CompanyEntity> implements ICompanyRepository {
   constructor(model: Model<ICompanyDocument>) {
     super(model, CompanyMapper.toDomain);
   }
@@ -18,14 +15,14 @@ export class CompanyRepository
     status: string,
     searchText: string,
     page: number,
-    limit: number,
+    limit: number
   ): Promise<{ companies: CompanyEntity[]; total: number }> {
     let query: any = {};
 
     if (searchText) {
       query.$or = [
-        { companyName: { $regex: "^" + searchText, $options: "i" } },
-        { email: { $regex: "^" + searchText, $options: "i" } },
+        { companyName: { $regex: '^' + searchText, $options: 'i' } },
+        { email: { $regex: '^' + searchText, $options: 'i' } },
       ];
     }
 

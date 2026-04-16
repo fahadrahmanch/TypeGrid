@@ -4,7 +4,7 @@ export type SubscriptionPlanProps = {
   price: number;
   duration: number;
   features: string[];
-  type: "normal" | "company";
+  type: 'normal' | 'company';
   userLimit?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -16,7 +16,7 @@ export class SubscriptionPlanEntity {
   private price: number;
   private duration: number;
   private features: string[];
-  private type: "normal" | "company";
+  private type: 'normal' | 'company';
   private userLimit?: number;
   private createdAt?: Date;
   private updatedAt?: Date;
@@ -53,7 +53,7 @@ export class SubscriptionPlanEntity {
     return this.features;
   }
 
-  public getType(): "normal" | "company" {
+  public getType(): 'normal' | 'company' {
     return this.type;
   }
 

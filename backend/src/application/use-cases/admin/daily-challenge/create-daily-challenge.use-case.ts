@@ -1,27 +1,22 @@
-import { ICreateDailyAssignChallengeUseCase } from "../../../use-cases/interfaces/admin/create-daily-challenge.interface";
-import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
-import { DailyAssignChallengeResponseDTO } from "../../../DTOs/admin/daily-challenge.dto";
-import { DailyAssignChallengeEntity } from "../../../../domain/entities/daily-challenge.entity";
-import { DailyAssignChallengeMapper } from "../../../mappers/admin/daily-assign-challenge.mapper";
-import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
-import { IDailyChallengeProgressRepository } from "../../../../domain/interfaces/repository/user/daily-challenge-progress-repository.interface";
-import { MESSAGES } from "../../../../domain/constants/messages";
+import { ICreateDailyAssignChallengeUseCase } from '../../../use-cases/interfaces/admin/create-daily-challenge.interface';
+import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
+import { DailyAssignChallengeResponseDTO } from '../../../DTOs/admin/daily-challenge.dto';
+import { DailyAssignChallengeEntity } from '../../../../domain/entities/daily-challenge.entity';
+import { DailyAssignChallengeMapper } from '../../../mappers/admin/daily-assign-challenge.mapper';
+import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
+import { MESSAGES } from '../../../../domain/constants/messages';
 
 export class CreateDailyAssignChallengeUseCase implements ICreateDailyAssignChallengeUseCase {
   constructor(
     private readonly _dailyAssignChallengeRepository: IDailyAssignChallengeRepository,
-    private readonly _challengeRepository: IChallengeRepository,
-    
+    private readonly _challengeRepository: IChallengeRepository
   ) {}
   /**
    *
    * @param data
    * @returns
    */
-  async execute(data: {
-    challengeId: string;
-    date: Date;
-  }): Promise<DailyAssignChallengeResponseDTO> {
+  async execute(data: { challengeId: string; date: Date }): Promise<DailyAssignChallengeResponseDTO> {
     const isExist = await this._dailyAssignChallengeRepository.findOne({
       date: data.date,
     });
@@ -30,13 +25,10 @@ export class CreateDailyAssignChallengeUseCase implements ICreateDailyAssignChal
     }
 
     const dailyAssignChallengeEntity = new DailyAssignChallengeEntity(data);
-    const dailyAssignChallenge =
-      await this._dailyAssignChallengeRepository.create(
-        dailyAssignChallengeEntity.toObject(),
-      );
-    const challenge = await this._challengeRepository.findById(
-      data.challengeId,
+    const dailyAssignChallenge = await this._dailyAssignChallengeRepository.create(
+      dailyAssignChallengeEntity.toObject()
     );
+    const challenge = await this._challengeRepository.findById(data.challengeId);
     if (!challenge) {
       throw new Error(MESSAGES.CHALLENGE_NOT_FOUND);
     }

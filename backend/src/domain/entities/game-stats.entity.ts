@@ -79,14 +79,30 @@ export class GameStatsEntity {
   }
 
   // Getters
-  getId() { return this._id; }
-  getUserId() { return this.userId; }
-  getQuickPlay() { return { ...this.quickPlay }; }
-  getSoloPlay() { return { ...this.soloPlay }; }
-  getGroupPlay() { return { ...this.groupPlay }; }
-  getDailyChallenge() { return { ...this.dailyChallenge }; }
-  getCreatedAt() { return this.createdAt; }
-  getUpdatedAt() { return this.updatedAt; }
+  getId() {
+    return this._id;
+  }
+  getUserId() {
+    return this.userId;
+  }
+  getQuickPlay() {
+    return { ...this.quickPlay };
+  }
+  getSoloPlay() {
+    return { ...this.soloPlay };
+  }
+  getGroupPlay() {
+    return { ...this.groupPlay };
+  }
+  getDailyChallenge() {
+    return { ...this.dailyChallenge };
+  }
+  getCreatedAt() {
+    return this.createdAt;
+  }
+  getUpdatedAt() {
+    return this.updatedAt;
+  }
 
   // Setters/Update Methods
   updateQuickPlay(wpm: number) {

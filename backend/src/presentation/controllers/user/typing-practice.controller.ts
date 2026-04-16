@@ -1,73 +1,44 @@
-import { Request, Response, NextFunction } from "express";
-import logger from "../../../utils/logger";
-import { HttpStatus } from "../../constants/httpStatus";
-import { IGetPracticeTypingContentUseCase } from "../../../application/use-cases/interfaces/user/typing-practice/get-practice-typing-content.interface";
-import { MESSAGES } from "../../../domain/constants/messages";
+import { Request, Response } from 'express';
+import logger from '../../../utils/logger';
+import { HttpStatus } from '../../constants/httpStatus';
+import { IGetPracticeTypingContentUseCase } from '../../../application/use-cases/interfaces/user/typing-practice/get-practice-typing-content.interface';
+import { MESSAGES } from '../../../domain/constants/messages';
+import { CustomError } from '../../../domain/entities/custom-error.entity';
 export class TypingPracticeController {
-  constructor(
-    private _getPracticeTypingContentUseCase: IGetPracticeTypingContentUseCase,
-  ) {}
+  constructor(private _getPracticeTypingContentUseCase: IGetPracticeTypingContentUseCase) {}
 
-  async getRandomPracticeLesson(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const level = req.query.level as string;
-      const category = req.query.category as string;
+  getRandomPracticeLesson = async (req: Request, res: Response): Promise<void> => {
+    const level = req.query.level as string;
+    const category = req.query.category as string;
 
-      if (!level || !category) {
-        res.status(HttpStatus.BAD_REQUEST).json({
-          success: false,
-          message: MESSAGES.LESSON_DATA_REQUIRED,
-        });
-        return;
-      }
-
-      const lesson = await this._getPracticeTypingContentUseCase.execute(
-        level,
-        category,
-      );
-
-      logger.info("Typing practice lesson retrieved", { level, category });
-
-      res.status(HttpStatus.OK).json({
-        success: true,
-        message: MESSAGES.FETCH_SUCCESS,
-        lesson,
-      });
-    } catch (error: unknown) {
-      next(error);
+    if (!level || !category) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.LESSON_DATA_REQUIRED);
     }
-  }
 
-  async getLessonById(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const lessonId = req.params.lessonId;
+    const lesson = await this._getPracticeTypingContentUseCase.execute(level, category);
 
-      if (!lessonId) {
-        res.status(HttpStatus.BAD_REQUEST).json({
-          success: false,
-          message: MESSAGES.INVALID_REQUEST,
-        });
-        return;
-      }
+    logger.info('Typing practice lesson retrieved', { level, category });
 
-      const lesson =
-        await this._getPracticeTypingContentUseCase.getLessonById(lessonId);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.FETCH_SUCCESS,
+      lesson,
+    });
+  };
 
-      res.status(HttpStatus.OK).json({
-        success: true,
-        message: MESSAGES.FETCH_SUCCESS,
-        lesson,
-      });
-    } catch (error: unknown) {
-      next(error);
+  getLessonById = async (req: Request, res: Response): Promise<void> => {
+    const lessonId = req.params.lessonId;
+
+    if (!lessonId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
     }
-  }
+
+    const lesson = await this._getPracticeTypingContentUseCase.getLessonById(lessonId);
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.FETCH_SUCCESS,
+      lesson,
+    });
+  };
 }

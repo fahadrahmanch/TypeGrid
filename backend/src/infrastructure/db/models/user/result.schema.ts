@@ -1,30 +1,30 @@
-import { Schema, model } from "mongoose";
-import { IResultDocument } from "../../types/documents";
+import { Schema, model } from 'mongoose';
+import { IResultDocument } from '../../types/documents';
 
 const resultSchema = new Schema(
   {
     type: {
       type: String,
-      enum: ["quick", "solo", "group", "contest", "oneToOne"],
+      enum: ['quick', 'solo', 'group', 'contest', 'oneToOne'],
       required: true,
     },
     competitionId: {
       type: Schema.Types.ObjectId,
-      ref: "Competition",
+      ref: 'Competition',
       required: false,
       index: true,
       default: null,
     },
     contestId: {
       type: Schema.Types.ObjectId,
-      ref: "Contest",
+      ref: 'Contest',
       required: false,
       index: true,
       default: null,
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
@@ -37,7 +37,7 @@ const resultSchema = new Schema(
       prize: { type: Number, required: false },
     },
   },
-  { timestamps: true, suppressReservedKeysWarning: true },
+  { timestamps: true, suppressReservedKeysWarning: true }
 );
 
-export const Result = model<IResultDocument>("Result", resultSchema);
+export const Result = model<IResultDocument>('Result', resultSchema);
