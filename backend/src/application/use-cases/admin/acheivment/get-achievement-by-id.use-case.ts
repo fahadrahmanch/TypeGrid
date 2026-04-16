@@ -14,7 +14,7 @@ export class GetAchievementByIdUseCase implements IGetAchievementByIdUseCase {
     if (!achievement) {
       throw new Error(MESSAGES.NOT_FOUND || "Achievement not found");
     }
-
+    console.log("achievement",achievement);
     return achievementToResponseDTO(achievement);
   }
 }

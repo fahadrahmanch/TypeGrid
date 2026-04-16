@@ -13,20 +13,11 @@ export class GetAchievementsUseCase implements IGetAchievementsUseCase {
     limit: number,
     page: number
   ): Promise<{ achievements: AchievementResponseDTO[]; total: number }> {
-    const filter = search 
-      ? { title: { $regex: search, $options: "i" } } 
-      : {};
-
-    const all = await this._achievementRepository.find(filter);
-    
-    const total = all.length; 
-
-    const start = (page - 1) * limit;
-    const paginated = all.slice(start, start + limit);
+    const result = await this._achievementRepository.findAchievements(search, limit, page);
 
     return {
-      achievements: paginated.map(achievementToResponseDTO),
-      total: total,
+      achievements: result.achievements.map(achievementToResponseDTO),
+      total: result.total,
     };
   }
 }

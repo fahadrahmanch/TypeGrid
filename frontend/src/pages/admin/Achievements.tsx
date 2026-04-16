@@ -75,15 +75,15 @@ const Achievements: React.FC = () => {
       setLoading(true);
       const response = await fetchAchievements(debouncedSearch, limit, page);
       if (response && response.data) {
-        // Assuming backend response matches standard structure
-        setAchievements(response.data.achievements || []);
-        setTotalPages(response.data.totalPages || 1);
-        setTotalAchievements(response.data.totalAchievements || 0);
+        const data = response.data.data;
+        const list = data.achievements || data.result || (Array.isArray(data) ? data : []);
+        setAchievements(list);
+        setTotalPages(data.totalPages || 1);
+        setTotalAchievements(data.totalAchievements || list.length);
       }
     } catch (err: any) {
       console.error("Error fetching achievements:", err);
-      // Silently fail if backend doesn't exist yet, but show breadcrumbs
-      // toast.error(err?.response?.data?.message || "Failed to load achievements");
+   
     } finally {
       setLoading(false);
     }
@@ -201,7 +201,7 @@ const Achievements: React.FC = () => {
     try {
       const response = await fetchAchievementById(id);
       if (response && response.data) {
-        const data = response.data.achievement;
+        const data = response.data.data
         setValues({
           title: data.title,
           description: data.description,
@@ -221,13 +221,15 @@ const Achievements: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
+
     setIdToDelete(id);
     setDeleteConfirmOpen(true);
+
   };
 
   const handleConfirmDelete = async () => {
     if (!idToDelete) return;
-    try {
+    try { 
       await deleteAchievement(idToDelete);
       toast.success("Achievement deleted successfully");
       loadAchievements();
@@ -351,7 +353,7 @@ const Achievements: React.FC = () => {
                 ) : (
                   achievements.map((item) => (
                     <tr
-                      key={item._id}
+                      key={item.id || item._id}
                       className="hover:bg-gray-50 transition-colors"
                     >
                       <td className="py-4 px-6">
@@ -384,14 +386,14 @@ const Achievements: React.FC = () => {
                       <td className="py-4 px-6">
                         <div className="flex justify-end gap-3">
                           <button
-                            onClick={() => handleEdit(item._id)}
+                            onClick={() => handleEdit(item.id || item._id)}
                             className="flex items-center gap-1.5 px-4 py-2 bg-[#F3F4F6] text-[#4B5563] rounded-lg font-bold text-xs hover:bg-gray-200 transition-colors"
                           >
                             <Edit2 className="w-4 h-4" />
                             Edit
                           </button>
                           <button
-                            onClick={() => handleDelete(item._id)}
+                            onClick={() => handleDelete(item.id || item._id)}
                             className="flex items-center gap-1.5 px-4 py-2 bg-[#EF4444] text-white rounded-lg font-bold text-xs hover:bg-red-600 transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />

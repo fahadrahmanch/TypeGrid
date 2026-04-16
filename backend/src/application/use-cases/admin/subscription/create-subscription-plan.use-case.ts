@@ -5,7 +5,7 @@ import { SubscriptionPlanEntity } from "../../../../domain/entities/admin/subscr
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 import { MESSAGES } from "../../../../domain/constants/messages";
-import { mapToSubscriptionPlan } from "../../../mappers/admin/subscription-plan.mapper";
+import { subscriptionPlanToResponseDTO } from "../../../mappers/admin/subscription-plan.mapper";
 
 export class CreateSubscriptionPlanUseCase implements ICreateSubscriptionPlanUseCase {
   constructor(private readonly _subscriptionPlanRepository: ISubscriptionPlanRepository) {}
@@ -34,6 +34,6 @@ export class CreateSubscriptionPlanUseCase implements ICreateSubscriptionPlanUse
     const newPlan = (
       await this._subscriptionPlanRepository.create(subscriptionPlanEntity.toObject())
     ).toObject();
-    return mapToSubscriptionPlan(newPlan);
+    return subscriptionPlanToResponseDTO(newPlan);
   }
 }

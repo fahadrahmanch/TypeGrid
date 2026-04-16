@@ -10,7 +10,7 @@ import { IStatsRepository } from "../../../../domain/interfaces/repository/user/
 import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
 import { StatsEntity } from "../../../../domain/entities/stats.entity";
 import { updateUserStats } from "../../../services/user-stats.service";
-
+import { IAchievementService } from "../../../../domain/interfaces/services/acheivment-service.interface";
 export class SoloPlayResultUseCase implements ISoloPlayResultUseCase {
   constructor(
     private _competitionRepo: ICompetitionRepository,
@@ -18,6 +18,7 @@ export class SoloPlayResultUseCase implements ISoloPlayResultUseCase {
     private _resultRepo: IResultRepository,
     private _statsRepo: IStatsRepository,
     private _lessonRepo: ILessonRepository,
+    private _achievementService: IAchievementService,
   ) {}
 
   async execute(userId: string, gameId: string, result: any): Promise<void> {
@@ -83,5 +84,7 @@ export class SoloPlayResultUseCase implements ISoloPlayResultUseCase {
     });
     const resultObject = resultEntity.toObject();
     await this._resultRepo.create(resultObject);
+    const newAchievements = await this._achievementService.checkAndUnlockAchievements(userId)
+    console.log("newAchievements in usecase",newAchievements);
   }
 }

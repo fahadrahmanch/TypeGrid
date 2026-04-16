@@ -21,6 +21,9 @@ export class CheckFeatureAccessUseCase implements ICheckFeatureAccessUseCase {
         throw new Error("Subscription plan details not found");
       }
 
+      console.log("plan", plan);
+      console.log("feature", feature);
+
       if (!plan.getFeatures().includes(feature)) {
         throw new Error(`Your current plan does not include the '${feature}' feature`);
       }

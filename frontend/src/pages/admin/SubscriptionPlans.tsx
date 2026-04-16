@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { Plus, Edit2, Trash2, X } from "lucide-react";
-import { createSubscriptionPlan } from "../../api/admin/subscription";
+import { 
+  createSubscriptionPlan, 
+  getSubscriptionPlans, 
+  updateSubscriptionPlan, 
+  deleteSubscriptionPlan 
+} from "../../api/admin/subscription";
 import {
   nameValidation,
   priceValidation,
@@ -12,21 +17,39 @@ import {
   featuresValidation,
 } from "../../validations/subscriptionValidation";
 
+import { getSubscriptionNormalPlans, getSubscriptionCompanyPlans } from "../../api/admin/subscription";
 const SubscriptionPlans: React.FC = () => {
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [newFeature, setNewFeature] = useState("");
 
-  const [normalPlans, setNormalPlans] = useState([
-    { id: "1", name: "Basic", price: "8.99", duration: "monthly", features: ["Quick Play Solo", "Solo Play"], type: "normal" },
-    { id: "2", name: "Premium", price: "18.99", duration: "monthly", features: ["Quick Play Solo", "Solo Play", "Group Play"], type: "normal" },
-    { id: "3", name: "Annual Premium", price: "199.99", duration: "yearly", features: ["Quick Play Solo", "Solo Play", "Group Play"], type: "normal" },
-  ]);
+  const [normalPlans, setNormalPlans] = useState<any[]>([]);
+  const [companyPlans, setCompanyPlans] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [companyPlans, setCompanyPlans] = useState([
-    { id: "4", name: "company", price: "8.99", duration: "monthly", features: ["team competition", "company leaderboard"], type: "company", userLimit: "50" },
-    { id: "5", name: "company", price: "9.99", duration: "monthly", features: ["team competition", "company leaderboard"], type: "company", userLimit: "100" },
-  ]);
+  const fetchPlans = async () => {
+    try {
+      setLoading(true);
+      const [normalRes, companyRes] = await Promise.all([
+        getSubscriptionNormalPlans(),
+        getSubscriptionCompanyPlans()
+      ]);
+
+      const normalData = normalRes.data.subscriptionPlans || [];
+      const companyData = companyRes.data.subscriptionPlans || [];
+
+      setNormalPlans(normalData);
+      setCompanyPlans(companyData);
+    } catch (error) {
+      console.error("Error fetching plans:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlans();
+  }, []);
 
   const [values, setValues] = useState({
     name: "",
@@ -66,6 +89,7 @@ const SubscriptionPlans: React.FC = () => {
   });
 
   const NORMAL_FEATURES = ["Solo Play", "Quick Play", "Group Play"];
+  
 
   const handleCreateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -160,18 +184,37 @@ const SubscriptionPlans: React.FC = () => {
 
   const handleCreateSubmit = async () => {
     if (validateAll(values, setFormErrors)) {
-      const response=await createSubscriptionPlan(values);
-      console.log("Creating Plan:", response);
-      setCreateOpen(false);
-      // Reset values here if needed
+      try {
+        const response = await createSubscriptionPlan(values);
+        console.log("Creating Plan:", response);
+        setCreateOpen(false);
+        fetchPlans(); // Refresh the list
+      } catch (error) {
+        console.error("Error creating plan:", error);
+      }
     }
   };
 
-  const handleEditSubmit = () => {
+  const handleEditSubmit = async () => {
     if (validateAll(editValues, setEditFormErrors)) {
-      console.log("Updating Plan:", editValues);
-      setEditOpen(true);
-      setEditOpen(false);
+      try {
+        await updateSubscriptionPlan(editValues.id, editValues);
+        setEditOpen(false);
+        fetchPlans(); // Refresh the list
+      } catch (error) {
+        console.error("Error updating plan:", error);
+      }
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this plan?")) {
+      try {
+        await deleteSubscriptionPlan(id);
+        fetchPlans(); // Refresh the list
+      } catch (error) {
+        console.error("Error deleting plan:", error);
+      }
     }
   };
 
@@ -259,7 +302,9 @@ const SubscriptionPlans: React.FC = () => {
                       <tr key={plan.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.name}</td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">${plan.price}</td>
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">{plan.duration}</td>
+                        <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">
+                          {plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`}
+                        </td>
                         <td className="py-5 px-6">
                           <div className="flex flex-wrap gap-2">
                             {plan.features.map((feature, fIndex) => (
@@ -277,7 +322,10 @@ const SubscriptionPlans: React.FC = () => {
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
-                            <button className="text-gray-400 hover:text-red-500 transition-colors">
+                            <button 
+                              onClick={() => handleDelete(plan.id)}
+                              className="text-gray-400 hover:text-red-500 transition-colors"
+                            >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -289,7 +337,7 @@ const SubscriptionPlans: React.FC = () => {
               </div>
 
               {/* Pagination */}
-              <div className="mt-6 flex justify-center items-center gap-2">
+              {/* <div className="mt-6 flex justify-center items-center gap-2">
                 <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Prev</button>
                 <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-sm font-bold text-gray-900">1</button>
                 <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">2</button>
@@ -297,7 +345,7 @@ const SubscriptionPlans: React.FC = () => {
                 <span className="text-gray-400">...</span>
                 <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">10</button>
                 <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Next</button>
-              </div>
+              </div> */}
             </div>
 
             {/* Company Plan Section */}
@@ -322,7 +370,9 @@ const SubscriptionPlans: React.FC = () => {
                       <tr key={plan.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.name}</td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">${plan.price}</td>
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">{plan.duration}</td>
+                        <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">
+                          {plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`}
+                        </td>
                         <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.userLimit} users</td>
                         <td className="py-5 px-6 text-right">
                           <div className="flex justify-end gap-3">
@@ -332,7 +382,10 @@ const SubscriptionPlans: React.FC = () => {
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
-                            <button className="text-gray-400 hover:text-red-500 transition-colors">
+                            <button 
+                              onClick={() => handleDelete(plan.id)}
+                              className="text-gray-400 hover:text-red-500 transition-colors"
+                            >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -344,7 +397,7 @@ const SubscriptionPlans: React.FC = () => {
               </div>
 
               {/* Pagination */}
-              <div className="mt-6 flex justify-center items-center gap-2">
+              {/* <div className="mt-6 flex justify-center items-center gap-2">
                 <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Prev</button>
                 <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">1</button>
                 <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">2</button>
@@ -352,7 +405,7 @@ const SubscriptionPlans: React.FC = () => {
                 <span className="text-gray-400">...</span>
                 <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">10</button>
                 <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Next</button>
-              </div>
+              </div> */}
             </div>
           </div>
         </main>

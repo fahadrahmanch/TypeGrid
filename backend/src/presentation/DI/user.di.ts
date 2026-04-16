@@ -74,10 +74,21 @@ import { PaymentController } from "../controllers/user/payment.controller";
 import { CheckFeatureAccessUseCase } from "../../application/use-cases/user/check-feature-access-use.case";
 import { createCheckFeature } from "../middlewares/check-feature.middleware";
 import { ConfirmCompanySubscriptionUseCase } from "../../application/use-cases/user/subsciption/confirm-company-subcription.use-case";
+import { AchievementRepository } from "../../infrastructure/db/repositories/user/achievement.repository";
+import { UserAchievementRepository } from "../../infrastructure/db/repositories/user/user-achievement.repository";
+import { AchievementModel } from "../../infrastructure/db/models/admin/acheivment.schema";
+import { UserAchievement } from "../../infrastructure/db/models/user/user-achievement.schema";
+import { AchievementService } from "../../application/services/achievement.service";
+import { GetAllAchievementsUseCase } from "../../application/use-cases/user/achievements/get-all-achievements.use-case";
+import { UserAchievementController } from "../controllers/user/user-achievment.controller";
+
 const statsRepository = new StatsRepository(StatsModel);
 const userRepository = new UserRepository(User);
 const authRepository = new AuthRepository();
 const companyRepository = new CompanyRepository(Company);
+const achievementRepository = new AchievementRepository(AchievementModel);
+const userAchievementRepository = new UserAchievementRepository(UserAchievement);
+const achievementServiceInstance = new AchievementService(achievementRepository, userAchievementRepository, statsRepository);
 const lessonRepository = new LessonRepository(Lesson);
 const companyRequestUseCaseInstance = new CompanyRequestUseCase(
   companyRepository,
@@ -137,7 +148,7 @@ const newGroupPlayUseCaseInstance = new NewGroupPlayUseCase(
 
 // solo play
 const resultRepository = new ResultRepository(Result);
-const createSoloPlayUseCaseInstance = new CreateSoloPlayUseCase(
+const createSoloPlayUseCase = new CreateSoloPlayUseCase(
   lessonRepository,
   competitionRepository,
   userRepository,
@@ -148,9 +159,10 @@ const soloPlayResultUseCaseInstance = new SoloPlayResultUseCase(
   resultRepository,
   statsRepository,
   lessonRepository,
+  achievementServiceInstance,
 );
 export const injectSoloPlayController = new SoloPlayController(
-  createSoloPlayUseCaseInstance,
+  createSoloPlayUseCase,
   soloPlayResultUseCaseInstance,
 );
 
@@ -280,3 +292,8 @@ const checkFeatureAccessUseCaseInstance = new CheckFeatureAccessUseCase(
 
 export const checkFeatureMiddleware = createCheckFeature(checkFeatureAccessUseCaseInstance);
 
+// achievements
+const getAllAchievementsUseCaseInstance = new GetAllAchievementsUseCase(achievementRepository,userAchievementRepository);
+export const injectUserAchievementController = new UserAchievementController(
+  getAllAchievementsUseCaseInstance
+);

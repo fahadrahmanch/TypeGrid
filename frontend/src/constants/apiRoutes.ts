@@ -25,6 +25,12 @@ export const API_ROUTES = {
     CREATE_COMPANY_SUBSCRIPTION_SESSION: "/subscription/create-company-session",
     CONFIRM_SUBSCRIPTION: "/subscription/confirm",
     CONFIRM_COMPANY_SUBSCRIPTION: "/subscription/confirm-company",
+    //achivements
+    ACHIEVEMENTS: {
+      GET_ALL: "/achievements",
+      GET_USER_ACHIEVEMENTS: "/achievements/user",
+      GET_BY_ID: (id: string) => `/achievement/${id}`,
+    }
   },
   QUICK_PLAY: {
     START: "/quick-play/start",
@@ -89,6 +95,8 @@ export const API_ROUTES = {
     SUBSCRIPTION: {
       BASE: "/subscription",
       BY_ID: (id: string) => `/subscription/${id}`,
+      NORMAL: "/subscription/normal",
+      COMPANY: "/subscription/company",
     },
     REWARDS: {
       BASE: "/rewards",
@@ -130,7 +138,12 @@ export const API_ROUTES = {
     REMOVE_MEMBER_FROM_GROUP: (groupId: string, memberId: string) => `/company-groups/${groupId}/members/${memberId}`,
     ADD_MEMBER_TO_GROUP: (groupId: string, memberId: string) => `/company-groups/${groupId}/members-add/${memberId}`,
     COMPANY_GROUP_BY_ID: (id: string) => `/company-groups/${id}`,
-   
+    ACHIEVEMENTS: {
+      BASE: "/achievement",
+      ALL: "/achievements",
+      BY_ID: (id: string) => `/achievement/${id}`,
+      DELETE: (id: string) => `/achievement/${id}`,
+    }
   },
   GET_COMPANY_USER_PROFILE:(userId:string)=> `/profile/${userId}`,
   UPDATE_COMPANY_PASSWORD:(userId:string)=> `/profile/${userId}/password`,

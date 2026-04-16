@@ -83,15 +83,22 @@ export const Routes = {
     FETCH_DAILY_ASSIGN_CHALLENGE_BY_ID: "/daily-assign-challenge/:id",
     UPDATE_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenge/:id",
     DELETE_DAILY_ASSIGN_CHALLENGE: "/daily-assign-challenge/:id",
-    CREATE_SUBSCRIPTION_PLAN: "/subscription",
-
+    
     //acheivements
     CREATE_ACHIVEMENT: "/acheivement",
-    FETCH_ACHIVEMENTS: "/acheivements",
-    FETCH_ACHIVEMENT_BY_ID: "/acheivement/:id",
-    UPDATE_ACHIVEMENT: "/acheivement/:id",
-    DELETE_ACHIVEMENT: "/acheivement/:id",
-  },
+    FETCH_ACHIVEMENTS: "/achievements",
+    FETCH_ACHIVEMENT_BY_ID: "/achievement/:id",
+    UPDATE_ACHIVEMENT: "/achievement/:id",
+    DELETE_ACHIVEMENT: "/achievement/:id",
+    
+    //subscription
+    CREATE_SUBSCRIPTION_PLAN: "/subscription",
+    FETCH_SUBSCRIPTION_NORMAL_PLANS: "/subscription/normal",
+    FETCH_SUBSCRIPTION_COMPANY_PLANS: "/subscription/company",
+    FETCH_SUBSCRIPTION_PLAN_BY_ID: "/subscription/:id",
+    // UPDATE_SUBSCRIPTION_PLAN: "/subscription/:id",
+    
+  }, 
 
   USERS: {
     // profile
@@ -140,6 +147,10 @@ export const Routes = {
     CREATE_SESSION: "/subscription/create-session",
     CREATE_COMPANY_SESSION: "/subscription/create-company-session",
     CONFIRM_SUBSCRIPTION: "/subscription/confirm",
+    ACHIEVEMENTS: {
+      GET_ALL: "/achievements",
+      GET_USER_ACHIEVEMENTS: "/achievements/me",
+    },
   },
 
   COMPANY_ADMIN: {

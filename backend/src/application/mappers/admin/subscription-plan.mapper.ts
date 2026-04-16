@@ -1,15 +1,17 @@
 import { SubscriptionPlanResponseDTO } from "../../DTOs/admin/subscription-plan.dto";
+import { SubscriptionPlanEntity } from "../../../domain/entities/admin/subscription-plan.entity";
 
-export function mapToSubscriptionPlan(plan: any): SubscriptionPlanResponseDTO {
+export function subscriptionPlanToResponseDTO(plan: SubscriptionPlanEntity | any): SubscriptionPlanResponseDTO {
+  const data = plan instanceof SubscriptionPlanEntity ? plan.toObject() : plan;
   return {
-    id: plan.id || plan._id?.toString() || "",
-    name: plan.name,
-    price: Number(plan.price),
-    duration: Number(plan.duration),
-    features: plan.features || [],
-    type: plan.type,
-    userLimit: plan.userLimit ? Number(plan.userLimit) : undefined,
-    createdAt: plan.createdAt,
-    updatedAt: plan.updatedAt,
+    id: data.id || data._id?.toString() || "",
+    name: data.name,
+    price: Number(data.price),
+    duration: Number(data.duration),
+    features: data.features || [],
+    type: data.type,
+    userLimit: data.userLimit ? Number(data.userLimit) : undefined,
+    createdAt: data.createdAt,
+    updatedAt: data.updatedAt,
   };
 }

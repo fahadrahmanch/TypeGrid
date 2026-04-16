@@ -14,4 +14,13 @@ export class UserAchievementRepository extends BaseRepository<IUserAchievementDo
     const docs = await this._userAchievementModel.find({ userId });
     return docs.map(doc => UserAchievementMapper.toDomain(doc));
   }
+
+  async findUnlocked(userId: string, achievementIds: string[]): Promise<string[]> {
+    const docs = await this._userAchievementModel.find({
+      userId,
+      achievementId: { $in: achievementIds },
+    });
+    
+    return docs.map((doc) => doc.achievementId.toString());
+  }
 }

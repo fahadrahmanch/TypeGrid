@@ -30,4 +30,8 @@ export class UserAchievementEntity {
       unlockedAt: this.unlockedAt,
     };
   }
+
+  getId(): string | undefined {
+    return this._id;
+  }
 }

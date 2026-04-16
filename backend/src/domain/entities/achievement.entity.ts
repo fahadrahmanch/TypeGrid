@@ -34,6 +34,46 @@ export class AchievementEntity {
     this._updatedAt = data.updatedAt;
   }
 
+  getId(): string | undefined {
+    return this._id;
+  }
+
+  getTitle(): string {
+    return this._title;
+  }
+
+  getDescription(): string {
+    return this._description;
+  }
+
+  getImageUrl(): string {
+    return this._imageUrl;
+  }
+
+  getMinWpm(): number | undefined {
+    return this._minWpm;
+  }
+
+  getMinAccuracy(): number | undefined {
+    return this._minAccuracy;
+  }
+
+  getMinGame(): number | undefined {
+    return this._minGame;
+  }
+
+  getXp(): number {
+    return this._xp;
+  }
+
+  getCreatedAt(): Date | undefined {
+    return this._createdAt;
+  }
+
+  getUpdatedAt(): Date | undefined {
+    return this._updatedAt;
+  }
+
   // Getters
   get id(): string | undefined { return this._id; }
   get title(): string { return this._title; }
@@ -67,16 +107,16 @@ export class AchievementEntity {
 
   toObject() {
     return {
-      _id: this.id,
-      title: this.title,
-      description: this.description,
-      imageUrl: this.imageUrl,
-      minWpm: this.minWpm,
-      minAccuracy: this.minAccuracy,
-      minGame: this.minGame,
-      xp: this.xp,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      _id: this._id,
+      title: this._title,
+      description: this._description,
+      imageUrl: this._imageUrl,
+      minWpm: this._minWpm,
+      minAccuracy: this._minAccuracy,
+      minGame: this._minGame,
+      xp: this._xp,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
     };
   }
 }

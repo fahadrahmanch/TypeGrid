@@ -30,6 +30,8 @@ import ChangePassword from "../pages/user/changePassword";
 import DailyChallengeLayout from "../pages/user/DailyChallenge/dailyChallenge";
 import DailyChallengeArea from "../pages/user/DailyChallenge/dailyChallengeArea";
 import LeaderBoard from "../pages/user/leaderBoard";
+import Achievements from "../pages/user/achievments";
+
 
 export default function UserRoutes() {
   const location = useLocation();
@@ -140,7 +142,9 @@ export default function UserRoutes() {
         <Route path="daily-challenge" element={<DailyChallengeLayout />} />
         <Route path="daily-challenge/:id" element={<DailyChallengeArea />} />
         <Route path="highscores" element={<LeaderBoard />} />
+        <Route path="badges" element={<Achievements />} />
       </Route>
+
     </Routes>
   );
 }

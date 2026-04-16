@@ -12,6 +12,7 @@ import { injectLeaderboardController } from "../DI/user.di";
 import { injectSubscriptionController } from "../DI/user.di";
 import { injectPaymentController } from "../DI/user.di";
 import { checkFeatureMiddleware } from "../DI/user.di";
+import { injectUserAchievementController } from "../DI/user.di";
 export class UserRoutes {
   private router: express.Router;
   constructor() {
@@ -236,6 +237,24 @@ export class UserRoutes {
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
       (req: Request, res: Response, next: NextFunction) => {
         injectPaymentController.createCompanySession(req, res, next);
+      },
+    );
+
+    // achievements
+    this.router.get(
+      Routes.USERS.ACHIEVEMENTS.GET_ALL,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectUserAchievementController.allAchievements(req, res, next);
+      },
+    );
+
+    this.router.get(
+      Routes.USERS.ACHIEVEMENTS.GET_USER_ACHIEVEMENTS,
+      checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        console.log("user achievements")
+        injectUserAchievementController.userAchievements(req, res, next);
       },
     );
   }

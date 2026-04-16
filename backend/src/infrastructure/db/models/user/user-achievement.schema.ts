@@ -1,32 +1,33 @@
-// import mongoose, { Schema } from "mongoose";
-// import { IUserAchievementDocument } from "../../types/documents";
 
-// const UserAchievementSchema = new Schema<IUserAchievementDocument>(
-//   {
-//     userId: {
-//       type: Schema.Types.ObjectId,
-//       ref: "User",
-//       required: true,
-//     },
-//     achievementId: {
-//       type: Schema.Types.ObjectId,
-//       ref: "Achievement",
-//       required: true,
-//     },
-//     unlockedAt: {
-//       type: Date,
-//       default: Date.now,
-//     },
-//   },
-//   { timestamps: true }
-// );
+import mongoose, { Schema } from "mongoose";
+import { IUserAchievementDocument } from "../../types/documents";
 
-// UserAchievementSchema.index(
-//   { userId: 1, achievementId: 1 },
-//   { unique: true }
-// );
+const UserAchievementSchema = new Schema<IUserAchievementDocument>(
+  {
+    userId: {
+      type:     mongoose.Schema.Types.ObjectId,
+      ref:      "User",
+      required: true,
+    },
+    achievementId: {
+      type:     mongoose.Schema.Types.ObjectId,
+      ref:      "Achievement",
+      required: true,
+    },
+    unlockedAt: {
+      type:    Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
 
-// export const UserAchievementModel = mongoose.model<IUserAchievementDocument>(
-//   "UserAchievement",
-//   UserAchievementSchema
-// );
+UserAchievementSchema.index(
+  { userId: 1, achievementId: 1 },
+  { unique: true }
+);
+
+export const UserAchievement = mongoose.model<IUserAchievementDocument>(
+  "UserAchievement",
+  UserAchievementSchema
+);

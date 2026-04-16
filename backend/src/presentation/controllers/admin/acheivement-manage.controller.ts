@@ -52,6 +52,7 @@ export class AchievementManageController {
     try {
       const id = req.params.id;
       const achievement = await this._getAchievementByIdUseCase.execute(id);
+      console.log("achievement in conteroller",achievement);
       res.status(HttpStatus.OK).json({
         success: true,
         message: "Achievement fetched successfully",
@@ -79,6 +80,7 @@ export class AchievementManageController {
 
   async deleteAchievement(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log("delete acheivement")
       const id = req.params.id;
       await this._deleteAchievementUseCase.execute(id);
       res.status(HttpStatus.OK).json({

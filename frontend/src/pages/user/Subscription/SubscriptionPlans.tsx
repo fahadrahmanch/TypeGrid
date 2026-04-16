@@ -15,7 +15,7 @@ interface ISubscriptionPlan {
 }
 
 const SubscriptionPlans: React.FC = () => {
-    const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">("yearly");
+    const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
     const [plans, setPlans] = useState<ISubscriptionPlan[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -23,6 +23,7 @@ const SubscriptionPlans: React.FC = () => {
     const fetchSubscriptionPlans = async () => {
         try {
             const response = await getSubscriptionPlans();
+            console.log("Subscription Plans",response.data);
             // Assuming response looks like { data: { plans: [...] } } or { data: [...] }
             // Given the user context, it's likely response.data.plans
             const plansData = response.data.plans || response.data || [];
@@ -34,41 +35,30 @@ const SubscriptionPlans: React.FC = () => {
         }
     }
     const handleUpgrade = async () => {
-         try {
-    const plan = selectedPlan === "monthly" ? monthlyPlan : yearlyPlan;
+        try {
+            if (!selectedPlanId) {
+                alert("Please select a plan first");
+                return;
+            }
 
-    if (!plan) {
-      alert("No plan selected");
-      return;
-    }
-
-    const res = await createSubscriptionSession(plan.id);
-    
-
-    const data =res.data.url
-
-    window.location.href = data;
-
-  } catch (error) {
-    console.error("Error:", error);
-  }
+            const res = await createSubscriptionSession(selectedPlanId);
+            const data = res.data.url;
+            window.location.href = data;
+        } catch (error) {
+            console.error("Error:", error);
+        }
     }
     useEffect(() => {
         fetchSubscriptionPlans();
     }, []);
 
-    const monthlyPlan = plans.find(p => p.type === 'normal' && p.duration === 30);
-    const yearlyPlan = plans.find(p => p.type === 'normal' && p.duration === 365);
+    const normalPlans = plans.filter(p => p.type === 'normal');
 
     useEffect(() => {
-        if (!loading) {
-            if (yearlyPlan) {
-                setSelectedPlan("yearly");
-            } else if (monthlyPlan) {
-                setSelectedPlan("monthly");
-            }
+        if (!loading && normalPlans.length > 0 && !selectedPlanId) {
+            setSelectedPlanId(normalPlans[0].id);
         }
-    }, [loading, monthlyPlan, yearlyPlan]);
+    }, [loading, normalPlans, selectedPlanId]);
 
     const freeFeatures = [
         { name: "Practice Mode", description: "Free unlimited typing practice sessions", icon: <Check className="w-5 h-5 text-green-500" /> },
@@ -175,59 +165,40 @@ const SubscriptionPlans: React.FC = () => {
                         <p className="text-sm text-gray-500">Unlock premium features and compete at the highest level</p>
                     </div>
 
-                    <div className={`grid gap-6 mb-10 ${monthlyPlan && yearlyPlan ? 'sm:grid-cols-2' : 'max-w-md mx-auto'}`}>
-                        {/* Monthly Plan */}
-                        {monthlyPlan && (
+                    <div className={`grid gap-6 mb-10 ${normalPlans.length > 1 ? 'sm:grid-cols-2 lg:grid-cols-3' : 'max-w-md mx-auto'}`}>
+                        {normalPlans.map((plan) => (
                             <div 
-                                onClick={() => setSelectedPlan("monthly")}
-                                className={`cursor-pointer rounded-2xl p-6 transition-all duration-300 border-2 ${
-                                    selectedPlan === "monthly" 
-                                    ? "bg-yellow-50/50 border-yellow-200" 
-                                    : "bg-white/50 border-transparent hover:border-gray-200"
-                                }`}
-                            >
-                                <div className="text-center">
-                                    <h3 className="font-medium text-gray-900 mb-4">{monthlyPlan.name}</h3>
-                                    <div className="flex items-baseline justify-center gap-1 mb-1">
-                                        <span className="text-3xl font-black">₹{monthlyPlan.price}</span>
-                                    </div>
-                                    <p className="text-xs text-gray-500">per month</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Yearly Plan */}
-                        {yearlyPlan && (
-                            <div 
-                                onClick={() => setSelectedPlan("yearly")}
+                                key={plan.id}
+                                onClick={() => setSelectedPlanId(plan.id)}
                                 className={`cursor-pointer rounded-2xl p-6 transition-all duration-300 border-2 relative ${
-                                    selectedPlan === "yearly" 
+                                    selectedPlanId === plan.id 
                                     ? "bg-yellow-50/50 border-yellow-200" 
                                     : "bg-white/50 border-transparent hover:border-gray-200"
                                 }`}
                             >
-                                {monthlyPlan && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                        <div className="bg-yellow-400 text-gray-900 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">
-                                            Save {Math.round((1 - (yearlyPlan.price / (monthlyPlan.price * 12))) * 100)}%
-                                        </div>
-                                    </div>
-                                )}
                                 <div className="text-center">
-                                    <h3 className="font-medium text-gray-900 mb-4">{yearlyPlan.name}</h3>
+                                    <h3 className="font-medium text-gray-900 mb-4">{plan.name}</h3>
                                     <div className="flex items-baseline justify-center gap-1 mb-1">
-                                        <span className="text-3xl font-black">₹{yearlyPlan.price}</span>
+                                        <span className="text-3xl font-black">₹{plan.price}</span>
                                     </div>
-                                    <p className="text-xs text-gray-500 leading-tight">
-                                        per year<br/>
-                                        <span className="text-[10px] opacity-75">₹{Math.round(yearlyPlan.price / 12)}/month</span>
+                                    <p className="text-xs text-gray-500">
+                                        for {plan.duration} days
                                     </p>
+                                    
+                                    <div className="mt-6 space-y-3 text-left">
+                                        {plan.features.map((feature, fIndex) => (
+                                            <div key={fIndex} className="flex items-center gap-2 text-sm text-gray-600">
+                                                <Check className="w-4 h-4 text-green-500 shrink-0" />
+                                                <span>{feature}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        )}
+                        ))}
                     </div>
 
-                    {!monthlyPlan && !yearlyPlan && !loading && (
+                    {normalPlans.length === 0 && !loading && (
                         <div className="text-center py-10 bg-white/30 rounded-2xl border border-dashed border-gray-200 mb-10">
                             <Lock className="w-8 h-8 text-gray-300 mx-auto mb-3" />
                             <p className="text-gray-500">No premium plans available at the moment.</p>

@@ -289,6 +289,20 @@ export class adminRouter {
         injectSubscriptionPlanController.createSubscriptionPlan(req, res, next);
       },
     );
+    this.router.get(
+      Routes.ADMIN.FETCH_SUBSCRIPTION_NORMAL_PLANS,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionPlanController.fetchNormalSubscriptionPlans(req, res, next);
+      },
+    );
+    this.router.get(
+      Routes.ADMIN.FETCH_SUBSCRIPTION_COMPANY_PLANS,
+      checkRoleBasedMiddleware(["admin"]),
+      (req: Request, res: Response, next: NextFunction) => {
+        injectSubscriptionPlanController.fetchCompanySubscriptionPlans(req, res, next);
+      },
+    );
 
     //achievement management routes
     this.router.post(
@@ -312,6 +326,7 @@ export class adminRouter {
       Routes.ADMIN.FETCH_ACHIVEMENT_BY_ID,
       checkRoleBasedMiddleware(["admin"]),
       (req: Request, res: Response, next: NextFunction) => {
+        console.log("get achievement by id");
         injectAchievementManageController.getAchievementById(req, res, next);
       },
     );
@@ -329,6 +344,7 @@ export class adminRouter {
       Routes.ADMIN.DELETE_ACHIVEMENT,
       checkRoleBasedMiddleware(["admin"]),
       (req: Request, res: Response, next: NextFunction) => {
+        console.log("delete achievement");
         injectAchievementManageController.deleteAchievement(req, res, next);
       },
     );
