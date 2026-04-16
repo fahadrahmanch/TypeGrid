@@ -30,3 +30,7 @@ export async function getCompanyStatusApi() {
 export async function changePasswordApi(data: any) {
   return userAPI.put(API_ROUTES.USER.CHANGE_PASSWORD, data);
 }
+
+export async function getCompanyDetailsApi() {
+  return userAPI.get(API_ROUTES.USER.GET_COMPANY_DETAILS);
+}

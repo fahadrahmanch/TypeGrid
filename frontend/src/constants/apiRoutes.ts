@@ -30,7 +30,13 @@ export const API_ROUTES = {
       GET_ALL: "/achievements",
       GET_USER_ACHIEVEMENTS: "/achievements/user",
       GET_BY_ID: (id: string) => `/achievement/${id}`,
-    }
+    },
+    CANCEL_SUBSCRIPTION: "/subscription/cancel",
+    CANCEL_COMPANY_SUBSCRIPTION: "/subscription/cancel-company",
+    SUBSCRIPTION_DETAILS: "/subscription/details",
+
+    //company
+    GET_COMPANY_DETAILS: "/company/details",
   },
   QUICK_PLAY: {
     START: "/quick-play/start",

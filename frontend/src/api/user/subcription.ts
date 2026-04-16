@@ -18,3 +18,14 @@ export async function confirmSubscription(planId: string) {
 export async function confirmCompanySubscription(planId: string) {
     return userAPI.post(API_ROUTES.USER.CONFIRM_COMPANY_SUBSCRIPTION, { planId });
 }
+
+export async function cancelSubscription(planId: string) {
+    return userAPI.post(API_ROUTES.USER.CANCEL_SUBSCRIPTION, { planId });
+}
+
+export async function cancelCompanySubscription(planId: string) {
+    return userAPI.post(API_ROUTES.USER.CANCEL_COMPANY_SUBSCRIPTION, { planId });
+}
+export async function getSubscriptionDetails() {
+    return userAPI.get(API_ROUTES.USER.SUBSCRIPTION_DETAILS);
+}

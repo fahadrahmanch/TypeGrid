@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCompanyPlans } from "../../../api/user/subcription";
 import { Check, ArrowLeft, Building2, Users, Trophy, BarChart3, Mail, Zap, Loader2 } from "lucide-react";
-
 interface ICompanyPlan {
   id: string;
   name: string;
@@ -33,6 +32,19 @@ const CompanySubcriptionDiv1: React.FC = () => {
     fetchCompanyDetails();
   }, []);
 
+  useEffect(()=>{
+     const companyDetails= async()=>{
+      try {
+        const response = await getCompanyDetailsApi();
+        const companyData = response.data.data
+        console.log(companyData);
+        
+      } catch (error) {
+        console.error("Error fetching company details:", error);
+      }
+     }
+     companyDetails();
+  },[])
   const getDurationText = (days: number) => {
     if (days >= 365) return "/year";
     if (days >= 30) return "/month";

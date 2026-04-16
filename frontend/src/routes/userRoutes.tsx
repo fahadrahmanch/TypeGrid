@@ -19,6 +19,7 @@ import PaymentSuccess from "../pages/user/Subscription/PaymentSuccess";
 import CompanyPaymentSuccess from "../pages/user/Subscription/CompanyPaymentSuccess";
 import CompanyPaymentFailed from "../pages/user/Subscription/CompanyPaymentFailed";
 import PaymentCancel from "../pages/user/Subscription/PaymentCancel";
+import SubscriptionManagement from "../pages/user/Subscription/SubscriptionManagement";
 import { useLocation } from "react-router-dom";
 import PracticeTyping from "../pages/user/practiceTyping/practiceTyping";
 import TypingPracticeArea from "../pages/user/practiceTyping/typingPracticeArea";
@@ -120,6 +121,7 @@ export default function UserRoutes() {
           element={<CompanyPaymentFailed />}
         />
         <Route path="cancel" element={<PaymentCancel />} />
+        <Route path="subscription/manage" element={<SubscriptionManagement />} />
 
         {/* Typing */}
         <Route path="typing/practice" element={<PracticeTyping />} />
