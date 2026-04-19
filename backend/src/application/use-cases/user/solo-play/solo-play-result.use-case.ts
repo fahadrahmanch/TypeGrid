@@ -71,6 +71,6 @@ export class SoloPlayResultUseCase implements ISoloPlayResultUseCase {
     });
     const resultObject = resultEntity.toObject();
     await this._resultRepo.create(resultObject);
-    const newAchievements = await this._achievementService.checkAndUnlockAchievements(userId);
+    await this._achievementService.checkAndUnlockAchievements(userId);
   }
 }

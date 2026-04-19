@@ -18,6 +18,7 @@ export class AchievementManageController {
 
   createAchievement = async (req: Request, res: Response): Promise<void> => {
     const data = req.body;
+    console.log(data);
     const achievement = await this._createAchievementUseCase.createAchievement(data);
     res.status(HttpStatus.CREATED).json({
       success: true,

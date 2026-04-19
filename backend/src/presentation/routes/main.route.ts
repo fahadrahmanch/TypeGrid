@@ -85,7 +85,7 @@ export const Routes = {
     DELETE_DAILY_ASSIGN_CHALLENGE: '/daily-assign-challenge/:id',
 
     //acheivements
-    CREATE_ACHIVEMENT: '/acheivement',
+    CREATE_ACHIVEMENT: '/achievement',
     FETCH_ACHIVEMENTS: '/achievements',
     FETCH_ACHIVEMENT_BY_ID: '/achievement/:id',
     UPDATE_ACHIVEMENT: '/achievement/:id',

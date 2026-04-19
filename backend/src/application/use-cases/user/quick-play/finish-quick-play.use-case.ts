@@ -7,13 +7,15 @@ import { IStatsRepository } from '../../../../domain/interfaces/repository/user/
 import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
 import { updateUserStats } from '../../../services/user-stats.service';
 import { StatsEntity } from '../../../../domain/entities/stats.entity';
+import { IAchievementService } from '../../../../domain/interfaces/services/acheivment-service.interface';
 
 export class FinishQuickPlayUseCase {
   constructor(
     private competitionRepository: ICompetitionRepository,
     private resultRepository: IResultRepository,
     private statsRepository: IStatsRepository,
-    private lessonRepository: ILessonRepository
+    private lessonRepository: ILessonRepository,
+    private achievementService: IAchievementService
   ) {}
   async execute(gameId: string, resultArray: QuicKPlayResult[]): Promise<void> {
     const competition = await this.competitionRepository.findById(gameId);
@@ -70,6 +72,8 @@ export class FinishQuickPlayUseCase {
 
       const resultObject = resultEntity.toObject();
       await this.resultRepository.create(resultObject);
+
+      await this.achievementService.checkAndUnlockAchievements(result.userId);
     }
   }
 }

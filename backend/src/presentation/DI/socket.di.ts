@@ -9,6 +9,11 @@ import { CompetitionRepository } from '../../infrastructure/db/repositories/user
 import { FinishGroupPlayUseCase } from '../../application/use-cases/user/group-play/finish-group-play.use-case';
 import { Result } from '../../infrastructure/db/models/user/result.schema';
 import { ResultRepository } from '../../infrastructure/db/repositories/user/result.repository';
+import { AchievementRepository } from '../../infrastructure/db/repositories/user/achievement.repository';
+import { UserAchievementRepository } from '../../infrastructure/db/repositories/user/user-achievement.repository';
+import { AchievementModel } from '../../infrastructure/db/models/admin/acheivment.schema';
+import { UserAchievement } from '../../infrastructure/db/models/user/user-achievement.schema';
+import { AchievementService } from '../../application/services/achievement.service';
 import { QuickSocketController } from '../../infrastructure/socket/quick-socket.controller';
 import { GetJoinMemberUseCase } from '../../application/use-cases/user/quick-play/get-join-member.use-case';
 import { FinishQuickPlayUseCase } from '../../application/use-cases/user/quick-play/finish-quick-play.use-case';
@@ -37,22 +42,31 @@ const contestRepository = new ContestRepository(Contest);
 const challengeRepository = new CompanyChallengeRepository(CompanyChallenge);
 const companyUserStatsRepository = new CompanyUserStatsRepository(CompanyUserStats);
 const lessonRepository = new LessonRepository(Lesson);
+const achievementRepository = new AchievementRepository(AchievementModel);
+const userAchievementRepository = new UserAchievementRepository(UserAchievement);
 
 const removeMemberUseCase = new RemoveMemberGroupPlayGroupUseCase(groupRepository, userRepository);
 const validateGroupPlayMemberUseCase = new ValidateGroupPlayMemberUseCase(groupRepository, competitionRepository);
 const statsRepository = new StatsRepository(StatsModel);
+const achievementServiceInstance = new AchievementService(
+  achievementRepository,
+  userAchievementRepository,
+  statsRepository
+);
 const finishGroupPlayUseCaseInstance = new FinishGroupPlayUseCase(
   competitionRepository,
   groupRepository,
   resultRepository,
-  statsRepository
+  statsRepository,
+  achievementServiceInstance
 );
 const getJoinMemberUseCaseInstance = new GetJoinMemberUseCase(competitionRepository, userRepository);
 const finishQuickPlayUseCaseInstance = new FinishQuickPlayUseCase(
   competitionRepository,
   resultRepository,
   statsRepository,
-  lessonRepository
+  lessonRepository,
+  achievementServiceInstance
 );
 const leaveQuickPlayUseCaseInstance = new LeaveQuickPlayUseCase(competitionRepository, userRepository);
 const finishContestUseCaseInstance = new FinishContestUseCase(

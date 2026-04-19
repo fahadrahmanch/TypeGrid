@@ -10,12 +10,15 @@ import { MESSAGES } from '../../../../domain/constants/messages';
 import { updateUserStats } from '../../../services/user-stats.service';
 import { IStatsRepository } from '../../../../domain/interfaces/repository/user/stats-repository.interface';
 import { StatsEntity } from '../../../../domain/entities/stats.entity';
+import { IAchievementService } from '../../../../domain/interfaces/services/acheivment-service.interface';
+
 export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
   constructor(
     private readonly _competitionRepository: ICompetitionRepository,
     private readonly _groupRepository: IGroupRepository,
     private readonly _resultRepository: IResultRepository,
-    private readonly _statsRepository: IStatsRepository
+    private readonly _statsRepository: IStatsRepository,
+    private readonly _achievementService: IAchievementService
   ) {}
 
   async execute(gameId: string, resultArray: GroupPlayResult[]): Promise<void> {
@@ -75,6 +78,8 @@ export class FinishGroupPlayUseCase implements IFinishGroupPlayUseCase {
       }
 
       await this._resultRepository.create(resultEntity.toObject());
+
+      await this._achievementService.checkAndUnlockAchievements(result.userId);
     }
   }
 }
