@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
 import { Search, Filter, Plus, Edit2, Trash2 } from "lucide-react";
+import ReusableTable from "../../components/common/ReusableTable";
 import {
   titleValidation,
   LevelValidation,
@@ -306,102 +307,92 @@ const Lessons: React.FC = () => {
                 </div>
               </div>
 
-              <div className="overflow-x-auto custom-scrollbar">
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-left">
-                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                        Difficulty
-                      </th>
-                      {/* <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Category</th> */}
-                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                        Preview
-                      </th>
-                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">
-                        Stats
-                      </th>
-                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                        Created
-                      </th>
-                      <th className="pb-4 px-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="divide-y divide-gray-50">
-                    {lessons &&
-                      lessons.map((lesson) => (
-                        <tr key={lesson.id} className="group hover:bg-white/40 transition-all">
-                          <td className="py-5 px-4">
-                            <span
-                              className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border
-                            ${
-                              lesson.level === "beginner" || lesson.level === "easy"
-                                ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-                                : lesson.level === "intermediate" || lesson.level === "medium"
-                                  ? "bg-amber-50 text-amber-600 border-amber-100"
-                                  : "bg-orange-50 text-[#D0864B] border-orange-100"
-                            }`}
-                            >
-                              {lesson.level}
+                <ReusableTable
+                  columns={[
+                    {
+                      header: "Difficulty",
+                      key: "level",
+                      render: (lesson) => (
+                        <span
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border
+                        ${
+                          lesson.level === "beginner" || lesson.level === "easy"
+                            ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                            : lesson.level === "intermediate" || lesson.level === "medium"
+                              ? "bg-amber-50 text-amber-600 border-amber-100"
+                              : "bg-orange-50 text-[#D0864B] border-orange-100"
+                        }`}
+                        >
+                          {lesson.level}
+                        </span>
+                      ),
+                    },
+                    {
+                      header: "Preview",
+                      key: "text",
+                      render: (lesson) => (
+                        <p className="text-sm font-medium text-gray-600 max-w-[200px] truncate leading-relaxed">
+                          {lesson.text}
+                        </p>
+                      ),
+                    },
+                    {
+                      header: "Stats",
+                      key: "stats",
+                      headerClassName: "text-center",
+                      className: "text-center",
+                      render: (lesson) => (
+                        <div className="flex items-center justify-center gap-3">
+                          <div className="flex flex-col items-center">
+                            <span className="text-[10px] text-gray-400 font-bold uppercase">
+                              {lesson.targetWpm || "-"}
                             </span>
-                          </td>
-                          {/* <td className="py-5 px-4 font-bold text-gray-700 text-xs">
-                          {lesson.category}
-                        </td> */}
-                          <td className="py-5 px-4">
-                            <p className="text-sm font-medium text-gray-600 max-w-[200px] truncate leading-relaxed">
-                              {lesson.text}
-                            </p>
-                          </td>
-                          <td className="py-5 px-4 text-center">
-                            <div className="flex items-center justify-center gap-3">
-                              <div className="flex flex-col items-center">
-                                <span className="text-[10px] text-gray-400 font-bold uppercase">
-                                  {lesson.targetWpm || "-"}
-                                </span>
-                                <span className="text-[9px] text-[#D0864B] font-bold uppercase tracking-tighter">
-                                  WPM
-                                </span>
-                              </div>
-                              <div className="w-[1px] h-4 bg-gray-100"></div>
-                              <div className="flex flex-col items-center">
-                                <span className="text-[10px] text-gray-400 font-bold uppercase">
-                                  {lesson.targetAccuracy || "-"}%
-                                </span>
-                                <span className="text-[9px] text-emerald-500 font-bold uppercase tracking-tighter">
-                                  ACC
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="py-5 px-4 text-xs font-medium text-gray-400">
-                            {new Date(lesson.createdAt).toLocaleDateString()}
-                          </td>
-                          <td className="py-5 px-4">
-                            <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                              <button
-                                onClick={() => fetch(lesson.id)}
-                                className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
-                                title="Edit Lesson"
-                              >
-                                <Edit2 className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteLesson(lesson.id)}
-                                className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
-                                title="Delete Lesson"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
+                            <span className="text-[9px] text-[#D0864B] font-bold uppercase tracking-tighter">WPM</span>
+                          </div>
+                          <div className="w-[1px] h-4 bg-gray-100"></div>
+                          <div className="flex flex-col items-center">
+                            <span className="text-[10px] text-gray-400 font-bold uppercase">
+                              {lesson.targetAccuracy || "-"}%
+                            </span>
+                            <span className="text-[9px] text-emerald-500 font-bold uppercase tracking-tighter">ACC</span>
+                          </div>
+                        </div>
+                      ),
+                    },
+                    {
+                      header: "Created",
+                      key: "createdAt",
+                      className: "text-xs font-medium text-gray-400",
+                      render: (lesson) => new Date(lesson.createdAt).toLocaleDateString(),
+                    },
+                    {
+                      header: "Actions",
+                      key: "actions",
+                      headerClassName: "text-right",
+                      className: "text-right",
+                      render: (lesson) => (
+                        <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                          <button
+                            onClick={() => fetch(lesson.id)}
+                            className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
+                            title="Edit Lesson"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteLesson(lesson.id)}
+                            className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
+                            title="Delete Lesson"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ),
+                    },
+                  ]}
+                  data={lessons}
+                  emptyMessage="No lessons found"
+                />
             </div>
           </div>
         </main>

@@ -9,12 +9,12 @@ import {
   Edit2,
   Trash2,
   X,
-  ChevronLeft,
-  ChevronRight,
   Trophy,
   Upload,
   Image as ImageIcon,
 } from "lucide-react";
+import ReusableTable from "../../components/common/ReusableTable";
+import Pagination from "../../components/common/Pagination";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import {
   fetchAchievements,
@@ -288,107 +288,88 @@ const Achievements: React.FC = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-[#FFF8EA] text-left">
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Badge</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Title</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Description</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Min WPM</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Min Accuracy</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Min Games</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">XP Reward</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-right">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {loading ? (
-                  <tr>
-                    <td colSpan={8} className="py-20 text-center">
-                      <div className="inline-block w-8 h-8 border-4 border-[#ECA468]/20 border-t-[#ECA468] rounded-full animate-spin" />
-                    </td>
-                  </tr>
-                ) : achievements.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="py-20 text-center text-gray-400 font-medium">
-                      No achievements found
-                    </td>
-                  </tr>
-                ) : (
-                  achievements.map((item) => (
-                    <tr key={item.id || item._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-6">
-                        <div className="w-10 h-10 rounded-lg bg-white/80 border border-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
-                          {item.imageUrl ? (
-                            <img src={item.imageUrl} alt="Badge" className="w-full h-full object-cover" />
-                          ) : (
-                            <Trophy className="w-5 h-5 text-gray-300" />
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 font-bold text-gray-700">{item.title}</td>
-                      <td className="py-4 px-6 text-gray-600 font-medium truncate max-w-[200px]">{item.description}</td>
-                      <td className="py-4 px-6 text-gray-700 font-bold">{item.minWpm || "—"}</td>
-                      <td className="py-4 px-6 text-gray-700 font-bold">
-                        {item.minAccuracy ? `${item.minAccuracy}%` : "—"}
-                      </td>
-                      <td className="py-4 px-6 text-gray-700 font-bold">{item.minGame || "—"}</td>
-                      <td className="py-4 px-6 text-[#D0864B] font-bold text-nowrap">+{item.xp} XP</td>
-                      <td className="py-4 px-6">
-                        <div className="flex justify-end gap-3">
-                          <button
-                            onClick={() => handleEdit(item.id || item._id)}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-[#F3F4F6] text-[#4B5563] rounded-lg font-bold text-xs hover:bg-gray-200 transition-colors"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item.id || item._id)}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-[#EF4444] text-white rounded-lg font-bold text-xs hover:bg-red-600 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+            <ReusableTable
+              columns={[
+                {
+                  header: "Badge",
+                  key: "imageUrl",
+                  render: (item) => (
+                    <div className="w-10 h-10 rounded-lg bg-white/80 border border-gray-100 flex items-center justify-center overflow-hidden shadow-sm">
+                      {item.imageUrl ? (
+                        <img src={item.imageUrl} alt="Badge" className="w-full h-full object-cover" />
+                      ) : (
+                        <Trophy className="w-5 h-5 text-gray-300" />
+                      )}
+                    </div>
+                  ),
+                },
+                {
+                  header: "Title",
+                  key: "title",
+                  className: "font-bold text-gray-700",
+                },
+                {
+                  header: "Description",
+                  key: "description",
+                  className: "text-gray-600 font-medium truncate max-w-[200px]",
+                },
+                {
+                  header: "Min WPM",
+                  key: "minWpm",
+                  className: "text-gray-700 font-bold",
+                  render: (item) => item.minWpm || "—",
+                },
+                {
+                  header: "Min Accuracy",
+                  key: "minAccuracy",
+                  className: "text-gray-700 font-bold",
+                  render: (item) => (item.minAccuracy ? `${item.minAccuracy}%` : "—"),
+                },
+                {
+                  header: "Min Games",
+                  key: "minGame",
+                  className: "text-gray-700 font-bold",
+                  render: (item) => item.minGame || "—",
+                },
+                {
+                  header: "XP Reward",
+                  key: "xp",
+                  className: "text-[#D0864B] font-bold text-nowrap",
+                  render: (item) => `+${item.xp} XP`,
+                },
+                {
+                  header: "Actions",
+                  key: "actions",
+                  headerClassName: "text-right",
+                  className: "py-4 px-6",
+                  render: (item) => (
+                    <div className="flex justify-end gap-3">
+                      <button
+                        onClick={() => handleEdit(item.id || item._id)}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-[#F3F4F6] text-[#4B5563] rounded-lg font-bold text-xs hover:bg-gray-200 transition-colors"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item.id || item._id)}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-[#EF4444] text-white rounded-lg font-bold text-xs hover:bg-red-600 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </button>
+                    </div>
+                  ),
+                },
+              ]}
+              data={achievements}
+              loading={loading}
+              emptyMessage="No achievements found"
+              headerClassName="bg-[#FFF8EA] text-left"
+              columnHeaderClassName="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest"
+            />
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-12 flex justify-center items-center gap-6">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage((prev) => prev - 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-              </button>
-
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
-                  of {totalPages}
-                </span>
-              </div>
-
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage((prev) => prev + 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-              </button>
-            </div>
-          )}
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       </div>
 

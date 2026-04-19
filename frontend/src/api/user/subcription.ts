@@ -7,6 +7,7 @@ export async function getCompanyPlans() {
   return userAPI.get(API_ROUTES.USER.COMPANY_PLANS);
 }
 export async function createSubscriptionSession(planId: string) {
+    alert(planId)
   return userAPI.post(API_ROUTES.USER.CREATE_SUBSCRIPTION_SESSION, { planId });
 }
 export async function createCompanySubscriptionSession(planId: string) {
@@ -18,6 +19,7 @@ export async function confirmSubscription(planId: string) {
   return userAPI.post(API_ROUTES.USER.CONFIRM_SUBSCRIPTION, { planId });
 }
 export async function confirmCompanySubscription(planId: string) {
+    alert(planId)
   return userAPI.post(API_ROUTES.USER.CONFIRM_COMPANY_SUBSCRIPTION, { planId });
 }
 
@@ -30,4 +32,8 @@ export async function cancelCompanySubscription(planId: string) {
 }
 export async function getSubscriptionDetails() {
   return userAPI.get(API_ROUTES.USER.SUBSCRIPTION_DETAILS);
+}
+
+export async function getCompanyDetails(){
+  return userAPI.get(API_ROUTES.USER. GET_COMPANY_DETAILS);
 }

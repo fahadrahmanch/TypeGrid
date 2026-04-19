@@ -284,7 +284,7 @@ export class AuthController {
   companySignIn = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body.data;
     const user = await this._loginUseCase.execute(email, password, ['companyAdmin', 'companyUser']);
-
+    console.log(user);
     if (!user || !user._id) {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }

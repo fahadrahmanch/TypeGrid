@@ -185,6 +185,11 @@ export class UserRoutes {
       asyncHandler(injectPaymentController.confirmSubscription)
     );
     this.router.post(
+      Routes.USERS.CONFIRM_COMPANY_SUBSCRIPTION,
+      checkRoleBasedMiddleware(['user', 'companyAdmin']),
+      asyncHandler(injectPaymentController.confirmCompanySubscription)
+    );
+    this.router.post(
       Routes.USERS.CREATE_COMPANY_SESSION,
       checkRoleBasedMiddleware(['user', 'companyAdmin']),
       asyncHandler(injectPaymentController.createCompanySession)
@@ -196,6 +201,13 @@ export class UserRoutes {
       checkRoleBasedMiddleware(['user', 'companyAdmin']),
       asyncHandler(injectUserAchievementController.allAchievements)
     );
+
+  this.router.get(
+      Routes.USERS.GET_COMPANY_DETAILS,
+      checkRoleBasedMiddleware(['user', 'companyAdmin']),
+      asyncHandler(injectUserController.getUsecCompanyDetails)
+  )
+    
   }
   getRouter() {
     return this.router;

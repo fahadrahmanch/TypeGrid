@@ -18,7 +18,7 @@ export class CreateSubscriptionSessionUseCase implements ICreateSubscriptionSess
         throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.PLAN_NOT_FOUND);
       }
 
-      const sessionUrl = await this._stripeService.createCheckoutSession(plan.getName(), plan.getPrice(), planId);
+      const sessionUrl = await this._stripeService.createCheckoutSession(plan.getName(), plan.getPrice(), planId,plan.getType());
 
       if (!sessionUrl) {
         throw new CustomError(HttpStatusCodes.INTERNAL_SERVER_ERROR, MESSAGES.CHECKOUT_SESSION_CREATE_FAILED);

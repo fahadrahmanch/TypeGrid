@@ -11,7 +11,7 @@ export class StripeService implements IStripeService {
     }
   }
 
-  async createCheckoutSession(name: string, price: number, planId: string): Promise<string | null> {
+  async createCheckoutSession(name: string, price: number, planId: string,type:string): Promise<string | null> {
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
 
@@ -28,7 +28,7 @@ export class StripeService implements IStripeService {
 
       mode: 'payment',
 
-      success_url: `${process.env.CLIENT_URL}/success?planId=${planId}`,
+      success_url: `${process.env.CLIENT_URL}/success?planId=${planId}&type=${type}`,
       cancel_url: `${process.env.CLIENT_URL}/cancel`,
     });
 

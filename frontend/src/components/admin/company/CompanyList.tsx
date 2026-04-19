@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import CompanyDetailsModal from "./CompanyDetailsModal";
 import { companies } from "../../../api/admin/company";
-import { Search, Filter, Eye, ChevronLeft, ChevronRight, Building2, Mail, Calendar } from "lucide-react";
+import { Search, Filter, Eye, Building2, Mail, Calendar } from "lucide-react";
+import ReusableTable from "../../common/ReusableTable";
+import Pagination from "../../common/Pagination";
 
 const CompanyList: React.FC = () => {
   const [status, setStatus] = useState("All");
@@ -94,111 +96,95 @@ const CompanyList: React.FC = () => {
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400">
-                    <th className="pb-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="w-3 h-3" /> Company
-                      </div>
-                    </th>
-                    <th className="pb-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-3 h-3" /> Contact
-                      </div>
-                    </th>
-                    <th className="pb-4 px-4 hidden sm:table-cell">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-3 h-3" /> Applied On
-                      </div>
-                    </th>
-                    <th className="pb-4 px-4 text-center">Status</th>
-                    <th className="pb-4 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-
-                <tbody className="divide-y divide-gray-50">
-                  {company.map((item: any) => {
+            <ReusableTable
+              columns={[
+                {
+                  header: (
+                    <div className="flex items-center gap-2">
+                      <Building2 className="w-3 h-3" /> Company
+                    </div>
+                  ),
+                  key: "companyName",
+                  className: "font-bold text-gray-800 text-sm",
+                },
+                {
+                  header: (
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-3 h-3" /> Contact
+                    </div>
+                  ),
+                  key: "email",
+                  className: "font-medium text-gray-500 text-xs italic",
+                },
+                {
+                  header: (
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-3 h-3" /> Applied On
+                    </div>
+                  ),
+                  key: "createdAt",
+                  className: "hidden sm:table-cell text-xs font-semibold text-gray-400",
+                  render: (item) =>
+                    new Date(item.createdAt).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    }),
+                },
+                {
+                  header: "Status",
+                  headerClassName: "text-center",
+                  className: "text-center",
+                  key: "status",
+                  render: (item) => {
                     const st = item?.status;
                     const isActive = st === "active";
                     const isRejected = st === "reject";
                     const isInactive = st === "inactive";
-                    const isPending = st === "pending";
-
                     return (
-                      <tr key={item?._id} className="group hover:bg-white/40 transition-all duration-300">
-                        <td className="py-5 px-4 font-bold text-gray-800 text-sm">{item?.companyName}</td>
-                        <td className="py-5 px-4 font-medium text-gray-500 text-xs italic">{item?.email}</td>
-                        <td className="py-5 px-4 hidden sm:table-cell text-xs font-semibold text-gray-400">
-                          {new Date(item?.createdAt).toLocaleDateString(undefined, {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </td>
-                        <td className="py-5 px-4 text-center">
-                          <span
-                            className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
-                            ${
-                              isActive
-                                ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-                                : isRejected
-                                  ? "bg-red-50 text-red-600 border-red-100"
-                                  : isInactive
-                                    ? "bg-gray-50 text-gray-600 border-gray-100"
-                                    : "bg-amber-50 text-amber-600 border-amber-100"
-                            }`}
-                          >
-                            {isActive ? "Active" : isRejected ? "Rejected" : isInactive ? "Inactive" : "Pending"}
-                          </span>
-                        </td>
-                        <td className="py-5 px-4">
-                          <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                            <button
-                              onClick={() => {
-                                setSelectedCompany(item);
-                                setOpen(true);
-                              }}
-                              className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
-                              title="View Details"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
+                      <span
+                        className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
+                        ${
+                          isActive
+                            ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                            : isRejected
+                              ? "bg-red-50 text-red-600 border-red-100"
+                              : isInactive
+                                ? "bg-gray-50 text-gray-600 border-gray-100"
+                                : "bg-amber-50 text-amber-600 border-amber-100"
+                        }`}
+                      >
+                        {isActive ? "Active" : isRejected ? "Rejected" : isInactive ? "Inactive" : "Pending"}
+                      </span>
                     );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                  },
+                },
+                {
+                  header: "Actions",
+                  headerClassName: "text-right",
+                  className: "text-right",
+                  key: "actions",
+                  render: (item) => (
+                    <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                      <button
+                        onClick={() => {
+                          setSelectedCompany(item);
+                          setOpen(true);
+                        }}
+                        className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
+                        title="View Details"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ),
+                },
+              ]}
+              data={company}
+              emptyMessage="No company applications found"
+            />
 
-            {/* Pagination */}
-            <div className="mt-10 flex justify-center items-center gap-6">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage((prev) => prev - 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-              </button>
-
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
-                  of {totalPages}
-                </span>
-              </div>
-
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage((prev) => prev + 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-              </button>
-            </div>
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         </div>
 

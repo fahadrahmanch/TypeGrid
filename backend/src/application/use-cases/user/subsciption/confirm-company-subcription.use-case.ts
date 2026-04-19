@@ -15,6 +15,7 @@ export class ConfirmCompanySubscriptionUseCase implements IConfirmCompanySubscri
     private readonly _companyRepository: ICompanyRepository
   ) {}
   async execute(userId: string, planId: string): Promise<void> {
+    console.log("here",userId)
     const plan = await this._subscriptionPlanRepository.findById(planId);
     if (!plan) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.SUBSCRIPTION_PLAN_NOT_FOUND);

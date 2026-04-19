@@ -72,4 +72,12 @@ export class UserController {
       message: MESSAGES.PASSWORD_UPDATE_SUCCESS,
     });
   };
+
+  getUsecCompanyDetails=async (req: AuthRequest, res: Response): Promise<void> => {
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
+    }
+    console.log("userId",userId)
+  }
 }

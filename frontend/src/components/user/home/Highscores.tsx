@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReusableTable from "../../common/ReusableTable";
 
 const Highscores: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"ALL" | "WEEKLY" | "MONTHLY">("ALL");
@@ -91,24 +92,21 @@ const Highscores: React.FC = () => {
         ))}
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="text-left text-[10px] text-gray-400 font-bold uppercase tracking-wider border-b border-gray-100">
-              <th className="pb-3 pl-2 font-normal">#</th>
-              <th className="pb-3 font-normal">Name</th>
-              <th className="pb-3 text-right font-normal">Accuracy</th>
-              <th className="pb-3 text-right font-normal">WPM</th>
-            </tr>
-          </thead>
-          <tbody className="text-xs">
-            {scores.map((score, index) => (
-              <tr
-                key={index}
-                className="border-b border-orange-100 last:border-0 hover:bg-orange-50/50 transition-colors"
-              >
-                <td className="py-3 pl-2 font-bold text-gray-700">{score.rank}.</td>
-                <td className="py-3">
+        <ReusableTable
+          columns={[
+            {
+              header: "#",
+              key: "rank",
+              className: "py-3 pl-2 font-bold text-gray-700",
+              render: (score) => `${score.rank}.`,
+              columnHeaderClassName: "font-normal",
+            },
+            {
+              header: "Name",
+              key: "name",
+              className: "py-3",
+              render: (score) => (
+                <>
                   <div className="font-bold text-gray-800">{score.name}</div>
                   <div className="text-[10px] text-gray-400 mt-0.5">
                     <span className={`font-bold ${score.mode === "easy" ? "text-green-600" : "text-red-500"}`}>
@@ -116,14 +114,30 @@ const Highscores: React.FC = () => {
                     </span>
                     , {score.time}
                   </div>
-                </td>
-                <td className="py-3 text-right text-gray-500 font-medium">{score.accuracy}</td>
-                <td className="py-3 text-right text-gray-800 font-bold">{score.wpm}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                </>
+              ),
+              columnHeaderClassName: "font-normal",
+            },
+            {
+              header: "Accuracy",
+              key: "accuracy",
+              headerClassName: "text-right",
+              className: "py-3 text-right text-gray-500 font-medium",
+              columnHeaderClassName: "font-normal",
+            },
+            {
+              header: "WPM",
+              key: "wpm",
+              headerClassName: "text-right",
+              className: "py-3 text-right text-gray-800 font-bold",
+              columnHeaderClassName: "font-normal",
+            },
+          ]}
+          data={scores}
+          rowClassName="border-b border-orange-100 last:border-0 hover:bg-orange-50/50 transition-colors"
+          headerClassName="text-left text-[10px] text-gray-400 font-bold uppercase tracking-wider border-b border-gray-100"
+          className="text-xs"
+        />
     </div>
   );
 };

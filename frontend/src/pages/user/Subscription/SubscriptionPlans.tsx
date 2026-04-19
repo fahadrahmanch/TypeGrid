@@ -37,7 +37,7 @@ const SubscriptionPlans: React.FC = () => {
   const handleUpgrade = async () => {
     try {
       if (!selectedPlanId) {
-        alert("Please select a plan first");
+        
         return;
       }
 

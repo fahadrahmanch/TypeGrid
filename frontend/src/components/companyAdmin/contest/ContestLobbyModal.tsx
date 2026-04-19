@@ -107,13 +107,13 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
                 {isStarting ? "Starting..." : "Start Contest"}
               </button>
 
-              <button
+              {/* <button
                 onClick={() => setIsAnnouncementOpen(!isAnnouncementOpen)}
                 className="flex items-center gap-2 px-6 py-3 bg-[#7D6B5D] hover:bg-[#635449] text-white rounded-xl font-bold shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 outline-none"
               >
                 <MessageSquare className="w-5 h-5" />
                 Send Announcement
-              </button>
+              </button> */}
             </div>
 
             {isAnnouncementOpen && (

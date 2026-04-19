@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
-import { Search, Plus, Edit2, Trash2, X, Target, Zap, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, X, Target, Zap, CheckCircle } from "lucide-react";
+import ReusableTable from "../../components/common/ReusableTable";
+import Pagination from "../../components/common/Pagination";
 import { goalValidation } from "../../validations/challengeValidation";
 import { WpmValidation, accuracyValidation } from "../../validations/lessonValidation";
 import ConfirmModal from "../../components/common/ConfirmModal";
@@ -215,116 +217,86 @@ const Goals: React.FC = () => {
               />
             </div>
 
-            <div className="overflow-x-auto rounded-xl">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-[#FFF8EA] text-left">
-                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Goal Title</th>
-                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-center">
-                      WPM
-                    </th>
-                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-center">
-                      Accuracy
-                    </th>
-                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Description</th>
-                    <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-right">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {loading ? (
-                    <tr>
-                      <td colSpan={5} className="py-20 text-center">
-                        <div className="inline-block w-8 h-8 border-4 border-[#ECA468]/20 border-t-[#ECA468] rounded-full animate-spin" />
-                      </td>
-                    </tr>
-                  ) : goals.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="py-20 text-center text-gray-400 font-medium">
-                        No goals found
-                      </td>
-                    </tr>
-                  ) : (
-                    goals.map((goal) => (
-                      <tr key={goal._id} className="group hover:bg-gray-50 transition-colors">
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-3">
-                            <Target className="w-5 h-5 text-[#ECA468]" />
-                            <span className="font-bold text-gray-800 leading-tight">{goal.title}</span>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <div className="flex flex-col items-center">
-                            <div className="flex items-center gap-1.5 mb-0.5">
-                              <Zap className="w-3.5 h-3.5 text-amber-500" />
-                              <span className="text-sm font-black text-gray-900">{goal.wpm || "-"}</span>
-                            </div>
-                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">WPM</span>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <div className="flex flex-col items-center">
-                            <div className="flex items-center gap-1.5 mb-0.5">
-                              <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
-                              <span className="text-sm font-black text-gray-900">{goal.accuracy || "-"}%</span>
-                            </div>
-                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">ACC</span>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-gray-600 font-medium text-sm max-w-xs truncate">
-                          {goal.description}
-                        </td>
-                        <td className="py-5 px-4">
-                          <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                            <button
-                              onClick={() => handleEdit(goal._id)}
-                              className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
-                              title="Edit Goal"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(goal._id)}
-                              className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
-                              title="Delete Goal"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <ReusableTable
+              columns={[
+                {
+                  header: "Goal Title",
+                  key: "title",
+                  render: (goal) => (
+                    <div className="flex items-center gap-3">
+                      <Target className="w-5 h-5 text-[#ECA468]" />
+                      <span className="font-bold text-gray-800 leading-tight">{goal.title}</span>
+                    </div>
+                  ),
+                },
+                {
+                  header: "WPM",
+                  key: "wpm",
+                  headerClassName: "text-center",
+                  className: "text-center",
+                  render: (goal) => (
+                    <div className="flex flex-col items-center">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <Zap className="w-3.5 h-3.5 text-amber-500" />
+                        <span className="text-sm font-black text-gray-900">{goal.wpm || "-"}</span>
+                      </div>
+                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">WPM</span>
+                    </div>
+                  ),
+                },
+                {
+                  header: "Accuracy",
+                  key: "accuracy",
+                  headerClassName: "text-center",
+                  className: "text-center",
+                  render: (goal) => (
+                    <div className="flex flex-col items-center">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                        <span className="text-sm font-black text-gray-900">{goal.accuracy || "-"}%</span>
+                      </div>
+                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">ACC</span>
+                    </div>
+                  ),
+                },
+                {
+                  header: "Description",
+                  key: "description",
+                  className: "text-gray-600 font-medium text-sm max-w-xs truncate",
+                },
+                {
+                  header: "Actions",
+                  key: "actions",
+                  headerClassName: "text-right",
+                  className: "text-right",
+                  render: (goal) => (
+                    <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                      <button
+                        onClick={() => handleEdit(goal._id)}
+                        className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
+                        title="Edit Goal"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(goal._id)}
+                        className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
+                        title="Delete Goal"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ),
+                },
+              ]}
+              data={goals}
+              loading={loading}
+              emptyMessage="No goals found"
+              headerClassName="bg-[#FFF8EA] text-left"
+              columnHeaderClassName="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest"
+            />
 
-            {/* Pagination */}
-            <div className="mt-12 flex justify-center items-center gap-6">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage((prev) => prev - 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-              </button>
-
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
-                  of {totalPages}
-                </span>
-              </div>
-
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage((prev) => prev + 1)}
-                className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-              >
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-              </button>
-            </div>
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ const companySchema = new Schema<ICompanyDocument>(
     },
     status: {
       type: String,
-      enum: ['active', 'inactive', 'pending', 'reject'],
+      enum: ['active', 'inactive', 'pending', 'reject','expired'],
       default: 'pending',
     },
     planId: {

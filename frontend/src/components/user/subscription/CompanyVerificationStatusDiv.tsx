@@ -31,12 +31,14 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
 
   const handlePayment = async () => {
     try {
+      alert(company?.planId);
       if (!company?.planId) {
         toast.error("No plan associated with this company");
         return;
       }
       setIsSubmitting(true);
       const response = await createCompanySubscriptionSession(company.planId);
+      alert(response.data?.url);
       if (response.data?.url) {
         window.location.href = response.data.url;
       } else {

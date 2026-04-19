@@ -3,16 +3,21 @@ import { CheckCircle, ArrowRight, Home, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/user/Navbar";
 import { confirmSubscription } from "../../../api/user/subcription";
-
+import { confirmCompanySubscription } from "../../../api/user/subcription";
 const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
+    alert(query)
     const planId = query.get("planId");
-
+    const type=query.get("type")
     const confirm = async () => {
       try {
-        await confirmSubscription(planId!);
+        if(type=="company"){
+          await confirmCompanySubscription(planId!);
+        }else{
+          await confirmSubscription(planId!);
+        }
       } catch (error) {
         console.error("Error confirming subscription:", error);
       }

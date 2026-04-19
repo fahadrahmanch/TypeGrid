@@ -15,6 +15,8 @@ export class ConfirmSubscriptionUseCase implements IConfirmSubscriptionUseCase {
   ) {}
 
   async execute(userId: string, planId: string): Promise<void> {
+    console.log('userId', userId);
+    console.log('planId', planId);
     const plan = await this._subscriptionPlanRepository.findById(planId);
     if (!plan) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.SUBSCRIPTION_PLAN_NOT_FOUND);

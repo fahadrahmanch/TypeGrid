@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
-import { Search, Plus, Edit2, Trash2, Trophy, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, Trophy, X } from "lucide-react";
+import ReusableTable from "../../components/common/ReusableTable";
+import Pagination from "../../components/common/Pagination";
 import { fetchGoals } from "../../api/admin/goals";
 import { fetchRewards } from "../../api/admin/rewards";
 import {
@@ -289,137 +291,72 @@ const Challenges: React.FC = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full table-fixed">
-              <thead>
-                <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400 border-b border-gray-100/50">
-                  <th className="pb-6 px-4 w-1/2">Challenge Designation</th>
-                  <th className="pb-6 px-4 w-1/4 text-center">Complexity</th>
-                  {/* <th className="pb-6 px-4">Target Metrics</th> */}
-                  {/* <th className="pb-6 px-4 text-center">Status</th> */}
-                  <th className="pb-6 px-4 w-1/4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50/50">
-                {loading ? (
-                  <tr>
-                    <td colSpan={3} className="py-24 text-center">
-                      <div className="inline-block w-10 h-10 border-4 border-[#ECA468]/20 border-t-[#ECA468] rounded-full animate-spin" />
-                      <p className="mt-4 text-[10px] font-black text-[#D0864B] uppercase tracking-widest">
-                        Synchronizing Repository
-                      </p>
-                    </td>
-                  </tr>
-                ) : challenges.length === 0 ? (
-                  <tr>
-                    <td colSpan={3} className="py-24 text-center">
-                      <div className="flex flex-col items-center opacity-20">
-                        <Trophy className="w-16 h-16 mb-4 text-[#ECA468]" />
-                        <p className="text-[10px] font-black text-[#D0864B] uppercase tracking-widest">
-                          Repository Empty
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                ) : (
-                  challenges.map((challenge) => (
-                    <tr key={challenge.id} className="group hover:bg-white/40 transition-all duration-300">
-                      <td className="py-6 px-4 align-top">
-                        <div className="flex flex-col items-start text-left">
-                          <span className="text-base font-black text-gray-800 group-hover:text-[#ECA468] transition-colors leading-tight text-left">
-                            {challenge.title}
-                          </span>
-                          <span className="text-[10px] text-gray-400 font-medium mt-1 truncate max-w-[300px]">
-                            {challenge.description}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="py-6 px-4 text-center">
-                        <span
-                          className={`px-3 py-1 text-[9px] font-black uppercase tracking-wider rounded-lg border
-                                                ${
-                                                  challenge.difficulty === "hard"
-                                                    ? "bg-red-50 text-red-600 border-red-100"
-                                                    : challenge.difficulty === "medium"
-                                                      ? "bg-orange-50 text-orange-600 border-orange-100"
-                                                      : "bg-emerald-50 text-emerald-600 border-emerald-100"
-                                                }`}
-                        >
-                          {challenge.difficulty} Tier
-                        </span>
-                      </td>
-                      {/* <td className="py-6 px-4">
-                        <div className="flex flex-col gap-1">
-                          <span className="text-[11px] font-black text-gray-700 flex items-center gap-2">
-                            <CheckCircle className="w-3 h-3 text-[#ECA468]" />
-                            {challenge.goal}
-                          </span>
-                          <span className="text-[10px] text-gray-400 font-bold italic translate-x-5">
-                            {challenge.reward}
-                          </span>
-                        </div>
-                      </td> */}
-                      {/* <td className="py-6 px-4 text-center">
-                        <span
-                          className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all inline-block
-                                                ${
-                                                  challenge.isActive
-                                                    ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
-                                                    : "bg-gray-50 text-gray-400 border border-gray-100"
-                                                }`}
-                        >
-                          {challenge.isActive ? "Active" : "Archived"}
-                        </span>
-                      </td> */}
-                      <td className="py-6 px-4">
-                        <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                          <button
-                            onClick={() => handleEdit(challenge._id)}
-                            className="p-2.5 text-gray-400 hover:text-[#ECA468] bg-white rounded-xl shadow-sm border border-gray-100 hover:border-[#FADDB8] transition-all"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(challenge._id)}
-                            className="p-2.5 text-red-300 hover:text-red-500 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-red-100 transition-all"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+            <ReusableTable
+              columns={[
+                {
+                  header: "Challenge Designation",
+                  key: "title",
+                  className: "py-6 px-4 align-top",
+                  render: (challenge) => (
+                    <div className="flex flex-col items-start text-left">
+                      <span className="text-base font-black text-gray-800 group-hover:text-[#ECA468] transition-colors leading-tight text-left">
+                        {challenge.title}
+                      </span>
+                      <span className="text-[10px] text-gray-400 font-medium mt-1 truncate max-w-[300px]">
+                        {challenge.description}
+                      </span>
+                    </div>
+                  ),
+                },
+                {
+                  header: "Complexity",
+                  key: "difficulty",
+                  headerClassName: "text-center",
+                  className: "py-6 px-4 text-center",
+                  render: (challenge) => (
+                    <span
+                      className={`px-3 py-1 text-[9px] font-black uppercase tracking-wider rounded-lg border
+                        ${
+                          challenge.difficulty === "hard"
+                            ? "bg-red-50 text-red-600 border-red-100"
+                            : challenge.difficulty === "medium"
+                              ? "bg-orange-50 text-orange-600 border-orange-100"
+                              : "bg-emerald-50 text-emerald-600 border-emerald-100"
+                        }`}
+                    >
+                      {challenge.difficulty} Tier
+                    </span>
+                  ),
+                },
+                {
+                  header: "Actions",
+                  key: "actions",
+                  headerClassName: "text-right",
+                  className: "py-6 px-4 text-right",
+                  render: (challenge) => (
+                    <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                      <button
+                        onClick={() => handleEdit(challenge._id)}
+                        className="p-2.5 text-gray-400 hover:text-[#ECA468] bg-white rounded-xl shadow-sm border border-gray-100 hover:border-[#FADDB8] transition-all"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(challenge._id)}
+                        className="p-2.5 text-red-300 hover:text-red-500 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-red-100 transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ),
+                },
+              ]}
+              data={challenges}
+              loading={loading}
+              emptyMessage="Repository Empty"
+            />
 
-          {/* Pagination */}
-          {/* {totalPages > 1 && ( */}
-          <div className="mt-12 flex justify-center items-center gap-6">
-            <button
-              disabled={page === 1}
-              onClick={() => setPage((prev) => prev - 1)}
-              className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-            >
-              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-            </button>
-
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
-                of {totalPages}
-              </span>
-            </div>
-
-            <button
-              disabled={page === totalPages}
-              onClick={() => setPage((prev) => prev + 1)}
-              className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-            >
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-          </div>
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           {/* )} */}
         </div>
       </div>

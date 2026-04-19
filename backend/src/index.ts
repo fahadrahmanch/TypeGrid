@@ -32,9 +32,11 @@ export class app {
   setMiddleWares() {
     this.app.use(
       cors({
-        origin: 'http://localhost:5173',
+        // origin: 'http://localhost:5173',
+        origin: process.env.CLIENT_URL,
         credentials: true,
       })
+      
     );
     this.app.use(cookieParser());
     this.app.use(express.json());

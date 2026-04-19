@@ -443,7 +443,7 @@ const GroupPlay: React.FC = () => {
               </div>
 
               {/* Chat Box */}
-              <div className="bg-[#FEFCE8] rounded-3xl p-5 shadow-xl shadow-orange-900/5 border border-orange-100 flex-1 min-h-0 flex flex-col">
+              {/* <div className="bg-[#FEFCE8] rounded-3xl p-5 shadow-xl shadow-orange-900/5 border border-orange-100 flex-1 min-h-0 flex flex-col">
                 <div className="flex items-center gap-2 mb-3 pb-3 border-b border-orange-100/50 shrink-0">
                   <h3 className="font-bold text-sm text-gray-700">Live Chat</h3>
                 </div>
@@ -469,7 +469,7 @@ const GroupPlay: React.FC = () => {
                     <Send className="w-3 h-3" />
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* CENTRE COLUMN - Game Area */}

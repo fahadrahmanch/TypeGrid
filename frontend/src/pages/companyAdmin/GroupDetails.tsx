@@ -6,6 +6,7 @@ import AddUsersModal from "../../components/companyAdmin/groups/AddUsersModal";
 import { getCompanyGroupById } from "../../api/companyAdmin/companyGroup";
 import { Group, GroupMember } from "../../types/group";
 import { removeMemberFromGroup } from "../../api/companyAdmin/companyGroup";
+import ReusableTable from "../../components/common/ReusableTable";
 const GroupDetails: React.FC = () => {
   const { groupId } = useParams();
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
@@ -140,66 +141,67 @@ const GroupDetails: React.FC = () => {
           </div>
 
           {/* Members Table */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900">Group Members</h2>
-              <span className="text-sm text-gray-500 font-medium">{group.members?.length || 0} Members</span>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-gray-50/50">
-                    <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">WPM</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Accuracy</th>
-                    {/* <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Streak
-                    </th> */}
-                    <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {group.members && group.members.length > 0 ? (
-                    group.members.map((member) => {
-                      const memberData: Partial<GroupMember> =
-                        typeof member === "string" ? { _id: member, name: "User " + member.slice(-4) } : member;
-
-                      return (
-                        <tr key={memberData._id} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-6 py-4 font-semibold text-gray-900 text-sm">{memberData.name}</td>
-                          <td className="px-6 py-4 text-gray-500 text-sm">{memberData.email || "-"}</td>
-                          <td className="px-6 py-4 text-gray-600 font-medium text-sm">
-                            {memberData.wpm !== undefined ? memberData.wpm : "-"}
-                          </td>
-                          <td className="px-6 py-4 text-gray-600 font-medium text-sm">
-                            {memberData.accuracy !== undefined ? `${memberData.accuracy}%` : "-"}
-                          </td>
-
-                          <td className="px-6 py-4 text-right">
-                            <button
-                              onClick={() => memberData._id && handleRemoveMember(memberData._id)}
-                              className="text-xs font-semibold text-red-500 hover:text-red-700 hover:underline"
-                            >
-                              Remove
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                        No members in this group.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+            <ReusableTable
+              columns={[
+                {
+                  header: "Name",
+                  key: "name",
+                  className: "font-semibold text-gray-900 text-sm",
+                  render: (member) => {
+                    const memberData: Partial<GroupMember> =
+                      typeof member === "string" ? { _id: member, name: "User " + member.slice(-4) } : member;
+                    return memberData.name;
+                  },
+                },
+                {
+                  header: "Email",
+                  key: "email",
+                  className: "text-gray-500 text-sm",
+                  render: (member) => {
+                    const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
+                    return memberData.email || "-";
+                  },
+                },
+                {
+                  header: "WPM",
+                  key: "wpm",
+                  className: "text-gray-600 font-medium text-sm",
+                  render: (member) => {
+                    const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
+                    return memberData.wpm !== undefined ? memberData.wpm : "-";
+                  },
+                },
+                {
+                  header: "Accuracy",
+                  key: "accuracy",
+                  className: "text-gray-600 font-medium text-sm",
+                  render: (member) => {
+                    const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
+                    return memberData.accuracy !== undefined ? `${memberData.accuracy}%` : "-";
+                  },
+                },
+                {
+                  header: "Actions",
+                  key: "actions",
+                  headerClassName: "text-right",
+                  className: "text-right",
+                  render: (member) => {
+                    const memberData: Partial<GroupMember> =
+                      typeof member === "string" ? { _id: member } : (member as GroupMember);
+                    return (
+                      <button
+                        onClick={() => memberData._id && handleRemoveMember(memberData._id)}
+                        className="text-xs font-semibold text-red-500 hover:text-red-700 hover:underline"
+                      >
+                        Remove
+                      </button>
+                    );
+                  },
+                },
+              ]}
+              data={group.members || []}
+              emptyMessage="No members in this group."
+            />
         </div>
 
         {/* Add User Modal */}

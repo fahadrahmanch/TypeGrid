@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
-import { Search, Plus, Edit2, Trash2, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, X } from "lucide-react";
+import ReusableTable from "../../components/common/ReusableTable";
+import Pagination from "../../components/common/Pagination";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import { xpPointsValidation, rewardDescriptionValidation } from "../../validations/rewardValidation";
 import { fetchRewards, createReward, updateReward, deleteReward, fetchRewardById } from "../../api/admin/rewards";
@@ -204,86 +206,51 @@ const Reward: React.FC = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-[#FFF8EA] text-left">
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">XP Points</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest">Description</th>
-                  <th className="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest text-right">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {loading ? (
-                  <tr>
-                    <td colSpan={3} className="py-20 text-center">
-                      <div className="inline-block w-8 h-8 border-4 border-[#ECA468]/20 border-t-[#ECA468] rounded-full animate-spin" />
-                    </td>
-                  </tr>
-                ) : rewards.length === 0 ? (
-                  <tr>
-                    <td colSpan={3} className="py-20 text-center text-gray-400 font-medium">
-                      No rewards found
-                    </td>
-                  </tr>
-                ) : (
-                  rewards.map((reward) => (
-                    <tr key={reward._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-6 font-bold text-gray-700">{reward.xp}</td>
-                      <td className="py-4 px-6 text-gray-600 font-medium">{reward.description}</td>
-                      <td className="py-4 px-6">
-                        <div className="flex justify-end gap-3">
-                          <button
-                            onClick={() => handleEdit(reward._id)}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-[#F3F4F6] text-[#4B5563] rounded-lg font-bold text-xs hover:bg-gray-200 transition-colors"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(reward._id)}
-                            className="flex items-center gap-1.5 px-4 py-2 bg-[#EF4444] text-white rounded-lg font-bold text-xs hover:bg-red-600 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+            <ReusableTable
+              columns={[
+                {
+                  header: "XP Points",
+                  key: "xp",
+                  className: "py-4 px-6 font-bold text-gray-700",
+                },
+                {
+                  header: "Description",
+                  key: "description",
+                  className: "py-4 px-6 text-gray-600 font-medium",
+                },
+                {
+                  header: "Actions",
+                  key: "actions",
+                  headerClassName: "text-right",
+                  className: "py-4 px-6",
+                  render: (reward) => (
+                    <div className="flex justify-end gap-3">
+                      <button
+                        onClick={() => handleEdit(reward._id)}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-[#F3F4F6] text-[#4B5563] rounded-lg font-bold text-xs hover:bg-gray-200 transition-colors"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(reward._id)}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-[#EF4444] text-white rounded-lg font-bold text-xs hover:bg-red-600 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </button>
+                    </div>
+                  ),
+                },
+              ]}
+              data={rewards}
+              loading={loading}
+              emptyMessage="No rewards found"
+              headerClassName="bg-[#FFF8EA] text-left"
+              columnHeaderClassName="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest"
+            />
 
-          {/* Pagination */}
-          {/* {totalPages > 1 && ( */}
-          <div className="mt-12 flex justify-center items-center gap-6">
-            <button
-              disabled={page === 1}
-              onClick={() => setPage((prev) => prev - 1)}
-              className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-            >
-              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-            </button>
-
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">
-                of {totalPages}
-              </span>
-            </div>
-
-            <button
-              disabled={page === totalPages}
-              onClick={() => setPage((prev) => prev + 1)}
-              className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-            >
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-          </div>
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           {/* )} */}
         </div>
       </div>

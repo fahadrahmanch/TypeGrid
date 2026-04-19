@@ -493,7 +493,7 @@ const QuickPlay: React.FC = () => {
               </div>
 
               {/* Right: Chat */}
-              <div className="bg-[#FEFCE8] rounded-3xl p-6 border border-orange-100 shadow-sm flex flex-col h-[400px]">
+              {/* <div className="bg-[#FEFCE8] rounded-3xl p-6 border border-orange-100 shadow-sm flex flex-col h-[400px]">
                 <div className="mb-4 pb-4 border-b border-orange-100/50">
                   <h3 className="font-bold text-gray-800">Chat</h3>
                 </div>
@@ -525,7 +525,7 @@ const QuickPlay: React.FC = () => {
                     <Send className="w-3 h-3" />
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </>
         )}

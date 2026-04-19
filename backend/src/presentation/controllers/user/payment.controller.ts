@@ -66,7 +66,7 @@ export class PaymentController {
       throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
     }
 
-    await this._confirmCompanySubscriptionUseCase.execute(userId, planId);
+    await this._confirmSubscriptionUseCase.execute(userId, planId);
 
     res.status(HttpStatus.OK).json({
       success: true,
@@ -85,7 +85,7 @@ export class PaymentController {
       throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
     }
 
-    await this._confirmSubscriptionUseCase.execute(userId, planId);
+    await this._confirmCompanySubscriptionUseCase.execute(userId, planId);
 
     res.status(HttpStatus.OK).json({
       success: true,

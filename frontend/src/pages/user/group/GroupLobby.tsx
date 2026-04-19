@@ -203,7 +203,7 @@ const GroupLobby: React.FC = () => {
 
   async function removePlayer(playerId: string) {
     try {
-      const response = await removePlayerAPI(group?.id, playerId);
+      const response = await removePlayerAPI(group?.id!, playerId);
       const groupDetails = response?.data?.group;
       setGroup((prev) => ({
         ...groupDetails,
@@ -434,7 +434,7 @@ const GroupLobby: React.FC = () => {
             </div>
 
             {/* CHAT */}
-            <div className="bg-[#FFF1D8] rounded-2xl p-8">
+            {/* <div className="bg-[#FFF1D8] rounded-2xl p-8">
               <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">💬 Chat</h3>
 
               <div className="bg-white rounded-lg border p-4 text-base text-gray-600 mb-4 h-32">
@@ -445,7 +445,7 @@ const GroupLobby: React.FC = () => {
                 <input placeholder="Write a message..." className="flex-1 border rounded-lg px-4 py-3 text-base" />
                 <button className="px-6 py-3 rounded-lg bg-[#7A6A5D] text-white text-base">Send</button>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* RIGHT – PLAYERS */}

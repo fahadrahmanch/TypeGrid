@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { Plus, Edit2, Trash2, X, AlertCircle } from "lucide-react";
+import ReusableTable from "../../components/common/ReusableTable";
 import {
   createSubscriptionPlan,
   getSubscriptionPlans,
@@ -317,64 +318,69 @@ const SubscriptionPlans: React.FC = () => {
                 </p>
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-gray-100">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-[#FEF3C7] text-left">
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Name</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Price</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Duration</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Features</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700 text-right">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-50">
-                    {normalPlans.map((plan) => (
-                      <tr key={plan.id} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.name}</td>
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700">${plan.price}</td>
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">
-                          {plan.duration === 30
-                            ? "Monthly"
-                            : plan.duration === 365
-                              ? "Yearly"
-                              : `${plan.duration} Days`}
-                        </td>
-                        <td className="py-5 px-6">
-                          <div className="flex flex-wrap gap-2">
-                            {plan.features.map((feature, fIndex) => (
-                              <span
-                                key={fIndex}
-                                className="px-3 py-1 bg-[#F1F5F9] text-[#64748B] text-[10px] font-bold rounded-full"
-                              >
-                                {feature}
-                              </span>
-                            ))}
-                          </div>
-                        </td>
-                        <td className="py-5 px-6 text-right">
-                          <div className="flex justify-end gap-3">
-                            <button
-                              onClick={() => openEdit(plan)}
-                              className="text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteClick(plan.id, plan.name)}
-                              className="text-gray-400 hover:text-red-500 transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <ReusableTable
+                columns={[
+                  {
+                    header: "Name",
+                    key: "name",
+                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                  },
+                  {
+                    header: "Price",
+                    key: "price",
+                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                    render: (plan) => `$${plan.price}`,
+                  },
+                  {
+                    header: "Duration",
+                    key: "duration",
+                    className: "py-5 px-6 text-sm font-bold text-gray-700 capitalize",
+                    render: (plan) =>
+                      plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`,
+                  },
+                  {
+                    header: "Features",
+                    key: "features",
+                    className: "py-5 px-6",
+                    render: (plan) => (
+                      <div className="flex flex-wrap gap-2">
+                        {plan.features.map((feature, fIndex) => (
+                          <span
+                            key={fIndex}
+                            className="px-3 py-1 bg-[#F1F5F9] text-[#64748B] text-[10px] font-bold rounded-full"
+                          >
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+                    ),
+                  },
+                  {
+                    header: "Actions",
+                    key: "actions",
+                    headerClassName: "text-right",
+                    className: "py-5 px-6 text-right",
+                    render: (plan) => (
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => openEdit(plan as ISubscriptionPlan)}
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(plan.id, plan.name)}
+                          className="text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ),
+                  },
+                ]}
+                data={normalPlans}
+                rowClassName="hover:bg-gray-50/50 transition-colors"
+              />
 
               {/* Pagination */}
               {/* <div className="mt-6 flex justify-center items-center gap-2">
@@ -394,53 +400,58 @@ const SubscriptionPlans: React.FC = () => {
                 <h2 className="text-xl font-black text-gray-900 mb-1">company-plan</h2>
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-gray-100">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-[#FEF3C7] text-left">
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Name</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Price</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Duration</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700">Limit</th>
-                      <th className="py-4 px-6 text-xs font-black uppercase tracking-widest text-gray-700 text-right">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-50">
-                    {companyPlans.map((plan) => (
-                      <tr key={plan.id} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.name}</td>
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700">${plan.price}</td>
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700 capitalize">
-                          {plan.duration === 30
-                            ? "Monthly"
-                            : plan.duration === 365
-                              ? "Yearly"
-                              : `${plan.duration} Days`}
-                        </td>
-                        <td className="py-5 px-6 text-sm font-bold text-gray-700">{plan.userLimit} users</td>
-                        <td className="py-5 px-6 text-right">
-                          <div className="flex justify-end gap-3">
-                            <button
-                              onClick={() => openEdit(plan)}
-                              className="text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteClick(plan.id, plan.name)}
-                              className="text-gray-400 hover:text-red-500 transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <ReusableTable
+                columns={[
+                  {
+                    header: "Name",
+                    key: "name",
+                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                  },
+                  {
+                    header: "Price",
+                    key: "price",
+                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                    render: (plan) => `$${plan.price}`,
+                  },
+                  {
+                    header: "Duration",
+                    key: "duration",
+                    className: "py-5 px-6 text-sm font-bold text-gray-700 capitalize",
+                    render: (plan) =>
+                      plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`,
+                  },
+                  {
+                    header: "Limit",
+                    key: "userLimit",
+                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                    render: (plan) => `${plan.userLimit} users`,
+                  },
+                  {
+                    header: "Actions",
+                    key: "actions",
+                    headerClassName: "text-right",
+                    className: "py-5 px-6 text-right",
+                    render: (plan) => (
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => openEdit(plan as ISubscriptionPlan)}
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(plan.id, plan.name)}
+                          className="text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ),
+                  },
+                ]}
+                data={companyPlans}
+                rowClassName="hover:bg-gray-50/50 transition-colors"
+              />
 
               {/* Pagination */}
               {/* <div className="mt-6 flex justify-center items-center gap-2">

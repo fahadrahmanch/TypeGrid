@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response,NextFunction } from 'express';
 import logger from '../../utils/logger';
 import { MESSAGES } from '../../domain/constants/messages';
 import { CustomError } from '../../domain/entities/custom-error.entity';
@@ -33,7 +33,7 @@ function narrowError(error: unknown): {
   };
 }
 
-export const errorMiddleware = (err: any, req: AuthRequest, res: Response) => {
+export const errorMiddleware = (err: any, req: AuthRequest, res: Response,next:NextFunction) => {
   console.log(err);
   const { message, status, stack } = narrowError(err);
 

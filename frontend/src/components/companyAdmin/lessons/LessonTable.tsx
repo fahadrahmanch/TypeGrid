@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Edit3, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
-import EditLessonModal from "./EditLessonModal";
-import { deleteLesson } from "../../../api/companyAdmin/lessons";
-import { toast } from "react-toastify";
 import { Lesson } from "../../../types/lesson";
+import ReusableTable from "../../common/ReusableTable";
+import Pagination from "../../common/Pagination";
 
 export type { Lesson };
 
@@ -64,95 +61,58 @@ const LessonTable: React.FC<{
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400">
-              <th className="pb-4 px-4">Lesson Details</th>
-              <th className="pb-4 px-4 text-center">Difficulty</th>
-              {/* <th className="pb-4 px-4 text-center">Engagement</th> */}
-              {/* <th className="pb-4 px-4 text-center font-bold text-[#D0864B]">
-                Avg Performance
-              </th> */}
-              <th className="pb-4 px-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {filteredLessons?.map((lesson) => (
-              <tr key={lesson.id} className="group hover:bg-white/40 transition-all duration-300">
-                <td className="py-5 px-6 font-bold text-gray-800 text-sm flex">{lesson.title}</td>
-                <td className="py-5 px-4 text-center">
-                  <span
-                    className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${getDifficultyColor(lesson?.level || "")}`}
-                  >
-                    {lesson?.level}
-                  </span>
-                </td>
-                {/* <td className="py-5 px-4 text-center">
-                  <div className="inline-flex flex-col items-center">
-                    <span className="text-xs font-bold text-gray-700">
-                      {lesson.assigned} Assigned
-                    </span>
-                    <span className="text-[10px] text-gray-400 font-medium">
-                      {lesson.completed} Completed ({lesson.completionRate}%)
-                    </span>
-                  </div>
-                </td> */}
-                {/* <td className="py-5 px-4 text-center">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFF8EA] rounded-lg text-xs font-black text-[#D0864B] border border-[#ECA468]/20">
-                    {lesson.avgWpm} WPM
-                  </div>
-                </td> */}
-                <td className="py-5 px-4">
-                  <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                    <button
-                      onClick={() => {
-                        setSelectedLessonId(lesson.id as string);
-                        setOpenEditModal(true);
-                      }}
-                      className="p-2 text-gray-400 hover:text-[#D0864B] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#ECA468]/30 transition-all"
-                      title="Edit Lesson"
-                    >
-                      <Edit3 size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteLesson(lesson.id as string)}
-                      className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
-                      title="Delete Lesson"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ReusableTable
+        columns={[
+          {
+            header: "Lesson Details",
+            key: "title",
+            className: "py-5 px-6 font-bold text-gray-800 text-sm flex",
+          },
+          {
+            header: "Difficulty",
+            key: "level",
+            headerClassName: "text-center",
+            className: "py-5 px-4 text-center",
+            render: (lesson) => (
+              <span
+                className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${getDifficultyColor(lesson?.level || "")}`}
+              >
+                {lesson?.level}
+              </span>
+            ),
+          },
+          {
+            header: "Actions",
+            key: "actions",
+            headerClassName: "text-right",
+            className: "py-5 px-4",
+            render: (lesson) => (
+              <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                <button
+                  onClick={() => {
+                    setSelectedLessonId(lesson.id as string);
+                    setOpenEditModal(true);
+                  }}
+                  className="p-2 text-gray-400 hover:text-[#D0864B] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#ECA468]/30 transition-all"
+                  title="Edit Lesson"
+                >
+                  <Edit3 size={16} />
+                </button>
+                <button
+                  onClick={() => handleDeleteLesson(lesson.id as string)}
+                  className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
+                  title="Delete Lesson"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ),
+          },
+        ]}
+        data={filteredLessons}
+      />
 
-      {/* {totalPages > 1 && ( */}
-      <div className="mt-10 flex justify-center items-center gap-6">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((prev) => prev - 1)}
-          className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-        >
-          <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-        </button>
-
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-black text-gray-900 tracking-tighter w-4 text-center">{page}</span>
-          <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]/40">of {totalPages}</span>
-        </div>
-
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage((prev) => prev + 1)}
-          className="p-3 bg-white rounded-xl shadow-sm border border-gray-50 disabled:opacity-30 hover:border-[#FADDB8] text-[#D0864B] transition-all group"
-        >
-          <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-        </button>
-      </div>
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       {/* )} */}
 
       <EditLessonModal

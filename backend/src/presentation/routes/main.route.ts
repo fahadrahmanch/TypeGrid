@@ -150,10 +150,12 @@ export const Routes = {
     CREATE_SESSION: '/subscription/create-session',
     CREATE_COMPANY_SESSION: '/subscription/create-company-session',
     CONFIRM_SUBSCRIPTION: '/subscription/confirm',
+    CONFIRM_COMPANY_SUBSCRIPTION: '/subscription/confirm-company',
     ACHIEVEMENTS: {
       GET_ALL: '/achievements',
       GET_USER_ACHIEVEMENTS: '/achievements/me',
     },
+     GET_COMPANY_DETAILS: '/company/details',
   },
 
   COMPANY_ADMIN: {

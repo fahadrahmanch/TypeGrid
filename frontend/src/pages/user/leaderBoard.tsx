@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ReusableTable from "../../components/common/ReusableTable";
 
 interface LeaderboardEntry {
   userId: string;
@@ -195,119 +196,119 @@ const LeaderBoard: React.FC = () => {
         </div>
 
         {/* Complete Rankings Section */}
-        <div className="w-full max-w-5xl bg-white rounded-[2.5rem] p-4 md:p-8 shadow-[0_20px_50px_rgba(236,164,104,0.08)] border border-[#FDE6C6] overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="text-[#9CA3AF] text-[11px] font-black uppercase tracking-[0.2em] text-left">
-                  <th className="pb-6 pl-4">Rank</th>
-                  <th className="pb-6 pl-4">Player</th>
-                  <th className="pb-6 text-center">Stats</th>
-                  <th className="pb-6 text-right pr-4">Score</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#F3F4F6]">
-                {isLoading ? (
-                  <tr>
-                    <td colSpan={4} className="py-20 text-center">
-                      <Loader2 className="w-8 h-8 animate-spin mx-auto text-[#ECA468]" />
-                    </td>
-                  </tr>
-                ) : (
-                  sortedRankings.map((user, index) => (
-                    <tr
-                      key={user.userId}
-                      className={`group hover:bg-[#FDF9F2]/50 transition-colors duration-200 ${
-                        user.userId === currentUser?._id ? "bg-orange-50/50" : index < 3 ? "bg-orange-50/10" : ""
-                      }`}
-                    >
-                      <td className="py-6 pl-4">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${
-                            index < 3 ? "bg-[#1A1A1A] text-white" : "bg-[#F3F4F6] text-[#4B5563]"
-                          }`}
-                        >
-                          {index + 1}
+          <ReusableTable
+            columns={[
+              {
+                header: "Rank",
+                key: "rank",
+                className: "py-6 pl-4",
+                render: (_, index) => (
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm ${
+                      index < 3 ? "bg-[#1A1A1A] text-white" : "bg-[#F3F4F6] text-[#4B5563]"
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
+                ),
+              },
+              {
+                header: "Player",
+                key: "name",
+                className: "py-6 pl-4",
+                render: (user, index) => (
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <img
+                        src={
+                          user.imageUrl ||
+                          `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+                        }
+                        className="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover"
+                        alt=""
+                      />
+                      {index === 0 && (
+                        <div className="absolute -top-1.5 -right-1.5 bg-[#FFBB00] rounded-full p-1 border-2 border-white shadow-sm">
+                          <Star className="w-2.5 h-2.5 text-white fill-current" />
                         </div>
-                      </td>
-                      <td className="py-6 pl-4">
-                        <div className="flex items-center gap-4">
-                          <div className="relative">
-                            <img
-                              src={
-                                user.imageUrl ||
-                                `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-                              }
-                              className="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover"
-                              alt=""
-                            />
-                            {index === 0 && (
-                              <div className="absolute -top-1.5 -right-1.5 bg-[#FFBB00] rounded-full p-1 border-2 border-white shadow-sm">
-                                <Star className="w-2.5 h-2.5 text-white fill-current" />
-                              </div>
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-bold text-slate-900 flex items-center gap-2">
-                              {user.name}
-                              {user.userId === currentUser?._id && (
-                                <span className="px-2 py-0.5 bg-orange-100 text-[#D0864B] rounded text-[10px] font-black uppercase tracking-tight">
-                                  You
-                                </span>
-                              )}
-                            </div>
-                            <div className="text-[11px] font-medium text-slate-400">{user.badge}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-6 text-center">
-                        <div className="flex flex-col items-center justify-center gap-1">
-                          <div className="flex flex-wrap items-center justify-center gap-2">
-                            <span className="px-2.5 py-1 bg-[#F3F4F6] rounded-full text-[10px] font-black text-[#D0864B] flex items-center gap-1 animate-in zoom-in-50">
-                              <Zap className="w-3 h-3 fill-current" />
-                              {user.wpm} WPM
-                            </span>
-                            <span className="px-2.5 py-1 bg-[#F3F4F6] rounded-full text-[10px] font-black text-blue-500/70 flex items-center gap-1">
-                              <Target className="w-3 h-3" />
-                              {user.accuracy}%
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-3 mt-1 text-[10px] font-bold text-gray-400 uppercase tracking-tighter opacity-60">
-                            <span>{user.totalCompetitions || 0} Tests</span>
-                            <span>•</span>
-                            <span className="flex items-center gap-0.5">
-                              <Flame className="w-3 h-3 text-orange-400" /> {user.streak}
-                            </span>
-                            <span>•</span>
-                            <span className="text-[#6D8A6B]">+{user.trend} Up</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-6 text-right pr-4">
-                        <div className="flex flex-col items-end">
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-xl font-black text-slate-900 group-hover:text-[#ECA468] transition-colors">
-                              {getScore(user)}
-                            </span>
-                            <span className="text-[10px] font-black text-gray-400 uppercase">PTS</span>
-                          </div>
-                          <div className="h-1 w-20 bg-gray-100 rounded-full mt-1.5 overflow-hidden">
-                            <div
-                              className="h-full bg-[#ECA468] rounded-full transition-all duration-1000"
-                              style={{
-                                width: `${Math.min((getScore(user) / 1000) * 100, 100)}%`,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-bold text-slate-900 flex items-center gap-2">
+                        {user.name}
+                        {user.userId === currentUser?._id && (
+                          <span className="px-2 py-0.5 bg-orange-100 text-[#D0864B] rounded text-[10px] font-black uppercase tracking-tight">
+                            You
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[11px] font-medium text-slate-400">{user.badge}</div>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                header: "Stats",
+                key: "stats",
+                headerClassName: "text-center",
+                className: "py-6 text-center",
+                render: (user) => (
+                  <div className="flex flex-col items-center justify-center gap-1">
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      <span className="px-2.5 py-1 bg-[#F3F4F6] rounded-full text-[10px] font-black text-[#D0864B] flex items-center gap-1 animate-in zoom-in-50">
+                        <Zap className="w-3 h-3 fill-current" />
+                        {user.wpm} WPM
+                      </span>
+                      <span className="px-2.5 py-1 bg-[#F3F4F6] rounded-full text-[10px] font-black text-blue-500/70 flex items-center gap-1">
+                        <Target className="w-3 h-3" />
+                        {user.accuracy}%
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 mt-1 text-[10px] font-bold text-gray-400 uppercase tracking-tighter opacity-60">
+                      <span>{user.totalCompetitions || 0} Tests</span>
+                      <span>•</span>
+                      <span className="flex items-center gap-0.5">
+                        <Flame className="w-3 h-3 text-orange-400" /> {user.streak}
+                      </span>
+                      <span>•</span>
+                      <span className="text-[#6D8A6B]">+{user.trend} Up</span>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                header: "Score",
+                key: "score",
+                headerClassName: "text-right pr-4",
+                className: "py-6 text-right pr-4",
+                render: (user) => (
+                  <div className="flex flex-col items-end">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-xl font-black text-slate-900 group-hover:text-[#ECA468] transition-colors">
+                        {getScore(user)}
+                      </span>
+                      <span className="text-[10px] font-black text-gray-400 uppercase">PTS</span>
+                    </div>
+                    <div className="h-1 w-20 bg-gray-100 rounded-full mt-1.5 overflow-hidden">
+                      <div
+                        className="h-full bg-[#ECA468] rounded-full transition-all duration-1000"
+                        style={{
+                          width: `${Math.min((getScore(user) / 1000) * 100, 100)}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ),
+              },
+            ]}
+            data={sortedRankings}
+            loading={isLoading}
+            rowClassName={(user, index) =>
+              `group hover:bg-[#FDF9F2]/50 transition-colors duration-200 ${user.userId === currentUser?._id ? "bg-orange-50/50" : index < 3 ? "bg-orange-50/10" : ""}`
+            }
+            columnHeaderClassName="pb-6 text-[#9CA3AF] text-[11px] font-black uppercase tracking-[0.2em]"
+            headerClassName="text-left"
+          />
 
         {/* Modal for Scoring Explanation */}
         {isModalOpen && (

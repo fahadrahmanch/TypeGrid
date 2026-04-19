@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { updateUserStatus, filterUsersAPI } from "../../../api/admin/users";
 import ConfirmModal from "../../common/ConfirmModal";
-import { Search, Filter, Shield, ShieldOff, User, Mail, ChevronLeft, ChevronRight, Hash, Trophy } from "lucide-react";
+import { Search, Filter, Shield, ShieldOff, Mail, Trophy, User as UserIcon } from "lucide-react";
+import ReusableTable, { Column } from "../../common/ReusableTable";
+import Pagination from "../../common/Pagination";
 
 const UserList: React.FC = () => {
   const [status, setStatus] = useState("All");
@@ -110,168 +112,96 @@ const UserList: React.FC = () => {
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400">
-                    <th className="pb-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <User className="w-3 h-3" /> User Profile
+            <ReusableTable
+              columns={[
+                {
+                  header: (
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="w-3 h-3" /> User Profile
+                    </div>
+                  ),
+                  key: "profile",
+                  render: (user) => (
+                    <div className="flex items-center gap-4">
+                      <div className="hidden sm:flex w-10 h-10 rounded-2xl bg-[#ECA468]/10 items-center justify-center text-[#ECA468] font-black text-lg">
+                        {user.name.charAt(0).toUpperCase()}
                       </div>
-                    </th>
-                    <th className="pb-4 px-4 text-center">Status</th>
-                    <th className="pb-4 px-4 text-center hidden sm:table-cell">
-                      <div className="flex items-center justify-center gap-2">
-                        <Trophy className="w-3 h-3" /> Competitions
+                      <div>
+                        <p className="font-bold text-gray-800 text-sm">{user.name}</p>
+                        <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-medium">
+                          <Mail className="w-3 h-3" />
+                          {user.email}
+                        </div>
                       </div>
-                    </th>
-                    <th className="pb-4 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-
-                <tbody className="divide-y divide-gray-50">
-                  {users.map((user: any) => {
+                    </div>
+                  ),
+                },
+                {
+                  header: "Status",
+                  key: "status",
+                  headerClassName: "text-center",
+                  className: "text-center",
+                  render: (user) => {
                     const isActive = user.status === "active";
-
                     return (
-                      <tr key={user._id} className="group hover:bg-white/40 transition-all duration-300">
-                        <td className="py-5 px-4">
-                          <div className="flex items-center gap-4">
-                            <div className="hidden sm:flex w-10 h-10 rounded-2xl bg-[#ECA468]/10 items-center justify-center text-[#ECA468] font-black text-lg">
-                              {user.name.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                              <p className="font-bold text-gray-800 text-sm">{user.name}</p>
-                              <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-medium">
-                                <Mail className="w-3 h-3" />
-                                {user.email}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-5 px-4 text-center">
-                          <span
-                            className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
-                            ${
-                              isActive
-                                ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-                                : "bg-red-50 text-red-600 border-red-100"
-                            }`}
-                          >
-                            {isActive ? "Active" : "Blocked"}
-                          </span>
-                        </td>
-                        <td className="py-5 px-4 text-center hidden sm:table-cell">
-                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-lg text-xs font-bold text-gray-500 border border-gray-100">
-                            <Hash className="w-3 h-3 text-[#D0864B]" />0
-                          </div>
-                        </td>
-                        <td className="py-5 px-4">
-                          <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                            <button
-                              onClick={() => openConfirmModal(user)}
-                              className={`p-2 rounded-lg shadow-sm border transition-all ${
-                                isActive
-                                  ? "text-gray-400 hover:text-red-500 bg-white border-gray-50 hover:border-red-100"
-                                  : "text-gray-400 hover:text-emerald-500 bg-white border-gray-50 hover:border-emerald-100"
-                              }`}
-                              title={isActive ? "Block User" : "Unblock User"}
-                            >
-                              {isActive ? <ShieldOff className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
+                      <span
+                        className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
+                        ${
+                          isActive
+                            ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                            : "bg-red-50 text-red-600 border-red-100"
+                        }`}
+                      >
+                        {isActive ? "Active" : "Blocked"}
+                      </span>
                     );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                  },
+                },
+                {
+                  header: (
+                    <div className="flex items-center justify-center gap-2">
+                      <Trophy className="w-3 h-3" /> Competitions
+                    </div>
+                  ),
+                  key: "competitions",
+                  headerClassName: "text-center hidden sm:table-cell",
+                  className: "text-center hidden sm:table-cell",
+                  render: () => (
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-lg text-xs font-bold text-gray-500 border border-gray-100">
+                      0
+                    </div>
+                  ),
+                },
+                {
+                  header: "Actions",
+                  key: "actions",
+                  headerClassName: "text-right",
+                  className: "text-right",
+                  render: (user) => {
+                    const isActive = user.status === "active";
+                    return (
+                      <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                        <button
+                          onClick={() => openConfirmModal(user)}
+                          className={`p-2 rounded-lg shadow-sm border transition-all ${
+                            isActive
+                              ? "text-gray-400 hover:text-red-500 bg-white border-gray-50 hover:border-red-100"
+                              : "text-gray-400 hover:text-emerald-500 bg-white border-gray-50 hover:border-emerald-100"
+                          }`}
+                          title={isActive ? "Block User" : "Unblock User"}
+                        >
+                          {isActive ? <ShieldOff className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    );
+                  },
+                },
+              ]}
+              data={users}
+              emptyMessage="No platform users found"
+            />
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-6 border-t border-[#ECA468]/5 pt-8">
-                <div className="flex items-center gap-2">
-                  <button
-                    disabled={page === 1}
-                    onClick={() => setPage((prev) => prev - 1)}
-                    className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] hover:text-[#D0864B] text-gray-400 transition-all group"
-                    title="Previous Page"
-                  >
-                    <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-                  </button>
-
-                  <div className="flex items-center gap-1">
-                    {(() => {
-                      const pages = [];
-                      const showEllipsis = totalPages > 7;
-
-                      if (!showEllipsis) {
-                        for (let i = 1; i <= totalPages; i++) {
-                          pages.push(i);
-                        }
-                      } else {
-                        // Logic for ellipses
-                        if (page <= 4) {
-                          pages.push(1, 2, 3, 4, 5, "...", totalPages);
-                        } else if (page >= totalPages - 3) {
-                          pages.push(
-                            1,
-                            "...",
-                            totalPages - 4,
-                            totalPages - 3,
-                            totalPages - 2,
-                            totalPages - 1,
-                            totalPages
-                          );
-                        } else {
-                          pages.push(1, "...", page - 1, page, page + 1, "...", totalPages);
-                        }
-                      }
-
-                      return pages.map((p, idx) =>
-                        p === "..." ? (
-                          <span
-                            key={`ellipsis-${idx}`}
-                            className="w-10 h-10 flex items-center justify-center text-gray-400 font-bold"
-                          >
-                            ...
-                          </span>
-                        ) : (
-                          <button
-                            key={`page-${p}`}
-                            onClick={() => setPage(Number(p))}
-                            className={`w-10 h-10 rounded-xl font-bold text-sm transition-all duration-300 ${
-                              page === p
-                                ? "bg-[#ECA468] text-white shadow-md shadow-[#ECA468]/20 scale-105"
-                                : "bg-white text-gray-500 border border-gray-100 hover:border-[#ECA468]/30 hover:bg-[#FFF8EA]"
-                            }`}
-                          >
-                            {p}
-                          </button>
-                        )
-                      );
-                    })()}
-                  </div>
-
-                  <button
-                    disabled={page >= totalPages}
-                    onClick={() => setPage((prev) => prev + 1)}
-                    className="p-2.5 bg-white rounded-xl shadow-sm border border-gray-100 disabled:opacity-30 hover:border-[#FADDB8] hover:text-[#D0864B] text-gray-400 transition-all group"
-                    title="Next Page"
-                  >
-                    <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-2 px-4 py-2 bg-[#ECA468]/5 rounded-2xl border border-[#ECA468]/10">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B]">
-                    Page <span className="text-gray-900 mx-1">{page}</span> of{" "}
-                    <span className="text-gray-900 ml-1">{totalPages}</span>
-                  </span>
-                </div>
-              </div>
-            )}
+            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         </div>
 
