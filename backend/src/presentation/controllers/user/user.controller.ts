@@ -5,6 +5,7 @@ import { IUserUpdateUseCase } from '../../../application/use-cases/interfaces/us
 import { MESSAGES } from '../../../domain/constants/messages';
 import { AuthRequest } from '../../../types/AuthRequest';
 import { IChangePasswordUseCase } from '../../../application/use-cases/interfaces/user/change-password.interface';
+import { ICheckUserCompanyUseCase } from '../../../application/use-cases/interfaces/user/check-user-company.interface';
 import { mapToUserProfileDTO } from '../../../application/mappers/user/user.mapper';
 import { CustomError } from '../../../domain/entities/custom-error.entity';
 
@@ -12,7 +13,8 @@ export class UserController {
   constructor(
     private _findUserUseCase: IFindUserUseCase,
     private _updateUserUseCase: IUserUpdateUseCase,
-    private _changePasswordUseCase: IChangePasswordUseCase
+    private _changePasswordUseCase: IChangePasswordUseCase,
+    private _checkUserCompanyUseCase: ICheckUserCompanyUseCase
   ) {}
 
   getProfile = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -73,11 +75,19 @@ export class UserController {
     });
   };
 
-  getUsecCompanyDetails=async (req: AuthRequest, res: Response): Promise<void> => {
+  userHaveCompany = async (req: AuthRequest, res: Response): Promise<void> => {
+    console.log("api called")
     const userId = req.user?.userId;
     if (!userId) {
       throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
     }
-    console.log("userId",userId)
-  }
+
+    const company = await this._checkUserCompanyUseCase.execute(userId);
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      company,
+    });
+  };
 }
+ 

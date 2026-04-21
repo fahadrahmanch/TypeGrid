@@ -10,6 +10,7 @@ import { companyUserValidation } from '../middlewares/validations/company-user.v
 import { lessonValidation } from '../middlewares/validations/lessson.validation';
 import { injectNotificationController } from '../DI/company-admin.di';
 import { asyncHandler } from '../../utils/async-handler';
+import { checkCompanyStatusMiddleware } from '../middlewares/check-company-status.middleware';
 export class companyAdminRouter {
   private router: express.Router;
   constructor() {
@@ -17,6 +18,7 @@ export class companyAdminRouter {
     this.initializeRoutes();
   }
   initializeRoutes() {
+    this.router.use(asyncHandler(checkCompanyStatusMiddleware));
     this.router.post(
       Routes.COMPANY_ADMIN.ADD_USER,
       checkRoleBasedMiddleware(['companyAdmin']),

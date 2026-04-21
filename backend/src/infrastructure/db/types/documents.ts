@@ -32,8 +32,10 @@ export interface ICompanyDocument {
   OwnerId?: Types.ObjectId;
   description?: string;
   rejectionReason?: string;
-  status?: 'active' | 'inactive' | 'pending' | 'reject';
+  status?: 'active' | 'inactive' | 'pending' | 'reject' | 'expired';
   planId?: Types.ObjectId;
+  startDate?: Date;
+  endDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -393,6 +395,7 @@ export interface IUserSubscriptionDocument {
   _id?: Types.ObjectId;
   userId: Types.ObjectId;
   subscriptionPlanId: Types.ObjectId;
+  planType: 'normal' | 'company';
   status: 'active' | 'expired' | 'pending';
   startDate?: Date;
   endDate?: Date;

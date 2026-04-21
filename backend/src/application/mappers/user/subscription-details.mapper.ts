@@ -43,8 +43,10 @@ export function toSubscriptionDetailsDTO(
       subscription: {
         planId: planData.id || planData._id?.toString() || '',
         planName: planData.name || '',
-        status: companyData.status === 'active' ? 'active' : 'inactive',
+        status: companyData.status || 'inactive',
         type: 'company',
+        startDate: companyData.startDate,
+        endDate: companyData.endDate,
       },
     };
   }

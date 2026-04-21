@@ -1,3 +1,4 @@
+
 import { Schema, model } from 'mongoose';
 import { ICompanyDocument } from '../../types/documents';
 
@@ -43,6 +44,14 @@ const companySchema = new Schema<ICompanyDocument>(
     planId: {
       type: Schema.Types.ObjectId,
       ref: 'SubscriptionPlan',
+      required: false,
+    },
+    startDate: {
+      type: Date,
+      required: false,
+    },
+    endDate: {
+      type: Date,
       required: false,
     },
   },

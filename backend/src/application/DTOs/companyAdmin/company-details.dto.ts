@@ -7,8 +7,10 @@ export interface CompanyDetailsDTO {
     number: string;
     OwnerId: string;
     planId: string;
-    status: 'active' | 'inactive' | 'pending' | 'reject';
+    status: 'active' | 'inactive' | 'pending' | 'reject' | 'expired';
     rejectionReason?: string;
+    startDate?: Date;
+    endDate?: Date;
   };
   subscription: {
     id: string;

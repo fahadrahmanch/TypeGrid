@@ -15,6 +15,8 @@ export class CompanyDetailsMapper {
         planId: company.planId ?? '',
         status: company.status ?? 'pending',
         rejectionReason: company.rejectionReason,
+        startDate: company.startDate,
+        endDate: company.endDate,
       },
       subscription: {
         id: subscription.getId() ?? '',

@@ -1,8 +1,4 @@
-import { Entity } from './entity';
-export class CompanyEntity extends Entity<CompanyEntity> {
-  constructor(attrs?: Partial<CompanyEntity>) {
-    super(attrs);
-  }
+export interface CompanyDTO {
   _id?: string;
   companyName?: string;
   email?: string;
@@ -10,7 +6,6 @@ export class CompanyEntity extends Entity<CompanyEntity> {
   number?: string;
   OwnerId?: string;
   planId?: string;
-  rejectionReason?: string;
   status?: 'active' | 'inactive' | 'pending' | 'reject' | 'expired';
   startDate?: Date;
   endDate?: Date;

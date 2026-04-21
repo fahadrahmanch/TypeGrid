@@ -34,6 +34,7 @@ export class SubscriptionController {
 
   getSubscriptionDetails = async (req: AuthRequest, res: Response): Promise<void> => {
     const subscriptionDetails = await this._getSubscriptionDetailsUseCase.execute(req.user?.userId!);
+    console.log(subscriptionDetails);
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.SUBSCRIPTION_DETAILS_FETCH_SUCCESS,

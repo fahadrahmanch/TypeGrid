@@ -41,6 +41,7 @@ export class ConfirmCompanySubscriptionUseCase implements IConfirmCompanySubscri
     const existingActiveSub = await this._userSubscriptionRepository.findOne({
       userId,
       status: 'active',
+      planType: 'company',
     });
 
     if (existingActiveSub) {
@@ -57,6 +58,7 @@ export class ConfirmCompanySubscriptionUseCase implements IConfirmCompanySubscri
       const userSubscription = new UserSubscriptionEntity({
         userId,
         subscriptionPlanId: planId,
+        planType: 'company',
         status: 'active',
         startDate,
         endDate,
@@ -68,6 +70,8 @@ export class ConfirmCompanySubscriptionUseCase implements IConfirmCompanySubscri
     await this._companyRepository.updateById(user.CompanyId, {
       status: 'active',
       planId: planId,
+      startDate,
+      endDate,
     });
   }
 }

@@ -205,7 +205,7 @@ export class UserRoutes {
   this.router.get(
       Routes.USERS.GET_COMPANY_DETAILS,
       checkRoleBasedMiddleware(['user', 'companyAdmin']),
-      asyncHandler(injectUserController.getUsecCompanyDetails)
+      asyncHandler(injectUserController.userHaveCompany)
   )
     
   }

@@ -4,6 +4,7 @@ export type UserSubscriptionProps = {
   id?: string;
   userId: string;
   subscriptionPlanId: string;
+  planType: 'normal' | 'company';
   status: UserSubscriptionStatus;
   startDate?: Date;
   endDate?: Date;
@@ -16,6 +17,7 @@ export class UserSubscriptionEntity {
   private id?: string;
   private userId: string;
   private subscriptionPlanId: string;
+  private planType: 'normal' | 'company';
   private status: UserSubscriptionStatus;
   private startDate?: Date;
   private endDate?: Date;
@@ -27,6 +29,7 @@ export class UserSubscriptionEntity {
     this.id = props.id;
     this.userId = props.userId;
     this.subscriptionPlanId = props.subscriptionPlanId;
+    this.planType = props.planType;
     this.status = props.status;
     this.startDate = props.startDate;
     this.endDate = props.endDate;
@@ -49,6 +52,9 @@ export class UserSubscriptionEntity {
 
   public getStatus(): UserSubscriptionStatus {
     return this.status;
+  }
+  public getPlanType(): 'normal' | 'company' {
+    return this.planType;
   }
 
   public getStartDate(): Date | undefined {
@@ -76,6 +82,7 @@ export class UserSubscriptionEntity {
       id: this.id,
       userId: this.userId,
       subscriptionPlanId: this.subscriptionPlanId,
+      planType: this.planType,
       status: this.status,
       startDate: this.startDate,
       endDate: this.endDate,

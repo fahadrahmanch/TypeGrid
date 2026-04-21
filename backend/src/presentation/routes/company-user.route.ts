@@ -10,6 +10,7 @@ import { injectTypingPracticeController } from '../DI/company-user.di';
 import { injectNotificationController } from '../DI/company-user.di';
 import { injectSetKeyboardLayoutController } from '../DI/company-user.di';
 import { asyncHandler } from '../../utils/async-handler';
+import { checkCompanyStatusMiddleware } from '../middlewares/check-company-status.middleware';
 
 export class companyUserRoutes {
   private router: express.Router;
@@ -19,6 +20,7 @@ export class companyUserRoutes {
   }
 
   initializeRoutes() {
+    this.router.use(asyncHandler(checkCompanyStatusMiddleware));
     this.router.get(
       Routes.COMPANY_USER.MY_LESSONS,
       checkRoleBasedMiddleware(['companyAdmin', 'companyUser']),

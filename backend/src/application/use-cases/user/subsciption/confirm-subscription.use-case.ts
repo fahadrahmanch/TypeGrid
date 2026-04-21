@@ -29,6 +29,7 @@ export class ConfirmSubscriptionUseCase implements IConfirmSubscriptionUseCase {
     const existingActiveSub = await this._userSubscriptionRepository.findOne({
       userId,
       status: 'active',
+      planType: 'normal',
     });
 
     if (existingActiveSub) {
@@ -47,6 +48,7 @@ export class ConfirmSubscriptionUseCase implements IConfirmSubscriptionUseCase {
     const userSubscription = new UserSubscriptionEntity({
       userId,
       subscriptionPlanId: planId,
+      planType: 'normal',
       status: 'active',
       startDate,
       endDate,

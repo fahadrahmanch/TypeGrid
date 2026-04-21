@@ -14,6 +14,11 @@ const userSubscriptionSchema = new mongoose.Schema<IUserSubscriptionDocument>(
       ref: 'SubscriptionPlan',
       required: true,
     },
+    planType: {
+      type: String,
+      enum: ['normal', 'company'],
+      required: true,
+    },
 
     status: {
       type: String,

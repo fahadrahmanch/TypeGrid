@@ -15,14 +15,14 @@ export class TokenService implements ITokenService {
     this.refreshSecret = process.env.REFRESH_SECRET;
   }
 
-  async generateAccessToken(userId: string, email: string, role: string): Promise<string> {
-    return jwt.sign({ userId: userId, email: email, role: role }, this.accessSecret, {
+  async generateAccessToken(userId: string, email: string, role: string, companyId?: string): Promise<string> {
+    return jwt.sign({ userId: userId, email: email, role: role, companyId }, this.accessSecret, {
       expiresIn: (process.env.ACCESS_EXPIRY || '7h') as jwt.SignOptions['expiresIn'],
     });
   }
 
-  async generateRefreshToken(userId: string, email: string, role: string): Promise<string> {
-    return jwt.sign({ userId: userId, email: email, role: role }, this.refreshSecret, {
+  async generateRefreshToken(userId: string, email: string, role: string, companyId?: string): Promise<string> {
+    return jwt.sign({ userId: userId, email: email, role: role, companyId }, this.refreshSecret, {
       expiresIn: (process.env.REFRESH_EXPIRY || '7d') as jwt.SignOptions['expiresIn'],
     });
   }

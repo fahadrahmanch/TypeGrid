@@ -82,9 +82,9 @@ export class AuthController {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.USER_DETAILS_NOT_FOUND);
     }
     //generate accesstoken
-    const accessToken = await this._tokenService.generateAccessToken(user._id, user?.email, user?.role);
+    const accessToken = await this._tokenService.generateAccessToken(user._id, user?.email, user?.role, user?.CompanyId?.toString());
     // generate refreshToken
-    const refreshToken = await this._tokenService.generateRefreshToken(user._id, user?.email, user?.role);
+    const refreshToken = await this._tokenService.generateRefreshToken(user._id, user?.email, user?.role, user?.CompanyId?.toString());
 
     if (!accessToken || !refreshToken) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
@@ -128,7 +128,7 @@ export class AuthController {
     if (user.status === Status.BLOCK) {
       throw new CustomError(HttpStatus.FORBIDDEN, MESSAGES.ACCOUNT_BLOCKED_ACCESS_DENIED);
     }
-    const accessToken = await this._tokenService.generateAccessToken(decoded?.userId, decoded?.email, decoded?.role);
+    const accessToken = await this._tokenService.generateAccessToken(decoded?.userId, decoded?.email, decoded?.role, user?.CompanyId?.toString());
 
     res.status(HttpStatus.OK).json({
       success: true,
@@ -150,9 +150,9 @@ export class AuthController {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
     //generate access token
-    const accessToken = await this._tokenService.generateAccessToken(user._id.toString(), email, 'user');
+    const accessToken = await this._tokenService.generateAccessToken(user._id.toString(), email, 'user', user?.CompanyId?.toString());
     //generate refresh token
-    const refreshToken = await this._tokenService.generateRefreshToken(user._id.toString(), email, 'user');
+    const refreshToken = await this._tokenService.generateRefreshToken(user._id.toString(), email, 'user', user?.CompanyId?.toString());
 
     if (!accessToken || !refreshToken) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
@@ -226,6 +226,7 @@ export class AuthController {
   //logout
   logout = async (req: Request, res: Response): Promise<void> => {
     const { tokenName, path } = getRoleConfig(req.baseUrl);
+    console.log(tokenName, path);
 
     res.clearCookie(tokenName, {
       httpOnly: true,
@@ -248,11 +249,12 @@ export class AuthController {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.ADMIN_NOT_FOUND);
     }
 
-    const accessToken = await this._tokenService.generateAccessToken(admin?._id.toString(), admin?.email, admin?.role);
+    const accessToken = await this._tokenService.generateAccessToken(admin?._id.toString(), admin?.email, admin?.role, admin?.CompanyId?.toString());
     const refreshToken = await this._tokenService.generateRefreshToken(
       admin?._id.toString(),
       admin?.email,
-      admin?.role
+      admin?.role,
+      admin?.CompanyId?.toString()
     );
 
     if (!accessToken || !refreshToken) {
@@ -294,8 +296,8 @@ export class AuthController {
 
     const company = await this._companyFindUseCase.execute(user?.CompanyId);
 
-    const accessToken = await this._tokenService.generateAccessToken(user?._id.toString(), user?.email, user?.role);
-    const refreshToken = await this._tokenService.generateRefreshToken(user?._id.toString(), user?.email, user?.role);
+    const accessToken = await this._tokenService.generateAccessToken(user?._id.toString(), user?.email, user?.role, user?.CompanyId?.toString());
+    const refreshToken = await this._tokenService.generateRefreshToken(user?._id.toString(), user?.email, user?.role, user?.CompanyId?.toString());
 
     if (!accessToken || !refreshToken) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);

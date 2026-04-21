@@ -13,6 +13,8 @@ import { FindUserUseCase } from '../../application/use-cases/user/find-user.use-
 import { User } from '../../infrastructure/db/models/user/user.schema';
 import { UpdateUserUseCase } from '../../application/use-cases/user/update-user.use-case';
 import { GetCompanyUseCase } from '../../application/use-cases/user/get-company.use-case';
+import { ICheckUserCompanyUseCase } from '../../application/use-cases/interfaces/user/check-user-company.interface';
+import { CheckUserCompanyUseCase } from '../../application/use-cases/user/check-user-company.use-case';
 import { CompanyReApplyUseCase } from '../../application/use-cases/user/company-re-apply.use-case';
 import { TypingPracticeController } from '../controllers/user/typing-practice.controller';
 import { GetPracticeTypingContentUseCase } from '../../application/use-cases/user/typing-practice/get-practice-typing-content.use-case';
@@ -173,10 +175,13 @@ export const injectCompanyRequestController = new CompanyRequestController(
   getCompanyUseCaseInstance,
   companyReApplyUseCaseInstance
 );
+const checkUserCompanyUseCaseInstance = new CheckUserCompanyUseCase(userRepository, companyRepository);
+
 export const injectUserController = new UserController(
   findUserUseCaseInstance,
   updateUserUseCaseInstance,
-  changePasswordUseCaseInstance
+  changePasswordUseCaseInstance,
+  checkUserCompanyUseCaseInstance
 );
 
 // daily challenge

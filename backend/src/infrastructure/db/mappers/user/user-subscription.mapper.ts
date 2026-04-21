@@ -7,6 +7,7 @@ export class UserSubscriptionMapper {
       id: doc._id?.toString(),
       userId: doc.userId.toString(),
       subscriptionPlanId: doc.subscriptionPlanId.toString(),
+      planType: doc.planType,
       status: doc.status,
       startDate: doc.startDate,
       endDate: doc.endDate,
