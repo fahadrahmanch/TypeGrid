@@ -9,6 +9,7 @@ interface PropsIsloggedCompany {
 }
 
 export default function ProtectRouteCompany({ allowedRoles }: Props) {
+  console.log("ProtectRouteCompany");
   const { accessToken, user, authLoaded } = useSelector((state: any) => state.auth);
 
   if (!authLoaded) {

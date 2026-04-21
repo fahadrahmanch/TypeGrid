@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCompanyPlans } from "../../../api/user/subcription";
 import { Check, ArrowLeft, Building2, Users, Trophy, BarChart3, Mail, Zap, Loader2 } from "lucide-react";
+import { userHaveCompany } from "../../../api/user/subcription";
+import { createCompanySubscriptionSession } from "../../../api/user/subcription";
+import { toast } from "react-toastify";
+
 interface ICompanyPlan {
   id: string;
   name: string;
@@ -16,6 +20,7 @@ const CompanySubcriptionDiv1: React.FC = () => {
   const navigate = useNavigate();
   const [plans, setPlans] = useState<ICompanyPlan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [HaveCompany, setUserHaveCompany] = useState<any>({});
 
   useEffect(() => {
     async function fetchCompanyDetails() {
@@ -31,19 +36,50 @@ const CompanySubcriptionDiv1: React.FC = () => {
     }
     fetchCompanyDetails();
   }, []);
+   useEffect(() => {
+      const UserHaveCompany = async () => {
+        try {
+          const response = await userHaveCompany();
+          console.log(response.data.company);
+          if (response && response.data.company) {
+            console.log(response.data.company);
+              setUserHaveCompany(response.data.company);
+          }
+        } catch (error: any) {
+          toast.error(error.response?.data?.message);
+          console.log(error);
+        }
+      };
+      UserHaveCompany();
+    }, []);
 
-  useEffect(() => {
-    const companyDetails = async () => {
+
+    const handleSelectPlan = async (planId: string) => {
       try {
-        const response = await getCompanyDetailsApi();
-        const companyData = response.data.data;
-        console.log(companyData);
-      } catch (error) {
-        console.error("Error fetching company details:", error);
+        console.log("kkk",HaveCompany);
+        if(HaveCompany.status==='pending'||HaveCompany.status==='inactive'){
+          navigate("/subscription/company/verify/status");
+          console.log("1")
+          return;
+        }else if(HaveCompany==null||Object.keys(HaveCompany).length===0){
+          navigate(`/subscription/company/verify/${planId}`);
+          console.log("3")
+          return;
+        }
+        console.log("4")
+        const response = await createCompanySubscriptionSession(planId);
+        if (response.data?.url) {
+          window.location.href = response.data.url;
+
+        } else {
+          toast.error("Failed to create payment session");
+        }
+      } catch (error: any) {
+        toast.error(error.response?.data?.message);
+        console.log(error);
       }
     };
-    companyDetails();
-  }, []);
+ 
   const getDurationText = (days: number) => {
     if (days >= 365) return "/year";
     if (days >= 30) return "/month";
@@ -138,8 +174,8 @@ const CompanySubcriptionDiv1: React.FC = () => {
                       ))}
                     </ul>
 
-                    <Link to={`/subscription/company/verify/${plan.id}`} className="block">
                       <button
+                      onClick={()=>handleSelectPlan(plan.id)}
                         className={`w-full py-4 font-bold rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2 ${
                           isPopular
                             ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-purple-100 hover:opacity-90"
@@ -149,7 +185,6 @@ const CompanySubcriptionDiv1: React.FC = () => {
                         Select Plan
                         <Zap className={`w-4 h-4 ${isPopular ? "fill-current" : ""}`} />
                       </button>
-                    </Link>
                   </div>
                 );
               })

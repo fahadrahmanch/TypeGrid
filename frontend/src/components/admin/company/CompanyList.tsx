@@ -81,6 +81,7 @@ const CompanyList: React.FC = () => {
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
                 <option value="reject">Reject</option>
+                <option value="expired">Expired</option>
               </select>
             </div>
           </div>
@@ -141,6 +142,7 @@ const CompanyList: React.FC = () => {
                     const isActive = st === "active";
                     const isRejected = st === "reject";
                     const isInactive = st === "inactive";
+                    const isExpired = st === "expired";
                     return (
                       <span
                         className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
@@ -149,12 +151,22 @@ const CompanyList: React.FC = () => {
                             ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                             : isRejected
                               ? "bg-red-50 text-red-600 border-red-100"
-                              : isInactive
+                            : isInactive
                                 ? "bg-gray-50 text-gray-600 border-gray-100"
-                                : "bg-amber-50 text-amber-600 border-amber-100"
+                                : isExpired
+                                  ? "bg-orange-50 text-orange-600 border-orange-100"
+                                  : "bg-amber-50 text-amber-600 border-amber-100"
                         }`}
                       >
-                        {isActive ? "Active" : isRejected ? "Rejected" : isInactive ? "Inactive" : "Pending"}
+                        {isActive
+                          ? "Active"
+                          : isRejected
+                            ? "Rejected"
+                            : isInactive
+                              ? "Inactive"
+                              : isExpired
+                                ? "Expired"
+                                : "Pending"}
                       </span>
                     );
                   },

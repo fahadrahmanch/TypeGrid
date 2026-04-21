@@ -12,7 +12,7 @@ export async function createSubscriptionPlan(data: any) {
 export async function updateSubscriptionPlan(id: string, data: any) {
   return adminAPI.put(API_ROUTES.ADMIN.SUBSCRIPTION.UPDATE_SUBSCRIPTION_PLAN(id), data);
 }
-
+ 
 export async function deleteSubscriptionPlan(id: string) {
   return adminAPI.delete(API_ROUTES.ADMIN.SUBSCRIPTION.DELETE_SUBSCRIPTION_PLAN(id));
 }

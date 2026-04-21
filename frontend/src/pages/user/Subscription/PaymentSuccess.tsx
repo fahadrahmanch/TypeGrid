@@ -8,7 +8,6 @@ const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
-    alert(query)
     const planId = query.get("planId");
     const type=query.get("type")
     const confirm = async () => {

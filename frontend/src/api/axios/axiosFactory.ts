@@ -1,6 +1,6 @@
 import axios from "axios";
 import { store } from "../../store/store";
-
+import { companyLogoutApi } from "../auth/authServices";
 export function createAPI(
   path: string,
   getToken: () => string | null,
@@ -29,6 +29,12 @@ export function createAPI(
       if (!error.response) return Promise.reject(error);
       if (originalRequest.url?.includes("refresh-token")) {
         store.dispatch(logoutAction());
+        return Promise.reject(error);
+      }
+
+      if (error.response?.data?.message === "COMPANY_EXPIRED") {
+        store.dispatch(logoutAction());
+        await companyLogoutApi();
         return Promise.reject(error);
       }
 

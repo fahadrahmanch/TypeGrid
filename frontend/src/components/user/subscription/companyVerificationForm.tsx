@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { verifyCompanyApi } from "../../../api/user/userService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,8 +9,13 @@ import {
   addressValidation,
   numberValidation,
 } from "../../../validations/companyRequestFormValidations";
+import { userHaveCompany } from "../../../api/user/subcription";
+import { createCompanySubscriptionSession } from "../../../api/user/subcription";
+import { getCompanyStatusApi } from "../../../api/user/userService";
+
 const CompanyVerificationFormDiv: React.FC = () => {
   const navigate = useNavigate();
+  const [company, setCompany] = useState<any>();
   const { id } = useParams();
 
   const [values, setValues] = useState({
@@ -51,6 +56,25 @@ const CompanyVerificationFormDiv: React.FC = () => {
       toast.error(error.response?.data?.message);
       console.log(error);
     }
+  }
+  useEffect(() => {
+    async function fetchCompanyDetails() {
+      try {
+        const response = await getCompanyStatusApi();
+        console.log(response.data.company);
+        setCompany(response.data.company);
+       
+      } catch (error) {
+        console.log(error);
+        setCompany(null);
+      }
+    }
+    fetchCompanyDetails();
+  }, []);
+
+  if(company?.status=="active"||company?.status=="expired"){
+    navigate("/");
+    return;
   }
   return (
     <>

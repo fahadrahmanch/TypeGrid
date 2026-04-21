@@ -42,6 +42,7 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({ setOpen, comp
   const isActive = st === "active";
   const isRejected = st === "reject";
   const isInactive = st === "inactive";
+  const isExpired = st === "expired";
   const isPending = st === "pending";
 
   return (
@@ -76,13 +77,23 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({ setOpen, comp
                   ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                   : isRejected
                     ? "bg-red-50 text-red-600 border-red-100"
+                      : isInactive
+                        ? "bg-gray-50 text-gray-600 border-gray-100"
+                        : isExpired
+                          ? "bg-orange-50 text-orange-600 border-orange-100"
+                          : "bg-amber-50 text-amber-600 border-amber-100"
+                }`}
+              >
+                {isActive
+                  ? "Active"
+                  : isRejected
+                    ? "Rejected"
                     : isInactive
-                      ? "bg-gray-50 text-gray-600 border-gray-100"
-                      : "bg-amber-50 text-amber-600 border-amber-100"
-              }`}
-            >
-              {isActive ? "Active" : isRejected ? "Rejected" : isInactive ? "Inactive" : "Pending Approval"}
-            </span>
+                      ? "Inactive"
+                      : isExpired
+                        ? "Expired"
+                        : "Pending Approval"}
+              </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -133,6 +144,8 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({ setOpen, comp
                     <AlertCircle className="w-4 h-4 text-red-500" />
                   ) : isInactive ? (
                     <div className="w-2 h-2 rounded-full bg-gray-400" />
+                  ) : isExpired ? (
+                    <div className="w-2 h-2 rounded-full bg-orange-500" />
                   ) : (
                     <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                   )}

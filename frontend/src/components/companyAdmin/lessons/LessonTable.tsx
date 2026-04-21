@@ -1,6 +1,10 @@
 import { Lesson } from "../../../types/lesson";
 import ReusableTable from "../../common/ReusableTable";
 import Pagination from "../../common/Pagination";
+import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
+import { Edit3, Trash2 } from "lucide-react";
+import EditLessonModal from "./EditLessonModal";
 
 export type { Lesson };
 

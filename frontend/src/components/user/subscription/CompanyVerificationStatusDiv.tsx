@@ -31,14 +31,12 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
 
   const handlePayment = async () => {
     try {
-      alert(company?.planId);
       if (!company?.planId) {
         toast.error("No plan associated with this company");
         return;
       }
       setIsSubmitting(true);
       const response = await createCompanySubscriptionSession(company.planId);
-      alert(response.data?.url);
       if (response.data?.url) {
         window.location.href = response.data.url;
       } else {
@@ -50,7 +48,10 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
       setIsSubmitting(false);
     }
   };
-
+if(company?.status=="active"||company?.status=="expired"){
+  navigate("/");
+  return;
+}
   return (
     <>
       <div className="min-h-screen mt-12 flex flex-col items-center pt-10 px-4">
@@ -139,6 +140,28 @@ const CompanyVerificationStatusDiv1: React.FC = () => {
                     className="bg-[#B99F8D]  text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition shadow-sm"
                   >
                     Re-Apply
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {company?.status === "expired" && (
+            <div className="bg-orange-50 border-2 border-orange-100 rounded-xl p-6 flex items-start gap-5 shadow-sm">
+              <div className="text-4xl text-orange-500">⚠️</div>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold text-gray-900">Subscription Expired</h2>
+                <p className="text-gray-600 mt-1">
+                  Your company subscription has expired. Please renew your subscription to reactivate your account and
+                  access dashboard features.
+                </p>
+                <div className="mt-4">
+                  <button
+                    onClick={handlePayment}
+                    className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 px-6 rounded-lg transition-all shadow-sm flex items-center gap-2"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    Renew Now
                   </button>
                 </div>
               </div>
