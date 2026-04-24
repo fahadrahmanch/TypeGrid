@@ -82,6 +82,16 @@ import { UserAchievement } from '../../infrastructure/db/models/user/user-achiev
 import { AchievementService } from '../../application/services/achievement.service';
 import { GetAllAchievementsUseCase } from '../../application/use-cases/user/achievements/get-all-achievements.use-case';
 import { UserAchievementController } from '../controllers/user/user-achievment.controller';
+import { Discussion } from '../../infrastructure/db/models/user/discussion.schema';
+import { DiscussionRepository } from '../../infrastructure/db/repositories/user/discussion.repository';
+import { Comment } from '../../infrastructure/db/models/user/comment.schema';
+import { CommentRepository } from '../../infrastructure/db/repositories/user/comment.repository';
+import { CreatePostUseCase } from '../../application/use-cases/user/discussions/create-post.use-case';
+import { GetAllDiscussionsUseCase } from '../../application/use-cases/user/discussions/get-all-discussions.use-case';
+import { GetDiscussionByIdUseCase } from '../../application/use-cases/user/discussions/get-discussion-by-id.use-case';
+import { CreateCommentUseCase } from '../../application/use-cases/user/discussions/create-comment.use-case';
+import { CreateReplyUseCase } from '../../application/use-cases/user/discussions/create-reply.use-case';
+import { DiscussionController } from '../controllers/user/discussion.controller';
 
 const statsRepository = new StatsRepository(StatsModel);
 const userRepository = new UserRepository(User);
@@ -271,3 +281,19 @@ const getAllAchievementsUseCaseInstance = new GetAllAchievementsUseCase(
   userAchievementRepository
 );
 export const injectUserAchievementController = new UserAchievementController(getAllAchievementsUseCaseInstance);
+
+// discussions
+const discussionRepository = new DiscussionRepository(Discussion);
+const commentRepository = new CommentRepository(Comment);
+const createPostUseCaseInstance = new CreatePostUseCase(discussionRepository);
+const getAllDiscussionsUseCaseInstance = new GetAllDiscussionsUseCase(discussionRepository, commentRepository, userRepository);
+const getDiscussionByIdUseCaseInstance = new GetDiscussionByIdUseCase(discussionRepository, commentRepository, userRepository);
+const createCommentUseCaseInstance = new CreateCommentUseCase(commentRepository, discussionRepository);
+const createReplyUseCaseInstance = new CreateReplyUseCase(commentRepository);
+export const injectDiscussionController = new DiscussionController(
+  createPostUseCaseInstance,
+  getAllDiscussionsUseCaseInstance,
+  getDiscussionByIdUseCaseInstance,
+  createCommentUseCaseInstance,
+  createReplyUseCaseInstance
+);

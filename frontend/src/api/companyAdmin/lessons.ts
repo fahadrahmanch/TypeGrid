@@ -41,3 +41,14 @@ export async function assignLesson(selectedUsers: string[], selectedLessons: str
     deadline,
   });
 }
+export async function assignLessonToGroup(selectedGroups: string[], selectedLessons: string[], deadline: string) {
+  return companyAPI.post(API_ROUTES.LESSONS.ADMIN.ASSIGNMENTS_LESSON_GROUP, {
+    groups: selectedGroups,
+    lessons: selectedLessons,
+    deadline,
+  });
+}
+
+export async function getPendingUsers() {
+  return companyAPI.get(API_ROUTES.GET_PENDING_USERS);
+}

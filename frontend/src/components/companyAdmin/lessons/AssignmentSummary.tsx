@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, Clock, User } from "lucide-react";
+import { Calendar, Clock, User, Check, X, Eye, Users } from "lucide-react";
 
 interface AssignmentSummaryProps {
   selectedUserCount: number;
@@ -8,6 +8,9 @@ interface AssignmentSummaryProps {
   onClear: () => void;
   deadlineAt: string;
   setDeadlineAt: (date: string) => void;
+  isGroupMode?: boolean;
+  selectedLessonsData?: any[];
+  onViewAssigned?: () => void;
 }
 
 const AssignmentSummary: React.FC<AssignmentSummaryProps> = ({
@@ -17,10 +20,14 @@ const AssignmentSummary: React.FC<AssignmentSummaryProps> = ({
   onClear,
   deadlineAt,
   setDeadlineAt,
+  isGroupMode = false,
 }) => {
+  console.log("selectedUserCount", selectedUserCount);
+  console.log("selectedLessonCount", selectedLessonCount);
+  console.log("deadlineAt", deadlineAt);
+  console.log("isGroupMode", isGroupMode);
   return (
     <div className="bg-[#FFF8EA] rounded-3xl p-8 border border-[#ECA468]/30 shadow-sm relative overflow-hidden group">
-      {/* Decorative background element */}
       <div className="absolute -right-12 -top-12 w-32 h-32 bg-[#ECA468]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
 
       <h3 className="text-sm font-black text-[#D0864B] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
@@ -30,7 +37,9 @@ const AssignmentSummary: React.FC<AssignmentSummaryProps> = ({
       <div className="space-y-8 relative">
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded-2xl border border-[#ECA468]/10 shadow-sm">
-            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Students</span>
+            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">
+              {isGroupMode ? "Groups" : "Students"}
+            </span>
             <span className="text-2xl font-black text-gray-900">{selectedUserCount}</span>
           </div>
           <div className="bg-white p-4 rounded-2xl border border-[#ECA468]/10 shadow-sm">
@@ -76,4 +85,6 @@ const AssignmentSummary: React.FC<AssignmentSummaryProps> = ({
   );
 };
 
+
 export default AssignmentSummary;
+

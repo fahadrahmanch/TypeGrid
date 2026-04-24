@@ -13,6 +13,7 @@ import { injectSubscriptionController } from '../DI/user.di';
 import { injectPaymentController } from '../DI/user.di';
 import { checkFeatureMiddleware } from '../DI/user.di';
 import { injectUserAchievementController } from '../DI/user.di';
+import { injectDiscussionController } from '../DI/user.di';
 import { asyncHandler } from '../../utils/async-handler';
 export class UserRoutes {
   private router: express.Router;
@@ -208,6 +209,32 @@ export class UserRoutes {
       asyncHandler(injectUserController.userHaveCompany)
   )
     
+    // discussions
+    this.router.post(
+      Routes.USERS.CREATE_POST,
+      checkRoleBasedMiddleware(['user', 'companyAdmin']),
+      asyncHandler(injectDiscussionController.createPost)
+    );
+    this.router.get(
+      Routes.USERS.GET_ALL_DISCUSSIONS,
+      checkRoleBasedMiddleware(['user', 'companyAdmin']),
+      asyncHandler(injectDiscussionController.getAllDiscussions)
+    );
+    this.router.get(
+      Routes.USERS.GET_DISCUSSION_BY_ID,
+      checkRoleBasedMiddleware(['user', 'companyAdmin']),
+      asyncHandler(injectDiscussionController.getDiscussionById)
+    );
+    this.router.post(
+      Routes.USERS.CREATE_COMMENT,
+      checkRoleBasedMiddleware(['user', 'companyAdmin']),
+      asyncHandler(injectDiscussionController.createComment)
+    );
+    this.router.post(
+      Routes.USERS.CREATE_REPLY,
+      checkRoleBasedMiddleware(['user', 'companyAdmin']),
+      asyncHandler(injectDiscussionController.createReply)
+    );
   }
   getRouter() {
     return this.router;

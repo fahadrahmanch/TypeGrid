@@ -1,5 +1,6 @@
 export interface Lesson {
   id: string;
+  _id?: string;
   title: string;
   difficulty: string;
   assigned?: number;
@@ -7,4 +8,5 @@ export interface Lesson {
   avgWpm?: number;
   level?: string;
   completionRate: number;
+  is_admin?: boolean;
 }

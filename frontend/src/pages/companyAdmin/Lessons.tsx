@@ -1,26 +1,34 @@
 import React, { useState } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
-import { Plus } from "lucide-react";
+import { Plus, Users, User as UserIcon, Layers } from "lucide-react";
 import LessonTable, { Lesson } from "../../components/companyAdmin/lessons/LessonTable";
 import UserSelectionList, { User } from "../../components/companyAdmin/lessons/UserSelectionList";
+import GroupSelectionList, { Group } from "../../components/companyAdmin/lessons/GroupSelectionList";
 import AssignmentSummary from "../../components/companyAdmin/lessons/AssignmentSummary";
 import LessonSelectionGrid from "../../components/companyAdmin/lessons/LessonSelectionGrid";
 import CreateLessonModal from "../../components/companyAdmin/lessons/CreateLessonModal";
-import { getLesson } from "../../api/companyAdmin/lessons";
+import PendingAssignments from "../../components/companyAdmin/lessons/PendingAssignments";
+import {  getLesson } from "../../api/companyAdmin/lessons";
 import { useEffect } from "react";
 import { getCompanyUsers } from "../../api/companyAdmin/lessons";
 import { getAdminLessons } from "../../api/companyAdmin/lessons";
-import { assignLesson } from "../../api/companyAdmin/lessons";
+import { assignLesson, assignLessonToGroup } from "../../api/companyAdmin/lessons";
+import { getCompanyGroups } from "../../api/companyAdmin/companyGroup";
 import { toast } from "react-toastify";
 
 const Lessons: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<"user" | "group">("user");
   const [companyUsers, setCompanyUsers] = useState<User[]>([]);
+  const [companyGroups, setCompanyGroups] = useState<Group[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [selectedLessons, setSelectedLessons] = useState<string[]>([]);
   const [adminLessons, setAdminLessons] = useState<Lesson[]>([]);
   const [deadlineAt, setDeadlineAt] = useState<string>("");
+  
+  const isGroupMode = activeTab === "group";
 
   useEffect(() => {
     async function fetchCompanyUsers() {
@@ -35,13 +43,36 @@ const Lessons: React.FC = () => {
     fetchCompanyUsers();
   }, []);
 
+  useEffect(() => {
+    async function fetchGroups() {
+      try {
+        const response = await getCompanyGroups();
+        const groupsData = response.data.groups || response.data.data || [];
+        setCompanyGroups(groupsData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchGroups();
+  }, [activeTab]);
+  
+
   const toggleUserSelection = (userId: string) => {
+    if (!userId) return;
     setSelectedUsers((prev: any) =>
       prev.includes(userId) ? prev.filter((id: string) => id !== userId) : [...prev, userId]
     );
   };
 
+  const toggleGroupSelection = (groupId: string) => {
+    if (!groupId) return;
+    setSelectedGroups((prev: any) =>
+      prev.includes(groupId) ? prev.filter((id: string) => id !== groupId) : [...prev, groupId]
+    );
+  };
+
   const toggleLessonSelection = (lessonId: string) => {
+    if (!lessonId) return;
     setSelectedLessons((prev: any) =>
       prev.includes(lessonId) ? prev.filter((id: string) => id !== lessonId) : [...prev, lessonId]
     );
@@ -49,15 +80,29 @@ const Lessons: React.FC = () => {
 
   const handleAssign = async () => {
     try {
-      const response = await assignLesson(selectedUsers, selectedLessons, deadlineAt);
+      let response;
+      if(isGroupMode){
+        response = await assignLessonToGroup(
+          selectedGroups,
+          selectedLessons,
+          deadlineAt
+        );
+      }else{
+        response = await assignLesson(
+          selectedUsers,
+          selectedLessons,
+          deadlineAt
+        );
+      }
       toast.success(response.data.message);
     } catch (error: any) {
-      toast.error(error.data.message);
+      toast.error(error.data?.message || "Failed to assign lesson");
     }
   };
 
   const handleClear = () => {
     setSelectedUsers([]);
+    setSelectedGroups([]);
     setSelectedLessons([]);
   };
 
@@ -88,6 +133,9 @@ const Lessons: React.FC = () => {
     }
     fetchAdminLessons();
   }, []);
+
+  const allAvailableLessons = lessons.concat(adminLessons);
+  const selectedLessonsData = allAvailableLessons.filter((l) => selectedLessons.includes((l._id || l.id) as string));
 
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
@@ -132,49 +180,81 @@ const Lessons: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex border-b border-gray-100 mb-8">
-              <button className="flex items-center gap-2 px-6 py-3 border-b-2 border-[#D0864B] text-[#D0864B] font-bold text-sm tracking-tight transition-all">
+            <div className="flex border-b border-gray-100 mb-10">
+              <button
+                onClick={() => setActiveTab("user")}
+                className={`flex items-center gap-2 px-6 py-3 font-bold text-sm tracking-tight transition-all border-b-2 ${
+                  activeTab === "user"
+                    ? "border-[#D0864B] text-[#D0864B]"
+                    : "border-transparent text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                <UserIcon size={18} />
                 Assign by User
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 text-gray-400 hover:text-gray-600 font-bold text-sm tracking-tight transition-all">
+              <button
+                onClick={() => setActiveTab("group")}
+                className={`flex items-center gap-2 px-6 py-3 font-bold text-sm tracking-tight transition-all border-b-2 ${
+                  activeTab === "group"
+                    ? "border-[#D0864B] text-[#D0864B]"
+                    : "border-transparent text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                <Users size={18} />
                 Assign by Group
-              </button>
-              <button className="flex items-center gap-2 px-6 py-3 text-gray-400 hover:text-gray-600 font-bold text-sm tracking-tight transition-all ml-auto">
-                View Progress
               </button>
             </div>
 
+
             <div className="flex flex-col lg:flex-row gap-12">
               <div className="flex-1">
-                <UserSelectionList
-                  users={companyUsers}
-                  selectedUsers={selectedUsers}
-                  onToggleUser={toggleUserSelection}
-                />
+                {activeTab === "user" ? (
+                  <UserSelectionList
+                    users={companyUsers}
+                    selectedUsers={selectedUsers}
+                    onToggleUser={toggleUserSelection}
+                  />
+                ) : (
+                  <GroupSelectionList
+                    groups={companyGroups}
+                    selectedGroups={selectedGroups}
+                    onToggleGroup={toggleGroupSelection}
+                  />
+                )}
               </div>
 
-              <div className="lg:w-80 shrink-0">
+              <div className={isGroupMode ? "lg:w-96 shrink-0" : "lg:w-80 shrink-0"}>
                 <AssignmentSummary
-                  selectedUserCount={selectedUsers.length}
+                  key={activeTab}
+                  selectedUserCount={isGroupMode ? selectedGroups.length : selectedUsers.length}
                   selectedLessonCount={selectedLessons.length}
                   onAssign={handleAssign}
                   onClear={handleClear}
                   deadlineAt={deadlineAt}
                   setDeadlineAt={setDeadlineAt}
+                  isGroupMode={isGroupMode}
+                  selectedLessonsData={selectedLessonsData}
                 />
               </div>
             </div>
 
-            <div className="mt-12 pt-12 border-t border-gray-50 text-center">
-              <h4 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-8">
-                Select Practice Material
+            <div className="mt-12 pt-12 border-t border-gray-50">
+              <h4 className={`text-sm font-black uppercase tracking-widest mb-8 ${isGroupMode ? "text-gray-900" : "text-gray-900 text-center"}`}>
+                {isGroupMode ? "Select Lessons to Assign" : "Select Practice Material"}
               </h4>
               <LessonSelectionGrid
-                lessons={lessons.concat(adminLessons)}
+                key={activeTab}
+                lessons={allAvailableLessons}
                 selectedLessons={selectedLessons}
                 onToggleLesson={toggleLessonSelection}
+                isGroupMode={isGroupMode}
               />
             </div>
+          </div>
+
+          {/* Progress Tracking Section */}
+          <div className="mt-12">
+            <PendingAssignments />
           </div>
         </div>
       </div>
@@ -183,3 +263,4 @@ const Lessons: React.FC = () => {
 };
 
 export default Lessons;
+

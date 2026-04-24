@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
   const navItems = [
     { name: "Home", icon: Home, path: "/" },
     { name: "Daily Challenge", icon: Target, path: "/daily-challenge" },
-    { name: "Discuss", icon: MessageSquare, path: "/discuss" },
+    { name: "Discuss", icon: MessageSquare, path: "/discussions" },
     { name: "Badges", icon: Award, path: "/badges" },
     { name: "Highscores", icon: Trophy, path: "/highscores" },
   ];

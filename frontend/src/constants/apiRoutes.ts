@@ -37,6 +37,12 @@ export const API_ROUTES = {
 
     //company
     GET_COMPANY_DETAILS: "/company/details",
+
+    //discussions
+    CREATE_POST: "/discussions/create-post",
+    GET_ALL_DISCUSSIONS: "/discussions",
+    CREATE_COMMENT: "/discussions/create-comment",
+    CREATE_REPLY: "/discussions/create-reply",
   },
   QUICK_PLAY: {
     START: "/quick-play/start",
@@ -92,6 +98,7 @@ export const API_ROUTES = {
       BY_ID: (id: string) => `/lesson/${id}`,
       RESULT: (id: string) => `/lesson/${id}/result`,
       ASSIGNMENTS: "/lesson-assignments",
+      ASSIGNMENTS_LESSON_GROUP: "/lesson-assignments-lesson-group",
       ADMIN_ONLY: "/admin-lessons",
     },
   },
@@ -167,4 +174,7 @@ export const API_ROUTES = {
 
   //company admin
   GET_COMPANY_DETAILS: "/company/details",
+  GET_PENDING_USERS: "/lesson/pending-users",
+
+
 } as const;

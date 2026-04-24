@@ -32,6 +32,8 @@ import DailyChallengeLayout from "../pages/user/DailyChallenge/dailyChallenge";
 import DailyChallengeArea from "../pages/user/DailyChallenge/dailyChallengeArea";
 import LeaderBoard from "../pages/user/leaderBoard";
 import Achievements from "../pages/user/achievments";
+import DiscussionsPage from "../pages/user/Discussions/DiscussionsPage";
+import DiscussionDetail from "../pages/user/Discussions/DiscussionDetail";
 
 export default function UserRoutes() {
   const location = useLocation();
@@ -126,6 +128,10 @@ export default function UserRoutes() {
         <Route path="daily-challenge/:id" element={<DailyChallengeArea />} />
         <Route path="highscores" element={<LeaderBoard />} />
         <Route path="badges" element={<Achievements />} />
+
+        {/* Discussions */}
+        <Route path="discussions" element={<DiscussionsPage />} />
+        <Route path="discussions/:id" element={<DiscussionDetail />} />
       </Route>
     </Routes>
   );

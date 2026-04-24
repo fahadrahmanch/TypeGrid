@@ -1,14 +1,27 @@
 import React from "react";
-import { Check, BookOpen } from "lucide-react";
+import { Check, BookOpen, Clock, FileText, Target } from "lucide-react";
 import { Lesson } from "./LessonTable";
 
 interface LessonSelectionGridProps {
-  lessons: (Partial<Lesson> & { is_admin?: boolean; _id?: string })[];
+  lessons: (Partial<Lesson> & {
+    is_admin?: boolean;
+    _id?: string;
+    description?: string;
+    duration?: number;
+    word_count?: number;
+    accuracy_required?: number;
+  })[];
   selectedLessons: string[];
   onToggleLesson: (lessonId: string) => void;
+  isGroupMode?: boolean;
 }
 
-const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({ lessons, selectedLessons, onToggleLesson }) => {
+const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
+  lessons,
+  selectedLessons,
+  onToggleLesson,
+  isGroupMode = false,
+}) => {
   const [filter, setFilter] = React.useState<"all" | "company" | "admin">("all");
 
   const filteredLessons = lessons.filter((lesson) => {
@@ -42,7 +55,7 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({ lessons, sele
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-left">
         {filteredLessons.map((lesson) => {
           const lessonId = (lesson._id || lesson.id || "") as string;
           const isSelected = selectedLessons.includes(lessonId);
@@ -111,4 +124,26 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({ lessons, sele
   );
 };
 
+
+const Badge: React.FC<{ children: React.ReactNode; color?: "green" | "yellow" | "red" | "gray"; icon?: React.ReactNode }> = ({
+  children,
+  color = "gray",
+  icon,
+}) => {
+  const colors = {
+    green: "bg-green-50 text-green-600",
+    yellow: "bg-yellow-50 text-yellow-700",
+    red: "bg-red-50 text-red-600",
+    gray: "bg-gray-50 text-gray-500",
+  };
+
+  return (
+    <span className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold ${colors[color]}`}>
+      {icon}
+      {children}
+    </span>
+  );
+};
+
 export default LessonSelectionGrid;
+

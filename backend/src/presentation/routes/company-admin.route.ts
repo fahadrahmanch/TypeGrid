@@ -43,13 +43,22 @@ export class companyAdminRouter {
       validate(lessonValidation.createLesson),
       asyncHandler(injectCompanyLessonManageController.createLesson)
     );
-
+    this.router.post(
+      Routes.COMPANY_ADMIN.ASSIGN_LESSON_TO_GROUP,
+      checkRoleBasedMiddleware(['companyAdmin']),
+      asyncHandler(injectCompanyLessonManageController.assignLessonToGroup)
+    );
     this.router.get(
       Routes.COMPANY_ADMIN.FETCH_LESSONS,
       checkRoleBasedMiddleware(['companyAdmin']),
       asyncHandler(injectCompanyLessonManageController.getLessons)
     );
 
+    this.router.get(
+      Routes.COMPANY_ADMIN.GET_PENDING_USERS,
+      checkRoleBasedMiddleware(['companyAdmin']),
+      asyncHandler(injectCompanyLessonManageController.getPendingUsers)
+    );
     this.router.get(
       Routes.COMPANY_ADMIN.FETCH_LESSON_BY_ID,
       checkRoleBasedMiddleware(['companyAdmin']),
@@ -66,6 +75,7 @@ export class companyAdminRouter {
       checkRoleBasedMiddleware(['companyAdmin']),
       asyncHandler(injectCompanyLessonManageController.deleteLesson)
     );
+
     this.router.get(
       Routes.COMPANY_ADMIN.GET_COMPANY_USERS,
       checkRoleBasedMiddleware(['companyAdmin']),

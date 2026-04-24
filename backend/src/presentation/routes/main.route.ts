@@ -140,6 +140,7 @@ export const Routes = {
     DAILY_CHALLENGE_FINISHED: '/daily-challenge-finished',
     DAILY_CHALLENGE_STATISTICS: '/daily-challenge/statistics',
     LEADERBOARD: '/leaderboard',
+    
 
     //subscription
     SUBSCRIPTION: '/subscription/plans',
@@ -156,6 +157,11 @@ export const Routes = {
       GET_USER_ACHIEVEMENTS: '/achievements/me',
     },
      GET_COMPANY_DETAILS: '/company/details',
+     CREATE_POST: '/discussions/create-post',
+     GET_ALL_DISCUSSIONS: '/discussions',
+     GET_DISCUSSION_BY_ID: '/discussions/:id',
+     CREATE_COMMENT: '/discussions/create-comment',
+     CREATE_REPLY: '/discussions/create-reply',
   },
 
   COMPANY_ADMIN: {
@@ -172,6 +178,8 @@ export const Routes = {
     FETCH_LESSON_BY_ID: '/lesson/:id',
     GET_ADMIN_LESSONS: '/admin-lessons',
     ASSIGN_LESSON: '/lesson-assignments',
+    ASSIGN_LESSON_TO_GROUP: '/lesson-assignments-lesson-group',
+    GET_PENDING_USERS: '/lesson/pending-users',
 
     //companyGroup
     CREATE_COMPANY_GROUP: '/company-groups',

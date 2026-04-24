@@ -403,3 +403,27 @@ export interface IUserSubscriptionDocument {
   createdAt?: Date;
   updatedAt?: Date;
 }
+// ────────────── Discussion ──────────────
+export interface IDiscussionDocument {
+  _id?: Types.ObjectId;
+  title: string;
+  content: string;
+  userId: Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+// ────────────── Comment ──────────────
+export interface ICommentDocument {
+  _id?: Types.ObjectId;
+  DiscussionpostId: Types.ObjectId;
+  userId: Types.ObjectId;
+  content: string;
+  replies: Array<{
+    userId: Types.ObjectId;
+    content: string;
+    createdAt: Date;
+  }>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

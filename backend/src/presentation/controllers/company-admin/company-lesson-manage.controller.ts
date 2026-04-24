@@ -10,6 +10,8 @@ import { IUpdateCompanyLessonUseCase } from '../../../application/use-cases/inte
 import { IDeleteCompanyLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/delete-company-lesson.interface';
 import { IGetAdminLessonsUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-admin-lesson.interface';
 import { IAssignLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/assign-lesson.interface';
+import { IAssignGroupLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/assign-group-lesson.interface';
+import { IGetPendingUsersUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-pending-users.interface';
 import { CustomError } from '../../../domain/entities/custom-error.entity';
 
 export class CompanyLessonManageController {
@@ -20,7 +22,9 @@ export class CompanyLessonManageController {
     private _updateCompanyLessonUseCase: IUpdateCompanyLessonUseCase,
     private _deleteCompanyLessonUseCase: IDeleteCompanyLessonUseCase,
     private _getAdminLessonsUseCase: IGetAdminLessonsUseCase,
-    private _assignLessonUseCase: IAssignLessonUseCase
+    private _assignLessonUseCase: IAssignLessonUseCase,
+    private _assignGroupLessonUseCase: IAssignGroupLessonUseCase,
+    private _getPendingUsersUseCase: IGetPendingUsersUseCase
   ) {}
 
   //create lesson
@@ -154,17 +158,55 @@ export class CompanyLessonManageController {
   // assign lessons
 
   assignLessons = async (req: AuthRequest, res: Response): Promise<void> => {
-    const users: string[] = req.body.users;
+    const users: string[] = (req.body.users || []).filter(Boolean);
     const userId = req.user?.userId;
     const deadline = req.body.deadline;
-    const lessons: string[] = req.body.lessons;
-    if (!users || users.length === 0 || !lessons || lessons.length === 0 || !userId) {
+    const lessons: string[] = (req.body.lessons || []).filter(Boolean);
+
+    if (users.length === 0 || lessons.length === 0 || !userId) {
       throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.ALL_FIELDS_REQUIRED);
     }
     await this._assignLessonUseCase.execute(userId, users, lessons, deadline);
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.UPDATE_SUCCESS,
+    });
+  };
+
+  assignLessonToGroup = async (req: AuthRequest, res: Response): Promise<void> => {
+    const groups: string[] = (req.body.groups || []).filter(Boolean);
+    console.log("groups",groups);
+    const userId = req.user?.userId;
+    const deadline = req.body.deadline;
+    const lessons: string[] = (req.body.lessons || []).filter(Boolean);
+    if (groups.length === 0 || lessons.length === 0 || !userId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.ALL_FIELDS_REQUIRED);
+    }
+    await this._assignGroupLessonUseCase.execute(userId, groups, lessons, deadline);
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.UPDATE_SUCCESS,
+    });
+  };
+
+  // get pending users
+
+  getPendingUsers = async (req: AuthRequest, res: Response): Promise<void> => {
+    const userId = req.user?.userId;
+    console.log("userId",userId)
+    if (!userId) {
+      throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
+    }
+
+    const { users, total, userIds } = await this._getPendingUsersUseCase.execute(userId);
+    console.log(users,total,userIds)
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.FETCH_SUCCESS,
+      total,
+      data: users,
+      userIds,
     });
   };
 }

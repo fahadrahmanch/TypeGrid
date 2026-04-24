@@ -16,7 +16,9 @@ import { UpdateCompanyLessonUseCase } from '../../application/use-cases/company-
 import { DeleteCompanyLessonUseCase } from '../../application/use-cases/company-admin/company-lesson/delete-company-lesson.use-case';
 import { GetAdminLessonUseCase } from '../../application/use-cases/company-admin/company-lesson/get-admin-lesson.use-case';
 import { AssignLessonUseCase } from '../../application/use-cases/company-admin/company-lesson/assign-lesson.use-case';
+import { AssignGroupLessonUseCase } from '../../application/use-cases/company-admin/company-lesson/assign-group-lesson.use-case';
 import { LessonAssignment } from '../../infrastructure/db/models/company/lesson-assignment.schema';
+import { GetPendingUsersUseCase } from '../../application/use-cases/company-admin/company-lesson/get-pending-users.use-case';
 import { LessonAssignmentRepository } from '../../infrastructure/db/repositories/company/lesson-assignment.repository';
 import { CompanyGroupController } from '../controllers/company-admin/company-group.controller';
 import { CreateCompanyGroupUseCase } from '../../application/use-cases/company-admin/company-group/create-company-group.use-case';
@@ -96,6 +98,12 @@ const deleteCompanyLessonUseCaseInstance = new DeleteCompanyLessonUseCase(lesson
 const getAdminLessonsUseCaseInstance = new GetAdminLessonUseCase(lessonRepository);
 const assignLessonUseCaseInstance = new AssignLessonUseCase(lessonAssignmentRepository, userRepository);
 const companyGroupRepository = new CompanyGroupRepositroy(CompanyGroup);
+const assignGroupLessonUseCaseInstance = new AssignGroupLessonUseCase(
+  lessonAssignmentRepository,
+  userRepository,
+  companyGroupRepository
+);
+const getPendingUsersUseCaseInstance = new GetPendingUsersUseCase(lessonAssignmentRepository, userRepository);
 const contestRepository = new ContestRepository(Contest);
 const createCompanyGroupUseCaseInstance = new CreateCompanyGroupUseCase(userRepository, companyGroupRepository);
 const createCompanyGroupAutoUseCaseInstance = new CreateCompanyGroupAutoUseCase(
@@ -194,7 +202,9 @@ export const injectCompanyLessonManageController = new CompanyLessonManageContro
   updateCompanyLessonUseCaseInstance,
   deleteCompanyLessonUseCaseInstance,
   getAdminLessonsUseCaseInstance,
-  assignLessonUseCaseInstance
+  assignLessonUseCaseInstance,
+  assignGroupLessonUseCaseInstance,
+  getPendingUsersUseCaseInstance
 );
 
 const getCompanyDetailsUseCaseInstance = new GetCompanyDetailsUseCase(

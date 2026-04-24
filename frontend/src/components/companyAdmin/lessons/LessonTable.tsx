@@ -86,6 +86,13 @@ const LessonTable: React.FC<{
             ),
           },
           {
+            header: "Assigned",
+            key: "assigned",
+            headerClassName: "text-center",
+            className: "py-5 px-4 text-center font-bold text-gray-600 text-sm",
+            render: (lesson) => lesson.assigned || 0,
+          },
+          {
             header: "Actions",
             key: "actions",
             headerClassName: "text-right",
