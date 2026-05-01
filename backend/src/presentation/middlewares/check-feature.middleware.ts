@@ -1,6 +1,6 @@
-import { Response, NextFunction } from 'express';
-import { ICheckFeatureAccessUseCase } from '../../application/use-cases/interfaces/user/check-feature-access.interface';
-import { AuthRequest } from '../../types/AuthRequest';
+import { Response, NextFunction } from "express";
+import { ICheckFeatureAccessUseCase } from "../../application/use-cases/interfaces/user/check-feature-access.interface";
+import { AuthRequest } from "../../types/AuthRequest";
 
 export const createCheckFeature = (useCase: ICheckFeatureAccessUseCase) => {
   return (feature: string) => {
@@ -10,7 +10,7 @@ export const createCheckFeature = (useCase: ICheckFeatureAccessUseCase) => {
 
         if (!userId) {
           return res.status(401).json({
-            message: 'User authentication required',
+            message: "User authentication required",
           });
         }
 
@@ -20,7 +20,7 @@ export const createCheckFeature = (useCase: ICheckFeatureAccessUseCase) => {
       } catch (error: any) {
         return res.status(403).json({
           success: false,
-          message: error.message || 'Feature access denied',
+          message: error.message || "Feature access denied",
         });
       }
     };

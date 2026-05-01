@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { IGetPracticeTypingContentUseCase } from '../../../application/use-cases/interfaces/companyUser/get-practice-typing-content.interface';
-import { HttpStatus } from '../../constants/httpStatus';
+import { Request, Response } from "express";
+import { IGetPracticeTypingContentUseCase } from "../../../application/use-cases/interfaces/companyUser/get-practice-typing-content.interface";
+import { HttpStatus } from "../../constants/httpStatus";
 
 export class TypingPracticeController {
   constructor(private _getPracticeTypingContentUseCase: IGetPracticeTypingContentUseCase) {}

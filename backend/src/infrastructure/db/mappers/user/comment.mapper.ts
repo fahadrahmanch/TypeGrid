@@ -1,5 +1,5 @@
-import { ICommentDocument } from '../../types/documents';
-import { CommentEntity } from '../../../../domain/entities/user/comment.entity';
+import { ICommentDocument } from "../../types/documents";
+import { CommentEntity } from "../../../../domain/entities/user/comment.entity";
 
 export const commentToDomain = (doc: ICommentDocument): CommentEntity => {
   return new CommentEntity({

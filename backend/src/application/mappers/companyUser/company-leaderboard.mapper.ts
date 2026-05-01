@@ -1,5 +1,5 @@
-import { CompanyUserStatsEntity } from '../../../domain/entities';
-import { CompanyLeaderboardDTO } from '../../DTOs/companyUser/company-leaderboard.dto';
+import { CompanyUserStatsEntity } from "../../../domain/entities";
+import { CompanyLeaderboardDTO } from "../../DTOs/companyUser/company-leaderboard.dto";
 
 export class CompanyLeaderboardMapper {
   static toDTO(entity: CompanyUserStatsEntity, userName: string, imageUrl: string): CompanyLeaderboardDTO {

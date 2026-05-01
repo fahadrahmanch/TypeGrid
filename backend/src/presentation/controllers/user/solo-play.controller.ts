@@ -1,11 +1,11 @@
-import { Response } from 'express';
-import logger from '../../../utils/logger';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { ICreateSoloPlayUseCase } from '../../../application/use-cases/interfaces/user/solo-play/create-solo-play.interface';
-import { ISoloPlayResultUseCase } from '../../../application/use-cases/interfaces/user/solo-play/solo-play-result.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Response } from "express";
+import logger from "../../../utils/logger";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { ICreateSoloPlayUseCase } from "../../../application/use-cases/interfaces/user/solo-play/create-solo-play.interface";
+import { ISoloPlayResultUseCase } from "../../../application/use-cases/interfaces/user/solo-play/solo-play-result.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 export class SoloPlayController {
   constructor(
     private _createSoloPlayUseCase: ICreateSoloPlayUseCase,

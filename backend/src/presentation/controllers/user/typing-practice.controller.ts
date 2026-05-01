@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import logger from '../../../utils/logger';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IGetPracticeTypingContentUseCase } from '../../../application/use-cases/interfaces/user/typing-practice/get-practice-typing-content.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Request, Response } from "express";
+import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IGetPracticeTypingContentUseCase } from "../../../application/use-cases/interfaces/user/typing-practice/get-practice-typing-content.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 export class TypingPracticeController {
   constructor(private _getPracticeTypingContentUseCase: IGetPracticeTypingContentUseCase) {}
 
@@ -17,7 +17,7 @@ export class TypingPracticeController {
 
     const lesson = await this._getPracticeTypingContentUseCase.execute(level, category);
 
-    logger.info('Typing practice lesson retrieved', { level, category });
+    logger.info("Typing practice lesson retrieved", { level, category });
 
     res.status(HttpStatus.OK).json({
       success: true,

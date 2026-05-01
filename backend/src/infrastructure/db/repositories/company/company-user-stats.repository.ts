@@ -1,9 +1,9 @@
-import { Model } from 'mongoose';
-import { BaseRepository } from '../../base/base.repository';
-import { ICompanyUserStatsRepository } from '../../../../domain/interfaces/repository/company/company-user-stats-repository.interface';
-import { ICompanyUserStatsDocument } from '../../types/documents';
-import { CompanyUserStatsEntity } from '../../../../domain/entities';
-import { CompanyUserStatsMapper } from '../../mappers/company-user-stats.mapper';
+import { Model } from "mongoose";
+import { BaseRepository } from "../../base/base.repository";
+import { ICompanyUserStatsRepository } from "../../../../domain/interfaces/repository/company/company-user-stats-repository.interface";
+import { ICompanyUserStatsDocument } from "../../types/documents";
+import { CompanyUserStatsEntity } from "../../../../domain/entities";
+import { CompanyUserStatsMapper } from "../../mappers/company-user-stats.mapper";
 export class CompanyUserStatsRepository
   extends BaseRepository<ICompanyUserStatsDocument, CompanyUserStatsEntity>
   implements ICompanyUserStatsRepository

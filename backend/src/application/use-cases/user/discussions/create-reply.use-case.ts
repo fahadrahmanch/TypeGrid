@@ -16,7 +16,6 @@ export class CreateReplyUseCase implements ICreateReplyUseCase {
     }
 
     parentComment.addReply(userId, content);
-    console.log("parentComment", parentComment);
     await this._commentRepository.update({_id:commentId, ...parentComment});
   }
 }

@@ -1,4 +1,4 @@
-import { ContestProps, openContestDTO } from '../../DTOs/companyAdmin/company-contest.dto';
+import { ContestProps, openContestDTO } from "../../DTOs/companyAdmin/company-contest.dto";
 
 export type ContestPayload = {
   _id?: any;
@@ -24,7 +24,7 @@ export const mapContestDTO = (contest: ContestPayload, userId: string): openCont
     _id: contest._id.toString(),
     contestMode: contest.contestMode,
     title: contest.title,
-    description: contest.description || '',
+    description: contest.description || "",
     difficulty: contest.difficulty,
     textSource: contest.textSource,
     contestText: contest.contestText,
@@ -47,7 +47,7 @@ export const mapOpenContestDTO = (contests: ContestPayload[], userId: string): C
     _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
-    description: data.description || '',
+    description: data.description || "",
     difficulty: data.difficulty,
     countDown: data.countDown ?? 10,
     textSource: data.textSource,
@@ -70,8 +70,8 @@ export const mapGroupContestDTO = (contests: ContestPayload[], userId: string) =
     _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
-    description: data.description || '',
-    targetGroup: data.groupId?.toString() || '',
+    description: data.description || "",
+    targetGroup: data.groupId?.toString() || "",
     difficulty: data.difficulty,
     textSource: data.textSource,
     contestText: data.contestText,
@@ -94,8 +94,8 @@ export const mapCompanyContestDTO = (contests: ContestPayload[]): ContestProps[]
     _id: data._id.toString(),
     contestMode: data.contestMode,
     title: data.title,
-    description: data.description || '',
-    targetGroup: data.groupId?.toString() || '',
+    description: data.description || "",
+    targetGroup: data.groupId?.toString() || "",
     difficulty: data.difficulty,
     textSource: data.textSource,
     contestText: data.contestText,
@@ -117,8 +117,8 @@ export const mapContestDTOAdmin = (contest: ContestPayload) => {
     _id: contest._id.toString(),
     contestMode: contest.contestMode,
     title: contest.title,
-    description: contest.description || '',
-    targetGroup: contest.groupId?.toString() || '',
+    description: contest.description || "",
+    targetGroup: contest.groupId?.toString() || "",
     difficulty: contest.difficulty,
     textSource: contest.textSource,
     contestText: contest.contestText,

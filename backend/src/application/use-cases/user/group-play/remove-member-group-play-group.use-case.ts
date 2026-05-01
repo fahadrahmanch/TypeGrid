@@ -1,10 +1,10 @@
-import { IGroupRepository } from '../../../../domain/interfaces/repository/user/group-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { IRemoveMemberGroupPlayGroupUseCase } from '../../interfaces/user/group-play/remove-member-group-play-group.interface';
-import { groupDTO, mapGroupToDTO } from '../../../DTOs/user/group.dto';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { IRemoveMemberGroupPlayGroupUseCase } from "../../interfaces/user/group-play/remove-member-group-play-group.interface";
+import { groupDTO, mapGroupToDTO } from "../../../DTOs/user/group.dto";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlayGroupUseCase {
   constructor(
@@ -12,7 +12,7 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
     private readonly _userRepository: IUserRepository
   ) {}
 
-  async execute(groupId: string, userId: string, reason: 'KICK' | 'LEAVE'): Promise<groupDTO> {
+  async execute(groupId: string, userId: string, reason: "KICK" | "LEAVE"): Promise<groupDTO> {
     const groupEntity = await this._groupRepository.findById(groupId);
     if (!groupEntity) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
@@ -30,7 +30,7 @@ export class RemoveMemberGroupPlayGroupUseCase implements IRemoveMemberGroupPlay
       }
     }
 
-    if (reason === 'KICK') {
+    if (reason === "KICK") {
       groupEntity.kickUser(userId);
     } else {
       groupEntity.removeMember(userId);

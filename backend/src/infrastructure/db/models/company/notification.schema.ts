@@ -1,23 +1,23 @@
-import { Schema, model } from 'mongoose';
-import { INotificationDocument } from '../../types/documents';
+import { Schema, model } from "mongoose";
+import { INotificationDocument } from "../../types/documents";
 
 const notificationSchema = new Schema<INotificationDocument>(
   {
     companyId: {
       type: Schema.Types.ObjectId,
-      ref: 'Company',
+      ref: "Company",
       required: true,
       index: true,
     },
     senderId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
 
     type: {
       type: String,
-      enum: ['individual', 'group', 'all'],
+      enum: ["individual", "group", "all"],
       required: true,
     },
 
@@ -42,4 +42,4 @@ const notificationSchema = new Schema<INotificationDocument>(
   }
 );
 
-export const Notification = model<INotificationDocument>('Notification', notificationSchema);
+export const Notification = model<INotificationDocument>("Notification", notificationSchema);

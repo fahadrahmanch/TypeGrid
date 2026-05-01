@@ -1,8 +1,8 @@
-import { IOtpService } from '../../../../domain/interfaces/services/otp-service.interface';
-import { IForgotPasswordOtpVerifyUseCase } from '../../interfaces/auth/forgot-password-otp-verify.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IOtpService } from "../../../../domain/interfaces/services/otp-service.interface";
+import { IForgotPasswordOtpVerifyUseCase } from "../../interfaces/auth/forgot-password-otp-verify.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Verifies an OTP during the forgot password process.

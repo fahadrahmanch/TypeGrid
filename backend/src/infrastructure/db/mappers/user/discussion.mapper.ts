@@ -1,5 +1,5 @@
-import { IDiscussionDocument } from '../../types/documents';
-import { DiscussionEntity } from '../../../../domain/entities/user/discussion.entity';
+import { IDiscussionDocument } from "../../types/documents";
+import { DiscussionEntity } from "../../../../domain/entities/user/discussion.entity";
 
 export const discussionToDomain = (doc: IDiscussionDocument): DiscussionEntity => {
   return new DiscussionEntity({

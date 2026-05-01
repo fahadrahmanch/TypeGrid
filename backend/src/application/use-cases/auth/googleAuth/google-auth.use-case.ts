@@ -1,9 +1,9 @@
-import { IGoogleAuthUseCase } from '../../interfaces/auth/google-auth.interface';
-import { IAuthRepository } from '../../../../domain/interfaces/repository/user/auth-repository.interface';
-import { AuthUserEntity } from '../../../../domain/entities';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IGoogleAuthUseCase } from "../../interfaces/auth/google-auth.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { AuthUserEntity } from "../../../../domain/entities";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Handles Google OAuth authentication.
@@ -20,7 +20,7 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
       return this._authRepository.create(newUser) as Promise<AuthUserEntity>;
     }
 
-    if (user.status === 'block') {
+    if (user.status === "block") {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.AUTH_ACCOUNT_BLOCKED);
     }
 

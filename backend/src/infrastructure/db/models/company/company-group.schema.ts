@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import { ICompanyGroupDocument } from '../../types/documents';
+import mongoose from "mongoose";
+import { ICompanyGroupDocument } from "../../types/documents";
 
 const companyGroupSchema = new mongoose.Schema<ICompanyGroupDocument>(
   {
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Company',
+      ref: "Company",
       required: true,
     },
     name: {
@@ -15,13 +15,13 @@ const companyGroupSchema = new mongoose.Schema<ICompanyGroupDocument>(
     },
     type: {
       type: String,
-      enum: ['beginner', 'intermediate', 'advanced'],
+      enum: ["beginner", "intermediate", "advanced"],
       required: true,
     },
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
   },
@@ -30,4 +30,4 @@ const companyGroupSchema = new mongoose.Schema<ICompanyGroupDocument>(
   }
 );
 
-export const CompanyGroup = mongoose.model<ICompanyGroupDocument>('CompanyGroup', companyGroupSchema);
+export const CompanyGroup = mongoose.model<ICompanyGroupDocument>("CompanyGroup", companyGroupSchema);

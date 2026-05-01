@@ -1,4 +1,4 @@
-import { GoalResponseDTO } from '../../DTOs/admin/goal.dto';
+import { GoalResponseDTO } from "../../DTOs/admin/goal.dto";
 
 export function mapToGoalDTO(goal: any): GoalResponseDTO {
   return {

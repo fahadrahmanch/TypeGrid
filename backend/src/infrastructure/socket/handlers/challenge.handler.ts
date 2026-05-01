@@ -1,7 +1,7 @@
-import { Socket, Server } from 'socket.io';
-import { injectChallengeSocketController } from '../../../presentation/DI/socket.di';
-import redis from '../../../config/redis';
-import { checkChallengeGameEndService } from '../../../application/services/game-result.service';
+import { Socket, Server } from "socket.io";
+import { injectChallengeSocketController } from "../../../presentation/DI/socket.di";
+import redis from "../../../config/redis";
+import { checkChallengeGameEndService } from "../../../application/services/game-result.service";
 
 function calculateStats({ totalTyped, errors, timeTaken }: { totalTyped: number; errors: number; timeTaken: number }) {
   const correctChars = Math.max(totalTyped - errors, 0);
@@ -16,14 +16,14 @@ function calculateStats({ totalTyped, errors, timeTaken }: { totalTyped: number;
 export const challengeHandlers = (socket: Socket, io: Server) => {
   /* ===================== 1V1 CHALLENGE ===================== */
 
-  socket.on('challenge-accepted', ({ challengeId, senderId }) => {
-    io.to(`user:${senderId}`).emit('challenge-status-updated', {
+  socket.on("challenge-accepted", ({ challengeId, senderId }) => {
+    io.to(`user:${senderId}`).emit("challenge-status-updated", {
       challengeId,
-      status: 'accepted',
+      status: "accepted",
     });
   });
 
-  socket.on('join-match', async ({ challengeId, receiverId }) => {
+  socket.on("join-match", async ({ challengeId, receiverId }) => {
     if (socket.data.challengeId) {
       socket.leave(socket.data.challengeId);
     }
@@ -32,19 +32,19 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
     const room = io.sockets.adapter.rooms.get(challengeId);
     if (room && room.size === 2) {
       await injectChallengeSocketController.execute(challengeId);
-      io.to(challengeId).emit('start-match', { challengeId });
+      io.to(challengeId).emit("start-match", { challengeId });
     } else {
-      io.to(`user:${receiverId}`).emit('waiting-for-opponent', { challengeId });
+      io.to(`user:${receiverId}`).emit("waiting-for-opponent", { challengeId });
     }
   });
 
   /* ===================== 1V1 CHALLENGE AREA ===================== */
-  socket.on('challenge-join', async ({ challengeId, userId, name, imageUrl }) => {
+  socket.on("challenge-join", async ({ challengeId, userId, name, imageUrl }) => {
     const key = `challenge:game:${challengeId}`;
 
     const isFinished = await redis.exists(`challenge:finished:${challengeId}`);
     if (isFinished) {
-      socket.emit('challenge-already-finished');
+      socket.emit("challenge-already-finished");
       return;
     }
 
@@ -67,7 +67,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           accuracy: 0,
           errors: 0,
           typedLength: 0,
-          status: 'PLAYING',
+          status: "PLAYING",
           updatedAt: Date.now(),
         })
       );
@@ -75,7 +75,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
     }
   });
 
-  socket.on('typing-progress-challenge', async (data) => {
+  socket.on("typing-progress-challenge", async (data) => {
     const { userId, wpm, accuracy, errors, typedLength, timeTaken } = data;
     const gameId = socket.data.challengeId;
     if (!gameId) return;
@@ -85,7 +85,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
     const raw = await redis.hget(key, userId);
     if (raw) {
       const existing = JSON.parse(raw);
-      if (existing.status === 'FINISHED' || existing.status === 'TIMES_UP') {
+      if (existing.status === "FINISHED" || existing.status === "TIMES_UP") {
         return;
       }
       await redis.hset(
@@ -98,17 +98,17 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           timeTaken,
           errors,
           typedLength,
-          status: 'PLAYING',
+          status: "PLAYING",
           updatedAt: Date.now(),
         })
       );
     }
     await redis.expire(key, 600);
-    io.to(gameId).emit('typing-progress-update-challenge', data);
+    io.to(gameId).emit("typing-progress-update-challenge", data);
   });
 
   socket.on(
-    'player-finished-challenge',
+    "player-finished-challenge",
     async ({ userId, name, imageUrl, timeTaken, totalTyped, errors, typedLength }) => {
       const gameId = socket.data.challengeId;
       if (!gameId) return;
@@ -130,7 +130,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           ...data,
           name,
           imageUrl,
-          status: 'FINISHED',
+          status: "FINISHED",
           timeTaken,
           wpm,
           accuracy,
@@ -148,11 +148,11 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           }))
           .sort((a, b) => {
             if (a.status !== b.status) {
-              if (a.status === 'FINISHED') return -1;
-              if (b.status === 'FINISHED') return 1;
+              if (a.status === "FINISHED") return -1;
+              if (b.status === "FINISHED") return 1;
             }
 
-            if (a.status === 'FINISHED' && b.status === 'FINISHED') {
+            if (a.status === "FINISHED" && b.status === "FINISHED") {
               if (a.timeTaken !== b.timeTaken) {
                 return a.timeTaken - b.timeTaken;
               }
@@ -164,7 +164,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
               return 0;
             }
 
-            if (a.status === 'TIMES_UP' && b.status === 'TIMES_UP') {
+            if (a.status === "TIMES_UP" && b.status === "TIMES_UP") {
               if (a.typedLength !== b.typedLength) {
                 return b.typedLength - a.typedLength;
               }
@@ -179,20 +179,20 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
             ...player,
             rank: index + 1,
           }));
-        io.to(gameId).emit('game-finished-challenge', resultArray);
+        io.to(gameId).emit("game-finished-challenge", resultArray);
         await redis.del(key);
         await injectChallengeSocketController.saveChallengePlayResult(gameId, resultArray);
       }
     }
   );
-  socket.on('time-up-challenge', async ({ userId, name, imageUrl, timeTaken, totalTyped, errors, typedLength }) => {
+  socket.on("time-up-challenge", async ({ userId, name, imageUrl, timeTaken, totalTyped, errors, typedLength }) => {
     const gameId = socket.data.challengeId;
     if (!gameId) return;
     const key = `challenge:game:${gameId}`;
     const raw = await redis.hget(key, userId);
     if (!raw) return;
     const data = JSON.parse(raw);
-    if (data.status === 'FINISHED') return;
+    if (data.status === "FINISHED") return;
     const { wpm, accuracy } = calculateStats({
       totalTyped,
       errors,
@@ -206,7 +206,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
         ...data,
         name,
         imageUrl,
-        status: 'TIMES_UP',
+        status: "TIMES_UP",
         timeTaken,
         wpm,
         accuracy,
@@ -224,11 +224,11 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
         }))
         .sort((a, b) => {
           if (a.status !== b.status) {
-            if (a.status === 'FINISHED') return -1;
-            if (b.status === 'FINISHED') return 1;
+            if (a.status === "FINISHED") return -1;
+            if (b.status === "FINISHED") return 1;
           }
 
-          if (a.status === 'FINISHED' && b.status === 'FINISHED') {
+          if (a.status === "FINISHED" && b.status === "FINISHED") {
             if (a.timeTaken !== b.timeTaken) {
               return a.timeTaken - b.timeTaken;
             }
@@ -240,7 +240,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
             return 0;
           }
 
-          if (a.status === 'TIMES_UP' && b.status === 'TIMES_UP') {
+          if (a.status === "TIMES_UP" && b.status === "TIMES_UP") {
             if (a.typedLength !== b.typedLength) {
               return b.typedLength - a.typedLength;
             }
@@ -255,18 +255,18 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           ...player,
           rank: index + 1,
         }));
-      io.to(gameId).emit('game-finished-challenge', resultArray);
+      io.to(gameId).emit("game-finished-challenge", resultArray);
       await redis.del(key);
       await injectChallengeSocketController.saveChallengePlayResult(gameId, resultArray);
     }
   });
-  socket.on('leave-challenge', async ({ challengeId, userId }) => {
+  socket.on("leave-challenge", async ({ challengeId, userId }) => {
     const key = `challenge:game:${challengeId}`;
 
     const raw = await redis.hget(key, userId);
     if (raw) {
       const data = JSON.parse(raw);
-      await redis.hset(key, userId, JSON.stringify({ ...data, status: 'LEFT' }));
+      await redis.hset(key, userId, JSON.stringify({ ...data, status: "LEFT" }));
     }
 
     const allEntries = await redis.hgetall(key);
@@ -276,14 +276,14 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
         ...JSON.parse(value),
       }))
       .sort((a, b) => {
-        if (a.status === 'LEFT' && b.status !== 'LEFT') return 1;
-        if (b.status === 'LEFT' && a.status !== 'LEFT') return -1;
-        if (a.status === 'LEFT' && b.status === 'LEFT') return 0;
+        if (a.status === "LEFT" && b.status !== "LEFT") return 1;
+        if (b.status === "LEFT" && a.status !== "LEFT") return -1;
+        if (a.status === "LEFT" && b.status === "LEFT") return 0;
 
-        if (a.status === 'FINISHED' && b.status !== 'FINISHED') return -1;
-        if (b.status === 'FINISHED' && a.status !== 'FINISHED') return 1;
+        if (a.status === "FINISHED" && b.status !== "FINISHED") return -1;
+        if (b.status === "FINISHED" && a.status !== "FINISHED") return 1;
 
-        if (a.status === 'FINISHED' && b.status === 'FINISHED') {
+        if (a.status === "FINISHED" && b.status === "FINISHED") {
           if (a.timeTaken !== b.timeTaken) return a.timeTaken - b.timeTaken;
           return (b.accuracy ?? 0) - (a.accuracy ?? 0);
         }
@@ -294,8 +294,8 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
         ...player,
         rank: index + 1,
       }));
-    await redis.set(`challenge:finished:${challengeId}`, '1', 'EX', 3600);
-    io.to(challengeId).emit('game-finished-challenge', resultArray);
+    await redis.set(`challenge:finished:${challengeId}`, "1", "EX", 3600);
+    io.to(challengeId).emit("game-finished-challenge", resultArray);
 
     await redis.del(key);
     await injectChallengeSocketController.saveChallengePlayResult(challengeId, resultArray);

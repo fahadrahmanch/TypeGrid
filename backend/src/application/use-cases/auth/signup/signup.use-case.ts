@@ -1,11 +1,11 @@
-import { IAuthUseCase } from '../../interfaces/auth/auth.interface';
-import { IAuthRepository } from '../../../../domain/interfaces/repository/user/auth-repository.interface';
-import { IOtpService } from '../../../../domain/interfaces/services/otp-service.interface';
-import { IEmailService } from '../../../../domain/interfaces/services/email-service.interface';
-import { IEmailTemplate } from '../../../DTOs/email/email-template.dto';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IAuthUseCase } from "../../interfaces/auth/auth.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IOtpService } from "../../../../domain/interfaces/services/otp-service.interface";
+import { IEmailService } from "../../../../domain/interfaces/services/email-service.interface";
+import { IEmailTemplate } from "../../../DTOs/email/email-template.dto";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Handles user signup by validating input, checking for existing email,
@@ -31,7 +31,7 @@ export class SignupUseCase implements IAuthUseCase {
       name,
       email,
       otp,
-      subject: 'Type Grid Sign Up OTP',
+      subject: "Type Grid Sign Up OTP",
     };
 
     await this._emailService.sentOtp(emailOptions);

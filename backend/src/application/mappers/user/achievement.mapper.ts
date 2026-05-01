@@ -1,4 +1,4 @@
-import { UserAchievementDTO } from '../../DTOs/user/achievement.dto';
+import { UserAchievementDTO } from "../../DTOs/user/achievement.dto";
 
 export const achievementUserMapper = (data: {
   id: string;

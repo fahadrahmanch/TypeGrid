@@ -1,5 +1,5 @@
-import { INotificationDocument } from '../types/documents';
-import { NotificationEntity } from '../../../domain/entities/company/notification.entity';
+import { INotificationDocument } from "../types/documents";
+import { NotificationEntity } from "../../../domain/entities/company/notification.entity";
 
 export class NotificationMapper {
   static toDomain(doc: INotificationDocument): NotificationEntity {

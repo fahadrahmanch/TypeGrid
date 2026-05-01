@@ -1,11 +1,11 @@
-import { IGetCompanyLessonsUseCase } from '../../interfaces/companyAdmin/get-company-lessons.interface';
-import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { mapLessonDTOforCompanyLesson } from '../../../mappers/companyAdmin/company-lesson.mapper';
-import { CompanyLessonDTO } from '../../../DTOs/companyAdmin/company-lesson.dto';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IGetCompanyLessonsUseCase } from "../../interfaces/companyAdmin/get-company-lessons.interface";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapLessonDTOforCompanyLesson } from "../../../mappers/companyAdmin/company-lesson.mapper";
+import { CompanyLessonDTO } from "../../../DTOs/companyAdmin/company-lesson.dto";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Use case responsible for retrieving all lessons belonging to a company.

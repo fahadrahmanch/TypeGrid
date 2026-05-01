@@ -1,9 +1,9 @@
-import { ISubscriptionPlanRepository } from '../../../domain/interfaces/repository/admin/subscription-plan.repository.interface';
-import { IUserSubscriptionRepository } from '../../../domain/interfaces/repository/user/user-subscription.repository.interface';
-import { ICheckFeatureAccessUseCase } from '../interfaces/user/check-feature-access.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../domain/constants/messages';
+import { ISubscriptionPlanRepository } from "../../../domain/interfaces/repository/admin/subscription-plan.repository.interface";
+import { IUserSubscriptionRepository } from "../../../domain/interfaces/repository/user/user-subscription.repository.interface";
+import { ICheckFeatureAccessUseCase } from "../interfaces/user/check-feature-access.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../domain/constants/messages";
 
 export class CheckFeatureAccessUseCase implements ICheckFeatureAccessUseCase {
   constructor(
@@ -13,7 +13,6 @@ export class CheckFeatureAccessUseCase implements ICheckFeatureAccessUseCase {
 
   async execute(userId: string, feature: string): Promise<boolean> {
     const sub = await this._subscriptionRepo.findActive(userId);
-
     if (!sub) {
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.ACTIVE_SUBSCRIPTION_REQUIRED);
     }

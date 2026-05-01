@@ -1,7 +1,7 @@
-import express from 'express';
-import { Routes } from '../main.route';
-import { injectAuthController } from '../../DI/auth.di';
-import { asyncHandler } from '../../../utils/async-handler';
+import express from "express";
+import { Routes } from "../main.route";
+import { injectAuthController } from "../../DI/auth.di";
+import { asyncHandler } from "../../../utils/async-handler";
 export class adminAuthRouter {
   private router: express.Router;
   constructor() {

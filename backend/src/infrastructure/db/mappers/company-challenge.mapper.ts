@@ -1,5 +1,5 @@
-import { ICompanyChallengeDocument } from '../types/documents';
-import { CompanyChallengeEntity } from '../../../domain/entities/company-challenge.entity';
+import { ICompanyChallengeDocument } from "../types/documents";
+import { CompanyChallengeEntity } from "../../../domain/entities/company-challenge.entity";
 
 export class CompanyChallengeMapper {
   static toDomain(doc: ICompanyChallengeDocument): CompanyChallengeEntity {

@@ -1,23 +1,23 @@
-import { Request, Response } from 'express';
-import { IAuthUseCase } from '../../../application/use-cases/interfaces/auth/auth.interface';
-import { ICompleteSignupUseCase } from '../../../application/use-cases/interfaces/auth/complete-signup.interface';
-import { IResentOtpUseCase } from '../../../application/use-cases/interfaces/auth/resent-otp.interface';
-import logger from '../../../utils/logger';
-import { ILoginUseCase } from '../../../application/use-cases/interfaces/auth/login.interface';
-import { ITokenService } from '../../../domain/interfaces/services/token-service.interface';
-import { IGoogleAuthUseCase } from '../../../application/use-cases/interfaces/auth/google-auth.interface';
-import { IFindUserByemailUseCase } from '../../../application/use-cases/interfaces/auth/find-user-by-email.interface';
-import { IForgotPasswordUseCase } from '../../../application/use-cases/interfaces/auth/forgot-password.interface';
-import { IForgotPasswordOtpVerifyUseCase } from '../../../application/use-cases/interfaces/auth/forgot-password-otp-verify.interface';
-import { ICreateNewPasswordUseCase } from '../../../application/use-cases/interfaces/auth/create-new-password.interface';
-import { ICompanyFindUseCase } from '../../../application/use-cases/interfaces/auth/company-find.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { HttpStatus } from '../../constants/httpStatus';
-import { getRoleConfig } from '../../helpers/auth-role.helper';
-import { mapToSafeUser } from '../../../application/mappers/auth/auth.mapper';
-import { Status } from '../../../domain/enums/status.enum';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
-
+import { Request, Response } from "express";
+import { IAuthUseCase } from "../../../application/use-cases/interfaces/auth/auth.interface";
+import { ICompleteSignupUseCase } from "../../../application/use-cases/interfaces/auth/complete-signup.interface";
+import { IResentOtpUseCase } from "../../../application/use-cases/interfaces/auth/resent-otp.interface";
+import logger from "../../../utils/logger";
+import { ILoginUseCase } from "../../../application/use-cases/interfaces/auth/login.interface";
+import { ITokenService } from "../../../domain/interfaces/services/token-service.interface";
+import { IGoogleAuthUseCase } from "../../../application/use-cases/interfaces/auth/google-auth.interface";
+import { IFindUserByemailUseCase } from "../../../application/use-cases/interfaces/auth/find-user-by-email.interface";
+import { IForgotPasswordUseCase } from "../../../application/use-cases/interfaces/auth/forgot-password.interface";
+import { IForgotPasswordOtpVerifyUseCase } from "../../../application/use-cases/interfaces/auth/forgot-password-otp-verify.interface";
+import { ICreateNewPasswordUseCase } from "../../../application/use-cases/interfaces/auth/create-new-password.interface";
+import { ICompanyFindUseCase } from "../../../application/use-cases/interfaces/auth/company-find.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { HttpStatus } from "../../constants/httpStatus";
+import { getRoleConfig } from "../../helpers/auth-role.helper";
+import { mapToSafeUser } from "../../../application/mappers/auth/auth.mapper";
+import { Status } from "../../../domain/enums/status.enum";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { ICompanyGoogleAuthUseCase } from "../../../application/use-cases/interfaces/auth/company-google-auth.interface";
 export class AuthController {
   constructor(
     private _registerUserUseCase: IAuthUseCase,
@@ -30,7 +30,8 @@ export class AuthController {
     private _forgotPasswordUseCase: IForgotPasswordUseCase,
     private _forgotPasswordOtpVerifyUseCase: IForgotPasswordOtpVerifyUseCase,
     private _createNewPasswordUseCase: ICreateNewPasswordUseCase,
-    private _companyFindUseCase: ICompanyFindUseCase
+    private _companyFindUseCase: ICompanyFindUseCase,
+    private _companyGoogleAuthUseCase: ICompanyGoogleAuthUseCase,
   ) {}
 
   //user register
@@ -52,7 +53,7 @@ export class AuthController {
   //verify otp
   verifyOtp = async (req: Request, res: Response): Promise<void> => {
     const { otp, name, email, password } = req.body;
-    logger.info('Verifying OTP', { email });
+    logger.info("Verifying OTP", { email });
     await this._completeSignupUseCase.execute(otp, name, email, password);
     res.status(HttpStatus.OK).json({
       success: true,
@@ -76,7 +77,7 @@ export class AuthController {
   // normal user signin and company admin signin into normal side
   signin = async (req: Request, res: Response): Promise<void> => {
     const { email, password, role } = req.body.data;
-    const user = await this._loginUseCase.execute(email, password, [role, 'companyAdmin']);
+    const user = await this._loginUseCase.execute(email, password, [role, "companyAdmin"]);
 
     if (!user || !user._id) {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.USER_DETAILS_NOT_FOUND);
@@ -92,15 +93,15 @@ export class AuthController {
     //remove password from user
     const safeUser = mapToSafeUser(user);
     //set refresh token in cookie
-    res.cookie('refresh_token', refreshToken, {
+    res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/user',
+      path: "/user",
     });
 
-    logger.info('User signed in successfully', { email });
+    logger.info("User signed in successfully", { email });
 
     res.status(HttpStatus.OK).json({
       success: true,
@@ -150,24 +151,24 @@ export class AuthController {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
     //generate access token
-    const accessToken = await this._tokenService.generateAccessToken(user._id.toString(), email, 'user', user?.CompanyId?.toString());
+    const accessToken = await this._tokenService.generateAccessToken(user._id.toString(), email, "user", user?.CompanyId?.toString());
     //generate refresh token
-    const refreshToken = await this._tokenService.generateRefreshToken(user._id.toString(), email, 'user', user?.CompanyId?.toString());
+    const refreshToken = await this._tokenService.generateRefreshToken(user._id.toString(), email, "user", user?.CompanyId?.toString());
 
     if (!accessToken || !refreshToken) {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
 
     const safeUser = mapToSafeUser(user);
-    res.cookie('refresh_token', refreshToken, {
+    res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/user',
+      path: "/user",
     });
 
-    logger.info('Google Authentication successful', { email });
+    logger.info("Google Authentication successful", { email });
 
     res.status(HttpStatus.OK).json({
       success: true,
@@ -176,6 +177,61 @@ export class AuthController {
       accessToken,
     });
   };
+
+  //company google auth
+  companyGoogleAuth = async (req: Request, res: Response): Promise<void> => {
+    const { name, email, googleId } = req.body;
+    if (!name || !email || !googleId || Object.keys(req.body).length === 0) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.REQUEST_BODY_MISSING);
+    }
+
+    const user = await this._companyGoogleAuthUseCase.execute(name, email);
+
+    if (!user || !user._id) {
+      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
+    }
+
+    const company = await this._companyFindUseCase.execute(user?.CompanyId!);
+
+    //generate access token
+    const accessToken = await this._tokenService.generateAccessToken(
+      user._id.toString(),
+      email,
+      user.role,
+      user?.CompanyId?.toString()
+    );
+    //generate refresh token
+    const refreshToken = await this._tokenService.generateRefreshToken(
+      user._id.toString(),
+      email,
+      user.role,
+      user?.CompanyId?.toString()
+    );
+
+    if (!accessToken || !refreshToken) {
+      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
+    }
+
+    const safeUser = mapToSafeUser(user);
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/company",
+    });
+
+    logger.info("Company Google Authentication successful", { email });
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.GOOGLE_LOGIN_SUCCESS,
+      user: safeUser,
+      accessToken,
+      company,
+    });
+  };
+
   // forgot-password user
   forgotPassword = async (req: Request, res: Response): Promise<void> => {
     const base = req.baseUrl;
@@ -189,7 +245,7 @@ export class AuthController {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
 
-    if (base.startsWith('/company') && !['companyUser', 'companyAdmin'].includes(user.role)) {
+    if (base.startsWith("/company") && !["companyUser", "companyAdmin"].includes(user.role)) {
       throw new CustomError(HttpStatus.FORBIDDEN, MESSAGES.ACCESS_DENIED_NOT_COMPANY);
     }
 
@@ -226,12 +282,11 @@ export class AuthController {
   //logout
   logout = async (req: Request, res: Response): Promise<void> => {
     const { tokenName, path } = getRoleConfig(req.baseUrl);
-    console.log(tokenName, path);
 
     res.clearCookie(tokenName, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       path,
     });
     res.status(HttpStatus.OK).json({
@@ -263,15 +318,15 @@ export class AuthController {
 
     const safeAdmin = mapToSafeUser(admin);
 
-    res.cookie('refresh_token', refreshToken, {
+    res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/admin',
+      path: "/admin",
     });
 
-    logger.info('Admin signed in successfully', { email });
+    logger.info("Admin signed in successfully", { email });
 
     res.status(HttpStatus.OK).json({
       success: true,
@@ -285,8 +340,7 @@ export class AuthController {
 
   companySignIn = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body.data;
-    const user = await this._loginUseCase.execute(email, password, ['companyAdmin', 'companyUser']);
-    console.log(user);
+    const user = await this._loginUseCase.execute(email, password, ["companyAdmin", "companyUser"]);
     if (!user || !user._id) {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
@@ -305,15 +359,15 @@ export class AuthController {
 
     const safeUser = mapToSafeUser(user);
 
-    res.cookie('refresh_token', refreshToken, {
+    res.cookie("refresh_token", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/company',
+      path: "/company",
     });
 
-    logger.info('Company signed in successfully', { email });
+    logger.info("Company signed in successfully", { email });
 
     res.status(HttpStatus.OK).json({
       success: true,

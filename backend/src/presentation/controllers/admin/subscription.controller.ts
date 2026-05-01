@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { ICreateSubscriptionPlanUseCase } from '../../../application/use-cases/interfaces/admin/create-subscription-plan.interface';
-import { IFetchNormalSubscriptionPlansUseCase } from '../../../application/use-cases/interfaces/admin/fetch-normal-subscription-plans.interface';
-import { IFetchCompanySubscriptionPlansUseCase } from '../../../application/use-cases/interfaces/admin/fetch-company-subscription-plans.interface';
-import { IUpdateSubscriptionPlanUseCase } from '../../../application/use-cases/interfaces/admin/update-subscription-plan.interface';
-import { IDeleteSubscriptionPlanUseCase } from '../../../application/use-cases/interfaces/admin/delete-subscription-plan.interface';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
-import logger from '../../../utils/logger';
+import { Request, Response } from "express";
+import { ICreateSubscriptionPlanUseCase } from "../../../application/use-cases/interfaces/admin/create-subscription-plan.interface";
+import { IFetchNormalSubscriptionPlansUseCase } from "../../../application/use-cases/interfaces/admin/fetch-normal-subscription-plans.interface";
+import { IFetchCompanySubscriptionPlansUseCase } from "../../../application/use-cases/interfaces/admin/fetch-company-subscription-plans.interface";
+import { IUpdateSubscriptionPlanUseCase } from "../../../application/use-cases/interfaces/admin/update-subscription-plan.interface";
+import { IDeleteSubscriptionPlanUseCase } from "../../../application/use-cases/interfaces/admin/delete-subscription-plan.interface";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
+import logger from "../../../utils/logger";
 
 export class SubscriptionController {
   constructor(

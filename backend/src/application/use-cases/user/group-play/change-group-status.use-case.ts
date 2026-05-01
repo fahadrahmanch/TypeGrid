@@ -1,8 +1,8 @@
-import { IGroupRepository } from '../../../../domain/interfaces/repository/user/group-repository.interface';
-import { IChangeGroupStatusUseCase } from '../../interfaces/user/group-play/change-group-status.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
+import { IChangeGroupStatusUseCase } from "../../interfaces/user/group-play/change-group-status.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class ChangeGroupStatusUseCase implements IChangeGroupStatusUseCase {
   constructor(private readonly _groupRepository: IGroupRepository) {}

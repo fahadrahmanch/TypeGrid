@@ -1,8 +1,8 @@
-import { IAchievementRepository } from '../../domain/interfaces/repository/user/achievement-repository.interface';
-import { IUserAchievementRepository } from '../../domain/interfaces/repository/user/user-achievement-repository.interface';
-import { IAchievementService } from '../../domain/interfaces/services/acheivment-service.interface';
-import { IStatsRepository } from '../../domain/interfaces/repository/user/stats-repository.interface';
-import { UserAchievementEntity } from '../../domain/entities/user-achievement.entity';
+import { IAchievementRepository } from "../../domain/interfaces/repository/user/achievement-repository.interface";
+import { IUserAchievementRepository } from "../../domain/interfaces/repository/user/user-achievement-repository.interface";
+import { IAchievementService } from "../../domain/interfaces/services/acheivment-service.interface";
+import { IStatsRepository } from "../../domain/interfaces/repository/user/stats-repository.interface";
+import { UserAchievementEntity } from "../../domain/entities/user-achievement.entity";
 export class AchievementService implements IAchievementService {
   constructor(
     private achievementRepo: IAchievementRepository,

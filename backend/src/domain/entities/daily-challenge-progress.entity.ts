@@ -3,7 +3,7 @@ export type DailyChallengeProgressProps = {
   userId: string;
   dailyChallengeId: string;
   date: Date;
-  status: 'not_started' | 'in_progress' | 'completed' | 'failed';
+  status: "not_started" | "in_progress" | "completed" | "failed";
   wpm: number;
   accuracy: number;
   xpEarned: number;
@@ -18,7 +18,7 @@ export class DailyChallengeProgressEntity {
   private userId: string;
   private dailyChallengeId: string;
   private date: Date;
-  private status: 'not_started' | 'in_progress' | 'completed' | 'failed';
+  private status: "not_started" | "in_progress" | "completed" | "failed";
   private wpm: number;
   private accuracy: number;
   private xpEarned: number;
@@ -42,7 +42,7 @@ export class DailyChallengeProgressEntity {
     this.updatedAt = attrs.updatedAt;
   }
 
-  setStatus(status: 'not_started' | 'in_progress' | 'completed' | 'failed') {
+  setStatus(status: "not_started" | "in_progress" | "completed" | "failed") {
     this.status = status;
   }
   setWpm(wpm: number) {
@@ -76,7 +76,7 @@ export class DailyChallengeProgressEntity {
   getDate(): Date {
     return this.date;
   }
-  getStatus(): 'not_started' | 'in_progress' | 'completed' | 'failed' {
+  getStatus(): "not_started" | "in_progress" | "completed" | "failed" {
     return this.status;
   }
   getWpm(): number {

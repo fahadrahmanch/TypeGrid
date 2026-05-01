@@ -1,11 +1,11 @@
-import { Response } from 'express';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { ICreateSubscriptionSessionUseCase } from '../../../application/use-cases/interfaces/user/subsciption/create-subscription-session.interface';
-import { IConfirmSubscriptionUseCase } from '../../../application/use-cases/interfaces/user/subsciption/confirm-subscription.interface';
-import { IConfirmCompanySubscriptionUseCase } from '../../../application/use-cases/interfaces/admin/confirm-company-subscription.interface';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Response } from "express";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { ICreateSubscriptionSessionUseCase } from "../../../application/use-cases/interfaces/user/subsciption/create-subscription-session.interface";
+import { IConfirmSubscriptionUseCase } from "../../../application/use-cases/interfaces/user/subsciption/confirm-subscription.interface";
+import { IConfirmCompanySubscriptionUseCase } from "../../../application/use-cases/interfaces/admin/confirm-company-subscription.interface";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class PaymentController {
   constructor(
@@ -55,7 +55,7 @@ export class PaymentController {
   };
 
   confirmSubscription = async (req: AuthRequest, res: Response): Promise<void> => {
-    const { planId } = req.body;
+    const { planId, providerTransactionId } = req.body;
     const userId = req.user?.userId;
 
     if (!userId) {
@@ -66,7 +66,7 @@ export class PaymentController {
       throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
     }
 
-    await this._confirmSubscriptionUseCase.execute(userId, planId);
+    await this._confirmSubscriptionUseCase.execute(userId, planId, providerTransactionId);
 
     res.status(HttpStatus.OK).json({
       success: true,
@@ -74,7 +74,7 @@ export class PaymentController {
     });
   };
   confirmCompanySubscription = async (req: AuthRequest, res: Response): Promise<void> => {
-    const { planId } = req.body;
+    const { planId, providerTransactionId } = req.body;
     const userId = req.user?.userId;
 
     if (!userId) {
@@ -85,7 +85,7 @@ export class PaymentController {
       throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.PLAN_ID_REQUIRED);
     }
 
-    await this._confirmCompanySubscriptionUseCase.execute(userId, planId);
+    await this._confirmCompanySubscriptionUseCase.execute(userId, planId, providerTransactionId);
 
     res.status(HttpStatus.OK).json({
       success: true,

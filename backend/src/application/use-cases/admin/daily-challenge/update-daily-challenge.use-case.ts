@@ -1,9 +1,9 @@
-import { IUpdateDailyAssignChallengeUseCase } from '../../interfaces/admin/update-daily-challenge.interface';
-import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
-import { DailyAssignChallengeResponseDTO } from '../../../DTOs/admin/daily-challenge.dto';
-import { DailyAssignChallengeMapper } from '../../../mappers/admin/daily-assign-challenge.mapper';
-import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IUpdateDailyAssignChallengeUseCase } from "../../interfaces/admin/update-daily-challenge.interface";
+import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
+import { DailyAssignChallengeResponseDTO } from "../../../DTOs/admin/daily-challenge.dto";
+import { DailyAssignChallengeMapper } from "../../../mappers/admin/daily-assign-challenge.mapper";
+import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class UpdateDailyAssignChallengeUseCase implements IUpdateDailyAssignChallengeUseCase {
   constructor(

@@ -1,8 +1,8 @@
-import { IDeleteChallengeUseCase } from '../../interfaces/admin/delete-challenge.interface';
-import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IDeleteChallengeUseCase } from "../../interfaces/admin/delete-challenge.interface";
+import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class DeleteChallengeUseCase implements IDeleteChallengeUseCase {
   constructor(private readonly _challengeRepository: IChallengeRepository) {}

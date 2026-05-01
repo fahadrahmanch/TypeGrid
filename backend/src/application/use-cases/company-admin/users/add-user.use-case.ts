@@ -1,15 +1,15 @@
-import { IAddUserUseCase } from '../../interfaces/companyAdmin/add-user.interface';
-import { AuthUserEntity } from '../../../../domain/entities';
-import { IHashService } from '../../../../domain/interfaces/services/hash-service.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { AddUserDTO } from '../../../DTOs/companyAdmin/add-uset.dto';
-import { IAuthRepository } from '../../../../domain/interfaces/repository/user/auth-repository.interface';
-import { ICompanyRepository } from '../../../../domain/interfaces/repository/company/company-repository.interface';
-import { IUserSubscriptionRepository } from '../../../../domain/interfaces/repository/user/user-subscription.repository.interface';
-import { ISubscriptionPlanRepository } from '../../../../domain/interfaces/repository/admin/subscription-plan.repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { IAddUserUseCase } from "../../interfaces/companyAdmin/add-user.interface";
+import { AuthUserEntity } from "../../../../domain/entities";
+import { IHashService } from "../../../../domain/interfaces/services/hash-service.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { AddUserDTO } from "../../../DTOs/companyAdmin/add-uset.dto";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
+import { IUserSubscriptionRepository } from "../../../../domain/interfaces/repository/user/user-subscription.repository.interface";
+import { ISubscriptionPlanRepository } from "../../../../domain/interfaces/repository/admin/subscription-plan.repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 
 /**
  * Use case responsible for creating a new company user.
@@ -34,11 +34,11 @@ export class AddUserUseCase implements IAddUserUseCase {
     if (!company) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPANY_NOT_FOUND);
     }
-    if (company.status !== 'active') {
+    if (company.status !== "active") {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.COMPANY_ACCOUNT_INACTIVE);
     }
 
-    const ownerSubscription = await this._userSubscriptionRepository.findActive(company.OwnerId!);
+    const ownerSubscription = await this._userSubscriptionRepository.findCompanyActive(company.OwnerId!);
     if (!ownerSubscription) {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.SUBSCRIPTION_NOT_FOUND);
     }
@@ -55,8 +55,8 @@ export class AddUserUseCase implements IAddUserUseCase {
 
     const userLimit = subscriptionPlan.getUserLimit();
     if (userLimit !== undefined) {
-      const currentUsers = await this._userRepository.getCompanyUsers('', data.CompanyId);
-      if (currentUsers.length >= userLimit) {
+      const currentUsers = await this._userRepository.getCompanyUsers("", data.CompanyId);
+      if (currentUsers.total >= userLimit) {
         throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_LIMIT_REACHED);
       }
     }
@@ -73,9 +73,9 @@ export class AddUserUseCase implements IAddUserUseCase {
       email: data.email,
       password: hashedPassword,
       CompanyId: data.CompanyId,
-      role: data.role || 'companyUser',
-      KeyBoardLayout: 'QWERTY',
-      status: 'active',
+      role: data.role || "companyUser",
+      KeyBoardLayout: "QWERTY",
+      status: "active",
     });
 
     return await this._authRepository.create(newUser);

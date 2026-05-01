@@ -24,7 +24,6 @@ export class CreateCommentUseCase implements ICreateCommentUseCase {
       content,
       replies: [],
     });
-    console.log("comment", comment);
 
     await this._commentRepository.create(comment);
   }

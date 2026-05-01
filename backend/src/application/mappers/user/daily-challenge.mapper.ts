@@ -1,6 +1,6 @@
 // application/mappers/daily-challenge.mapper.ts
 
-import { DailyChallengeResponseDTO } from '../../DTOs/user/daily-challenge.dto';
+import { DailyChallengeResponseDTO } from "../../DTOs/user/daily-challenge.dto";
 
 type DailyChallengeObject = {
   _id?: string;
@@ -44,7 +44,7 @@ export function mapToGoalResponseDTO(
       title: challenge.title,
       description: challenge.description,
       duration: challenge.duration,
-      lesson: challenge.lesson || '',
+      lesson: challenge.lesson || "",
       difficulty: challenge.difficulty,
       startedAt: new Date(),
     },

@@ -1,7 +1,7 @@
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
-import { IDeleteCompanyGroupUseCase } from '../../interfaces/companyAdmin/delete-company-group.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
+import { IDeleteCompanyGroupUseCase } from "../../interfaces/companyAdmin/delete-company-group.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class DeleteCompanyGroupUseCase implements IDeleteCompanyGroupUseCase {
   constructor(

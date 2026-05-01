@@ -1,4 +1,4 @@
-import { IFinishContestUseCase } from '../../application/use-cases/interfaces/companyUser/finish-contest.interface';
+import { IFinishContestUseCase } from "../../application/use-cases/interfaces/companyUser/finish-contest.interface";
 
 export class ContestSocketController {
   constructor(private _finishContestUseCase: IFinishContestUseCase) {}

@@ -1,4 +1,4 @@
-import { CompetitionDTOQuickPlay, CompetitionMember } from '../../DTOs/user/competition-quick-play.dto';
+import { CompetitionDTOQuickPlay, CompetitionMember } from "../../DTOs/user/competition-quick-play.dto";
 
 export interface PopulatedQuickCompetitionPayload {
   _id: any;
@@ -28,7 +28,7 @@ export const mapCompetitionToDTOQuickPlay = (
     mode: competition.mode,
     status: competition.status,
     duration: competition.duration,
-    startedAt: competition.startedAt ? competition.startedAt.toString() : '',
+    startedAt: competition.startedAt ? competition.startedAt.toString() : "",
     countDown: competition.countDown,
     lesson: {
       id: competition.lesson._id!.toString(),
@@ -39,7 +39,7 @@ export const mapCompetitionToDTOQuickPlay = (
     participants: competition.participants.map((user) => ({
       _id: user._id!.toString(),
       name: user.name,
-      imageUrl: user.imageUrl || '',
+      imageUrl: user.imageUrl || "",
     })),
   };
 };
@@ -48,6 +48,6 @@ export const mapQuickMemberToDTO = (user: { _id: any; name: string; imageUrl?: s
   return {
     _id: user._id,
     name: user.name,
-    imageUrl: user.imageUrl || '',
+    imageUrl: user.imageUrl || "",
   };
 };

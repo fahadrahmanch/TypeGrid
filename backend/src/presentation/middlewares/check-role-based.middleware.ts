@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 export function checkRoleBasedMiddleware(allowedRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {

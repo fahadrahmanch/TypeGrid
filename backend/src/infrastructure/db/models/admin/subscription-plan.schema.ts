@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { ISubscriptionPlanDocument } from '../../types/documents';
+import mongoose from "mongoose";
+import { ISubscriptionPlanDocument } from "../../types/documents";
 
 const subscriptionPlanSchema = new mongoose.Schema<ISubscriptionPlanDocument>(
   {
@@ -26,7 +26,7 @@ const subscriptionPlanSchema = new mongoose.Schema<ISubscriptionPlanDocument>(
 
     type: {
       type: String,
-      enum: ['normal', 'company'],
+      enum: ["normal", "company"],
       required: true,
     },
 
@@ -38,4 +38,4 @@ const subscriptionPlanSchema = new mongoose.Schema<ISubscriptionPlanDocument>(
   { timestamps: true }
 );
 
-export const SubscriptionPlan = mongoose.model<ISubscriptionPlanDocument>('SubscriptionPlan', subscriptionPlanSchema);
+export const SubscriptionPlan = mongoose.model<ISubscriptionPlanDocument>("SubscriptionPlan", subscriptionPlanSchema);

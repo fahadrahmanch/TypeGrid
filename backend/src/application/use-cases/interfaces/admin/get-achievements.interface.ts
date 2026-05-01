@@ -1,4 +1,4 @@
-import { AchievementResponseDTO } from '../../../DTOs/admin/achievement.dto';
+import { AchievementResponseDTO } from "../../../DTOs/admin/achievement.dto";
 
 export interface IGetAchievementsUseCase {
   execute(

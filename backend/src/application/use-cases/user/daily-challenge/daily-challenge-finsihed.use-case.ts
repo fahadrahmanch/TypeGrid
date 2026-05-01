@@ -1,15 +1,15 @@
-import { IDailyChallengeFinishedUseCase } from '../../interfaces/user/daily-challenge/daily-challenge-finished.interface';
-import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { IDailyChallengeProgressRepository } from '../../../../domain/interfaces/repository/user/daily-challenge-progress-repository.interface';
-import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
-import { IGoalRepository } from '../../../../domain/interfaces/repository/admin/goal-repository.interface';
-import { IRewardRepository } from '../../../../domain/interfaces/repository/admin/reward-repository.interface';
-import { DailyChallengeProgressEntity } from '../../../../domain/entities/daily-challenge-progress.entity';
-import { IStreakRepository } from '../../../../domain/interfaces/repository/user/streak-repository.interface';
-import { StreakEntity } from '../../../../domain/entities/streak.entity';
-import { IStatsRepository } from '../../../../domain/interfaces/repository/user/stats-repository.interface';
-import { StatsEntity } from '../../../../domain/entities/stats.entity';
+import { IDailyChallengeFinishedUseCase } from "../../interfaces/user/daily-challenge/daily-challenge-finished.interface";
+import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { IDailyChallengeProgressRepository } from "../../../../domain/interfaces/repository/user/daily-challenge-progress-repository.interface";
+import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { IGoalRepository } from "../../../../domain/interfaces/repository/admin/goal-repository.interface";
+import { IRewardRepository } from "../../../../domain/interfaces/repository/admin/reward-repository.interface";
+import { DailyChallengeProgressEntity } from "../../../../domain/entities/daily-challenge-progress.entity";
+import { IStreakRepository } from "../../../../domain/interfaces/repository/user/streak-repository.interface";
+import { StreakEntity } from "../../../../domain/entities/streak.entity";
+import { IStatsRepository } from "../../../../domain/interfaces/repository/user/stats-repository.interface";
+import { StatsEntity } from "../../../../domain/entities/stats.entity";
 export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUseCase {
   constructor(
     private readonly _dailyChallengeRepository: IDailyAssignChallengeRepository,
@@ -48,7 +48,7 @@ export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUse
       dailyChallengeId: dailyChallenge.getId(),
       date: { $gte: startOfDay, $lte: endOfDay },
     });
-    const wasAlreadyCompleted = dailyChallengeProgress?.getStatus() === 'completed';
+    const wasAlreadyCompleted = dailyChallengeProgress?.getStatus() === "completed";
 
     if (wasAlreadyCompleted) return;
     if (!dailyChallengeProgress) {
@@ -56,7 +56,7 @@ export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUse
         userId,
         dailyChallengeId: dailyChallenge.getId()!,
         date: today,
-        status: isComplete ? 'completed' : 'in_progress',
+        status: isComplete ? "completed" : "in_progress",
         wpm,
         accuracy,
         xpEarned: isComplete ? reward.getXp() : 0,
@@ -65,11 +65,11 @@ export class DailyChallengeFinishedUseCase implements IDailyChallengeFinishedUse
       });
       await this._dailyChallengeProgressRepository.create(dailyChallengeProgress);
     } else {
-      dailyChallengeProgress.setStatus(isComplete ? 'completed' : 'in_progress');
+      dailyChallengeProgress.setStatus(isComplete ? "completed" : "in_progress");
       dailyChallengeProgress.setWpm(wpm);
       dailyChallengeProgress.setAccuracy(accuracy);
       dailyChallengeProgress.setXpEarned(isComplete ? reward.getXp() : 0);
-      dailyChallengeProgress.setStatus(isComplete ? 'completed' : 'in_progress');
+      dailyChallengeProgress.setStatus(isComplete ? "completed" : "in_progress");
       dailyChallengeProgress.setCompletedAt(today);
       await this._dailyChallengeProgressRepository.update(dailyChallengeProgress);
     }

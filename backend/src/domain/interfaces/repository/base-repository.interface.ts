@@ -17,4 +17,9 @@ export interface IBaseRepository<TEntity> {
   findOne(filter?: any): Promise<TEntity | null>;
   delete(_id: string): Promise<TEntity | null>;
   updateById(_id: string, updateQuery: any): Promise<TEntity | null>;
+  deleteMany(filter: any): Promise<void>;
+  countDocuments(filter?: any): Promise<number>;
+  aggregate(pipeline: any[]): Promise<any[]>;
 }
+
+

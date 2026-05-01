@@ -1,17 +1,17 @@
-import { Response } from 'express';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { IIndividualNotificationUseCase } from '../../../application/use-cases/interfaces/companyAdmin/individual-notification.interface';
-import { IGroupNotificationUseCase } from '../../../application/use-cases/interfaces/companyAdmin/group-notification.interface';
-import { IAllNotificationUseCase } from '../../../application/use-cases/interfaces/companyAdmin/all-notification.interface';
-import { INotificationHistoryUseCase } from '../../../application/use-cases/interfaces/companyAdmin/notification-history.interface';
+import { Response } from "express";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { IIndividualNotificationUseCase } from "../../../application/use-cases/interfaces/companyAdmin/individual-notification.interface";
+import { IGroupNotificationUseCase } from "../../../application/use-cases/interfaces/companyAdmin/group-notification.interface";
+import { IAllNotificationUseCase } from "../../../application/use-cases/interfaces/companyAdmin/all-notification.interface";
+import { INotificationHistoryUseCase } from "../../../application/use-cases/interfaces/companyAdmin/notification-history.interface";
 import {
   IndividualNotificationDTO,
   GroupNotificationDTO,
   AllNotificationDTO,
-} from '../../../application/DTOs/companyAdmin/notification.dto';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+} from "../../../application/DTOs/companyAdmin/notification.dto";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class NotificationController {
   constructor(

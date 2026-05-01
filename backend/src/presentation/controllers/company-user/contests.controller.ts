@@ -1,14 +1,14 @@
-import { Response } from 'express';
-import logger from '../../../utils/logger';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IGetOpenContestsUseCase } from '../../../application/use-cases/interfaces/companyUser/get-open-contests.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IJoinOrLeaveContestUseCase } from '../../../application/use-cases/interfaces/companyUser/join-or-leave-contest.interface';
-import { IGetGroupContestsUseCase } from '../../../application/use-cases/interfaces/companyUser/get-group-contest.interface';
-import { IGetContestUseCase } from '../../../application/use-cases/interfaces/companyUser/get-contest.interface';
-import { IGetContestDataUseCase } from '../../../application/use-cases/interfaces/companyUser/get-contest-data.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Response } from "express";
+import logger from "../../../utils/logger";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IGetOpenContestsUseCase } from "../../../application/use-cases/interfaces/companyUser/get-open-contests.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IJoinOrLeaveContestUseCase } from "../../../application/use-cases/interfaces/companyUser/join-or-leave-contest.interface";
+import { IGetGroupContestsUseCase } from "../../../application/use-cases/interfaces/companyUser/get-group-contest.interface";
+import { IGetContestUseCase } from "../../../application/use-cases/interfaces/companyUser/get-contest.interface";
+import { IGetContestDataUseCase } from "../../../application/use-cases/interfaces/companyUser/get-contest-data.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 export class ContestsController {
   constructor(
     private readonly _getOpenContestsUseCase: IGetOpenContestsUseCase,
@@ -83,13 +83,13 @@ export class ContestsController {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
     const contest = await this._joinOrLeaveContestUseCase.execute(userId, contestId, action);
-    logger.info(action === 'join' ? MESSAGES.CONTEST_JOINED_SUCCESS : MESSAGES.CONTEST_LEAVED_SUCCESS, {
+    logger.info(action === "join" ? MESSAGES.CONTEST_JOINED_SUCCESS : MESSAGES.CONTEST_LEAVED_SUCCESS, {
       userId,
       contestId,
     });
     res.status(HttpStatus.OK).json({
       success: true,
-      message: action === 'join' ? MESSAGES.CONTEST_JOINED_SUCCESS : MESSAGES.CONTEST_LEAVED_SUCCESS,
+      message: action === "join" ? MESSAGES.CONTEST_JOINED_SUCCESS : MESSAGES.CONTEST_LEAVED_SUCCESS,
       data: contest,
     });
   };

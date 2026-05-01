@@ -1,9 +1,9 @@
-import { IFinishQuickPlayResult } from '../../application/use-cases/interfaces/user/quick-play/finish-quick-play-result.interface';
-import logger from '../../utils/logger';
-import { IGetJoinMemberUseCase } from '../../application/use-cases/interfaces/user/quick-play/get-quick-play-data.interface';
-import { QuicKPlayResult } from '../../application/DTOs/user/competition-quick-play.dto';
-import { MESSAGES } from '../../domain/constants/messages';
-import { ILeaveQuickPlayUseCase } from '../../application/use-cases/interfaces/user/quick-play/leave-quick-play.interface';
+import { IFinishQuickPlayResult } from "../../application/use-cases/interfaces/user/quick-play/finish-quick-play-result.interface";
+import logger from "../../utils/logger";
+import { IGetJoinMemberUseCase } from "../../application/use-cases/interfaces/user/quick-play/get-quick-play-data.interface";
+import { QuicKPlayResult } from "../../application/DTOs/user/competition-quick-play.dto";
+import { MESSAGES } from "../../domain/constants/messages";
+import { ILeaveQuickPlayUseCase } from "../../application/use-cases/interfaces/user/quick-play/leave-quick-play.interface";
 export class QuickSocketController {
   constructor(
     private readonly _getJoinMemberUseCase: IGetJoinMemberUseCase,
@@ -13,7 +13,7 @@ export class QuickSocketController {
 
   async getQuickPlayData(competitionId: string, userId: string) {
     if (!competitionId || !userId) {
-      throw new Error('competitionId or userId missing');
+      throw new Error("competitionId or userId missing");
     }
     const member = await this._getJoinMemberUseCase.execute(competitionId, userId);
 
@@ -23,7 +23,7 @@ export class QuickSocketController {
     try {
       await this._finishQuickPlayResultUseCase.execute(gameId, resultArray);
     } catch (error: any) {
-      logger.error('Error in saveQuickPlayResult socket handler', {
+      logger.error("Error in saveQuickPlayResult socket handler", {
         error: error.message,
         stack: error.stack,
         gameId,
@@ -38,7 +38,7 @@ export class QuickSocketController {
       }
       await this._leaveQuickPlayUseCase.execute(gameId, userId);
     } catch (error: any) {
-      logger.error('Error in leaveQuickPlay socket handler', {
+      logger.error("Error in leaveQuickPlay socket handler", {
         error: error.message,
         stack: error.stack,
         gameId,

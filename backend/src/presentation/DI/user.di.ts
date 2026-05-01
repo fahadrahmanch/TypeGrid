@@ -1,97 +1,102 @@
-import { CompanyRequestController } from '../controllers/user/company-request.controller';
-import { CompanyRequestUseCase } from '../../application/use-cases/user/company-request.use-case';
-import { CompanyRepository } from '../../infrastructure/db/repositories/company/company.repository';
-import { UserRepository } from '../../infrastructure/db/repositories/user/user.repository';
-import { LessonRepository } from '../../infrastructure/db/repositories/admin/lesson.repository';
-import { CompetitionRepository } from '../../infrastructure/db/repositories/user/competition.repository';
-import { GroupRepository } from '../../infrastructure/db/repositories/user/group.repository';
-import { ResultRepository } from '../../infrastructure/db/repositories/user/result.repository';
-import { Company } from '../../infrastructure/db/models/company/company.schema';
-import { UserController } from '../controllers/user/user.controller';
-import { TokenService } from '../../application/services/token.service';
-import { FindUserUseCase } from '../../application/use-cases/user/find-user.use-case';
-import { User } from '../../infrastructure/db/models/user/user.schema';
-import { UpdateUserUseCase } from '../../application/use-cases/user/update-user.use-case';
-import { GetCompanyUseCase } from '../../application/use-cases/user/get-company.use-case';
-import { ICheckUserCompanyUseCase } from '../../application/use-cases/interfaces/user/check-user-company.interface';
-import { CheckUserCompanyUseCase } from '../../application/use-cases/user/check-user-company.use-case';
-import { CompanyReApplyUseCase } from '../../application/use-cases/user/company-re-apply.use-case';
-import { TypingPracticeController } from '../controllers/user/typing-practice.controller';
-import { GetPracticeTypingContentUseCase } from '../../application/use-cases/user/typing-practice/get-practice-typing-content.use-case';
-import { Lesson } from '../../infrastructure/db/models/admin/lesson.schema';
-import { GroupPlayController } from '../controllers/user/group-play.controller';
-import { CreateGroupPlayRoomUseCase } from '../../application/use-cases/user/group-play/create-group-play-group.use-case';
-import { Group } from '../../infrastructure/db/models/user/group.schema';
-import { GetGroupPlayGroupUseCase } from '../../application/use-cases/user/group-play/get-group-play-group.use-case';
-import { EditGroupUseCase } from '../../application/use-cases/user/group-play/edit-group.use-case';
-import { JoinGroupPlayGroupUseCase } from '../../application/use-cases/user/group-play/join-group-play-group.use-case';
-import { RemoveMemberGroupPlayGroupUseCase } from '../../application/use-cases/user/group-play/remove-member-group-play-group.use-case';
-import { StartGameGroupPlayGroupUseCase } from '../../application/use-cases/user/group-play/start-game-group-play-group.use-case';
-import { Competition } from '../../infrastructure/db/models/user/competition.schema';
-import { ChangeGroupStatusUseCase } from '../../application/use-cases/user/group-play/change-group-status.use-case';
-import { SoloPlayController } from '../controllers/user/solo-play.controller';
-import { CreateSoloPlayUseCase } from '../../application/use-cases/user/solo-play/create-solo-play.use-case';
-import { SoloPlayResultUseCase } from '../../application/use-cases/user/solo-play/solo-play-result.use-case';
-import { Result } from '../../infrastructure/db/models/user/result.schema';
-import { NewGroupPlayUseCase } from '../../application/use-cases/user/group-play/new-group-play.use-case';
-import { QuickPlayController } from '../controllers/user/quick-play.controller';
-import { StartQuickPlayUseCase } from '../../application/use-cases/user/quick-play/start-quick-play.use-case';
-import { ChangeStatusUseCase } from '../../application/use-cases/user/quick-play/change-status.use-case';
-import { ChangePasswordUseCase } from '../../application/use-cases/user/change-password.use-case';
-import { HashService } from '../../application/services/hash.service';
-import { AuthRepository } from '../../infrastructure/db/repositories/auth/auth.repository';
-import { GetTodayChallengeUseCase } from '../../application/use-cases/user/daily-challenge/get-daily-challenge.use-case';
-import { DailyAssignChallengeRepository } from '../../infrastructure/db/repositories/admin/daily-challenge.repository';
-import { DailyChallenge } from '../../infrastructure/db/models/admin/daily-challenge.schema';
-import { DailyChallengeController } from '../controllers/user/daily-challenge.controller';
-import { ChallengeRepository } from '../../infrastructure/db/repositories/admin/challenge.repository';
-import { AdminChallenge } from '../../infrastructure/db/models/admin/challenge.schema';
-import { GoalRepository } from '../../infrastructure/db/repositories/admin/goal.repository';
-import { Goal } from '../../infrastructure/db/models/admin/goal.schema';
-import { RewardRepository } from '../../infrastructure/db/repositories/admin/reward.repository';
-import { Reward } from '../../infrastructure/db/models/admin/reward.schema';
-import { StreakRepository } from '../../infrastructure/db/repositories/user/streak.repository';
-import { Streak } from '../../infrastructure/db/models/user/streak.schema';
-import { DailyChallengeProgress } from '../../infrastructure/db/models/user/daily-challenge-progess.schema';
-import { DailyChallengeProgressRepository } from '../../infrastructure/db/repositories/user/daily-challenge-progress.repository';
-import { DailyChallengeFinishedUseCase } from '../../application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case';
-import { GetDailyChallengeStatsUseCase } from '../../application/use-cases/user/daily-challenge/get-daily-challenge-stats.use-case';
-import { StatsRepository } from '../../infrastructure/db/repositories/user/stats.repository';
-import { StatsModel } from '../../infrastructure/db/models/stats.schema';
-import { GetLeaderboardUseCase } from '../../application/use-cases/user/leaderboard/get-leaderboard.use-case';
-import { LeaderboardController } from '../controllers/user/leaderboard.controller';
-import { SubscriptionController } from '../controllers/user/subscription.controller';
-import { SubscriptionPlanRepository } from '../../infrastructure/db/repositories/admin/subscription-plan.repository';
-import { SubscriptionPlan } from '../../infrastructure/db/models/admin/subscription-plan.schema';
-import { GetNormalPlansUseCase } from '../../application/use-cases/user/subsciption/get-normal-plans.use-case';
-import { GetCompanyPlansUseCase } from '../../application/use-cases/user/subsciption/get-company-plans.use-case';
-import { CreateSubscriptionSessionUseCase } from '../../application/use-cases/user/subsciption/create-subscription-session.use-case';
-import { ConfirmSubscriptionUseCase } from '../../application/use-cases/user/subsciption/confirm-subscription.use-case';
-import { GetSubscriptionDetailsUseCase } from '../../application/use-cases/user/subsciption/get-subscription-details.use-case';
-import { UserSubscriptionRepository } from '../../infrastructure/db/repositories/user/user-subscription.repository';
-import { UserSubscription } from '../../infrastructure/db/models/user/user.subscription.schema';
-import { StripeService } from '../../infrastructure/services/stripe.service';
-import { PaymentController } from '../controllers/user/payment.controller';
-import { CheckFeatureAccessUseCase } from '../../application/use-cases/user/check-feature-access-use.case';
-import { createCheckFeature } from '../middlewares/check-feature.middleware';
-import { ConfirmCompanySubscriptionUseCase } from '../../application/use-cases/user/subsciption/confirm-company-subcription.use-case';
-import { AchievementRepository } from '../../infrastructure/db/repositories/user/achievement.repository';
-import { UserAchievementRepository } from '../../infrastructure/db/repositories/user/user-achievement.repository';
-import { AchievementModel } from '../../infrastructure/db/models/admin/acheivment.schema';
-import { UserAchievement } from '../../infrastructure/db/models/user/user-achievement.schema';
-import { AchievementService } from '../../application/services/achievement.service';
-import { GetAllAchievementsUseCase } from '../../application/use-cases/user/achievements/get-all-achievements.use-case';
-import { UserAchievementController } from '../controllers/user/user-achievment.controller';
-import { Discussion } from '../../infrastructure/db/models/user/discussion.schema';
-import { DiscussionRepository } from '../../infrastructure/db/repositories/user/discussion.repository';
-import { Comment } from '../../infrastructure/db/models/user/comment.schema';
-import { CommentRepository } from '../../infrastructure/db/repositories/user/comment.repository';
-import { CreatePostUseCase } from '../../application/use-cases/user/discussions/create-post.use-case';
-import { GetAllDiscussionsUseCase } from '../../application/use-cases/user/discussions/get-all-discussions.use-case';
-import { GetDiscussionByIdUseCase } from '../../application/use-cases/user/discussions/get-discussion-by-id.use-case';
-import { CreateCommentUseCase } from '../../application/use-cases/user/discussions/create-comment.use-case';
-import { CreateReplyUseCase } from '../../application/use-cases/user/discussions/create-reply.use-case';
-import { DiscussionController } from '../controllers/user/discussion.controller';
+import { CompanyRequestController } from "../controllers/user/company-request.controller";
+import { CompanyRequestUseCase } from "../../application/use-cases/user/company-request.use-case";
+import { CompanyRepository } from "../../infrastructure/db/repositories/company/company.repository";
+import { UserRepository } from "../../infrastructure/db/repositories/user/user.repository";
+import { LessonRepository } from "../../infrastructure/db/repositories/admin/lesson.repository";
+import { CompetitionRepository } from "../../infrastructure/db/repositories/user/competition.repository";
+import { GroupRepository } from "../../infrastructure/db/repositories/user/group.repository";
+import { ResultRepository } from "../../infrastructure/db/repositories/user/result.repository";
+import { Company } from "../../infrastructure/db/models/company/company.schema";
+import { UserController } from "../controllers/user/user.controller";
+import { TokenService } from "../../application/services/token.service";
+import { FindUserUseCase } from "../../application/use-cases/user/find-user.use-case";
+import { FindUserWithStatsUseCase } from "../../application/use-cases/user/find-user-with-stats.use-case";
+import { User } from "../../infrastructure/db/models/user/user.schema";
+import { UpdateUserUseCase } from "../../application/use-cases/user/update-user.use-case";
+import { GetCompanyUseCase } from "../../application/use-cases/user/get-company.use-case";
+import { CheckUserCompanyUseCase } from "../../application/use-cases/user/check-user-company.use-case";
+import { CompanyReApplyUseCase } from "../../application/use-cases/user/company-re-apply.use-case";
+import { TypingPracticeController } from "../controllers/user/typing-practice.controller";
+import { GetPracticeTypingContentUseCase } from "../../application/use-cases/user/typing-practice/get-practice-typing-content.use-case";
+import { Lesson } from "../../infrastructure/db/models/admin/lesson.schema";
+import { GroupPlayController } from "../controllers/user/group-play.controller";
+import { CreateGroupPlayRoomUseCase } from "../../application/use-cases/user/group-play/create-group-play-group.use-case";
+import { Group } from "../../infrastructure/db/models/user/group.schema";
+import { GetGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/get-group-play-group.use-case";
+import { EditGroupUseCase } from "../../application/use-cases/user/group-play/edit-group.use-case";
+import { JoinGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/join-group-play-group.use-case";
+import { RemoveMemberGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/remove-member-group-play-group.use-case";
+import { StartGameGroupPlayGroupUseCase } from "../../application/use-cases/user/group-play/start-game-group-play-group.use-case";
+import { Competition } from "../../infrastructure/db/models/user/competition.schema";
+import { ChangeGroupStatusUseCase } from "../../application/use-cases/user/group-play/change-group-status.use-case";
+import { SoloPlayController } from "../controllers/user/solo-play.controller";
+import { CreateSoloPlayUseCase } from "../../application/use-cases/user/solo-play/create-solo-play.use-case";
+import { SoloPlayResultUseCase } from "../../application/use-cases/user/solo-play/solo-play-result.use-case";
+import { Result } from "../../infrastructure/db/models/user/result.schema";
+import { NewGroupPlayUseCase } from "../../application/use-cases/user/group-play/new-group-play.use-case";
+import { QuickPlayController } from "../controllers/user/quick-play.controller";
+import { StartQuickPlayUseCase } from "../../application/use-cases/user/quick-play/start-quick-play.use-case";
+import { ChangeStatusUseCase } from "../../application/use-cases/user/quick-play/change-status.use-case";
+import { ChangePasswordUseCase } from "../../application/use-cases/user/change-password.use-case";
+import { HashService } from "../../application/services/hash.service";
+import { AuthRepository } from "../../infrastructure/db/repositories/auth/auth.repository";
+import { GetTodayChallengeUseCase } from "../../application/use-cases/user/daily-challenge/get-daily-challenge.use-case";
+import { DailyAssignChallengeRepository } from "../../infrastructure/db/repositories/admin/daily-challenge.repository";
+import { DailyChallenge } from "../../infrastructure/db/models/admin/daily-challenge.schema";
+import { DailyChallengeController } from "../controllers/user/daily-challenge.controller";
+import { ChallengeRepository } from "../../infrastructure/db/repositories/admin/challenge.repository";
+import { AdminChallenge } from "../../infrastructure/db/models/admin/challenge.schema";
+import { GoalRepository } from "../../infrastructure/db/repositories/admin/goal.repository";
+import { Goal } from "../../infrastructure/db/models/admin/goal.schema";
+import { RewardRepository } from "../../infrastructure/db/repositories/admin/reward.repository";
+import { Reward } from "../../infrastructure/db/models/admin/reward.schema";
+import { StreakRepository } from "../../infrastructure/db/repositories/user/streak.repository";
+import { Streak } from "../../infrastructure/db/models/user/streak.schema";
+import { DailyChallengeProgress } from "../../infrastructure/db/models/user/daily-challenge-progess.schema";
+import { DailyChallengeProgressRepository } from "../../infrastructure/db/repositories/user/daily-challenge-progress.repository";
+import { DailyChallengeFinishedUseCase } from "../../application/use-cases/user/daily-challenge/daily-challenge-finsihed.use-case";
+import { GetDailyChallengeStatsUseCase } from "../../application/use-cases/user/daily-challenge/get-daily-challenge-stats.use-case";
+import { StatsRepository } from "../../infrastructure/db/repositories/user/stats.repository";
+import { StatsModel } from "../../infrastructure/db/models/stats.schema";
+import { GetLeaderboardUseCase } from "../../application/use-cases/user/leaderboard/get-leaderboard.use-case";
+import { LeaderboardController } from "../controllers/user/leaderboard.controller";
+import { SubscriptionController } from "../controllers/user/subscription.controller";
+import { SubscriptionPlanRepository } from "../../infrastructure/db/repositories/admin/subscription-plan.repository";
+import { SubscriptionPlan } from "../../infrastructure/db/models/admin/subscription-plan.schema";
+import { GetNormalPlansUseCase } from "../../application/use-cases/user/subsciption/get-normal-plans.use-case";
+import { GetCompanyPlansUseCase } from "../../application/use-cases/user/subsciption/get-company-plans.use-case";
+import { CreateSubscriptionSessionUseCase } from "../../application/use-cases/user/subsciption/create-subscription-session.use-case";
+import { ConfirmSubscriptionUseCase } from "../../application/use-cases/user/subsciption/confirm-subscription.use-case";
+import { GetSubscriptionDetailsUseCase } from "../../application/use-cases/user/subsciption/get-subscription-details.use-case";
+import { UserSubscriptionRepository } from "../../infrastructure/db/repositories/user/user-subscription.repository";
+import { UserSubscription } from "../../infrastructure/db/models/user/user.subscription.schema";
+import { StripeService } from "../../infrastructure/services/stripe.service";
+import { PaymentController } from "../controllers/user/payment.controller";
+import { PaymentRepository } from "../../infrastructure/db/repositories/user/payment.repository";
+import { Payment } from "../../infrastructure/db/models/user/payment.schema";
+import { CheckFeatureAccessUseCase } from "../../application/use-cases/user/check-feature-access-use.case";
+import { createCheckFeature } from "../middlewares/check-feature.middleware";
+import { ConfirmCompanySubscriptionUseCase } from "../../application/use-cases/user/subsciption/confirm-company-subcription.use-case";
+import { AchievementRepository } from "../../infrastructure/db/repositories/user/achievement.repository";
+import { UserAchievementRepository } from "../../infrastructure/db/repositories/user/user-achievement.repository";
+import { AchievementModel } from "../../infrastructure/db/models/admin/acheivment.schema";
+import { UserAchievement } from "../../infrastructure/db/models/user/user-achievement.schema";
+import { AchievementService } from "../../application/services/achievement.service";
+import { GetAllAchievementsUseCase } from "../../application/use-cases/user/achievements/get-all-achievements.use-case";
+import { UserAchievementController } from "../controllers/user/user-achievment.controller";
+import { Discussion } from "../../infrastructure/db/models/user/discussion.schema";
+import { DiscussionRepository } from "../../infrastructure/db/repositories/user/discussion.repository";
+import { Comment } from "../../infrastructure/db/models/user/comment.schema";
+import { CommentRepository } from "../../infrastructure/db/repositories/user/comment.repository";
+import { CreatePostUseCase } from "../../application/use-cases/user/discussions/create-post.use-case";
+import { GetAllDiscussionsUseCase } from "../../application/use-cases/user/discussions/get-all-discussions.use-case";
+import { GetDiscussionByIdUseCase } from "../../application/use-cases/user/discussions/get-discussion-by-id.use-case";
+import { CreateCommentUseCase } from "../../application/use-cases/user/discussions/create-comment.use-case";
+import { CreateReplyUseCase } from "../../application/use-cases/user/discussions/create-reply.use-case";
+import { GetMyDiscussionsUseCase } from "../../application/use-cases/user/discussions/get-my-discussions.use-case";
+import { DeleteDiscussionUseCase } from "../../application/use-cases/user/discussions/delete-discussion.use-case";
+import { DiscussionController } from "../controllers/user/discussion.controller";
+import { GetAnotherUserProfileUseCase } from "../../application/use-cases/user/get-another-user-profile.use-case";
 
 const statsRepository = new StatsRepository(StatsModel);
 const userRepository = new UserRepository(User);
@@ -99,6 +104,9 @@ const authRepository = new AuthRepository();
 const companyRepository = new CompanyRepository(Company);
 const achievementRepository = new AchievementRepository(AchievementModel);
 const userAchievementRepository = new UserAchievementRepository(UserAchievement);
+const paymentRepository = new PaymentRepository(Payment);
+const discussionRepository = new DiscussionRepository(Discussion);
+const commentRepository = new CommentRepository(Comment);
 const achievementServiceInstance = new AchievementService(
   achievementRepository,
   userAchievementRepository,
@@ -108,6 +116,7 @@ const lessonRepository = new LessonRepository(Lesson);
 const companyRequestUseCaseInstance = new CompanyRequestUseCase(companyRepository, userRepository);
 const tokenService = new TokenService();
 const findUserUseCaseInstance = new FindUserUseCase(authRepository);
+const findUserWithStatsUseCaseInstance = new FindUserWithStatsUseCase(authRepository, statsRepository);
 const getCompanyUseCaseInstance = new GetCompanyUseCase(companyRepository);
 const companyReApplyUseCaseInstance = new CompanyReApplyUseCase(companyRepository, userRepository);
 const updateUserUseCaseInstance = new UpdateUserUseCase(userRepository);
@@ -186,12 +195,21 @@ export const injectCompanyRequestController = new CompanyRequestController(
   companyReApplyUseCaseInstance
 );
 const checkUserCompanyUseCaseInstance = new CheckUserCompanyUseCase(userRepository, companyRepository);
+const getAnotherUserProfileUseCaseInstance = new GetAnotherUserProfileUseCase(
+  userRepository,
+  statsRepository,
+  discussionRepository,
+  userAchievementRepository,
+  achievementRepository
+);
 
 export const injectUserController = new UserController(
+  findUserWithStatsUseCaseInstance,
   findUserUseCaseInstance,
   updateUserUseCaseInstance,
   changePasswordUseCaseInstance,
-  checkUserCompanyUseCaseInstance
+  checkUserCompanyUseCaseInstance,
+  getAnotherUserProfileUseCaseInstance
 );
 
 // daily challenge
@@ -248,7 +266,8 @@ export const injectSubscriptionController = new SubscriptionController(
 const confirmSubscriptionUseCaseInstance = new ConfirmSubscriptionUseCase(
   subscriptionRepository,
   userSubscriptionRepository,
-  userRepository
+  userRepository,
+  paymentRepository
 );
 const stripeService = new StripeService();
 const createSubscriptionSessionUseCaseInstance = new CreateSubscriptionSessionUseCase(
@@ -259,7 +278,8 @@ const confirmCompanySubscriptionUseCaseInstance = new ConfirmCompanySubscription
   subscriptionRepository,
   userSubscriptionRepository,
   userRepository,
-  companyRepository
+  companyRepository,
+  paymentRepository
 );
 export const injectPaymentController = new PaymentController(
   createSubscriptionSessionUseCaseInstance,
@@ -283,17 +303,21 @@ const getAllAchievementsUseCaseInstance = new GetAllAchievementsUseCase(
 export const injectUserAchievementController = new UserAchievementController(getAllAchievementsUseCaseInstance);
 
 // discussions
-const discussionRepository = new DiscussionRepository(Discussion);
-const commentRepository = new CommentRepository(Comment);
+
 const createPostUseCaseInstance = new CreatePostUseCase(discussionRepository);
 const getAllDiscussionsUseCaseInstance = new GetAllDiscussionsUseCase(discussionRepository, commentRepository, userRepository);
 const getDiscussionByIdUseCaseInstance = new GetDiscussionByIdUseCase(discussionRepository, commentRepository, userRepository);
 const createCommentUseCaseInstance = new CreateCommentUseCase(commentRepository, discussionRepository);
 const createReplyUseCaseInstance = new CreateReplyUseCase(commentRepository);
+const getMyDiscussionsUseCaseInstance = new GetMyDiscussionsUseCase(discussionRepository, commentRepository, userRepository);
+const deleteDiscussionUseCaseInstance = new DeleteDiscussionUseCase(discussionRepository, commentRepository);
 export const injectDiscussionController = new DiscussionController(
   createPostUseCaseInstance,
   getAllDiscussionsUseCaseInstance,
   getDiscussionByIdUseCaseInstance,
   createCommentUseCaseInstance,
-  createReplyUseCaseInstance
+  createReplyUseCaseInstance,
+  getMyDiscussionsUseCaseInstance,
+  deleteDiscussionUseCaseInstance
 );
+

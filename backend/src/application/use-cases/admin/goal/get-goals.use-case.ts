@@ -1,7 +1,7 @@
-import { IGetGoalsUseCase } from '../../interfaces/admin/get-goals.interface';
-import { IGoalRepository } from '../../../../domain/interfaces/repository/admin/goal-repository.interface';
-import { GoalResponseDTO } from '../../../DTOs/admin/goal.dto';
-import { mapToGoalDTO } from '../../../mappers/admin/goal-management.mapper';
+import { IGetGoalsUseCase } from "../../interfaces/admin/get-goals.interface";
+import { IGoalRepository } from "../../../../domain/interfaces/repository/admin/goal-repository.interface";
+import { GoalResponseDTO } from "../../../DTOs/admin/goal.dto";
+import { mapToGoalDTO } from "../../../mappers/admin/goal-management.mapper";
 
 export class GetGoalsUseCase implements IGetGoalsUseCase {
   constructor(private readonly _goalRepository: IGoalRepository) {}

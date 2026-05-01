@@ -1,7 +1,7 @@
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
-import { IAddCompanyGroupMemberUseCase } from '../../interfaces/companyAdmin/add-company-group-member.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
+import { IAddCompanyGroupMemberUseCase } from "../../interfaces/companyAdmin/add-company-group-member.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class AddCompanyGroupMemberUseCase implements IAddCompanyGroupMemberUseCase {
   constructor(

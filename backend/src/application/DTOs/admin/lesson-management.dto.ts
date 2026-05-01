@@ -1,4 +1,4 @@
-import { LessonCategory, LessonLevel } from '../../../domain/entities/lesson.entity';
+import { LessonCategory, LessonLevel } from "../../../domain/entities/lesson.entity";
 export interface LessonDTO {
   id: string;
   text: string;

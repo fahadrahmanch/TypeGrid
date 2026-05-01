@@ -1,14 +1,14 @@
-import { IGroupNotificationUseCase } from '../../interfaces/companyAdmin/group-notification.interface';
-import { GroupNotificationDTO } from '../../../DTOs/companyAdmin/notification.dto';
-import { INotificationRepository } from '../../../../domain/interfaces/repository/company/notification-repository.interface';
-import { INotificationReceiptRepository } from '../../../../domain/interfaces/repository/company/notification-receipt-repository.interface';
-import { NotificationEntity } from '../../../../domain/entities/company/notification.entity';
-import { NotificationReceiptEntity } from '../../../../domain/entities/company/notification-receipt.entity';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IGroupNotificationUseCase } from "../../interfaces/companyAdmin/group-notification.interface";
+import { GroupNotificationDTO } from "../../../DTOs/companyAdmin/notification.dto";
+import { INotificationRepository } from "../../../../domain/interfaces/repository/company/notification-repository.interface";
+import { INotificationReceiptRepository } from "../../../../domain/interfaces/repository/company/notification-receipt-repository.interface";
+import { NotificationEntity } from "../../../../domain/entities/company/notification.entity";
+import { NotificationReceiptEntity } from "../../../../domain/entities/company/notification-receipt.entity";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class GroupNotificationUseCase implements IGroupNotificationUseCase {
   constructor(
@@ -32,7 +32,7 @@ export class GroupNotificationUseCase implements IGroupNotificationUseCase {
     const notification = new NotificationEntity({
       companyId,
       senderId,
-      type: 'group',
+      type: "group",
       title,
       targetId: selectedGroup,
       message,

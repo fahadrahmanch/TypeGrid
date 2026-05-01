@@ -1,9 +1,9 @@
-import { ICreateNewPasswordUseCase } from '../../interfaces/auth/create-new-password.interface';
-import { IAuthRepository } from '../../../../domain/interfaces/repository/user/auth-repository.interface';
-import { IHashService } from '../../../../domain/interfaces/services/hash-service.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { ICreateNewPasswordUseCase } from "../../interfaces/auth/create-new-password.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IHashService } from "../../../../domain/interfaces/services/hash-service.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 /**
  * Use case for creating a new password during the forgot password flow.
  */

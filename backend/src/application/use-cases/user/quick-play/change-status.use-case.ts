@@ -1,8 +1,8 @@
-import { IChangeStatusUseCase } from '../../interfaces/user/quick-play/change-status.interface';
-import { ICompetitionRepository } from '../../../../domain/interfaces/repository/user/competition-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IChangeStatusUseCase } from "../../interfaces/user/quick-play/change-status.interface";
+import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 export class ChangeStatusUseCase implements IChangeStatusUseCase {
   constructor(private readonly _competitionRepository: ICompetitionRepository) {}
 

@@ -1,23 +1,23 @@
-import { Socket, Server } from 'socket.io';
-import { injectGroupSocketController } from '../../../presentation/DI/socket.di';
-import redis from '../../../config/redis';
-import { checkGameEndService } from '../../../application/services/game-result.service';
+import { Socket, Server } from "socket.io";
+import { injectGroupSocketController } from "../../../presentation/DI/socket.di";
+import redis from "../../../config/redis";
+import { checkGameEndService } from "../../../application/services/game-result.service";
 
 export const groupHandlers = (socket: Socket, io: Server) => {
   /* ===================== GROUP PLAY ===================== */
-  socket.on('join-room', ({ groupId, userId }: { groupId: string; userId: string }) => {
+  socket.on("join-room", ({ groupId, userId }: { groupId: string; userId: string }) => {
     socket.join(groupId);
     socket.data.groupId = groupId;
     socket.data.userId = userId;
   });
 
-  socket.on('group-play', async (Competition: { gameId: string; userId: string }) => {
+  socket.on("group-play", async (Competition: { gameId: string; userId: string }) => {
     if (socket.data.gameId) {
       socket.leave(socket.data.gameId);
     }
     const member = await injectGroupSocketController.getGroup(Competition.gameId, Competition.userId);
     if (!member) {
-      socket.emit('force-exit');
+      socket.emit("force-exit");
       return;
     }
 
@@ -25,7 +25,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
     socket.data.gameId = Competition.gameId;
   });
 
-  socket.on('typing-progress', async (data) => {
+  socket.on("typing-progress", async (data) => {
     const { userId, wpm, accuracy, errors, typedLength } = data;
     const gameId = socket.data.gameId;
     if (!gameId) return;
@@ -36,7 +36,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
 
     if (raw) {
       const existing = JSON.parse(raw);
-      if (existing.status === 'FINISHED' || existing.status === 'TIMES_UP') {
+      if (existing.status === "FINISHED" || existing.status === "TIMES_UP") {
         return;
       }
     }
@@ -48,16 +48,16 @@ export const groupHandlers = (socket: Socket, io: Server) => {
         accuracy,
         errors,
         typedLength,
-        status: 'PLAYING',
+        status: "PLAYING",
         updatedAt: Date.now(),
       })
     );
     await redis.expire(key, 600);
 
-    socket.to(gameId).emit('typing-progress-update', data);
+    socket.to(gameId).emit("typing-progress-update", data);
   });
 
-  socket.on('player-finished', async ({ userId, name, imageUrl, timeTaken, wpm, accuracy, errors, typedLength }) => {
+  socket.on("player-finished", async ({ userId, name, imageUrl, timeTaken, wpm, accuracy, errors, typedLength }) => {
     const gameId = socket.data.gameId;
     if (!gameId) return;
     const key = `game:${gameId}`;
@@ -74,7 +74,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
         ...data,
         name,
         imageUrl,
-        status: 'FINISHED',
+        status: "FINISHED",
         timeTaken,
         wpm,
         accuracy,
@@ -91,9 +91,9 @@ export const groupHandlers = (socket: Socket, io: Server) => {
       accuracy,
       errors,
       typedLength,
-      status: 'FINISHED',
+      status: "FINISHED",
     };
-    socket.to(gameId).emit('typing-progress-update', updatedData);
+    socket.to(gameId).emit("typing-progress-update", updatedData);
     const isEnd = await checkGameEndService(gameId);
     if (isEnd) {
       const result = await redis.hgetall(key);
@@ -104,11 +104,11 @@ export const groupHandlers = (socket: Socket, io: Server) => {
         }))
         .sort((a, b) => {
           if (a.status !== b.status) {
-            if (a.status === 'FINISHED') return -1;
-            if (b.status === 'FINISHED') return 1;
+            if (a.status === "FINISHED") return -1;
+            if (b.status === "FINISHED") return 1;
           }
 
-          if (a.status === 'FINISHED' && b.status === 'FINISHED') {
+          if (a.status === "FINISHED" && b.status === "FINISHED") {
             if (a.timeTaken !== b.timeTaken) {
               return a.timeTaken - b.timeTaken;
             }
@@ -120,7 +120,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
             return 0;
           }
 
-          if (a.status === 'TIMES_UP' && b.status === 'TIMES_UP') {
+          if (a.status === "TIMES_UP" && b.status === "TIMES_UP") {
             if (a.typedLength !== b.typedLength) {
               return b.typedLength - a.typedLength;
             }
@@ -136,12 +136,12 @@ export const groupHandlers = (socket: Socket, io: Server) => {
           rank: index + 1,
         }));
       await injectGroupSocketController.saveGroupPlayResult(gameId, resultArray);
-      io.to(gameId).emit('game-finished', resultArray);
+      io.to(gameId).emit("game-finished", resultArray);
       await redis.del(key);
     }
   });
 
-  socket.on('time-up', async ({ userId, name, imageUrl, timeTaken, wpm, accuracy, errors, typedLength }) => {
+  socket.on("time-up", async ({ userId, name, imageUrl, timeTaken, wpm, accuracy, errors, typedLength }) => {
     const gameId = socket.data.gameId;
     if (!gameId) return;
     const key = `game:${gameId}`;
@@ -157,7 +157,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
         ...data,
         name,
         imageUrl,
-        status: 'TIMES_UP',
+        status: "TIMES_UP",
         timeTaken,
         wpm,
         accuracy,
@@ -176,11 +176,11 @@ export const groupHandlers = (socket: Socket, io: Server) => {
         }))
         .sort((a, b) => {
           if (a.status !== b.status) {
-            if (a.status === 'FINISHED') return -1;
-            if (b.status === 'FINISHED') return 1;
+            if (a.status === "FINISHED") return -1;
+            if (b.status === "FINISHED") return 1;
           }
 
-          if (a.status === 'FINISHED' && b.status === 'FINISHED') {
+          if (a.status === "FINISHED" && b.status === "FINISHED") {
             if (a.timeTaken !== b.timeTaken) {
               return a.timeTaken - b.timeTaken;
             }
@@ -192,7 +192,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
             return 0;
           }
 
-          if (a.status === 'TIMES_UP' && b.status === 'TIMES_UP') {
+          if (a.status === "TIMES_UP" && b.status === "TIMES_UP") {
             if (a.typedLength !== b.typedLength) {
               return b.typedLength - a.typedLength;
             }
@@ -208,25 +208,24 @@ export const groupHandlers = (socket: Socket, io: Server) => {
           rank: index + 1,
         }));
       await injectGroupSocketController.saveGroupPlayResult(gameId, resultArray);
-      io.to(gameId).emit('game-finished', resultArray);
+      io.to(gameId).emit("game-finished", resultArray);
       await redis.del(key);
     }
   });
 
   // in group playp
-  socket.on('leave-group', async ({ groupId, userId }) => {
+  socket.on("leave-group", async ({ groupId, userId }) => {
     socket.data.groupId = groupId;
     socket.data.userId = userId;
     await injectGroupSocketController.groupLeave(socket, io);
     socket.leave(groupId);
   });
-  socket.on('leave-game', async ({ gameId, userId }) => {
-    console.log('leave-game', gameId, userId);
+  socket.on("leave-game", async ({ gameId, userId }) => {
     await injectGroupSocketController.handleDisconnect(socket, io);
     socket.leave(gameId);
   });
 
-  socket.on('disconnect', async () => {
+  socket.on("disconnect", async () => {
     if (socket.data.groupId && socket.data.userId) {
       await injectGroupSocketController.handleDisconnect(socket, io);
     }

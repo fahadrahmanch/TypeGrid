@@ -1,5 +1,5 @@
-import { ICompetitionDocument } from '../types/documents';
-import { CompetitionEntity } from '../../../domain/entities/competition.entity';
+import { ICompetitionDocument } from "../types/documents";
+import { CompetitionEntity } from "../../../domain/entities/competition.entity";
 
 export class CompetitionMapper {
   static toDomain(doc: ICompetitionDocument): CompetitionEntity {

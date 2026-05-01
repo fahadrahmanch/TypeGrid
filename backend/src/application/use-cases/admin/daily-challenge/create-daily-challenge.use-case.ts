@@ -1,10 +1,10 @@
-import { ICreateDailyAssignChallengeUseCase } from '../../../use-cases/interfaces/admin/create-daily-challenge.interface';
-import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
-import { DailyAssignChallengeResponseDTO } from '../../../DTOs/admin/daily-challenge.dto';
-import { DailyAssignChallengeEntity } from '../../../../domain/entities/daily-challenge.entity';
-import { DailyAssignChallengeMapper } from '../../../mappers/admin/daily-assign-challenge.mapper';
-import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { ICreateDailyAssignChallengeUseCase } from "../../../use-cases/interfaces/admin/create-daily-challenge.interface";
+import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
+import { DailyAssignChallengeResponseDTO } from "../../../DTOs/admin/daily-challenge.dto";
+import { DailyAssignChallengeEntity } from "../../../../domain/entities/daily-challenge.entity";
+import { DailyAssignChallengeMapper } from "../../../mappers/admin/daily-assign-challenge.mapper";
+import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class CreateDailyAssignChallengeUseCase implements ICreateDailyAssignChallengeUseCase {
   constructor(

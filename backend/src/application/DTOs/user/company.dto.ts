@@ -6,7 +6,7 @@ export interface CompanyDTO {
   number?: string;
   OwnerId?: string;
   planId?: string;
-  status?: 'active' | 'inactive' | 'pending' | 'reject' | 'expired';
+  status?: "active" | "inactive" | "pending" | "reject" | "expired";
   startDate?: Date;
   endDate?: Date;
 }

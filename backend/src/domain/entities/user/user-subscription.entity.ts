@@ -1,10 +1,10 @@
-export type UserSubscriptionStatus = 'active' | 'expired' | 'pending';
+export type UserSubscriptionStatus = "active" | "expired" | "pending";
 
 export type UserSubscriptionProps = {
   id?: string;
   userId: string;
   subscriptionPlanId: string;
-  planType: 'normal' | 'company';
+  planType: "normal" | "company";
   status: UserSubscriptionStatus;
   startDate?: Date;
   endDate?: Date;
@@ -17,7 +17,7 @@ export class UserSubscriptionEntity {
   private id?: string;
   private userId: string;
   private subscriptionPlanId: string;
-  private planType: 'normal' | 'company';
+  private planType: "normal" | "company";
   private status: UserSubscriptionStatus;
   private startDate?: Date;
   private endDate?: Date;
@@ -53,7 +53,7 @@ export class UserSubscriptionEntity {
   public getStatus(): UserSubscriptionStatus {
     return this.status;
   }
-  public getPlanType(): 'normal' | 'company' {
+  public getPlanType(): "normal" | "company" {
     return this.planType;
   }
 

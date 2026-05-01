@@ -1,10 +1,10 @@
-import { AuthRequest } from '../../../types/AuthRequest';
-import { Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IGetCompanyLeaderboardUseCase } from '../../../application/use-cases/interfaces/companyUser/get-company-leaderboard.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import logger from '../../../utils/logger';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { AuthRequest } from "../../../types/AuthRequest";
+import { Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IGetCompanyLeaderboardUseCase } from "../../../application/use-cases/interfaces/companyUser/get-company-leaderboard.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import logger from "../../../utils/logger";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class LeaderBoardController {
   constructor(private _getCompanyLeaderboardUseCase: IGetCompanyLeaderboardUseCase) {}

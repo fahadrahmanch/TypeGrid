@@ -1,10 +1,10 @@
-import { IUpdateGoalUseCase } from '../../interfaces/admin/update-goal.interface';
-import { IGoalRepository } from '../../../../domain/interfaces/repository/admin/goal-repository.interface';
-import { GoalResponseDTO, UpdateGoalDTO } from '../../../DTOs/admin/goal.dto';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { mapToGoalDTO } from '../../../mappers/admin/goal-management.mapper';
+import { IUpdateGoalUseCase } from "../../interfaces/admin/update-goal.interface";
+import { IGoalRepository } from "../../../../domain/interfaces/repository/admin/goal-repository.interface";
+import { GoalResponseDTO, UpdateGoalDTO } from "../../../DTOs/admin/goal.dto";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToGoalDTO } from "../../../mappers/admin/goal-management.mapper";
 
 export class UpdateGoalUseCase implements IUpdateGoalUseCase {
   constructor(private readonly _goalRepository: IGoalRepository) {}

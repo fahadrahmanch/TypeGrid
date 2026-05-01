@@ -1,11 +1,11 @@
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { IGetCompanyContestsUsecase } from '../../interfaces/companyAdmin/get-company-contests.interface';
-import { ContestProps } from '../../../DTOs/companyAdmin/company-contest.dto';
-import { mapCompanyContestDTO } from '../../../mappers/companyAdmin/company-contest.mapper';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { IGetCompanyContestsUsecase } from "../../interfaces/companyAdmin/get-company-contests.interface";
+import { ContestProps } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapCompanyContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Use case for retrieving all contests associated with a company.

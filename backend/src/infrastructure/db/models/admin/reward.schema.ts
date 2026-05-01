@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
-import { IRewardDocument } from '../../types/documents';
+import mongoose, { Schema } from "mongoose";
+import { IRewardDocument } from "../../types/documents";
 const RewardSchema = new Schema<IRewardDocument>(
   {
     xp: { type: Number, required: true },
@@ -8,4 +8,4 @@ const RewardSchema = new Schema<IRewardDocument>(
   { timestamps: true }
 );
 
-export const Reward = mongoose.model<IRewardDocument>('Reward', RewardSchema);
+export const Reward = mongoose.model<IRewardDocument>("Reward", RewardSchema);

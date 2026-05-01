@@ -1,11 +1,11 @@
-import { IOtpService } from '../../domain/interfaces/services/otp-service.interface';
-import { ICachingService } from '../../domain/interfaces/services/caching-service.interface';
+import { IOtpService } from "../../domain/interfaces/services/otp-service.interface";
+import { ICachingService } from "../../domain/interfaces/services/caching-service.interface";
 
 export class OtpService implements IOtpService {
   constructor(private _cachingService: ICachingService) {}
 
   createOtp(email: string): string {
-    let otp = '';
+    let otp = "";
     for (let i = 0; i < 6; i++) {
       const randomIndex = Math.floor(Math.random() * 9);
       otp += randomIndex;

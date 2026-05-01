@@ -1,9 +1,9 @@
-import { IRejectCompanyUseCase } from '../../interfaces/admin/reject-company.interface';
-import { ICompanyRepository } from '../../../../domain/interfaces/repository/company/company-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { IEmailService } from '../../../../domain/interfaces/services/email-service.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IRejectCompanyUseCase } from "../../interfaces/admin/reject-company.interface";
+import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { IEmailService } from "../../../../domain/interfaces/services/email-service.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class RejectCompanyUseCase implements IRejectCompanyUseCase {
   constructor(
@@ -16,13 +16,13 @@ export class RejectCompanyUseCase implements IRejectCompanyUseCase {
     if (!company) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.COMPANY_NOT_FOUND_OR_REMOVED);
     }
-    company.status = 'reject';
+    company.status = "reject";
     company.rejectionReason = rejectionReason;
     await this.companyRepository.update(company);
     await this._emailService.sendMail({
       from: process.env.EMAIL_USER,
       to: company.email,
-      subject: '❌ Company Application Rejected',
+      subject: "❌ Company Application Rejected",
       text: `Your company application was rejected. Reason: ${rejectionReason}`,
       html: `
       <div style="font-family: Arial, sans-serif; line-height:1.6;">

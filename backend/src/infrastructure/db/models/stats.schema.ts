@@ -1,11 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema } from "mongoose";
 
-import { IStatsDocument } from '../types/documents';
+import { IStatsDocument } from "../types/documents";
 const StatsSchema = new Schema<IStatsDocument>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       unique: true,
     },
@@ -20,4 +20,4 @@ const StatsSchema = new Schema<IStatsDocument>(
   },
   { timestamps: true }
 );
-export const StatsModel = mongoose.model<IStatsDocument>('Stats', StatsSchema);
+export const StatsModel = mongoose.model<IStatsDocument>("Stats", StatsSchema);

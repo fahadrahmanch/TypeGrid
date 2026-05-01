@@ -1,5 +1,5 @@
-import { CompanyGroupDTO } from '../../../DTOs/companyAdmin/company-group.dto';
+import { CompanyGroupDTO } from "../../../DTOs/companyAdmin/company-group.dto";
 
 export interface IGetCompanyGroupsUseCase {
-  execute(userId: string): Promise<CompanyGroupDTO[]>;
+  execute(userId: string, search?: string, limit?: string, page?: string): Promise<{ groups: CompanyGroupDTO[]; totalPages: number }>;
 }

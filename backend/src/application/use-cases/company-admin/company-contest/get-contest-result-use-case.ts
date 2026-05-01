@@ -1,12 +1,12 @@
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { IGetContestResultUseCase } from '../../interfaces/companyUser/get-contest-result.interface';
-import { IResultRepository } from '../../../../domain/interfaces/repository/result-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { contestResultMapper } from '../../../mappers/companyAdmin/contest-result.mapper';
-import { contestResultDTO } from '../../../DTOs/companyAdmin/contest-result.dto';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { IGetContestResultUseCase } from "../../interfaces/companyUser/get-contest-result.interface";
+import { IResultRepository } from "../../../../domain/interfaces/repository/result-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { contestResultMapper } from "../../../mappers/companyAdmin/contest-result.mapper";
+import { contestResultDTO } from "../../../DTOs/companyAdmin/contest-result.dto";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 /**
  * use case for get contest result
  */

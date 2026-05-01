@@ -1,8 +1,8 @@
-import { IRewardRepository } from '../../../../domain/interfaces/repository/admin/reward-repository.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { IDeleteRewardUseCase } from '../../interfaces/admin/delete-reward.interface';
+import { IRewardRepository } from "../../../../domain/interfaces/repository/admin/reward-repository.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { IDeleteRewardUseCase } from "../../interfaces/admin/delete-reward.interface";
 
 /**
  * Use case responsible for deleting a reward.

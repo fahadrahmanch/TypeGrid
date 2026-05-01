@@ -1,12 +1,12 @@
-import { IGetCompanyDetailsUseCase } from '../interfaces/companyAdmin/get-company-details.interface';
-import { ICompanyRepository } from '../../../domain/interfaces/repository/company/company-repository.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { ISubscriptionPlanRepository } from '../../../domain/interfaces/repository/admin/subscription-plan.repository.interface';
-import { IUserRepository } from '../../../domain/interfaces/repository/user/user-repository.interface';
-import { CompanyDetailsDTO } from '../../DTOs/companyAdmin/company-details.dto';
-import { CompanyDetailsMapper } from '../../mappers/companyAdmin/company-details.mapper';
+import { IGetCompanyDetailsUseCase } from "../interfaces/companyAdmin/get-company-details.interface";
+import { ICompanyRepository } from "../../../domain/interfaces/repository/company/company-repository.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { ISubscriptionPlanRepository } from "../../../domain/interfaces/repository/admin/subscription-plan.repository.interface";
+import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
+import { CompanyDetailsDTO } from "../../DTOs/companyAdmin/company-details.dto";
+import { CompanyDetailsMapper } from "../../mappers/companyAdmin/company-details.mapper";
 
 export class GetCompanyDetailsUseCase implements IGetCompanyDetailsUseCase {
   constructor(

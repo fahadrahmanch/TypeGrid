@@ -1,11 +1,11 @@
-import { ICompanyReApplyUseCase } from '../interfaces/user/company-re-apply.interface';
-import { CompanyReApplyDTO } from '../../DTOs/user/company-re-apply.dto';
-import { CompanyEntity } from '../../../domain/entities';
-import { ICompanyRepository } from '../../../domain/interfaces/repository/company/company-repository.interface';
-import { IUserRepository } from '../../../domain/interfaces/repository/user/user-repository.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../domain/constants/messages';
+import { ICompanyReApplyUseCase } from "../interfaces/user/company-re-apply.interface";
+import { CompanyReApplyDTO } from "../../DTOs/user/company-re-apply.dto";
+import { CompanyEntity } from "../../../domain/entities";
+import { ICompanyRepository } from "../../../domain/interfaces/repository/company/company-repository.interface";
+import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../domain/constants/messages";
 export class CompanyReApplyUseCase implements ICompanyReApplyUseCase {
   constructor(
     private companyRepository: ICompanyRepository,
@@ -23,8 +23,9 @@ export class CompanyReApplyUseCase implements ICompanyReApplyUseCase {
       email: data.email,
       OwnerId: data.userId,
       number: data.number,
-      status: 'pending',
-      rejectionReason: '',
+      document: data.document,
+      status: "pending",
+      rejectionReason: "",
     });
     await this.companyRepository.update(company);
   }

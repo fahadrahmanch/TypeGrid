@@ -1,4 +1,4 @@
-import { CompanyEntity } from '../../../../domain/entities';
+import { CompanyEntity } from "../../../../domain/entities";
 
 export interface IGetCompaniesUseCase {
   execute(

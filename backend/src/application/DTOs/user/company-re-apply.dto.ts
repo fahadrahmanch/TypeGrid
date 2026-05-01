@@ -4,4 +4,5 @@ export interface CompanyReApplyDTO {
   address: string;
   email: string;
   number: string;
+  document: string;
 }

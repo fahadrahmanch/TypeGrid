@@ -1,19 +1,19 @@
-import { Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { getIO } from '../../../infrastructure/socket/socket';
-import logger from '../../../utils/logger';
+import { Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { getIO } from "../../../infrastructure/socket/socket";
+import logger from "../../../utils/logger";
 
-import { ICreateGroupPlayRoomUseCase } from '../../../application/use-cases/interfaces/user/group-play/create-group-play-room.interface';
-import { IGetGroupPlayGroupUseCase } from '../../../application/use-cases/interfaces/user/group-play/get-group-play-group.interface';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IEditGroupPlayUseCase } from '../../../application/use-cases/interfaces/user/group-play/edit-group-play.interface';
-import { IJoinGroupPlayGroupUseCase } from '../../../application/use-cases/interfaces/user/group-play/join-group-play-group.interface';
-import { IRemoveMemberGroupPlayGroupUseCase } from '../../../application/use-cases/interfaces/user/group-play/remove-member-group-play-group.interface';
-import { IStartGameGroupPlayGroupUseCase } from '../../../application/use-cases/interfaces/user/group-play/start-game-group-play-group.interface';
-import { IChangeGroupStatusUseCase } from '../../../application/use-cases/interfaces/user/group-play/change-group-status.interface';
-import { INewGroupPlayUseCase } from '../../../application/use-cases/interfaces/user/group-play/new-group-play.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { ICreateGroupPlayRoomUseCase } from "../../../application/use-cases/interfaces/user/group-play/create-group-play-room.interface";
+import { IGetGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/group-play/get-group-play-group.interface";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IEditGroupPlayUseCase } from "../../../application/use-cases/interfaces/user/group-play/edit-group-play.interface";
+import { IJoinGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/group-play/join-group-play-group.interface";
+import { IRemoveMemberGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/group-play/remove-member-group-play-group.interface";
+import { IStartGameGroupPlayGroupUseCase } from "../../../application/use-cases/interfaces/user/group-play/start-game-group-play-group.interface";
+import { IChangeGroupStatusUseCase } from "../../../application/use-cases/interfaces/user/group-play/change-group-status.interface";
+import { INewGroupPlayUseCase } from "../../../application/use-cases/interfaces/user/group-play/new-group-play.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 export class GroupPlayController {
   constructor(
     private _createGroupPlayRoomUseCase: ICreateGroupPlayRoomUseCase,
@@ -93,7 +93,7 @@ export class GroupPlayController {
 
     const group = await this._editGroupPlayGroupUseCase.execute(groupId, difficulty, maxPlayers, userId);
 
-    getIO().to(group.id).emit('change-difficulty', {
+    getIO().to(group.id).emit("change-difficulty", {
       difficulty: group.difficulty,
       maximumPlayers: group.maximumPlayers,
     });
@@ -117,7 +117,7 @@ export class GroupPlayController {
 
     const group = await this._joinGroupPlayGroupUseCase.execute(joinLink, userId);
 
-    getIO().to(group.id).emit('fetchGroupDetails', {
+    getIO().to(group.id).emit("fetchGroupDetails", {
       group,
     });
     res.status(HttpStatus.OK).json({
@@ -138,9 +138,9 @@ export class GroupPlayController {
       throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.UNAUTHORIZED);
     }
 
-    const group = await this._removeMemberGroupPlayGroupUseCase.execute(groupId, userId, 'KICK');
+    const group = await this._removeMemberGroupPlayGroupUseCase.execute(groupId, userId, "KICK");
 
-    getIO().to(groupId).emit('remove-player', {
+    getIO().to(groupId).emit("remove-player", {
       group,
     });
     res.status(HttpStatus.OK).json({
@@ -164,9 +164,9 @@ export class GroupPlayController {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
 
-    await this._changeGroupStatusUseCase.changeGroupStatus(groupId, 'started');
+    await this._changeGroupStatusUseCase.changeGroupStatus(groupId, "started");
 
-    getIO().to(groupId).emit('game-started', {
+    getIO().to(groupId).emit("game-started", {
       competition: startCompetition,
     });
 
@@ -194,7 +194,7 @@ export class GroupPlayController {
       throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, MESSAGES.SOMETHING_WENT_WRONG);
     }
 
-    getIO().to(startCompetition.groupId!).emit('new-game-started', {
+    getIO().to(startCompetition.groupId!).emit("new-game-started", {
       competition: startCompetition,
     });
 

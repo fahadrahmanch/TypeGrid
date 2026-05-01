@@ -1,5 +1,5 @@
-import { IContestDocument } from '../types/documents';
-import { ContestEntity } from '../../../domain/entities/company-contest.entity';
+import { IContestDocument } from "../types/documents";
+import { ContestEntity } from "../../../domain/entities/company-contest.entity";
 
 export class ContestMapper {
   static toDomain(doc: IContestDocument): ContestEntity {
@@ -20,7 +20,7 @@ export class ContestMapper {
       rewards: doc?.rewards,
       status: doc?.status,
       countDown: doc?.countDown || 10,
-      CompanyId: doc?.CompanyId?.toString() ?? '',
+      CompanyId: doc?.CompanyId?.toString() ?? "",
       createdAt: doc?.createdAt,
       updatedAt: doc?.updatedAt,
     });

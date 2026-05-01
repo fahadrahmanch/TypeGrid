@@ -1,11 +1,11 @@
-import { AuthRequest } from '../../../types/AuthRequest';
-import { HttpStatus } from '../../constants/httpStatus';
-import { Response } from 'express';
-import { IGetTodayChallengeUseCase } from '../../../application/use-cases/interfaces/user/daily-challenge/get-daily-challenge.interface';
-import logger from '../../../utils/logger';
-import { IDailyChallengeFinishedUseCase } from '../../../application/use-cases/interfaces/user/daily-challenge/daily-challenge-finished.interface';
-import { IGetDailyChallengeStatsUseCase } from '../../../application/use-cases/interfaces/user/daily-challenge/get-daily-challenge-stats.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
+import { AuthRequest } from "../../../types/AuthRequest";
+import { HttpStatus } from "../../constants/httpStatus";
+import { Response } from "express";
+import { IGetTodayChallengeUseCase } from "../../../application/use-cases/interfaces/user/daily-challenge/get-daily-challenge.interface";
+import logger from "../../../utils/logger";
+import { IDailyChallengeFinishedUseCase } from "../../../application/use-cases/interfaces/user/daily-challenge/daily-challenge-finished.interface";
+import { IGetDailyChallengeStatsUseCase } from "../../../application/use-cases/interfaces/user/daily-challenge/get-daily-challenge-stats.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
 export class DailyChallengeController {
   constructor(
     private _getTodayChallengeUseCase: IGetTodayChallengeUseCase,
@@ -35,7 +35,7 @@ export class DailyChallengeController {
     const stats = await this._getDailyChallengeStatsUseCase.execute(req.user?.userId!);
     res.status(HttpStatus.OK).json({
       success: true,
-      message: MESSAGES.DAILY_CHALLENGE_STATS_FETCHED_SUCCESS || 'Daily challenge statistics fetched successfully',
+      message: MESSAGES.DAILY_CHALLENGE_STATS_FETCHED_SUCCESS || "Daily challenge statistics fetched successfully",
       data: stats,
     });
   };

@@ -1,6 +1,6 @@
-import { ICreatePostUseCase } from '../../interfaces/user/create-post.interface';
-import { IDiscussionRepository } from '../../../../domain/interfaces/repository/user/discussion-repository.interface';
-import { DiscussionEntity } from '../../../../domain/entities/user/discussion.entity';
+import { ICreatePostUseCase } from "../../interfaces/user/create-post.interface";
+import { IDiscussionRepository } from "../../../../domain/interfaces/repository/user/discussion-repository.interface";
+import { DiscussionEntity } from "../../../../domain/entities/user/discussion.entity";
 
 export class CreatePostUseCase implements ICreatePostUseCase {
   constructor(private _discussionRepository: IDiscussionRepository) {}

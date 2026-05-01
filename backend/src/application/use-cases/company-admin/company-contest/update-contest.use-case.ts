@@ -1,10 +1,10 @@
-import { CreateContestDTO } from '../../../DTOs/companyAdmin/company-contest.dto';
-import { IUpdateContestUseCase } from '../../interfaces/companyAdmin/update-contest.interface';
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { mapContestDTOAdmin } from '../../../mappers/companyAdmin/company-contest.mapper';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { CreateContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { IUpdateContestUseCase } from "../../interfaces/companyAdmin/update-contest.interface";
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Use case for updating an existing contest.

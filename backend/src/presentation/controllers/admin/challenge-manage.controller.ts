@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { ICreateChallengeUseCase } from '../../../application/use-cases/interfaces/admin/create-challenge.interface';
-import { IGetChallengeUseCase } from '../../../application/use-cases/interfaces/admin/get-challenge.interface';
-import { IGetChallengesUseCase } from '../../../application/use-cases/interfaces/admin/get-challenges.interface';
-import { IUpdateChallengeUseCase } from '../../../application/use-cases/interfaces/admin/update-challenge.interface';
-import { IDeleteChallengeUseCase } from '../../../application/use-cases/interfaces/admin/delete-challenge.interface';
-import logger from '../../../utils/logger';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
+import { Request, Response } from "express";
+import { ICreateChallengeUseCase } from "../../../application/use-cases/interfaces/admin/create-challenge.interface";
+import { IGetChallengeUseCase } from "../../../application/use-cases/interfaces/admin/get-challenge.interface";
+import { IGetChallengesUseCase } from "../../../application/use-cases/interfaces/admin/get-challenges.interface";
+import { IUpdateChallengeUseCase } from "../../../application/use-cases/interfaces/admin/update-challenge.interface";
+import { IDeleteChallengeUseCase } from "../../../application/use-cases/interfaces/admin/delete-challenge.interface";
+import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
 
 export class ChallengeManageController {
   constructor(

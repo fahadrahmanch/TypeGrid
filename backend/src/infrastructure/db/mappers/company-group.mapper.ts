@@ -1,5 +1,5 @@
-import { ICompanyGroupDocument } from '../types/documents';
-import { CompanyGroupEntity } from '../../../domain/entities/company-group.entity';
+import { ICompanyGroupDocument } from "../types/documents";
+import { CompanyGroupEntity } from "../../../domain/entities/company-group.entity";
 
 export class CompanyGroupMapper {
   static toDomain(doc: ICompanyGroupDocument): CompanyGroupEntity {

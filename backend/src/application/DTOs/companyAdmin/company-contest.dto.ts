@@ -1,5 +1,5 @@
-export type ContestMode = 'group' | 'open';
-export type TextSource = 'manual' | 'random';
+export type ContestMode = "group" | "open";
+export type TextSource = "manual" | "random";
 
 export interface RewardDTO {
   rank: number;
@@ -18,7 +18,7 @@ export interface ContestProps {
   startTime: Date;
 
   targetGroup?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
   date: string;
@@ -37,7 +37,7 @@ export interface CreateContestDTO {
   description: string;
   targetGroup?: string;
   startTime: Date | string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
   date: string;
@@ -53,7 +53,7 @@ export interface openContestDTO {
   title: string;
   description: string;
   targetGroup?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
   status: string;
@@ -72,7 +72,7 @@ export interface groupContestDTO {
   title: string;
   description: string;
   targetGroup?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   textSource: TextSource;
   contestText?: string;
   status: string;
@@ -95,12 +95,12 @@ export interface ParticipantsDTO {
 }
 export interface GetGroupContestDTO {
   _id?: string;
-  contestMode: 'open' | 'group';
+  contestMode: "open" | "group";
   title: string;
   description?: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   groupId?: string;
-  textSource: 'manual' | 'random';
+  textSource: "manual" | "random";
   participants: string[];
   contestText?: string;
   date: Date;
@@ -108,7 +108,7 @@ export interface GetGroupContestDTO {
   duration: number;
   maxParticipants: number;
   rewards: Array<{ rank: number; prize: number }>;
-  status: 'upcoming' | 'ongoing' | 'completed' | 'waiting';
+  status: "upcoming" | "ongoing" | "completed" | "waiting";
   countDown?: number;
   startedAt?: Date;
   CompanyId: string;

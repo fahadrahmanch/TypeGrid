@@ -1,4 +1,4 @@
-import { CompetitionDTOGroupPlay } from '../../DTOs/user/competition-group-play.dto';
+import { CompetitionDTOGroupPlay } from "../../DTOs/user/competition-group-play.dto";
 
 export interface PopulatedGroupCompetitionPayload {
   _id: any;
@@ -32,7 +32,7 @@ export const mapCompetitionToDTOGroupPlay = (
     status: competition.status,
     duration: competition.duration,
     groupId: competition.groupId?.toString(),
-    startedAt: competition.startedAt ? competition.startedAt.toString() : '',
+    startedAt: competition.startedAt ? competition.startedAt.toString() : "",
     countDown: competition.countDown,
     JoinLink: competition.joinLink,
     lesson: {
@@ -44,7 +44,7 @@ export const mapCompetitionToDTOGroupPlay = (
     participants: competition.participants.map((user) => ({
       _id: user._id!.toString(),
       name: user.name,
-      imageUrl: user.imageUrl || '',
+      imageUrl: user.imageUrl || "",
       isHost: user._id!.toString() === hostUserId.toString(),
     })),
   };

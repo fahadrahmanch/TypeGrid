@@ -1,11 +1,11 @@
-import { IGetContestDataUseCase } from '../../interfaces/companyUser/get-contest-data.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { ContestProps } from '../../../DTOs/companyAdmin/company-contest.dto';
-import { mapContestDTO } from '../../../mappers/companyAdmin/company-contest.mapper';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IGetContestDataUseCase } from "../../interfaces/companyUser/get-contest-data.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { ContestProps } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Use case for retrieving contest data for a user.
@@ -36,7 +36,7 @@ export class GetContestDataUseCase implements IGetContestDataUseCase {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_NOT_JOINED_CONTEST);
     }
 
-    if (contest.getStatus() !== 'ongoing') {
+    if (contest.getStatus() !== "ongoing") {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.GROUP_EXPIRED);
     }
 

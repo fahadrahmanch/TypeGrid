@@ -1,8 +1,8 @@
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { IBlockUserUseCase } from '../../interfaces/admin/block-user.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { IBlockUserUseCase } from "../../interfaces/admin/block-user.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Use case for blocking or unblocking a user.
@@ -20,7 +20,7 @@ export class BlockUserUseCase implements IBlockUserUseCase {
     }
 
     // Toggle user status
-    user.status = user.status === 'block' ? 'active' : 'block';
+    user.status = user.status === "block" ? "active" : "block";
 
     await this._userRepository.update(user);
   }

@@ -1,12 +1,12 @@
-import { IEditGroupPlayUseCase } from '../../interfaces/user/group-play/edit-group-play.interface';
-import { IGroupRepository } from '../../../../domain/interfaces/repository/user/group-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { GroupEntity } from '../../../../domain/entities/group.entity';
-import { mapGroupToDTO } from '../../../DTOs/user/group.dto';
-import { groupDTO } from '../../../DTOs/user/group.dto';
-type Difficulty = 'easy' | 'medium' | 'hard';
+import { IEditGroupPlayUseCase } from "../../interfaces/user/group-play/edit-group-play.interface";
+import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { GroupEntity } from "../../../../domain/entities/group.entity";
+import { mapGroupToDTO } from "../../../DTOs/user/group.dto";
+import { groupDTO } from "../../../DTOs/user/group.dto";
+type Difficulty = "easy" | "medium" | "hard";
 export class EditGroupUseCase implements IEditGroupPlayUseCase {
   constructor(private groupRepository: IGroupRepository) {}
   async execute(groupId: string, difficulty: Difficulty, maxPlayers: number, userId: string): Promise<groupDTO> {

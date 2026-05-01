@@ -1,3 +1,3 @@
 export interface IConfirmCompanySubscriptionUseCase {
-  execute(userId: string, planId: string): Promise<void>;
+  execute(userId: string, planId: string, providerTransactionId: string): Promise<void>;
 }

@@ -1,12 +1,12 @@
 // models/GameStats.model.ts
-import mongoose, { Schema } from 'mongoose';
-import { IGameStatsDocument } from '../../types/documents';
+import mongoose, { Schema } from "mongoose";
+import { IGameStatsDocument } from "../../types/documents";
 
 const GameStatsSchema = new Schema<IGameStatsDocument>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       unique: true,
     },
@@ -38,4 +38,4 @@ const GameStatsSchema = new Schema<IGameStatsDocument>(
   { timestamps: true }
 );
 
-export const GameStatsModel = mongoose.model<IGameStatsDocument>('GameStats', GameStatsSchema);
+export const GameStatsModel = mongoose.model<IGameStatsDocument>("GameStats", GameStatsSchema);

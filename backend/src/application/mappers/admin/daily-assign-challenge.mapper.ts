@@ -1,5 +1,5 @@
-import { DailyAssignChallengeResponseDTO } from '../../../application/DTOs/admin/daily-challenge.dto';
-import { DailyAssignChallengeDTO } from '../../../application/DTOs/admin/daily-challenge.dto';
+import { DailyAssignChallengeResponseDTO } from "../../../application/DTOs/admin/daily-challenge.dto";
+import { DailyAssignChallengeDTO } from "../../../application/DTOs/admin/daily-challenge.dto";
 export function DailyAssignChallengeMapper(
   dailyAssignChallenge: DailyAssignChallengeDTO
 ): DailyAssignChallengeResponseDTO {

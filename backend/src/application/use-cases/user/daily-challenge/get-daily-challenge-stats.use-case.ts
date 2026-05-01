@@ -1,8 +1,8 @@
-import { DailyChallengeStatsDTO } from '../../../DTOs/user/daily-challenge-stats.dto';
-import { IGetDailyChallengeStatsUseCase } from '../../interfaces/user/daily-challenge/get-daily-challenge-stats.interface';
-import { IDailyChallengeProgressRepository } from '../../../../domain/interfaces/repository/user/daily-challenge-progress-repository.interface';
-import { IStreakRepository } from '../../../../domain/interfaces/repository/user/streak-repository.interface';
-import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
+import { DailyChallengeStatsDTO } from "../../../DTOs/user/daily-challenge-stats.dto";
+import { IGetDailyChallengeStatsUseCase } from "../../interfaces/user/daily-challenge/get-daily-challenge-stats.interface";
+import { IDailyChallengeProgressRepository } from "../../../../domain/interfaces/repository/user/daily-challenge-progress-repository.interface";
+import { IStreakRepository } from "../../../../domain/interfaces/repository/user/streak-repository.interface";
+import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
 
 export class GetDailyChallengeStatsUseCase implements IGetDailyChallengeStatsUseCase {
   constructor(
@@ -34,32 +34,32 @@ export class GetDailyChallengeStatsUseCase implements IGetDailyChallengeStatsUse
 
     const totalCompletedCount = await this._dailyChallengeProgressRepository.find({
       userId,
-      status: 'completed',
+      status: "completed",
     });
 
-    const monthCompleted = monthProgress.filter((p) => p.getStatus() === 'completed').length;
+    const monthCompleted = monthProgress.filter((p) => p.getStatus() === "completed").length;
     const monthTarget = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
 
     const weeklyProgress = monthProgress.filter((p) => {
       const pDate = new Date(p.getDate());
       return pDate >= startOfWeek && pDate <= endOfWeek;
     });
-    const completedSessions = weeklyProgress.filter((p) => p.getStatus() === 'completed').length;
+    const completedSessions = weeklyProgress.filter((p) => p.getStatus() === "completed").length;
 
-    const calendarData: { [key: string]: 'completed' | 'missed' } = {};
+    const calendarData: { [key: string]: "completed" | "missed" } = {};
 
     const formatDate = (date: Date) => {
       const d = new Date(date);
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     };
 
     monthProgress.forEach((p) => {
       const dateStr = formatDate(p.getDate());
       const status = p.getStatus();
-      if (status === 'completed') {
-        calendarData[dateStr] = 'completed';
-      } else if (status === 'failed') {
-        calendarData[dateStr] = 'missed';
+      if (status === "completed") {
+        calendarData[dateStr] = "completed";
+      } else if (status === "failed") {
+        calendarData[dateStr] = "missed";
       }
     });
 
@@ -70,7 +70,7 @@ export class GetDailyChallengeStatsUseCase implements IGetDailyChallengeStatsUse
     monthChallenges.forEach((c) => {
       const dateStr = formatDate(c.getDate());
       if (!calendarData[dateStr]) {
-        calendarData[dateStr] = 'missed';
+        calendarData[dateStr] = "missed";
       }
     });
 

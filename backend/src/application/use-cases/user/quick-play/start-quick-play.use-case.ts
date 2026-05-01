@@ -1,13 +1,13 @@
-import { ICompetitionRepository } from '../../../../domain/interfaces/repository/user/competition-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
-import { IStartQuickPlayUseCase } from '../../interfaces/user/quick-play/start-quick-play.interface';
-import { CompetitionEntity } from '../../../../domain/entities/competition.entity';
-import { mapCompetitionToDTOQuickPlay } from '../../../mappers/user/competition-quick-play.mapper';
-import { CompetitionDTOQuickPlay } from '../../../DTOs/user/competition-quick-play.dto';
+import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { IStartQuickPlayUseCase } from "../../interfaces/user/quick-play/start-quick-play.interface";
+import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
+import { mapCompetitionToDTOQuickPlay } from "../../../mappers/user/competition-quick-play.mapper";
+import { CompetitionDTOQuickPlay } from "../../../DTOs/user/competition-quick-play.dto";
 
 export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
   constructor(
@@ -27,8 +27,8 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
     }
 
     const competition = await this._competitionRepository.findOne({
-      status: 'pending',
-      $expr: { $lt: [{ $size: '$participants' }, 5] },
+      status: "pending",
+      $expr: { $lt: [{ $size: "$participants" }, 5] },
       participants: { $ne: userId },
     });
 
@@ -56,20 +56,20 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
         ...competition.toObject(),
         participants: populatedParticipants,
         lesson: {
-          _id: lesson?._id ?? '',
-          text: lesson?.text ?? '',
-          category: lesson?.category ?? '',
-          level: lesson?.level ?? '',
+          _id: lesson?._id ?? "",
+          text: lesson?.text ?? "",
+          category: lesson?.category ?? "",
+          level: lesson?.level ?? "",
         },
       });
     }
 
-    const levels = ['beginner', 'intermediate', 'advanced'];
+    const levels = ["beginner", "intermediate", "advanced"];
     const selectedLevel = levels[Math.floor(Math.random() * levels.length)];
 
     const lessons = await this._lessonRepository.find({
       level: selectedLevel,
-      createdBy: 'admin',
+      createdBy: "admin",
     });
 
     if (!lessons.length) {
@@ -79,11 +79,11 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
     const selectedLesson = lessons[Math.floor(Math.random() * lessons.length)];
 
     const competitionEntity = new CompetitionEntity({
-      type: 'quick',
-      mode: 'global',
+      type: "quick",
+      mode: "global",
       duration: 300,
       countDown: 10,
-      status: 'pending',
+      status: "pending",
       participants: [userId],
       textId: selectedLesson._id?.toString(),
     });
@@ -105,7 +105,7 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
       ...createdCompetition.toObject(),
       participants: populatedParticipants,
       lesson: {
-        _id: selectedLesson._id ?? '',
+        _id: selectedLesson._id ?? "",
         text: selectedLesson.text,
         category: selectedLesson.category,
         level: selectedLesson.level,

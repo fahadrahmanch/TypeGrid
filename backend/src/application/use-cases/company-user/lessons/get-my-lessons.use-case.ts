@@ -1,11 +1,11 @@
-import { IGetMyLessonsUseCase } from '../../interfaces/companyUser/get-my-lessons.interface';
-import { ILessonAssignmentRepository } from '../../../../domain/interfaces/repository/company/lesson-assignment-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { GetMyLessonsResponseDTO } from '../../../DTOs/companyUser/get-my-lessons-response.dto';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IGetMyLessonsUseCase } from "../../interfaces/companyUser/get-my-lessons.interface";
+import { ILessonAssignmentRepository } from "../../../../domain/interfaces/repository/company/lesson-assignment-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { GetMyLessonsResponseDTO } from "../../../DTOs/companyUser/get-my-lessons-response.dto";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
   constructor(
     private _baseAssignmentLessonRepository: ILessonAssignmentRepository,
@@ -46,7 +46,7 @@ export class GetMyLessonsUseCase implements IGetMyLessonsUseCase {
     );
 
     const completed = assignedLessons.reduce((acc, curr) => {
-      if (curr.getStatus() === 'completed') {
+      if (curr.getStatus() === "completed") {
         return acc + 1;
       }
       return acc;

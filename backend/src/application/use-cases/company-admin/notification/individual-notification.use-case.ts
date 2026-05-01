@@ -1,13 +1,13 @@
-import { IIndividualNotificationUseCase } from '../../interfaces/companyAdmin/individual-notification.interface';
-import { IndividualNotificationDTO } from '../../../DTOs/companyAdmin/notification.dto';
-import { INotificationRepository } from '../../../../domain/interfaces/repository/company/notification-repository.interface';
-import { INotificationReceiptRepository } from '../../../../domain/interfaces/repository/company/notification-receipt-repository.interface';
-import { NotificationEntity } from '../../../../domain/entities/company/notification.entity';
-import { NotificationReceiptEntity } from '../../../../domain/entities/company/notification-receipt.entity';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IIndividualNotificationUseCase } from "../../interfaces/companyAdmin/individual-notification.interface";
+import { IndividualNotificationDTO } from "../../../DTOs/companyAdmin/notification.dto";
+import { INotificationRepository } from "../../../../domain/interfaces/repository/company/notification-repository.interface";
+import { INotificationReceiptRepository } from "../../../../domain/interfaces/repository/company/notification-receipt-repository.interface";
+import { NotificationEntity } from "../../../../domain/entities/company/notification.entity";
+import { NotificationReceiptEntity } from "../../../../domain/entities/company/notification-receipt.entity";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class IndividualNotificationUseCase implements IIndividualNotificationUseCase {
   constructor(
@@ -29,7 +29,7 @@ export class IndividualNotificationUseCase implements IIndividualNotificationUse
     const notification = new NotificationEntity({
       companyId,
       senderId,
-      type: 'individual',
+      type: "individual",
       title,
       message,
     });

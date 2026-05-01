@@ -1,4 +1,4 @@
-import { UserDTO } from '../../DTOs/admin/user-management.dto';
+import { UserDTO } from "../../DTOs/admin/user-management.dto";
 
 export const mapUserToDTO = (user: UserDTO): UserDTO => ({
   _id: user._id?.toString(),

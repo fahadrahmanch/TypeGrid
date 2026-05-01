@@ -1,7 +1,7 @@
 type ChallengeProps = {
   _id?: string;
   title: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   goal: string;
   reward: string;
   duration: number;
@@ -13,7 +13,7 @@ type ChallengeProps = {
 export class ChallengeEntity {
   private _id?: string;
   private title: string;
-  private difficulty: 'easy' | 'medium' | 'hard';
+  private difficulty: "easy" | "medium" | "hard";
   private goal: string;
   private reward: string;
   private duration: number;
@@ -39,7 +39,7 @@ export class ChallengeEntity {
   getTitle(): string {
     return this.title;
   }
-  getDifficulty(): 'easy' | 'medium' | 'hard' {
+  getDifficulty(): "easy" | "medium" | "hard" {
     return this.difficulty;
   }
   getGoal(): string {

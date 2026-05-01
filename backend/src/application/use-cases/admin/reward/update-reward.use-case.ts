@@ -1,10 +1,10 @@
-import { IUpdateRewardUseCase } from '../../interfaces/admin/update-reward.interface';
-import { IRewardRepository } from '../../../../domain/interfaces/repository/admin/reward-repository.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { UpdateRewardDTO, RewardResponseDTO } from '../../../DTOs/admin/reward.dto';
-import { mapToReward } from '../../../mappers/admin/reward-management.mapper';
+import { IUpdateRewardUseCase } from "../../interfaces/admin/update-reward.interface";
+import { IRewardRepository } from "../../../../domain/interfaces/repository/admin/reward-repository.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { UpdateRewardDTO, RewardResponseDTO } from "../../../DTOs/admin/reward.dto";
+import { mapToReward } from "../../../mappers/admin/reward-management.mapper";
 
 export class UpdateRewardUseCase implements IUpdateRewardUseCase {
   constructor(private readonly _rewardRepository: IRewardRepository) {}

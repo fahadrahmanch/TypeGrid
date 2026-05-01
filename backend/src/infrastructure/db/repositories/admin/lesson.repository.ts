@@ -1,10 +1,10 @@
-import { Model } from 'mongoose';
-import { BaseRepository } from '../../base/base.repository';
-import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
-import { ILessonDocument } from '../../types/documents';
-import { LessonEntity } from '../../../../domain/entities/lesson.entity';
-import { LessonMapper } from '../../mappers/lesson.mapper';
-import { Status } from '../../../../domain/enums/status.enum';
+import { Model } from "mongoose";
+import { BaseRepository } from "../../base/base.repository";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { ILessonDocument } from "../../types/documents";
+import { LessonEntity } from "../../../../domain/entities/lesson.entity";
+import { LessonMapper } from "../../mappers/lesson.mapper";
+import { Status } from "../../../../domain/enums/status.enum";
 
 export class LessonRepository extends BaseRepository<ILessonDocument, LessonEntity> implements ILessonRepository {
   constructor(model: Model<ILessonDocument>) {
@@ -21,7 +21,7 @@ export class LessonRepository extends BaseRepository<ILessonDocument, LessonEnti
       query.level = status;
     }
     if (searchText) {
-      query.title = { $regex: '^' + searchText, $options: 'i' };
+      query.title = { $regex: "^" + searchText, $options: "i" };
     }
     const rawLessons = await this.model
       .find(query)

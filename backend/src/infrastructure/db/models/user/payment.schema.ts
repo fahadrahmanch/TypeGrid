@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import { IPaymentDocument } from '../../types/documents';
+import mongoose from "mongoose";
+import { IPaymentDocument } from "../../types/documents";
 
 const paymentSchema = new mongoose.Schema<IPaymentDocument>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     amount: {
@@ -14,12 +14,12 @@ const paymentSchema = new mongoose.Schema<IPaymentDocument>(
     },
     currency: {
       type: String,
-      default: 'USD',
+      default: "USD",
     },
     status: {
       type: String,
-      enum: ['pending', 'completed', 'failed', 'refunded'],
-      default: 'pending',
+      enum: ["pending", "completed", "failed"],
+      default: "pending",
     },
     provider: {
       type: String,
@@ -33,4 +33,4 @@ const paymentSchema = new mongoose.Schema<IPaymentDocument>(
   { timestamps: true }
 );
 
-export const Payment = mongoose.model<IPaymentDocument>('Payment', paymentSchema);
+export const Payment = mongoose.model<IPaymentDocument>("Payment", paymentSchema);

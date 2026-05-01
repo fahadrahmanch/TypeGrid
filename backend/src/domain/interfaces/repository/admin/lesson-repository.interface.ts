@@ -1,5 +1,5 @@
-import { LessonEntity } from '../../../entities/lesson.entity';
-import { IBaseRepository } from '../base-repository.interface';
+import { LessonEntity } from "../../../entities/lesson.entity";
+import { IBaseRepository } from "../base-repository.interface";
 export interface ILessonRepository extends IBaseRepository<LessonEntity> {
   // CUSTOM
   getLessons(

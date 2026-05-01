@@ -1,20 +1,24 @@
-import { Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IFindUserUseCase } from '../../../application/use-cases/interfaces/user/find-user.interface';
-import { IUserUpdateUseCase } from '../../../application/use-cases/interfaces/user/user-update.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { IChangePasswordUseCase } from '../../../application/use-cases/interfaces/user/change-password.interface';
-import { ICheckUserCompanyUseCase } from '../../../application/use-cases/interfaces/user/check-user-company.interface';
-import { mapToUserProfileDTO } from '../../../application/mappers/user/user.mapper';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IFindUserUseCase } from "../../../application/use-cases/interfaces/user/find-user.interface";
+import { IFindUserWithStatsUseCase } from "../../../application/use-cases/interfaces/user/find-user-with-stats.interface";
+import { IUserUpdateUseCase } from "../../../application/use-cases/interfaces/user/user-update.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { IChangePasswordUseCase } from "../../../application/use-cases/interfaces/user/change-password.interface";
+import { ICheckUserCompanyUseCase } from "../../../application/use-cases/interfaces/user/check-user-company.interface";
+import { mapToUserProfileDTO } from "../../../application/mappers/user/user.mapper";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { IGetAnotherUserProfileUseCase } from "../../../application/use-cases/interfaces/user/get-another-user-profile.interface";
 
 export class UserController {
   constructor(
+    private _findUserWithStatsUseCase: IFindUserWithStatsUseCase,
     private _findUserUseCase: IFindUserUseCase,
     private _updateUserUseCase: IUserUpdateUseCase,
     private _changePasswordUseCase: IChangePasswordUseCase,
-    private _checkUserCompanyUseCase: ICheckUserCompanyUseCase
+    private _checkUserCompanyUseCase: ICheckUserCompanyUseCase,
+    private _getAnotherUserProfileUseCase: IGetAnotherUserProfileUseCase
   ) {}
 
   getProfile = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -23,13 +27,12 @@ export class UserController {
       throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
     }
 
-    const user = await this._findUserUseCase.execute(email);
+    const { user, stats } = await this._findUserWithStatsUseCase.execute(email);
     if (!user) {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.USER_DETAILS_NOT_FOUND);
     }
 
-    const userProfile = mapToUserProfileDTO(user);
-
+    const userProfile = mapToUserProfileDTO(user, stats);
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.FETCH_SUCCESS,
@@ -45,7 +48,7 @@ export class UserController {
       throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
     }
 
-    const user = await this._findUserUseCase.execute(email);
+    const { user } = await this._findUserWithStatsUseCase.execute(email);
     if (!user) {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.USER_DETAILS_NOT_FOUND);
     }
@@ -76,7 +79,6 @@ export class UserController {
   };
 
   userHaveCompany = async (req: AuthRequest, res: Response): Promise<void> => {
-    console.log("api called")
     const userId = req.user?.userId;
     if (!userId) {
       throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
@@ -89,5 +91,29 @@ export class UserController {
       company,
     });
   };
+
+  getAnotherUserProfile = async (req: AuthRequest, res: Response): Promise<void> => {
+    const { userId } = req.params;
+    const requesterRole = req.user?.role;
+
+    if (!userId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, "User ID is required");
+    }
+
+    if (!requesterRole) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
+    }
+
+    const userProfile = await this._getAnotherUserProfileUseCase.execute(userId, requesterRole);
+    if (!userProfile) {
+      throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.USER_DETAILS_NOT_FOUND);
+    }
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.FETCH_SUCCESS,
+      data: userProfile,
+    });
+  };
+  
 }
  

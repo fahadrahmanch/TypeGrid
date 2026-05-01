@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IGetProfileUseCase } from '../../../application/use-cases/interfaces/companyUser/get-profile.interface';
-import { IUpdateCompanyPasswordUseCase } from '../../../application/use-cases/interfaces/companyUser/update-password.interface';
-import { HttpStatus } from '../../constants/httpStatus';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Request, Response } from "express";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IGetProfileUseCase } from "../../../application/use-cases/interfaces/companyUser/get-profile.interface";
+import { IUpdateCompanyPasswordUseCase } from "../../../application/use-cases/interfaces/companyUser/update-password.interface";
+import { HttpStatus } from "../../constants/httpStatus";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 export class CompanyUserController {
   constructor(
     private readonly _getProfileUseCase: IGetProfileUseCase,

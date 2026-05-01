@@ -1,18 +1,18 @@
-import { Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import logger from '../../../utils/logger';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { ICreateCompanyLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/create-company-lesson.interface';
-import { IGetCompanyLessonsUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-company-lessons.interface';
-import { IGetLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-lesson.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IUpdateCompanyLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/update-company-lesson.interface';
-import { IDeleteCompanyLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/delete-company-lesson.interface';
-import { IGetAdminLessonsUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-admin-lesson.interface';
-import { IAssignLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/assign-lesson.interface';
-import { IAssignGroupLessonUseCase } from '../../../application/use-cases/interfaces/companyAdmin/assign-group-lesson.interface';
-import { IGetPendingUsersUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-pending-users.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import logger from "../../../utils/logger";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { ICreateCompanyLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/create-company-lesson.interface";
+import { IGetCompanyLessonsUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-company-lessons.interface";
+import { IGetLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-lesson.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IUpdateCompanyLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/update-company-lesson.interface";
+import { IDeleteCompanyLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/delete-company-lesson.interface";
+import { IGetAdminLessonsUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-admin-lesson.interface";
+import { IAssignLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/assign-lesson.interface";
+import { IAssignGroupLessonUseCase } from "../../../application/use-cases/interfaces/companyAdmin/assign-group-lesson.interface";
+import { IGetPendingUsersUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-pending-users.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class CompanyLessonManageController {
   constructor(
@@ -57,7 +57,7 @@ export class CompanyLessonManageController {
       message: MESSAGES.CREATE_SUCCESS,
       lesson,
     });
-    logger.info('Company lesson created successfully', { userId });
+    logger.info("Company lesson created successfully", { userId });
   };
 
   // get lessons
@@ -113,7 +113,7 @@ export class CompanyLessonManageController {
       message: MESSAGES.UPDATE_SUCCESS,
       lesson,
     });
-    logger.info('Company lesson updated successfully', {
+    logger.info("Company lesson updated successfully", {
       userId: req.user?.userId,
       lessonId,
     });
@@ -131,7 +131,7 @@ export class CompanyLessonManageController {
       success: true,
       message: MESSAGES.DELETE_SUCCESS,
     });
-    logger.info('Company lesson deleted successfully', {
+    logger.info("Company lesson deleted successfully", {
       userId: req.user?.userId,
       lessonId,
     });
@@ -175,7 +175,6 @@ export class CompanyLessonManageController {
 
   assignLessonToGroup = async (req: AuthRequest, res: Response): Promise<void> => {
     const groups: string[] = (req.body.groups || []).filter(Boolean);
-    console.log("groups",groups);
     const userId = req.user?.userId;
     const deadline = req.body.deadline;
     const lessons: string[] = (req.body.lessons || []).filter(Boolean);
@@ -193,13 +192,11 @@ export class CompanyLessonManageController {
 
   getPendingUsers = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.userId;
-    console.log("userId",userId)
     if (!userId) {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
 
     const { users, total, userIds } = await this._getPendingUsersUseCase.execute(userId);
-    console.log(users,total,userIds)
 
     res.status(HttpStatus.OK).json({
       success: true,

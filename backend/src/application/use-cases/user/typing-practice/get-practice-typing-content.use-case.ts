@@ -1,10 +1,10 @@
-import { IGetPracticeTypingContentUseCase } from '../../interfaces/user/typing-practice/get-practice-typing-content.interface';
-import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { PracticeTypingDTO } from '../../../DTOs/user/practice-typing.dto';
-import { mapPracticeTypingToDTO } from '../../../DTOs/user/practice-typing.dto';
+import { IGetPracticeTypingContentUseCase } from "../../interfaces/user/typing-practice/get-practice-typing-content.interface";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { PracticeTypingDTO } from "../../../DTOs/user/practice-typing.dto";
+import { mapPracticeTypingToDTO } from "../../../DTOs/user/practice-typing.dto";
 export class GetPracticeTypingContentUseCase implements IGetPracticeTypingContentUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
   async execute(level: string, category: string): Promise<PracticeTypingDTO> {

@@ -1,10 +1,10 @@
-import { Response } from 'express';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { IGetNormalPlansUseCase } from '../../../application/use-cases/interfaces/user/subsciption/get-normal-plans.interface';
-import { IGetCompanyPlansUseCase } from '../../../application/use-cases/interfaces/user/subsciption/get-company-plans.interface';
-import { IGetSubscriptionDetailsUseCase } from '../../../application/use-cases/interfaces/user/subsciption/get-subscription-details.interface';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
+import { Response } from "express";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { IGetNormalPlansUseCase } from "../../../application/use-cases/interfaces/user/subsciption/get-normal-plans.interface";
+import { IGetCompanyPlansUseCase } from "../../../application/use-cases/interfaces/user/subsciption/get-company-plans.interface";
+import { IGetSubscriptionDetailsUseCase } from "../../../application/use-cases/interfaces/user/subsciption/get-subscription-details.interface";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
 
 export class SubscriptionController {
   constructor(
@@ -34,7 +34,6 @@ export class SubscriptionController {
 
   getSubscriptionDetails = async (req: AuthRequest, res: Response): Promise<void> => {
     const subscriptionDetails = await this._getSubscriptionDetailsUseCase.execute(req.user?.userId!);
-    console.log(subscriptionDetails);
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.SUBSCRIPTION_DETAILS_FETCH_SUCCESS,

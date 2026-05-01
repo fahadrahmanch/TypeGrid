@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
-import logger from '../../../../utils/logger';
-import { HttpStatus } from '../../../constants/httpStatus';
-import { IAddUserUseCase } from '../../../../application/use-cases/interfaces/companyAdmin/add-user.interface';
-import { IFindUserUseCase } from '../../../../application/use-cases/interfaces/user/find-user.interface';
-import { IGetCompanyUsersUseCase } from '../../../../application/use-cases/interfaces/companyAdmin/get-company-users.interface';
-import { IDeleteCompanyUserUseCase } from '../../../../application/use-cases/interfaces/companyAdmin/delete-company-user.interface';
-import { IGetCompanyUsersWithStatusUseCase } from '../../../../application/use-cases/interfaces/companyAdmin/get-company-users-with-status.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { IGetCompanyDetailsUseCase } from '../../../../application/use-cases/interfaces/companyAdmin/get-company-details.interface';
-import { AuthRequest } from '../../../../types/AuthRequest';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
+import { Request, Response } from "express";
+import logger from "../../../../utils/logger";
+import { HttpStatus } from "../../../constants/httpStatus";
+import { IAddUserUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/add-user.interface";
+import { IFindUserUseCase } from "../../../../application/use-cases/interfaces/user/find-user.interface";
+import { IGetCompanyUsersUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/get-company-users.interface";
+import { IDeleteCompanyUserUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/delete-company-user.interface";
+import { IGetCompanyUsersWithStatusUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/get-company-users-with-status.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { IGetCompanyDetailsUseCase } from "../../../../application/use-cases/interfaces/companyAdmin/get-company-details.interface";
+import { AuthRequest } from "../../../../types/AuthRequest";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
 
 export class CompanyUserController {
   constructor(
@@ -38,7 +38,7 @@ export class CompanyUserController {
     }
 
     const user = await this._findUserUseCase.execute(email);
-    if (!user || user.role !== 'companyAdmin') {
+    if (!user || user.role !== "companyAdmin") {
       return {
         error: {
           status: HttpStatus.NOT_FOUND,
@@ -79,9 +79,9 @@ export class CompanyUserController {
       name: data.name,
       email: data.email,
       CompanyId: data.CompanyId,
-      role: data.role || 'companyUser',
-      KeyBoardLayout: 'QWERTY',
-      status: 'active',
+      role: data.role || "companyUser",
+      KeyBoardLayout: "QWERTY",
+      status: "active",
     };
 
     logger.info(MESSAGES.USER_ADDED_SUCCESS, {
@@ -103,11 +103,17 @@ export class CompanyUserController {
     }
     const adminUser = adminInfo.user;
 
-    const companyUsers = await this._getCompanyUsersUseCase.execute(adminUser.CompanyId!);
+    const search = (req.query.search as string) || "";
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const { users, total } = await this._getCompanyUsersUseCase.execute(adminUser.CompanyId!, search, page, limit);
+
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.COMPANY_USERS_FETCHED_SUCCESS,
-      data: companyUsers,
+      data: users,
+      total,
     });
   };
 

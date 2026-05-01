@@ -1,6 +1,6 @@
-import { IGroupRepository } from '../../../../domain/interfaces/repository/user/group-repository.interface';
-import { ICompetitionRepository } from '../../../../domain/interfaces/repository/user/competition-repository.interface';
-import { IValidateGroupPlayMemberUseCase } from '../../interfaces/user/group-play/validate-group-play-member.interface';
+import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
+import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
+import { IValidateGroupPlayMemberUseCase } from "../../interfaces/user/group-play/validate-group-play-member.interface";
 export class ValidateGroupPlayMemberUseCase implements IValidateGroupPlayMemberUseCase {
   constructor(
     private groupRepository: IGroupRepository,

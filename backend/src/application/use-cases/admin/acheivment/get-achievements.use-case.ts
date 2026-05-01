@@ -1,7 +1,7 @@
-import { IGetAchievementsUseCase } from '../../interfaces/admin/get-achievements.interface';
-import { IAchievementRepository } from '../../../../domain/interfaces/repository/user/achievement-repository.interface';
-import { AchievementResponseDTO } from '../../../DTOs/admin/achievement.dto';
-import { achievementToResponseDTO } from '../../../mappers/admin/achievement-management.mapper';
+import { IGetAchievementsUseCase } from "../../interfaces/admin/get-achievements.interface";
+import { IAchievementRepository } from "../../../../domain/interfaces/repository/user/achievement-repository.interface";
+import { AchievementResponseDTO } from "../../../DTOs/admin/achievement.dto";
+import { achievementToResponseDTO } from "../../../mappers/admin/achievement-management.mapper";
 
 export class GetAchievementsUseCase implements IGetAchievementsUseCase {
   constructor(private readonly _achievementRepository: IAchievementRepository) {}

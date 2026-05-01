@@ -1,5 +1,5 @@
-import { CompanyEntity } from '../../../domain/entities';
-import { CompanyDTO } from '../../DTOs/user/company.dto';
+import { CompanyEntity } from "../../../domain/entities";
+import { CompanyDTO } from "../../DTOs/user/company.dto";
 
 export const mapToCompanyDTO = (company: CompanyEntity): CompanyDTO => {
   return {

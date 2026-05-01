@@ -1,10 +1,10 @@
-import { ICompanyRequestUseCase } from '../interfaces/user/company-request.interface';
-import { ICompanyRepository } from '../../../domain/interfaces/repository/company/company-repository.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../domain/enums/http-status-codes.enum';
-import { IUserRepository } from '../../../domain/interfaces/repository/user/user-repository.interface';
-import { CompanyEntity } from '../../../domain/entities';
+import { ICompanyRequestUseCase } from "../interfaces/user/company-request.interface";
+import { ICompanyRepository } from "../../../domain/interfaces/repository/company/company-repository.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
+import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
+import { CompanyEntity } from "../../../domain/entities";
 export class CompanyRequestUseCase implements ICompanyRequestUseCase {
   constructor(
     private companyRepository: ICompanyRepository,
@@ -16,7 +16,8 @@ export class CompanyRequestUseCase implements ICompanyRequestUseCase {
     address: string,
     email: string,
     number: string,
-    planId: string
+    planId: string,
+    document: string
   ): Promise<void> {
     const company = new CompanyEntity({
       companyName,
@@ -25,7 +26,8 @@ export class CompanyRequestUseCase implements ICompanyRequestUseCase {
       OwnerId,
       number,
       planId,
-      status: 'pending',
+      document,
+      status: "pending",
     });
     const exists = await this.companyRepository.find({ OwnerId });
 

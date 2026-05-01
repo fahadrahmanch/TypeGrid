@@ -4,9 +4,9 @@ export type GroupProps = {
   ownerId: string;
   members?: string[];
   maximumPlayers?: number;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   joinLink?: string | null;
-  status?: 'waiting' | 'started' | 'completed';
+  status?: "waiting" | "started" | "completed";
   kickedUsers?: string[];
 };
 export class GroupEntity {
@@ -15,9 +15,9 @@ export class GroupEntity {
   private ownerId!: string;
   private members!: string[];
   private maximumPlayers!: number;
-  private difficulty!: 'easy' | 'medium' | 'hard';
+  private difficulty!: "easy" | "medium" | "hard";
   private joinLink!: string | null;
-  private status!: 'waiting' | 'started' | 'completed';
+  private status!: "waiting" | "started" | "completed";
   private kickedUsers!: string[];
 
   constructor(attrs?: GroupProps) {
@@ -29,36 +29,36 @@ export class GroupEntity {
       this.maximumPlayers = attrs.maximumPlayers ?? 5;
       this.difficulty = attrs.difficulty;
       this.joinLink = attrs.joinLink ?? null;
-      this.status = attrs.status ?? 'waiting';
+      this.status = attrs.status ?? "waiting";
       this.kickedUsers = attrs.kickedUsers ?? [];
     }
   }
-  changeDifficulty(difficulty: 'easy' | 'medium' | 'hard') {
-    if (this.status !== 'waiting') {
-      throw new Error('Cannot change difficulty after game has started');
+  changeDifficulty(difficulty: "easy" | "medium" | "hard") {
+    if (this.status !== "waiting") {
+      throw new Error("Cannot change difficulty after game has started");
     }
     this.difficulty = difficulty;
   }
 
   changeMaximumPlayers(max: number) {
     if (max < this.members.length) {
-      throw new Error('Maximum players cannot be less than current members');
+      throw new Error("Maximum players cannot be less than current members");
     }
     if (max < 2 || max > 10) {
-      throw new Error('Maximum players must be between 2 and 10');
+      throw new Error("Maximum players must be between 2 and 10");
     }
     this.maximumPlayers = max;
   }
   addMember(memberId: string) {
     if (this.members.length >= this.maximumPlayers) {
-      throw new Error('Group is full');
+      throw new Error("Group is full");
     }
-    if (this.status != 'waiting') {
-      throw new Error('Cannot join group after game has started');
+    if (this.status != "waiting") {
+      throw new Error("Cannot join group after game has started");
     }
     const kikedUser = this.kickedUsers.find((user) => user.toString() === memberId);
     if (kikedUser) {
-      throw new Error('User is kicked from group');
+      throw new Error("User is kicked from group");
     }
 
     const alreadyMember = this.members.find((member) => member.toString() === memberId);
@@ -109,7 +109,7 @@ export class GroupEntity {
     this.kickedUsers.push(memberId.toString());
   }
   setStatus(status: string) {
-    this.status = status as 'waiting' | 'started' | 'completed';
+    this.status = status as "waiting" | "started" | "completed";
   }
   setGroupMembers(members: string[]) {
     this.members = [...members];

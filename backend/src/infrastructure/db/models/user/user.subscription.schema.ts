@@ -1,29 +1,29 @@
-import mongoose from 'mongoose';
-import { IUserSubscriptionDocument } from '../../types/documents';
+import mongoose from "mongoose";
+import { IUserSubscriptionDocument } from "../../types/documents";
 
 const userSubscriptionSchema = new mongoose.Schema<IUserSubscriptionDocument>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
 
     subscriptionPlanId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'SubscriptionPlan',
+      ref: "SubscriptionPlan",
       required: true,
     },
     planType: {
       type: String,
-      enum: ['normal', 'company'],
+      enum: ["normal", "company"],
       required: true,
     },
 
     status: {
       type: String,
-      enum: ['active', 'expired', 'pending'],
-      default: 'pending',
+      enum: ["active", "expired", "pending"],
+      default: "pending",
     },
 
     startDate: {
@@ -36,10 +36,10 @@ const userSubscriptionSchema = new mongoose.Schema<IUserSubscriptionDocument>(
 
     paymentId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Payment',
+      ref: "Payment",
     },
   },
   { timestamps: true }
 );
 
-export const UserSubscription = mongoose.model<IUserSubscriptionDocument>('UserSubscription', userSubscriptionSchema);
+export const UserSubscription = mongoose.model<IUserSubscriptionDocument>("UserSubscription", userSubscriptionSchema);

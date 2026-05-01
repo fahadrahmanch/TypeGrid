@@ -1,11 +1,11 @@
-import { IGetJoinMemberUseCase } from '../../interfaces/user/quick-play/get-quick-play-data.interface';
-import { ICompetitionRepository } from '../../../../domain/interfaces/repository/user/competition-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { mapQuickMemberToDTO } from '../../../mappers/user/competition-quick-play.mapper';
-import { QuickPlayMemberDTO } from '../../../DTOs/user/competition-quick-play.dto';
+import { IGetJoinMemberUseCase } from "../../interfaces/user/quick-play/get-quick-play-data.interface";
+import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { mapQuickMemberToDTO } from "../../../mappers/user/competition-quick-play.mapper";
+import { QuickPlayMemberDTO } from "../../../DTOs/user/competition-quick-play.dto";
 
 export class GetJoinMemberUseCase implements IGetJoinMemberUseCase {
   constructor(

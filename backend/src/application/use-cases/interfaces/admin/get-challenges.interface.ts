@@ -1,4 +1,4 @@
-import { ChallengeResponseDTO } from '../../../DTOs/admin/challenge.dto';
+import { ChallengeResponseDTO } from "../../../DTOs/admin/challenge.dto";
 
 export interface IGetChallengesUseCase {
   execute(

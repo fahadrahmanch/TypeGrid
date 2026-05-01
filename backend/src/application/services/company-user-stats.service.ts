@@ -1,5 +1,5 @@
-type Difficulty = 'easy' | 'medium' | 'hard';
-type ActivityType = 'lesson' | 'oneToOne' | 'contest';
+type Difficulty = "easy" | "medium" | "hard";
+type ActivityType = "lesson" | "oneToOne" | "contest";
 
 const difficultyMultiplier: Record<Difficulty, number> = {
   easy: 1.0,

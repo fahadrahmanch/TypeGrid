@@ -1,16 +1,16 @@
-import { AuthRequest } from '../../../types/AuthRequest';
-import logger from '../../../utils/logger';
-import { Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IGetCompanyUsersUseCase } from '../../../application/use-cases/interfaces/companyUser/get-company-users.interface';
-import { IMakeChallengeUseCase } from '../../../application/use-cases/interfaces/companyUser/make-challenge.interface';
-import { IGetSentChallengeUseCase } from '../../../application/use-cases/interfaces/companyUser/get-sent-challenge.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IGetChallengesUseCase } from '../../../application/use-cases/interfaces/companyUser/get-challenges.interface';
-import { IAcceptChallengeUseCase } from '../../../application/use-cases/interfaces/companyUser/accept-challenge.interface';
-import { IGetChallengeGameDataUseCase } from '../../../application/use-cases/interfaces/companyUser/get-challenge-game-data.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
-import { IRejectChallengeUseCase } from '../../../application/use-cases/interfaces/companyUser/reject-challenge.interface';
+import { AuthRequest } from "../../../types/AuthRequest";
+import logger from "../../../utils/logger";
+import { Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IGetCompanyUsersUseCase } from "../../../application/use-cases/interfaces/companyUser/get-company-users.interface";
+import { IMakeChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/make-challenge.interface";
+import { IGetSentChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/get-sent-challenge.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IGetChallengesUseCase } from "../../../application/use-cases/interfaces/companyUser/get-challenges.interface";
+import { IAcceptChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/accept-challenge.interface";
+import { IGetChallengeGameDataUseCase } from "../../../application/use-cases/interfaces/companyUser/get-challenge-game-data.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { IRejectChallengeUseCase } from "../../../application/use-cases/interfaces/companyUser/reject-challenge.interface";
 export class ChallengesController {
   constructor(
     private _getCompanyUsersUseCase: IGetCompanyUsersUseCase,
@@ -51,7 +51,7 @@ export class ChallengesController {
 
     await this._makeChallengeUseCase.execute(senderId, receiverId);
 
-    logger.info('Challenge made successfully', { senderId, receiverId });
+    logger.info("Challenge made successfully", { senderId, receiverId });
     res.status(HttpStatus.CREATED).json({
       success: true,
       message: MESSAGES.CREATE_SUCCESS,
@@ -104,7 +104,7 @@ export class ChallengesController {
 
     await this._acceptChallengeUseCase.execute(challengeId);
 
-    logger.info('Challenge accepted successfully', { challengeId, userId });
+    logger.info("Challenge accepted successfully", { challengeId, userId });
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.UPDATE_SUCCESS,
@@ -141,7 +141,7 @@ export class ChallengesController {
 
     await this._rejectChallengeUseCase.execute(challengeId);
 
-    logger.info('Challenge rejected successfully', { challengeId, userId });
+    logger.info("Challenge rejected successfully", { challengeId, userId });
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.UPDATE_SUCCESS,

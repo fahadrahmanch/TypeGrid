@@ -1,4 +1,4 @@
-import { SubscriptionPlanResponseDTO } from '../../../DTOs/admin/subscription-plan.dto';
+import { SubscriptionPlanResponseDTO } from "../../../DTOs/admin/subscription-plan.dto";
 
 export interface IFetchNormalSubscriptionPlansUseCase {
   execute(): Promise<SubscriptionPlanResponseDTO[]>;

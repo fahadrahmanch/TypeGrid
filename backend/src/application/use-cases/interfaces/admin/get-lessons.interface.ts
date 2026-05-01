@@ -1,4 +1,4 @@
-import { LessonDTO } from '../../../DTOs/admin/lesson-management.dto';
+import { LessonDTO } from "../../../DTOs/admin/lesson-management.dto";
 export interface IGetLessonsUseCase {
   execute(
     status: string,

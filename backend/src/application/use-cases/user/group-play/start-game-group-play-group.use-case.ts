@@ -1,15 +1,15 @@
-import { IStartGameGroupPlayGroupUseCase } from '../../interfaces/user/group-play/start-game-group-play-group.interface';
-import { ICompetitionRepository } from '../../../../domain/interfaces/repository/user/competition-repository.interface';
-import { IGroupRepository } from '../../../../domain/interfaces/repository/user/group-repository.interface';
-import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { CompetitionEntity } from '../../../../domain/entities/competition.entity';
-import { mapLessonDTOforGroupPlay } from '../../../mappers/admin/lesson-management.mapper';
-import { mapCompetitionToDTOGroupPlay } from '../../../mappers/user/competition-group-play.mapper';
-import { CompetitionDTOGroupPlay } from '../../../DTOs/user/competition-group-play.dto';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IStartGameGroupPlayGroupUseCase } from "../../interfaces/user/group-play/start-game-group-play-group.interface";
+import { ICompetitionRepository } from "../../../../domain/interfaces/repository/user/competition-repository.interface";
+import { IGroupRepository } from "../../../../domain/interfaces/repository/user/group-repository.interface";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { CompetitionEntity } from "../../../../domain/entities/competition.entity";
+import { mapLessonDTOforGroupPlay } from "../../../mappers/admin/lesson-management.mapper";
+import { mapCompetitionToDTOGroupPlay } from "../../../mappers/user/competition-group-play.mapper";
+import { CompetitionDTOGroupPlay } from "../../../DTOs/user/competition-group-play.dto";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupUseCase {
   constructor(
@@ -26,16 +26,16 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
     }
 
     const difficultyToLevelMap: Record<string, string> = {
-      easy: 'beginner',
-      medium: 'intermediate',
-      hard: 'advanced',
+      easy: "beginner",
+      medium: "intermediate",
+      hard: "advanced",
     };
 
     const level = difficultyToLevelMap[group.getDifficulty()];
 
     const lessons = await this._lessonRepository.find({
       level,
-      createdBy: 'admin',
+      createdBy: "admin",
     });
     if (!lessons.length) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
@@ -44,13 +44,13 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
     const selectedLesson = mapLessonDTOforGroupPlay(lessons[Math.floor(Math.random() * lessons.length)]);
 
     const competitionEntity = new CompetitionEntity({
-      type: 'group',
-      mode: 'global',
+      type: "group",
+      mode: "global",
       textId: selectedLesson.id,
       participants: group.getMembers(),
       groupId: group.getId()!,
       duration: 50,
-      status: 'ongoing',
+      status: "ongoing",
       countDown,
     });
 

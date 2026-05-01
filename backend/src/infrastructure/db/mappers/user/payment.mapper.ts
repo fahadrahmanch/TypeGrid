@@ -1,5 +1,5 @@
-import { IPaymentDocument } from '../../types/documents';
-import { PaymentEntity } from '../../../../domain/entities/user/payment.entity';
+import { IPaymentDocument } from "../../types/documents";
+import { PaymentEntity } from "../../../../domain/entities/user/payment.entity";
 
 export class PaymentMapper {
   static toDomain(doc: IPaymentDocument): PaymentEntity {

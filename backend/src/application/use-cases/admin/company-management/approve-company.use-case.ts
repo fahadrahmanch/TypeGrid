@@ -1,10 +1,10 @@
-import { IApproveCompanyUseCase } from '../../interfaces/admin/approve-company.interface';
-import { ICompanyRepository } from '../../../../domain/interfaces/repository/company/company-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { IEmailService } from '../../../../domain/interfaces/services/email-service.interface';
+import { IApproveCompanyUseCase } from "../../interfaces/admin/approve-company.interface";
+import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { IEmailService } from "../../../../domain/interfaces/services/email-service.interface";
 
 export class ApproveCompanyUseCase implements IApproveCompanyUseCase {
   constructor(
@@ -27,8 +27,8 @@ export class ApproveCompanyUseCase implements IApproveCompanyUseCase {
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
-    user.role = 'companyAdmin';
-    company.status = 'inactive';
+    user.role = "companyAdmin";
+    company.status = "inactive";
 
     await this.userRepository.update(user);
     await this.companyRepository.update(company);
@@ -36,7 +36,7 @@ export class ApproveCompanyUseCase implements IApproveCompanyUseCase {
     await this._emailService.sendMail({
       from: process.env.EMAIL_USER as string,
       to: user.email,
-      subject: '🎉 Company Approved please payment for activate your company',
+      subject: "🎉 Company Approved please payment for activate your company",
       text: `Hello ${user.name}, your company has been approved successfully.`,
       html: `
       <div style="font-family: Arial, sans-serif; line-height:1.6;">

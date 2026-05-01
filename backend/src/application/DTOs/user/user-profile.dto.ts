@@ -6,9 +6,16 @@ export interface UserProfileDTO {
   bio?: string;
   age?: string;
   number?: string;
-  KeyBoardLayout: 'QWERTY' | 'AZERTY' | 'DVORAK';
-  status?: 'active' | 'block';
+  KeyBoardLayout: "QWERTY" | "AZERTY" | "DVORAK";
+  status?: "active" | "block";
   contactNumber?: number;
   gender?: string;
-  role: 'user' | 'admin' | 'companyUser' | 'companyAdmin';
+  role: "user" | "admin" | "companyUser" | "companyAdmin";
+  level?: number;
+  joinedAt?: Date;
+  performance?: {
+    averageSpeed: number;
+    accuracy: number;
+    competitions: number;
+  };
 }

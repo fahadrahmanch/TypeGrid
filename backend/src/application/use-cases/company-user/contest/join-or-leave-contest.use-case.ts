@@ -1,11 +1,11 @@
-import { IJoinOrLeaveContestUseCase } from '../../interfaces/companyUser/join-or-leave-contest.interface';
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { openContestDTO } from '../../../DTOs/companyAdmin/company-contest.dto';
-import { mapContestDTO } from '../../../mappers/companyAdmin/company-contest.mapper';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IJoinOrLeaveContestUseCase } from "../../interfaces/companyUser/join-or-leave-contest.interface";
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { openContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Use case for joining or leaving a contest.
@@ -19,7 +19,7 @@ export class JoinOrLeaveContestUseCase implements IJoinOrLeaveContestUseCase {
   /**
    * Join or cancel participation in a contest.
    */
-  async execute(userId: string, contestId: string, action: 'join' | 'cancel'): Promise<openContestDTO> {
+  async execute(userId: string, contestId: string, action: "join" | "cancel"): Promise<openContestDTO> {
     if (!userId || !contestId) {
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
     }
@@ -34,7 +34,7 @@ export class JoinOrLeaveContestUseCase implements IJoinOrLeaveContestUseCase {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
     }
 
-    if (action === 'join') {
+    if (action === "join") {
       contest.joinContest(userId);
     } else {
       contest.unJoin(userId);

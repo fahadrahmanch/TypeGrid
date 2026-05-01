@@ -1,10 +1,10 @@
-import { ILoginUseCase } from '../../interfaces/auth/login.interface';
-import { IAuthRepository } from '../../../../domain/interfaces/repository/user/auth-repository.interface';
-import { IHashService } from '../../../../domain/interfaces/services/hash-service.interface';
-import { AuthUserEntity } from '../../../../domain/entities';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { ILoginUseCase } from "../../interfaces/auth/login.interface";
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IHashService } from "../../../../domain/interfaces/services/hash-service.interface";
+import { AuthUserEntity } from "../../../../domain/entities";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class LoginUseCase implements ILoginUseCase {
   constructor(
@@ -23,7 +23,7 @@ export class LoginUseCase implements ILoginUseCase {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.USER_DETAILS_NOT_FOUND);
     }
 
-    if (user.status === 'block') {
+    if (user.status === "block") {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.AUTH_ACCOUNT_BLOCKED);
     }
 

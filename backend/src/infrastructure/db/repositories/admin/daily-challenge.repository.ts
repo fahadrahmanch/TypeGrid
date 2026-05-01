@@ -1,9 +1,9 @@
-import { Model } from 'mongoose';
-import { BaseRepository } from '../../base/base.repository';
-import { IDailyChallengeDocument } from '../../types/documents';
-import { DailyAssignChallengeEntity } from '../../../../domain/entities/daily-challenge.entity';
-import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
-import { DailyAssignChallengeMapper } from '../../mappers/daily-challenge.mapper';
+import { Model } from "mongoose";
+import { BaseRepository } from "../../base/base.repository";
+import { IDailyChallengeDocument } from "../../types/documents";
+import { DailyAssignChallengeEntity } from "../../../../domain/entities/daily-challenge.entity";
+import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
+import { DailyAssignChallengeMapper } from "../../mappers/daily-challenge.mapper";
 
 export class DailyAssignChallengeRepository
   extends BaseRepository<IDailyChallengeDocument, DailyAssignChallengeEntity>

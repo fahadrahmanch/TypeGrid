@@ -1,6 +1,6 @@
-import { CompanyEntity } from '../../../../domain/entities';
-import { IGetCompaniesUseCase } from '../../interfaces/admin/get-companies.interface';
-import { ICompanyRepository } from '../../../../domain/interfaces/repository/company/company-repository.interface';
+import { CompanyEntity } from "../../../../domain/entities";
+import { IGetCompaniesUseCase } from "../../interfaces/admin/get-companies.interface";
+import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
 
 /**
  * Use case for retrieving all companies.

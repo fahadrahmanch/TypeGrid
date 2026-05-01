@@ -1,9 +1,9 @@
-import { IUserRepository } from '../../../domain/interfaces/repository/user/user-repository.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../domain/enums/http-status-codes.enum';
-import { IChangePasswordUseCase } from '../interfaces/user/change-password.interface';
-import { IHashService } from '../../../domain/interfaces/services/hash-service.interface';
+import { IUserRepository } from "../../../domain/interfaces/repository/user/user-repository.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
+import { IChangePasswordUseCase } from "../interfaces/user/change-password.interface";
+import { IHashService } from "../../../domain/interfaces/services/hash-service.interface";
 
 export class ChangePasswordUseCase implements IChangePasswordUseCase {
   constructor(

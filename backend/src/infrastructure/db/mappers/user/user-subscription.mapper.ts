@@ -1,5 +1,5 @@
-import { IUserSubscriptionDocument } from '../../types/documents';
-import { UserSubscriptionEntity } from '../../../../domain/entities/user/user-subscription.entity';
+import { IUserSubscriptionDocument } from "../../types/documents";
+import { UserSubscriptionEntity } from "../../../../domain/entities/user/user-subscription.entity";
 
 export class UserSubscriptionMapper {
   static toDomain(doc: IUserSubscriptionDocument): UserSubscriptionEntity {

@@ -1,8 +1,8 @@
-import { IAuthRepository } from '../../../../domain/interfaces/repository/user/auth-repository.interface';
-import { IEmailService } from '../../../../domain/interfaces/services/email-service.interface';
-import { IOtpService } from '../../../../domain/interfaces/services/otp-service.interface';
-import { IEmailTemplate } from '../../../DTOs/email/email-template.dto';
-import { IResentOtpUseCase } from '../../interfaces/resent-otp.interface';
+import { IAuthRepository } from "../../../../domain/interfaces/repository/user/auth-repository.interface";
+import { IEmailService } from "../../../../domain/interfaces/services/email-service.interface";
+import { IOtpService } from "../../../../domain/interfaces/services/otp-service.interface";
+import { IEmailTemplate } from "../../../DTOs/email/email-template.dto";
+import { IResentOtpUseCase } from "../../interfaces/resent-otp.interface";
 /**
  * Resends an OTP to the user's email for sign up verification.
  */
@@ -19,7 +19,7 @@ export class ResentOtpUseCase implements IResentOtpUseCase {
       name,
       email,
       otp,
-      subject: 'Type Grid Sign Up Otp',
+      subject: "Type Grid Sign Up Otp",
     };
     await this._emailService.sentOtp(emailOptions);
   }

@@ -1,15 +1,15 @@
-import { AuthRequest } from '../../../types/AuthRequest';
-import logger from '../../../utils/logger';
-import { Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IGetCompanyGroupsUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-company-groups.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { ICreateCompanyGroupAutoUseCase } from '../../../application/use-cases/interfaces/companyAdmin/create-company-group-auto.interface';
-import { CreateCompanyGroupAutoDTO } from '../../../application/DTOs/companyAdmin/create-company-group-auto.dto';
-import { IGetCompanyGroupByIdUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-company-group-by-id.interface';
-import { IRemoveCompanyGroupMemberUseCase } from '../../../application/use-cases/interfaces/companyAdmin/remove-company-group-member.interface';
-import { IAddCompanyGroupMemberUseCase } from '../../../application/use-cases/interfaces/companyAdmin/add-company-group-member.interface';
-import { IDeleteCompanyGroupUseCase } from '../../../application/use-cases/interfaces/companyAdmin/delete-company-group.interface';
+import { AuthRequest } from "../../../types/AuthRequest";
+import logger from "../../../utils/logger";
+import { Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IGetCompanyGroupsUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-company-groups.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { ICreateCompanyGroupAutoUseCase } from "../../../application/use-cases/interfaces/companyAdmin/create-company-group-auto.interface";
+import { CreateCompanyGroupAutoDTO } from "../../../application/DTOs/companyAdmin/create-company-group-auto.dto";
+import { IGetCompanyGroupByIdUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-company-group-by-id.interface";
+import { IRemoveCompanyGroupMemberUseCase } from "../../../application/use-cases/interfaces/companyAdmin/remove-company-group-member.interface";
+import { IAddCompanyGroupMemberUseCase } from "../../../application/use-cases/interfaces/companyAdmin/add-company-group-member.interface";
+import { IDeleteCompanyGroupUseCase } from "../../../application/use-cases/interfaces/companyAdmin/delete-company-group.interface";
 
 export class CompanyGroupController {
   constructor(
@@ -20,7 +20,7 @@ export class CompanyGroupController {
     private _removeCompanyGroupMemberUseCase: IRemoveCompanyGroupMemberUseCase,
     private _addCompanyGroupMemberUseCase: IAddCompanyGroupMemberUseCase,
     private _deleteCompanyGroupUseCase: IDeleteCompanyGroupUseCase
-  ) {}
+  ) { }
 
   createGroup = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.userId;
@@ -33,7 +33,7 @@ export class CompanyGroupController {
 
     await this._createCompanyGroupUseCase.execute(groupData, userId);
 
-    logger.info('Company group created successfully', { userId });
+    logger.info("Company group created successfully", { userId });
     res.status(HttpStatus.CREATED).json({
       success: true,
       message: MESSAGES.GROUP_CREATED_SUCCESS,
@@ -51,7 +51,7 @@ export class CompanyGroupController {
 
     await this._createCompanyGroupAutoUseCase.execute(groupData, userId);
 
-    logger.info('Company group created successfully', { userId });
+    logger.info("Company group created successfully", { userId });
 
     res.status(HttpStatus.CREATED).json({
       success: true,
@@ -61,15 +61,18 @@ export class CompanyGroupController {
 
   getCompanyGroups = async (req: AuthRequest, res: Response): Promise<void> => {
     const userId = req.user?.userId;
+    const { search, limit, page } = req.query;
 
     if (!userId) {
       throw new Error(MESSAGES.UNAUTHORIZED);
     }
 
-    const groups = await this._getCompanyGroupsUseCase.execute(userId);
+    const { groups, totalPages } = await this._getCompanyGroupsUseCase.execute(userId, search as string, limit as string, page as string);
+
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.GROUPS_FETCHED_SUCCESS,
+      total: totalPages,
       groups,
     });
   };
@@ -100,7 +103,7 @@ export class CompanyGroupController {
 
     await this._removeCompanyGroupMemberUseCase.execute(groupId, memberId, adminUserId);
 
-    logger.info('Member removed from company group', {
+    logger.info("Member removed from company group", {
       groupId,
       memberId,
       adminUserId,
@@ -122,7 +125,7 @@ export class CompanyGroupController {
 
     await this._addCompanyGroupMemberUseCase.execute(groupId, memberId, adminUserId);
 
-    logger.info('Member added to company group', {
+    logger.info("Member added to company group", {
       groupId,
       memberId,
       adminUserId,
@@ -144,7 +147,7 @@ export class CompanyGroupController {
 
     await this._deleteCompanyGroupUseCase.execute(groupId, adminUserId);
 
-    logger.info('Company group deleted successfully', { groupId, adminUserId });
+    logger.info("Company group deleted successfully", { groupId, adminUserId });
 
     res.status(HttpStatus.OK).json({
       success: true,

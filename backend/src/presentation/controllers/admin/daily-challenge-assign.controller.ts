@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import { ICreateDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/create-daily-challenge.interface';
-import { IGetDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/get-daily-challenge.interface';
-import { IUpdateDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/update-daily-challenge.interface';
-import { IDeleteDailyAssignChallengeUseCase } from '../../../application/use-cases/interfaces/admin/delete-daily-challenge.interface';
-import { IGetDailyAssignChallengesUseCase } from '../../../application/use-cases/interfaces/admin/get-daily-challenges.interface';
+import { Request, Response } from "express";
+import { ICreateDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/create-daily-challenge.interface";
+import { IGetDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/get-daily-challenge.interface";
+import { IUpdateDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/update-daily-challenge.interface";
+import { IDeleteDailyAssignChallengeUseCase } from "../../../application/use-cases/interfaces/admin/delete-daily-challenge.interface";
+import { IGetDailyAssignChallengesUseCase } from "../../../application/use-cases/interfaces/admin/get-daily-challenges.interface";
 
-import logger from '../../../utils/logger';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
+import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
 
 export class DailyAssignChallengeManageController {
   constructor(
@@ -67,7 +67,7 @@ export class DailyAssignChallengeManageController {
   getDailyAssignChallenges = async (req: Request, res: Response): Promise<void> => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
-    const date = (req.query.date as string) || '';
+    const date = (req.query.date as string) || "";
     const result = await this._getDailyAssignChallengesUseCase.execute(date, page, limit);
     logger.info(MESSAGES.DAILY_CHALLENGES_FETCHED_SUCCESS, result);
     res.status(HttpStatus.OK).json({

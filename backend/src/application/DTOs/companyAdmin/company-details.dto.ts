@@ -7,7 +7,7 @@ export interface CompanyDetailsDTO {
     number: string;
     OwnerId: string;
     planId: string;
-    status: 'active' | 'inactive' | 'pending' | 'reject' | 'expired';
+    status: "active" | "inactive" | "pending" | "reject" | "expired";
     rejectionReason?: string;
     startDate?: Date;
     endDate?: Date;
@@ -18,7 +18,7 @@ export interface CompanyDetailsDTO {
     price: number;
     duration: number;
     features: string[];
-    type: 'normal' | 'company';
+    type: "normal" | "company";
     userLimit?: number;
   };
 }

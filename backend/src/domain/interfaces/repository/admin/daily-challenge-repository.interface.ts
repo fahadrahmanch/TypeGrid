@@ -1,5 +1,5 @@
-import { DailyAssignChallengeEntity } from '../../../../domain/entities/daily-challenge.entity';
-import { IBaseRepository } from '../base-repository.interface';
+import { DailyAssignChallengeEntity } from "../../../../domain/entities/daily-challenge.entity";
+import { IBaseRepository } from "../base-repository.interface";
 
 export interface IDailyAssignChallengeRepository extends IBaseRepository<DailyAssignChallengeEntity> {
   getDailyAssignChallenges(

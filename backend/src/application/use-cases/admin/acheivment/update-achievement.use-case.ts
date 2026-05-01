@@ -1,10 +1,10 @@
-import { IUpdateAchievementUseCase } from '../../interfaces/admin/update-achievement.interface';
-import { IAchievementRepository } from '../../../../domain/interfaces/repository/user/achievement-repository.interface';
-import { CreateAchievementDTO, AchievementResponseDTO } from '../../../DTOs/admin/achievement.dto';
-import { achievementToResponseDTO } from '../../../mappers/admin/achievement-management.mapper';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IUpdateAchievementUseCase } from "../../interfaces/admin/update-achievement.interface";
+import { IAchievementRepository } from "../../../../domain/interfaces/repository/user/achievement-repository.interface";
+import { CreateAchievementDTO, AchievementResponseDTO } from "../../../DTOs/admin/achievement.dto";
+import { achievementToResponseDTO } from "../../../mappers/admin/achievement-management.mapper";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 export class UpdateAchievementUseCase implements IUpdateAchievementUseCase {
   constructor(private readonly _achievementRepository: IAchievementRepository) {}

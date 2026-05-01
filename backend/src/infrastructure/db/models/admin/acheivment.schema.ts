@@ -1,6 +1,6 @@
 // models/UserAchievement.model.ts
-import mongoose, { Schema } from 'mongoose';
-import { IAchievementDocument } from '../../types/documents';
+import mongoose, { Schema } from "mongoose";
+import { IAchievementDocument } from "../../types/documents";
 const AchievementSchema = new Schema<IAchievementDocument>(
   {
     title: {
@@ -43,4 +43,4 @@ const AchievementSchema = new Schema<IAchievementDocument>(
   { timestamps: true }
 );
 
-export const AchievementModel = mongoose.model<IAchievementDocument>('Achievement', AchievementSchema);
+export const AchievementModel = mongoose.model<IAchievementDocument>("Achievement", AchievementSchema);

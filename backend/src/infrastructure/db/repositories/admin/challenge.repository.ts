@@ -1,9 +1,9 @@
-import { BaseRepository } from '../../base/base.repository';
-import { IAdminChallengeDocument } from '../../types/documents';
-import { ChallengeEntity } from '../../../../domain/entities/challenge.entity';
-import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
-import { Model } from 'mongoose';
-import { ChallengeMapper } from '../../mappers/challenge.mapper';
+import { BaseRepository } from "../../base/base.repository";
+import { IAdminChallengeDocument } from "../../types/documents";
+import { ChallengeEntity } from "../../../../domain/entities/challenge.entity";
+import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { Model } from "mongoose";
+import { ChallengeMapper } from "../../mappers/challenge.mapper";
 
 export class ChallengeRepository
   extends BaseRepository<IAdminChallengeDocument, ChallengeEntity>
@@ -21,7 +21,7 @@ export class ChallengeRepository
     const filter = searchText
       ? {
           $or: [
-            { title: { $regex: '^' + searchText, $options: 'i' } },
+            { title: { $regex: "^" + searchText, $options: "i" } },
             // { description: { $regex: searchText, $options: "i" } },
           ],
         }

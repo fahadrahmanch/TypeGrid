@@ -4,6 +4,6 @@ export interface SubscriptionPlanDTO {
   price: number;
   duration: number;
   features: string[];
-  type: 'normal' | 'company';
+  type: "normal" | "company";
   userLimit?: number;
 }

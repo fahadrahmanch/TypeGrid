@@ -1,10 +1,9 @@
-import { IGetAllDiscussionsUseCase } from '../../interfaces/user/get-all-discussions.interface';
-import { IDiscussionRepository } from '../../../../domain/interfaces/repository/user/discussion-repository.interface';
-import { IDiscussionDTO } from '../../../DTOs/user/get-discussions.dto';
-import { discussionToDTO } from '../../../mappers/user/discussion-dto.mapper';
-import { DiscussionEntity } from '../../../../domain/entities/user/discussion.entity';
-import { ICommentRepository } from '../../../../domain/interfaces/repository/user/comment-repository.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
+import { IGetAllDiscussionsUseCase } from "../../interfaces/user/get-all-discussions.interface";
+import { IDiscussionRepository } from "../../../../domain/interfaces/repository/user/discussion-repository.interface";
+import { IDiscussionDTO } from "../../../DTOs/user/get-discussions.dto";
+import { discussionToDTO } from "../../../mappers/user/discussion-dto.mapper";
+import { ICommentRepository } from "../../../../domain/interfaces/repository/user/comment-repository.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
 export class GetAllDiscussionsUseCase implements IGetAllDiscussionsUseCase {
   constructor(
     private _discussionRepository: IDiscussionRepository,
@@ -18,12 +17,11 @@ export class GetAllDiscussionsUseCase implements IGetAllDiscussionsUseCase {
     const rawDiscussions = await this._discussionRepository.getAllDiscussions(skip, limit);
     const allDiscussions = await Promise.all(
       rawDiscussions.map(async (discussion) => {
-        const comments = await this._discussionCommentRepository.getAllComments(discussion.getId() || '');
-        const user = await this._userRepository.findById(discussion.getUserId() || '');
+        const comments = await this._discussionCommentRepository.getAllComments(discussion.getId() || "");
+        const user = await this._userRepository.findById(discussion.getUserId() || "");
         return discussionToDTO(discussion, user, comments.length);
       })
     );
-    console.log("allDiscussions", allDiscussions);
     return allDiscussions;
   }
 }

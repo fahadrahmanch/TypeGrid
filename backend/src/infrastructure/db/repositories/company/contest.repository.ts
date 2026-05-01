@@ -1,10 +1,10 @@
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { Model } from 'mongoose';
-import mongoose from 'mongoose';
-import { BaseRepository } from '../../base/base.repository';
-import { IContestDocument } from '../../types/documents';
-import { ContestEntity } from '../../../../domain/entities/company-contest.entity';
-import { ContestMapper } from '../../mappers/contest.mapper';
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { Model } from "mongoose";
+import mongoose from "mongoose";
+import { BaseRepository } from "../../base/base.repository";
+import { IContestDocument } from "../../types/documents";
+import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
+import { ContestMapper } from "../../mappers/contest.mapper";
 
 export class ContestRepository extends BaseRepository<IContestDocument, ContestEntity> implements IContestRepository {
   constructor(model: Model<IContestDocument>) {
@@ -14,10 +14,10 @@ export class ContestRepository extends BaseRepository<IContestDocument, ContestE
   async getGroupContests(groupIds: string[]): Promise<ContestEntity[]> {
     const docs = await this.model
       .find({
-        contestMode: 'group',
+        contestMode: "group",
         groupId: { $in: groupIds },
         date: { $gt: new Date() },
-        status: 'upcoming',
+        status: "upcoming",
       })
       .lean<IContestDocument[]>()
       .exec();

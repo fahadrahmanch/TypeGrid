@@ -1,10 +1,10 @@
-import { IUpdateChallengeUseCase } from '../../interfaces/admin/update-challenge.interface';
-import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
-import { ChallengeResponseDTO, UpdateChallengeDTO } from '../../../DTOs/admin/challenge.dto';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { mapToChallengeDTO } from '../../../mappers/admin/challenge-management.mapper';
+import { IUpdateChallengeUseCase } from "../../interfaces/admin/update-challenge.interface";
+import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { ChallengeResponseDTO, UpdateChallengeDTO } from "../../../DTOs/admin/challenge.dto";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { mapToChallengeDTO } from "../../../mappers/admin/challenge-management.mapper";
 
 export class UpdateChallengeUseCase implements IUpdateChallengeUseCase {
   constructor(private readonly _challengeRepository: IChallengeRepository) {}

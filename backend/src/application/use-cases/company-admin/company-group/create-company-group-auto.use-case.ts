@@ -1,12 +1,12 @@
-import { ICreateCompanyGroupAutoUseCase } from '../../interfaces/companyAdmin/create-company-group-auto.interface';
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
-import { ICompanyUserStatsRepository } from '../../../../domain/interfaces/repository/company/company-user-stats-repository.interface';
-import { CreateCompanyGroupAutoDTO } from '../../../DTOs/companyAdmin/create-company-group-auto.dto';
-import { CompanyGroupEntity } from '../../../../domain/entities/company-group.entity';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { ICreateCompanyGroupAutoUseCase } from "../../interfaces/companyAdmin/create-company-group-auto.interface";
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
+import { ICompanyUserStatsRepository } from "../../../../domain/interfaces/repository/company/company-user-stats-repository.interface";
+import { CreateCompanyGroupAutoDTO } from "../../../DTOs/companyAdmin/create-company-group-auto.dto";
+import { CompanyGroupEntity } from "../../../../domain/entities/company-group.entity";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 export class CreateCompanyGroupAutoUseCase implements ICreateCompanyGroupAutoUseCase {
   constructor(
     private readonly userRepo: IUserRepository,

@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { IGroupDocument } from '../../types/documents';
+import { Schema, model } from "mongoose";
+import { IGroupDocument } from "../../types/documents";
 
 const groupSchema = new Schema<IGroupDocument>(
   {
@@ -11,14 +11,14 @@ const groupSchema = new Schema<IGroupDocument>(
 
     ownerId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
 
     members: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
 
@@ -30,7 +30,7 @@ const groupSchema = new Schema<IGroupDocument>(
 
     difficulty: {
       type: String,
-      enum: ['easy', 'medium', 'hard'],
+      enum: ["easy", "medium", "hard"],
       required: true,
     },
 
@@ -43,13 +43,13 @@ const groupSchema = new Schema<IGroupDocument>(
 
     status: {
       type: String,
-      enum: ['waiting', 'started', 'completed'],
-      default: 'waiting',
+      enum: ["waiting", "started", "completed"],
+      default: "waiting",
     },
     kickedUsers: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
   },
@@ -58,4 +58,4 @@ const groupSchema = new Schema<IGroupDocument>(
   }
 );
 
-export const Group = model<IGroupDocument>('Group', groupSchema);
+export const Group = model<IGroupDocument>("Group", groupSchema);

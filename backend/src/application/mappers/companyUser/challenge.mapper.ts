@@ -1,4 +1,4 @@
-import { SentChallengeDTO, OpponentDTO, ChallengeDTO, ChallengeGameDTO } from '../../DTOs/companyUser/challenge.dto';
+import { SentChallengeDTO, OpponentDTO, ChallengeDTO, ChallengeGameDTO } from "../../DTOs/companyUser/challenge.dto";
 
 export type ChallengeOpponentPayload = {
   _id: any;
@@ -40,7 +40,7 @@ export const mapOpponentToDTO = (user: ChallengeOpponentPayload): OpponentDTO =>
     id: user._id!.toString(),
     name: user.name,
     email: user.email,
-    imageUrl: user.imageUrl || '',
+    imageUrl: user.imageUrl || "",
     companyRole: user.CompanyRole ?? null,
   };
 };
@@ -52,8 +52,8 @@ export const mapChallengeToDTO = (challenge: ChallengePayload): ChallengeDTO => 
     senderId: challenge.senderId.toString(),
     receiverId: challenge.receiverId.toString(),
     status: challenge.status,
-    competitionId: challenge.competitionId ? challenge.competitionId.toString() : '',
-    type: challenge.type as 'sent' | 'received' | 'completed',
+    competitionId: challenge.competitionId ? challenge.competitionId.toString() : "",
+    type: challenge.type as "sent" | "received" | "completed",
     opponent: mapOpponentToDTO(challenge.opponent),
     createdAt: challenge.createdAt!,
     updatedAt: challenge.updatedAt!,
@@ -90,18 +90,18 @@ export const mapChallengeGameToDTO = (data: ChallengeGamePayload): ChallengeGame
     startedAt: data.competition.startedAt!,
     status: data.competition.status,
     duration: data.competition.duration,
-    companyId: data.competition.CompanyId ? data.competition.CompanyId.toString() : '',
+    companyId: data.competition.CompanyId ? data.competition.CompanyId.toString() : "",
     countDown: data.competition.countDown,
     lesson: {
       id: data.lesson._id!.toString(),
-      title: data.lesson.title || '',
+      title: data.lesson.title || "",
       text: data.lesson.text,
     },
     players: data.players.map((player) => ({
       id: player._id!.toString(),
       name: player.name,
-      imageUrl: player.imageUrl || '',
-      companyId: player.CompanyId ? player.CompanyId.toString() : '',
+      imageUrl: player.imageUrl || "",
+      companyId: player.CompanyId ? player.CompanyId.toString() : "",
       companyRole: player.CompanyRole || null,
       bio: player.bio || null,
     })),

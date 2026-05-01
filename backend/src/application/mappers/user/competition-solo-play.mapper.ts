@@ -1,4 +1,4 @@
-import { CompetitionDTOSoloPlay } from '../../DTOs/user/competition-solo-play.dto';
+import { CompetitionDTOSoloPlay } from "../../DTOs/user/competition-solo-play.dto";
 
 export type PopulatedSoloCompetitionPayload = {
   _id: any;
@@ -26,10 +26,10 @@ export const mapCompetitionToDTOSoloPlay = (competition: PopulatedSoloCompetitio
     mode: competition.mode,
     status: competition.status,
     duration: competition.duration,
-    startedAt: competition.startedAt ? competition.startedAt.toString() : '',
+    startedAt: competition.startedAt ? competition.startedAt.toString() : "",
     countDown: competition.countDown,
     lesson: {
-      _id: competition.lesson._id ?? '',
+      _id: competition.lesson._id ?? "",
       text: competition.lesson.text,
       category: competition.lesson.category,
       level: competition.lesson.level,
@@ -37,7 +37,7 @@ export const mapCompetitionToDTOSoloPlay = (competition: PopulatedSoloCompetitio
     participants: competition.participants.map((user) => ({
       _id: user._id!.toString(),
       name: user.name,
-      imageUrl: user.imageUrl || '',
+      imageUrl: user.imageUrl || "",
       isHost: false,
     })),
   };

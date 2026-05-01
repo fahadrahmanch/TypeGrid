@@ -1,11 +1,11 @@
-import { Schema, model } from 'mongoose';
-import { IContestDocument } from '../../types/documents';
+import { Schema, model } from "mongoose";
+import { IContestDocument } from "../../types/documents";
 
 const contestSchema = new Schema<IContestDocument>(
   {
     contestMode: {
       type: String,
-      enum: ['open', 'group'],
+      enum: ["open", "group"],
       required: true,
     },
     title: {
@@ -19,29 +19,29 @@ const contestSchema = new Schema<IContestDocument>(
     },
     difficulty: {
       type: String,
-      enum: ['easy', 'medium', 'hard'],
+      enum: ["easy", "medium", "hard"],
       required: true,
     },
     groupId: {
       type: Schema.Types.ObjectId,
-      ref: 'CompanyGroup',
+      ref: "CompanyGroup",
       default: null,
     },
     textSource: {
       type: String,
-      enum: ['manual', 'random'],
+      enum: ["manual", "random"],
       required: true,
     },
     participants: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
     contestText: {
       type: String,
       required: function (this: IContestDocument) {
-        return this.textSource === 'manual';
+        return this.textSource === "manual";
       },
     },
     date: {
@@ -69,8 +69,8 @@ const contestSchema = new Schema<IContestDocument>(
     ],
     status: {
       type: String,
-      enum: ['upcoming', 'ongoing', 'completed', 'waiting'],
-      default: 'upcoming',
+      enum: ["upcoming", "ongoing", "completed", "waiting"],
+      default: "upcoming",
     },
     countDown: {
       type: Number,
@@ -84,11 +84,11 @@ const contestSchema = new Schema<IContestDocument>(
     },
     CompanyId: {
       type: Schema.Types.ObjectId,
-      ref: 'Company',
+      ref: "Company",
       required: true,
     },
   },
   { timestamps: true }
 );
 
-export const Contest = model<IContestDocument>('Contest', contestSchema);
+export const Contest = model<IContestDocument>("Contest", contestSchema);

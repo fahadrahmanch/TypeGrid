@@ -1,11 +1,11 @@
-import { IGetDailyAssignChallengesUseCase } from '../../interfaces/admin/get-daily-challenges.interface';
-import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
-import { DailyAssignChallengeResponseDTO } from '../../../DTOs/admin/daily-challenge.dto';
-import { DailyAssignChallengeMapper } from '../../../mappers/admin/daily-assign-challenge.mapper';
-import { IChallengeRepository } from '../../../../domain/interfaces/repository/admin/challenge-repository.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IGetDailyAssignChallengesUseCase } from "../../interfaces/admin/get-daily-challenges.interface";
+import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
+import { DailyAssignChallengeResponseDTO } from "../../../DTOs/admin/daily-challenge.dto";
+import { DailyAssignChallengeMapper } from "../../../mappers/admin/daily-assign-challenge.mapper";
+import { IChallengeRepository } from "../../../../domain/interfaces/repository/admin/challenge-repository.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class GetDailyAssignChallengesUseCase implements IGetDailyAssignChallengesUseCase {
   constructor(

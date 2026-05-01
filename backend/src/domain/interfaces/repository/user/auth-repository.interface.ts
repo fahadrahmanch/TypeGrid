@@ -1,5 +1,5 @@
-import { IBaseRepository } from '../base-repository.interface';
-import AuthUserEntity from '../../../entities/auth-user.entity';
+import { IBaseRepository } from "../base-repository.interface";
+import AuthUserEntity from "../../../entities/auth-user.entity";
 
 export interface IAuthRepository extends IBaseRepository<AuthUserEntity> {
   findByEmail(email: string): Promise<AuthUserEntity | null>;

@@ -1,11 +1,11 @@
-import { AuthRequest } from '../../../types/AuthRequest';
-import logger from '../../../utils/logger';
-import { Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IStartQuickPlayUseCase } from '../../../application/use-cases/interfaces/user/quick-play/start-quick-play.interface';
-import { IChangeStatusUseCase } from '../../../application/use-cases/interfaces/user/quick-play/change-status.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { AuthRequest } from "../../../types/AuthRequest";
+import logger from "../../../utils/logger";
+import { Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IStartQuickPlayUseCase } from "../../../application/use-cases/interfaces/user/quick-play/start-quick-play.interface";
+import { IChangeStatusUseCase } from "../../../application/use-cases/interfaces/user/quick-play/change-status.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 export class QuickPlayController {
   constructor(
     private _startQuickPlayUseCase: IStartQuickPlayUseCase,

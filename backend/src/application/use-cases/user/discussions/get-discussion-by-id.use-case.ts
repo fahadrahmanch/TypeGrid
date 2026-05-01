@@ -18,26 +18,25 @@ export class GetDiscussionByIdUseCase implements IGetDiscussionByIdUseCase {
       return null;
     }
 
-    const discussionUser = await this._userRepository.findById(discussion.getUserId() || '');
+    const discussionUser = await this._userRepository.findById(discussion.getUserId() || "");
     const commentEntities = await this._commentRepository.getAllComments(id);
-    console.log("commentEntities", commentEntities);
     const mappedComments = await Promise.all(
       commentEntities.map(async (comment) => {
-        const user = await this._userRepository.findById(comment.getUserId() || '');
+        const user = await this._userRepository.findById(comment.getUserId() || "");
         const replies = await Promise.all(comment.getReplies().map(async (item) => {
-          const replyUser = await this._userRepository.findById(item.userId || '');
+          const replyUser = await this._userRepository.findById(item.userId || "");
           return {
-            id: item.userId || '',
-            authorName: replyUser?.name || 'Unknown',
-            authorAvatar: replyUser?.imageUrl || '',
+            id: item.userId || "",
+            authorName: replyUser?.name || "Unknown",
+            authorAvatar: replyUser?.imageUrl || "",
             content: item.content,
             postedAt: item.createdAt?.toISOString() || new Date().toISOString(),
           };
         }));
         return {
-          id: comment.getId() || '',
-          authorName: user?.name || 'Unknown',
-          authorAvatar: user?.imageUrl || '',
+          id: comment.getId() || "",
+          authorName: user?.name || "Unknown",
+          authorAvatar: user?.imageUrl || "",
           replies: replies,
           content: comment.getContent(),
           postedAt: comment.getCreatedAt()?.toISOString() || new Date().toISOString(),

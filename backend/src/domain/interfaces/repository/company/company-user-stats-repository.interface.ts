@@ -1,5 +1,5 @@
-import { CompanyUserStatsEntity } from '../../../entities';
-import { IBaseRepository } from '../base-repository.interface';
+import { CompanyUserStatsEntity } from "../../../entities";
+import { IBaseRepository } from "../base-repository.interface";
 export interface ICompanyUserStatsRepository extends IBaseRepository<CompanyUserStatsEntity> {
   getLeaderboard(companyId: string, limit: number): Promise<CompanyUserStatsEntity[]>;
   updateStats(

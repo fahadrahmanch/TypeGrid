@@ -1,5 +1,5 @@
-import { Model } from 'mongoose';
-import { IBaseRepository } from '../../../domain/interfaces/repository/base-repository.interface';
+import mongoose, { Model } from "mongoose";
+import { IBaseRepository } from "../../../domain/interfaces/repository/base-repository.interface";
 
 export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDomain> {
   protected model: Model<TDocument>;
@@ -66,4 +66,39 @@ export class BaseRepository<TDocument, TDomain> implements IBaseRepository<TDoma
     const doc = await this.model.findByIdAndDelete(_id).exec();
     return doc ? this.toDomain(doc) : null;
   }
+
+  async deleteMany(filter: any): Promise<void> {
+    await this.model.deleteMany(filter).exec();
+  }
+
+  async countDocuments(filter: any = {}): Promise<number> {
+    return await this.model.countDocuments(filter).exec();
+  }
+
+  async aggregate(pipeline: any[]): Promise<any[]> {
+    const convertIds = (obj: any) => {
+      if (Array.isArray(obj)) {
+        obj.forEach(convertIds);
+      } else if (obj !== null && typeof obj === "object") {
+        // Prevent traversing native Date or ObjectId instances
+        if (obj instanceof Date || obj instanceof mongoose.Types.ObjectId) {
+          return;
+        }
+        for (const key in obj) {
+          if (typeof obj[key] === "string" && mongoose.Types.ObjectId.isValid(obj[key]) && obj[key].length === 24) {
+            if (key.endsWith("Id") || key === "_id") {
+              obj[key] = new mongoose.Types.ObjectId(obj[key]);
+            }
+          } else if (typeof obj[key] === "object") {
+            convertIds(obj[key]);
+          }
+        }
+      }
+    };
+
+    convertIds(pipeline);
+    return await this.model.aggregate(pipeline).exec();
+  }
 }
+
+

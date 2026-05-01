@@ -1,11 +1,11 @@
-import { MESSAGES } from '../../../domain/constants/messages';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IApproveCompanyUseCase } from '../../../application/use-cases/interfaces/admin/approve-company.interface';
-import { IRejectCompanyUseCase } from '../../../application/use-cases/interfaces/admin/reject-company.interface';
-import { IGetCompaniesUseCase } from '../../../application/use-cases/interfaces/admin/get-companies.interface';
-import { Request, Response } from 'express';
-import logger from '../../../utils/logger';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { MESSAGES } from "../../../domain/constants/messages";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IApproveCompanyUseCase } from "../../../application/use-cases/interfaces/admin/approve-company.interface";
+import { IRejectCompanyUseCase } from "../../../application/use-cases/interfaces/admin/reject-company.interface";
+import { IGetCompaniesUseCase } from "../../../application/use-cases/interfaces/admin/get-companies.interface";
+import { Request, Response } from "express";
+import logger from "../../../utils/logger";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class CompanyManageController {
   constructor(
@@ -24,7 +24,7 @@ export class CompanyManageController {
       Number(page),
       Number(limit)
     );
-    logger.info('Companies fetched successfully by admin');
+    logger.info("Companies fetched successfully by admin");
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.COMPANIES_FETCHED_SUCCESS,
@@ -42,10 +42,10 @@ export class CompanyManageController {
       throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
     }
 
-    if (status === 'active') {
+    if (status === "active") {
       await this._approveCompanyUseCase.execute(companyId);
 
-      logger.info('Company request approved successfully', { companyId });
+      logger.info("Company request approved successfully", { companyId });
       res.status(HttpStatus.OK).json({
         success: true,
         message: MESSAGES.COMPANY_APPROVED_SUCCESS,
@@ -53,14 +53,14 @@ export class CompanyManageController {
       return;
     }
 
-    if (status === 'reject') {
+    if (status === "reject") {
       if (!reason) {
         throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.ALL_FIELDS_REQUIRED);
       }
 
       await this._rejectCompanyUseCase.execute(companyId, reason);
 
-      logger.info('Company request rejected successfully', {
+      logger.info("Company request rejected successfully", {
         companyId,
         reason,
       });

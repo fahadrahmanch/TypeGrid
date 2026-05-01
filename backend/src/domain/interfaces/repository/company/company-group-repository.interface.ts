@@ -1,5 +1,5 @@
-import { IBaseRepository } from '../base-repository.interface';
-import { CompanyGroupEntity } from '../../../entities/company-group.entity';
+import { IBaseRepository } from "../base-repository.interface";
+import { CompanyGroupEntity } from "../../../entities/company-group.entity";
 export interface ICompanyGroupRepository extends IBaseRepository<CompanyGroupEntity> {
   create(data: any): Promise<any>;
   findById(
@@ -19,4 +19,5 @@ export interface ICompanyGroupRepository extends IBaseRepository<CompanyGroupEnt
   delete(_id: string): Promise<any | null>;
   updateById(_id: string, updateQuery: any): Promise<any | null>;
   getGroup(userId: string): Promise<any[]>;
+  allGroups(companyId: string, search?: string, limit?: string, page?: string): Promise<{ groups: CompanyGroupEntity[]; totalPages: number }>;
 }

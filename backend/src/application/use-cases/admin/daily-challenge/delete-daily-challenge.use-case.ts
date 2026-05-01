@@ -1,5 +1,5 @@
-import { IDeleteDailyAssignChallengeUseCase } from '../../interfaces/admin/delete-daily-challenge.interface';
-import { IDailyAssignChallengeRepository } from '../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface';
+import { IDeleteDailyAssignChallengeUseCase } from "../../interfaces/admin/delete-daily-challenge.interface";
+import { IDailyAssignChallengeRepository } from "../../../../domain/interfaces/repository/admin/daily-challenge-repository.interface";
 
 export class DeleteDailyAssignChallengeUseCase implements IDeleteDailyAssignChallengeUseCase {
   constructor(private readonly _dailyAssignChallengeRepository: IDailyAssignChallengeRepository) {}

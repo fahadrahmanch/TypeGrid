@@ -1,7 +1,7 @@
-import { SubscriptionDetailsDTO, UserSubscriptionDetailsDTO } from '../../DTOs/user/subscription-details.dto';
-import { UserSubscriptionEntity } from '../../../domain/entities/user/user-subscription.entity';
-import { CompanyEntity } from '../../../domain/entities/company.entity';
-import { SubscriptionPlanEntity } from '../../../domain/entities/admin/subscription-plan.entity';
+import { SubscriptionDetailsDTO, UserSubscriptionDetailsDTO } from "../../DTOs/user/subscription-details.dto";
+import { UserSubscriptionEntity } from "../../../domain/entities/user/user-subscription.entity";
+import { CompanyEntity } from "../../../domain/entities/company.entity";
+import { SubscriptionPlanEntity } from "../../../domain/entities/admin/subscription-plan.entity";
 
 export function toUserSubscriptionDTO(
   userSubscription: UserSubscriptionEntity | any,
@@ -11,7 +11,7 @@ export function toUserSubscriptionDTO(
   const planData = plan instanceof SubscriptionPlanEntity ? plan.toObject() : plan;
 
   return {
-    planId: planData.id || planData._id?.toString() || '',
+    planId: planData.id || planData._id?.toString() || "",
     planName: planData.name,
     status: subData.status,
     startDate: subData.startDate,
@@ -38,13 +38,13 @@ export function toSubscriptionDetailsDTO(
     const planData = companySub.plan instanceof SubscriptionPlanEntity ? companySub.plan.toObject() : companySub.plan;
 
     details.companySubscription = {
-      companyId: companyData.id || companyData._id?.toString() || '',
-      companyName: companyData.companyName || '',
+      companyId: companyData.id || companyData._id?.toString() || "",
+      companyName: companyData.companyName || "",
       subscription: {
-        planId: planData.id || planData._id?.toString() || '',
-        planName: planData.name || '',
-        status: companyData.status || 'inactive',
-        type: 'company',
+        planId: planData.id || planData._id?.toString() || "",
+        planName: planData.name || "",
+        status: companyData.status || "inactive",
+        type: "company",
         startDate: companyData.startDate,
         endDate: companyData.endDate,
       },

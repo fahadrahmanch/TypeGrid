@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
-import { ICreateAchievementUseCase } from '../../../application/use-cases/interfaces/admin/create-achievement.interface';
-import { IUpdateAchievementUseCase } from '../../../application/use-cases/interfaces/admin/update-achievement.interface';
-import { IDeleteAchievementUseCase } from '../../../application/use-cases/interfaces/admin/delete-achievement.interface';
-import { IGetAchievementsUseCase } from '../../../application/use-cases/interfaces/admin/get-achievements.interface';
-import { IGetAchievementByIdUseCase } from '../../../application/use-cases/interfaces/admin/get-achievement-by-id.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { HttpStatus } from '../../constants/httpStatus';
+import { Request, Response } from "express";
+import { ICreateAchievementUseCase } from "../../../application/use-cases/interfaces/admin/create-achievement.interface";
+import { IUpdateAchievementUseCase } from "../../../application/use-cases/interfaces/admin/update-achievement.interface";
+import { IDeleteAchievementUseCase } from "../../../application/use-cases/interfaces/admin/delete-achievement.interface";
+import { IGetAchievementsUseCase } from "../../../application/use-cases/interfaces/admin/get-achievements.interface";
+import { IGetAchievementByIdUseCase } from "../../../application/use-cases/interfaces/admin/get-achievement-by-id.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { HttpStatus } from "../../constants/httpStatus";
 
 export class AchievementManageController {
   constructor(
@@ -18,7 +18,6 @@ export class AchievementManageController {
 
   createAchievement = async (req: Request, res: Response): Promise<void> => {
     const data = req.body;
-    console.log(data);
     const achievement = await this._createAchievementUseCase.createAchievement(data);
     res.status(HttpStatus.CREATED).json({
       success: true,
@@ -28,7 +27,7 @@ export class AchievementManageController {
   };
 
   getAllAchievements = async (req: Request, res: Response): Promise<void> => {
-    const search = (req.query.search as string) || '';
+    const search = (req.query.search as string) || "";
     const limit = parseInt(req.query.limit as string) || 10;
     const page = parseInt(req.query.page as string) || 1;
 

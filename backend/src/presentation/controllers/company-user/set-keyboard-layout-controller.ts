@@ -1,9 +1,9 @@
-import { Response } from 'express';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { ISetKeyboardLayoutUseCase } from '../../../application/use-cases/interfaces/companyUser/set-keyboard-layout.interface';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Response } from "express";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { ISetKeyboardLayoutUseCase } from "../../../application/use-cases/interfaces/companyUser/set-keyboard-layout.interface";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class SetKeyboardLayoutController {
   constructor(private readonly setKeyboardLayoutUseCase: ISetKeyboardLayoutUseCase) {}

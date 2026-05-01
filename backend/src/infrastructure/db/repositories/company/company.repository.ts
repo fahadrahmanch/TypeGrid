@@ -1,10 +1,10 @@
-import { Model } from 'mongoose';
-import { BaseRepository } from '../../base/base.repository';
-import { ICompanyRepository } from '../../../../domain/interfaces/repository/company/company-repository.interface';
-import { ICompanyDocument } from '../../types/documents';
-import { CompanyEntity } from '../../../../domain/entities';
-import { CompanyMapper } from '../../mappers/company.mapper';
-import { Status } from '../../../../domain/enums/status.enum';
+import { Model } from "mongoose";
+import { BaseRepository } from "../../base/base.repository";
+import { ICompanyRepository } from "../../../../domain/interfaces/repository/company/company-repository.interface";
+import { ICompanyDocument } from "../../types/documents";
+import { CompanyEntity } from "../../../../domain/entities";
+import { CompanyMapper } from "../../mappers/company.mapper";
+import { Status } from "../../../../domain/enums/status.enum";
 
 export class CompanyRepository extends BaseRepository<ICompanyDocument, CompanyEntity> implements ICompanyRepository {
   constructor(model: Model<ICompanyDocument>) {
@@ -21,8 +21,8 @@ export class CompanyRepository extends BaseRepository<ICompanyDocument, CompanyE
 
     if (searchText) {
       query.$or = [
-        { companyName: { $regex: '^' + searchText, $options: 'i' } },
-        { email: { $regex: '^' + searchText, $options: 'i' } },
+        { companyName: { $regex: "^" + searchText, $options: "i" } },
+        { email: { $regex: "^" + searchText, $options: "i" } },
       ];
     }
 

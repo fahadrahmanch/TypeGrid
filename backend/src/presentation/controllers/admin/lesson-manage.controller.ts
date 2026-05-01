@@ -1,13 +1,13 @@
-import { Request, Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { ICreateLessonUseCase } from '../../../application/use-cases/interfaces/admin/create-lesson.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IGetLessonUseCase } from '../../../application/use-cases/interfaces/admin/get-lesson.interface';
-import { IUpdateLessonUseCase } from '../../../application/use-cases/interfaces/admin/update-lesson.interface';
-import { IDeleteLessonUseCase } from '../../../application/use-cases/interfaces/admin/delete-lesson.interface';
-import { IGetLessonsUseCase } from '../../../application/use-cases/interfaces/admin/get-lessons.interface';
-import logger from '../../../utils/logger';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Request, Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { ICreateLessonUseCase } from "../../../application/use-cases/interfaces/admin/create-lesson.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IGetLessonUseCase } from "../../../application/use-cases/interfaces/admin/get-lesson.interface";
+import { IUpdateLessonUseCase } from "../../../application/use-cases/interfaces/admin/update-lesson.interface";
+import { IDeleteLessonUseCase } from "../../../application/use-cases/interfaces/admin/delete-lesson.interface";
+import { IGetLessonsUseCase } from "../../../application/use-cases/interfaces/admin/get-lessons.interface";
+import logger from "../../../utils/logger";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 //lesson management controller
 
@@ -29,7 +29,7 @@ export class LessonManageController {
     }
 
     await this._createLessonUseCase.execute(values);
-    logger.info('Lesson created successfully', {
+    logger.info("Lesson created successfully", {
       title: values.title,
       category: values.category,
     });
@@ -91,7 +91,7 @@ export class LessonManageController {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.LESSON_NOT_FOUND);
     }
 
-    logger.info('Lesson updated successfully', { lessonId });
+    logger.info("Lesson updated successfully", { lessonId });
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.UPDATE_SUCCESS,
@@ -109,7 +109,7 @@ export class LessonManageController {
     }
 
     await this._deleteLessonUseCase.execute(lessonId);
-    logger.info('Lesson deleted successfully', { lessonId });
+    logger.info("Lesson deleted successfully", { lessonId });
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.DELETE_SUCCESS,

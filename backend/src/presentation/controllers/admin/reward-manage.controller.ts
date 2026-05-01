@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { ICreateRewardUseCase } from '../../../application/use-cases/interfaces/admin/create-reward.interface';
-import logger from '../../../utils/logger';
-import { IGetRewardsUseCase } from '../../../application/use-cases/interfaces/admin/get-rewards.interface';
-import { IGetRewardByIdUseCase } from '../../../application/use-cases/interfaces/admin/get-reward-by-id.interface';
-import { IUpdateRewardUseCase } from '../../../application/use-cases/interfaces/admin/update-reward.interface';
-import { IDeleteRewardUseCase } from '../../../application/use-cases/interfaces/admin/delete-reward.interface';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
+import { Request, Response } from "express";
+import { ICreateRewardUseCase } from "../../../application/use-cases/interfaces/admin/create-reward.interface";
+import logger from "../../../utils/logger";
+import { IGetRewardsUseCase } from "../../../application/use-cases/interfaces/admin/get-rewards.interface";
+import { IGetRewardByIdUseCase } from "../../../application/use-cases/interfaces/admin/get-reward-by-id.interface";
+import { IUpdateRewardUseCase } from "../../../application/use-cases/interfaces/admin/update-reward.interface";
+import { IDeleteRewardUseCase } from "../../../application/use-cases/interfaces/admin/delete-reward.interface";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
 export class RewardManageController {
   constructor(
     private readonly _createRewardUseCase: ICreateRewardUseCase,

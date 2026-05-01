@@ -1,4 +1,4 @@
-export type LessonResultStatus = 'assigned' | 'progress' | 'completed' | 'expired';
+export type LessonResultStatus = "assigned" | "progress" | "completed" | "expired";
 
 export class LessonResult {
   private readonly _id: string | undefined;
@@ -27,8 +27,8 @@ export class LessonResult {
     status: LessonResultStatus;
     createdAt?: Date;
   }) {
-    if (params.wpm < 0) throw new Error('WPM cannot be negative');
-    if (params.accuracy < 0 || params.accuracy > 100) throw new Error('Accuracy must be between 0 and 100');
+    if (params.wpm < 0) throw new Error("WPM cannot be negative");
+    if (params.accuracy < 0 || params.accuracy > 100) throw new Error("Accuracy must be between 0 and 100");
     this._id = params._id;
     this.companyId = params.companyId;
     this.assignmentId = params.assignmentId;
@@ -84,11 +84,11 @@ export class LessonResult {
   }
 
   markCompleted() {
-    this.status = 'completed';
+    this.status = "completed";
   }
 
   markExpired() {
-    this.status = 'expired';
+    this.status = "expired";
   }
 
   toPersistence() {

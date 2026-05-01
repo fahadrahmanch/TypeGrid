@@ -3,5 +3,5 @@ export interface AddUserDTO {
   email: string;
   password: string;
   CompanyId: string;
-  role?: 'user' | 'admin' | 'companyUser' | 'companyAdmin';
+  role?: "user" | "admin" | "companyUser" | "companyAdmin";
 }

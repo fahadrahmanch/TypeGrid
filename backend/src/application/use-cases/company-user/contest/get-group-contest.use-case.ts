@@ -1,12 +1,12 @@
-import { IGetGroupContestsUseCase } from '../../interfaces/companyUser/get-group-contest.interface';
-import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { groupContestDTO } from '../../../DTOs/companyAdmin/company-contest.dto';
-import { mapGroupContestDTO } from '../../../mappers/companyAdmin/company-contest.mapper';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { ContestEntity } from '../../../../domain/entities/company-contest.entity';
+import { IGetGroupContestsUseCase } from "../../interfaces/companyUser/get-group-contest.interface";
+import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { groupContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { mapGroupContestDTO } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
 /**
  * Use case for retrieving contests belonging to the user's groups.
  */

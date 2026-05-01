@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
-import { HttpStatus } from '../../constants/httpStatus';
-import { IGetUsersUseCase } from '../../../application/use-cases/interfaces/admin/get-users.interface';
-import { IBlockUserUseCase } from '../../../application/use-cases/interfaces/admin/block-user.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import logger from '../../../utils/logger';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Request, Response } from "express";
+import { HttpStatus } from "../../constants/httpStatus";
+import { IGetUsersUseCase } from "../../../application/use-cases/interfaces/admin/get-users.interface";
+import { IBlockUserUseCase } from "../../../application/use-cases/interfaces/admin/block-user.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import logger from "../../../utils/logger";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 
 export class UserManageController {
   constructor(
@@ -32,7 +32,7 @@ export class UserManageController {
 
     await this._blockUserUseCase.execute(userId);
 
-    logger.info('User status updated successfully by admin', { userId });
+    logger.info("User status updated successfully by admin", { userId });
 
     res.status(HttpStatus.OK).json({
       success: true,

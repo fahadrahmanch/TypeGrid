@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { ICreateGoalUseCase } from '../../../application/use-cases/interfaces/admin/create-goal.interface';
-import { IGetGoalUseCase } from '../../../application/use-cases/interfaces/admin/get-goal.interface';
-import { IGetGoalsUseCase } from '../../../application/use-cases/interfaces/admin/get-goals.interface';
-import { IUpdateGoalUseCase } from '../../../application/use-cases/interfaces/admin/update-goal.interface';
-import { IDeleteGoalUseCase } from '../../../application/use-cases/interfaces/admin/delete-goal.interface';
-import logger from '../../../utils/logger';
-import { HttpStatus } from '../../constants/httpStatus';
-import { MESSAGES } from '../../../domain/constants/messages';
+import { Request, Response } from "express";
+import { ICreateGoalUseCase } from "../../../application/use-cases/interfaces/admin/create-goal.interface";
+import { IGetGoalUseCase } from "../../../application/use-cases/interfaces/admin/get-goal.interface";
+import { IGetGoalsUseCase } from "../../../application/use-cases/interfaces/admin/get-goals.interface";
+import { IUpdateGoalUseCase } from "../../../application/use-cases/interfaces/admin/update-goal.interface";
+import { IDeleteGoalUseCase } from "../../../application/use-cases/interfaces/admin/delete-goal.interface";
+import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
+import { MESSAGES } from "../../../domain/constants/messages";
 
 export class GoalManageController {
   constructor(

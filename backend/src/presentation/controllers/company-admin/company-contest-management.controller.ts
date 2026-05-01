@@ -1,17 +1,17 @@
-import { Response } from 'express';
-import logger from '../../../utils/logger';
-import { HttpStatus } from '../../constants/httpStatus';
-import { ICreateCompanyContestUseCase } from '../../../application/use-cases/interfaces/companyAdmin/create-company-contest.interface';
-import { AuthRequest } from '../../../types/AuthRequest';
-import { IGetCompanyContestsUsecase } from '../../../application/use-cases/interfaces/companyAdmin/get-company-contests.interface';
-import { IUpdateCompanyContestStatusUseCase } from '../../../application/use-cases/interfaces/companyAdmin/update-company-contest-status.interface';
-import { IGetContestParticipantsUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-contest-participants.interface';
-import { IGetContestUseCase } from '../../../application/use-cases/interfaces/companyAdmin/get-contest.interface';
-import { MESSAGES } from '../../../domain/constants/messages';
-import { IUpdateContestUseCase } from '../../../application/use-cases/interfaces/companyAdmin/update-contest.interface';
-import { IDeleteContestUseCase } from '../../../application/use-cases/interfaces/companyAdmin/delete-contest.interface';
-import { IGetContestResultUseCase } from '../../../application/use-cases/interfaces/companyUser/get-contest-result.interface';
-import { CustomError } from '../../../domain/entities/custom-error.entity';
+import { Response } from "express";
+import logger from "../../../utils/logger";
+import { HttpStatus } from "../../constants/httpStatus";
+import { ICreateCompanyContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/create-company-contest.interface";
+import { AuthRequest } from "../../../types/AuthRequest";
+import { IGetCompanyContestsUsecase } from "../../../application/use-cases/interfaces/companyAdmin/get-company-contests.interface";
+import { IUpdateCompanyContestStatusUseCase } from "../../../application/use-cases/interfaces/companyAdmin/update-company-contest-status.interface";
+import { IGetContestParticipantsUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-contest-participants.interface";
+import { IGetContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/get-contest.interface";
+import { MESSAGES } from "../../../domain/constants/messages";
+import { IUpdateContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/update-contest.interface";
+import { IDeleteContestUseCase } from "../../../application/use-cases/interfaces/companyAdmin/delete-contest.interface";
+import { IGetContestResultUseCase } from "../../../application/use-cases/interfaces/companyUser/get-contest-result.interface";
+import { CustomError } from "../../../domain/entities/custom-error.entity";
 export class CompanyContestManagementController {
   constructor(
     private _createCompanyContestUseCase: ICreateCompanyContestUseCase,
@@ -33,7 +33,7 @@ export class CompanyContestManagementController {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
     const contest = await this._createCompanyContestUseCase.execute(data, userId);
-    logger.info('Company contest created successfully', { userId });
+    logger.info("Company contest created successfully", { userId });
 
     res.status(HttpStatus.OK).json({
       data: contest,
@@ -67,7 +67,7 @@ export class CompanyContestManagementController {
     }
 
     await this._updateCompanyContestStatusUseCase.execute(contestId, status);
-    logger.info('Contest status updated successfully', { contestId, status });
+    logger.info("Contest status updated successfully", { contestId, status });
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.UPDATE_SUCCESS,
@@ -119,7 +119,7 @@ export class CompanyContestManagementController {
 
     const updatedContest = await this._updateContestUseCase.execute(contestId, data);
 
-    logger.info('Contest updated successfully', { contestId });
+    logger.info("Contest updated successfully", { contestId });
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.UPDATE_SUCCESS,
@@ -137,7 +137,7 @@ export class CompanyContestManagementController {
 
     await this._deleteContestUseCase.execute(contestId);
 
-    logger.info('Contest deleted successfully', { contestId });
+    logger.info("Contest deleted successfully", { contestId });
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.DELETE_SUCCESS,
@@ -150,7 +150,7 @@ export class CompanyContestManagementController {
       throw new CustomError(HttpStatus.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);
     }
     const result = await this._getContestResultUseCase.execute(contestId);
-    logger.info('Contest result fetched successfully', { contestId });
+    logger.info("Contest result fetched successfully", { contestId });
     res.status(HttpStatus.OK).json({
       success: true,
       data: result,

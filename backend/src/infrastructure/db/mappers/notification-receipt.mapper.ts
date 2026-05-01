@@ -1,5 +1,5 @@
-import { INotificationReceiptDocument } from '../types/documents';
-import { NotificationReceiptEntity } from '../../../domain/entities/company/notification-receipt.entity';
+import { INotificationReceiptDocument } from "../types/documents";
+import { NotificationReceiptEntity } from "../../../domain/entities/company/notification-receipt.entity";
 
 export class NotificationReceiptMapper {
   static toDomain(doc: INotificationReceiptDocument): NotificationReceiptEntity {

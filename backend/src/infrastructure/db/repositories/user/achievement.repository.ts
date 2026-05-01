@@ -1,9 +1,9 @@
-import { Model } from 'mongoose';
-import { BaseRepository } from '../../base/base.repository';
-import { IAchievementRepository } from '../../../../domain/interfaces/repository/user/achievement-repository.interface';
-import { IAchievementDocument } from '../../types/documents';
-import { AchievementEntity } from '../../../../domain/entities/achievement.entity';
-import { AchievementMapper } from '../../mappers/achievement.mapper';
+import { Model } from "mongoose";
+import { BaseRepository } from "../../base/base.repository";
+import { IAchievementRepository } from "../../../../domain/interfaces/repository/user/achievement-repository.interface";
+import { IAchievementDocument } from "../../types/documents";
+import { AchievementEntity } from "../../../../domain/entities/achievement.entity";
+import { AchievementMapper } from "../../mappers/achievement.mapper";
 
 export class AchievementRepository
   extends BaseRepository<IAchievementDocument, AchievementEntity>
@@ -45,7 +45,7 @@ export class AchievementRepository
     limit: number,
     page: number
   ): Promise<{ achievements: AchievementEntity[]; total: number }> {
-    const filter = search ? { title: { $regex: search, $options: 'i' } } : {};
+    const filter = search ? { title: { $regex: search, $options: "i" } } : {};
 
     const [docs, total] = await Promise.all([
       this.model

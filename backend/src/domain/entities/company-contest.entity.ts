@@ -1,7 +1,7 @@
-export type ContestMode = 'open' | 'group';
-export type Difficulty = 'easy' | 'medium' | 'hard';
-export type TextSource = 'manual' | 'random';
-export type ContestStatus = 'upcoming' | 'ongoing' | 'completed' | 'waiting';
+export type ContestMode = "open" | "group";
+export type Difficulty = "easy" | "medium" | "hard";
+export type TextSource = "manual" | "random";
+export type ContestStatus = "upcoming" | "ongoing" | "completed" | "waiting";
 
 export interface RewardProps {
   rank: number;
@@ -72,7 +72,7 @@ export class ContestEntity {
     this.duration = props.duration;
     this.maxParticipants = props.maxParticipants;
     this.rewards = props.rewards;
-    this.status = props.status ?? 'upcoming';
+    this.status = props.status ?? "upcoming";
     this.countDown = 10;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
@@ -81,20 +81,20 @@ export class ContestEntity {
   }
 
   private validate() {
-    if (this.contestMode === 'group' && !this.groupId) {
-      throw new Error('Group contest must have groupId');
+    if (this.contestMode === "group" && !this.groupId) {
+      throw new Error("Group contest must have groupId");
     }
 
-    if (this.textSource === 'manual' && !this.contestText) {
-      throw new Error('Manual contest must have contestText');
+    if (this.textSource === "manual" && !this.contestText) {
+      throw new Error("Manual contest must have contestText");
     }
 
     if (this.duration < 10) {
-      throw new Error('Duration must be at least 10 seconds');
+      throw new Error("Duration must be at least 10 seconds");
     }
 
     if (this.maxParticipants < 1) {
-      throw new Error('Max participants must be at least 1');
+      throw new Error("Max participants must be at least 1");
     }
   }
 
@@ -120,22 +120,22 @@ export class ContestEntity {
   }
 
   startContest() {
-    this.status = 'ongoing';
+    this.status = "ongoing";
     this.startTime = new Date();
   }
   joinContest(userId: string) {
-    if (this.status !== 'upcoming' && this.status !== 'ongoing') {
-      throw new Error('Contest is not open for joining');
+    if (this.status !== "upcoming" && this.status !== "ongoing") {
+      throw new Error("Contest is not open for joining");
     }
 
     if (this.participants.length >= this.maxParticipants) {
-      throw new Error('Contest is full');
+      throw new Error("Contest is full");
     }
 
     const alreadyJoined = this.participants.find((p) => p.toString() === userId.toString());
 
     if (alreadyJoined) {
-      throw new Error('User already joined');
+      throw new Error("User already joined");
     }
 
     this.participants.push(userId);
@@ -144,7 +144,7 @@ export class ContestEntity {
     const alreadyJoined = this.participants.find((p) => p.toString() === userId.toString());
 
     if (!alreadyJoined) {
-      throw new Error('User not joined');
+      throw new Error("User not joined");
     }
 
     this.participants = this.participants.filter((p) => p.toString() !== userId.toString());
@@ -153,7 +153,7 @@ export class ContestEntity {
     return this.difficulty;
   }
   completeContest() {
-    this.status = 'completed';
+    this.status = "completed";
   }
   toObject(): ContestProps {
     return {

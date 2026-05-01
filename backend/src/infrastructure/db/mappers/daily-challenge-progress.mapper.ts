@@ -1,10 +1,10 @@
-import { IDailyChallengeProgressDocument } from '../types/documents';
-import { DailyChallengeProgressEntity } from '../../../domain/entities/daily-challenge-progress.entity';
+import { IDailyChallengeProgressDocument } from "../types/documents";
+import { DailyChallengeProgressEntity } from "../../../domain/entities/daily-challenge-progress.entity";
 
 export class DailyChallengeProgressMapper {
   static toDomain(doc: IDailyChallengeProgressDocument): DailyChallengeProgressEntity {
     return new DailyChallengeProgressEntity({
-      _id: doc._id?.toString() ?? '',
+      _id: doc._id?.toString() ?? "",
       userId: doc.userId.toString(),
       dailyChallengeId: doc.dailyChallengeId.toString(),
       date: doc.date,

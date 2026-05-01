@@ -1,4 +1,4 @@
-export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
+export type PaymentStatus = "pending" | "completed" | "failed";
 
 export type PaymentProps = {
   id?: string;

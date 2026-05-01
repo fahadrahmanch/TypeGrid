@@ -1,14 +1,14 @@
-import { IUserRepository } from '../../../../domain/interfaces/repository/user/user-repository.interface';
-import { ICompanyGroupRepository } from '../../../../domain/interfaces/repository/company/company-group-repository.interface';
-import { IContestRepository } from '../../../../domain/interfaces/repository/company/contest-repository.interface';
-import { ILessonRepository } from '../../../../domain/interfaces/repository/admin/lesson-repository.interface';
-import { ICreateCompanyContestUseCase } from '../../interfaces/companyAdmin/create-company-contest.interface';
-import { CreateContestDTO } from '../../../DTOs/companyAdmin/company-contest.dto';
-import { ContestEntity } from '../../../../domain/entities/company-contest.entity';
-import { mapContestDTOAdmin } from '../../../mappers/companyAdmin/company-contest.mapper';
-import { MESSAGES } from '../../../../domain/constants/messages';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
+import { IUserRepository } from "../../../../domain/interfaces/repository/user/user-repository.interface";
+import { ICompanyGroupRepository } from "../../../../domain/interfaces/repository/company/company-group-repository.interface";
+import { IContestRepository } from "../../../../domain/interfaces/repository/company/contest-repository.interface";
+import { ILessonRepository } from "../../../../domain/interfaces/repository/admin/lesson-repository.interface";
+import { ICreateCompanyContestUseCase } from "../../interfaces/companyAdmin/create-company-contest.interface";
+import { CreateContestDTO } from "../../../DTOs/companyAdmin/company-contest.dto";
+import { ContestEntity } from "../../../../domain/entities/company-contest.entity";
+import { mapContestDTOAdmin } from "../../../mappers/companyAdmin/company-contest.mapper";
+import { MESSAGES } from "../../../../domain/constants/messages";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
 
 /**
  * Use case for creating a company contest.
@@ -44,7 +44,7 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.DATE_OR_START_TIME_REQUIRED);
     }
 
-    if (data.textSource === 'random') {
+    if (data.textSource === "random") {
       const difficulty = this.mapDifficulty(data.difficulty);
       const lesson = await this._lessonRepository.findOne({
         level: difficulty,
@@ -57,7 +57,7 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       data.contestText = lesson.text;
     }
 
-    if (data.contestMode === 'group') {
+    if (data.contestMode === "group") {
       if (!data.targetGroup) {
         throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);
       }
@@ -91,10 +91,10 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
 
   private mapDifficulty(difficulty: string): string {
     const map: Record<string, string> = {
-      easy: 'beginner',
-      medium: 'intermediate',
-      hard: 'advanced',
+      easy: "beginner",
+      medium: "intermediate",
+      hard: "advanced",
     };
-    return map[difficulty] ?? 'beginner';
+    return map[difficulty] ?? "beginner";
   }
 }

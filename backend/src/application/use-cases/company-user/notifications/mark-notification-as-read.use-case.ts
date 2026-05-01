@@ -1,8 +1,8 @@
-import { IMarkNotificationAsReadUseCase } from '../../interfaces/companyUser/mark-notification-as-read.interface';
-import { INotificationReceiptRepository } from '../../../../domain/interfaces/repository/company/notification-receipt-repository.interface';
-import { CustomError } from '../../../../domain/entities/custom-error.entity';
-import { HttpStatusCodes } from '../../../../domain/enums/http-status-codes.enum';
-import { MESSAGES } from '../../../../domain/constants/messages';
+import { IMarkNotificationAsReadUseCase } from "../../interfaces/companyUser/mark-notification-as-read.interface";
+import { INotificationReceiptRepository } from "../../../../domain/interfaces/repository/company/notification-receipt-repository.interface";
+import { CustomError } from "../../../../domain/entities/custom-error.entity";
+import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
+import { MESSAGES } from "../../../../domain/constants/messages";
 
 export class MarkNotificationAsReadUseCase implements IMarkNotificationAsReadUseCase {
   constructor(private notificationReceiptRepository: INotificationReceiptRepository) {}
