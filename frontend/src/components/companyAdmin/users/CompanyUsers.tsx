@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AddUser from "./addUser";
-import { Trash2, Plus, Search, User as UserIcon, Mail, Target, Zap } from "lucide-react";
+import { Trash2, Plus, Search, Mail, Target, Zap } from "lucide-react";
 import ReusableTable from "../../common/ReusableTable";
 import Pagination from "../../common/Pagination";
 import { toast } from "react-toastify";
@@ -17,48 +17,43 @@ const UsersTable: React.FC = () => {
   const [page, setPage] = useState(1);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
   useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const res = await fetchCompanyUsers();
-        if (res?.data?.success) {
-          setUsers(res.data.data);
-          setFilterUsers(res?.data?.data);
-        } else {
-          console.error("Failed to fetch company users:", res?.data?.message);
-        }
-      } catch (error) {
-        console.error("Error fetching company users:", error);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchText);
+      setPage(1);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetchCompanyUsers(debouncedSearch, page, limit);
+      if (res?.data?.success) {
+        setUsers(res.data.data);
+        setFilterUsers(res.data.data);
+        setTotalCount(res.data.total);
+        setTotalPages(Math.ceil(res.data.total / limit));
+      } else {
+        console.error("Failed to fetch company users:", res?.data?.message);
       }
+    } catch (error) {
+      console.error("Error fetching company users:", error);
     }
-    fetchUsers();
-  }, []);
+  };
 
   useEffect(() => {
-    let filtered = [...users];
+    fetchUsers();
+  }, [debouncedSearch, page]);
 
-    if (searchText.trim()) {
-      const lower = searchText.toLowerCase();
-      filtered = filtered.filter(
-        (u) => u.name.toLowerCase().startsWith(lower) || u.email.toLowerCase().startsWith(lower)
-      );
-    }
-    const total = Math.ceil(filtered.length / limit);
-    setTotalPages(total);
-
-    const start = (page - 1) * limit;
-    const paginated = filtered.slice(start, start + limit);
-
-    setFilterUsers(paginated);
-  }, [searchText, users, page]);
 
   async function handleDelete(userID: string) {
     try {
       const response = await deleteCompanyUser(userID);
       if (response.data.success) {
-        setUsers((prev) => prev.filter((item) => item._id != userID));
         toast.success(response.data.message);
+        fetchUsers();
       }
     } catch (error: any) {
       console.log(error);
@@ -112,7 +107,7 @@ const UsersTable: React.FC = () => {
             <div className="flex items-center gap-4 text-gray-400 font-black text-[10px] uppercase tracking-widest">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50" />
-                <span>{users.length} Active Members</span>
+                <span>{totalCount} Active Members</span>
               </div>
             </div>
           </div>
@@ -195,7 +190,7 @@ const UsersTable: React.FC = () => {
         </div>
       </div>
 
-      {isOpen && <AddUser setOpen={setOpen} setUsers={setUsers} />}
+      {isOpen && <AddUser setOpen={setOpen} onUserAdded={fetchUsers} />}
 
       <ConfirmModal
         isOpen={isConfirmOpen}

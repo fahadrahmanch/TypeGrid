@@ -10,7 +10,8 @@ import { useTypingStats } from "../../../hooks/useTypingStats";
 import { useQuickPlaySocket } from "../../../hooks/quickPlay/useQuickPlaySocket";
 import { useQuickPlayHandleKeyDown } from "../../../hooks/quickPlay/useQuickPlayHandleKeyDown";
 import { toast } from "react-toastify";
-import { Zap, Target, Clock, AlertCircle, Send, Users, Trophy, Home, RotateCcw } from "lucide-react";
+import { Zap, Target, Clock, AlertCircle, Users, Trophy, Home, RotateCcw, Crown } from "lucide-react";
+
 export type GamePlayerResult = {
   userId: string;
   wpm: number;
@@ -35,10 +36,10 @@ interface Participant {
   time?: string;
   errors?: number;
   rank?: number;
-  //   status: Status
+  progress?: number;
 }
+
 const QuickPlay: React.FC = () => {
-  // Mock Data matching the image
   const location = useLocation();
   const navigate = useNavigate();
   const gameData = location.state?.gameData;
@@ -53,7 +54,7 @@ const QuickPlay: React.FC = () => {
   const [errors, setErrors] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [livePlayers, setLivePlayers] = useState<Participant[]>(players || []);
-  const [chatMessage, setChatMessage] = useState("");
+
   const lesson = gameData?.lesson?.text || "";
   const [hasSentStart, setHasSentStart] = useState(false);
   const [totalTyped, setTotalTyped] = useState(0);
@@ -65,17 +66,16 @@ const QuickPlay: React.FC = () => {
   const { wpm, accuracy } = useTypingStats(totalTyped, errors, elapsedTime, phase, isFinished);
   const [currentUser, setCurrentUser] = useState<
     | {
-        _id: string;
-        name: string;
-        imageUrl?: string;
-        isHost: boolean;
-      }
+      _id: string;
+      name: string;
+      imageUrl?: string;
+      isHost: boolean;
+    }
     | undefined
   >(undefined);
 
   useQuickPlaySocket(
     gameData,
-    // currentUser,
     typedText,
     wpm,
     accuracy,
@@ -91,11 +91,63 @@ const QuickPlay: React.FC = () => {
     gameIdRef,
     userIdRef
   );
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  useEffect(() => {
+    const preventDefault = (e: Event) => {
+      const isSnippetArea = snippetContainerRef.current?.contains(e.target as Node);
+      if (!isSnippetArea) {
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && (e.key === "=" || e.key === "-" || e.key === "+" || e.key === "0")) {
+        e.preventDefault();
+      }
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || !snippetContainerRef.current?.contains(e.target as Node)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouch = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchmove", preventDefault, { passive: false });
+    window.addEventListener("touchstart", handleTouch, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
+
+    document.body.style.overflow = "hidden";
+    document.body.style.userSelect = "none";
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchmove", preventDefault);
+      window.removeEventListener("touchstart", handleTouch);
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
+      document.body.style.userSelect = "auto";
+    };
+  }, []);
+
   useEffect(() => {
     if (!gameData) {
       navigate("/", { replace: true });
     }
-  }, []);
+  }, [gameData, navigate]);
 
   useEffect(() => {
     if (!user) return;
@@ -104,25 +156,25 @@ const QuickPlay: React.FC = () => {
       prev.map((p) =>
         p._id === user._id
           ? {
-              ...p,
-              wpm,
-              accuracy,
-              errors,
-              progress: typedText.length,
-            }
+            ...p,
+            wpm,
+            accuracy,
+            errors,
+            progress: typedText.length,
+          }
           : p
       )
     );
-  }, [wpm, accuracy, errors, typedText, currentUser, gameData]);
+  }, [wpm, accuracy, errors, typedText, user?._id]);
 
-  //current user
   useEffect(() => {
     if (players) {
-      setCurrentUser(players?.find((item: any) => item._id === user._id));
+      setCurrentUser(players?.find((item: any) => item._id === user?._id));
     }
-  }, [players, user._id]);
+  }, [players, user?._id]);
 
   useGameTimer(gameData, finalResult, setPhase, setCountdown, setRemainingTime, setElapsedTime, setIsfinished);
+
   const startGameAPI = async (competitionId: string) => {
     try {
       await statusChange(competitionId, "ongoing");
@@ -138,18 +190,19 @@ const QuickPlay: React.FC = () => {
       toast.error("Failed to complete game");
     }
   };
-  useEffect(() => {
-    if (isFinished || remainingTime === 0) {
-      completeGameAPI(gameData._id);
-    }
-  }, [isFinished, gameData._id, remainingTime]);
 
   useEffect(() => {
-    if (phase === "PLAY" && !hasSentStart) {
+    if (isFinished || remainingTime === 0) {
+      if (gameData?._id) completeGameAPI(gameData._id);
+    }
+  }, [isFinished, gameData?._id, remainingTime]);
+
+  useEffect(() => {
+    if (phase === "PLAY" && !hasSentStart && gameData?._id) {
       setHasSentStart(true);
       startGameAPI(gameData._id);
     }
-  }, [phase, hasSentStart, currentUser, gameData?._id]);
+  }, [phase, hasSentStart, gameData?._id]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -170,7 +223,6 @@ const QuickPlay: React.FC = () => {
         }
       }
 
-      // Cursor logic
       const isCurrentChar = index === typedText.length;
       const cursorClass =
         isCurrentChar && phase === "PLAY" && !isFinished ? "border-l-2 border-orange-500 animate-pulse -ml-[1px]" : "";
@@ -179,11 +231,7 @@ const QuickPlay: React.FC = () => {
         <span
           key={index}
           ref={isCurrentChar ? activeCharRef : null}
-          className={`
-           ${cursorClass}
-           ${className}
-          relative transition-colors duration-100
-        `}
+          className={`${cursorClass} ${className} relative transition-colors duration-100`}
         >
           {char}
         </span>
@@ -191,14 +239,12 @@ const QuickPlay: React.FC = () => {
     });
   };
 
-  // Auto-scroll effect
   useTypingScroll({
     activeCharRef,
     snippetContainerRef,
     typedText,
   });
 
-  //handle key down
   useQuickPlayHandleKeyDown({
     lesson,
     isFinished,
@@ -220,316 +266,265 @@ const QuickPlay: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#FFF8EA] font-sans text-gray-800 flex flex-col">
+    <div className="h-screen bg-[#FFF8EA] font-sans text-gray-800 flex flex-col overflow-hidden touch-none">
       <Navbar />
 
-      <div className="flex-1 w-full max-w-[1440px] mx-auto pt-24 px-4 md:px-6 flex flex-col gap-6 pb-12">
-        {finalResult.length > 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 animate-in fade-in zoom-in duration-500">
-            <div className="text-center space-y-2">
-              <h1 className="text-4xl font-black text-gray-800 tracking-tight flex items-center justify-center gap-3">
-                <Trophy className="w-10 h-10 text-amber-500 fill-amber-500" />
-                Race Results
-                <Trophy className="w-10 h-10 text-amber-500 fill-amber-500" />
-              </h1>
-              <p className="text-gray-500 font-medium">Top performers this round</p>
-            </div>
+      <div className="flex-1 min-h-0 w-full max-w-[1440px] mx-auto pt-20 px-4 md:px-6 flex flex-col gap-6 pb-4 box-border overflow-hidden">
+        {/* Active Players Row */}
+        <div className="flex justify-between items-center shrink-0">
+          <h2 className="text-xl font-black text-gray-700 tracking-tight flex items-center gap-2">
+            <Users className="w-5 h-5 text-orange-500" />
+            Active Racers
+          </h2>
+        </div>
 
-            <div className="w-full max-w-2xl bg-white rounded-3xl shadow-xl border-4 border-orange-100 overflow-hidden">
-              {/* Header Row */}
-              <div className="grid grid-cols-[80px_1fr_100px_100px_100px] gap-4 p-4 bg-orange-50/50 border-b border-orange-100 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                <div className="text-center">Rank</div>
-                <div>Player</div>
-                <div className="text-right">WPM</div>
-                <div className="text-right">Accuracy</div>
-                <div className="text-right">Time</div>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 shrink-0">
+          {livePlayers.map((player) => {
+            const progressPercent = Math.round(((player?.progress || 0) / (lesson?.length || 1)) * 100);
+            return (
+              <div
+                key={player._id}
+                className={`bg-[#FFF8EA] rounded-xl p-3 shadow-sm border transition-all hover:shadow-md ${player.rank === 1 ? "border-amber-200 ring-1 ring-amber-100" : "border-gray-100"
+                  } flex flex-col gap-2 relative overflow-hidden`}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <img
+                      src={player.imageUrl}
+                      alt={player.name}
+                      className="w-10 h-10 rounded-lg bg-gray-50 border-2 border-white shadow-sm object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-bold text-xs text-gray-800 truncate">{player.name}</div>
+                    <div className="text-[8px] font-bold text-emerald-600 uppercase tracking-widest">Racing</div>
+                  </div>
+                </div>
 
-              {/* Players List */}
-              <div className="divide-y divide-gray-50">
-                {finalResult
-                  .sort((a, b) => (a.rank || 999) - (b.rank || 999))
-                  .map((result, index) => (
+                <div className="grid grid-cols-2 gap-1.5">
+                  <div className="bg-gray-50 rounded-lg p-1.5 flex flex-col items-center border border-gray-100">
+                    <span className="text-[8px] font-bold text-gray-400 uppercase">WPM</span>
+                    <span className="text-sm font-black text-gray-800">{player.wpm || 0}</span>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-1.5 flex flex-col items-center border border-gray-100">
+                    <span className="text-[8px] font-bold text-gray-400 uppercase">Acc</span>
+                    <span className="text-sm font-black text-gray-800">{player.accuracy || 0}%</span>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[8px] font-bold text-gray-400 uppercase">
+                    <span>Progress</span>
+                    <span className="text-emerald-600">{progressPercent}%</span>
+                  </div>
+                  <div className="h-1 w-full bg-gray-100 rounded-full overflow-hidden">
                     <div
-                      key={result.userId}
-                      className={`grid grid-cols-[80px_1fr_100px_100px_100px] gap-4 p-4 items-center hover:bg-orange-50/30 transition-colors
-                            ${result.userId === user?._id ? "bg-amber-50/60" : ""}
-                        `}
-                    >
-                      <div className="flex justify-center">
-                        {result.rank === 1 ? (
-                          <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-black shadow-sm ring-2 ring-amber-200">
-                            1
-                          </div>
-                        ) : result.rank === 2 ? (
-                          <div className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-black shadow-sm ring-2 ring-gray-200">
-                            2
-                          </div>
-                        ) : result.rank === 3 ? (
-                          <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-black shadow-sm ring-2 ring-orange-200">
-                            3
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 font-bold">#{result.rank || index + 1}</span>
-                        )}
-                      </div>
+                      className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+                      style={{ width: `${progressPercent}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={result.imageUrl}
-                          className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
-                          alt={result.name}
-                        />
-                        <div>
-                          <div className="font-bold text-gray-800 text-sm">
-                            {result.name} {result.userId === user?._id && "(You)"}
-                          </div>
-                        </div>
-                      </div>
+        {/* Challenge Area */}
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 min-h-0">
+          <div className="bg-[#FFF8EA] border border-orange-100 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center gap-4 shadow-xl shadow-orange-900/5 relative overflow-hidden group">
+            <div className="absolute -top-20 -left-20 w-40 h-40 bg-orange-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
 
-                      <div className="text-right font-black text-gray-800 text-lg">{result.wpm}</div>
-                      <div className="text-right font-bold text-emerald-600">{result.accuracy}%</div>
-                      <div className="text-right font-mono text-gray-500 text-xs">{formatTime(result.timeTaken)}</div>
-                    </div>
-                  ))}
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-1 shadow-inner group-hover:rotate-6 transition-transform ${remainingTime <= 10 ? "bg-red-50 text-red-500" : "bg-orange-50 text-orange-500"
+              }`}>
+              <Clock className="w-6 h-6" />
+            </div>
+
+            <div className="space-y-0.5 relative z-10">
+              <h3 className="font-black text-gray-800 text-lg tracking-tight">
+                {phase === "COUNTDOWN" ? `Wait ${countdown}s` : formatTime(remainingTime)}
+              </h3>
+              <p className="text-[8px] text-gray-500 font-bold uppercase tracking-[0.2em] opacity-60">
+                {phase === "COUNTDOWN" ? "Prepare" : "Remaining"}
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 w-full">
+               <div className="flex items-center gap-3 bg-emerald-50/50 border border-emerald-100 p-3 rounded-xl">
+                  <Zap className="w-4 h-4 text-emerald-500" />
+                  <div className="text-left">
+                    <div className="text-[8px] font-bold text-emerald-600 uppercase tracking-widest">Speed</div>
+                    <div className="text-base font-black text-emerald-900">{wpm} WPM</div>
+                  </div>
+               </div>
+               <div className="flex items-center gap-3 bg-blue-50/50 border border-blue-100 p-3 rounded-xl">
+                  <Target className="w-4 h-4 text-blue-500" />
+                  <div className="text-left">
+                    <div className="text-[8px] font-bold text-blue-600 uppercase tracking-widest">Accuracy</div>
+                    <div className="text-base font-black text-blue-900">{accuracy || 0}%</div>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          <div className="bg-[#FFF8EA] rounded-[2rem] relative p-10 border border-orange-100 shadow-xl shadow-orange-900/5 flex flex-col min-h-0"
+            onPaste={(e) => e.preventDefault()}
+            onContextMenu={(e) => e.preventDefault()}
+          >
+            <div className="flex justify-between items-center mb-8 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-6 bg-orange-500 rounded-full"></div>
+                <h3 className="text-xl font-black text-gray-800 tracking-tight">Challenge Snippet</h3>
+              </div>
+              <span className="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest animate-pulse">
+                Live Race
+              </span>
+            </div>
+
+            <div
+              ref={snippetContainerRef}
+              className="font-mono text-gray-700 leading-loose text-xl md:text-2xl flex-1 pt-2 custom-scrollbar overflow-y-auto selection:bg-orange-100"
+            >
+              {renderTextWithHighlight()}
+            </div>
+
+            {phase === "COUNTDOWN" && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-sm z-20 rounded-[2rem]">
+                <div className="text-center bg-white/95 p-12 rounded-[3rem] shadow-2xl border border-orange-100 animate-in zoom-in duration-300">
+                  <div className="text-8xl font-black text-orange-500 animate-bounce mb-4 drop-shadow-sm font-mono">
+                    {countdown}
+                  </div>
+                  <p className="text-orange-900/50 font-black uppercase tracking-[0.3em] text-sm">
+                    Get Ready
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Final Game Results Overlay - Same as groupPlay */}
+      {finalResult.length > 0 && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-orange-900/20 backdrop-blur-md animate-fade-in">
+          <div className="w-[95%] max-w-7xl h-[85vh] bg-[#FFF8EA] rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-orange-100 overflow-hidden flex flex-col animate-zoom-in">
+            <div className="bg-[#FFF8EA] px-8 py-6 border-b border-orange-100 flex items-center justify-between shrink-0 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-6 opacity-5">
+                <Trophy className="w-48 h-48 -rotate-12" />
+              </div>
+              <div className="relative z-10">
+                <h2 className="text-3xl font-black text-gray-800 tracking-tight">Race Results</h2>
+                <p className="text-gray-500 font-bold text-sm mt-1 uppercase tracking-wide">
+                  Final Standings
+                </p>
+              </div>
+              <div className="bg-white p-3 rounded-2xl shadow-sm border border-orange-100 flex items-center gap-3 px-5 relative z-10">
+                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                   <Crown className="w-6 h-6 text-amber-500 fill-amber-500" />
+                </div>
+                <div className="text-right">
+                  <div className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Top Speed</div>
+                  <div className="text-lg font-black text-gray-800">
+                    {Math.max(...(finalResult.map((p) => p.wpm || 0)), 0)} WPM
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="p-0 bg-[#FFF8EA] flex-1 overflow-y-auto custom-scrollbar">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-gray-50/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm border-b border-gray-100">
+                  <tr>
+                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-24">Rank</th>
+                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] w-full">Player</th>
+                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-32">WPM</th>
+                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-32">ACC</th>
+                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-40">Tier</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {finalResult
+                    .sort((a, b) => (a.rank || 0) - (b.rank || 0))
+                    .map((p) => {
+                      const rank = p.rank;
+                      const isWinner = rank === 1;
+                      const isMe = p.userId === user?._id;
+
+                      return (
+                        <tr key={p.userId} className={`group transition-all duration-200 ${isMe ? "bg-orange-50/70" : "hover:bg-orange-50/30"}`}>
+                          <td className="py-6 px-8 text-center">
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl shadow-sm mx-auto ${isWinner ? "bg-amber-400 text-white rotate-12" : rank === 2 ? "bg-slate-300 text-white" : rank === 3 ? "bg-orange-300 text-white" : "bg-gray-100 text-gray-400"
+                              }`}>
+                              {rank}
+                            </div>
+                          </td>
+                          <td className="py-6 px-8">
+                            <div className="flex items-center gap-5">
+                              <div className="relative">
+                                <img
+                                  src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
+                                  className={`w-16 h-16 rounded-[1.25rem] bg-gray-50 object-cover ring-4 ${isWinner ? 'ring-amber-200' : 'ring-white'} shadow-md`}
+                                  alt={p.name}
+                                />
+                                {isWinner && (
+                                  <div className="absolute -top-4 -left-4 animate-bounce">
+                                    <div className="bg-amber-400 p-1.5 rounded-xl shadow-lg border-2 border-white">
+                                      <Crown className="w-5 h-5 text-white fill-white" />
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-3">
+                                  <span className="font-black text-gray-800 text-xl">{p.name}</span>
+                                  {isMe && <span className="px-3 py-1 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest shadow-sm">You</span>}
+                                </div>
+                                {isWinner && <div className="text-[10px] font-black text-amber-500 uppercase tracking-[0.25em] mt-1">Race Winner</div>}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-6 px-8 text-center">
+                            <div className="font-black text-gray-800 text-3xl tracking-tighter">{p.wpm || 0}</div>
+                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mt-1">Words / Min</div>
+                          </td>
+                          <td className="py-6 px-8 text-center">
+                            <div className="font-black text-emerald-600 text-3xl tracking-tighter">{p.accuracy || 0}%</div>
+                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mt-1">Accuracy</div>
+                          </td>
+                          <td className="py-6 px-8 text-center">
+                            {(p.wpm || 0) > 80 ? (
+                              <span className="px-4 py-1.5 rounded-full bg-orange-500 text-white font-black text-[10px] uppercase tracking-widest shadow-sm">Legendary</span>
+                            ) : (p.wpm || 0) > 40 ? (
+                              <span className="px-4 py-1.5 rounded-full bg-indigo-500 text-white font-black text-[10px] uppercase tracking-widest shadow-sm">Professional</span>
+                            ) : (
+                              <span className="px-4 py-1.5 rounded-full bg-gray-400 text-white font-black text-[10px] uppercase tracking-widest shadow-sm">Rookie</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="bg-[#FFF8EA]/50 backdrop-blur-sm px-10 py-8 border-t border-orange-100 flex gap-5 justify-center items-center shrink-0">
               <button
                 onClick={() => navigate("/")}
-                className="px-6 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-600 font-bold hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center gap-2"
+                className="px-10 py-4 rounded-2xl bg-white border-2 border-gray-200 text-gray-500 font-black hover:bg-gray-50 hover:text-gray-700 hover:border-gray-400 transition-all text-base shadow-sm uppercase tracking-widest flex items-center gap-2"
               >
-                <Home className="w-4 h-4" />
-                Back Home
+                <Home className="w-5 h-5" />
+                Exit Game
               </button>
               <button
                 onClick={() => window.location.reload()}
-                className="px-8 py-3 rounded-xl bg-gray-900 text-white font-bold hover:bg-black hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2"
+                className="px-12 py-4 rounded-2xl bg-orange-500 text-white font-black uppercase tracking-widest shadow-lg shadow-orange-200 hover:bg-orange-600 transition-all active:scale-95 flex items-center gap-2"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-5 h-5" />
                 Play Again
               </button>
             </div>
           </div>
-        ) : (
-          <>
-            {/* Active Players Header */}
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold text-gray-700">Active Players</h2>
-              {/* <div className="px-3 py-1 bg-emerald-100/50 text-emerald-600 text-xs font-bold rounded-full border border-emerald-100">
-                5 Online
-              </div> */}
-            </div>
-
-            {/* Players Cards Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              {livePlayers.map((player) => (
-                <div
-                  key={player._id}
-                  className={`bg-white rounded-2xl p-4 shadow-sm border ${
-                    player.rank === 1
-                      ? "border-amber-200 shadow-amber-50 ring-1 ring-amber-100"
-                      : player.rank === 2
-                        ? "border-gray-200 shadow-gray-50 ring-1 ring-gray-100"
-                        : player.rank === 3
-                          ? "border-orange-200 shadow-orange-50 ring-1 ring-orange-100"
-                          : "border-gray-100"
-                  } flex flex-col gap-4 relative overflow-hidden transition-all hover:shadow-md hover:-translate-y-1`}
-                >
-                  {/* Rank Badge */}
-                  {player.rank && (
-                    <div
-                      className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm z-10
-                                    ${
-                                      player.rank === 1
-                                        ? "bg-gradient-to-br from-amber-400 to-amber-600"
-                                        : player.rank === 2
-                                          ? "bg-gradient-to-br from-gray-300 to-gray-500"
-                                          : player.rank === 3
-                                            ? "bg-gradient-to-br from-orange-400 to-orange-600"
-                                            : "bg-gray-100 text-gray-400"
-                                    }`}
-                    >
-                      {player.rank}
-                    </div>
-                  )}
-
-                  {/* Header */}
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <img
-                        src={player.imageUrl}
-                        alt={player.name}
-                        className="w-12 h-12 rounded-full bg-gray-50 border-2 border-white shadow-sm object-cover"
-                      />
-                      <div className="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full bg-emerald-500"></div>
-                    </div>
-                    <div>
-                      <div className="font-bold text-sm text-gray-800 line-clamp-1">{player.name}</div>
-                      <div className="text-[10px] items-center gap-1.5 flex font-medium text-emerald-600">Online</div>
-                    </div>
-                  </div>
-
-                  {/* Main Stats (WPM & Accuracy) */}
-                  <div className="grid grid-cols-2 gap-3 pt-2">
-                    <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center border border-gray-100">
-                      <div className="flex items-center gap-1 text-gray-400 mb-0.5">
-                        <Zap className="w-3 h-3 text-amber-500" />
-                        <span className="text-[10px] font-bold uppercase">WPM</span>
-                      </div>
-                      <div className="text-xl font-black text-gray-800">{player.wpm || 0}</div>
-                    </div>
-                    <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center border border-gray-100">
-                      <div className="flex items-center gap-1 text-gray-400 mb-0.5">
-                        <Target className="w-3 h-3 text-emerald-500" />
-                        <span className="text-[10px] font-bold uppercase">ACC</span>
-                      </div>
-                      <div className="text-xl font-black text-gray-800">{player.accuracy || 0}%</div>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="pt-2 flex flex-col gap-1.5">
-                    <div className="flex justify-between items-center px-1">
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Progress</span>
-                      <span className="text-[10px] font-black text-emerald-600">
-                        {Math.round((((player as any).progress || 0) / (lesson?.length || 1)) * 100)}%
-                      </span>
-                    </div>
-                    <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-emerald-500 rounded-full transition-all duration-300"
-                        style={{
-                          width: `${Math.round((((player as any).progress || 0) / (lesson?.length || 1)) * 100)}%`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Secondary Stats (Time & Errors) */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-dashed border-gray-100">
-                    <div className="flex items-center justify-between px-2">
-                      <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-bold">
-                        <Clock className="w-3 h-3" /> Time
-                      </div>
-                      {/* <div className="text-xs font-bold text-gray-700">
-                        {player.timeTaken}
-                      </div> */}
-                    </div>
-                    <div className="flex items-center justify-between px-2 border-l border-gray-100 pl-2">
-                      <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-bold">
-                        <AlertCircle className="w-3 h-3 text-red-400" /> Errors
-                      </div>
-                      <div className="text-xs font-bold text-gray-700">{player.errors || 0}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Main 3-Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_300px] gap-6 items-start">
-              {/* Left: Looking for Players */}
-              <div className="bg-[#FFF8EA] border-2 border-dashed border-orange-200 rounded-3xl p-8 flex flex-col items-center justify-center text-center gap-4 min-h-[300px]">
-                <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-500 mb-2">
-                  <Users className="w-7 h-7" />
-                </div>
-
-                <h3 className="font-bold text-gray-800 text-sm">
-                  {phase === "COUNTDOWN" ? `Game starts in ${countdown}s` : `Time left: ${formatTime(remainingTime)}`}
-                </h3>
-                <p className="text-[11px] text-gray-500 font-medium">
-                  {phase === "COUNTDOWN" ? "Waiting for players" : "Race in progress"}
-                </p>
-
-                {/* <div className="mt-8 space-y-2 text-[10px] font-mono font-medium text-gray-400">
-                  <div className="flex items-center gap-2 bg-white px-2 py-1 rounded border border-orange-100">
-                    <kbd className="bg-gray-100 px-1 rounded text-gray-600">
-                      Ctrl
-                    </kbd>{" "}
-                    +{" "}
-                    <kbd className="bg-gray-100 px-1 rounded text-gray-600">
-                      Esc
-                    </kbd>{" "}
-                    to exit
-                  </div>
-                  <div className="flex items-center gap-2 bg-white px-2 py-1 rounded border border-orange-100 justify-center">
-                    <kbd className="bg-gray-100 px-1 rounded text-gray-600">
-                      Tab
-                    </kbd>{" "}
-                    to focus input
-                  </div>
-                </div> */}
-              </div>
-
-              {/* Center: Snippet */}
-              <div className="flex flex-col gap-4">
-                <div className="bg-[#FEFCE8] relative rounded-3xl p-8 border border-orange-100 shadow-sm flex flex-col min-h-[300px]">
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-lg font-bold text-gray-800">Snippet</h3>
-                    <span className="bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider animate-pulse">
-                      Live
-                    </span>
-                  </div>
-
-                  <div
-                    ref={snippetContainerRef}
-                    className="font-mono text-gray-600 leading-relaxed text-sm md:text-base flex-1"
-                  >
-                    <p>{renderTextWithHighlight()}</p>
-                  </div>
-                </div>
-
-                {/* Typing Input Area */}
-                {/* <div className="bg-[#FEFCE8] rounded-2xl p-6 border border-orange-50 shadow-sm">
-                  <h4 className="text-xs font-bold text-gray-600 mb-3 uppercase tracking-wide">
-                    Type here when the game begins...
-                  </h4>
-                  <div className="font-mono text-gray-400 text-sm">
-                    Start typing when the race begins...
-                  </div>
-                </div> */}
-              </div>
-
-              {/* Right: Chat */}
-              {/* <div className="bg-[#FEFCE8] rounded-3xl p-6 border border-orange-100 shadow-sm flex flex-col h-[400px]">
-                <div className="mb-4 pb-4 border-b border-orange-100/50">
-                  <h3 className="font-bold text-gray-800">Chat</h3>
-                </div>
-
-                <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 mb-4 pr-2">
-                  <div className="text-xs">
-                    <span className="font-bold text-gray-500 mr-2">System:</span>
-                    <span className="text-gray-700">Welcome to TypeGrid!</span>
-                  </div>
-                  <div className="text-xs">
-                    <span className="font-bold text-gray-400 mr-2">Mitu:</span>
-                    <span className="text-gray-700">Good luck everyone!</span>
-                  </div>
-                  <div className="text-xs">
-                    <span className="font-bold text-gray-400 mr-2">Admi:</span>
-                    <span className="text-gray-700">gl hf</span>
-                  </div>
-                </div>
-
-                <div className="relative mt-auto">
-                  <input
-                    type="text"
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                    placeholder="Message..."
-                    className="w-full bg-[#FFF8EA] border border-orange-100 rounded-lg pl-3 pr-10 py-2.5 text-xs focus:ring-1 focus:ring-orange-200 outline-none transition-all placeholder:text-gray-400"
-                  />
-                  <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-gray-900 text-white p-1.5 rounded-md hover:bg-black transition-colors">
-                    <Send className="w-3 h-3" />
-                  </button>
-                </div>
-              </div> */}
-            </div>
-          </>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

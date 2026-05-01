@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 
 export type KeyboardLayoutType = "qwerty" | "azerty" | "dvorak";
 
@@ -60,14 +59,12 @@ export const layoutMaps: Layouts = {
   },
 };
 export function getMappedKey(key: string, layout: KeyboardLayoutType) {
-  console.log("layout", layout);
   if (!layout || layout === "qwerty") {
     return key;
   }
   const isUpperCase = key === key.toUpperCase();
 
   const lowerKey = key.toLowerCase();
-  console.log("key mapped item", layoutMaps[layout][lowerKey]);
   const mapped = layoutMaps[layout][lowerKey] || lowerKey;
 
   return isUpperCase ? mapped.toUpperCase() : mapped;

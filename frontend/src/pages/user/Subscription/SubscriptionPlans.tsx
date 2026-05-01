@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Check, Lock, Star, Zap, Users, Shield, ArrowRight } from "lucide-react";
+import { Check, Lock, Star, Zap, Users, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/user/Navbar";
 import { getSubscriptionPlans } from "../../../api/user/subcription";

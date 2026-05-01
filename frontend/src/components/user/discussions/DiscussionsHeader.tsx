@@ -1,5 +1,6 @@
 import React from "react";
 import { Plus, Compass } from "lucide-react";
+import { Link } from "react-router-dom";
 import illustration from "../../../assets/images/discussions_illustration.png";
 
 interface DiscussionsHeaderProps {
@@ -38,15 +39,23 @@ const DiscussionsHeader: React.FC<DiscussionsHeaderProps> = ({ onCreatePost }) =
           </div>
 
           {/* Action Section */}
-          <button 
-            onClick={onCreatePost}
-            className="flex items-center gap-2 bg-[#D0864B] hover:bg-[#B36E39] text-white pl-4 pr-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl shadow-[#D0864B]/20 transition-all hover:scale-[1.02] active:scale-[0.98] group"
-          >
-            <div className="p-1.5 bg-white/20 rounded-lg group-hover:rotate-90 transition-transform duration-500">
-              <Plus size={16} strokeWidth={3} />
-            </div>
-            <span>New Discussion</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <Link 
+              to="/discussions/my"
+              className="flex items-center gap-2 bg-white/60 hover:bg-white text-[#D0864B] px-5 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest border border-[#ECA468]/10 transition-all hover:shadow-md active:scale-95 transition-all"
+            >
+               My Posts
+            </Link>
+            <button 
+              onClick={onCreatePost}
+              className="flex items-center gap-2 bg-[#D0864B] hover:bg-[#B36E39] text-white pl-4 pr-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl shadow-[#D0864B]/20 transition-all hover:scale-[1.02] active:scale-[0.98] group"
+            >
+              <div className="p-1.5 bg-white/20 rounded-lg group-hover:rotate-90 transition-transform duration-500">
+                <Plus size={16} strokeWidth={3} />
+              </div>
+              <span>New Discussion</span>
+            </button>
+          </div>
         </div>
       </div>
     </header>

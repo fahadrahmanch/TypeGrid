@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { ArrowLeft, Play, MessageSquare, Users, Send } from "lucide-react";
+import { ArrowLeft, Play, Users, Send } from "lucide-react";
 import { updateContestStatus } from "../../../api/companyAdmin/companyContextAPI";
 import { socket } from "../../../socket";
 

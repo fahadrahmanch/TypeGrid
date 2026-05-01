@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { Edit3, Trash2 } from "lucide-react";
 import EditLessonModal from "./EditLessonModal";
-
+import { deleteLesson } from "../../../api/companyAdmin/lessons";
 export type { Lesson };
 
 const getDifficultyColor = (level: string) => {

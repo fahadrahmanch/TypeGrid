@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import { Sparkles, Code } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { generatePracticeText } from "../../api/companyUser/practice";
 import { toast } from "react-toastify";
 

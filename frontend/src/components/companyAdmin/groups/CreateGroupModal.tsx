@@ -82,6 +82,14 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ isOpen, onClose, on
           selectedUsers,
         });
       }
+      setGroupName("");
+      setGroupType("beginner");
+      setGroupingMethod("auto");
+      setMinWpm("0");
+      setMaxWpm("50");
+      setMinAccuracy("0");
+      setMaxAccuracy("100");
+      setSelectedUsers([]);
       if (onGroupCreated) onGroupCreated();
       onClose();
     } catch (error) {

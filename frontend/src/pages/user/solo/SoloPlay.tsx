@@ -31,7 +31,16 @@ const SoloPlay: React.FC = () => {
   useEffect(() => {
     window.history.replaceState(null, "", window.location.pathname);
   }, []);
+// useEffect(() => {
+//   const unlock = () => {
+//     const audio = new Audio("https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/sound/click1/click1_1.wav");
+//     audio.play().catch(() => {});
+//   };
 
+//   window.addEventListener("click", unlock, { once: true });
+
+//   return () => window.removeEventListener("click", unlock);
+// }, []);
   let timeDisplay: string;
   let timeLabel: string;
 
@@ -122,6 +131,52 @@ const SoloPlay: React.FC = () => {
     setIsfinished,
   });
 
+  const snippetContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const preventDefault = (e: Event) => {
+      const isSnippetArea = snippetContainerRef.current?.contains(e.target as Node);
+      if (!isSnippetArea) {
+        e.preventDefault();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && (e.key === "=" || e.key === "-" || e.key === "+" || e.key === "0")) {
+        e.preventDefault();
+      }
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || !snippetContainerRef.current?.contains(e.target as Node)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouch = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchmove", preventDefault, { passive: false });
+    window.addEventListener("touchstart", handleTouch, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
+
+    document.body.style.overflow = "hidden";
+    document.body.style.userSelect = "none";
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchmove", preventDefault);
+      window.removeEventListener("touchstart", handleTouch);
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
+      document.body.style.userSelect = "auto";
+    };
+  }, []);
+
   useEffect(() => {
     async function endGameHandler() {
       try {
@@ -146,7 +201,8 @@ const SoloPlay: React.FC = () => {
       if (!response) {
         throw new Error("Solo room ID missing");
       }
-      const solo = response.data;
+      const solo = response.data.data;
+      console.log("solor",solo)
       if (response) {
         navigate(`/solo-play/${solo._id}`, {
           state: { gameData: solo },
@@ -159,10 +215,9 @@ const SoloPlay: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="h-screen bg-[#fff7e9] flex flex-col items-center selection:bg-orange-200 selection:text-orange-900 overflow-hidden touch-none">
       <Navbar />
-
-      <div className="min-h-screen bg-[#fff7e9] flex flex-col items-center px-4 pt-24 pb-12">
+      <div className="flex-1 min-h-0 w-full max-w-5xl mx-auto flex flex-col items-center pt-20 px-4 pb-6 box-border overflow-hidden">
         {isFinished ? (
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8 animate-in fade-in zoom-in duration-500 w-full max-w-4xl mx-auto mt-12">
             <div className="text-center space-y-2">
@@ -220,12 +275,8 @@ const SoloPlay: React.FC = () => {
           </div>
         ) : (
           <>
-            {/* Header */}
-            <h1 className="text-2xl font-bold">Solo Play</h1>
-            <p className="text-sm text-gray-500 mt-1">Start typing to begin the test</p>
-
             {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl mt-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl mb-8 shrink-0">
               <StatCard
                 icon={<Clock className="w-5 h-5 text-blue-500" />}
                 label={timeLabel}
@@ -256,34 +307,27 @@ const SoloPlay: React.FC = () => {
             <div className="w-full max-w-4xl h-2 bg-[#9b8a7a] rounded-full my-8" />
 
             {/* Typing Box */}
-            <div className="w-full max-w-4xl bg-[#fffaf0] border border-gray-200 rounded-2xl p-5">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold">Typing Test</h3>
-                <button className="flex items-center gap-1 px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-100">
-                  Reset
-                </button>
+            <div className="w-full bg-[#fffaf0] border border-orange-100 rounded-3xl p-5 shadow-lg shadow-orange-900/5 flex flex-col min-h-0 flex-1 mb-2">
+              <div className="flex items-center justify-between mb-4 shrink-0">
+                <h3 className="font-black text-gray-800 text-lg tracking-tight">Typing Test</h3>
+                <div className="flex items-center gap-2">
+                   <div className="px-3 py-1 rounded-full bg-orange-50 border border-orange-100 text-[10px] font-bold text-orange-600 uppercase tracking-widest">
+                     Solo Mode
+                   </div>
+                </div>
               </div>
 
-              {/* Text Area */}
-              {/* Text Area */}
               <div
-                className=" mt-5 border-2 border-dashed border-gray-300 rounded-2xl p-8 
-                    text-left text-gray-600 text-base leading-relaxed 
-                    min-h-[220px]"
+                ref={snippetContainerRef}
+                className="flex-1 overflow-y-auto custom-scrollbar border-2 border-dashed border-orange-100 rounded-2xl p-6 text-left"
               >
                 {renderTextWithHighlight()}
               </div>
-
-              {/* Hint */}
-              {/* <p className="mt-4 text-xs text-center text-gray-500">
-                Click here and start typing to begin the test
-              </p> */}
             </div>
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

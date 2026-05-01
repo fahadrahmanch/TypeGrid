@@ -111,7 +111,7 @@ const DiscussionsPage: React.FC = () => {
               >
                   <div className="absolute inset-0 bg-[#D0864B] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
                   <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                    {isLoadingMore ? 'Loading...' : 'Load Older Stories'}
+                    {isLoadingMore ? "Loading..." : "Load Older Stories"}
                   </span>
               </button>
           </div>

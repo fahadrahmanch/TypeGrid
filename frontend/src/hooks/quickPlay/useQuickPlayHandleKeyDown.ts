@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { socket } from "../../socket";
+import { useTypingSound } from "../useTypingSound";
 
 interface Props {
   lesson: string;
@@ -40,6 +41,7 @@ export const useQuickPlayHandleKeyDown = ({
   errors,
   totalTyped,
 }: Props) => {
+  const { playTyping, playTypingError } = useTypingSound();
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lesson || isFinished || phase !== "PLAY") return;
@@ -59,6 +61,7 @@ export const useQuickPlayHandleKeyDown = ({
         setTotalTyped((prev) => prev + 1);
 
         if (e.key !== expectedChar) {
+          playTypingError();
           setErrors((prev) => prev + 1);
           setHasError(true);
           setTypedText((prev) => prev + e.key);
@@ -67,6 +70,7 @@ export const useQuickPlayHandleKeyDown = ({
 
         const nextText = typedText + e.key;
         const newTotal = totalTyped + 1;
+        playTyping();
         setTypedText(nextText);
 
         if (nextText.length === lesson.length) {

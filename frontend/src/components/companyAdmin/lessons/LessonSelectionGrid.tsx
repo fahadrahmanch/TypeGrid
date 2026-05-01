@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, BookOpen, Clock, FileText, Target } from "lucide-react";
+import { Check, BookOpen} from "lucide-react";
 import { Lesson } from "./LessonTable";
 
 interface LessonSelectionGridProps {
@@ -20,7 +20,7 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
   lessons,
   selectedLessons,
   onToggleLesson,
-  isGroupMode = false,
+  // isGroupMode = false,
 }) => {
   const [filter, setFilter] = React.useState<"all" | "company" | "admin">("all");
 
@@ -125,25 +125,25 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
 };
 
 
-const Badge: React.FC<{ children: React.ReactNode; color?: "green" | "yellow" | "red" | "gray"; icon?: React.ReactNode }> = ({
-  children,
-  color = "gray",
-  icon,
-}) => {
-  const colors = {
-    green: "bg-green-50 text-green-600",
-    yellow: "bg-yellow-50 text-yellow-700",
-    red: "bg-red-50 text-red-600",
-    gray: "bg-gray-50 text-gray-500",
-  };
+// const Badge: React.FC<{ children: React.ReactNode; color?: "green" | "yellow" | "red" | "gray"; icon?: React.ReactNode }> = ({
+//   children,
+//   color = "gray",
+//   icon,
+// }) => {
+//   const colors = {
+//     green: "bg-green-50 text-green-600",
+//     yellow: "bg-yellow-50 text-yellow-700",
+//     red: "bg-red-50 text-red-600",
+//     gray: "bg-gray-50 text-gray-500",
+//   };
 
-  return (
-    <span className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold ${colors[color]}`}>
-      {icon}
-      {children}
-    </span>
-  );
-};
+//   return (
+//     <span className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold ${colors[color]}`}>
+//       {icon}
+//       {children}
+//     </span>
+//   );
+// };
 
 export default LessonSelectionGrid;
 

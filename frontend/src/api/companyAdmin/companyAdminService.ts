@@ -7,8 +7,8 @@ export async function companyAddUser(data: any) {
 }
 
 // get all company users
-export async function fetchCompanyUsers() {
-  return companyAPI.get(API_ROUTES.ADMIN.USERS.COMPANY_USERS);
+export async function fetchCompanyUsers(search: string = "", page: number = 1, limit: number = 10) {
+  return companyAPI.get(API_ROUTES.ADMIN.USERS.COMPANY_USERS, { params: { search, page, limit } });
 }
 
 // delete company user

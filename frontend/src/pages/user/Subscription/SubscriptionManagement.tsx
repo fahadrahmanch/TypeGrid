@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  CreditCard,
   Calendar,
   ShieldCheck,
   ArrowUpCircle,
@@ -44,8 +43,6 @@ const SubscriptionManagement: React.FC = () => {
     const fetchData = async () => {
       try {
         const res = await getSubscriptionDetails();
-        console.log(res.data.subscriptionDetails
-);
         if (res.data) {
           setSubscriptionData(res.data.subscriptionDetails);
         }
@@ -130,14 +127,14 @@ const SubscriptionManagement: React.FC = () => {
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
                           <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                            subscriptionData.personalSubscription.status === 'active' 
-                              ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
-                              : 'bg-rose-50 text-rose-600 border border-rose-100'
+                            subscriptionData.personalSubscription.status === "active" 
+                              ? "bg-emerald-50 text-emerald-600 border border-emerald-100" 
+                              : "bg-rose-50 text-rose-600 border border-rose-100"
                           }`}>
                             {subscriptionData.personalSubscription.status}
                           </span>
                           <span className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                            {subscriptionData.personalSubscription.type} Plan
+                            {subscriptionData.personalSubscription.type === "company" ? "normal" : subscriptionData.personalSubscription.type} Plan
                           </span>
                         </div>
                       </div>
@@ -234,9 +231,9 @@ const SubscriptionManagement: React.FC = () => {
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
                           <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                            subscriptionData.companySubscription.subscription.status === 'active' 
-                              ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
-                              : 'bg-rose-50 text-rose-600 border border-rose-100'
+                            subscriptionData.companySubscription.subscription.status === "active" 
+                              ? "bg-emerald-50 text-emerald-600 border border-emerald-100" 
+                              : "bg-rose-50 text-rose-600 border border-rose-100"
                           }`}>
                             {subscriptionData.companySubscription.subscription.status}
                           </span>

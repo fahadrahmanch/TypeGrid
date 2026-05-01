@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, MessageCircle, MoreHorizontal, User, Sparkles } from "lucide-react";
+import { ArrowLeft, MoreHorizontal, User, Sparkles } from "lucide-react";
 import CommentItem from "../../../components/user/discussions/CommentItem";
 import ReplyModal from "../../../components/user/discussions/ReplyModal";
 import Navbar from "../../../components/user/Navbar";
@@ -123,7 +123,7 @@ const DiscussionDetail: React.FC = () => {
                    </div>
                    <div className="space-y-1">
                       <h3 className="font-black text-[#1A1512] text-xl leading-none">{post.authorName}</h3>
-                      <p className="text-[#D0864B]/60 text-sm font-black uppercase tracking-[0.1em]">@{post.authorName.toLowerCase().replace(/\s+/g, '')}</p>
+                      <p className="text-[#D0864B]/60 text-sm font-black uppercase tracking-[0.1em]">@{post.authorName.toLowerCase().replace(/\s+/g, "")}</p>
                    </div>
                 </div>
                 <button className="p-3 bg-[#FAF5E9] text-[#D0864B] rounded-2xl hover:bg-[#D0864B] hover:text-white transition-all">

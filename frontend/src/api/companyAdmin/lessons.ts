@@ -22,8 +22,8 @@ export async function deleteLesson(id: string) {
   return companyAPI.delete(API_ROUTES.LESSONS.ADMIN.BY_ID(id));
 }
 
-export async function getCompanyUsers() {
-  return companyAPI.get(API_ROUTES.ADMIN.USERS.COMPANY_USERS);
+export async function getCompanyUsers(search: string = "") {
+  return companyAPI.get(API_ROUTES.ADMIN.USERS.COMPANY_USERS, { params: { search } });
 }
 
 export async function getAdminLessons() {

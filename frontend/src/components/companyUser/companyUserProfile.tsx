@@ -343,11 +343,10 @@ export const CompanyUserProfile: React.FC = () => {
               </div>
               <button
                 onClick={() => setShowPasswordForm(!showPasswordForm)}
-                className={`px-6 py-3 rounded-2xl font-bold transition-all shadow-lg hover:scale-105 active:scale-95 ${
-                  showPasswordForm
+                className={`px-6 py-3 rounded-2xl font-bold transition-all shadow-lg hover:scale-105 active:scale-95 ${showPasswordForm
                     ? "bg-white text-gray-600 border border-gray-200"
                     : "bg-[#8B7355] text-white shadow-[#8B7355]/30 hover:bg-[#725e46]"
-                }`}
+                  }`}
               >
                 {showPasswordForm ? "Cancel" : "Change Password"}
               </button>
@@ -371,9 +370,8 @@ export const CompanyUserProfile: React.FC = () => {
                           name="oldPassword"
                           value={passwordData.oldPassword}
                           onChange={handlePasswordChange}
-                          className={`w-full pl-4 pr-12 py-4 bg-white border rounded-2xl outline-none focus:border-[#8B7355] transition-colors font-semibold ${
-                            formErrors.oldPassword ? "border-red-400" : "border-gray-100"
-                          }`}
+                          className={`w-full pl-4 pr-12 py-4 bg-white border rounded-2xl outline-none focus:border-[#8B7355] transition-colors font-semibold ${formErrors.oldPassword ? "border-red-400" : "border-gray-100"
+                            }`}
                           placeholder="••••••••"
                         />
                         <button
@@ -398,9 +396,8 @@ export const CompanyUserProfile: React.FC = () => {
                           name="newPassword"
                           value={passwordData.newPassword}
                           onChange={handlePasswordChange}
-                          className={`w-full pl-4 pr-12 py-4 bg-white border rounded-2xl outline-none focus:border-[#8B7355] transition-colors font-semibold ${
-                            formErrors.newPassword ? "border-red-400" : "border-gray-100"
-                          }`}
+                          className={`w-full pl-4 pr-12 py-4 bg-white border rounded-2xl outline-none focus:border-[#8B7355] transition-colors font-semibold ${formErrors.newPassword ? "border-red-400" : "border-gray-100"
+                            }`}
                           placeholder="••••••••"
                         />
                         <button
@@ -425,9 +422,8 @@ export const CompanyUserProfile: React.FC = () => {
                           name="confirmPassword"
                           value={passwordData.confirmPassword}
                           onChange={handlePasswordChange}
-                          className={`w-full pl-4 pr-12 py-4 bg-white border rounded-2xl outline-none focus:border-[#8B7355] transition-colors font-semibold ${
-                            formErrors.confirmPassword ? "border-red-400" : "border-gray-100"
-                          }`}
+                          className={`w-full pl-4 pr-12 py-4 bg-white border rounded-2xl outline-none focus:border-[#8B7355] transition-colors font-semibold ${formErrors.confirmPassword ? "border-red-400" : "border-gray-100"
+                            }`}
                           placeholder="••••••••"
                         />
                         <button

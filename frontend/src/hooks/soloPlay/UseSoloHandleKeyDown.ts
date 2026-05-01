@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-
+import { useTypingSound } from "../useTypingSound";
 type UseSoloHandleKeyDownProps = {
   lesson: any;
   isFinished: boolean;
@@ -32,9 +32,11 @@ export const useSoloHandleKeyDown = ({
   setTotalTyped,
   setIsfinished,
 }: UseSoloHandleKeyDownProps) => {
+  const { playTyping, playTypingError } = useTypingSound();
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === " " && !space) {
+        e.preventDefault();
         setSpace(true);
         startTimeRef.current = Date.now();
       }
@@ -57,6 +59,7 @@ export const useSoloHandleKeyDown = ({
         const expectedChar = lesson.text[typedText.length];
 
         if (e.key !== expectedChar) {
+          playTypingError()
           setErrors((prev) => prev + 1);
           setHasError(true);
           setTypedText((prev) => prev + e.key);
@@ -64,6 +67,7 @@ export const useSoloHandleKeyDown = ({
         }
 
         const nextText = typedText + e.key;
+        playTyping();
         setTypedText(nextText);
 
         if (nextText.length === lesson.text.length) {

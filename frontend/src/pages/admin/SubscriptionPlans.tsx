@@ -5,7 +5,6 @@ import { Plus, Edit2, Trash2, X, AlertCircle } from "lucide-react";
 import ReusableTable from "../../components/common/ReusableTable";
 import {
   createSubscriptionPlan,
-  getSubscriptionPlans,
   updateSubscriptionPlan,
   deleteSubscriptionPlan,
 } from "../../api/admin/subscription";
@@ -38,15 +37,15 @@ const SubscriptionPlans: React.FC = () => {
     id: string;
     name: string;
   } | null>(null);
-  const [newFeature, setNewFeature] = useState("");
+
 
   const [normalPlans, setNormalPlans] = useState<ISubscriptionPlan[]>([]);
   const [companyPlans, setCompanyPlans] = useState<ISubscriptionPlan[]>([]);
-  const [loading, setLoading] = useState(true);
+
 
   const fetchPlans = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const [normalRes, companyRes] = await Promise.all([getSubscriptionNormalPlans(), getSubscriptionCompanyPlans()]);
 
       const normalData = normalRes.data.subscriptionPlans || [];
@@ -57,7 +56,7 @@ const SubscriptionPlans: React.FC = () => {
     } catch (error) {
       console.error("Error fetching plans:", error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -207,7 +206,6 @@ const SubscriptionPlans: React.FC = () => {
     if (validateAll(values, setFormErrors)) {
       try {
         const response = await createSubscriptionPlan(values);
-        console.log("Creating Plan:", response);
         setCreateOpen(false);
         fetchPlans(); // Refresh the list
       } catch (error) {

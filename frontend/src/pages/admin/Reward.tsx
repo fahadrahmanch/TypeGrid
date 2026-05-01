@@ -244,7 +244,7 @@ const Reward: React.FC = () => {
                 },
               ]}
               data={rewards}
-              loading={loading}
+              isLoading={loading}
               emptyMessage="No rewards found"
               headerClassName="bg-[#FFF8EA] text-left"
               columnHeaderClassName="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest"

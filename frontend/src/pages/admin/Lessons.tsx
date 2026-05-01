@@ -4,7 +4,7 @@ import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
 import { Search, Filter, Plus, Edit2, Trash2 } from "lucide-react";
 import ReusableTable from "../../components/common/ReusableTable";
-import {
+import {  
   titleValidation,
   LevelValidation,
   WpmValidation,

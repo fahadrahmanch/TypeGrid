@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { socket } from "../../socket";
+import { useTypingSound } from "../useTypingSound";
 
 export function useTypingInput({
   lesson,
@@ -19,6 +20,7 @@ export function useTypingInput({
   accuracy,
   errors,
 }: any) {
+  const { playTyping, playTypingError } = useTypingSound();
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lesson || isFinished || phase !== "PLAY") return;
@@ -39,6 +41,7 @@ export function useTypingInput({
         setTotalTyped((prev: number) => prev + 1);
 
         if (e.key !== expectedChar) {
+          playTypingError();
           setErrors((prev: number) => prev + 1);
           setHasError(true);
           setTypedText((prev: string) => prev + e.key);
@@ -46,6 +49,7 @@ export function useTypingInput({
         }
 
         const nextText = typedText + e.key;
+        playTyping();
         setTypedText(nextText);
 
         if (nextText.length === lesson.text.length) {

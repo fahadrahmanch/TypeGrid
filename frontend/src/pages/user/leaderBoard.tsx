@@ -8,7 +8,7 @@ import {
   Zap,
   ArrowLeft,
   Loader2,
-  TrendingUp,
+  // TrendingUp,
   Flame,
   Star,
   Target,
@@ -302,7 +302,7 @@ const LeaderBoard: React.FC = () => {
               },
             ]}
             data={sortedRankings}
-            loading={isLoading}
+            isLoading={isLoading}
             rowClassName={(user, index) =>
               `group hover:bg-[#FDF9F2]/50 transition-colors duration-200 ${user.userId === currentUser?._id ? "bg-orange-50/50" : index < 3 ? "bg-orange-50/10" : ""}`
             }

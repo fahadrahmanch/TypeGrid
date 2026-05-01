@@ -9,8 +9,8 @@ export const createCompanyGroupAuto = async (groupData: any) => {
   return companyAPI.post(API_ROUTES.ADMIN.COMPANY_GROUPS_AUTO, groupData);
 };
 
-export const getCompanyGroups = async () => {
-  return await companyAPI.get(API_ROUTES.ADMIN.COMPANY_GROUPS);
+export const getCompanyGroups = async (search?: string, limit?: number, page?: number) => {
+  return await companyAPI.get(API_ROUTES.ADMIN.COMPANY_GROUPS, { params: { search, limit, page } });
 };
 
 export const getCompanyGroupById = async (id: string) => {

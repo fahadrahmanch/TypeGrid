@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import { Bell, Search, Trash2, Eye, Clock, User, Info, Calendar, CheckCircle2 } from "lucide-react";
+import { Bell, Search, Eye, Clock, Info, Calendar, CheckCircle2 } from "lucide-react";
 import { fetchUserNotifications, markNotificationAsRead } from "../../api/companyUser/notifications";
 import { toast } from "react-toastify";
 

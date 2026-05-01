@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Trophy, Users, Target, Clock } from "lucide-react";
+import {  } from "lucide-react";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 // import StatCard from "../../components/common/StatCard";
 import {

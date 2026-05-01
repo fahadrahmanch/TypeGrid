@@ -1,7 +1,7 @@
 import { updateCompanyStatus } from "../../../api/admin/company";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { X, Building2, Mail, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
+import { X, Building2, Mail, CheckCircle2, AlertCircle, Calendar, FileUp } from "lucide-react";
 
 interface CompanyDetailsModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -152,6 +152,23 @@ const CompanyDetailsModal: React.FC<CompanyDetailsModalProps> = ({ setOpen, comp
                   {company.status || "Unknown"}
                 </div>
               </div>
+
+              {company.document && (
+                <div className="pt-4">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block">
+                    Verification Document
+                  </label>
+                  <a 
+                    href={company.document} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full p-4 bg-[#ECA468]/5 hover:bg-[#ECA468]/10 text-[#D0864B] border border-dashed border-[#ECA468]/30 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all group"
+                  >
+                    <FileUp className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    View Business License
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>

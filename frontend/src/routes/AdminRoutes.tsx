@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectRouteAdmin from "../components/ProtectRoutes/protectRouteAdmin";
 import Users from "../pages/admin/Users";
+import Dashboard from "../pages/admin/Dashboard";
 import Company from "../pages/admin/Company";
 import AdminSignIn from "../pages/auth/AdminSignIn";
 import { IsloggedAdmin } from "../components/ProtectRoutes/protectRouteAdmin";
@@ -27,6 +28,8 @@ export default function AdminRoutes() {
 
       {/* Protected Admin Routes */}
       <Route element={<ProtectRouteAdmin />}>
+        <Route index element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="company" element={<Company />} />
         <Route path="lessons" element={<Lessons />} />

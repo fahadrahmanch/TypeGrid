@@ -6,6 +6,7 @@ import { getMappedKey, KeyboardLayoutType } from "../../utils/keyboardLayouts";
 import { ArrowLeft, RotateCcw, Zap, Target, AlertCircle, Keyboard, Trophy, Home, Sparkles } from "lucide-react";
 import StatCard from "../../components/common/StatCard";
 import { useTypingStats } from "../../hooks/useTypingStats";
+import { useTypingSound } from "../../hooks/useTypingSound";
 
 const PracticeTypingArea: React.FC = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const PracticeTypingArea: React.FC = () => {
   };
 
   const keyboardLayout = useSelector((state: any) => state.auth.keyboardLayout) as KeyboardLayoutType;
+  const { playTyping, playTypingError } = useTypingSound();
   const [typedText, setTypedText] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -87,7 +89,10 @@ const PracticeTypingArea: React.FC = () => {
 
       setTotalTyped((prev) => prev + 1);
       if (!isCorrect) {
+        playTypingError();
         setErrors((prev) => prev + 1);
+      } else {
+        playTyping();
       }
 
       const nextText = typedText + key;

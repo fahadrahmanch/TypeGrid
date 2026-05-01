@@ -290,7 +290,7 @@ const Goals: React.FC = () => {
                 },
               ]}
               data={goals}
-              loading={loading}
+              isLoading={loading}
               emptyMessage="No goals found"
               headerClassName="bg-[#FFF8EA] text-left"
               columnHeaderClassName="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest"

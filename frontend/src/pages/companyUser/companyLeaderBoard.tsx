@@ -7,7 +7,6 @@ import {
   Star,
   Zap,
   ArrowLeft,
-  Loader2,
   Target,
   Info,
   Sparkles,
@@ -277,7 +276,7 @@ const CompanyLeaderBoard: React.FC = () => {
               },
             ]}
             data={sortedRankings}
-            loading={isLoading}
+            isLoading={isLoading}
             emptyMessage="No rankings yet! Complete your first lesson or contest to appear on the leaderboard."
             rowClassName={(user, index) =>
               `group hover:bg-orange-50/30 transition-colors duration-200 ${index < 3 ? "bg-orange-100/10" : ""}`

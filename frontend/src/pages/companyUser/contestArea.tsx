@@ -8,6 +8,7 @@ import { Crown, Trophy, Users } from "lucide-react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 // type PlayerStatus = "PLAYING" | "DISCONNECTED" | "FINISHED" | "LEFT";
 import { useContestSocket } from "../../hooks/companyUser/useContestAreaSocket";
+import { useTypingSound } from "../../hooks/useTypingSound";
 // import { LivePlayer ,PlayerStatus} from "../../types/contest";
 interface ContestRecord {
   _id: string;
@@ -54,6 +55,7 @@ const ContestArea: React.FC = () => {
   const [finalResult, setFinalResult] = useState<GamePlayerResult[]>([]);
 
   const [typedText, setTypedText] = useState("");
+  const { playTyping, playTypingError } = useTypingSound();
   const navigate = useNavigate();
   useEffect(() => {
     gameIdRef.current = contestData?._id;
@@ -271,6 +273,7 @@ const ContestArea: React.FC = () => {
         setTotalTyped((prev) => prev + 1);
 
         if (mappedKey !== expectedChar) {
+          playTypingError();
           setErrors((prev) => prev + 1);
           setHasError(true);
           setTypedText((prev) => prev + e.key);
@@ -278,6 +281,7 @@ const ContestArea: React.FC = () => {
         }
 
         const nextText = typedText + e.key;
+        playTyping();
         setTypedText(nextText);
         if (nextText.length === lesson.length) {
           setIsFinished(true);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getCompanyPlans } from "../../../api/user/subcription";
-import { Check, ArrowLeft, Building2, Users, Trophy, BarChart3, Mail, Zap, Loader2 } from "lucide-react";
+import { Check, ArrowLeft, Building2, Users, Trophy, BarChart3, Zap } from "lucide-react";
 import { userHaveCompany } from "../../../api/user/subcription";
 import { createCompanySubscriptionSession } from "../../../api/user/subcription";
 import { toast } from "react-toastify";
@@ -40,14 +40,12 @@ const CompanySubcriptionDiv1: React.FC = () => {
       const UserHaveCompany = async () => {
         try {
           const response = await userHaveCompany();
-          console.log(response.data.company);
           if (response && response.data.company) {
             console.log(response.data.company);
               setUserHaveCompany(response.data.company);
           }
         } catch (error: any) {
           toast.error(error.response?.data?.message);
-          console.log(error);
         }
       };
       UserHaveCompany();
@@ -56,17 +54,13 @@ const CompanySubcriptionDiv1: React.FC = () => {
 
     const handleSelectPlan = async (planId: string) => {
       try {
-        console.log("kkk",HaveCompany);
-        if(HaveCompany.status==='pending'||HaveCompany.status==='inactive'){
+        if(HaveCompany.status==="pending"||HaveCompany.status==="inactive"){
           navigate("/subscription/company/verify/status");
-          console.log("1")
           return;
         }else if(HaveCompany==null||Object.keys(HaveCompany).length===0){
           navigate(`/subscription/company/verify/${planId}`);
-          console.log("3")
           return;
         }
-        console.log("4")
         const response = await createCompanySubscriptionSession(planId);
         if (response.data?.url) {
           window.location.href = response.data.url;
@@ -76,7 +70,6 @@ const CompanySubcriptionDiv1: React.FC = () => {
         }
       } catch (error: any) {
         toast.error(error.response?.data?.message);
-        console.log(error);
       }
     };
  

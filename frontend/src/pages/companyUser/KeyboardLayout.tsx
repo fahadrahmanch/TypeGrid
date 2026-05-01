@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import { Keyboard as KeyboardIcon, Info, CheckCircle2, X, Save, Eye, ChevronRight, Loader2 } from "lucide-react";
+import { Info, CheckCircle2, X, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { setKeyboardLayout as updateLayoutState } from "../../store/slices/auth/authSlice";

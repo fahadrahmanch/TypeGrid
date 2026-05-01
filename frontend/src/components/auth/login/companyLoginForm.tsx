@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { companySignIn } from "../../../api/auth/authServices";
 import { setAccessToken } from "../../../store/slices/auth/authSlice";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { GoogleLogin } from "@react-oauth/google";
+
+import { useGoogleCompanyAuth } from "../../../hooks/useGoogleCompanyAuth";
 
 const CompanyLoginForm: React.FC = () => {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -15,6 +18,7 @@ const CompanyLoginForm: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { handleCompanyGoogleSuccess, handleCompanyGoogleError } = useGoogleCompanyAuth();
 
   const handleChange = async (e: any) => {
     const { name, value } = e.target;
@@ -69,6 +73,7 @@ const CompanyLoginForm: React.FC = () => {
         <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
           <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">Company Login</h2>
           <p className="text-sm pb-8">Sign in to your account to continue</p>
+            <GoogleLogin onSuccess={handleCompanyGoogleSuccess} onError={handleCompanyGoogleError} />
 
           {/* Divider */}
 

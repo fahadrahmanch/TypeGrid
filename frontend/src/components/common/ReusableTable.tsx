@@ -5,7 +5,7 @@ export interface Column<T> {
   key: string;
   className?: string;
   headerClassName?: string;
-  render?: (item: T) => React.ReactNode;
+  render?: (item: T, index: number) => React.ReactNode;
 }
 
 interface ReusableTableProps<T> {
@@ -14,6 +14,8 @@ interface ReusableTableProps<T> {
   isLoading?: boolean;
   emptyMessage?: string;
   rowClassName?: string;
+  headerClassName?: string;
+  columnHeaderClassName?: string;
 }
 
 const ReusableTable = <T extends { _id?: string; id?: string }>({
@@ -22,12 +24,14 @@ const ReusableTable = <T extends { _id?: string; id?: string }>({
   isLoading = false,
   emptyMessage = "No data found",
   rowClassName = "",
+  headerClassName = "",
+  columnHeaderClassName = "",
 }: ReusableTableProps<T>) => {
   return (
     <div className="overflow-x-auto custom-scrollbar">
       <table className="w-full">
-        <thead>
-          <tr className="text-left font-black text-[10px] uppercase tracking-widest text-gray-400">
+        <thead className={headerClassName}>
+          <tr className={`text-left font-black text-[10px] uppercase tracking-widest text-gray-400 ${columnHeaderClassName}`}>
             {columns.map((col) => (
               <th key={col.key} className={`pb-4 px-4 ${col.headerClassName || ""}`}>
                 {col.header}
@@ -54,14 +58,14 @@ const ReusableTable = <T extends { _id?: string; id?: string }>({
               </td>
             </tr>
           ) : (
-            data.map((item) => (
+            data.map((item, index) => (
               <tr
                 key={item._id || item.id}
                 className={`group hover:bg-white/40 transition-all duration-300 ${rowClassName}`}
               >
                 {columns.map((col) => (
                   <td key={`${item._id || item.id}-${col.key}`} className={`py-5 px-4 ${col.className || ""}`}>
-                    {col.render ? col.render(item) : (item as any)[col.key]}
+                    {col.render ? col.render(item, index) : (item as any)[col.key]}
                   </td>
                 ))}
               </tr>

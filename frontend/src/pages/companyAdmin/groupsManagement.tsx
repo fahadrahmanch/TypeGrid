@@ -5,18 +5,34 @@ import GroupListTable from "../../components/companyAdmin/groups/GroupListTable"
 import { Group } from "../../types/group";
 import CreateGroupModal from "../../components/companyAdmin/groups/CreateGroupModal";
 import { getCompanyGroups } from "../../api/companyAdmin/companyGroup";
+import Pagination from "../../components/common/Pagination";
 
 const GroupsManagement: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("All Groups");
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [loading, setLoading] = useState(true);
 
+  const [groups, setGroups] = useState<Group[]>([]);
+   const [limit] = useState(5);
+    const [page, setPage] = useState(1);
+    const [searchText, setSearchText] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
+ useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchText);
+      setPage(1);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+    useEffect(() => {
+      fetchGroups();
+    }, [debouncedSearch, page]);
   const fetchGroups = async () => {
     try {
       setLoading(true);
-      const response = await getCompanyGroups();
+      const response = await getCompanyGroups(debouncedSearch, limit, page);
       setGroups(response.data.groups || []);
+      setTotal(response.data.total);
     } catch (error) {
       console.error("Error fetching groups:", error);
     } finally {
@@ -24,9 +40,6 @@ const GroupsManagement: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchGroups();
-  }, []);
 
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
@@ -43,6 +56,7 @@ const GroupsManagement: React.FC = () => {
           <div className="flex items-center justify-between gap-4">
             <input
               type="text"
+              onChange={(e) => setSearchText(e.target.value)}
               placeholder="Search groups..."
               className="w-full max-w-sm px-4 py-3 bg-white border-transparent rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm placeholder-gray-400"
             />
@@ -56,7 +70,7 @@ const GroupsManagement: React.FC = () => {
           </div>
 
           {/* Tabs */}
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             {["All Groups", "Beginner", "Intermediate", "Advanced"].map((tab) => (
               <button
                 key={tab}
@@ -70,7 +84,7 @@ const GroupsManagement: React.FC = () => {
                 {tab}
               </button>
             ))}
-          </div>
+          </div> */}
 
           {/* Groups List */}
           {loading ? (
@@ -78,7 +92,14 @@ const GroupsManagement: React.FC = () => {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
           ) : (
-            <GroupListTable groups={groups} onDeleteSuccess={fetchGroups} />
+            <>
+              <GroupListTable groups={groups} onDeleteSuccess={fetchGroups} />
+              <Pagination
+                currentPage={page}
+                totalPages={total}
+                onPageChange={(newPage) => setPage(newPage)}
+              />
+            </>
           )}
         </div>
 

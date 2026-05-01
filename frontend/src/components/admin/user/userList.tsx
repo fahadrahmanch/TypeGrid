@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { updateUserStatus, filterUsersAPI } from "../../../api/admin/users";
 import ConfirmModal from "../../common/ConfirmModal";
 import { Search, Filter, Shield, ShieldOff, Mail, Trophy, User as UserIcon } from "lucide-react";
-import ReusableTable, { Column } from "../../common/ReusableTable";
+import ReusableTable from "../../common/ReusableTable";
 import Pagination from "../../common/Pagination";
 
 const UserList: React.FC = () => {

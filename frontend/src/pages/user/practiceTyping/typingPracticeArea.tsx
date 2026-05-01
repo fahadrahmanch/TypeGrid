@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import Navbar from "../../../components/user/Navbar";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTypingSound } from "../../../hooks/useTypingSound";
 import { getTypiingPracticeLessonById } from "../../../api/user/typingPracticeService";
 import { Zap, Target, Clock, AlertCircle, RotateCcw, Trophy, ArrowLeft, Layout, BarChart3 } from "lucide-react";
 
@@ -15,6 +16,7 @@ const TypingPracticeArea = () => {
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(100);
   const [isFinished, setIsfinished] = useState(false);
+  const { playTyping, playTypingError } = useTypingSound();
 
   const snippetContainerRef = useRef<HTMLDivElement>(null);
   const activeCharRef = useRef<HTMLSpanElement>(null);
@@ -145,6 +147,14 @@ const TypingPracticeArea = () => {
 
       if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault(); // Prevent scrolling space
+        
+        const expectedChar = Content.text[typedText.length];
+        if (e.key !== expectedChar) {
+          playTypingError();
+        } else {
+          playTyping();
+        }
+        
         setTypedText((prev) => prev + e.key);
       }
     };

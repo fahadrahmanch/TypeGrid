@@ -344,7 +344,7 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                   </option>
                   {companyGroups.map((group: any) => (
                     <option key={group._id} value={group._id}>
-                      {group.name}
+                      {group.groupName}
                     </option>
                   ))}
                 </select>

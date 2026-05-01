@@ -4,7 +4,7 @@ import Logo from "../../../assets/Icon/logo.png";
 import { companyLogoutApi } from "../../../api/auth/authServices";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../store/slices/auth/authSlice";
-import { LayoutDashboard, Users, BookOpen, Trophy, Settings, LogOut, UsersRound, Bell } from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, Trophy, LogOut, UsersRound, Bell } from "lucide-react";
 
 // Define navigation items with their respective icons and paths
 const navItems = [
@@ -26,7 +26,7 @@ const navItems = [
     label: "Notifications",
     icon: Bell,
   },
-  { path: "/company/admin/settings", label: "Settings", icon: Settings },
+  // { path: "/company/admin/settings", label: "Settings", icon: Settings },
 ];
 
 const CompanyAdminSidebar: React.FC = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
-import { ArrowLeft, Plus, ChevronUp, ChevronDown } from "lucide-react";
+import { ArrowLeft, Plus, ChevronUp } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import AddUsersModal from "../../components/companyAdmin/groups/AddUsersModal";
 import { getCompanyGroupById } from "../../api/companyAdmin/companyGroup";
@@ -37,7 +37,7 @@ const GroupDetails: React.FC = () => {
         if (!prevGroup) return null;
         return {
           ...prevGroup,
-          members: prevGroup.members.filter((member) => {
+          members: (prevGroup.members || []).filter((member) => {
             const id = typeof member === "string" ? member : member._id;
             return id !== memberId;
           }),

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, User as UserIcon, Check } from "lucide-react";
 
 export interface User {
@@ -15,15 +15,20 @@ interface UserSelectionListProps {
   users: User[];
   selectedUsers: string[];
   onToggleUser: (userId: string) => void;
+  onSearch: (searchTerm: string) => void;
 }
 
-const UserSelectionList: React.FC<UserSelectionListProps> = ({ users, selectedUsers, onToggleUser }) => {
+const UserSelectionList: React.FC<UserSelectionListProps> = ({ users, selectedUsers, onToggleUser, onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredUsers = users.filter((user) => {
-    const name = user.name || user.fullname || "";
-    return name.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearch(searchTerm);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm, onSearch]);
+
+  const displayUsers = users;
 
   return (
     <div className="flex flex-col h-full bg-white/40 backdrop-blur-md rounded-3xl border border-[#ECA468]/10 overflow-hidden">
@@ -44,14 +49,14 @@ const UserSelectionList: React.FC<UserSelectionListProps> = ({ users, selectedUs
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 custom-scrollbar min-h-[400px]">
-        {filteredUsers.length === 0 ? (
+        {displayUsers.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-400 opacity-60 py-12">
             <UserIcon size={48} className="mb-4" />
             <p className="font-bold text-sm uppercase tracking-widest">No users found</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
-            {filteredUsers.map((user) => {
+            {displayUsers.map((user) => {
               const userId = user._id || user.id || "";
               const userName = user.name || user.fullname || "Student";
               const isSelected = selectedUsers.includes(userId);

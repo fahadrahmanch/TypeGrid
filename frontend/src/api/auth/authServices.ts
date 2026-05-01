@@ -41,6 +41,11 @@ export async function googleAuthApi(data: any) {
   return userAPI.post(API_ROUTES.AUTH.GOOGLE, data);
 }
 
+// company google auth
+export async function companyGoogleAuthApi(data: any) {
+  return companyAPI.post(API_ROUTES.AUTH.GOOGLE, data);
+}
+
 // logout
 export async function logoutApi() {
   return userAPI.post(API_ROUTES.AUTH.LOGOUT);

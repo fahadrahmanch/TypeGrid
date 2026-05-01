@@ -8,7 +8,7 @@ import { getCompanyDetailsApi } from "../../../api/companyAdmin/company";
 
 interface AddUserProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setUsers: any;
+  onUserAdded: () => void;
 }
 
 interface SubscriptionInfo {
@@ -17,7 +17,7 @@ interface SubscriptionInfo {
   duration: number;
 }
 
-const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
+const AddUser: React.FC<AddUserProps> = ({ setOpen, onUserAdded }) => {
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -63,7 +63,7 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, setUsers }) => {
         password: values.password,
         role: "companyUser",
       });
-      setUsers((prev: any[]) => [...prev, response.data.data]);
+      onUserAdded();
       setOpen(false);
       toast.success(response.data.message);
     } catch (error: any) {

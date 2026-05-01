@@ -34,6 +34,7 @@ import LeaderBoard from "../pages/user/leaderBoard";
 import Achievements from "../pages/user/achievments";
 import DiscussionsPage from "../pages/user/Discussions/DiscussionsPage";
 import DiscussionDetail from "../pages/user/Discussions/DiscussionDetail";
+import MyPosts from "../pages/user/Discussions/MyPosts";
 
 export default function UserRoutes() {
   const location = useLocation();
@@ -94,6 +95,7 @@ export default function UserRoutes() {
       <Route element={<ProtectRouteUser />}>
         <Route path="/" element={<Home />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="profile/:userId" element={<Profile />} />
         <Route path="profile/edit" element={<EditProfile />} />
         <Route path="change/password" element={<ChangePassword />} />
 
@@ -132,6 +134,7 @@ export default function UserRoutes() {
         {/* Discussions */}
         <Route path="discussions" element={<DiscussionsPage />} />
         <Route path="discussions/:id" element={<DiscussionDetail />} />
+        <Route path="discussions/my" element={<MyPosts />} />
       </Route>
     </Routes>
   );

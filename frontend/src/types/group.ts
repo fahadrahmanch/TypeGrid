@@ -8,10 +8,10 @@ export interface GroupMember {
 }
 
 export interface Group {
-  id: string;
-  name: string;
-  type: string;
-  members: (string | GroupMember)[];
+  _id: string;
+  groupName: string;
+  groupType: string;
+  selectedUsers: (string | GroupMember)[];
   companyId?: string;
   createdAt?: string;
   usersCount?: number;

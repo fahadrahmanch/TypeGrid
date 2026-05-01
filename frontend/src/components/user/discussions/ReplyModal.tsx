@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { X, Send, User } from "lucide-react";
+import { X, User } from "lucide-react";
 import { formatRelativeTime } from "../../../utils/dateFormatter";
 import { createReply } from "../../../api/user/disscussions";
 interface ReplyModalProps {
@@ -14,10 +14,9 @@ interface ReplyModalProps {
     authorAvatar?: string;
   } | null;
   onSubmit: (data: { content: string }) => void;
-  replies?: { author: string; content: string; postedAt: string }[];
 }
 
-const ReplyModal: React.FC<ReplyModalProps> = ({ isOpen, onClose, parentComment, onSubmit, replies = [] }) => {
+const ReplyModal: React.FC<ReplyModalProps> = ({ isOpen, onClose, parentComment, onSubmit }) => {
   const [content, setContent] = useState("");
 
   if (!isOpen || !parentComment) return null;

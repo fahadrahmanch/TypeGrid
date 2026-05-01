@@ -41,8 +41,10 @@ export const API_ROUTES = {
     //discussions
     CREATE_POST: "/discussions/create-post",
     GET_ALL_DISCUSSIONS: "/discussions",
+    DELETE_DISCUSSION: (id: string) => `/discussions/${id}`,
     CREATE_COMMENT: "/discussions/create-comment",
     CREATE_REPLY: "/discussions/create-reply",
+    GET_MY_DISCUSSIONS: "/discussions/my-discussions",
   },
   QUICK_PLAY: {
     START: "/quick-play/start",
@@ -103,7 +105,9 @@ export const API_ROUTES = {
     },
   },
   ADMIN: {
+    DASHBOARD_STATS: "/dashboard/stats",
     SUBSCRIPTION: {
+
       BASE: "/subscription",
       BY_ID: (id: string) => `/subscription/${id}`,
       NORMAL: "/subscription/normal",
@@ -173,6 +177,8 @@ export const API_ROUTES = {
   SET_KEYBOARD_LAYOUT: "/keyboard/set-keyboard-layout",
 
   //company admin
+  COMPANY_ADMIN_DASHBOARD_STATS: "/dashboard/stats",
+  COMPANY_USER_DASHBOARD_STATS: "/dashboard-stats",
   GET_COMPANY_DETAILS: "/company/details",
   GET_PENDING_USERS: "/lesson/pending-users",
 

@@ -34,3 +34,7 @@ export async function changePasswordApi(data: any) {
 export async function getCompanyDetailsApi() {
   return userAPI.get(API_ROUTES.USER.GET_COMPANY_DETAILS);
 }
+
+export async function getAnotherUserProfileApi(userId: string) {
+  return userAPI.get(API_ROUTES.GET_COMPANY_USER_PROFILE(userId));
+}

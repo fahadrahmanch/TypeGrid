@@ -40,16 +40,7 @@ const NotificationPage: React.FC = () => {
   const [isGroupDropdownOpen, setIsGroupDropdownOpen] = useState(false);
   const [notificationHistory, setNotificationHistory] = useState<NotificationHistoryItem[]>([]);
 
-  // Mock History
-  const [history] = useState<NotificationHistoryItem[]>([
-    {
-      id: "1",
-      title: "k;lk",
-      message: "n,mn",
-      target: "All Users",
-      timestamp: "Oct 28, 2025, 5:12 PM",
-    },
-  ]);
+
 
   useEffect(() => {
     const loadData = async () => {

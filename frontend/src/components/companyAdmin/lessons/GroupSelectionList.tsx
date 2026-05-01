@@ -1,11 +1,12 @@
-import React, { useEffect,useState } from "react";
+import React from "react";
 import { Users, Check } from "lucide-react";
 
 export interface Group {
   _id?: string;
   id?: string;
-  name: string;
-  members: string[];
+  groupName: string;
+  groupType?: string;
+  selectedUsers: string[];
   avgProgress?: number;
 }
 
@@ -65,14 +66,14 @@ const GroupSelectionList: React.FC<GroupSelectionListProps> = ({ groups, selecte
                     <h4
                       className={`font-black text-sm transition-colors ${isSelected ? "text-white" : "text-gray-800"}`}
                     >
-                      {group.name}
+                      {group.groupName}
                     </h4>
                     <p
                       className={`text-[10px] uppercase font-bold tracking-widest transition-colors ${
                         isSelected ? "text-white/70" : "text-gray-400"
                       }`}
                     >
-                      {group.members?.length || 0} Members
+                      {group.selectedUsers?.length || 0} Members
                     </p>
                   </div>
                 </button>

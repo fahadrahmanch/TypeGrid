@@ -1,43 +1,31 @@
 import React, { useState, useEffect } from "react";
 import {
   Award,
-  Trophy,
-  Target,
-  Zap,
-  Users,
   CheckCircle2,
   Lock,
-  ChevronLeft,
-  ChevronRight,
-  TrendingUp,
-  Calendar,
-  Flame,
+  Zap,
   Search,
 } from "lucide-react";
 import { getAllAchievements } from "../../api/user/achievments";
 import Navbar from "../../components/user/Navbar";
-import { useSelector } from "react-redux";
 
-interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  minWpm: number;
-  minAccuracy: number;
-  minGame: number;
-  xp: number;
-  isUnlocked: boolean;
-}
+
+
 
 const Achievements: React.FC = () => {
-  const { user } = useSelector((state: any) => state.auth);
+
   const [activeTab, setActiveTab] = useState<"all" | "unlocked" | "locked">("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-
   const [achievements, setAchievements] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const getRarity = (xp: number): "common" | "rare" | "epic" | "legendary" => {
     if (xp < 100) return "common";
@@ -49,31 +37,27 @@ const Achievements: React.FC = () => {
   useEffect(() => {
     const fetchAchievements = async () => {
       try {
-        setLoading(true);
-        const response = await getAllAchievements();
-        const data = response.data.data || response.data || [];
+        const response = await getAllAchievements(debouncedSearch);
+        const data = response.data.data || [];
         setAchievements(data);
       } catch (error) {
         console.log(error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchAchievements();
-  }, []);
+  }, [debouncedSearch]);
 
   const filteredAchievements = achievements.filter((ach) => {
     const matchesTab =
       activeTab === "all" ||
       (activeTab === "unlocked" && ach.isUnlocked) ||
       (activeTab === "locked" && !ach.isUnlocked);
-    const matchesSearch = ach.title.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTab && matchesSearch;
+    return matchesTab;
   });
 
   const unlockedCount = achievements.filter((ach) => ach.isUnlocked).length;
   const lockedCount = achievements.length - unlockedCount;
-  const completionPercentage = achievements.length > 0 ? Math.round((unlockedCount / achievements.length) * 100) : 0;
+
 
   const getRarityStyles = (rarity: string) => {
     switch (rarity) {
@@ -270,24 +254,7 @@ const Achievements: React.FC = () => {
           </div>
         )}
 
-        {/* Pagination Section */}
-        {/* <div className="flex justify-center items-center gap-3">
-                    <button className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-gray-100 text-gray-400 hover:text-gray-900 transition-all shadow-sm hover:shadow-md">
-                        <ChevronLeft className="w-5 h-5" />
-                    </button>
 
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/60 backdrop-blur-sm rounded-[24px] border border-gray-100 shadow-sm">
-                        <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#8B7355] text-white text-sm font-black shadow-lg shadow-[#8B7355]/20">1</button>
-                        <button className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white text-sm font-bold text-gray-400 hover:text-gray-900 transition-all">2</button>
-                        <button className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white text-sm font-bold text-gray-400 hover:text-gray-900 transition-all">3</button>
-                        <span className="px-2 text-gray-300 font-bold">...</span>
-                        <button className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white text-sm font-bold text-gray-400 hover:text-gray-900 transition-all">10</button>
-                    </div>
-
-                    <button className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-gray-100 text-gray-400 hover:text-gray-900 transition-all shadow-sm hover:shadow-md">
-                        <ChevronRight className="w-5 h-5" />
-                    </button>
-                </div> */}
       </div>
     </div>
   );

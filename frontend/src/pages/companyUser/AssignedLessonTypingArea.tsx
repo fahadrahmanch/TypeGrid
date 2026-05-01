@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { saveLessonResult } from "../../api/companyAdmin/lessons";
 import StatCard from "../../components/common/StatCard";
 import { useSelector } from "react-redux";
+import { useTypingSound } from "../../hooks/useTypingSound";
 const AssignedLessonTypingArea: React.FC = () => {
   const navigate = useNavigate();
   const keyboardLayout = useSelector((state: any) => state.auth.keyboardLayout);
@@ -44,6 +45,7 @@ const AssignedLessonTypingArea: React.FC = () => {
   const { assignedLessonId } = useParams();
   const hasSavedRef = useRef(false);
   const [isTimeUp, setIsTimeUp] = useState(false);
+  const { playTyping, playTypingError } = useTypingSound();
 
   useEffect(() => {
     async function fectchAssignLesson() {
@@ -122,6 +124,13 @@ const AssignedLessonTypingArea: React.FC = () => {
       const expectedChar = assignedLesson.lesson.text[index];
 
       const isWrong = mappedKey !== expectedChar;
+      
+      if (isWrong) {
+        playTypingError();
+      } else {
+        playTyping();
+      }
+
       const newTotal = totalTyped + 1;
       const newErrors = isWrong ? errors + 1 : errors;
 

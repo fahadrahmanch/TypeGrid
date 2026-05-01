@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, Clock, User, Check, X, Eye, Users } from "lucide-react";
+import { Calendar, Clock, User} from "lucide-react";
 
 interface AssignmentSummaryProps {
   selectedUserCount: number;
@@ -22,10 +22,7 @@ const AssignmentSummary: React.FC<AssignmentSummaryProps> = ({
   setDeadlineAt,
   isGroupMode = false,
 }) => {
-  console.log("selectedUserCount", selectedUserCount);
-  console.log("selectedLessonCount", selectedLessonCount);
-  console.log("deadlineAt", deadlineAt);
-  console.log("isGroupMode", isGroupMode);
+
   return (
     <div className="bg-[#FFF8EA] rounded-3xl p-8 border border-[#ECA468]/30 shadow-sm relative overflow-hidden group">
       <div className="absolute -right-12 -top-12 w-32 h-32 bg-[#ECA468]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />

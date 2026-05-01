@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { User, Bell, ChevronRight, Clock, AlertCircle } from "lucide-react";
+import { User, Bell, Clock } from "lucide-react";
+
 import ReusableTable from "../../common/ReusableTable";
 import NotificationModal from "./NotificationModal";
 import { getPendingUsers } from "../../../api/companyAdmin/lessons";

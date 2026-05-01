@@ -14,11 +14,11 @@ export async function createCompanySubscriptionSession(planId: string) {
     planId,
   });
 }
-export async function confirmSubscription(planId: string) {
-  return userAPI.post(API_ROUTES.USER.CONFIRM_SUBSCRIPTION, { planId });
+export async function confirmSubscription(planId: string, providerTransactionId: string) {
+  return userAPI.post(API_ROUTES.USER.CONFIRM_SUBSCRIPTION, { planId, providerTransactionId });
 }
-export async function confirmCompanySubscription(planId: string) {
-  return userAPI.post(API_ROUTES.USER.CONFIRM_COMPANY_SUBSCRIPTION, { planId });
+export async function confirmCompanySubscription(planId: string, providerTransactionId: string) {
+  return userAPI.post(API_ROUTES.USER.CONFIRM_COMPANY_SUBSCRIPTION, { planId, providerTransactionId });
 }
 
 export async function cancelSubscription(planId: string) {
@@ -33,6 +33,5 @@ export async function getSubscriptionDetails() {
 }
 
 export async function userHaveCompany(){
-  console.log("api called")
   return userAPI.get(API_ROUTES.USER. GET_COMPANY_DETAILS);
 }

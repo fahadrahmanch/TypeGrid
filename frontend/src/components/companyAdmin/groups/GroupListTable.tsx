@@ -33,14 +33,14 @@ const GroupListTable: React.FC<GroupListTableProps> = ({ groups, onDeleteSuccess
         {
           header: "Group Name",
           key: "name",
-          render: (group) => <span className="font-semibold text-gray-900 capitalize">{group.name}</span>,
+          render: (group) => <span className="font-semibold text-gray-900 capitalize">{group.groupName}</span>,
         },
         {
           header: "Group Type",
           key: "type",
           render: (group) => (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100 capitalize">
-              {group.type}
+              {group.groupType}
             </span>
           ),
         },
@@ -48,26 +48,26 @@ const GroupListTable: React.FC<GroupListTableProps> = ({ groups, onDeleteSuccess
           header: "Users",
           key: "usersCount",
           className: "text-sm text-gray-600 font-medium",
-          render: (group) => group.members?.length || group.usersCount || 0,
+          render: (group) => group.selectedUsers?.length || group.usersCount || 0,
         },
-        {
-          header: "Avg WPM",
-          key: "avgWpm",
-          className: "text-sm text-gray-600 font-medium",
-          render: (group) => (group.avgWpm !== undefined ? group.avgWpm.toFixed(1) : "-"),
-        },
-        {
-          header: "Avg Accuracy",
-          key: "avgAccuracy",
-          className: "text-sm text-gray-600 font-medium",
-          render: (group) => (group.avgAccuracy !== undefined ? `${group.avgAccuracy.toFixed(1)}%` : "-"),
-        },
-        {
-          header: "Max Accuracy",
-          key: "maxAccuracy",
-          className: "text-sm text-gray-600 font-medium",
-          render: (group) => (group.maxAccuracy !== undefined ? `${group.maxAccuracy.toFixed(1)}%` : "-"),
-        },
+        // {
+        //   header: "Avg WPM",
+        //   key: "avgWpm",
+        //   className: "text-sm text-gray-600 font-medium",
+        //   render: (group) => (group.avgWpm !== undefined ? group.avgWpm.toFixed(1) : "-"),
+        // },
+        // {
+        //   header: "Avg Accuracy",
+        //   key: "avgAccuracy",
+        //   className: "text-sm text-gray-600 font-medium",
+        //   render: (group) => (group.avgAccuracy !== undefined ? `${group.avgAccuracy.toFixed(1)}%` : "-"),
+        // },
+        // {
+        //   header: "Max Accuracy",
+        //   key: "maxAccuracy",
+        //   className: "text-sm text-gray-600 font-medium",
+        //   render: (group) => (group.maxAccuracy !== undefined ? `${group.maxAccuracy.toFixed(1)}%` : "-"),
+        // },
         {
           header: "Actions",
           key: "actions",
@@ -76,14 +76,14 @@ const GroupListTable: React.FC<GroupListTableProps> = ({ groups, onDeleteSuccess
           render: (group) => (
             <div className="flex items-center justify-end gap-3">
               <button
-                onClick={() => navigate(`/company/admin/groups/${group.id}`)}
+                onClick={() => navigate(`/company/admin/groups/${group._id}`)}
                 className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 title="View Details"
               >
                 <Eye className="w-4 h-4" />
               </button>
               <button
-                onClick={() => handleDelete(group.id, group.name)}
+                onClick={() => handleDelete(group._id, group.groupName)}
                 className="p-1.5 text-red-500 hover:bg-red-50 hover:text-red-700 rounded-lg transition-colors"
                 title="Delete Group"
               >

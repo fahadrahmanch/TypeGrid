@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CompanyAdminSidebar from "../../components/companyAdmin/layout/CompanyAdminSideNavbar";
-import { Plus, Users, User as UserIcon, Layers } from "lucide-react";
+import { Plus, Users, User as UserIcon } from "lucide-react";
 import LessonTable, { Lesson } from "../../components/companyAdmin/lessons/LessonTable";
 import UserSelectionList, { User } from "../../components/companyAdmin/lessons/UserSelectionList";
 import GroupSelectionList, { Group } from "../../components/companyAdmin/lessons/GroupSelectionList";
@@ -27,13 +27,14 @@ const Lessons: React.FC = () => {
   const [selectedLessons, setSelectedLessons] = useState<string[]>([]);
   const [adminLessons, setAdminLessons] = useState<Lesson[]>([]);
   const [deadlineAt, setDeadlineAt] = useState<string>("");
+  const [userSearch, setUserSearch] = useState("");
   
   const isGroupMode = activeTab === "group";
 
   useEffect(() => {
     async function fetchCompanyUsers() {
       try {
-        const response = await getCompanyUsers();
+        const response = await getCompanyUsers(userSearch);
         const userData = response.data.users || response.data.data || [];
         setCompanyUsers(userData);
       } catch (error) {
@@ -41,13 +42,15 @@ const Lessons: React.FC = () => {
       }
     }
     fetchCompanyUsers();
-  }, []);
+  }, [userSearch]);
 
   useEffect(() => {
     async function fetchGroups() {
       try {
         const response = await getCompanyGroups();
+
         const groupsData = response.data.groups || response.data.data || [];
+        console.log("groupsData", groupsData);
         setCompanyGroups(groupsData);
       } catch (error) {
         console.log(error);
@@ -213,6 +216,7 @@ const Lessons: React.FC = () => {
                     users={companyUsers}
                     selectedUsers={selectedUsers}
                     onToggleUser={toggleUserSelection}
+                    onSearch={setUserSearch}
                   />
                 ) : (
                   <GroupSelectionList

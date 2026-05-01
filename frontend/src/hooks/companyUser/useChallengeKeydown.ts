@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { socket } from "../../socket";
 import { getMappedKey, KeyboardLayoutType } from "../../utils/keyboardLayouts";
+import { useTypingSound } from "../useTypingSound";
 
 interface UseChallengeKeydownProps {
   lessonText: string | undefined;
@@ -47,6 +48,7 @@ export function useChallengeKeydown({
   setIsFinished,
   keyboardLayout,
 }: UseChallengeKeydownProps) {
+  const { playTyping, playTypingError } = useTypingSound();
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!lessonText || isFinished || phase !== "PLAY") return;
@@ -74,6 +76,7 @@ export function useChallengeKeydown({
       const newTotal = totalTyped + 1;
 
       if (mappedKey !== expectedChar) {
+        playTypingError();
         setErrors((prev) => prev + 1);
         setHasError(true);
         setTotalTyped(newTotal);
@@ -83,6 +86,7 @@ export function useChallengeKeydown({
       }
 
       const nextText = typedText + key;
+      playTyping();
 
       setTypedText(nextText);
       setTotalTyped(newTotal);

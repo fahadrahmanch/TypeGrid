@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { toast } from "react-toastify";
-import { Search, Plus, Edit2, Trash2, Trophy, X } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, X } from "lucide-react";
 import ReusableTable from "../../components/common/ReusableTable";
 import Pagination from "../../components/common/Pagination";
 import { fetchGoals } from "../../api/admin/goals";
@@ -352,7 +352,7 @@ const Challenges: React.FC = () => {
                 },
               ]}
               data={challenges}
-              loading={loading}
+              isLoading={loading}
               emptyMessage="Repository Empty"
             />
 
