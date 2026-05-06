@@ -2,6 +2,7 @@ import { CompanyUserStatsEntity } from "../../../entities";
 import { IBaseRepository } from "../base-repository.interface";
 export interface ICompanyUserStatsRepository extends IBaseRepository<CompanyUserStatsEntity> {
   getLeaderboard(companyId: string, limit: number): Promise<CompanyUserStatsEntity[]>;
+  findByUserIds(userIds: string[]): Promise<CompanyUserStatsEntity[]>;
   updateStats(
     companyId: string,
     userId: string,

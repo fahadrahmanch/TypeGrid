@@ -1,5 +1,6 @@
 import React from "react";
 import { MessageCircle, MoreHorizontal } from "lucide-react";
+import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../../../utils/dateFormatter";
 
 interface DiscussionCardProps {
@@ -7,6 +8,7 @@ interface DiscussionCardProps {
     id: string;
     title: string;
     content?: string;
+    authorId: string;
     authorName: string;
     authorAvatar?: string;
     postedAt: string;
@@ -26,8 +28,12 @@ const DiscussionCard: React.FC<DiscussionCardProps> = ({ post, onClick }) => {
 
       <div className="relative flex gap-6">
         {/* Avatar Section */}
-        <div className="shrink-0 flex flex-col items-center">
-          <div className="w-14 h-14 rounded-2xl overflow-hidden bg-white shadow-md border-2 border-white ring-1 ring-[#ECA468]/10 transition-transform duration-500 group-hover:scale-110">
+        <Link 
+          to={`/profile/${post.authorId}`}
+          onClick={(e) => e.stopPropagation()}
+          className="shrink-0 flex flex-col items-center"
+        >
+          <div className="w-14 h-14 rounded-2xl overflow-hidden bg-white shadow-md border-2 border-white ring-1 ring-[#ECA468]/10 transition-transform duration-500 hover:scale-110">
             {post.authorAvatar ? (
               <img src={post.authorAvatar} alt={post.authorName} className="w-full h-full object-cover" />
             ) : (
@@ -36,16 +42,20 @@ const DiscussionCard: React.FC<DiscussionCardProps> = ({ post, onClick }) => {
               </div>
             )}
           </div>
-        </div>
+        </Link>
 
         {/* Content Section */}
         <div className="flex-1 min-w-0 space-y-3">
           {/* Metadata Row */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-black tracking-[0.2em] uppercase text-[#3A2E28] block truncate">
+              <Link 
+                to={`/profile/${post.authorId}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-[11px] font-black tracking-[0.2em] uppercase text-[#3A2E28] block truncate hover:text-[#D0864B] transition-colors"
+              >
                 {post.authorName}
-              </span>
+              </Link>
               <span className="text-[#D0864B]/30 font-bold">·</span>
               <span className="text-[10px] font-black tracking-widest uppercase text-[#D0864B]/60">
                 {formatRelativeTime(post.postedAt)} ago

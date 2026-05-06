@@ -6,11 +6,11 @@ export async function getSubscriptionPlans() {
 }
 
 export async function createSubscriptionPlan(data: any) {
-  return adminAPI.post(API_ROUTES.ADMIN.SUBSCRIPTION.BASE, data);
+  return adminAPI.post(API_ROUTES.ADMIN.SUBSCRIPTION.BASE, { data });
 }
 
 export async function updateSubscriptionPlan(id: string, data: any) {
-  return adminAPI.put(API_ROUTES.ADMIN.SUBSCRIPTION.UPDATE_SUBSCRIPTION_PLAN(id), data);
+  return adminAPI.put(API_ROUTES.ADMIN.SUBSCRIPTION.UPDATE_SUBSCRIPTION_PLAN(id), { data });
 }
  
 export async function deleteSubscriptionPlan(id: string) {

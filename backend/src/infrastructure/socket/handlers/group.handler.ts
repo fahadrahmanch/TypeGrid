@@ -2,7 +2,7 @@ import { Socket, Server } from "socket.io";
 import { injectGroupSocketController } from "../../../presentation/DI/socket.di";
 import redis from "../../../config/redis";
 import { checkGameEndService } from "../../../application/services/game-result.service";
-
+import logger from "../../../utils/logger";
 export const groupHandlers = (socket: Socket, io: Server) => {
   /* ===================== GROUP PLAY ===================== */
   socket.on("join-room", ({ groupId, userId }: { groupId: string; userId: string }) => {
@@ -221,6 +221,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
     socket.leave(groupId);
   });
   socket.on("leave-game", async ({ gameId, userId }) => {
+    logger.info("user id from leave game",userId);
     await injectGroupSocketController.handleDisconnect(socket, io);
     socket.leave(gameId);
   });

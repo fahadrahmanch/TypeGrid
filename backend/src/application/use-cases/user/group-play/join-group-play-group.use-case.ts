@@ -5,18 +5,23 @@ import { mapGroupToDTO, groupDTO } from "../../../DTOs/user/group.dto";
 import { MESSAGES } from "../../../../domain/constants/messages";
 import { CustomError } from "../../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../../domain/enums/http-status-codes.enum";
-
+import { IUserSubscriptionRepository } from "../../../../domain/interfaces/repository/user/user-subscription.repository.interface";
 export class JoinGroupPlayGroupUseCase implements IJoinGroupPlayGroupUseCase {
   constructor(
     private readonly _groupRepository: IGroupRepository,
-    private readonly _userRepository: IUserRepository
+    private readonly _userRepository: IUserRepository,
+    private readonly _userSubscriptionRepository: IUserSubscriptionRepository
   ) {}
 
   async execute(joinLink: string, userId: string): Promise<groupDTO> {
+    
     if (!joinLink || !userId) {
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.JOIN_LINK_AND_USER_ID_REQUIRED);
     }
-
+    const subscription=await this._userSubscriptionRepository.findActive(userId)
+    if(!subscription){
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.ACTIVE_SUBSCRIPTION_REQUIRED);
+    }
     const group = await this._groupRepository.findOne({ joinLink });
     if (!group) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GROUP_NOT_FOUND);

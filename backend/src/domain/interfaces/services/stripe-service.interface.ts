@@ -1,3 +1,3 @@
 export interface IStripeService {
-  createCheckoutSession(name: string, price: number, planId: string,type:string): Promise<string | null>;
+  createCheckoutSession(userId:string,name: string, price: number, planId: string,type:string): Promise<string | null>;
 }

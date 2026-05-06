@@ -47,6 +47,7 @@ const NotificationPage: React.FC = () => {
       setLoadingData(true);
       try {
         const [usersRes, groupsRes] = await Promise.all([fetchCompanyUsers(), getCompanyGroups()]);
+
         setUsers(usersRes.data.data || []);
         setGroups(groupsRes.data.groups || []);
       } catch (error) {
@@ -227,7 +228,7 @@ const NotificationPage: React.FC = () => {
                         className="w-full flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-xl text-sm font-medium text-gray-700 hover:border-blue-200 transition-all"
                       >
                         <span className={selectedGroup ? "text-gray-900" : "text-gray-400"}>
-                          {selectedGroup ? groups.find((g) => g.id === selectedGroup)?.name : "Choose a group..."}
+                          {selectedGroup ? groups.find((g) => g._id === selectedGroup)?.groupName : "Choose a group..."}
                         </span>
                         <ChevronDown
                           className={`w-5 h-5 transition-transform ${isGroupDropdownOpen ? "rotate-180" : ""}`}
@@ -238,14 +239,14 @@ const NotificationPage: React.FC = () => {
                         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-10 py-2 max-h-48 overflow-y-auto custom-scrollbar animate-in slide-in-from-top-2 duration-200">
                           {groups.map((group) => (
                             <button
-                              key={group.id}
+                              key={group._id}
                               onClick={() => {
-                                setSelectedGroup(group.id);
+                                setSelectedGroup(group._id);
                                 setIsGroupDropdownOpen(false);
                               }}
                               className="w-full text-left px-4 py-3 text-sm hover:bg-blue-50 transition-colors font-medium border-l-2 border-transparent hover:border-blue-500"
                             >
-                              {group.name}
+                              {group.groupName}
                             </button>
                           ))}
                         </div>

@@ -8,6 +8,7 @@ export const discussionToDTO = (discussion: DiscussionEntity, user: UserEntity |
     id: discussion.getId() || "",
     title: discussion.getTitle(),
     content: discussion.getContent(),
+    authorId: user?._id || "",
     authorName: user?.name || "Unknown",
     authorAvatar: user?.imageUrl || "",
     postedAt: discussion.getCreatedAt()?.toISOString() || new Date().toISOString(),

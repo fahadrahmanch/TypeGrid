@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import { Bell, Search, Eye, Clock, Info, Calendar, CheckCircle2 } from "lucide-react";
+import { Bell,
+  //  Search, 
+   Eye, Clock, Info, Calendar, CheckCircle2 } from "lucide-react";
 import { fetchUserNotifications, markNotificationAsRead } from "../../api/companyUser/notifications";
 import { toast } from "react-toastify";
 
@@ -19,7 +21,7 @@ interface Notification {
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -76,14 +78,14 @@ const Notifications: React.FC = () => {
           </div>
 
           <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            {/* <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
               placeholder="Search notifications..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-white border border-[#E6DCC3] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#B09886]/20 transition-all shadow-sm"
-            />
+            /> */}
           </div>
         </div>
 

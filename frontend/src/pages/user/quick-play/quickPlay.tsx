@@ -10,7 +10,7 @@ import { useTypingStats } from "../../../hooks/useTypingStats";
 import { useQuickPlaySocket } from "../../../hooks/quickPlay/useQuickPlaySocket";
 import { useQuickPlayHandleKeyDown } from "../../../hooks/quickPlay/useQuickPlayHandleKeyDown";
 import { toast } from "react-toastify";
-import { Zap, Target, Clock, AlertCircle, Users, Trophy, Home, RotateCcw, Crown } from "lucide-react";
+import { Zap, Target, Clock, Users, Trophy, Home, RotateCcw, Crown } from "lucide-react";
 
 export type GamePlayerResult = {
   userId: string;
@@ -462,7 +462,7 @@ const QuickPlay: React.FC = () => {
                               <div className="relative">
                                 <img
                                   src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
-                                  className={`w-16 h-16 rounded-[1.25rem] bg-gray-50 object-cover ring-4 ${isWinner ? 'ring-amber-200' : 'ring-white'} shadow-md`}
+                                  className={`w-16 h-16 rounded-[1.25rem] bg-gray-50 object-cover ring-4 ${isWinner ? "ring-amber-200" : "ring-white"} shadow-md`}
                                   alt={p.name}
                                 />
                                 {isWinner && (

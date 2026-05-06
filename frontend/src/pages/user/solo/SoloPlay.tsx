@@ -202,7 +202,7 @@ const SoloPlay: React.FC = () => {
         throw new Error("Solo room ID missing");
       }
       const solo = response.data.data;
-      console.log("solor",solo)
+      console.log("solor",solo);
       if (response) {
         navigate(`/solo-play/${solo._id}`, {
           state: { gameData: solo },

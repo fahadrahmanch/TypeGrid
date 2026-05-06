@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { IGetUserDashboardStatsUseCase } from "../../../application/use-cases/interfaces/companyUser/get-user-dashboard-stats.interface";
 import { HttpStatus } from "../../constants/httpStatus";
 import { AuthRequest } from "../../../types/AuthRequest";

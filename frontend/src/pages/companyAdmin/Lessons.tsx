@@ -50,7 +50,6 @@ const Lessons: React.FC = () => {
         const response = await getCompanyGroups();
 
         const groupsData = response.data.groups || response.data.data || [];
-        console.log("groupsData", groupsData);
         setCompanyGroups(groupsData);
       } catch (error) {
         console.log(error);

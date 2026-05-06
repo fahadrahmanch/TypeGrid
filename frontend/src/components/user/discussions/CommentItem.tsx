@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { MessageCircle, MoreHorizontal, User, Reply, ChevronDown, ChevronUp } from "lucide-react";
+import { Link } from "react-router-dom";
 import { formatRelativeTime } from "../../../utils/dateFormatter";
 
 interface CommentItem {
   id: string;
+  authorId: string;
   authorName: string;
   authorAvatar?: string;
   content: string;
@@ -30,7 +32,10 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, isReply = false, onR
 
         {/* Avatar Section */}
         <div className="shrink-0 relative z-10">
-          <div className={`${isReply ? "w-10 h-10" : "w-12 h-12 md:w-14 md:h-14"} rounded-2xl overflow-hidden bg-white border-2 border-white shadow-md transition-transform duration-500 group-hover:scale-110`}>
+          <Link 
+            to={`/profile/${comment.authorId}`}
+            className={`${isReply ? "w-10 h-10" : "w-12 h-12 md:w-14 md:h-14"} rounded-2xl overflow-hidden bg-white border-2 border-white shadow-md transition-transform duration-500 hover:scale-110 block`}
+          >
             {comment.authorAvatar ? (
               <img src={comment.authorAvatar} alt={comment.authorName} className="w-full h-full object-cover" />
             ) : (
@@ -38,7 +43,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, isReply = false, onR
                 <User size={isReply ? 18 : 24} strokeWidth={2.5} />
               </div>
             )}
-          </div>
+          </Link>
           
           {isReply && (
              <div className="absolute -top-2 -left-2 p-1.5 bg-white rounded-lg shadow-sm border border-[#ECA468]/10 text-[#D0864B]">
@@ -52,9 +57,12 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, isReply = false, onR
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#3A2E28] block truncate">
+              <Link 
+                to={`/profile/${comment.authorId}`}
+                className="text-[11px] font-black uppercase tracking-[0.2em] text-[#3A2E28] block truncate hover:text-[#D0864B] transition-colors"
+              >
                 {comment.authorName}
-              </span>
+              </Link>
               <span className="text-[#D0864B]/30 font-bold">·</span>
               <span className="text-[9px] font-black tracking-[0.15em] uppercase text-[#D0864B]/60">
                 {formatRelativeTime(comment.postedAt)} ago

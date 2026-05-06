@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, MoreHorizontal, User, Sparkles } from "lucide-react";
 import CommentItem from "../../../components/user/discussions/CommentItem";
 import ReplyModal from "../../../components/user/discussions/ReplyModal";
@@ -9,6 +9,7 @@ import { formatRelativeTime } from "../../../utils/dateFormatter";
 
 interface IComment {
   id: string;
+  authorId: string;
   authorName: string;
   authorAvatar?: string;
   content: string;
@@ -20,6 +21,7 @@ interface IDiscussionDetail {
   id: string;
   title: string;
   content: string;
+  authorId: string;
   authorName: string;
   authorAvatar?: string;
   postedAt: string;
@@ -32,7 +34,7 @@ const DiscussionDetail: React.FC = () => {
   const navigate = useNavigate();
   const [commentText, setCommentText] = useState("");
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
-  const [selectedParent, setSelectedParent] = useState<{id:string, author:string, content:string, postedAt:string, authorAvatar?: string} | null>(null);
+  const [selectedParent, setSelectedParent] = useState<{id:string, authorId: string, author:string, content:string, postedAt:string, authorAvatar?: string} | null>(null);
   const [post, setPost] = useState<IDiscussionDetail | null>(null);
 
   const fetchPost = async () => {
@@ -53,6 +55,7 @@ const DiscussionDetail: React.FC = () => {
   const handleReply = (comment: IComment) => {
     setSelectedParent({ 
       id: comment.id, 
+      authorId: comment.authorId,
       author: comment.authorName, 
       content: comment.content, 
       postedAt: comment.postedAt,
@@ -111,8 +114,8 @@ const DiscussionDetail: React.FC = () => {
           
           <article className="relative bg-white rounded-[3.5rem] p-8 md:p-14 shadow-[0_20px_50px_-20px_rgba(208,134,75,0.12)] border border-[#ECA468]/5 space-y-8 overflow-hidden">
             <div className="flex items-center justify-between">
-               <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-[1.5rem] overflow-hidden bg-white shadow-lg border-2 border-white ring-1 ring-[#ECA468]/10 group-hover:scale-105 transition-all duration-500">
+                <div className="flex items-center gap-5">
+                  <Link to={`/profile/${post.authorId}`} className="w-16 h-16 rounded-[1.5rem] overflow-hidden bg-white shadow-lg border-2 border-white ring-1 ring-[#ECA468]/10 hover:scale-105 transition-all duration-500">
                       {post.authorAvatar ? (
                         <img src={post.authorAvatar} alt={post.authorName} className="w-full h-full object-cover" />
                       ) : (
@@ -120,9 +123,9 @@ const DiscussionDetail: React.FC = () => {
                           {post.authorName[0]}
                         </div>
                       )}
-                   </div>
+                   </Link>
                    <div className="space-y-1">
-                      <h3 className="font-black text-[#1A1512] text-xl leading-none">{post.authorName}</h3>
+                      <Link to={`/profile/${post.authorId}`} className="font-black text-[#1A1512] text-xl leading-none hover:text-[#D0864B] transition-colors">{post.authorName}</Link>
                       <p className="text-[#D0864B]/60 text-sm font-black uppercase tracking-[0.1em]">@{post.authorName.toLowerCase().replace(/\s+/g, "")}</p>
                    </div>
                 </div>

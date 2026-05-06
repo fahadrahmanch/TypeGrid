@@ -18,6 +18,7 @@ import { dailyAssignChallengeValidation } from "../middlewares/validations/daily
 import { lessonValidation } from "../middlewares/validations/lessson.validation";
 import { injectAchievementManageController, injectAdminDashboardController } from "../DI/admin.di";
 import { achievementValidation } from "../middlewares/validations/achievement.validation";
+import { subscriptionPlanValidation } from "../middlewares/validations/subscription-plan.validation";
 import { asyncHandler } from "../../utils/async-handler";
 export class adminRouter {
   private router: express.Router;
@@ -212,6 +213,7 @@ export class adminRouter {
     this.router.post(
       Routes.ADMIN.CREATE_SUBSCRIPTION_PLAN,
       checkRoleBasedMiddleware(["admin"]),
+      validate(subscriptionPlanValidation),
       asyncHandler(injectSubscriptionPlanController.createSubscriptionPlan)
     );
     this.router.get(
@@ -228,6 +230,7 @@ export class adminRouter {
     this.router.put(
       Routes.ADMIN.UPDATE_SUBSCRIPTION_PLAN,
       checkRoleBasedMiddleware(["admin"]),
+      validate(subscriptionPlanValidation),
       asyncHandler(injectSubscriptionPlanController.updateSubscriptionPlan)
     );
 

@@ -6,10 +6,12 @@ import CreatePostModal from "../../../components/user/discussions/CreatePostModa
 import Navbar from "../../../components/user/Navbar";
 import { createPost } from "../../../api/user/disscussions";
 import { getAllDiscussions } from "../../../api/user/disscussions";
+
 interface IDiscussion {
   id: string;
   title: string;
   content: string;
+  authorId: string;
   authorName: string;
   authorAvatar?: string;
   postedAt: string;

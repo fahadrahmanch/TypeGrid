@@ -23,6 +23,15 @@ export class CompanyUserStatsRepository
     return rawStats.map((doc) => this.toDomain(doc));
   }
 
+  async findByUserIds(userIds: string[]): Promise<CompanyUserStatsEntity[]> {
+    const rawStats = await this.model
+      .find({ userId: { $in: userIds } })
+      .lean<ICompanyUserStatsDocument[]>()
+      .exec();
+
+    return rawStats.map((doc) => this.toDomain(doc));
+  }
+
   async updateStats(
     companyId: string,
     userId: string,
@@ -38,7 +47,7 @@ export class CompanyUserStatsRepository
 
     await this.model
       .findOneAndUpdate(
-        { companyId, userId },
+        { userId, companyId },
         {
           $inc: {
             totalScore,
@@ -66,18 +75,15 @@ export class CompanyUserStatsRepository
     maxAccuracy: number
   ): Promise<string[]> {
     const rawStats = await this.model
-      .find(
-        {
-          companyId,
-          wpm: { $gte: minWpm, $lte: maxWpm },
-          accuracy: { $gte: minAccuracy, $lte: maxAccuracy },
-        },
-        { userId: 1 }
-      )
-      .sort({ wpm: -1, accuracy: -1 })
+      .find({
+        companyId,
+        wpm: { $gte: minWpm, $lte: maxWpm },
+        accuracy: { $gte: minAccuracy, $lte: maxAccuracy },
+      })
+      .select("userId")
       .lean<ICompanyUserStatsDocument[]>()
       .exec();
 
-    return rawStats.map((doc) => doc.userId.toString());
+    return rawStats.map((stat) => stat.userId.toString());
   }
 }

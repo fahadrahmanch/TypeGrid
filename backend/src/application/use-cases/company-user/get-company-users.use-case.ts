@@ -8,7 +8,7 @@ import { CustomError } from "../../../domain/entities/custom-error.entity";
 import { HttpStatusCodes } from "../../../domain/enums/http-status-codes.enum";
 
 export class GetCompanyUsersUseCase implements IGetCompanyUsersUseCase {
-  constructor(private readonly _userRepository: IUserRepository) {}
+  constructor(private readonly _userRepository: IUserRepository) { }
   async execute(userId: string, search: string): Promise<companyUserDTO[]> {
     const user = await this._userRepository.findById(userId);
     if (!user) {

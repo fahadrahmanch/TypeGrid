@@ -59,7 +59,7 @@ export const useSoloHandleKeyDown = ({
         const expectedChar = lesson.text[typedText.length];
 
         if (e.key !== expectedChar) {
-          playTypingError()
+          playTypingError();
           setErrors((prev) => prev + 1);
           setHasError(true);
           setTypedText((prev) => prev + e.key);

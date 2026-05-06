@@ -13,15 +13,18 @@ export class LoginUseCase implements ILoginUseCase {
   ) {}
 
   async execute(email: string, password: string, allowedRoles: string[]): Promise<AuthUserEntity> {
+    
     if (!email || !password) {
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.INVALID_REQUEST);
     }
 
     const user = await this._authRepository.findByEmail(email);
+    
 
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.USER_DETAILS_NOT_FOUND);
     }
+
 
     if (user.status === "block") {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.AUTH_ACCOUNT_BLOCKED);

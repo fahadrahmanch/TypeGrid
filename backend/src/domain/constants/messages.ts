@@ -260,4 +260,5 @@ export const MESSAGES = {
   PLAN_NOT_FOUND: "Subscription plan not found",
   ACHIEVEMENT_NOT_FOUND: "Achievement not found",
   NOTIFICATION_NOT_FOUND: "Notification not found",
+  // ACTIVE_SUBSCRIPTION_REQUIRED:"YOU NEED ACTIVE SUBSCRIPTION TO JOIN GROUP PLAY"
 };

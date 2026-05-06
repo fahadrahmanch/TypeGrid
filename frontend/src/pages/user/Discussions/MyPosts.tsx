@@ -4,6 +4,7 @@ import Navbar from "../../../components/user/Navbar";
 import { useNavigate } from "react-router-dom";
 import { myDiscussions } from "../../../api/user/disscussions";
 import { deleteDiscussion } from "../../../api/user/disscussions";
+
 const MyPosts: React.FC = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,6 +13,7 @@ const MyPosts: React.FC = () => {
     id: string;
     title: string;
     content: string;
+    authorId: string;
     authorName: string;
     authorAvatar: string;
     postedAt: string;
@@ -55,8 +57,6 @@ const MyPosts: React.FC = () => {
       }
     };
 
-
-
   return (
     <div className="min-h-screen bg-[#FFF8EA]/50">
       <Navbar />
@@ -67,13 +67,6 @@ const MyPosts: React.FC = () => {
           <h1 className="text-3xl font-black text-[#1A1512] tracking-tight">
             My <span className="text-[#D0864B]">Posts</span>
           </h1>
-{/*           
-          <button 
-            className="flex items-center gap-2 bg-[#4285F4] hover:bg-[#3367D6] text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/20 active:scale-95"
-          >
-            <Plus size={18} strokeWidth={3} />
-            <span>New Post</span>
-          </button> */}
         </div>
 
         {/* Search Bar */}

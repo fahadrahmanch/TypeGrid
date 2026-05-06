@@ -55,7 +55,6 @@ const CompanyUserDashboard: React.FC = () => {
     const fetchStats = async () => {
       try {
         const response = await getCompanyUserDashboardStats();
-        console.log("response",response)
         setStats(response.data.data);
       } catch (error) {
         console.error("Error fetching company user dashboard stats:", error);

@@ -7,7 +7,7 @@ import { mapUserToDTO } from "../../../mappers/admin/user-manage.mapper";
  * Use case responsible for retrieving all users.
  */
 export class GetUsersUseCase implements IGetUsersUseCase {
-  constructor(private readonly authRepository: IAuthRepository) {}
+  constructor(private readonly authRepository: IAuthRepository) { }
 
   /**
    * Retrieves all users from the authentication repository and maps them to DTOs.

@@ -11,9 +11,10 @@ export class OtpService implements IOtpService {
       otp += randomIndex;
     }
     this.storeOtp(otp, email);
+    console.log("Generated OTP:", otp); 
     return otp;
   }
-
+ 
   storeOtp(otp: string, email: string): void {
     this._cachingService.setData(`user-otp-${email}`, otp, 300);
   }

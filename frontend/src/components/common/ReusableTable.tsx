@@ -13,7 +13,7 @@ interface ReusableTableProps<T> {
   data: T[];
   isLoading?: boolean;
   emptyMessage?: string;
-  rowClassName?: string;
+  rowClassName?: string | ((item: T, index: number) => string);
   headerClassName?: string;
   columnHeaderClassName?: string;
 }
@@ -61,7 +61,9 @@ const ReusableTable = <T extends { _id?: string; id?: string }>({
             data.map((item, index) => (
               <tr
                 key={item._id || item.id}
-                className={`group hover:bg-white/40 transition-all duration-300 ${rowClassName}`}
+                className={`group hover:bg-white/40 transition-all duration-300 ${
+                  typeof rowClassName === "function" ? rowClassName(item, index) : rowClassName
+                }`}
               >
                 {columns.map((col) => (
                   <td key={`${item._id || item.id}-${col.key}`} className={`py-5 px-4 ${col.className || ""}`}>

@@ -8,7 +8,7 @@ import { deleteCompanyUser, fetchCompanyUsers } from "../../../api/companyAdmin/
 import ConfirmModal from "../../common/ConfirmModal";
 
 const UsersTable: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]);
+
   const [isOpen, setOpen] = useState(false);
   const [filterUsers, setFilterUsers] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -31,7 +31,7 @@ const UsersTable: React.FC = () => {
     try {
       const res = await fetchCompanyUsers(debouncedSearch, page, limit);
       if (res?.data?.success) {
-        setUsers(res.data.data);
+
         setFilterUsers(res.data.data);
         setTotalCount(res.data.total);
         setTotalPages(Math.ceil(res.data.total / limit));

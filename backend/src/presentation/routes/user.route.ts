@@ -15,6 +15,10 @@ import { checkFeatureMiddleware } from "../DI/user.di";
 import { injectUserAchievementController } from "../DI/user.di";
 import { injectDiscussionController } from "../DI/user.di";
 import { asyncHandler } from "../../utils/async-handler";
+import { validate } from "../middlewares/validate.middleware";
+import { updateProfileValidation } from "../middlewares/validations/update-profile.validation";
+import { changePasswordValidation } from "../middlewares/validations/change-password.validation";
+import { verifyCompanyValidation } from "../middlewares/validations/verify-company.validation";
 export class UserRoutes {
   private router: express.Router;
   constructor() {
@@ -25,6 +29,7 @@ export class UserRoutes {
     this.router.post(
       Routes.USERS.VERIFY_COMPANY,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      validate(verifyCompanyValidation),
       asyncHandler(injectCompanyRequestController.companyRequestDetails)
     );
 
@@ -37,11 +42,13 @@ export class UserRoutes {
     this.router.put(
       Routes.USERS.UPDATE_PROFILE,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      validate(updateProfileValidation),
       asyncHandler(injectUserController.updateProfile)
     );
     this.router.put(
       Routes.USERS.CHANGE_PASSWORD,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      validate(changePasswordValidation),
       asyncHandler(injectUserController.changePassword)
     );
     this.router.get(
@@ -53,6 +60,7 @@ export class UserRoutes {
     this.router.put(
       Routes.USERS.RE_VERIFY_COMPANY,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
+      validate(verifyCompanyValidation),
       asyncHandler(injectCompanyRequestController.reApplyCompanyDetails)
     );
 
@@ -203,18 +211,18 @@ export class UserRoutes {
       asyncHandler(injectUserAchievementController.allAchievements)
     );
 
-  this.router.get(
+    this.router.get(
       Routes.USERS.GET_COMPANY_DETAILS,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
       asyncHandler(injectUserController.userHaveCompany)
-  );
+    );
 
-  this.router.get(
-    Routes.USERS.GET_ANOTHER_PROFILE,
-    checkRoleBasedMiddleware(["user", "companyAdmin", "admin"]),
-    asyncHandler(injectUserController.getAnotherUserProfile)
-  );
-    
+    this.router.get(
+      Routes.USERS.GET_ANOTHER_PROFILE,
+      checkRoleBasedMiddleware(["user", "companyAdmin", "admin"]),
+      asyncHandler(injectUserController.getAnotherUserProfile)
+    );
+
     // discussions
     this.router.post(
       Routes.USERS.CREATE_POST,

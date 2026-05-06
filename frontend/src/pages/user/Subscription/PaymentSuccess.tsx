@@ -4,23 +4,27 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/user/Navbar";
 import { confirmSubscription } from "../../../api/user/subcription";
 import { confirmCompanySubscription } from "../../../api/user/subcription";
+import { useSelector } from "react-redux";
 const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
+  const user = useSelector((state: any) => state.auth.user);
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [errorMessage, setErrorMessage] = useState("");
+  const [type, setType] = useState<string | null>(null);
   const confirmed = useRef(false);
 
   useEffect(() => {
     if (confirmed.current) return;
     const query = new URLSearchParams(window.location.search);
     const planId = query.get("planId");
-    const type = query.get("type");
+    const planType = query.get("type");
     const sessionId = query.get("session_id");
+    setType(planType);
 
     const confirm = async () => {
       try {
         setStatus("loading");
-        if (type == "company") {
+        if (planType == "company") {
           await confirmCompanySubscription(planId!, sessionId!);
         } else {
           await confirmSubscription(planId!, sessionId!);
@@ -43,6 +47,9 @@ const PaymentSuccess: React.FC = () => {
       setErrorMessage("Missing required payment information. Please check your email or contact support.");
     }
   }, []);
+
+  const isCompanyUpgrade = type === "company" && user?.role === "companyAdmin";
+
   return (
     <div className="min-h-screen bg-[#FFF8EA] pt-20 pb-12 px-4 flex flex-col items-center">
       <Navbar />
@@ -72,34 +79,67 @@ const PaymentSuccess: React.FC = () => {
                 </div>
               </div>
 
-              <h1 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">Payment Successful!</h1>
+              <h1 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">
+                {isCompanyUpgrade
+                  ? "Plan Upgraded Successfully!"
+                  : type === "company"
+                  ? "Request Submitted!"
+                  : "Payment Successful!"}
+              </h1>
 
               <p className="text-lg text-gray-600 mb-10 leading-relaxed">
-                Congratulations! Your premium subscription is now active. You've unlocked all the tools to become a
-                typing master.
+                {isCompanyUpgrade
+                  ? "Your company plan has been upgraded successfully. You can now access your new features from the admin dashboard."
+                  : type === "company"
+                  ? "Your company registration request has been received. Our admin will review your details shortly. Once approved, you can sign in using your company credentials."
+                  : "Congratulations! Your premium subscription is now active. You've unlocked all the tools to become a typing master."}
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4">
-                <button
-                  onClick={() => navigate("/")}
-                  className="bg-[#8B7355] hover:bg-[#766248] text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl active:scale-95 group"
-                >
-                  <Home className="w-5 h-5" />
-                  Go to Home
-                </button>
+                {isCompanyUpgrade ? (
+                  <button
+                    onClick={() => navigate("/company/admin/dashboard")}
+                    className="bg-[#8B7355] hover:bg-[#766248] text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl active:scale-95 group sm:col-span-2"
+                  >
+                    <CheckCircle className="w-5 h-5" />
+                    Go to Admin Dashboard
+                  </button>
+                ) : type === "company" ? (
+                  <button
+                    onClick={() => navigate("/company/signin")}
+                    className="bg-[#8B7355] hover:bg-[#766248] text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl active:scale-95 group sm:col-span-2"
+                  >
+                    <CheckCircle className="w-5 h-5" />
+                    Go to Company Sign In
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => navigate("/")}
+                      className="bg-[#8B7355] hover:bg-[#766248] text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl active:scale-95 group"
+                    >
+                      <Home className="w-5 h-5" />
+                      Go to Home
+                    </button>
 
-                <button
-                  onClick={() => navigate("/profile")}
-                  className="bg-white border-2 border-gray-100 hover:border-gray-200 text-gray-700 px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg active:scale-95"
-                >
-                  <User className="w-5 h-5" />
-                  View Profile
-                </button>
+                    <button
+                      onClick={() => navigate("/profile")}
+                      className="bg-white border-2 border-gray-100 hover:border-gray-200 text-gray-700 px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg active:scale-95"
+                    >
+                      <User className="w-5 h-5" />
+                      View Profile
+                    </button>
+                  </>
+                )}
               </div>
 
               <div className="mt-12 pt-8 border-t border-gray-100">
                 <p className="text-sm text-gray-400">
-                  A receipt has been sent to your email. If you have any questions, please contact our support team.
+                  {isCompanyUpgrade
+                    ? "A receipt for your upgrade has been sent to your email. If you have any questions, please contact our support team."
+                    : type === "company"
+                    ? "A confirmation email will be sent once your account is reviewed. If you have any questions, please contact our support team."
+                    : "A receipt has been sent to your email. If you have any questions, please contact our support team."}
                 </p>
               </div>
             </>

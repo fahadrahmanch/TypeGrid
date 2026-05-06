@@ -41,7 +41,7 @@ export class UserController {
   };
 
   updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
-    const data = req.body;
+    const data = req.body.data;
     const email = req.user?.email;
 
     if (!email) {

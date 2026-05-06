@@ -41,7 +41,6 @@ const CompanySubcriptionDiv1: React.FC = () => {
         try {
           const response = await userHaveCompany();
           if (response && response.data.company) {
-            console.log(response.data.company);
               setUserHaveCompany(response.data.company);
           }
         } catch (error: any) {

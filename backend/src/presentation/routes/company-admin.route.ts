@@ -8,9 +8,16 @@ import { injectCompanyContestManagementController } from "../DI/company-admin.di
 import { validate } from "../middlewares/validate.middleware";
 import { companyUserValidation } from "../middlewares/validations/company-user.validation";
 import { lessonValidation } from "../middlewares/validations/lessson.validation";
+import {
+  individualNotificationValidation,
+  groupNotificationValidation,
+  allNotificationValidation,
+} from "../middlewares/validations/notification.validation";
 import { injectNotificationController, injectCompanyDashboardController } from "../DI/company-admin.di";
 import { asyncHandler } from "../../utils/async-handler";
 import { checkCompanyStatusMiddleware } from "../middlewares/check-company-status.middleware";
+// import { companyGroupValidation } from "../middlewares/validations/group.validation";
+import { createCompanyGroup } from "../middlewares/validations/group.validation";
 export class companyAdminRouter {
   private router: express.Router;
   constructor() {
@@ -19,7 +26,7 @@ export class companyAdminRouter {
   }
   initializeRoutes() {
     this.router.use(asyncHandler(checkCompanyStatusMiddleware));
-    
+
     this.router.get(
       Routes.COMPANY_ADMIN.DASHBOARD_STATS,
       checkRoleBasedMiddleware(["companyAdmin"]),
@@ -103,6 +110,7 @@ export class companyAdminRouter {
     this.router.post(
       Routes.COMPANY_ADMIN.CREATE_COMPANY_GROUP,
       checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(createCompanyGroup),
       asyncHandler(injectCompanyGroupController.createGroup)
     );
 
@@ -188,16 +196,19 @@ export class companyAdminRouter {
     this.router.post(
       Routes.COMPANY_ADMIN.SEND_INDIVIDUAL_NOTIFICATION,
       checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(individualNotificationValidation),
       asyncHandler(injectNotificationController.sendIndividualNotification)
     );
     this.router.post(
       Routes.COMPANY_ADMIN.SEND_GROUP_NOTIFICATION,
       checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(groupNotificationValidation),
       asyncHandler(injectNotificationController.sendGroupNotification)
     );
     this.router.post(
       Routes.COMPANY_ADMIN.SEND_ALL_NOTIFICATION,
       checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(allNotificationValidation),
       asyncHandler(injectNotificationController.sendAllNotification)
     );
     this.router.get(

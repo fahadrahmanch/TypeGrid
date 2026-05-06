@@ -6,6 +6,7 @@ import {
   Clock,
   Building2,
   User as UserIcon,
+  AlertCircle,
 } from "lucide-react";
 import { getSubscriptionDetails } from "../../../api/user/subcription";
 import { useNavigate } from "react-router-dom";
@@ -286,16 +287,60 @@ const SubscriptionManagement: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="p-6 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl text-white">
-                      <div className="flex items-center gap-3 mb-2">
-                        <ShieldCheck className="w-5 h-5 text-indigo-200" />
-                        <h4 className="font-bold">Enterprise Access Active</h4>
+                    {subscriptionData.companySubscription.subscription.status === "active" ? (
+                      <div className="p-6 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl text-white">
+                        <div className="flex items-center gap-3 mb-2">
+                          <ShieldCheck className="w-5 h-5 text-indigo-200" />
+                          <h4 className="font-bold">Enterprise Access Active</h4>
+                        </div>
+                        <p className="text-indigo-100 text-xs font-medium leading-relaxed">
+                          Your account is linked to {subscriptionData.companySubscription.companyName}. 
+                          All enterprise features are currently unlocked for your usage.
+                        </p>
                       </div>
-                      <p className="text-indigo-100 text-xs font-medium leading-relaxed">
-                        Your account is linked to {subscriptionData.companySubscription.companyName}. 
-                        All enterprise features are currently unlocked for your usage.
-                      </p>
-                    </div>
+                    ) : (
+                      <div className={`p-6 rounded-3xl border transition-all duration-300 ${
+                        subscriptionData.companySubscription.subscription.status === "pending"
+                          ? "bg-amber-50/50 border-amber-100"
+                          : "bg-rose-50/50 border-rose-100"
+                      }`}>
+                        <div className="flex items-center gap-3 mb-3">
+                          {subscriptionData.companySubscription.subscription.status === "pending" ? (
+                            <div className="p-2 bg-amber-100 rounded-lg">
+                              <Clock className="w-4 h-4 text-amber-600" />
+                            </div>
+                          ) : (
+                            <div className="p-2 bg-rose-100 rounded-lg">
+                              <AlertCircle className="w-4 h-4 text-rose-600" />
+                            </div>
+                          )}
+                          <h4 className={`font-bold text-sm ${
+                            subscriptionData.companySubscription.subscription.status === "pending" ? "text-amber-900" : "text-rose-900"
+                          }`}>
+                            {subscriptionData.companySubscription.subscription.status === "pending" 
+                              ? "Verification Pending" 
+                              : "Activation Required"}
+                          </h4>
+                        </div>
+                        <p className={`text-[11px] font-medium leading-relaxed mb-5 ${
+                          subscriptionData.companySubscription.subscription.status === "pending" ? "text-amber-700/80" : "text-rose-700/80"
+                        }`}>
+                          {subscriptionData.companySubscription.subscription.status === "pending"
+                            ? "Our administration team is currently reviewing your company credentials. This typically takes 24-48 hours."
+                            : "Your company subscription is currently inactive. You need to complete the payment to activate enterprise features for your team."}
+                        </p>
+                        <button
+                          onClick={() => navigate("/subscription/company/verify/status")}
+                          className={`w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                            subscriptionData.companySubscription.subscription.status === "pending"
+                              ? "bg-white border-amber-200 text-amber-700 hover:bg-amber-50 shadow-sm shadow-amber-200/20"
+                              : "bg-white border-rose-200 text-rose-700 hover:bg-rose-50 shadow-sm shadow-rose-200/20"
+                          }`}
+                        >
+                          Check Verification Status
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

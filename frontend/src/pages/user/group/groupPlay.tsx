@@ -14,7 +14,6 @@ import {
   Target,
   Clock,
   AlertCircle,
-  Users,
   Crown,
 } from "lucide-react";
 
@@ -734,7 +733,7 @@ const GroupPlay: React.FC = () => {
                               <div className="relative">
                                 <img
                                   src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
-                                  className={`w-16 h-16 rounded-[1.25rem] bg-gray-50 object-cover ring-4 ${isWinner ? 'ring-amber-200' : 'ring-white'} shadow-md`}
+                                  className={`w-16 h-16 rounded-[1.25rem] bg-gray-50 object-cover ring-4 ${isWinner ? "ring-amber-200" : "ring-white"} shadow-md`}
                                   alt={p.name}
                                 />
                                 {isWinner && (

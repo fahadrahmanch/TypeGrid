@@ -1,4 +1,4 @@
-  import { MyLessonsController } from "../controllers/company-user/my-lessons.controller";
+import { MyLessonsController } from "../controllers/company-user/my-lessons.controller";
 import { LessonAssignment } from "../../infrastructure/db/models/company/lesson-assignment.schema";
 import { LessonAssignmentRepository } from "../../infrastructure/db/repositories/company/lesson-assignment.repository";
 import { GetMyLessonsUseCase } from "../../application/use-cases/company-user/lessons/get-my-lessons.use-case";

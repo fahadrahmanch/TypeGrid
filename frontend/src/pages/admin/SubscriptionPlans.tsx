@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import SideNavbar from "../../components/admin/layout/Navbar/SideNabar";
 import { Plus, Edit2, Trash2, X, AlertCircle } from "lucide-react";
 import ReusableTable from "../../components/common/ReusableTable";
+import { toast } from "react-toastify";
 import {
   createSubscriptionPlan,
   updateSubscriptionPlan,
@@ -205,10 +206,15 @@ const SubscriptionPlans: React.FC = () => {
   const handleCreateSubmit = async () => {
     if (validateAll(values, setFormErrors)) {
       try {
-        const response = await createSubscriptionPlan(values);
+        await createSubscriptionPlan(values);
         setCreateOpen(false);
         fetchPlans(); // Refresh the list
-      } catch (error) {
+      } catch (error: any) {
+        if (error.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Error creating plan");
+        }
         console.error("Error creating plan:", error);
       }
     }
@@ -220,7 +226,12 @@ const SubscriptionPlans: React.FC = () => {
         await updateSubscriptionPlan(editValues.id, editValues);
         setEditOpen(false);
         fetchPlans(); // Refresh the list
-      } catch (error) {
+      } catch (error:any) {
+        if (error.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Error updating plan");
+        }
         console.error("Error updating plan:", error);
       }
     }

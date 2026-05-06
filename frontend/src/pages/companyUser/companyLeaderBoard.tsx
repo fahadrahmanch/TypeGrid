@@ -20,6 +20,8 @@ import { toast } from "react-toastify";
 import ReusableTable from "../../components/common/ReusableTable";
 
 interface LeaderboardEntry {
+  _id?: string;
+  id?: string;
   userId: string;
   name: string;
   imageUrl: string;

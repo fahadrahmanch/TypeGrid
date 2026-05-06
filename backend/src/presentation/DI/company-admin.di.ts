@@ -82,9 +82,9 @@ const addUserUseCaseInstance = new AddUserUseCase(
   subscriptionRepository,
   userRepository
 );
-const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(userRepository);
-const deleteUserUseCaseInstance = new DeleteUserUseCase(userRepository);
 const companyUserStatsRepository = new CompanyUserStatsRepository(CompanyUserStats);
+const getCompanyUsersUseCaseInstance = new GetCompanyUsersUseCase(userRepository, companyUserStatsRepository);
+const deleteUserUseCaseInstance = new DeleteUserUseCase(userRepository);
 const getCompanyUsersWithStatusUseCaseInstance = new GetCompanyUsersWithStatusUseCase(
   userRepository,
   companyUserStatsRepository

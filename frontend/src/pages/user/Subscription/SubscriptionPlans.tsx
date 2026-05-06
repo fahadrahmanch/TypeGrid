@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Check, Lock, Star, Zap, Users, ArrowRight } from "lucide-react";
+import { Check, Lock,
+  //  Star, Zap,
+    Users, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/user/Navbar";
 import { getSubscriptionPlans } from "../../../api/user/subcription";
@@ -23,9 +25,7 @@ const SubscriptionPlans: React.FC = () => {
   const fetchSubscriptionPlans = async () => {
     try {
       const response = await getSubscriptionPlans();
-      console.log("Subscription Plans", response.data);
-      // Assuming response looks like { data: { plans: [...] } } or { data: [...] }
-      // Given the user context, it's likely response.data.plans
+
       const plansData = response.data.plans || response.data || [];
       setPlans(plansData);
     } catch (error) {
@@ -60,73 +60,55 @@ const SubscriptionPlans: React.FC = () => {
     }
   }, [loading, normalPlans, selectedPlanId]);
 
-  const freeFeatures = [
-    {
-      name: "Practice Mode",
-      description: "Free unlimited typing practice sessions",
-      icon: <Check className="w-5 h-5 text-green-500" />,
-    },
-    {
-      name: "Daily Challenges",
-      description: "Complete daily typing challenges",
-      icon: <Check className="w-5 h-5 text-green-500" />,
-    },
-    {
-      name: "Basic Badges",
-      description: "Earn basic achievement badges",
-      icon: <Check className="w-5 h-5 text-green-500" />,
-    },
-  ];
+  // const freeFeatures = [
+  //   {
+  //     name: "Practice Mode",
+  //     description: "Free unlimited typing practice sessions",
+  //     icon: <Check className="w-5 h-5 text-green-500" />,
+  //   },
+  //   {
+  //     name: "Daily Challenges",
+  //     description: "Complete daily typing challenges",
+  //     icon: <Check className="w-5 h-5 text-green-500" />,
+  //   },
+  //   {
+  //     name: "Basic Badges",
+  //     description: "Earn basic achievement badges",
+  //     icon: <Check className="w-5 h-5 text-green-500" />,
+  //   },
+  // ];
 
-  const premiumFeatures = [
-    {
-      name: "Quick Play",
-      description: "Battle against random players worldwide",
-      icon: <Zap className="w-5 h-5 text-yellow-500" />,
-    },
-    {
-      name: "Group Play",
-      description: "Create teams and play with friends",
-      icon: <Users className="w-5 h-5 text-yellow-500" />,
-    },
-    {
-      name: "Earn More Badges",
-      description: "Unlock exclusive premium badges and achievements",
-      icon: <AwardIcon />,
-    },
-  ];
 
-  function AwardIcon() {
-    return (
-      <svg
-        className="w-5 h-5 text-yellow-500"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="8" r="7" />
-        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
-      </svg>
-    );
-  }
+
+  // function AwardIcon() {
+  //   return (
+  //     <svg
+  //       className="w-5 h-5 text-yellow-500"
+  //       viewBox="0 0 24 24"
+  //       fill="none"
+  //       stroke="currentColor"
+  //       strokeWidth="2"
+  //       strokeLinecap="round"
+  //       strokeLinejoin="round"
+  //     >
+  //       <circle cx="12" cy="8" r="7" />
+  //       <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+  //     </svg>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-[#FFF8EA] pt-20 pb-12 px-4">
       <Navbar />
 
       <div className="max-w-5xl mx-auto">
-        {/* Header Section */}
+   
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Unlock Your Typing Potential!</h1>
           <p className="text-lg text-gray-600">Upgrade to Premium for an Enhanced Experience</p>
         </div>
 
-        {/* Features Comparison */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {/* Free Features Card */}
+        {/* <div className="grid md:grid-cols-2 gap-8 mb-16">
           <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-100 shadow-sm">
             <div className="flex items-center gap-2 mb-6">
               <span className="text-gray-900 font-bold text-xl flex items-center gap-2">
@@ -150,7 +132,6 @@ const SubscriptionPlans: React.FC = () => {
             </div>
           </div>
 
-          {/* Premium Features Card */}
           <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-8 border border-yellow-100 shadow-sm relative overflow-hidden">
             <div className="absolute top-0 right-0">
               <div className="bg-yellow-400 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
@@ -182,7 +163,7 @@ const SubscriptionPlans: React.FC = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Pricing Section */}
         <div className="bg-white/40 backdrop-blur-md rounded-[40px] p-10 border border-white/60 shadow-xl max-w-3xl mx-auto mb-16">
@@ -207,7 +188,7 @@ const SubscriptionPlans: React.FC = () => {
                 <div className="text-center">
                   <h3 className="font-medium text-gray-900 mb-4">{plan.name}</h3>
                   <div className="flex items-baseline justify-center gap-1 mb-1">
-                    <span className="text-3xl font-black">₹{plan.price}</span>
+                    <span className="text-3xl font-black">${plan.price}</span>
                   </div>
                   <p className="text-xs text-gray-500">for {plan.duration} days</p>
 

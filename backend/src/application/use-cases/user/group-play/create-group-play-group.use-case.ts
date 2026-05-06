@@ -23,7 +23,7 @@ export class CreateGroupPlayRoomUseCase implements ICreateGroupPlayRoomUseCase {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
 
-    const joinCode = generateJoinCode(); // no need for await — not async
+    const joinCode = generateJoinCode(); 
 
     const group = new GroupEntity({
       name: "Group Play Room",

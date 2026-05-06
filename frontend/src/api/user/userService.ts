@@ -8,7 +8,7 @@ export async function getUserDataApi() {
 
 // update logged-in user data
 export async function updateUserDataApi(user: any) {
-  return userAPI.put(API_ROUTES.USER.ME, user);
+  return userAPI.put(API_ROUTES.USER.ME, { data: user });
 }
 
 // apply / verify company

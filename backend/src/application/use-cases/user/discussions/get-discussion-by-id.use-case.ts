@@ -27,6 +27,7 @@ export class GetDiscussionByIdUseCase implements IGetDiscussionByIdUseCase {
           const replyUser = await this._userRepository.findById(item.userId || "");
           return {
             id: item.userId || "",
+            authorId: item.userId || "",
             authorName: replyUser?.name || "Unknown",
             authorAvatar: replyUser?.imageUrl || "",
             content: item.content,
@@ -35,6 +36,7 @@ export class GetDiscussionByIdUseCase implements IGetDiscussionByIdUseCase {
         }));
         return {
           id: comment.getId() || "",
+          authorId: user?._id || "",
           authorName: user?.name || "Unknown",
           authorAvatar: user?.imageUrl || "",
           replies: replies,

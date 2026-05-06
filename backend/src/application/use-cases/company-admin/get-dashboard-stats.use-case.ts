@@ -69,6 +69,7 @@ export class GetCompanyDashboardStatsUseCase implements IGetCompanyDashboardStat
         { 
           $match: { 
             companyId: companyId,
+             status: "completed",
             createdAt: { $gte: new Date(now.getFullYear(), now.getMonth() - 5, 1) } 
           } 
         },

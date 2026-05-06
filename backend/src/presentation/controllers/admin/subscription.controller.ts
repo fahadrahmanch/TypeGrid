@@ -18,7 +18,7 @@ export class SubscriptionController {
   ) {}
 
   createSubscriptionPlan = async (req: Request, res: Response): Promise<void> => {
-    const subscriptionPlan = await this._createSubscriptionPlanUseCase.execute(req.body);
+    const subscriptionPlan = await this._createSubscriptionPlanUseCase.execute(req.body.data);
     logger.info(MESSAGES.SUBSCRIPTION_PLAN_CREATED_SUCCESS, subscriptionPlan);
     res.status(HttpStatus.CREATED).json({
       message: MESSAGES.SUBSCRIPTION_PLAN_CREATED_SUCCESS,
@@ -46,7 +46,7 @@ export class SubscriptionController {
     const { id } = req.params;
     const subscriptionPlan = await this._updateSubscriptionPlanUseCase.execute({
       id,
-      ...req.body,
+      ...req.body.data,
     });
     logger.info(MESSAGES.SUBSCRIPTION_PLAN_UPDATED_SUCCESS, subscriptionPlan);
     res.status(HttpStatus.OK).json({

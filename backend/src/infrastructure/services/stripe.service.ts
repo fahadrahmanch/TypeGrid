@@ -11,10 +11,16 @@ export class StripeService implements IStripeService {
     }
   }
 
-  async createCheckoutSession(name: string, price: number, planId: string,type:string): Promise<string | null> {
-    const session = await this.stripe.checkout.sessions.create({
+  async createCheckoutSession(
+  userId: string,
+  name: string,
+  price: number,
+  planId: string,
+  type: string
+): Promise<string | null> {
+  const session = await this.stripe.checkout.sessions.create(
+    {
       payment_method_types: ["card"],
-
       line_items: [
         {
           price_data: {
@@ -25,13 +31,16 @@ export class StripeService implements IStripeService {
           quantity: 1,
         },
       ],
-
       mode: "payment",
-
       success_url: `${process.env.CLIENT_URL}/success?planId=${planId}&type=${type}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_URL}/cancel`,
-    });
+      metadata: { userId, planId },
+    },
+    {
+      idempotencyKey: `checkout-${userId}-${planId}`,
+    }
+  );
 
-    return session.url;
-  }
+  return session.url;
+}
 }

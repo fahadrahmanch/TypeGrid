@@ -107,6 +107,7 @@ const userAchievementRepository = new UserAchievementRepository(UserAchievement)
 const paymentRepository = new PaymentRepository(Payment);
 const discussionRepository = new DiscussionRepository(Discussion);
 const commentRepository = new CommentRepository(Comment);
+const userSubscriptionRepository = new UserSubscriptionRepository(UserSubscription);
 const achievementServiceInstance = new AchievementService(
   achievementRepository,
   userAchievementRepository,
@@ -131,7 +132,7 @@ const competitionRepository = new CompetitionRepository(Competition);
 const createGroupPlayRoomUseCaseInstance = new CreateGroupPlayRoomUseCase(groupRepository, userRepository);
 const getGroupPlayGroupUseCaseInstance = new GetGroupPlayGroupUseCase(groupRepository, userRepository);
 const editGroupUseCaseInstance = new EditGroupUseCase(groupRepository);
-const joinGroupPlayGroupUseCaseInstance = new JoinGroupPlayGroupUseCase(groupRepository, userRepository);
+const joinGroupPlayGroupUseCaseInstance = new JoinGroupPlayGroupUseCase(groupRepository, userRepository,userSubscriptionRepository);
 const removeMemberGroupPlayGroupUseCaseInstance = new RemoveMemberGroupPlayGroupUseCase(
   groupRepository,
   userRepository
@@ -251,7 +252,6 @@ const getLeaderboardUseCaseInstance = new GetLeaderboardUseCase(statsRepository,
 const subscriptionRepository = new SubscriptionPlanRepository(SubscriptionPlan);
 const getNormalPlansUseCaseInstance = new GetNormalPlansUseCase(subscriptionRepository);
 const getCompanyPlansUseCaseInstance = new GetCompanyPlansUseCase(subscriptionRepository);
-const userSubscriptionRepository = new UserSubscriptionRepository(UserSubscription);
 const getSubscriptionDetailsUseCaseInstance = new GetSubscriptionDetailsUseCase(
   userSubscriptionRepository,
   companyRepository,
