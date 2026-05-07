@@ -98,7 +98,7 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           timeTaken,
           errors,
           typedLength,
-          status: "PLAYING",
+          status: data.status || "PLAYING",
           updatedAt: Date.now(),
         })
       );
@@ -138,6 +138,14 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           typedLength,
         })
       );
+      io.to(gameId).emit("typing-progress-update-challenge", {
+        userId,
+        typedLength,
+        wpm,
+        accuracy,
+        errors,
+        status: "FINISHED",
+      });
       const isEnd = await checkChallengeGameEndService(gameId);
       if (isEnd) {
         const result = await redis.hgetall(key);
@@ -214,6 +222,14 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
         typedLength,
       })
     );
+    io.to(gameId).emit("typing-progress-update-challenge", {
+      userId,
+      typedLength,
+      wpm,
+      accuracy,
+      errors,
+      status: "TIMES_UP",
+    });
     const isEnd = await checkChallengeGameEndService(gameId);
     if (isEnd) {
       const result = await redis.hgetall(key);
@@ -256,8 +272,9 @@ export const challengeHandlers = (socket: Socket, io: Server) => {
           rank: index + 1,
         }));
       io.to(gameId).emit("game-finished-challenge", resultArray);
-      await redis.del(key);
+
       await injectChallengeSocketController.saveChallengePlayResult(gameId, resultArray);
+      await redis.del(key);
     }
   });
   socket.on("leave-challenge", async ({ challengeId, userId }) => {

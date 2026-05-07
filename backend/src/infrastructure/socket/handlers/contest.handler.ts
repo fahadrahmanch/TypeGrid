@@ -118,8 +118,12 @@ export const contestHandlers = (socket: Socket, io: Server) => {
 
     if (raw) {
       const player = JSON.parse(raw);
-
-      player.status = "PLAYING";
+      if (
+        player.status !== "FINISHED" &&
+        player.status !== "TIMES_UP"
+      ) {
+        player.status = "PLAYING";
+      }
       player.socketId = socket.id;
 
       await redis.hset(key, userId, JSON.stringify(player));
@@ -131,6 +135,7 @@ export const contestHandlers = (socket: Socket, io: Server) => {
   });
 
   socket.on("typing-progress-contest", async (data) => {
+
     const { userId, wpm, accuracy, errors, typedLength } = data;
     const { contestId } = data;
     if (!contestId) return;
@@ -155,7 +160,7 @@ export const contestHandlers = (socket: Socket, io: Server) => {
         accuracy,
         errors,
         typedLength,
-        status: "PLAYING",
+        status: existing?.status?existing.status:"PLAYING",
         updatedAt: Date.now(),
       })
     );
@@ -168,7 +173,6 @@ export const contestHandlers = (socket: Socket, io: Server) => {
       const contestId = socket.data.gamecontestId;
       if (!contestId) return;
       const key = `company:game:${contestId}`;
-
       const raw = await redis.hget(key, userId);
       if (!raw) return;
 
@@ -193,6 +197,7 @@ export const contestHandlers = (socket: Socket, io: Server) => {
           typedLength,
         })
       );
+      const rw = await redis.hget(key, userId)
       const isEnd = await checkCompanyContestGameEndService(contestId);
       if (isEnd) {
         const result = await redis.hgetall(key);
@@ -233,13 +238,13 @@ export const contestHandlers = (socket: Socket, io: Server) => {
             ...player,
             rank: index + 1,
           }));
-
         io.to(contestId).emit("game-finished-contest", resultArray);
         io.to("company-admin-contest").emit("contest-updated-admin", {
           contestId,
           status: "completed",
           results: resultArray,
         });
+
         await redis.del(key);
         await injectContestSocketController.saveContestResult(contestId, resultArray);
       }
