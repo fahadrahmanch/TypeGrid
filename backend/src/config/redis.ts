@@ -2,10 +2,10 @@ import Redis from "ioredis";
 import logger from "../utils/logger";
 
 const redis = new Redis({
-  // host: '127.0.0.1',
-  // port: 6379,
-  host: process.env.REDIS_HOST || "localhost",  
-  port: Number(process.env.REDIS_PORT) || 6379,
+  host: process.env.REDIS_HOST,
+  port: Number(process.env.REDIS_PORT),
+  password: process.env.REDIS_PASSWORD,
+  // username: "default",
 });
 
 redis.on("connect", () => {
