@@ -4,13 +4,13 @@ import { ArrowLeft, Plus, ChevronUp } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import AddUsersModal from "../../components/companyAdmin/groups/AddUsersModal";
 import { getCompanyGroupById } from "../../api/companyAdmin/companyGroup";
-import { Group, GroupMember } from "../../types/group";
+import { GroupMember } from "../../types/group";
 import { removeMemberFromGroup } from "../../api/companyAdmin/companyGroup";
 import ReusableTable from "../../components/common/ReusableTable";
 const GroupDetails: React.FC = () => {
   const { groupId } = useParams();
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
-  const [group, setGroup] = useState<Group | null>(null);
+  const [group, setGroup] = useState<{ name?: string, type?: string, usersCount?: number, avgWpm?: number, avgAccuracy?: number, members?: { _id: string, name: string, email: string, wpm: number, accuracy: number }[] } | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchGroupDetails = async () => {
@@ -141,67 +141,67 @@ const GroupDetails: React.FC = () => {
           </div>
 
           {/* Members Table */}
-            <ReusableTable
-              columns={[
-                {
-                  header: "Name",
-                  key: "name",
-                  className: "font-semibold text-gray-900 text-sm",
-                  render: (member) => {
-                    const memberData: Partial<GroupMember> =
-                      typeof member === "string" ? { _id: member, name: "User " + member.slice(-4) } : member;
-                    return memberData.name;
-                  },
+          <ReusableTable
+            columns={[
+              {
+                header: "Name",
+                key: "name",
+                className: "font-semibold text-gray-900 text-sm",
+                render: (member) => {
+                  // const memberData: Partial<GroupMember> =
+                  //   typeof member === "string" ? { _id: member, name: "User " + member.slice(-4) } : member;
+                  return member?.name;
                 },
-                {
-                  header: "Email",
-                  key: "email",
-                  className: "text-gray-500 text-sm",
-                  render: (member) => {
-                    const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
-                    return memberData.email || "-";
-                  },
+              },
+              {
+                header: "Email",
+                key: "email",
+                className: "text-gray-500 text-sm",
+                render: (member) => {
+                  const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
+                  return memberData.email || "-";
                 },
-                {
-                  header: "WPM",
-                  key: "wpm",
-                  className: "text-gray-600 font-medium text-sm",
-                  render: (member) => {
-                    const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
-                    return memberData.wpm !== undefined ? memberData.wpm : "-";
-                  },
+              },
+              {
+                header: "WPM",
+                key: "wpm",
+                className: "text-gray-600 font-medium text-sm",
+                render: (member) => {
+                  const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
+                  return memberData.wpm !== undefined ? memberData.wpm : "-";
                 },
-                {
-                  header: "Accuracy",
-                  key: "accuracy",
-                  className: "text-gray-600 font-medium text-sm",
-                  render: (member) => {
-                    const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
-                    return memberData.accuracy !== undefined ? `${memberData.accuracy}%` : "-";
-                  },
+              },
+              {
+                header: "Accuracy",
+                key: "accuracy",
+                className: "text-gray-600 font-medium text-sm",
+                render: (member) => {
+                  const memberData: Partial<GroupMember> = typeof member === "object" ? member : {};
+                  return memberData.accuracy !== undefined ? `${memberData.accuracy}%` : "-";
                 },
-                {
-                  header: "Actions",
-                  key: "actions",
-                  headerClassName: "text-right",
-                  className: "text-right",
-                  render: (member) => {
-                    const memberData: Partial<GroupMember> =
-                      typeof member === "string" ? { _id: member } : (member as GroupMember);
-                    return (
-                      <button
-                        onClick={() => memberData._id && handleRemoveMember(memberData._id)}
-                        className="text-xs font-semibold text-red-500 hover:text-red-700 hover:underline"
-                      >
-                        Remove
-                      </button>
-                    );
-                  },
+              },
+              {
+                header: "Actions",
+                key: "actions",
+                headerClassName: "text-right",
+                className: "text-right",
+                render: (member) => {
+                  const memberData: Partial<GroupMember> =
+                    typeof member === "string" ? { _id: member } : (member as GroupMember);
+                  return (
+                    <button
+                      onClick={() => memberData._id && handleRemoveMember(memberData._id)}
+                      className="text-xs font-semibold text-red-500 hover:text-red-700 hover:underline"
+                    >
+                      Remove
+                    </button>
+                  );
                 },
-              ]}
-              data={group.members || []}
-              emptyMessage="No members in this group."
-            />
+              },
+            ]}
+            data={group.members || []}
+            emptyMessage="No members in this group."
+          />
         </div>
 
         {/* Add User Modal */}

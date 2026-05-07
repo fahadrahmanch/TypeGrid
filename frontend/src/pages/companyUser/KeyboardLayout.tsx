@@ -143,7 +143,7 @@ const KeyboardLayout: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-bold text-gray-900">{layout.title}</h3>
                   <button
-                    onClick={(e) => openPreview(e, layout.id as KeyboardLayoutType)}
+                    onClick={(e) => openPreview(e, layout.id as LayoutType)}
                     className="text-gray-400 hover:text-[#2563EB] transition-colors"
                   >
                     <Info className="w-5 h-5" />
