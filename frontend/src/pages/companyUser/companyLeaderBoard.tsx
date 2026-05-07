@@ -280,7 +280,7 @@ const CompanyLeaderBoard: React.FC = () => {
             data={sortedRankings}
             isLoading={isLoading}
             emptyMessage="No rankings yet! Complete your first lesson or contest to appear on the leaderboard."
-            rowClassName={(user, index) =>
+            rowClassName={(_user, index) =>
               `group hover:bg-orange-50/30 transition-colors duration-200 ${index < 3 ? "bg-orange-100/10" : ""}`
             }
             columnHeaderClassName="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]"

@@ -129,7 +129,7 @@ const LiveMonitorModal: React.FC<LiveMonitorModalProps> = ({
       const elapsed = Math.floor((now - startTimesamp) / 1000);
       if (elapsed < contestDetails.countDown) {
         // setPhase("COUNTDOWN");
-        setCountdown(contestDetails.countDown - elapsed);
+        // setCountdown(contestDetails.countDown - elapsed);
       } else if (elapsed < contestDetails.countDown + contestDetails.duration) {
         // setPhase("PLAY");
         setRemainingTime(contestDetails.countDown + contestDetails.duration - elapsed);

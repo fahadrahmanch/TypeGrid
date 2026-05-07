@@ -109,6 +109,7 @@ const ContestArea: React.FC = () => {
     setTotalTyped,
     setElapsedTime,
     setIsFinished,
+    isFinished,
     finalResult,
   });
 
@@ -181,7 +182,7 @@ const ContestArea: React.FC = () => {
       } else {
         setPhase("PLAY");
         setRemainingTime(0);
-        //  setIsfinished(true);
+        setIsFinished(true);
         clearInterval(interval);
       }
     }, 1000);

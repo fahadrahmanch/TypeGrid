@@ -103,7 +103,7 @@ export default function ChallengeArea() {
   const [errors, setErrors] = useState(0);
 
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY">("COUNTDOWN");
+  const [phase, setPhase] = useState<"COUNTDOWN" | "PLAY" | "TIMES_UP">("COUNTDOWN");
   const [countdown, setCountdown] = useState(3);
   const [remainingTime, setRemainingTime] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
@@ -170,15 +170,15 @@ export default function ChallengeArea() {
         prev?.map((p) =>
           p.userId === (user?._id || user?.id)
             ? {
-                ...p,
-                typedLength: typedText.length,
-                wpm: wpm || 0,
-                accuracy: accuracy || 0,
-                errors: errors,
-                progress: isFinished
-                  ? 100
-                  : Math.min(100, Math.round((typedText.length / challengeData.lesson.text.length) * 100)),
-              }
+              ...p,
+              typedLength: typedText.length,
+              wpm: wpm || 0,
+              accuracy: accuracy || 0,
+              errors: errors,
+              progress: isFinished
+                ? 100
+                : Math.min(100, Math.round((typedText.length / challengeData.lesson.text.length) * 100)),
+            }
             : p
         ) ?? null
     );
@@ -276,11 +276,11 @@ export default function ChallengeArea() {
     accuracy,
     errors,
     elapsedTime,
+    totalTyped: totalTyped,
     totalLength: challengeData?.lesson?.text?.length || 0,
     onPlayersUpdate: setPlayers,
     onGameFinished: setFinalResult,
   });
-
   if (finalResult.length > 0) {
     return (
       <>

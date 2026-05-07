@@ -5,7 +5,7 @@ interface UseChallengeTimerProps {
   duration: number | undefined;
   countDown: number | undefined;
   isFinished: boolean;
-  setPhase: (phase: "COUNTDOWN" | "PLAY") => void;
+  setPhase: (phase: "COUNTDOWN" | "PLAY" | "TIMES_UP") => void;
   setCountdown: (v: number) => void;
   setRemainingTime: (v: number) => void;
   setElapsedTime: (v: number) => void;
@@ -24,6 +24,7 @@ export function useChallengeTimer({
   setIsFinished,
 }: UseChallengeTimerProps) {
   useEffect(() => {
+    // if (isFinished) return;
     if (!startedAt || !duration || countDown === undefined) return;
 
     const startTimestamp = new Date(startedAt).getTime();
@@ -40,9 +41,11 @@ export function useChallengeTimer({
         setRemainingTime(countDown + duration - elapsed);
         setElapsedTime(elapsed - countDown);
       } else {
-        setPhase("PLAY");
+        setPhase("TIMES_UP");
         setRemainingTime(0);
         setIsFinished(true);
+        
+
         clearInterval(interval);
       }
     }, 1000);

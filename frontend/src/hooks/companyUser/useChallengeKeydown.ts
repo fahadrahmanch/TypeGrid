@@ -10,7 +10,7 @@ interface UseChallengeKeydownProps {
   currentUserName: string | undefined;
   currentUserImageUrl: string | undefined;
   isFinished: boolean;
-  phase: "COUNTDOWN" | "PLAY";
+  phase: "COUNTDOWN" | "PLAY" | "TIMES_UP";
   hasError: boolean;
   typedText: string;
   elapsedTime: number;

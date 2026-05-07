@@ -3,7 +3,7 @@ import Navbar from "../../../components/user/Navbar";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTypingSound } from "../../../hooks/useTypingSound";
 import { getTypiingPracticeLessonById } from "../../../api/user/typingPracticeService";
-import { Zap, Target, Clock, AlertCircle, RotateCcw, Trophy, ArrowLeft, Layout, BarChart3 } from "lucide-react";
+import { Zap, Target, Clock, AlertCircle, RotateCcw, Trophy, ArrowLeft, Layout, BarChart3, CheckCircle } from "lucide-react";
 
 const TypingPracticeArea = () => {
   const { lessonId } = useParams<{ lessonId?: string }>();
@@ -147,14 +147,14 @@ const TypingPracticeArea = () => {
 
       if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault(); // Prevent scrolling space
-        
+
         const expectedChar = Content.text[typedText.length];
         if (e.key !== expectedChar) {
           playTypingError();
         } else {
           playTyping();
         }
-        
+
         setTypedText((prev) => prev + e.key);
       }
     };
@@ -219,13 +219,12 @@ const TypingPracticeArea = () => {
                   <span
                     className={`
                                 px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border
-                                ${
-                                  Content?.level === "beginner"
-                                    ? "bg-green-50 text-green-600 border-green-100"
-                                    : Content?.level === "intermediate"
-                                      ? "bg-amber-50 text-amber-600 border-amber-100"
-                                      : "bg-red-50 text-red-600 border-red-100"
-                                }
+                                ${Content?.level === "beginner"
+                        ? "bg-green-50 text-green-600 border-green-100"
+                        : Content?.level === "intermediate"
+                          ? "bg-amber-50 text-amber-600 border-amber-100"
+                          : "bg-red-50 text-red-600 border-red-100"
+                      }
                              `}
                   >
                     {Content?.level || "Loading..."}

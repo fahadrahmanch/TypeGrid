@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "../../socket";
 import type { LivePlayer, GamePlayerResult } from "../../pages/companyUser/ChallengeArea";
 
-interface UseChallengeSocketProps {
+export interface UseChallengeSocketProps {
   challengeId: string | undefined;
   currentUserId: string | undefined;
   user: any;
-  phase: "COUNTDOWN" | "PLAY";
+  phase: "COUNTDOWN" | "PLAY" | "TIMES_UP";
   isFinished: boolean;
   typedText: string;
   wpm: number;
   accuracy: number | null;
   errors: number;
   elapsedTime: number;
+  totalTyped: number;
   totalLength: number;
   onPlayersUpdate: (updater: (prev: LivePlayer[] | null) => LivePlayer[] | null) => void;
   onGameFinished: (results: GamePlayerResult[]) => void;
@@ -30,6 +31,7 @@ export function useChallengeSocket({
   accuracy,
   errors,
   elapsedTime,
+  totalTyped,
   totalLength,
   onPlayersUpdate,
   onGameFinished,
@@ -49,20 +51,32 @@ export function useChallengeSocket({
 
   // Emit live typing progress
   useEffect(() => {
-    if (!challengeId || !currentUserId) return;
-    if (phase !== "PLAY" || (isFinished && typedText.length !== totalLength)) return;
+  if (!challengeId || !currentUserId) return;
 
-    socket.emit("typing-progress-challenge", {
-      challengeId: challengeId,
-      userId: currentUserId,
-      typedLength: typedText.length,
-      wpm,
-      status: "PLAYING",
-      accuracy,
-      errors,
-      timeTaken: elapsedTime,
-    });
-  }, [typedText, wpm, accuracy, errors, phase, isFinished, elapsedTime, challengeId, currentUserId]);
+  if (phase !== "PLAY" || isFinished) return;
+
+  socket.emit("typing-progress-challenge", {
+    challengeId,
+    userId: currentUserId,
+    typedLength: typedText.length,
+    wpm,
+    status: "PLAYING",
+    accuracy,
+    errors,
+    timeTaken: elapsedTime,
+  });
+
+}, [
+  typedText,
+  wpm,
+  accuracy,
+  errors,
+  phase,
+  isFinished,
+  elapsedTime,
+  challengeId,
+  currentUserId,
+]);
 
   // Listen for other players' progress
   useEffect(() => {
@@ -104,6 +118,22 @@ export function useChallengeSocket({
       });
     }
   }, [challengeId, currentUserId]);
+
+  // Emit time-up
+  useEffect(() => {
+    if (!challengeId || !currentUserId) return;
+    if (phase !== "TIMES_UP") return;
+
+    socket.emit("time-up-challenge", {
+      userId: currentUserId,
+      name: user.name,
+      imageUrl: user.imageUrl,
+      timeTaken: elapsedTime,
+      totalTyped: totalTyped,
+      errors,
+      typedLength: typedText.length,
+    });
+  }, [challengeId, currentUserId, phase]);
 
   useEffect(() => {
     const handleBeforeUnload = () => emitLeave();

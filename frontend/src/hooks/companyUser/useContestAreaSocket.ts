@@ -14,7 +14,7 @@ interface UseContestSocketProps {
   remainingTime: number;
   elapsedTime: number;
   totalTyped: number;
-
+  isFinished: boolean;
   gameIdRef: MutableRefObject<string | undefined>;
   userIdRef: MutableRefObject<string | undefined>;
 
@@ -52,6 +52,7 @@ export const useContestSocket = ({
   setTotalTyped,
   setElapsedTime,
   setIsFinished,
+  isFinished,
   finalResult,
 }: UseContestSocketProps) => {
   // join contest
@@ -168,7 +169,7 @@ export const useContestSocket = ({
   useEffect(() => {
     if (!contestData?._id || !user) return;
     if (phase !== "PLAY") return;
-
+if (isFinished) return;
     socket.emit("typing-progress-contest", {
       contestId: contestData._id,
       userId: user._id,

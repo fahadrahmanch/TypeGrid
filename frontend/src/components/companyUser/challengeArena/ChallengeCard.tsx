@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CheckCircle2, Clock, Zap, Target, Swords } from "lucide-react";
 import { challengeAccept, challengeReject } from "../../../api/companyUser/challenge";
 import { socket } from "../../../socket";
-
+import { CompletedChallenge } from "./types";
 const ChallengeCard = ({ challenge }: { challenge: any }) => {
   const [hasJoined, setHasJoined] = useState(false);
   const [localAccepted, setLocalAccepted] = useState(false);

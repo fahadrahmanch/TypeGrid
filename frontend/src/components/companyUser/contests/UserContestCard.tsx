@@ -102,18 +102,17 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
   return (
     <div
       className="group bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-[0_10px_30px_rgb(236,164,104,0.04)] hover:shadow-[0_20px_50px_rgb(236,164,104,0.08)] border border-[#ECA468]/10 transition-all duration-500 relative w-full transform hover:-translate-y-1.5 overflow-hidden flex flex-col h-full"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      // onMouseEnter={() => setIsHovered(true)}
+      // onMouseLeave={() => setIsHovered(false)}
     >
       {/* Top decorative gradient bar */}
       <div
-        className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${
-          difficulty.toLowerCase() === "hard"
+        className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${difficulty.toLowerCase() === "hard"
             ? "from-rose-400 to-red-500"
             : difficulty.toLowerCase() === "medium"
               ? "from-blue-400 to-indigo-500"
               : "from-amber-400 to-[#ECA468]"
-        }`}
+          }`}
       />
 
       {/* Header Section */}
@@ -233,11 +232,10 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
         <button
           onClick={() => handleClick(_id, action)}
           className={`flex-1 py-3 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap
-                    ${
-                      action === "join"
-                        ? "bg-[#ECA468] text-white hover:bg-[#D0864B] hover:shadow-lg hover:shadow-[#ECA468]/30"
-                        : "bg-rose-100 text-rose-600 border border-rose-200 hover:bg-rose-200"
-                    }
+                    ${action === "join"
+              ? "bg-[#ECA468] text-white hover:bg-[#D0864B] hover:shadow-lg hover:shadow-[#ECA468]/30"
+              : "bg-rose-100 text-rose-600 border border-rose-200 hover:bg-rose-200"
+            }
                   `}
         >
           {action === "join" ? "Join Contest" : "Cancel"}
