@@ -112,6 +112,7 @@ const Lessons: React.FC = () => {
     if (name === "text") err = textValidation(value);
 
     setEditFormErrors((prev) => ({ ...prev, [name]: err }));
+    fetchLessons();
   }
 
   async function handleSubmit() {
@@ -155,7 +156,7 @@ const Lessons: React.FC = () => {
         text: "",
       });
       toast.success("Lesson created successfully");
-
+      fetchLessons();
       // const fetchResponse = await getAllLessons();
       // if (fetchResponse && fetchResponse.data.lessons) {
       //   setLessons(fetchResponse.data.lessons);
