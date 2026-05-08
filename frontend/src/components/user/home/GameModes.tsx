@@ -42,7 +42,7 @@ const GameModes: React.FC<{ onGameModeClick: (mode: string) => void }> = ({ onGa
   const modes = [
     {
       title: "Group play",
-      // description: "Play against friends",
+      description: "Play against friends",
       image: GroupImg,
       bg: "bg-[#FFF8E7]", // Beige
       mode: "group",
