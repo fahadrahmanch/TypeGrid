@@ -27,6 +27,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create env file
+        run: |
+          echo "VITE_API_URL=https://api.typegrid.in" >> .env
+          echo "VITE_GOOGLE_CLIENT_ID=538999956200-0ar7t7ashcaigbalun7ovhkvvuhe3q5v.apps.googleusercontent.com" >> .env
+          echo "VITE_TEST=fahad" >> .env
+          echo "VITE_STRIPE_PUBLISHABLE_KEY=pk_test_51TM3qRLw5iKPWFW5jqXtg1R4twn7d7q2qkrUK7gwxqiYsoUtrueHfXrCTzFpLh84b8jJkcLeFTkWNzT15oipnJEV00gzTYBRhMpm2" >> .env
+
       - name: Build frontend
         run: npm run build
 
