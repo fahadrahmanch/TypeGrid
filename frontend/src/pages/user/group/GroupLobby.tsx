@@ -37,7 +37,7 @@ const GroupLobby: React.FC = () => {
   const [difficulty, setDifficulty] = useState<string>();
   const [maximumPlayers, setMaximumPlayes] = useState<number>();
   const isHost = group?.currentUserId === group?.ownerId;
-  const inviteLink = `http://localhost:5173/group-play/group/${group?.joinLink}`;
+const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
   const [isBlurred, setIsBlurred] = useState(true);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const { user } = useSelector((state: any) => state.auth);

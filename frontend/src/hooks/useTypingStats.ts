@@ -4,7 +4,7 @@ export function useTypingStats(
   totalTyped: number,
   errors: number,
   elapsedTime: number,
-  phase: "COUNTDOWN" | "PLAY",
+  phase: "COUNTDOWN" | "PLAY" | "TIMES_UP",
   isFinished: boolean
 ) {
   const [wpm, setWpm] = useState(0);
