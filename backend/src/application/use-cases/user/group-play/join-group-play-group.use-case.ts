@@ -18,7 +18,7 @@ export class JoinGroupPlayGroupUseCase implements IJoinGroupPlayGroupUseCase {
     if (!joinLink || !userId) {
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.JOIN_LINK_AND_USER_ID_REQUIRED);
     }
-    const subscription=await this._userSubscriptionRepository.findActive(userId)
+    const subscription=await this._userSubscriptionRepository.findActive(userId);
     if(!subscription){
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.ACTIVE_SUBSCRIPTION_REQUIRED);
     }

@@ -197,7 +197,6 @@ export const contestHandlers = (socket: Socket, io: Server) => {
           typedLength,
         })
       );
-      const rw = await redis.hget(key, userId)
       const isEnd = await checkCompanyContestGameEndService(contestId);
       if (isEnd) {
         const result = await redis.hgetall(key);
