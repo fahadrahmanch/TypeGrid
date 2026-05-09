@@ -18,6 +18,7 @@ import { asyncHandler } from "../../utils/async-handler";
 import { checkCompanyStatusMiddleware } from "../middlewares/check-company-status.middleware";
 // import { companyGroupValidation } from "../middlewares/validations/group.validation";
 import { createCompanyGroup } from "../middlewares/validations/group.validation";
+import { companyContestValidation } from "../middlewares/validations/company-contest.validation";
 export class companyAdminRouter {
   private router: express.Router;
   constructor() {
@@ -154,6 +155,7 @@ export class companyAdminRouter {
     this.router.post(
       Routes.COMPANY_ADMIN.CREATE_COMPANY_CONTEST,
       checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(companyContestValidation.create),
       asyncHandler(injectCompanyContestManagementController.createContest)
     );
     this.router.get(
@@ -179,6 +181,7 @@ export class companyAdminRouter {
     this.router.put(
       Routes.COMPANY_ADMIN.UPDATE_CONTEST,
       checkRoleBasedMiddleware(["companyAdmin"]),
+      validate(companyContestValidation.update),
       asyncHandler(injectCompanyContestManagementController.updateContest)
     );
     this.router.delete(

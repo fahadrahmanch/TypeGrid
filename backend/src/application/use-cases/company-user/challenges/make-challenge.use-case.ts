@@ -61,8 +61,8 @@ export class MakeChallengeUseCase implements IMakeChallengeUseCase {
       mode: "company",
       CompanyId: sender.CompanyId,
       participants: [senderId, receiverId],
-      duration: 20,
-      countDown: 5,
+      duration: 300,
+      countDown: 10,
       status: "pending",
       textId: lesson._id?.toString(),
     });

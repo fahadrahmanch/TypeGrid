@@ -395,7 +395,7 @@ export const contestHandlers = (socket: Socket, io: Server) => {
     const key = `company:game:${contestId}`;
 
     const allPlayers = await redis.hgetall(key);
-    if (!allPlayers || Object.keys(allPlayers).length === 0) return;
+    if (!allPlayers ) return;
 
     const resultArray = Object.entries(allPlayers)
       .map(([userId, value]) => ({

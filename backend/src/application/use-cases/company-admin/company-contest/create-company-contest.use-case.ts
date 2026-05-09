@@ -76,10 +76,10 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       duration: Number(data.duration) * 60,
       maxParticipants: Number(data.maxParticipants),
       groupId: data.targetGroup ?? null,
-      rewards: data.rewards.map((r) => ({
+      rewards: data.rewards?.map((r) => ({
         rank: r.rank,
         prize: Number(r.prize),
-      })),
+      })) ?? [],
       CompanyId: user.CompanyId,
       countDown: 10,
     });

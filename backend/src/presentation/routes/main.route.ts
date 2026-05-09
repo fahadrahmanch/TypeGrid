@@ -222,6 +222,7 @@ export const Routes = {
   COMPANY_USER: {
     DASHBOARD_STATS: "/dashboard-stats",
     PROFILE: "/profile/:userId",
+    UPDATE_PROFILE: "/profile/update/:userId",
     MY_LESSONS: "/my-lessons",
     ASSIGNED_LESSON_BY_ID: "/my-lessons/:assignmentId",
     SAVE_LESSON_RESULT: "/lesson/:id/result",

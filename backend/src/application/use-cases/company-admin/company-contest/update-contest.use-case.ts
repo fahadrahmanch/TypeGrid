@@ -27,6 +27,13 @@ export class UpdateContestUseCase implements IUpdateContestUseCase {
     const updatedContest = await this._contestRepository.update({
       ...contest.toObject(),
       ...data,
+      groupId: data.targetGroup !== undefined ? (data.targetGroup || null) : contest.toObject().groupId,
+      duration: data.duration ? Number(data.duration) * 60 : contest.toObject().duration,
+      maxParticipants: data.maxParticipants ? Number(data.maxParticipants) : contest.toObject().maxParticipants,
+      rewards: data.rewards ? data.rewards.map(r => ({
+        rank: r.rank,
+        prize: Number(r.prize)
+      })) : contest.toObject().rewards
     });
     if (!updatedContest) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.CONTEST_NOT_FOUND);

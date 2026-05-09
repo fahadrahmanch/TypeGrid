@@ -82,7 +82,11 @@ export class ContestEntity {
 
   private validate() {
     if (this.contestMode === "group" && !this.groupId) {
-      throw new Error("Group contest must have groupId");
+      if (this._id) {
+        console.warn(`Contest ${this._id} is in group mode but missing groupId`);
+      } else {
+        throw new Error("Group contest must have groupId");
+      }
     }
 
     if (this.textSource === "manual" && !this.contestText) {
@@ -124,7 +128,7 @@ export class ContestEntity {
     this.startTime = new Date();
   }
   joinContest(userId: string) {
-    if (this.status !== "upcoming" && this.status !== "ongoing") {
+    if (this.status !== "upcoming" && this.status !== "ongoing"&& this.status !== "waiting") {
       throw new Error("Contest is not open for joining");
     }
 

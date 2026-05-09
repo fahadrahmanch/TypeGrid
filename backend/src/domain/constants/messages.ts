@@ -177,6 +177,7 @@ export const MESSAGES = {
   DAILY_CHALLENGE_ALREADY_EXIST: "Daily challenge already exists with this date",
   DAILY_CHALLENGE_NOT_FOUND: "Daily challenge not found",
   PROFILE_FETCHED_SUCCESSFULLY: "Profile fetched successfully",
+  PROFILE_UPDATED_SUCCESSFULLY: "Profile updated successfully",
   STATS_NOT_FOUND: "Stats not found",
   SUBSCRIPTION_PLAN_CREATED_SUCCESS: "Subscription plan created successfully",
   SUBSCRIPTION_PLAN_ALREADY_EXISTS: "Subscription plan already exists with this name",

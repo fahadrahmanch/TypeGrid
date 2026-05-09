@@ -33,9 +33,9 @@ export const groupHandlers = (socket: Socket, io: Server) => {
     const key = `game:${gameId}`;
 
     const raw = await redis.hget(key, userId);
-
+    let existing=null;
     if (raw) {
-      const existing = JSON.parse(raw);
+      existing = JSON.parse(raw);
       if (existing.status === "FINISHED" || existing.status === "TIMES_UP") {
         return;
       }
@@ -48,7 +48,7 @@ export const groupHandlers = (socket: Socket, io: Server) => {
         accuracy,
         errors,
         typedLength,
-        status: "PLAYING",
+        status: existing?.status?existing.status:"PLAYING",
         updatedAt: Date.now(),
       })
     );

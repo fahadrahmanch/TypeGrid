@@ -33,6 +33,7 @@ function narrowError(error: unknown): {
 }
 
 export const errorMiddleware = (err: any, req: AuthRequest, res: Response,next:NextFunction) => {
+  console.log("err",err);
   const { message, status, stack } = narrowError(err);
 
   // Log error with context

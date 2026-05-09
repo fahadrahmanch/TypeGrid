@@ -116,6 +116,11 @@ export class companyUserRoutes {
       asyncHandler(injectCompanyUserController.getProfile)
     );
     this.router.put(
+      Routes.COMPANY_USER.UPDATE_PROFILE,
+      checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
+      asyncHandler(injectCompanyUserController.updateProfile)
+    );
+    this.router.put(
       Routes.COMPANY_USER.UPDATE_PASSWORD,
       checkRoleBasedMiddleware(["companyUser", "companyAdmin"]),
       asyncHandler(injectCompanyUserController.changePassword)

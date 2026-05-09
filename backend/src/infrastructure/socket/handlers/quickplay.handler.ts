@@ -81,9 +81,9 @@ export const quickplayHandlers = (socket: Socket, io: Server) => {
     const key = `quick:game:${gameId}`;
 
     const raw = await redis.hget(key, userId);
-
+    let existing = null;
     if (raw) {
-      const existing = JSON.parse(raw);
+      existing = JSON.parse(raw);
 
       if (existing.status === "FINISHED" || existing.status === "TIMES_UP" || existing.status === "LEFT") {
         return;
@@ -97,7 +97,7 @@ export const quickplayHandlers = (socket: Socket, io: Server) => {
           accuracy,
           errors,
           typedLength,
-          status: "PLAYING",
+          status: existing?.status ? existing.status : "PLAYING",
           updatedAt: Date.now(),
         })
       );

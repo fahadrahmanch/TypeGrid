@@ -42,6 +42,7 @@ import { CompanyUserController } from "../controllers/company-user/company-user.
 import { GetProfileUseCase } from "../../application/use-cases/company-user/get-profile.use-case";
 import { HashService } from "../../application/services/hash.service";
 import { UpdateCompanyPasswordUseCase } from "../../application/use-cases/company-user/update-password.use-case";
+import { UpdateProfileUseCase } from "../../application/use-cases/company-user/update-profile.use-case";
 import { LLMService } from "../../infrastructure/services/llm.service";
 import { GetPracticeTypingContentUseCase } from "../../application/use-cases/company-user/Practice/get-practice-typing-content.use-case";
 import { TypingPracticeController } from "../controllers/company-user/typing-practice.controller";
@@ -122,6 +123,7 @@ const getProfileUseCaseInstance = new GetProfileUseCase(
 );
 
 const changePasswordUseCaseInstance = new UpdateCompanyPasswordUseCase(userRepository, hashService);
+const updateProfileUseCaseInstance = new UpdateProfileUseCase(userRepository);
 
 const getNotificationsUseCaseInstance = new GetNotificationsUseCase(
   notificationRepository,
@@ -148,7 +150,8 @@ export const injectTypingPracticeController = new TypingPracticeController(getPr
 
 export const injectCompanyUserController = new CompanyUserController(
   getProfileUseCaseInstance,
-  changePasswordUseCaseInstance
+  changePasswordUseCaseInstance,
+  updateProfileUseCaseInstance
 );
 
 export const injectChallengesController = new ChallengesController(

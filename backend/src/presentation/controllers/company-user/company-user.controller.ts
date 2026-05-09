@@ -4,11 +4,14 @@ import { IGetProfileUseCase } from "../../../application/use-cases/interfaces/co
 import { IUpdateCompanyPasswordUseCase } from "../../../application/use-cases/interfaces/companyUser/update-password.interface";
 import { HttpStatus } from "../../constants/httpStatus";
 import { CustomError } from "../../../domain/entities/custom-error.entity";
+import { IUpdateProfileUseCase } from "../../../application/use-cases/interfaces/companyUser/update-profile.interface";
+
 export class CompanyUserController {
   constructor(
     private readonly _getProfileUseCase: IGetProfileUseCase,
-    private readonly _updatePasswordUseCase: IUpdateCompanyPasswordUseCase
-  ) {}
+    private readonly _updatePasswordUseCase: IUpdateCompanyPasswordUseCase,
+    private readonly _updateProfileUseCase: IUpdateProfileUseCase
+  ) { }
 
   getProfile = async (req: Request, res: Response): Promise<void> => {
     const userId = req.params.userId;
@@ -37,6 +40,22 @@ export class CompanyUserController {
     res.status(HttpStatus.OK).json({
       success: true,
       message: MESSAGES.PASSWORD_UPDATE_SUCCESS,
+    });
+  };
+
+  updateProfile = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.params.userId;
+    const data = req.body.imageUrl;
+
+    if (!userId) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, MESSAGES.USER_DETAILS_NOT_FOUND);
+    }
+
+    await this._updateProfileUseCase.execute(userId, data);
+
+    res.status(HttpStatus.OK).json({
+      success: true,
+      message: MESSAGES.PROFILE_UPDATED_SUCCESSFULLY,
     });
   };
 }
