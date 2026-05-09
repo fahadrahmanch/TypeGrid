@@ -19,12 +19,14 @@ export const useQuickPlaySocket = (
   elapsedTime: number,
   totalTyped: number,
   gameIdRef: React.MutableRefObject<string | undefined>,
-  userIdRef: React.MutableRefObject<string | undefined>
+  userIdRef: React.MutableRefObject<string | undefined>,
+  isFinished: boolean
 ) => {
   const user = useSelector((state: any) => state.auth.user);
 
   // send live stats
   useEffect(() => {
+    if(isFinished) return;
     if (!gameData?._id || !user) return;
     if (phase !== "PLAY") return;
 

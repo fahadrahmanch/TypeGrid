@@ -78,79 +78,22 @@ const Achievements: React.FC = () => {
     <div className="min-h-screen bg-[#FFF8EA] pb-20">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
-        {/* Header Profile Section */}
-        {/* <div className="bg-white/40 backdrop-blur-md rounded-[32px] p-6 mb-8 border border-white/60 shadow-xl relative overflow-hidden group">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-                        <div className="flex items-center gap-6">
-                            <div className="relative">
-                                <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg overflow-hidden flex items-center justify-center bg-gray-100">
-                                    {user?.imageUrl ? (
-                                        <img src={user.imageUrl} alt="Profile" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <Users className="w-12 h-12 text-gray-400" />
-                                    )}
-                                </div>
-                                <div className="absolute -bottom-1 -right-1 bg-yellow-400 text-white w-8 h-8 rounded-full flex items-center justify-center border-4 border-[#FFF8EA] shadow-sm">
-                                    <Award className="w-4 h-4" />
-                                </div>
-                            </div>
-
-                        <div className="text-center md:text-left">
-                            <h1 className="text-3xl font-black text-gray-900 mb-2">{user?.name || "Fahad"}</h1>
-                            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-gray-500 font-medium">
-                                <span className="flex items-center gap-1.5 bg-white/50 px-3 py-1 rounded-full border border-gray-100 shadow-sm">
-                                    <TrendingUp className="w-4 h-4 text-purple-500" />
-                                    Level {user?.level || 12}
-                                </span>
-                                <span className="flex items-center gap-1.5 bg-white/50 px-3 py-1 rounded-full border border-gray-100 shadow-sm">
-                                    <Flame className="w-4 h-4 text-orange-500" />
-                                    {user?.streak || 5} day streak
-                                </span>
-                                <span className="flex items-center gap-1.5 bg-white/50 px-3 py-1 rounded-full border border-gray-100 shadow-sm">
-                                    <Calendar className="w-4 h-4 text-blue-500" />
-                                    Joined {user?.joinedAt || "January 2024"}
-                                </span>
-                            </div>
-                        </div>
-                        </div>
-
-                        <div className="flex items-center gap-8 w-full md:w-auto">
-                            <div className="flex-1 md:flex-none text-center">
-                                <span className="text-5xl font-black text-yellow-500 block mb-1">{completionPercentage}%</span>
-                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Complete</span>
-                            </div>
-                            <div className="w-px h-16 bg-gray-200 hidden md:block"></div>
-                            <div className="flex-1 md:flex-none text-center">
-                                <span className="text-3xl font-black text-gray-900 block mb-1">{unlockedCount}/{achievements.length}</span>
-                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Achievements</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-8 relative">
-                        <div className="flex justify-between items-center mb-2">
-                            <span className="text-xs font-black uppercase tracking-widest text-gray-400 px-1">Level Progress</span>
-                            <span className="text-xs font-bold text-gray-600">2850/3000 XP</span>
-                        </div>
-                        <div className="h-3 w-full bg-gray-200/50 rounded-full overflow-hidden border border-white/40 shadow-inner">
-                            <div
-                                className="h-full bg-gradient-to-r from-[#8B7355] to-[#B99F8D] rounded-full shadow-lg transition-all duration-1000"
-                                style={{ width: `${completionPercentage}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                </div> */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32">
+        {/* Page Header */}
+        <div className="mb-10 text-center sm:text-left">
+          <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-2">My Achievements</h1>
+          <p className="text-sm md:text-base text-gray-500 font-medium">Track your progress and showcase your typing milestones.</p>
+        </div>
 
         {/* Controls Section */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-10">
-          <div className="bg-gray-200/40 backdrop-blur-sm p-1.5 rounded-[22px] flex items-center gap-1 w-full sm:w-auto">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 mb-10">
+          <div className="bg-gray-200/40 backdrop-blur-sm p-1.5 rounded-3xl flex items-center gap-1 overflow-x-auto no-scrollbar scroll-smooth">
             <button
               onClick={() => setActiveTab("all")}
-              className={`flex-1 sm:flex-none px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${
+              className={`whitespace-nowrap flex-1 lg:flex-none px-6 md:px-8 py-3 rounded-2xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${
                 activeTab === "all"
                   ? "bg-[#8B7355] text-white shadow-lg shadow-[#8B7355]/20"
-                  : "text-gray-500 hover:text-gray-700"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-white/20"
               }`}
             >
               <Award className="w-4 h-4" />
@@ -158,10 +101,10 @@ const Achievements: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab("unlocked")}
-              className={`flex-1 sm:flex-none px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${
+              className={`whitespace-nowrap flex-1 lg:flex-none px-6 md:px-8 py-3 rounded-2xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${
                 activeTab === "unlocked"
                   ? "bg-[#8B7355] text-white shadow-lg shadow-[#8B7355]/20"
-                  : "text-gray-500 hover:text-gray-700"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-white/20"
               }`}
             >
               <CheckCircle2 className="w-4 h-4" />
@@ -169,10 +112,10 @@ const Achievements: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab("locked")}
-              className={`flex-1 sm:flex-none px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${
+              className={`whitespace-nowrap flex-1 lg:flex-none px-6 md:px-8 py-3 rounded-2xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${
                 activeTab === "locked"
                   ? "bg-[#8B7355] text-white shadow-lg shadow-[#8B7355]/20"
-                  : "text-gray-500 hover:text-gray-700"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-white/20"
               }`}
             >
               <Lock className="w-4 h-4" />
@@ -180,60 +123,60 @@ const Achievements: React.FC = () => {
             </button>
           </div>
 
-          <div className="relative w-full sm:w-72 group">
+          <div className="relative group lg:w-80">
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 transition-colors group-focus-within:text-[#8B7355]" />
             <input
               type="text"
               placeholder="Search achievements..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 bg-white/60 backdrop-blur-sm border border-gray-100 rounded-2xl outline-none focus:ring-4 focus:ring-[#8B7355]/5 focus:border-[#8B7355]/30 transition-all font-medium text-sm text-gray-700 placeholder:text-gray-400"
+              className="w-full pl-12 pr-6 py-4 bg-white/60 backdrop-blur-sm border border-white rounded-2xl outline-none focus:ring-4 focus:ring-[#8B7355]/5 focus:border-[#8B7355]/30 transition-all font-medium text-sm text-gray-700 placeholder:text-gray-400 shadow-sm"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
           {filteredAchievements.map((ach) => (
             <div
               key={ach.id}
-              className={`group bg-white/50 backdrop-blur-sm rounded-[32px] p-6 border transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-gray-200/50 flex flex-col border-gray-100 shadow-sm ${!ach.isUnlocked ? "grayscale-[0.8] opacity-80" : ""}`}
+              className={`group bg-white/50 backdrop-blur-sm rounded-[2.5rem] p-6 md:p-8 border transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#8B7355]/10 flex flex-col border-white shadow-sm ${!ach.isUnlocked ? "grayscale opacity-80" : ""}`}
             >
               <div className="flex justify-between items-start mb-6">
                 <div
-                  className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner transition-transform duration-500 group-hover:rotate-3 ${ach.isUnlocked ? "bg-yellow-50" : "bg-gray-100"}`}
+                  className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center shadow-inner transition-transform duration-500 group-hover:rotate-6 ${ach.isUnlocked ? "bg-[#FFF8EA]" : "bg-gray-100"}`}
                 >
                   <img
                     src={ach.imageUrl}
                     alt={ach.title}
-                    className={`w-10 h-10 object-contain ${!ach.isUnlocked ? "opacity-40" : ""}`}
+                    className={`w-10 h-10 md:w-12 md:h-12 object-contain ${!ach.isUnlocked ? "opacity-30" : ""}`}
                   />
                 </div>
                 <span
-                  className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${getRarityStyles(getRarity(ach.xp))}`}
+                  className={`px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest ${getRarityStyles(getRarity(ach.xp))}`}
                 >
                   {getRarity(ach.xp)}
                 </span>
               </div>
 
-              <div className="flex-1">
-                <h3 className={"text-lg font-bold mb-2 transition-colors text-gray-900"}>{ach.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed mb-4 font-medium line-clamp-2">{ach.description}</p>
-                <div className="flex items-center gap-2 mt-4">
-                  <div className="flex items-center gap-1.5 px-3 py-1 bg-yellow-400/10 rounded-full text-xs font-black text-yellow-600">
-                    <Zap className="w-3 h-3 fill-yellow-600" />
+              <div className="flex-1 space-y-3">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 leading-tight">{ach.title}</h3>
+                <p className="text-xs md:text-sm text-gray-500 leading-relaxed font-medium line-clamp-3">{ach.description}</p>
+                <div className="flex items-center gap-2 pt-2">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#8B7355]/5 rounded-full text-[10px] md:text-xs font-black text-[#8B7355]">
+                    <Zap className="w-3 h-3 fill-[#8B7355]" />
                     {ach.xp} XP
                   </div>
                 </div>
               </div>
 
-              <div className="mt-auto pt-6 border-t border-gray-100/50">
+              <div className="mt-8 pt-6 border-t border-gray-100/50">
                 {ach.isUnlocked ? (
-                  <div className="w-full bg-green-50 text-green-600 px-4 py-3 rounded-2xl flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest border border-green-100 shadow-sm">
+                  <div className="w-full bg-[#8B7355] text-white px-4 py-3.5 rounded-2xl flex items-center justify-center gap-2 text-[10px] md:text-xs font-black uppercase tracking-widest shadow-lg shadow-[#8B7355]/20">
                     <CheckCircle2 className="w-4 h-4" />
                     Unlocked
                   </div>
                 ) : (
-                  <div className="w-full bg-gray-50 text-gray-400 px-4 py-3 rounded-2xl flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest border border-gray-100/50">
+                  <div className="w-full bg-white/50 text-gray-400 px-4 py-3.5 rounded-2xl flex items-center justify-center gap-2 text-[10px] md:text-xs font-black uppercase tracking-widest border border-gray-100">
                     <Lock className="w-4 h-4" />
                     Locked
                   </div>
@@ -245,16 +188,14 @@ const Achievements: React.FC = () => {
 
         {/* Empty State */}
         {filteredAchievements.length === 0 && (
-          <div className="text-center py-20 bg-white/30 backdrop-blur-sm rounded-[40px] border border-dashed border-gray-200 mb-12">
-            <div className="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+          <div className="text-center py-20 bg-white/30 backdrop-blur-sm rounded-[3rem] border-2 border-dashed border-gray-200 mb-12 flex flex-col items-center">
+            <div className="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mb-6">
               <Search className="w-10 h-10 text-gray-300" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">No achievements found</h3>
-            <p className="text-gray-500 font-medium">Try adjusting your search or filters to see more results.</p>
+            <p className="text-gray-500 font-medium max-w-xs mx-auto">Try adjusting your search or filters to see more results.</p>
           </div>
         )}
-
-
       </div>
     </div>
   );

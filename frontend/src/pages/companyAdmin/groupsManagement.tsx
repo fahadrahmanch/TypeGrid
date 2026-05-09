@@ -44,25 +44,27 @@ const GroupsManagement: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
       <CompanyAdminSidebar />
-      <div className="flex-1 ml-64 p-8">
-        <div className="max-w-7xl mx-auto space-y-8">
+      <div className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 overflow-y-auto pt-20 md:pt-12">
+        <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
           {/* Header */}
-          <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">User Group Management</h1>
-            <p className="text-gray-500 font-medium">Organize and track user performance groups</p>
+          <div className="flex flex-col gap-1 md:gap-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">User Group Management</h1>
+            <p className="text-xs md:text-sm text-gray-500 font-medium">Organize and track user performance groups</p>
           </div>
 
           {/* Search and Action Bar */}
-          <div className="flex items-center justify-between gap-4">
-            <input
-              type="text"
-              onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search groups..."
-              className="w-full max-w-sm px-4 py-3 bg-white border-transparent rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm placeholder-gray-400"
-            />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+            <div className="relative flex-1 max-w-sm">
+              <input
+                type="text"
+                onChange={(e) => setSearchText(e.target.value)}
+                placeholder="Search groups..."
+                className="w-full px-4 py-3 bg-white border-transparent rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#B99F8D]/20 text-sm placeholder-gray-400"
+              />
+            </div>
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 hover:-translate-y-0.5 transition-all"
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-[#B99F8D] text-white font-semibold rounded-xl shadow-lg shadow-[#B99F8D]/20 hover:bg-[#B99F8D]/80 hover:-translate-y-0.5 transition-all text-sm md:text-base whitespace-nowrap"
             >
               <Plus className="w-5 h-5" />
               Create Group
@@ -89,7 +91,7 @@ const GroupsManagement: React.FC = () => {
           {/* Groups List */}
           {loading ? (
             <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B99F8D]"></div>
             </div>
           ) : (
             <>

@@ -6,7 +6,6 @@ import {
   Medal,
   Star,
   Zap,
-  ArrowLeft,
   Target,
   Info,
   Sparkles,
@@ -15,7 +14,6 @@ import {
   Flame,
   X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ReusableTable from "../../components/common/ReusableTable";
 
@@ -39,7 +37,6 @@ const CompanyLeaderBoard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>("weekly");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // - [x] Add Leaderboard Scoring Description to `companyLeaderBoard.tsx`
@@ -87,37 +84,32 @@ const CompanyLeaderBoard: React.FC = () => {
     <div className="min-h-screen bg-[#FFF8EA] font-sans text-gray-800">
       <CompanyUserNavbar />
 
-      <main className="pt-24 px-4 md:px-8 pb-12 max-w-5xl mx-auto flex flex-col gap-8">
+      <main className="pt-20 md:pt-24 px-4 md:px-8 pb-12 max-w-5xl mx-auto flex flex-col gap-6 md:gap-8">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="flex items-start gap-4">
-            <button
-              onClick={() => navigate(-1)}
-              className="mt-1 p-2 bg-white rounded-xl border border-[#FDE6C6] hover:bg-orange-50 transition-colors shadow-sm group"
-            >
-              <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:-translate-x-0.5 transition-transform" />
-            </button>
-            <div>
-              <div className="flex items-center gap-2 mb-1">
+          
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1 justify-center md:justify-start">
                 <Trophy className="w-6 h-6 text-orange-500 fill-orange-500/20" />
-                <h1 className="text-3xl font-black text-[#111827] tracking-tight">Company Leaderboard</h1>
+                <h1 className="text-2xl md:text-3xl font-black text-[#111827] tracking-tight">Leaderboard</h1>
               </div>
-              <p className="text-gray-500 font-medium">The absolute fastest typists in your organization.</p>
+              <p className="text-xs md:text-sm text-gray-500 font-medium text-center md:text-left">The fastest typists in your organization.</p>
 
               {/* Added Top Summary */}
               <div
-                className="flex items-center gap-3 mt-3 px-3 py-1.5 bg-orange-50 rounded-lg border border-orange-100 w-fit group cursor-help transition-all hover:bg-orange-100/50"
+                className="flex items-center gap-3 mt-4 px-3 py-1.5 bg-orange-50 rounded-lg border border-orange-100 w-fit mx-auto md:mx-0 group cursor-help transition-all hover:bg-orange-100/50"
                 title="WPM × Accuracy × Multipliers = Score"
               >
                 <div className="flex -space-x-1">
                   <Zap className="w-3.5 h-3.5 text-orange-400 fill-current" />
                   <Target className="w-3.5 h-3.5 text-blue-400" />
                 </div>
-                <p className="text-[11px] font-bold text-orange-800/80 uppercase tracking-wider flex items-center gap-1.5">
-                  Calculation: <span className="text-gray-400 font-black">WPM × ACC × Multipliers</span>
+                <p className="text-[10px] font-bold text-orange-800/80 uppercase tracking-wider flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+                  Formula: <span className="text-gray-400 font-black">WPM × ACC × Multipliers</span>
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="ml-1 text-orange-500 hover:text-orange-600 underline underline-offset-2 decoration-orange-300 transition-colors"
+                    className="text-orange-500 hover:text-orange-600 underline underline-offset-2 decoration-orange-300 transition-colors"
                   >
                     How it works?
                   </button>
@@ -126,18 +118,18 @@ const CompanyLeaderBoard: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white/60 backdrop-blur-md p-1.5 rounded-2xl border border-[#FDE6C6] shadow-sm flex items-center gap-1">
+          <div className="bg-white/60 backdrop-blur-md p-1 rounded-2xl border border-[#FDE6C6] shadow-sm flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full">
             {(["weekly", "monthly", "all"] as FilterType[]).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 py-2 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap shrink-0 ${
                   filter === f
                     ? "bg-orange-500 text-white shadow-md"
                     : "text-gray-500 hover:bg-orange-50 hover:text-orange-600"
                 }`}
               >
-                {f === "all" ? "All Time" : f === "weekly" ? "This Week" : "This Month"}
+                {f === "all" ? "All Time" : f === "weekly" ? "Weekly" : "Monthly"}
               </button>
             ))}
           </div>
@@ -145,47 +137,54 @@ const CompanyLeaderBoard: React.FC = () => {
 
         {/* Podium / Top 3 Display */}
         {!isLoading && sortedRankings.length >= 3 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end mt-4 mb-2">
+          <div className="flex flex-row items-end justify-center gap-2 sm:gap-6 mt-4 mb-2 overflow-x-auto no-scrollbar pb-4 px-2">
             {/* 2nd Place */}
-            <PodiumCard
-              user={sortedRankings[1]}
-              rank={2}
-              color="slate"
-              delay="delay-100"
-              score={getScore(sortedRankings[1])}
-            />
+            <div className="order-1 flex-1 min-w-[100px] sm:min-w-0">
+              <PodiumCard
+                user={sortedRankings[1]}
+                rank={2}
+                color="slate"
+                delay="delay-100"
+                score={getScore(sortedRankings[1])}
+              />
+            </div>
             {/* 1st Place */}
-            <PodiumCard
-              user={sortedRankings[0]}
-              rank={1}
-              color="orange"
-              delay="delay-0"
-              isLarge
-              score={getScore(sortedRankings[0])}
-            />
+            <div className="order-2 flex-1 min-w-[110px] sm:min-w-0 transform -translate-y-4 sm:-translate-y-6 scale-105 sm:scale-125 z-10">
+              <PodiumCard
+                user={sortedRankings[0]}
+                rank={1}
+                color="orange"
+                delay="delay-0"
+                isLarge
+                score={getScore(sortedRankings[0])}
+              />
+            </div>
             {/* 3rd Place */}
-            <PodiumCard
-              user={sortedRankings[2]}
-              rank={3}
-              color="amber"
-              delay="delay-200"
-              score={getScore(sortedRankings[2])}
-            />
+            <div className="order-3 flex-1 min-w-[100px] sm:min-w-0">
+              <PodiumCard
+                user={sortedRankings[2]}
+                rank={3}
+                color="amber"
+                delay="delay-200"
+                score={getScore(sortedRankings[2])}
+              />
+            </div>
           </div>
         )}
 
         {/* Full List */}
+        <div className="bg-white rounded-[2rem] border border-[#FDE6C6] shadow-xl overflow-hidden mt-4 md:mt-8">
           <ReusableTable
             columns={[
               {
                 header: "Rank",
                 key: "rank",
-                className: "px-8 py-5",
+                className: "px-4 md:px-8 py-5",
                 render: (_, index) => (
                   <div className="flex items-center gap-3">
                     <span
                       className={`
-                      w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm
+                      w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center font-black text-xs md:text-sm
                       ${
                         index === 0
                           ? "bg-orange-100 text-orange-600 border border-orange-200 shadow-sm"
@@ -205,29 +204,29 @@ const CompanyLeaderBoard: React.FC = () => {
               {
                 header: "Typist",
                 key: "name",
-                className: "px-8 py-5",
+                className: "px-4 md:px-8 py-5",
                 render: (user, index) => (
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
+                  <div className="flex items-center gap-3 md:gap-4 max-w-[120px] md:max-w-none">
+                    <div className="relative shrink-0">
                       <img
                         src={
                           user.imageUrl ||
                           `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
                         }
                         alt={user.name}
-                        className="w-12 h-12 rounded-xl border-2 border-white shadow-sm object-cover bg-gray-100"
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-xl border-2 border-white shadow-sm object-cover bg-gray-100"
                       />
                       {index === 0 && (
-                        <div className="absolute -top-1.5 -right-1.5 bg-orange-500 rounded-full p-1 border-2 border-white">
+                        <div className="absolute -top-1 -right-1 bg-orange-500 rounded-full p-0.5 border-2 border-white">
                           <Star className="w-2 h-2 text-white fill-current" />
                         </div>
                       )}
                     </div>
-                    <div>
-                      <p className="font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+                    <div className="truncate">
+                      <p className="font-bold text-gray-900 group-hover:text-orange-600 transition-colors truncate text-sm md:text-base">
                         {user.name}
                       </p>
-                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+                      <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5 hidden sm:block">
                         Active Typist
                       </p>
                     </div>
@@ -237,17 +236,17 @@ const CompanyLeaderBoard: React.FC = () => {
               {
                 header: "Stats",
                 key: "stats",
-                headerClassName: "text-center",
-                className: "px-8 py-5 text-center",
+                headerClassName: "text-center hidden sm:table-cell",
+                className: "px-4 md:px-8 py-5 text-center hidden sm:table-cell",
                 render: (user) => (
                   <div className="flex flex-col items-center justify-center gap-1">
-                    <span className="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-bold text-gray-600 flex items-center gap-1 border border-gray-100">
-                      <Zap className="w-3 h-3 text-orange-400 fill-current" />
+                    <span className="px-2 md:px-3 py-1 bg-gray-50 rounded-full text-[9px] md:text-[10px] font-black text-gray-600 flex items-center gap-1 border border-gray-100 uppercase tracking-widest">
+                      <Zap className="w-2.5 h-2.5 text-orange-400 fill-current" />
                       {user.wpm} WPM
                     </span>
-                    <span className="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-bold text-gray-500 flex items-center gap-1 border border-gray-100">
-                      <Target className="w-3 h-3 text-blue-400" />
-                      {user.accuracy}% ACC
+                    <span className="px-2 md:px-3 py-1 bg-gray-50 rounded-full text-[9px] md:text-[10px] font-black text-gray-500 flex items-center gap-1 border border-gray-100 uppercase tracking-widest">
+                      <Target className="w-2.5 h-2.5 text-blue-400" />
+                      {user.accuracy}%
                     </span>
                   </div>
                 ),
@@ -256,16 +255,16 @@ const CompanyLeaderBoard: React.FC = () => {
                 header: "Score",
                 key: "score",
                 headerClassName: "text-right",
-                className: "px-8 py-5 text-right",
+                className: "px-4 md:px-8 py-5 text-right",
                 render: (user) => (
                   <div className="flex flex-col items-end">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-2xl font-black text-gray-900 group-hover:text-orange-500 transition-colors tracking-tight">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-lg md:text-2xl font-black text-gray-900 group-hover:text-orange-500 transition-colors tracking-tight">
                         {getScore(user)}
                       </span>
-                      <span className="text-[10px] font-black text-gray-400 uppercase">PTS</span>
+                      <span className="text-[9px] font-black text-gray-400 uppercase">PTS</span>
                     </div>
-                    <div className="h-1 w-24 bg-gray-100 rounded-full mt-2 overflow-hidden">
+                    <div className="h-1 w-16 md:w-24 bg-gray-100 rounded-full mt-2 overflow-hidden hidden sm:block">
                       <div
                         className="h-full bg-orange-400 rounded-full transition-all duration-1000"
                         style={{
@@ -279,32 +278,33 @@ const CompanyLeaderBoard: React.FC = () => {
             ]}
             data={sortedRankings}
             isLoading={isLoading}
-            emptyMessage="No rankings yet! Complete your first lesson or contest to appear on the leaderboard."
+            emptyMessage="No rankings yet!"
             rowClassName={(_user, index) =>
-              `group hover:bg-orange-50/30 transition-colors duration-200 ${index < 3 ? "bg-orange-100/10" : ""}`
+              `group hover:bg-orange-50/30 transition-colors duration-200 border-b border-orange-50/50 ${index < 3 ? "bg-orange-100/10" : ""}`
             }
-            columnHeaderClassName="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]"
+            columnHeaderClassName="px-4 md:px-8 py-4 md:py-5 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]"
             headerClassName="bg-orange-50/50 border-b border-[#FDE6C6] text-left"
           />
+        </div>
 
         {/* Modal for Scoring Explanation */}
         {isModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             {/* Backdrop */}
             <div
-              className="absolute inset-0 bg-black/40 backdrop-blur-md animate-in fade-in duration-300"
+              className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300"
               onClick={() => setIsModalOpen(false)}
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-300 border border-[#FDE6C6]">
+            <div className="relative bg-[#FFFDF9] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-8 duration-300 border border-[#FDE6C6] flex flex-col">
               {/* Header */}
-              <div className="sticky top-0 bg-white/80 backdrop-blur-md px-8 py-6 flex items-center justify-between border-b border-orange-50 z-10">
+              <div className="sticky top-0 bg-white/80 backdrop-blur-md px-6 md:px-8 py-5 md:py-6 flex items-center justify-between border-b border-orange-100 z-10">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-orange-100 rounded-2xl">
-                    <Info className="w-6 h-6 text-orange-600" />
+                  <div className="p-2.5 bg-orange-100 rounded-xl">
+                    <Info className="w-5 h-5 md:w-6 md:h-6 text-orange-600" />
                   </div>
-                  <h2 className="text-2xl font-black text-[#111827]">Leaderboard Scoring</h2>
+                  <h2 className="text-xl md:text-2xl font-black text-[#111827]">Scoring System</h2>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
@@ -315,46 +315,42 @@ const CompanyLeaderBoard: React.FC = () => {
               </div>
 
               {/* Scrollable Content */}
-              <div className="p-8 md:p-12 overflow-y-auto max-h-[calc(90vh-80px)]">
-                <div className="flex flex-col md:flex-row gap-12">
+              <div className="p-6 md:p-10 overflow-y-auto">
+                <div className="flex flex-col lg:flex-row gap-8 md:gap-12">
                   <div className="flex-1">
                     <div className="space-y-6">
-                      <p className="text-gray-600 leading-relaxed font-medium text-lg">
-                        Your rank is determined by a comprehensive scoring system that rewards both speed and accuracy.
+                      <p className="text-gray-600 leading-relaxed font-medium text-base md:text-lg">
+                        The scoring system rewards both speed and accuracy. The formula is:
                       </p>
 
                       {/* Formula Card */}
-                      <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-8 rounded-[2rem] text-white shadow-lg shadow-orange-500/20 relative overflow-hidden group">
-                        <Sparkles className="absolute top-4 right-4 w-12 h-12 text-white/10 group-hover:rotate-12 transition-transform duration-500" />
-                        <p className="text-orange-100 text-xs font-black uppercase tracking-widest mb-2">
-                          The Calculation
-                        </p>
-                        <div className="flex flex-wrap items-center gap-2 text-xl md:text-3xl font-black tracking-tight">
-                          <span>WPM</span>
-                          <span className="text-orange-300">×</span>
-                          <span>Accuracy%</span>
-                          <span className="text-orange-300">×</span>
-                          <span>Multipliers</span>
-                          <span className="text-orange-300">=</span>
-                          <span className="bg-white text-orange-600 px-4 py-1 rounded-xl shadow-sm">Score</span>
+                      <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] text-white shadow-lg shadow-orange-500/20 relative overflow-hidden group text-center md:text-left">
+                        <Sparkles className="absolute top-4 right-4 w-10 h-10 md:w-12 md:h-12 text-white/10 group-hover:rotate-12 transition-transform duration-500" />
+                        <p className="text-orange-100 text-[10px] font-black uppercase tracking-widest mb-4">Calculation</p>
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 text-lg md:text-2xl font-black tracking-tight">
+                          <span className="bg-white/10 px-3 py-1 rounded-lg">WPM</span>
+                          <span className="text-orange-300 text-xl">×</span>
+                          <span className="bg-white/10 px-3 py-1 rounded-lg">ACC%</span>
+                          <span className="text-orange-300 text-xl">×</span>
+                          <span className="bg-white/10 px-3 py-1 rounded-lg">Multipliers</span>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="p-5 bg-orange-50/50 rounded-2xl border border-orange-100">
-                          <h4 className="font-bold text-orange-800 mb-1 flex items-center gap-2">
-                            <Zap className="w-4 h-4" /> Speed (WPM)
+                        <div className="p-5 bg-white rounded-2xl border border-orange-100 shadow-sm">
+                          <h4 className="font-black text-orange-800 mb-2 flex items-center gap-2 uppercase tracking-widest text-[10px]">
+                            <Zap className="w-3 h-3" /> Speed (WPM)
                           </h4>
-                          <p className="text-sm text-orange-700/70 font-medium leading-normal">
+                          <p className="text-xs text-orange-700/70 font-medium leading-relaxed">
                             Your raw typing speed in Words Per Minute.
                           </p>
                         </div>
-                        <div className="p-5 bg-blue-50/50 rounded-2xl border border-blue-100">
-                          <h4 className="font-bold text-blue-800 mb-1 flex items-center gap-2">
-                            <Target className="w-4 h-4" /> Accuracy
+                        <div className="p-5 bg-white rounded-2xl border border-blue-100 shadow-sm">
+                          <h4 className="font-black text-blue-800 mb-2 flex items-center gap-2 uppercase tracking-widest text-[10px]">
+                            <Target className="w-3 h-3" /> Accuracy
                           </h4>
-                          <p className="text-sm text-blue-700/70 font-medium leading-normal">
-                            Precision matters. Higher accuracy yields a higher final score multiplier.
+                          <p className="text-xs text-blue-700/70 font-medium leading-relaxed">
+                            Higher accuracy yields a higher final score multiplier.
                           </p>
                         </div>
                       </div>
@@ -362,16 +358,13 @@ const CompanyLeaderBoard: React.FC = () => {
                   </div>
 
                   <div className="flex-1 flex flex-col gap-6">
-                    <h3 className="text-sm font-black text-gray-400 flex items-center gap-2 uppercase tracking-[0.2em] mb-2">
+                    <h3 className="text-[10px] font-black text-gray-400 flex items-center gap-2 uppercase tracking-[0.2em] mb-2">
                       Active Multipliers
                     </h3>
 
-                    <div className="grid gap-4">
+                    <div className="grid gap-3 md:gap-4">
                       {/* Activity Multipliers */}
-                      <div className="bg-gray-50 rounded-3xl p-6 border border-gray-100 shadow-sm">
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-1.5 leading-none">
-                          <Trophy className="w-3 h-3" /> Activity Type
-                        </p>
+                      <div className="bg-white rounded-2xl p-5 md:p-6 border border-gray-100 shadow-sm">
                         <div className="space-y-4">
                           <MultiplierItem icon={<BookOpen className="w-4 h-4" />} label="Lessons" multiplier="1.0x" />
                           <MultiplierItem
@@ -390,10 +383,7 @@ const CompanyLeaderBoard: React.FC = () => {
                       </div>
 
                       {/* Difficulty Multipliers */}
-                      <div className="bg-gray-50 rounded-3xl p-6 border border-gray-100 shadow-sm">
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-1.5 leading-none">
-                          <Flame className="w-3 h-3" /> Lesson Difficulty
-                        </p>
+                      <div className="bg-white rounded-2xl p-5 md:p-6 border border-gray-100 shadow-sm">
                         <div className="space-y-4">
                           <MultiplierItem
                             icon={<Flame className="w-4 h-4 text-green-500" />}
@@ -418,8 +408,8 @@ const CompanyLeaderBoard: React.FC = () => {
               </div>
 
               {/* Footer */}
-              <div className="bg-orange-50/50 p-6 flex items-center justify-center border-t border-orange-50">
-                <p className="text-xs font-bold text-orange-600/60 uppercase tracking-widest text-center">
+              <div className="bg-orange-50/30 p-6 flex items-center justify-center border-t border-orange-100">
+                <p className="text-[10px] font-black text-orange-600/40 uppercase tracking-widest text-center">
                   Scores update in real-time as you complete activities.
                 </p>
               </div>
@@ -488,15 +478,15 @@ const PodiumCard: React.FC<{
   return (
     <div
       className={`
-      flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both ${delay}
-      ${isLarge ? "order-1 md:order-2 mb-8" : rank === 2 ? "order-2 md:order-1" : "order-3"}
+      flex flex-col items-center gap-2 sm:gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both ${delay}
+      ${isLarge ? "mb-2 sm:mb-8" : ""}
     `}
     >
       <div className="relative">
         <div
           className={`
-          ${isLarge ? "w-32 h-32" : "w-24 h-24"} 
-          rounded-3xl border-4 border-white shadow-2xl relative overflow-hidden group
+          ${isLarge ? "w-24 h-24 sm:w-32 sm:h-32" : "w-16 h-16 sm:w-24 sm:h-24"} 
+          rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-white shadow-xl sm:shadow-2xl relative overflow-hidden group
         `}
         >
           <img
@@ -504,26 +494,26 @@ const PodiumCard: React.FC<{
             alt={user.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 bg-gray-100"
           />
-          <div className={`absolute bottom-0 left-0 w-full ${style.bg} h-1.5 opacity-80`} />
+          <div className={`absolute bottom-0 left-0 w-full ${style.bg} h-1 md:h-1.5 opacity-80`} />
         </div>
         <div
           className={`
-          absolute -bottom-3 -right-3 w-10 h-10 ${style.bg} text-white rounded-xl shadow-lg
-          flex items-center justify-center font-black border-2 border-white
+          absolute -bottom-2 -right-2 sm:-bottom-3 sm:-right-3 w-7 h-7 sm:w-10 sm:h-10 ${style.bg} text-white rounded-lg sm:rounded-xl shadow-lg
+          flex items-center justify-center font-black border-2 border-white text-[10px] sm:text-base
         `}
         >
           {rank}
         </div>
       </div>
 
-      <div className="text-center">
-        <h3 className="font-black text-gray-900 text-lg leading-none mb-2">{user.name}</h3>
-        <div className={`flex items-center justify-center gap-1.5 ${style.text} font-black italic`}>
-          <Icon className="w-4 h-4" />
-          <span className="text-2xl tracking-tight">{score}</span>
-          <span className="text-xs uppercase ml-0.5 opacity-80">PTS</span>
+      <div className="text-center px-1">
+        <h3 className="font-black text-gray-900 text-xs sm:text-lg leading-none mb-1 sm:mb-2 truncate max-w-[80px] sm:max-w-none">{user.name}</h3>
+        <div className={`flex items-center justify-center gap-1 ${style.text} font-black italic`}>
+          <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+          <span className="text-sm sm:text-2xl tracking-tight">{score}</span>
+          <span className="text-[8px] sm:text-xs uppercase ml-0.5 opacity-80">PTS</span>
         </div>
-        <div className="flex items-center justify-center gap-2 mt-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+        <div className="hidden sm:flex items-center justify-center gap-2 mt-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
           <span className="flex items-center gap-0.5">
             <Zap className="w-3 h-3 text-orange-400" /> {user.wpm}
           </span>

@@ -29,32 +29,32 @@ const TeammateCard = ({
   return (
     <div className="bg-[#FAF3E0] rounded-2xl overflow-hidden shadow-sm border border-[#EBE3D5] flex flex-col relative group hover:shadow-md transition-all">
       {/* Top Banner */}
-      <div className="h-24 bg-gradient-to-r from-[#5a483e] to-[#40332c] relative">
-        <div className="absolute top-4 right-4 z-10">
+      <div className="h-12 md:h-24 bg-gradient-to-r from-[#5a483e] to-[#40332c] relative">
+        <div className="absolute top-1 md:top-4 right-1 md:right-4 z-10">
           <span
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold shadow-sm ${teammate.online === true ? "bg-[#1DCE6C] text-white" : "bg-[#A8A2A0] text-white"}`}
+            className={`inline-flex items-center gap-0.5 md:gap-1.5 px-1 md:px-2.5 py-0.5 md:py-1 rounded-full text-[6px] md:text-xs font-bold shadow-sm ${teammate.online === true ? "bg-[#1DCE6C] text-white" : "bg-[#A8A2A0] text-white"}`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-white opacity-80 animate-pulse"></span>
-            {teammate.online === true ? "Online" : "Offline"}
+            <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-white opacity-80 animate-pulse"></span>
+            {teammate.online === true ? "On" : "Off"}
           </span>
         </div>
       </div>
 
       {/* Content body */}
-      <div className="px-6 flex-1 flex flex-col pb-6 relative -mt-10">
+      <div className="px-1.5 md:px-6 flex-1 flex flex-col pb-2 md:pb-6 relative -mt-6 md:-mt-10">
         {/* Avatar */}
-        <div className="mb-3">
+        <div className="mb-1 md:mb-3">
           <img
             src={teammate.avatar}
             alt={teammate.name}
-            className="w-20 h-20 rounded-2xl object-cover border-4 border-[#FAF3E0] shadow-sm bg-white"
+            className="w-10 h-10 md:w-20 md:h-20 rounded-lg md:rounded-2xl object-cover border-2 md:border-4 border-[#FAF3E0] shadow-sm bg-white"
           />
         </div>
 
         {/* Info */}
-        <div className="mb-5">
-          <h3 className="text-[17px] font-bold text-gray-900 mb-0.5">{teammate.name}</h3>
-          <p className="text-sm font-medium text-indigo-500/80">{teammate.companyRole}</p>
+        <div className="mb-2 md:mb-5">
+          <h3 className="text-[10px] md:text-[17px] font-bold text-gray-900 mb-0.5 truncate">{teammate.name}</h3>
+          <p className="text-[8px] md:text-sm font-medium text-indigo-500/80 truncate">{teammate.companyRole}</p>
         </div>
 
         {/* Stats */}
@@ -119,14 +119,15 @@ const TeammateCard = ({
           <button
             disabled={!teammate.online}
             onClick={handleChallenge}
-            className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+            className={`w-full py-1.5 md:py-3 rounded-lg md:rounded-xl font-bold flex items-center justify-center gap-1 md:gap-2 transition-all text-[9px] md:text-sm ${
               teammate.online
                 ? "bg-[#B09D89] hover:bg-[#A3907C] text-white shadow-sm"
                 : "bg-[#E5DFD3] text-[#A8A2A0] cursor-not-allowed"
             }`}
           >
-            <Swords className="w-4 h-4" />
-            {!teammate.online ? "Offline" : "Challenge"}
+            <Swords className="w-3 md:w-4 h-3 md:h-4" />
+            <span className="hidden xs:inline">{!teammate.online ? "Offline" : "Challenge"}</span>
+            <span className="xs:hidden">{!teammate.online ? "Off" : "Go"}</span>
           </button>
         )}
       </div>

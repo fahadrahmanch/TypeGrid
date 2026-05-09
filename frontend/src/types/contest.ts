@@ -16,6 +16,7 @@ export interface ContestProps {
   startTime?: string;
   type?: "open" | "group";
   setContests: React.Dispatch<React.SetStateAction<ContestProps[]>>;
+  fetchContests: () => void;
 }
 
 export type PlayerStatus = "PLAYING" | "DISCONNECTED" | "FINISHED" | "LEFT";

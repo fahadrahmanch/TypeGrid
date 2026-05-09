@@ -43,10 +43,10 @@ const ChallengeArena = ({ setView }: { setView: (v: "arena" | "my-challenges") =
         <div className="w-full relative py-6">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#AD9B8E] to-transparent opacity-80 blur-sm pointer-events-none"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#AD9B8E] to-transparent pointer-events-none"></div>
-          <h1 className="text-4xl font-black text-gray-900 relative z-10 tracking-tight">Challenge Your Teammates</h1>
+          <h1 className="text-2xl md:text-4xl font-black text-gray-900 relative z-10 tracking-tight px-4">Challenge Your Teammates</h1>
         </div>
 
-        <p className="text-gray-500 font-medium mt-4 mb-8">Compete with colleagues and track your typing performance</p>
+        <p className="text-gray-500 font-medium mt-2 md:mt-4 mb-6 md:mb-8 text-xs md:text-base px-6">Compete with colleagues and track your typing performance</p>
 
         <button
           onClick={() => setView("my-challenges")}
@@ -58,7 +58,7 @@ const ChallengeArena = ({ setView }: { setView: (v: "arena" | "my-challenges") =
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 flex gap-4 shadow-sm border border-[#EBE3D5] mb-10 sticky top-24 z-20">
+      <div className="bg-white/80 backdrop-blur-md rounded-2xl p-3 md:p-4 flex gap-4 shadow-sm border border-[#EBE3D5] mb-8 md:mb-10 sticky top-20 md:top-24 z-20 mx-2 md:mx-0">
         <div className="flex-1 relative">
           <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
           <input
@@ -87,7 +87,7 @@ const ChallengeArena = ({ setView }: { setView: (v: "arena" | "my-challenges") =
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-3 gap-2 md:gap-8 px-1 md:px-0">
         {users
           .filter((user) => user._id !== companyUser?._id)
           .map((user) => (

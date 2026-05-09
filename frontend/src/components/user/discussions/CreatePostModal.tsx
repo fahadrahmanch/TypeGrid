@@ -32,10 +32,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onSu
       />
 
       {/* Modal Content */}
-      <div className="relative bg-[#FFF8EA] rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col font-sans">
+      <div className="relative bg-[#FFF8EA] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-300 flex flex-col font-sans">
         {/* Header */}
-        <div className="px-8 pt-8 pb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-black text-gray-800 tracking-tight">Create post</h2>
+        <div className="px-6 md:px-8 pt-6 md:pt-8 pb-3 md:pb-4 flex items-center justify-between sticky top-0 bg-[#FFF8EA] z-10 border-b border-[#ECA468]/5">
+          <h2 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight">Create post</h2>
           <button 
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-xl transition-all text-gray-400 hover:text-gray-600"
@@ -44,10 +44,10 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onSu
           </button>
         </div>
 
-        <div className="p-8 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="bg-[#FAF5E9] p-6 rounded-3xl border border-[#ECA468]/10 shadow-sm">
-              <label className="block text-[10px] font-black text-[#D0864B]/60 uppercase tracking-[0.2em] mb-3 ml-1">
+        <div className="p-6 md:p-8 space-y-5 md:space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
+            <div className="bg-[#FAF5E9] p-4 md:p-6 rounded-2xl md:rounded-3xl border border-[#ECA468]/10 shadow-sm">
+              <label className="block text-[9px] md:text-[10px] font-black text-[#D0864B]/60 uppercase tracking-[0.2em] mb-2 md:mb-3 ml-1">
                 The title of your post
               </label>
               <input
@@ -55,13 +55,13 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onSu
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 autoFocus
-                placeholder="Give your topic a clear, concise name..."
-                className="w-full bg-transparent outline-none font-bold text-[#1A1512] placeholder:text-[#D0864B]/20 transition-all border-b-2 border-[#ECA468]/5 focus:border-[#ECA468] py-2"
+                placeholder="Give your topic a clear name..."
+                className="w-full bg-transparent outline-none font-bold text-sm md:text-base text-[#1A1512] placeholder:text-[#D0864B]/20 transition-all border-b-2 border-[#ECA468]/5 focus:border-[#ECA468] py-2"
               />
             </div>
 
-            <div className="bg-[#FAF5E9] p-6 rounded-[2rem] border border-[#ECA468]/10 shadow-sm min-h-[300px] flex flex-col">
-              <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 ml-1">
+            <div className="bg-[#FAF5E9] p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-[#ECA468]/10 shadow-sm min-h-[200px] md:min-h-[300px] flex flex-col">
+              <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 md:mb-4 ml-1">
                 <AlignLeft size={12} className="text-[#D0864B]" />
                 The content of your posts
               </label>
@@ -69,15 +69,15 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onSu
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What's on your mind? Start typing here..."
-                className="flex-1 w-full bg-transparent outline-none font-medium text-gray-700 placeholder:text-gray-300 resize-none leading-relaxed text-sm"
+                className="flex-1 w-full bg-transparent outline-none font-medium text-gray-700 placeholder:text-gray-300 resize-none leading-relaxed text-xs md:text-sm"
               />
             </div>
 
-            <div className="flex items-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 pt-2">
               <button
                 type="submit"
                 disabled={!title || !content}
-                className="px-10 py-4 bg-[#8C7B6B] hover:bg-[#736558] text-white rounded-2xl font-black shadow-lg shadow-[#8C7B6B]/20 transition-all uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="w-full sm:w-auto px-10 py-3.5 md:py-4 bg-[#8C7B6B] hover:bg-[#736558] text-white rounded-xl md:rounded-2xl font-black shadow-lg shadow-[#8C7B6B]/20 transition-all uppercase tracking-widest text-[9px] md:text-[10px] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 <Send size={14} className="group-hover:translate-x-1 transition-transform" />
                 <span>Post</span>
@@ -86,7 +86,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, onSu
               <button
                 type="button"
                 onClick={onClose}
-                className="px-10 py-4 bg-[#EBDDC8] hover:bg-[#DBCFB8] text-[#8C7B6B] rounded-2xl font-black transition-all uppercase tracking-widest text-[10px]"
+                className="w-full sm:w-auto px-10 py-3.5 md:py-4 bg-[#EBDDC8] hover:bg-[#DBCFB8] text-[#8C7B6B] rounded-xl md:rounded-2xl font-black transition-all uppercase tracking-widest text-[9px] md:text-[10px]"
               >
                 Cancel
               </button>

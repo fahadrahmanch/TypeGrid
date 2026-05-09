@@ -103,9 +103,9 @@ const SubscriptionPlans: React.FC = () => {
 
       <div className="max-w-5xl mx-auto">
    
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Unlock Your Typing Potential!</h1>
-          <p className="text-lg text-gray-600">Upgrade to Premium for an Enhanced Experience</p>
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight">Unlock Your Typing Potential!</h1>
+          <p className="text-base md:text-lg text-gray-600 font-medium">Upgrade to Premium for an Enhanced Experience</p>
         </div>
 
         {/* <div className="grid md:grid-cols-2 gap-8 mb-16">
@@ -165,15 +165,14 @@ const SubscriptionPlans: React.FC = () => {
           </div>
         </div> */}
 
-        {/* Pricing Section */}
-        <div className="bg-white/40 backdrop-blur-md rounded-[40px] p-10 border border-white/60 shadow-xl max-w-3xl mx-auto mb-16">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Choose Your Plan</h2>
-            <p className="text-sm text-gray-500">Unlock premium features and compete at the highest level</p>
+        <div className="bg-white/40 backdrop-blur-md rounded-[2.5rem] md:rounded-[40px] p-6 md:p-10 border border-white/60 shadow-xl max-w-3xl mx-auto mb-12 md:mb-16">
+          <div className="text-center mb-8 md:mb-10">
+            <h2 className="text-xl md:text-2xl font-black text-gray-900 mb-2">Choose Your Plan</h2>
+            <p className="text-xs md:text-sm text-gray-500 font-bold uppercase tracking-widest">Unlock premium features</p>
           </div>
 
           <div
-            className={`grid gap-6 mb-10 ${normalPlans.length > 1 ? "sm:grid-cols-2 lg:grid-cols-3" : "max-w-md mx-auto"}`}
+            className={`grid gap-4 md:gap-6 mb-8 md:mb-10 ${normalPlans.length > 1 ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "max-w-md mx-auto"}`}
           >
             {normalPlans.map((plan) => (
               <div
@@ -181,22 +180,22 @@ const SubscriptionPlans: React.FC = () => {
                 onClick={() => setSelectedPlanId(plan.id)}
                 className={`cursor-pointer rounded-2xl p-6 transition-all duration-300 border-2 relative ${
                   selectedPlanId === plan.id
-                    ? "bg-yellow-50/50 border-yellow-200"
+                    ? "bg-[#8B7355]/5 border-[#8B7355] shadow-lg shadow-[#8B7355]/10 scale-[1.02]"
                     : "bg-white/50 border-transparent hover:border-gray-200"
                 }`}
               >
                 <div className="text-center">
-                  <h3 className="font-medium text-gray-900 mb-4">{plan.name}</h3>
+                  <h3 className="font-black text-gray-900 mb-4 uppercase tracking-widest text-xs">{plan.name}</h3>
                   <div className="flex items-baseline justify-center gap-1 mb-1">
-                    <span className="text-3xl font-black">${plan.price}</span>
+                    <span className="text-3xl font-black text-gray-900">${plan.price}</span>
                   </div>
-                  <p className="text-xs text-gray-500">for {plan.duration} days</p>
+                  <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">for {plan.duration} days</p>
 
                   <div className="mt-6 space-y-3 text-left">
-                    {plan.features.map((feature, fIndex) => (
-                      <div key={fIndex} className="flex items-center gap-2 text-sm text-gray-600">
-                        <Check className="w-4 h-4 text-green-500 shrink-0" />
-                        <span>{feature}</span>
+                    {plan.features.slice(0, 5).map((feature, fIndex) => (
+                      <div key={fIndex} className="flex items-center gap-2 text-[11px] md:text-xs text-gray-600 font-bold">
+                        <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span className="line-clamp-1">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -215,36 +214,35 @@ const SubscriptionPlans: React.FC = () => {
           <div className="text-center">
             <button
               onClick={() => handleUpgrade()}
-              className="bg-[#8B7355] hover:bg-[#766248] text-white px-10 py-4 rounded-xl font-bold flex items-center justify-center gap-2 mx-auto transition-all shadow-lg hover:shadow-xl active:scale-95 mb-4 group"
+              className="w-full md:w-auto bg-[#8B7355] hover:bg-[#766248] text-white px-10 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-2 mx-auto transition-all shadow-lg hover:shadow-[#8B7355]/20 active:scale-95 mb-4 group"
             >
-              Upgrade to Premium
+              UPGRADE NOW
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <p className="text-xs text-gray-500">Join thousands of typing champions worldwide</p>
+            <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Join typing champions worldwide</p>
           </div>
         </div>
 
-        {/* Company Subscription Banner */}
         <div className="relative group">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-[32px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-          <div className="relative bg-gradient-to-r from-[#A855F7] to-[#3B82F6] rounded-[32px] p-8 md:p-12 text-center text-white shadow-2xl overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/20 rounded-full -ml-32 -mb-32 blur-3xl"></div>
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-[2.5rem] md:rounded-[32px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+          <div className="relative bg-gradient-to-r from-[#A855F7] to-[#3B82F6] rounded-[2.5rem] md:rounded-[32px] p-8 md:p-12 text-center text-white shadow-2xl overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-white/10 rounded-full -mr-24 -mt-24 md:-mr-32 md:-mt-32 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 md:w-64 md:h-64 bg-blue-500/20 rounded-full -ml-24 -mb-24 md:-ml-32 -mb-32 blur-3xl"></div>
 
             <div className="relative z-10 flex flex-col items-center">
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-6 backdrop-blur-sm">
                 <Users className="w-6 h-6" />
               </div>
-              <h2 className="text-3xl font-bold mb-4">Company Subscription</h2>
-              <p className="text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
+              <h2 className="text-2xl md:text-3xl font-black mb-4 tracking-tight">Company Subscription</h2>
+              <p className="text-white/80 text-sm md:text-base max-w-2xl mx-auto mb-8 leading-relaxed font-medium">
                 Join exclusive company contests, compete with your team, and climb the corporate leaderboard. Perfect
-                for teams looking to improve typing skills together while having fun!
+                for teams looking to improve typing skills together!
               </p>
               <button
                 onClick={() => navigate("/subscription/company")}
-                className="bg-white text-purple-600 px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-white/20 flex items-center gap-2 group"
+                className="w-full md:w-auto bg-white text-purple-600 px-8 py-3.5 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-opacity-90 transition-all shadow-lg hover:shadow-white/20 flex items-center justify-center gap-2 group"
               >
-                Go to Company Subscription
+                GO TO COMPANY PLAN
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>

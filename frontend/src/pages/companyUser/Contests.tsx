@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import UserContestCard from "../../components/companyUser/contests/UserContestCard";
-import { openContestApi } from "../../api/companyUser/contests";
+import { openContestApi, groupContestApi } from "../../api/companyUser/contests";
 import { useState } from "react";
-import { groupContestApi } from "../../api/companyUser/contests";
 export interface RewardResponseDTO {
   rank: number;
   prize: number;
@@ -30,7 +27,6 @@ export interface ContestResponseDTO {
   rewards: RewardResponseDTO[];
 }
 const Contests: React.FC = () => {
-  const navigate = useNavigate();
   const [openContests, setOpenContests] = useState<ContestResponseDTO[]>([]);
   const [groupContests, setGroupContests] = useState<ContestResponseDTO[]>([]);
 
@@ -55,32 +51,32 @@ const Contests: React.FC = () => {
     <div className="min-h-screen bg-[#FFF8EA]">
       <CompanyUserNavbar />
 
-      <main className="pt-24 px-8 max-w-7xl mx-auto pb-12">
+      <main className="pt-20 md:pt-24 px-4 md:px-8 max-w-7xl mx-auto pb-12">
         {/* Header */}
-        <div className="flex items-start gap-4 mb-10">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
-          </button>
+        <div className="flex items-start gap-4 mb-8 md:mb-10">
+      
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">Available Contests</h1>
-            <p className="text-gray-500">Join a contest and compete with others</p>
+            <h1 className="text-2xl md:text-3xl font-black text-gray-900 mb-1 tracking-tight">Contests</h1>
+            <p className="text-xs md:text-sm text-gray-500 font-bold uppercase tracking-widest opacity-70">
+              Compete with others and prove your speed
+            </p>
           </div>
         </div>
 
         {/* Group Contests Section */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Group Contests</h2>
-            <span className="bg-blue-100 text-blue-700 font-semibold px-3 py-1 rounded-lg text-sm">
-              {groupContests.length} Available
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-6 bg-blue-500 rounded-full"></div>
+              <h2 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight">Group Events</h2>
+            </div>
+            <span className="bg-blue-50 text-blue-600 font-black px-3 py-1.5 rounded-xl text-[10px] md:text-xs uppercase tracking-widest border border-blue-100 shadow-sm">
+              {groupContests.length} Active
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {groupContests.length > 0 &&
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 px-1 md:px-0">
+            {groupContests.length > 0 ? (
               groupContests.map((contest) => {
                 const start = new Date(contest.startTime);
                 return (
@@ -106,47 +102,61 @@ const Contests: React.FC = () => {
                     actionLabel="Join Contest"
                   />
                 );
-              })}
+              })
+            ) : (
+              <div className="col-span-full py-12 text-center bg-white/50 rounded-[2rem] border-2 border-dashed border-gray-200">
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No active group contests</p>
+              </div>
+            )}
           </div>
         </section>
 
         {/* Open Contests Section */}
         <section>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Open Contests</h2>
-            <span className="bg-emerald-100 text-emerald-700 font-semibold px-3 py-1 rounded-lg text-sm">
-              {openContests.length} Available
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-6 bg-emerald-500 rounded-full"></div>
+              <h2 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight">Public Arena</h2>
+            </div>
+            <span className="bg-emerald-50 text-emerald-600 font-black px-3 py-1.5 rounded-xl text-[10px] md:text-xs uppercase tracking-widest border border-emerald-100 shadow-sm">
+              {openContests.length} Open
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {openContests.map((contest) => {
-              const start = new Date(contest.startTime);
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6 px-1 md:px-0">
+            {openContests.length > 0 ? (
+              openContests.map((contest) => {
+                const start = new Date(contest.startTime);
 
-              return (
-                <UserContestCard
-                  key={contest._id as string}
-                  _id={contest._id as string}
-                  title={contest.title}
-                  description={contest.description}
-                  status={contest.status}
-                  participants={contest.participants}
-                  maxParticipants={contest.maxParticipants}
-                  duration={contest.duration}
-                  joined={contest.joined}
-                  difficulty={contest.difficulty}
-                  startTime={contest.startTime}
-                  reward={contest.rewards}
-                  date={start.toLocaleDateString("en-IN", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                  isGroup={contest.contestMode === "group"}
-                  actionLabel="Join Contest"
-                />
-              );
-            })}
+                return (
+                  <UserContestCard
+                    key={contest._id as string}
+                    _id={contest._id as string}
+                    title={contest.title}
+                    description={contest.description}
+                    status={contest.status}
+                    participants={contest.participants}
+                    maxParticipants={contest.maxParticipants}
+                    duration={contest.duration}
+                    joined={contest.joined}
+                    difficulty={contest.difficulty}
+                    startTime={contest.startTime}
+                    reward={contest.rewards}
+                    date={start.toLocaleDateString("en-IN", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                    isGroup={contest.contestMode === "group"}
+                    actionLabel="Join Contest"
+                  />
+                );
+              })
+            ) : (
+              <div className="col-span-full py-12 text-center bg-white/50 rounded-[2rem] border-2 border-dashed border-gray-200">
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No open contests available</p>
+              </div>
+            )}
           </div>
         </section>
       </main>

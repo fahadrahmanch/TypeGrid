@@ -65,7 +65,7 @@ export function useTypingInput({
             accuracy,
             errors,
             typedLength: nextText.length,
-            status: "finished",
+            status: "FINISHED",
           });
         }
       }

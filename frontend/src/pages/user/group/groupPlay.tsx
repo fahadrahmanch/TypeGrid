@@ -15,6 +15,7 @@ import {
   Clock,
   AlertCircle,
   Crown,
+  Users,
 } from "lucide-react";
 
 interface Lesson {
@@ -205,6 +206,8 @@ const GroupPlay: React.FC = () => {
     setFinalResult,
     setIsfinished,
     hasJoinedRef,
+    isFinished,
+
   });
 
   useEffect(() => {
@@ -360,133 +363,93 @@ const GroupPlay: React.FC = () => {
   }, [gameData?._id]);
 
   return (
-    <div className="h-screen bg-[#FFF8EA] font-sans selection:bg-orange-200 selection:text-orange-900 flex flex-col overflow-hidden touch-none">
+    <div className="min-h-screen bg-[#FFF8EA] font-sans selection:bg-orange-200 selection:text-orange-900 flex flex-col overflow-x-hidden">
       <Navbar />
-      <div className="flex-1 min-h-0 pt-20 px-4 md:px-8 pb-4 max-w-[1920px] mx-auto w-full box-border flex flex-col overflow-hidden">
+      <div className="flex-1 pt-24 px-4 md:px-8 pb-4 max-w-[1920px] mx-auto w-full box-border flex flex-col">
         <div className="flex-1 min-h-0 pb-4">
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr_320px] items-stretch h-full">
-            <div className="flex flex-col gap-4 h-full min-h-0">
-              <div className="bg-[#FFF8EA] border border-orange-100 p-4 rounded-3xl shadow-lg shadow-orange-900/5 group shrink-0 relative overflow-hidden">
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-50 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-6 items-start lg:items-stretch lg:h-full">
 
-                <div className="flex items-center gap-3 mb-4 relative">
-                  <div className="relative hover:scale-105 transition-transform duration-300">
-                    <img
-                      src={currentUser?.imageUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"}
-                      alt="me"
-                      className="w-12 h-12 rounded-xl object-cover shadow-md shadow-orange-900/10 ring-4 ring-white"
-                    />
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-[2px] border-white flex items-center justify-center">
-                      <div className="w-1 h-1 bg-white rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-black text-lg text-gray-800 tracking-tight leading-tight truncate">
-                      {currentUser?.name || "Guest"}
-                    </h3>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      {currentUser?.isHost && (
-                        <span className="px-1.5 py-0.5 rounded-full bg-orange-50 border border-orange-100 text-[9px] text-orange-600 font-bold uppercase tracking-wider shadow-sm flex items-center gap-1">
-                          <Crown className="w-2.5 h-2.5" /> Host
-                        </span>
-                      )}
-                    </div>
-                  </div>
+            {/* 1. RACERS SECTION - Top on Mobile (order-1), Right Sidebar on Desktop (lg:order-3) */}
+            <div className="flex flex-col gap-4 lg:h-full order-1 lg:order-3">
+              <div className="bg-[#FFF8EA] rounded-3xl p-4 lg:p-6 shadow-xl shadow-orange-900/5 border border-orange-100 flex-1 flex flex-col relative overflow-hidden">
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-orange-50 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+
+                <div className="flex items-center justify-between mb-4 lg:mb-6 shrink-0 relative">
+                  <h3 className="font-black text-gray-800 text-xs lg:text-sm uppercase tracking-widest flex items-center gap-2">
+                    <Users className="w-3 h-3 lg:w-4 lg:h-4 text-orange-400" /> Racers
+                  </h3>
+                  <span className="bg-orange-500 text-white text-[9px] lg:text-[10px] font-black px-2 lg:px-3 py-1 rounded-full shadow-lg shadow-orange-500/20">
+                    {players?.length || 0} / 4
+                  </span>
                 </div>
 
-                <div
-                  className={`mb-4 p-2.5 rounded-2xl border flex items-center gap-3 shadow-sm transition-all duration-300 ${isFinished ? "bg-emerald-50 border-emerald-100" : "bg-orange-50 border-orange-100"}`}
-                >
-                  <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center shadow-sm ${isFinished ? "bg-emerald-500 text-white" : "bg-orange-500 text-white animate-bounce-subtle"}`}
-                  >
-                    {isFinished ? <Crown className="w-3.5 h-3.5" /> : <Zap className="w-3.5 h-3.5" />}
-                  </div>
-                  <div>
-                    <div
-                      className={`text-[10px] font-bold uppercase tracking-wider ${isFinished ? "text-emerald-800" : "text-orange-800"}`}
-                    >
-                      {phase == "COUNTDOWN" ? "Waiting..." : isFinished ? " Complete" : "Racing..."}
-                    </div>
-                  </div>
-                </div>
+                <div className="flex flex-row lg:flex-col gap-3 lg:gap-4 overflow-x-auto lg:overflow-y-auto pb-2 lg:pb-0 custom-scrollbar flex-1 flex-nowrap">
+                  {livePlayers.map((player) => {
+                    const isPlayerFinished =
+                      player.progress === (lesson?.text.length || 0) && (lesson?.text.length || 0) > 0;
+                    const progressPercent = Math.round(((player?.progress || 0) / (lesson?.text.length || 1)) * 100);
 
-                <div className="grid grid-cols-2 gap-2 relative">
-                  <div className="bg-orange-50/50 p-2.5 rounded-2xl border border-gray-100 hover:border-orange-200 transition-all duration-300">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Zap className="w-3 h-3 text-orange-500" />
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Speed</span>
-                    </div>
-                    <div className="text-xl font-black text-gray-800">
-                      {wpm}
-                      <span className="text-[10px] text-gray-400 font-bold ml-1">wpm</span>
-                    </div>
-                  </div>
+                    return (
+                      <div
+                        key={player._id}
+                        className="min-w-[140px] lg:min-w-0 bg-white rounded-2xl p-2 lg:p-3 border border-white shadow-sm hover:border-orange-200 transition-all duration-300 relative group shrink-0"
+                      >
+                        <div className="flex items-center gap-2 lg:gap-3">
+                          <div className="relative shrink-0">
+                            <img
+                              src={player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`}
+                              className={`w-8 h-8 lg:w-10 lg:h-10 rounded-xl bg-gray-50 object-cover ring-2 ${isPlayerFinished ? "ring-emerald-400" : "ring-white"}`}
+                              alt={player.name}
+                            />
+                            {player.isHost && (
+                              <div className="absolute -top-1 -right-1 bg-orange-500 text-white p-0.5 rounded-lg border border-white shadow-sm">
+                                <Crown className="w-2 lg:w-2.5 h-2 lg:h-2.5" />
+                              </div>
+                            )}
+                          </div>
 
-                  <div className="bg-gray-50/50 p-2.5 rounded-2xl border border-gray-100 hover:border-emerald-200 transition-all duration-300">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Target className="w-3 h-3 text-emerald-500" />
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Accuracy</span>
-                    </div>
-                    <div className="text-xl font-black text-gray-800">
-                      {accuracy ?? "--"}
-                      <span className="text-[10px] text-gray-400 font-bold ml-1">%</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50/50 p-2.5 rounded-2xl border border-gray-100 hover:border-blue-200 transition-all duration-300">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Clock className="w-3 h-3 text-blue-500" />
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Time</span>
-                    </div>
-                    <div className="text-lg font-black text-gray-800">{formatTime(elapsedTime)}</div>
-                  </div>
-
-                  <div className="bg-gray-50/50 p-2.5 rounded-2xl border border-gray-100 hover:border-red-200 transition-all duration-300">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <AlertCircle className="w-3 h-3 text-red-500" />
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Errors</span>
-                    </div>
-                    <div className="text-lg font-black text-gray-800">{errors}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#FFF8EA] border border-orange-100 p-4 rounded-3xl shadow-lg shadow-orange-900/5 group shrink-0 relative overflow-hidden">
-                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-50 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
-                <div className="flex items-center justify-between gap-4 relative">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-inner transition-colors duration-500 ${remainingTime <= 10 ? "bg-red-50 text-red-500" : "bg-orange-50 text-orange-500"}`}>
-                      <Clock className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Time Left</div>
-                      <div className={`text-2xl font-black font-mono leading-none mt-1 ${remainingTime <= 10 ? "text-red-500 animate-pulse" : "text-gray-800"}`}>
-                        {remainingTime}s
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="font-black text-gray-800 text-[10px] lg:text-xs truncate">{player.name}</span>
+                              <span className={`text-[9px] lg:text-[10px] font-black ${isPlayerFinished ? "text-emerald-500" : "text-orange-400"}`}>
+                                {player.wpm || 0} <span className="hidden lg:inline text-[8px] opacity-50 uppercase">WPM</span>
+                              </span>
+                            </div>
+                            <div className="mt-1.5 lg:mt-2 h-1 lg:h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all duration-500 ${isPlayerFinished ? "bg-emerald-500" : "bg-orange-400"}`}
+                                style={{ width: `${progressPercent}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="px-2 py-1 rounded-lg bg-orange-50/50 border border-orange-100 flex items-center gap-1.5">
-                    <div className={`w-1.5 h-1.5 rounded-full ${phase === "PLAY" ? "bg-emerald-500 animate-pulse" : "bg-orange-400"}`}></div>
-                    <span className="text-[8px] font-bold text-orange-800 uppercase tracking-wider">{phase}</span>
-                  </div>
-                </div>
-              </div>
+                    );
+                  })}
 
-              <div className="bg-gradient-to-br from-orange-500 to-pink-500 p-4 rounded-3xl shadow-lg shadow-orange-500/20 text-white shrink-0 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-3 opacity-20">
-                  <Zap className="w-10 h-10" />
+                  {leftPlayers.length > 0 && (
+                    <div className="hidden lg:flex flex-col pt-6 border-t border-orange-100 mt-4 space-y-3 opacity-50">
+                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Quit Race</div>
+                      {leftPlayers.map((player) => (
+                        <div key={player._id} className="flex items-center gap-3 grayscale">
+                          <img
+                            src={player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`}
+                            className="w-8 h-8 rounded-lg opacity-50"
+                            alt=""
+                          />
+                          <span className="text-xs font-bold text-gray-400 line-through">{player.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <h4 className="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Quick Tip</h4>
-                <p className="text-xs font-medium leading-relaxed relative z-10">
-                  Focus on accuracy! Smooth typing is faster than fast typing with errors.
-                </p>
               </div>
             </div>
 
-            <div className="flex flex-col h-full min-h-0">
-              <div className="relative bg-[#FFF8EA] rounded-3xl p-1 shadow-xl shadow-orange-900/5 group flex-1 flex flex-col min-h-0">
-                <div className="absolute top-0 left-8 right-8 h-1 bg-orange-100/50 rounded-b-full overflow-hidden z-10">
+            {/* 2. TYPING AREA - Middle (order-2) */}
+            <div className="flex flex-col min-h-[400px] md:min-h-[450px] lg:h-full order-2">
+              <div className="relative bg-[#FFF8EA] rounded-[2.5rem] p-1 shadow-xl shadow-orange-900/5 flex-1 flex flex-col border border-orange-100">
+                <div className="absolute top-0 left-8 right-8 h-1.5 bg-gray-100 rounded-b-full overflow-hidden z-10">
                   <div
                     className="h-full bg-gradient-to-r from-orange-400 to-pink-500 transition-all duration-300 ease-out"
                     style={{
@@ -495,22 +458,22 @@ const GroupPlay: React.FC = () => {
                   ></div>
                 </div>
 
-                <div className="bg-[#FFF8EA] rounded-[1.3rem] p-6 md:p-8 flex-1 border border-orange-50/50 relative overflow-hidden flex flex-col">
-                  <div className="flex justify-between items-center mb-6 border-b border-orange-100/50 pb-4 shrink-0">
-                    <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                      <span className="w-2 h-6 bg-orange-400 rounded-full block"></span>
-                      {gameData?.mode || "Classic Mode"}
+                <div className="bg-[#FFF8EA] rounded-[2rem] p-6 md:p-10 flex-1 relative overflow-hidden flex flex-col">
+                  <div className="flex justify-between items-center mb-8 border-b border-orange-100/30 pb-6 shrink-0">
+                    <h3 className="text-xl font-black text-gray-800 flex items-center gap-3">
+                      <span className="w-2 h-6 bg-orange-500 rounded-full block"></span>
+                      {gameData?.mode || "Classic Race"}
                     </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700 uppercase tracking-wide">
-                        {lesson?.level}
+                    <div className="flex items-center gap-3">
+                      <span className="px-3 py-1.5 rounded-xl text-[10px] font-black bg-orange-100 text-orange-700 uppercase tracking-widest border border-orange-200">
+                        {lesson?.level || "Lvl 1"}
                       </span>
                     </div>
                   </div>
 
                   <div
                     ref={snippetContainerRef}
-                    className="relative font-mono text-xl md:text-2xl leading-loose tracking-wide text-gray-400 select-none outline-none overflow-y-auto custom-scrollbar flex-1 pt-12 px-4"
+                    className="relative font-mono text-xl md:text-3xl leading-relaxed md:leading-[1.8] tracking-wide text-gray-400 select-none outline-none overflow-y-auto custom-scrollbar flex-1 pt-4 md:pt-8"
                     style={{ whiteSpace: "pre-wrap" }}
                     onClick={() => document.body.focus()}
                     onPaste={(e) => e.preventDefault()}
@@ -520,13 +483,13 @@ const GroupPlay: React.FC = () => {
                   </div>
 
                   {phase === "COUNTDOWN" && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[2px] z-20">
-                      <div className="text-center">
-                        <div className="text-8xl font-black text-orange-500 animate-bounce mb-2 drop-shadow-sm">
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-md z-30">
+                      <div className="text-center animate-in zoom-in duration-300">
+                        <div className="text-[120px] md:text-[180px] font-black text-orange-500 animate-bounce leading-none drop-shadow-2xl">
                           {countdown}
                         </div>
-                        <p className="text-orange-900/50 font-bold uppercase tracking-widest text-sm">
-                          Starting shortly
+                        <p className="text-orange-900/30 font-black uppercase tracking-[0.5em] text-sm md:text-base mt-4">
+                          Ready... Set...
                         </p>
                       </div>
                     </div>
@@ -535,138 +498,127 @@ const GroupPlay: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 h-full min-h-0">
-              <div className="bg-[#FFF8EA] rounded-3xl p-6 shadow-xl shadow-orange-900/5 border border-orange-100 flex-1 flex flex-col min-h-0 relative overflow-hidden">
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-orange-50 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
-                <div className="flex items-center justify-between mb-4 shrink-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-sm text-gray-700">Competitors</h3>
+            {/* 3. STATS SECTION - Bottom on Mobile (order-3), Left Sidebar on Desktop (lg:order-1) */}
+            <div className="flex flex-col gap-4 lg:h-full order-3 lg:order-1">
+              <div className="bg-[#FFF8EA] border border-orange-100 p-5 rounded-3xl shadow-lg shadow-orange-900/5 group shrink-0 relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-50 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+
+                <div className="flex items-center gap-4 mb-5 relative">
+                  <div className="relative shrink-0">
+                    <img
+                      src={currentUser?.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser?.name || "Felix"}`}
+                      alt="me"
+                      className="w-12 h-12 md:w-14 md:h-14 rounded-2xl object-cover shadow-md ring-4 ring-white"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center">
+                      <div className="w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                    </div>
                   </div>
-                  <span className="bg-orange-500 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm shadow-orange-200">
-                    {players?.length} / 4
-                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-black text-lg md:text-xl text-gray-800 truncate tracking-tight">
+                      {currentUser?.name || "Guest"}
+                    </h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      {currentUser?.isHost && (
+                        <span className="px-2 py-0.5 rounded-full bg-orange-50 border border-orange-100 text-[10px] text-orange-600 font-black uppercase tracking-wider flex items-center gap-1">
+                          <Crown className="w-3 h-3" /> Host
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-3 overflow-y-auto pr-1 custom-scrollbar min-h-0 flex-1">
-                  {livePlayers.map((player) => {
-                    const isPlayerFinished =
-                      player.progress === (lesson?.text.length || 0) && (lesson?.text.length || 0) > 0;
-                    const progressPercent = Math.round(((player?.progress || 0) / (lesson?.text.length || 1)) * 100);
-
-                    return (
-                      <div
-                        key={player._id}
-                        className="bg-[#FFF8EA] rounded-xl p-2.5 border border-orange-100/60 shadow-sm hover:border-orange-200 transition-all group relative overflow-hidden"
-                      >
-                        {player.isHost && (
-                          <div className="absolute top-0 right-0 bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-bl-lg text-[8px] font-bold uppercase tracking-wider flex items-center gap-1 z-10">
-                            <Crown className="w-2.5 h-2.5" /> HOST
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-2 mb-2 mt-1">
-                          <div className="relative shrink-0">
-                            <img
-                              src={player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`}
-                              className={`w-8 h-8 rounded-lg bg-gray-50 object-cover ring-2 ${isPlayerFinished ? "ring-emerald-400" : "ring-white shadow-sm"}`}
-                              alt={player.name}
-                            />
-                          </div>
-
-                          <div className="min-w-0 flex-1">
-                            <div className="font-bold text-gray-800 text-xs truncate pr-6">{player.name}</div>
-                            <div className="flex items-center gap-2 mt-0.5">
-                              <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
-                                <div
-                                  className={`h-full rounded-full transition-all duration-500 ${isPlayerFinished ? "bg-emerald-500" : "bg-orange-400"}`}
-                                  style={{ width: `${progressPercent}%` }}
-                                ></div>
-                              </div>
-                              <span
-                                className={`text-[8px] font-bold uppercase ${isPlayerFinished ? "text-emerald-600" : "text-orange-400"}`}
-                              >
-                                {isPlayerFinished ? "Done" : `${progressPercent}%`}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-1.5 bg-gray-50/80 rounded-lg p-1.5 border border-gray-100">
-                          <div className="text-center">
-                            <div className="text-[8px] text-gray-400 font-bold uppercase mb-0.5">WPM</div>
-                            <div className="text-[11px] font-black text-gray-700">{player.wpm || "-"}</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-[8px] text-gray-400 font-bold uppercase mb-0.5">ACC</div>
-                            <div className="text-[11px] font-black text-gray-700">{player.accuracy ? player.accuracy + "%" : "-"}</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-[8px] text-gray-400 font-bold uppercase mb-0.5">ERR</div>
-                            <div className="text-[11px] font-black text-gray-700">{player.errors || "0"}</div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  {leftPlayers.length > 0 && (
-                    <div className="pt-2 border-t border-orange-100/50 mt-2">
-                      <div className="text-[10px] uppercase font-bold text-gray-400 mb-2 pl-1">Left Game</div>
-                      {leftPlayers.map((player) => (
-                        <div
-                          key={player._id}
-                          className="bg-gray-50/50 rounded-xl p-3 border border-gray-100 mb-2 opacity-75 grayscale hover:grayscale-0 transition-all"
-                        >
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="relative">
-                              <img
-                                src={
-                                  player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`
-                                }
-                                className="w-8 h-8 rounded-lg bg-gray-200 object-cover ring-2 ring-gray-100"
-                                alt={player.name}
-                              />
-                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-red-400 rounded-full border-2 border-white flex items-center justify-center">
-                                <span className="sr-only">Left</span>
-                              </div>
-                            </div>
-
-                            <div className="min-w-0 flex-1">
-                              <div className="font-bold text-gray-500 text-xs truncate line-through">{player.name}</div>
-                              <div className="text-[9px] text-red-400 font-bold uppercase">Disconnected</div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-3">
+                  <div className="bg-orange-50/50 p-3 rounded-2xl border border-orange-100/50">
+                    <div className="flex items-center gap-1.5 mb-1 opacity-60">
+                      <Zap className="w-3 h-3 text-orange-500" />
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Speed</span>
                     </div>
-                  )}
+                    <div className="text-xl font-black text-gray-800">{wpm}<span className="text-[10px] ml-1 opacity-40">WPM</span></div>
+                  </div>
+
+                  <div className="bg-emerald-50/50 p-3 rounded-2xl border border-emerald-100/50">
+                    <div className="flex items-center gap-1.5 mb-1 opacity-60">
+                      <Target className="w-3 h-3 text-emerald-500" />
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Acc</span>
+                    </div>
+                    <div className="text-xl font-black text-gray-800">{accuracy ?? "--"}<span className="text-[10px] ml-1 opacity-40">%</span></div>
+                  </div>
+
+                  <div className="bg-blue-50/50 p-3 rounded-2xl border border-blue-100/50">
+                    <div className="flex items-center gap-1.5 mb-1 opacity-60">
+                      <Clock className="w-3 h-3 text-blue-500" />
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Time</span>
+                    </div>
+                    <div className="text-xl font-black text-gray-800">{formatTime(elapsedTime)}</div>
+                  </div>
+
+                  <div className="bg-red-50/50 p-3 rounded-2xl border border-red-100/50">
+                    <div className="flex items-center gap-1.5 mb-1 opacity-60">
+                      <AlertCircle className="w-3 h-3 text-red-500" />
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Errors</span>
+                    </div>
+                    <div className="text-xl font-black text-gray-800">{errors}</div>
+                  </div>
                 </div>
               </div>
+
+              {/* Progress & Time Left */}
+              <div className="bg-[#FFF8EA] border border-orange-100 p-5 rounded-3xl shadow-lg shadow-orange-900/5 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner ${remainingTime <= 10 ? "bg-red-50 text-red-500" : "bg-orange-50 text-orange-500"}`}>
+                    <Clock className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Time Remaining</div>
+                    <div className={`text-2xl font-black font-mono leading-none mt-1 ${remainingTime <= 10 ? "text-red-500 animate-pulse" : "text-gray-800"}`}>
+                      {remainingTime}s
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden sm:flex flex-col items-end">
+                  <div className="text-[10px] font-black text-orange-400 uppercase tracking-widest mb-1">{phase}</div>
+                  <div className="w-12 h-1 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-orange-400 rounded-full" style={{ width: phase === "PLAY" ? "100%" : "50%" }}></div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="hidden lg:block bg-gradient-to-br from-[#7A6A5D] to-gray-800 p-5 rounded-3xl shadow-lg shadow-orange-500/20 text-white relative overflow-hidden">
+                <Zap className="absolute -bottom-4 -right-4 w-20 h-20 opacity-10" />
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-2">Pro Tip</h4>
+                <p className="text-xs font-bold leading-relaxed relative z-10">
+                  Focus on rhythm over raw speed. Accuracy is the secret to high WPM!
+                </p>
+              </div>
             </div>
+
           </div>
         </div>
       </div>
+
+      {/* Results Modal */}
       {isFinished && finalResult.length > 0 && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-orange-900/20 backdrop-blur-md animate-fade-in">
-          <div className="w-[95%] max-w-7xl h-[85vh] bg-[#FFF8EA] rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-orange-100 overflow-hidden flex flex-col animate-zoom-in">
-            <div className="bg-[#FFF8EA] px-8 py-6 border-b border-orange-100 flex items-center justify-between shrink-0 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-6 opacity-5">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4 bg-orange-900/20 backdrop-blur-md animate-fade-in">
+          <div className="w-full max-w-7xl h-[90vh] md:h-[85vh] bg-[#FFF8EA] rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-orange-100 overflow-hidden flex flex-col animate-zoom-in">
+            <div className="bg-[#FFF8EA] px-4 md:px-8 py-4 md:py-6 border-b border-orange-100 flex items-center justify-between shrink-0 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-6 opacity-5 hidden md:block">
                 <Crown className="w-48 h-48 -rotate-12" />
               </div>
               <div className="relative z-10">
-                <h2 className="text-3xl font-black text-gray-800 tracking-tight">Game Results</h2>
-                <p className="text-gray-500 font-bold text-sm mt-1 uppercase tracking-wide">
+                <h2 className="text-xl md:text-3xl font-black text-gray-800 tracking-tight">Game Results</h2>
+                <p className="text-gray-500 font-bold text-[10px] md:text-sm mt-0.5 uppercase tracking-wide">
                   Final Standings
                 </p>
               </div>
-              <div className="bg-white p-3 rounded-2xl shadow-sm border border-orange-100 flex items-center gap-3 px-5 relative z-10">
-                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <Crown className="w-6 h-6 text-amber-500 fill-amber-500" />
+              <div className="bg-white p-2 md:p-3 rounded-xl md:rounded-2xl shadow-sm border border-orange-100 flex items-center gap-2 md:gap-3 px-3 md:px-5 relative z-10">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-amber-100 rounded-lg md:rounded-xl flex items-center justify-center">
+                  <Crown className="w-4 h-4 md:w-6 md:h-6 text-amber-500 fill-amber-500" />
                 </div>
                 <div className="text-right">
-                  <div className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Match High</div>
-                  <div className="text-lg font-black text-gray-800">
-                    {Math.max(...(finalResult.map((p) => p.wpm || 0)), 0)} WPM
+                  <div className="text-[8px] md:text-[9px] text-gray-400 font-black uppercase tracking-widest leading-none">Best</div>
+                  <div className="text-sm md:text-lg font-black text-gray-800 leading-none mt-1">
+                    {Math.max(...(finalResult.map((p) => p.wpm || 0)), 0)} <span className="text-[10px] md:text-xs">WPM</span>
                   </div>
                 </div>
               </div>
@@ -676,19 +628,19 @@ const GroupPlay: React.FC = () => {
               <table className="w-full text-left border-collapse">
                 <thead className="bg-gray-50/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm border-b border-gray-100">
                   <tr>
-                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-24">
-                      Rank
+                    <th className="py-3 md:py-4 px-3 md:px-8 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-16 md:w-24">
+                      #
                     </th>
-                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] w-full">
+                    <th className="py-3 md:py-4 px-3 md:px-8 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] w-full">
                       Player
                     </th>
-                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-32">
+                    <th className="py-3 md:py-4 px-3 md:px-8 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-20 md:w-32">
                       WPM
                     </th>
-                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-32">
+                    <th className="hidden sm:table-cell py-3 md:py-4 px-3 md:px-8 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-20 md:w-32">
                       ACC
                     </th>
-                    <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-40">
+                    <th className="hidden md:table-cell py-3 md:py-4 px-3 md:px-8 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] text-center w-32 md:w-40">
                       Tier
                     </th>
                   </tr>
@@ -710,10 +662,10 @@ const GroupPlay: React.FC = () => {
                                 ${isMe ? "bg-orange-50/70" : "hover:bg-orange-50/30"}
                               `}
                         >
-                          <td className="py-6 px-8 text-center">
+                          <td className="py-4 md:py-6 px-3 md:px-8 text-center">
                             <div
                               className={`
-                                    w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl shadow-sm mx-auto
+                                    w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-2xl flex items-center justify-center font-black text-sm md:text-xl shadow-sm mx-auto
                                     ${isWinner
                                   ? "bg-amber-400 text-white shadow-amber-200 rotate-12"
                                   : rank === 2
@@ -728,71 +680,72 @@ const GroupPlay: React.FC = () => {
                             </div>
                           </td>
 
-                          <td className="py-6 px-8">
-                            <div className="flex items-center gap-5">
-                              <div className="relative">
+                          <td className="py-4 md:py-6 px-3 md:px-8">
+                            <div className="flex items-center gap-3 md:gap-5">
+                              <div className="relative shrink-0">
                                 <img
                                   src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
-                                  className={`w-16 h-16 rounded-[1.25rem] bg-gray-50 object-cover ring-4 ${isWinner ? "ring-amber-200" : "ring-white"} shadow-md`}
+                                  className={`w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-[1.25rem] bg-gray-50 object-cover ring-2 md:ring-4 ${isWinner ? "ring-amber-200" : "ring-white"} shadow-md`}
                                   alt={p.name}
                                 />
                                 {isWinner && (
-                                  <div className="absolute -top-4 -left-4 animate-bounce">
-                                    <div className="bg-amber-400 p-1.5 rounded-xl shadow-lg border-2 border-white">
-                                      <Crown className="w-5 h-5 text-white fill-white" />
+                                  <div className="absolute -top-2 -left-2 md:-top-4 md:-left-4 animate-bounce">
+                                    <div className="bg-amber-400 p-1 md:p-1.5 rounded-lg md:rounded-xl shadow-lg border border-white">
+                                      <Crown className="w-3 h-3 md:w-5 md:h-5 text-white fill-white" />
                                     </div>
                                   </div>
                                 )}
                               </div>
-                              <div>
-                                <div className="flex items-center gap-3">
-                                  <span className="font-black text-gray-800 text-xl">{p.name}</span>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-black text-gray-800 text-sm md:text-xl truncate">{p.name}</span>
                                   {isMe && (
-                                    <span className="px-3 py-1 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest shadow-sm">
+                                    <span className="px-2 py-0.5 rounded-full bg-orange-500 text-white text-[8px] md:text-[10px] font-black uppercase tracking-widest shadow-sm">
                                       You
                                     </span>
                                   )}
                                 </div>
                                 {isWinner && (
-                                  <div className="text-[10px] font-black text-amber-500 uppercase tracking-[0.25em] mt-1">
-                                    Match Winner
+                                  <div className="text-[8px] md:text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] mt-0.5">
+                                    Winner
                                   </div>
                                 )}
+                                <div className="sm:hidden text-[9px] font-bold text-emerald-600 mt-1 uppercase">
+                                  Acc: {p.accuracy || 0}%
+                                </div>
                               </div>
                             </div>
                           </td>
 
-                          <td className="py-6 px-8 text-center">
-                            <div className="font-black text-gray-800 text-3xl tracking-tighter">
+                          <td className="py-4 md:py-6 px-3 md:px-8 text-center">
+                            <div className="font-black text-gray-800 text-xl md:text-3xl tracking-tighter">
                               {p.wpm || 0}
                             </div>
-                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mt-1">
-                              Words / Min
+                            <div className="text-[8px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5 md:mt-1">
+                              WPM
                             </div>
                           </td>
 
-                          <td className="py-6 px-8 text-center">
-                            <div className="font-black text-emerald-600 text-3xl tracking-tighter">
+                          <td className="hidden sm:table-cell py-4 md:py-6 px-3 md:px-8 text-center">
+                            <div className="font-black text-emerald-600 text-xl md:text-3xl tracking-tighter">
                               {p.accuracy || 0}%
                             </div>
-                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mt-1">
+                            <div className="text-[8px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5 md:mt-1">
                               Accuracy
                             </div>
                           </td>
 
-                          <td className="py-6 px-8 text-center">
+                          <td className="hidden md:table-cell py-4 md:py-6 px-3 md:px-8 text-center">
                             {(p.wpm || 0) > 80 ? (
-                              <div className="inline-flex flex-col items-center">
-                                <span className="px-4 py-1.5 rounded-full bg-orange-500 text-white font-black text-[10px] uppercase tracking-widest shadow-sm">
-                                  Legendary
-                                </span>
-                              </div>
+                              <span className="px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-orange-500 text-white font-black text-[8px] md:text-[10px] uppercase tracking-widest shadow-sm">
+                                Legendary
+                              </span>
                             ) : (p.wpm || 0) > 40 ? (
-                              <span className="px-4 py-1.5 rounded-full bg-indigo-500 text-white font-black text-[10px] uppercase tracking-widest shadow-sm">
-                                Professional
+                              <span className="px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-indigo-500 text-white font-black text-[8px] md:text-[10px] uppercase tracking-widest shadow-sm">
+                                Pro
                               </span>
                             ) : (
-                              <span className="px-4 py-1.5 rounded-full bg-gray-400 text-white font-black text-[10px] uppercase tracking-widest shadow-sm">
+                              <span className="px-3 md:px-4 py-1 md:py-1.5 rounded-full bg-gray-400 text-white font-black text-[8px] md:text-[10px] uppercase tracking-widest shadow-sm">
                                 Rookie
                               </span>
                             )}
@@ -804,24 +757,24 @@ const GroupPlay: React.FC = () => {
               </table>
             </div>
 
-            <div className="bg-[#FFF8EA]/50 backdrop-blur-sm px-10 py-8 border-t border-orange-100 flex gap-5 justify-center items-center shrink-0">
+            <div className="bg-[#FFF8EA]/50 backdrop-blur-sm px-4 md:px-10 py-6 md:py-8 border-t border-orange-100 flex flex-col sm:flex-row gap-3 md:gap-5 justify-center items-center shrink-0">
               <button
                 onClick={() => navigate("/")}
-                className="px-10 py-4 rounded-2xl bg-white border-2 border-gray-200 text-gray-500 font-black hover:bg-gray-50 hover:text-gray-700 hover:border-gray-400 transition-all text-base shadow-sm uppercase tracking-widest"
+                className="w-full sm:w-auto px-8 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl bg-white border-2 border-gray-100 text-gray-500 font-black hover:bg-gray-50 hover:text-gray-700 hover:border-gray-300 transition-all text-xs md:text-base shadow-sm uppercase tracking-widest"
               >
                 Exit Game
               </button>
               <button
                 disabled={!currentUser?.isHost}
                 onClick={handleNewGame}
-                className={`px-12 py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg transition-all active:scale-95
+                className={`w-full sm:w-auto px-10 md:px-12 py-3 md:py-4 rounded-xl md:rounded-2xl font-black uppercase tracking-widest shadow-lg transition-all active:scale-95 text-xs md:text-base
                   ${currentUser?.isHost
                     ? "bg-orange-500 text-white hover:bg-orange-600 shadow-orange-200"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-gray-300 text-gray-400 cursor-not-allowed"
                   }
                 `}
               >
-                Play Again
+                {currentUser?.isHost ? "Play Again" : "Wait for Host"}
               </button>
             </div>
           </div>

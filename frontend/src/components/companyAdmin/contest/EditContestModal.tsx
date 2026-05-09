@@ -11,6 +11,7 @@ interface EditContestModalProps {
   contestId: string;
   onUpdate?: () => void;
   setContests: React.Dispatch<React.SetStateAction<ContestProps[]>>;
+  fetchContests: () => void;
 }
 
 interface RewardRank {
@@ -20,7 +21,7 @@ interface RewardRank {
   prize: string;
 }
 
-const EditContestModal: React.FC<EditContestModalProps> = ({ isOpen, onClose, contestId, onUpdate, setContests }) => {
+const EditContestModal: React.FC<EditContestModalProps> = ({ isOpen, onClose, contestId, onUpdate, fetchContests }) => {
   const [contestMode, setContestMode] = useState<"group" | "open">("group");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -183,14 +184,14 @@ const EditContestModal: React.FC<EditContestModalProps> = ({ isOpen, onClose, co
         if (response.data?.success || response.status === 200 || response.data) {
           toast.success("Contest updated successfully");
           if (onUpdate) onUpdate();
-          setContests((prev: any) => prev.map((c: any) => (c._id === contestId ? { ...c, ...data } : c)));
+          fetchContests();
           onClose();
         } else {
           toast.error("Failed to update contest");
         }
-      } catch (error) {
+      } catch (error:any) {
         console.error("Failed to update contest", error);
-        toast.error("Failed to update contest");
+        toast.error(error?.response?.data?.message || "Failed to update contest");
       }
     } else {
       toast.error("Form has errors");

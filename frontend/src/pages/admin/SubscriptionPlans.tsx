@@ -215,7 +215,6 @@ const SubscriptionPlans: React.FC = () => {
         } else {
           toast.error("Error creating plan");
         }
-        console.error("Error creating plan:", error);
       }
     }
   };
@@ -232,7 +231,6 @@ const SubscriptionPlans: React.FC = () => {
         } else {
           toast.error("Error updating plan");
         }
-        console.error("Error updating plan:", error);
       }
     }
   };
@@ -249,8 +247,12 @@ const SubscriptionPlans: React.FC = () => {
         setDeleteOpen(false);
         setPlanToDelete(null);
         fetchPlans(); // Refresh the list
-      } catch (error) {
-        console.error("Error deleting plan:", error);
+      } catch (error:any) {
+          if (error.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Error updating plan");
+        }
       }
     }
   };
@@ -280,83 +282,83 @@ const SubscriptionPlans: React.FC = () => {
     <>
       <SideNavbar />
 
-      <div className="flex min-h-screen bg-[#FFF8EA]">
-        {/* Main Content */}
-        <main className="flex-1 ml-64 p-8">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-10">
-              <div>
-                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Subscription Plans</h1>
-                <p className="text-gray-500 font-medium">Manage your platform's subscription tiers and pricing</p>
-              </div>
-
-              <button
-                onClick={() => {
-                  setValues({
-                    name: "",
-                    price: "",
-                    duration: "monthly",
-                    type: "normal",
-                    userLimit: "",
-                    features: [],
-                  });
-                  setFormErrors({
-                    name: "",
-                    price: "",
-                    duration: "",
-                    type: "",
-                    userLimit: "",
-                    features: "",
-                  });
-                  setCreateOpen(true);
-                }}
-                className="flex items-center gap-2 bg-[#B99F8D] text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-[#B99F8D]/20 hover:bg-[#a68c7a] transition-all duration-300"
-              >
-                <Plus className="w-5 h-5" />
-                Create Plan
-              </button>
+      <div className="md:ml-64 p-4 md:p-8 min-h-screen bg-[#FFF8EA] pt-24 md:pt-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight mb-1 md:mb-2">Subscription Plans</h1>
+              <p className="text-xs md:text-sm text-gray-500 font-medium">Manage platform tiers and pricing models.</p>
             </div>
 
-            {/* Normal Plan Section */}
-            <div className="bg-[#FEF9F0] rounded-[2rem] p-8 shadow-sm border border-[#ECA468]/10 mb-8">
-              <div className="mb-6">
-                <h2 className="text-xl font-black text-gray-900 mb-1">normal plan</h2>
-                <p className="text-sm text-gray-400 font-medium">
-                  Quick Play Solo is always free. Manage premium plans below.
-                </p>
-              </div>
+            <button
+              onClick={() => {
+                setValues({
+                  name: "",
+                  price: "",
+                  duration: "monthly",
+                  type: "normal",
+                  userLimit: "",
+                  features: [],
+                });
+                setFormErrors({
+                  name: "",
+                  price: "",
+                  duration: "",
+                  type: "",
+                  userLimit: "",
+                  features: "",
+                });
+                setCreateOpen(true);
+              }}
+              className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#ECA468] text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] transition-all duration-300 uppercase text-[10px] md:text-xs tracking-widest"
+            >
+              <Plus className="w-4 h-4 md:w-5 md:h-5" />
+              Create Plan
+            </button>
+          </div>
 
+          {/* Normal Plan Section */}
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2rem] p-4 md:p-8 shadow-sm border border-[#ECA468]/10 mb-6 md:mb-8">
+            <div className="mb-6 px-1">
+              <h2 className="text-lg md:text-xl font-black text-gray-900 mb-1 capitalize">Individual Plans</h2>
+              <p className="text-[10px] md:text-sm text-gray-400 font-medium">
+                Standard membership tiers for regular users.
+              </p>
+            </div>
+
+            {/* Individual Plans Table */}
+            <div className="overflow-x-auto">
               <ReusableTable
                 columns={[
                   {
-                    header: "Name",
+                    header: "Plan Tier",
                     key: "name",
-                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                    className: "py-5 px-6 text-sm font-bold text-gray-800 whitespace-nowrap",
                   },
                   {
-                    header: "Price",
+                    header: "Pricing",
                     key: "price",
-                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                    className: "py-5 px-6 text-sm font-bold text-[#ECA468] whitespace-nowrap",
                     render: (plan) => `$${plan.price}`,
                   },
                   {
-                    header: "Duration",
+                    header: "Cycle",
                     key: "duration",
-                    className: "py-5 px-6 text-sm font-bold text-gray-700 capitalize",
+                    className: "py-5 px-6 text-sm font-bold text-gray-500 capitalize whitespace-nowrap",
                     render: (plan) =>
                       plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`,
                   },
                   {
-                    header: "Features",
+                    header: "Feature Set",
                     key: "features",
-                    className: "py-5 px-6",
+                    className: "py-5 px-6 whitespace-nowrap",
                     render: (plan) => (
                       <div className="flex flex-wrap gap-2">
                         {plan.features.map((feature, fIndex) => (
                           <span
                             key={fIndex}
-                            className="px-3 py-1 bg-[#F1F5F9] text-[#64748B] text-[10px] font-bold rounded-full"
+                            className="px-3 py-1 bg-white text-[#64748B] text-[10px] font-bold rounded-full border border-gray-100"
                           >
                             {feature}
                           </span>
@@ -368,18 +370,18 @@ const SubscriptionPlans: React.FC = () => {
                     header: "Actions",
                     key: "actions",
                     headerClassName: "text-right",
-                    className: "py-5 px-6 text-right",
+                    className: "py-5 px-6 text-right whitespace-nowrap",
                     render: (plan) => (
-                      <div className="flex justify-end gap-3">
+                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                         <button
                           onClick={() => openEdit(plan as ISubscriptionPlan)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                          className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(plan.id, plan.name)}
-                          className="text-gray-400 hover:text-red-500 transition-colors"
+                          className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -389,68 +391,69 @@ const SubscriptionPlans: React.FC = () => {
                 ]}
                 data={normalPlans}
                 rowClassName="hover:bg-gray-50/50 transition-colors"
+                headerClassName="bg-[#FFF8EA] text-left"
+                columnHeaderClassName="py-4 px-6 text-[10px] font-black text-[#D0864B] uppercase tracking-widest border-b border-[#ECA468]/10"
               />
+            </div>
+          </div>
 
-              {/* Pagination */}
-              {/* <div className="mt-6 flex justify-center items-center gap-2">
-                <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Prev</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-sm font-bold text-gray-900">1</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">2</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">3</button>
-                <span className="text-gray-400">...</span>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">10</button>
-                <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Next</button>
-              </div> */}
+          {/* Company Plan Section */}
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2rem] p-4 md:p-8 shadow-sm border border-[#ECA468]/10">
+            <div className="mb-6 px-1">
+              <h2 className="text-lg md:text-xl font-black text-gray-900 mb-1 capitalize">Enterprise Plans</h2>
+              <p className="text-[10px] md:text-sm text-gray-400 font-medium">
+                Bulk licensing for organizations and corporate teams.
+              </p>
             </div>
 
-            {/* Company Plan Section */}
-            <div className="bg-[#FEF9F0] rounded-[2rem] p-8 shadow-sm border border-[#ECA468]/10">
-              <div className="mb-6">
-                <h2 className="text-xl font-black text-gray-900 mb-1">company-plan</h2>
-              </div>
-
+            {/* Enterprise Plans Table */}
+            <div className="overflow-x-auto">
               <ReusableTable
                 columns={[
                   {
-                    header: "Name",
+                    header: "Corporate Tier",
                     key: "name",
-                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                    className: "py-5 px-6 text-sm font-bold text-gray-800 whitespace-nowrap",
                   },
                   {
-                    header: "Price",
+                    header: "Pricing",
                     key: "price",
-                    className: "py-5 px-6 text-sm font-bold text-gray-700",
+                    className: "py-5 px-6 text-sm font-bold text-[#ECA468] whitespace-nowrap",
                     render: (plan) => `$${plan.price}`,
                   },
                   {
-                    header: "Duration",
+                    header: "Cycle",
                     key: "duration",
-                    className: "py-5 px-6 text-sm font-bold text-gray-700 capitalize",
+                    className: "py-5 px-6 text-sm font-bold text-gray-500 capitalize whitespace-nowrap",
                     render: (plan) =>
                       plan.duration === 30 ? "Monthly" : plan.duration === 365 ? "Yearly" : `${plan.duration} Days`,
                   },
                   {
-                    header: "Limit",
+                    header: "User Limit",
                     key: "userLimit",
-                    className: "py-5 px-6 text-sm font-bold text-gray-700",
-                    render: (plan) => `${plan.userLimit} users`,
+                    className: "py-5 px-6 text-sm font-bold text-gray-700 whitespace-nowrap",
+                    render: (plan) => (
+                      <span className="px-3 py-1 bg-white border border-gray-100 rounded-lg">
+                        {plan.userLimit} Seats
+                      </span>
+                    ),
                   },
                   {
                     header: "Actions",
                     key: "actions",
                     headerClassName: "text-right",
-                    className: "py-5 px-6 text-right",
+                    className: "py-5 px-6 text-right whitespace-nowrap",
                     render: (plan) => (
-                      <div className="flex justify-end gap-3">
+                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                         <button
                           onClick={() => openEdit(plan as ISubscriptionPlan)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                          className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(plan.id, plan.name)}
-                          className="text-gray-400 hover:text-red-500 transition-colors"
+                          className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -460,42 +463,36 @@ const SubscriptionPlans: React.FC = () => {
                 ]}
                 data={companyPlans}
                 rowClassName="hover:bg-gray-50/50 transition-colors"
+                headerClassName="bg-[#FFF8EA] text-left"
+                columnHeaderClassName="py-4 px-6 text-[10px] font-black text-[#D0864B] uppercase tracking-widest border-b border-[#ECA468]/10"
               />
-
-              {/* Pagination */}
-              {/* <div className="mt-6 flex justify-center items-center gap-2">
-                <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Prev</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">1</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">2</button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 text-sm font-bold text-gray-900">3</button>
-                <span className="text-gray-400">...</span>
-                <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-400">10</button>
-                <button className="px-3 py-1 text-sm font-bold text-gray-400 hover:text-gray-600">Next</button>
-              </div> */}
             </div>
           </div>
-        </main>
+        </div>
       </div>
 
-      {/* Create Modal */}
       {isCreateOpen &&
         createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-            <div className="w-full max-w-2xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-[#ECA468]/10 animate-in zoom-in-95 duration-200">
-              <div className="px-10 py-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-300 p-4">
+            <div className="relative w-full max-w-2xl bg-[#FFF8EA] rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] md:max-h-[90vh] animate-in zoom-in-95 duration-300">
+              {/* Header */}
+              <div className="px-5 md:px-10 py-4 md:py-8 border-b border-[#ECA468]/10 bg-white/40 flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 leading-tight">Create Subscription Plan</h2>
-                  <p className="text-sm text-gray-500 font-medium mt-1">Add a new tier to the platform</p>
+                  <h2 className="text-lg md:text-2xl font-black text-gray-900 leading-tight">Create Subscription Plan</h2>
+                  <p className="text-[8px] md:text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-0.5">Add a new tier to the platform</p>
                 </div>
-                <button onClick={() => setCreateOpen(false)} className="p-2 text-gray-400 hover:text-gray-700">
-                  <X className="w-6 h-6" />
+                <button 
+                  onClick={() => setCreateOpen(false)} 
+                  className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-white rounded-lg transition-all"
+                >
+                  <X className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-10 bg-[#FDFBF7] custom-scrollbar">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="flex-1 overflow-y-auto p-5 md:p-10 bg-white/20 custom-scrollbar">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Plan Name
                     </label>
                     <input
@@ -504,14 +501,14 @@ const SubscriptionPlans: React.FC = () => {
                       value={values.name}
                       onChange={handleCreateChange}
                       placeholder="e.g. Premium"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.name ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${formErrors.name ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 shadow-sm`}
                     />
                     {formErrors.name && (
-                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.name}</p>
+                      <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{formErrors.name}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Price ($)
                     </label>
                     <input
@@ -520,38 +517,38 @@ const SubscriptionPlans: React.FC = () => {
                       value={values.price}
                       onChange={handleCreateChange}
                       placeholder="e.g. 19.99"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.price ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${formErrors.price ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 shadow-sm`}
                     />
                     {formErrors.price && (
-                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.price}</p>
+                      <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{formErrors.price}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Duration
                     </label>
                     <select
                       name="duration"
                       value={values.duration}
                       onChange={handleCreateChange}
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.duration ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer`}
+                      className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${formErrors.duration ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 appearance-none cursor-pointer shadow-sm`}
                     >
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
                     </select>
                     {formErrors.duration && (
-                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.duration}</p>
+                      <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{formErrors.duration}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Plan Type
                     </label>
                     <select
                       name="type"
                       value={values.type}
                       onChange={handleCreateChange}
-                      className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer"
+                      className="w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 appearance-none cursor-pointer shadow-sm"
                     >
                       <option value="normal">Normal Plan</option>
                       <option value="company">Company Plan</option>
@@ -559,8 +556,8 @@ const SubscriptionPlans: React.FC = () => {
                   </div>
                   {values.type === "company" && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
-                        Number of Users
+                      <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
+                        User Seats
                       </label>
                       <input
                         type="number"
@@ -568,24 +565,24 @@ const SubscriptionPlans: React.FC = () => {
                         value={values.userLimit}
                         onChange={handleCreateChange}
                         placeholder="e.g. 50"
-                        className={`w-full px-6 py-4 bg-white rounded-2xl border ${formErrors.userLimit ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                        className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${formErrors.userLimit ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 shadow-sm`}
                       />
                       {formErrors.userLimit && (
-                        <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{formErrors.userLimit}</p>
+                        <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{formErrors.userLimit}</p>
                       )}
                     </div>
                   )}
                   {values.type === "normal" && (
                     <div className="md:col-span-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
                         Select Features
                       </label>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-2 md:gap-3">
                         {NORMAL_FEATURES.map((feature) => (
                           <button
                             key={feature}
                             onClick={() => toggleFeature("create", feature)}
-                            className={`px-6 py-3 rounded-xl text-xs font-bold transition-all border ${
+                            className={`px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold transition-all border ${
                               values.features.includes(feature)
                                 ? "bg-[#ECA468] text-white border-[#ECA468] shadow-md"
                                 : "bg-white text-gray-400 border-gray-100 hover:border-[#ECA468]/30"
@@ -596,25 +593,26 @@ const SubscriptionPlans: React.FC = () => {
                         ))}
                       </div>
                       {formErrors.features && (
-                        <p className="text-red-400 text-[10px] font-bold mt-3 px-1 uppercase">{formErrors.features}</p>
+                        <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-2 px-1">{formErrors.features}</p>
                       )}
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-4">
+              {/* Footer Buttons */}
+              <div className="px-5 md:px-10 py-4 md:py-8 border-t border-[#ECA468]/5 bg-white/40 flex flex-row justify-end gap-2 md:gap-4">
                 <button
                   onClick={() => setCreateOpen(false)}
-                  className="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-600"
+                  className="px-4 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl bg-white text-gray-500 font-black text-[8px] md:text-xs uppercase tracking-widest border border-gray-100 hover:bg-gray-50 transition-all shadow-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCreateSubmit}
-                  className="px-10 py-3 rounded-2xl bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
+                  className="px-5 md:px-10 py-2 md:py-4 rounded-xl md:rounded-2xl bg-[#ECA468] text-white font-black text-[8px] md:text-xs uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
                 >
-                  Create Plan
+                  Create
                 </button>
               </div>
             </div>
@@ -622,25 +620,28 @@ const SubscriptionPlans: React.FC = () => {
           document.body
         )}
 
-      {/* Edit Modal */}
       {isEditOpen &&
         createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-            <div className="w-full max-w-2xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-[#ECA468]/10 animate-in zoom-in-95 duration-200">
-              <div className="px-10 py-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-300 p-4">
+            <div className="relative w-full max-w-2xl bg-[#FFF8EA] rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] md:max-h-[90vh] animate-in zoom-in-95 duration-300">
+              {/* Header */}
+              <div className="px-5 md:px-10 py-4 md:py-8 border-b border-[#ECA468]/10 bg-white/40 flex justify-between items-center">
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 leading-tight">Edit Subscription Plan</h2>
-                  <p className="text-sm text-gray-500 font-medium mt-1">Update plan details and pricing</p>
+                  <h2 className="text-lg md:text-2xl font-black text-gray-900 leading-tight">Edit Subscription Plan</h2>
+                  <p className="text-[8px] md:text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-0.5">Update plan details and pricing</p>
                 </div>
-                <button onClick={() => setEditOpen(false)} className="p-2 text-gray-400 hover:text-gray-700">
-                  <X className="w-6 h-6" />
+                <button 
+                  onClick={() => setEditOpen(false)} 
+                  className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-white rounded-lg transition-all"
+                >
+                  <X className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-10 bg-[#FDFBF7] custom-scrollbar">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="flex-1 overflow-y-auto p-5 md:p-10 bg-white/20 custom-scrollbar">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Plan Name
                     </label>
                     <input
@@ -649,14 +650,14 @@ const SubscriptionPlans: React.FC = () => {
                       value={editValues.name}
                       onChange={handleEditChange}
                       placeholder="e.g. Premium"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.name ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${editFormErrors.name ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 shadow-sm`}
                     />
                     {editFormErrors.name && (
-                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.name}</p>
+                      <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{editFormErrors.name}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Price ($)
                     </label>
                     <input
@@ -665,40 +666,38 @@ const SubscriptionPlans: React.FC = () => {
                       value={editValues.price}
                       onChange={handleEditChange}
                       placeholder="e.g. 19.99"
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.price ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                      className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${editFormErrors.price ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 shadow-sm`}
                     />
                     {editFormErrors.price && (
-                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">{editFormErrors.price}</p>
+                      <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{editFormErrors.price}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Duration
                     </label>
                     <select
                       name="duration"
                       value={editValues.duration}
                       onChange={handleEditChange}
-                      className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.duration ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer`}
+                      className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${editFormErrors.duration ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 appearance-none cursor-pointer shadow-sm`}
                     >
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
                     </select>
                     {editFormErrors.duration && (
-                      <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">
-                        {editFormErrors.duration}
-                      </p>
+                      <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{editFormErrors.duration}</p>
                     )}
                   </div>
                   <div>
-                    <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
                       Plan Type
                     </label>
                     <select
                       name="type"
                       value={editValues.type}
                       onChange={handleEditChange}
-                      className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800 appearance-none cursor-pointer"
+                      className="w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 appearance-none cursor-pointer shadow-sm"
                     >
                       <option value="normal">Normal Plan</option>
                       <option value="company">Company Plan</option>
@@ -706,8 +705,8 @@ const SubscriptionPlans: React.FC = () => {
                   </div>
                   {editValues.type === "company" && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
-                        Number of Users
+                      <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-1.5 block px-1">
+                        User Seats
                       </label>
                       <input
                         type="number"
@@ -715,26 +714,24 @@ const SubscriptionPlans: React.FC = () => {
                         value={editValues.userLimit}
                         onChange={handleEditChange}
                         placeholder="e.g. 50"
-                        className={`w-full px-6 py-4 bg-white rounded-2xl border ${editFormErrors.userLimit ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-gray-800`}
+                        className={`w-full px-4 md:px-6 py-2.5 md:py-4 bg-white rounded-xl md:rounded-2xl border ${editFormErrors.userLimit ? "border-red-400" : "border-gray-100"} outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all font-bold text-xs md:text-base text-gray-800 shadow-sm`}
                       />
                       {editFormErrors.userLimit && (
-                        <p className="text-red-400 text-[10px] font-bold mt-2 px-1 uppercase">
-                          {editFormErrors.userLimit}
-                        </p>
+                        <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 px-1">{editFormErrors.userLimit}</p>
                       )}
                     </div>
                   )}
                   {editValues.type === "normal" && (
                     <div className="md:col-span-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
+                      <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] mb-2 block px-1">
                         Select Features
                       </label>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-2 md:gap-3">
                         {NORMAL_FEATURES.map((feature) => (
                           <button
                             key={feature}
                             onClick={() => toggleFeature("edit", feature)}
-                            className={`px-6 py-3 rounded-xl text-xs font-bold transition-all border ${
+                            className={`px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold transition-all border ${
                               editValues.features.includes(feature)
                                 ? "bg-[#ECA468] text-white border-[#ECA468] shadow-md"
                                 : "bg-white text-gray-400 border-gray-100 hover:border-[#ECA468]/30"
@@ -745,27 +742,26 @@ const SubscriptionPlans: React.FC = () => {
                         ))}
                       </div>
                       {editFormErrors.features && (
-                        <p className="text-red-400 text-[10px] font-bold mt-3 px-1 uppercase">
-                          {editFormErrors.features}
-                        </p>
+                        <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-2 px-1">{editFormErrors.features}</p>
                       )}
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex justify-end gap-4">
+              {/* Footer Buttons */}
+              <div className="px-5 md:px-10 py-4 md:py-8 border-t border-[#ECA468]/5 bg-white/40 flex flex-row justify-end gap-2 md:gap-4">
                 <button
                   onClick={() => setEditOpen(false)}
-                  className="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-600"
+                  className="px-4 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl bg-white text-gray-500 font-black text-[8px] md:text-xs uppercase tracking-widest border border-gray-100 hover:bg-gray-50 transition-all shadow-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleEditSubmit}
-                  className="px-10 py-3 rounded-2xl bg-[#ECA468] text-white text-xs font-black uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
+                  className="px-5 md:px-10 py-2 md:py-4 rounded-xl md:rounded-2xl bg-[#ECA468] text-white font-black text-[8px] md:text-xs uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
                 >
-                  Update Plan
+                  Update
                 </button>
               </div>
             </div>
@@ -773,38 +769,35 @@ const SubscriptionPlans: React.FC = () => {
           document.body
         )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteOpen &&
         createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-red-100 animate-in zoom-in-95 duration-200">
-              <div className="px-10 py-10 text-center">
-                <div className="w-20 h-20 bg-red-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                  <AlertCircle className="w-10 h-10 text-red-500" />
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-300 p-4">
+            <div className="w-full max-w-sm md:max-w-md bg-white rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-[#ECA468]/10 animate-in zoom-in-95 duration-300">
+              <div className="px-6 md:px-10 py-6 md:py-10 flex flex-col items-center text-center">
+                <div className="w-12 h-12 md:w-20 md:h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-4 md:mb-6">
+                  <AlertCircle className="w-6 h-6 md:w-10 md:h-10" />
                 </div>
-                <h2 className="text-2xl font-black text-gray-900 leading-tight mb-2">Delete Plan?</h2>
-                <p className="text-gray-500 font-medium px-4">
-                  Are you sure you want to delete{" "}
-                  <span className="text-gray-900 font-black">"{planToDelete?.name}"</span>? This action cannot be
-                  undone.
+                <h2 className="text-xl md:text-2xl font-black text-gray-900 leading-tight mb-2">Delete Plan?</h2>
+                <p className="text-xs md:text-sm text-gray-500 font-medium px-4">
+                  Are you sure you want to delete <span className="text-gray-900 font-black">"{planToDelete?.name}"</span>?
                 </p>
               </div>
 
-              <div className="px-10 py-8 bg-gray-50/50 border-t border-gray-100 flex justify-center gap-4">
+              <div className="px-6 md:px-10 py-4 md:py-8 bg-gray-50/50 border-t border-gray-100 flex flex-row justify-end gap-2 md:gap-4 shadow-inner">
                 <button
                   onClick={() => {
                     setDeleteOpen(false);
                     setPlanToDelete(null);
                   }}
-                  className="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-gray-600 transition-colors"
+                  className="flex-1 px-4 md:px-8 py-2 md:py-3 rounded-xl md:rounded-2xl text-[8px] md:text-xs font-black uppercase tracking-widest text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirmDelete}
-                  className="px-10 py-3 rounded-2xl bg-red-500 text-white text-xs font-black uppercase tracking-widest hover:bg-red-600 shadow-lg shadow-red-500/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
+                  className="flex-1 px-4 md:px-10 py-2 md:py-3 rounded-xl md:rounded-2xl bg-red-500 text-white text-[8px] md:text-xs font-black uppercase tracking-widest hover:bg-red-600 shadow-lg shadow-red-500/20 transition-all hover:shadow-xl hover:-translate-y-0.5"
                 >
-                  Delete Plan
+                  Delete
                 </button>
               </div>
             </div>

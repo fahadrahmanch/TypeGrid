@@ -98,43 +98,43 @@ const SubscriptionManagement: React.FC = () => {
     <div className="min-h-screen bg-[#FFF8EA] pb-20">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto pt-24 px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
-          <h1 className="text-4xl font-black text-gray-900 tracking-tight">Subscription Management</h1>
-          <p className="text-gray-500 mt-2 font-medium">
+      <main className="max-w-7xl mx-auto pt-20 md:pt-24 px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 md:mb-12 text-center md:text-left">
+          <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight leading-tight">Subscription Management</h1>
+          <p className="text-sm md:text-base text-gray-500 mt-2 font-medium">
             Manage your personal and company-provided premium benefits.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
           {/* Personal Subscription Column */}
           <div className="space-y-6">
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
               <UserIcon className="w-6 h-6 text-[#96705B]" />
-              <h2 className="text-2xl font-black text-gray-900">Personal Subscription</h2>
+              <h2 className="text-xl md:text-2xl font-black text-gray-900">Personal Subscription</h2>
             </div>
             
             {subscriptionData.personalSubscription ? (
-              <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden group hover:shadow-xl transition-all duration-300">
-                <div className="p-8 sm:p-10">
-                  <div className="flex items-start justify-between mb-8">
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-[#FDFBF7] rounded-3xl flex items-center justify-center border border-[#F5EBD8]">
+              <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden group hover:shadow-xl transition-all duration-300">
+                <div className="p-6 md:p-10">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-8 gap-6">
+                    <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                      <div className="w-16 h-16 bg-[#FDFBF7] rounded-3xl flex items-center justify-center border border-[#F5EBD8] shrink-0">
                         <ShieldCheck className="w-8 h-8 text-[#96705B]" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-black text-gray-900">
+                        <h3 className="text-2xl font-black text-gray-900 leading-tight">
                           {subscriptionData.personalSubscription.planName}
                         </h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wider ${
                             subscriptionData.personalSubscription.status === "active" 
                               ? "bg-emerald-50 text-emerald-600 border border-emerald-100" 
                               : "bg-rose-50 text-rose-600 border border-rose-100"
                           }`}>
                             {subscriptionData.personalSubscription.status}
                           </span>
-                          <span className="text-xs text-gray-400 font-bold uppercase tracking-widest">
+                          <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest">
                             {subscriptionData.personalSubscription.type === "company" ? "normal" : subscriptionData.personalSubscription.type} Plan
                           </span>
                         </div>
@@ -142,7 +142,7 @@ const SubscriptionManagement: React.FC = () => {
                     </div>
                     <button
                       onClick={() => navigate("/subscription")}
-                      className="flex items-center gap-2 px-4 py-2 bg-[#FDFBF7] hover:bg-[#F5EBD8] text-[#96705B] text-sm font-bold rounded-xl border border-[#F5EBD8] transition-all"
+                      className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-[#FDFBF7] hover:bg-[#F5EBD8] text-[#96705B] text-xs font-black uppercase tracking-widest rounded-xl border border-[#F5EBD8] transition-all"
                     >
                       Change
                       <ArrowUpCircle className="w-4 h-4" />
@@ -152,15 +152,15 @@ const SubscriptionManagement: React.FC = () => {
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-sm font-bold text-gray-600 flex items-center gap-2">
+                        <span className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
                           <Clock className="w-4 h-4 text-[#96705B]" />
                           Time remaining
                         </span>
-                        <span className="text-sm font-black text-gray-900">
+                        <span className="text-xs md:text-sm font-black text-gray-900">
                           {getDaysRemaining(subscriptionData.personalSubscription.endDate)} days left
                         </span>
                       </div>
-                      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="w-full h-2 md:h-3 bg-gray-100 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-[#96705B] to-[#B99F8D] rounded-full transition-all duration-1000"
                           style={{ width: `${calculateProgress(
@@ -173,18 +173,18 @@ const SubscriptionManagement: React.FC = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="p-5 bg-[#FDFBF7] rounded-2xl border border-[#F5EBD8]">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1">
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1 opacity-70">
                           Started On
                         </span>
-                        <span className="text-lg font-bold text-gray-900">
+                        <span className="text-base md:text-lg font-black text-gray-800">
                           {formatDate(subscriptionData.personalSubscription.startDate)}
                         </span>
                       </div>
                       <div className="p-5 bg-[#FDFBF7] rounded-2xl border border-[#F5EBD8]">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1">
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#D0864B] block mb-1 opacity-70">
                           Expires On
                         </span>
-                        <span className="text-lg font-bold text-gray-900">
+                        <span className="text-base md:text-lg font-black text-gray-800">
                           {formatDate(subscriptionData.personalSubscription.endDate)}
                         </span>
                       </div>
@@ -193,17 +193,17 @@ const SubscriptionManagement: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-[2.5rem] border border-dashed border-gray-200 p-12 text-center">
+              <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border-2 border-dashed border-gray-100 p-8 md:p-12 text-center">
                 <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <ShieldCheck className="w-8 h-8 text-gray-200" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-400">No Personal Subscription</h3>
-                <p className="text-sm text-gray-300 mt-2 max-w-xs mx-auto">
+                <h3 className="text-xl font-black text-gray-400">No Personal Plan</h3>
+                <p className="text-xs md:text-sm text-gray-300 mt-2 max-w-xs mx-auto font-medium">
                   Upgrade your account to unlock premium typing features and analytics.
                 </p>
                 <button
                   onClick={() => navigate("/subscription")}
-                  className="mt-8 px-8 py-3 bg-[#96705B] text-white font-black rounded-2xl shadow-lg shadow-[#96705B]/20 hover:shadow-xl transition-all"
+                  className="mt-8 px-8 py-3.5 bg-[#96705B] text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-lg shadow-[#96705B]/20 hover:shadow-xl transition-all active:scale-95"
                 >
                   View Plans
                 </button>
@@ -213,32 +213,32 @@ const SubscriptionManagement: React.FC = () => {
 
           {/* Company Subscription Column */}
           <div className="space-y-6">
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
               <Building2 className="w-6 h-6 text-indigo-600" />
-              <h2 className="text-2xl font-black text-gray-900">Company Subscription</h2>
+              <h2 className="text-xl md:text-2xl font-black text-gray-900">Company Subscription</h2>
             </div>
 
             {subscriptionData.companySubscription ? (
-              <div className="bg-white rounded-[2.5rem] shadow-sm border border-indigo-50 overflow-hidden group hover:shadow-xl transition-all duration-300">
-                <div className="p-8 sm:p-10">
-                  <div className="flex items-start justify-between mb-8">
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-indigo-50 rounded-3xl flex items-center justify-center border border-indigo-100">
+              <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-sm border border-indigo-50 overflow-hidden group hover:shadow-xl transition-all duration-300">
+                <div className="p-6 md:p-10">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-8 gap-6">
+                    <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                      <div className="w-16 h-16 bg-indigo-50 rounded-3xl flex items-center justify-center border border-indigo-100 shrink-0">
                         <Building2 className="w-8 h-8 text-indigo-600" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-black text-gray-900">
+                        <h3 className="text-2xl font-black text-gray-900 leading-tight">
                           {subscriptionData.companySubscription.companyName}
                         </h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        <div className="flex items-center justify-center sm:justify-start gap-2 mt-2">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wider ${
                             subscriptionData.companySubscription.subscription.status === "active" 
                               ? "bg-emerald-50 text-emerald-600 border border-emerald-100" 
                               : "bg-rose-50 text-rose-600 border border-rose-100"
                           }`}>
                             {subscriptionData.companySubscription.subscription.status}
                           </span>
-                          <span className="text-xs text-indigo-400 font-bold uppercase tracking-widest">
+                          <span className="text-[10px] text-indigo-400 font-black uppercase tracking-widest">
                             {subscriptionData.companySubscription.subscription.planName}
                           </span>
                         </div>
@@ -249,15 +249,15 @@ const SubscriptionManagement: React.FC = () => {
                   <div className="space-y-6">
                     <div>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-sm font-bold text-gray-600 flex items-center gap-2">
+                        <span className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-indigo-600" />
                           Subscription Period
                         </span>
-                        <span className="text-sm font-black text-gray-900">
+                        <span className="text-xs md:text-sm font-black text-gray-900">
                           {getDaysRemaining(subscriptionData.companySubscription.subscription.endDate)} days left
                         </span>
                       </div>
-                      <div className="w-full h-3 bg-gray-50 rounded-full overflow-hidden">
+                      <div className="w-full h-2 md:h-3 bg-gray-50 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-indigo-600 to-violet-500 rounded-full transition-all duration-1000"
                           style={{ width: `${calculateProgress(
@@ -270,51 +270,51 @@ const SubscriptionManagement: React.FC = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="p-5 bg-indigo-50/30 rounded-2xl border border-indigo-100/50">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 block mb-1">
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-indigo-400 block mb-1 opacity-70">
                           Valid From
                         </span>
-                        <span className="text-lg font-bold text-gray-900">
+                        <span className="text-base md:text-lg font-black text-gray-800">
                           {formatDate(subscriptionData.companySubscription.subscription.startDate)}
                         </span>
                       </div>
                       <div className="p-5 bg-indigo-50/30 rounded-2xl border border-indigo-100/50">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 block mb-1">
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-indigo-400 block mb-1 opacity-70">
                           Valid Until
                         </span>
-                        <span className="text-lg font-bold text-gray-900">
+                        <span className="text-base md:text-lg font-black text-gray-800">
                           {formatDate(subscriptionData.companySubscription.subscription.endDate)}
                         </span>
                       </div>
                     </div>
 
                     {subscriptionData.companySubscription.subscription.status === "active" ? (
-                      <div className="p-6 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl text-white">
+                      <div className="p-6 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-[1.5rem] md:rounded-[2rem] text-white shadow-lg shadow-indigo-200/50">
                         <div className="flex items-center gap-3 mb-2">
                           <ShieldCheck className="w-5 h-5 text-indigo-200" />
-                          <h4 className="font-bold">Enterprise Access Active</h4>
+                          <h4 className="font-black text-sm uppercase tracking-wider">Enterprise Active</h4>
                         </div>
-                        <p className="text-indigo-100 text-xs font-medium leading-relaxed">
+                        <p className="text-indigo-100 text-[11px] md:text-xs font-medium leading-relaxed">
                           Your account is linked to {subscriptionData.companySubscription.companyName}. 
-                          All enterprise features are currently unlocked for your usage.
+                          All enterprise features are currently unlocked.
                         </p>
                       </div>
                     ) : (
-                      <div className={`p-6 rounded-3xl border transition-all duration-300 ${
+                      <div className={`p-6 rounded-[1.5rem] md:rounded-[2rem] border transition-all duration-300 ${
                         subscriptionData.companySubscription.subscription.status === "pending"
                           ? "bg-amber-50/50 border-amber-100"
                           : "bg-rose-50/50 border-rose-100"
                       }`}>
                         <div className="flex items-center gap-3 mb-3">
                           {subscriptionData.companySubscription.subscription.status === "pending" ? (
-                            <div className="p-2 bg-amber-100 rounded-lg">
+                            <div className="p-2 bg-amber-100 rounded-lg shrink-0">
                               <Clock className="w-4 h-4 text-amber-600" />
                             </div>
                           ) : (
-                            <div className="p-2 bg-rose-100 rounded-lg">
+                            <div className="p-2 bg-rose-100 rounded-lg shrink-0">
                               <AlertCircle className="w-4 h-4 text-rose-600" />
                             </div>
                           )}
-                          <h4 className={`font-bold text-sm ${
+                          <h4 className={`font-black text-xs md:text-sm uppercase tracking-widest ${
                             subscriptionData.companySubscription.subscription.status === "pending" ? "text-amber-900" : "text-rose-900"
                           }`}>
                             {subscriptionData.companySubscription.subscription.status === "pending" 
@@ -322,22 +322,22 @@ const SubscriptionManagement: React.FC = () => {
                               : "Activation Required"}
                           </h4>
                         </div>
-                        <p className={`text-[11px] font-medium leading-relaxed mb-5 ${
+                        <p className={`text-[10px] md:text-[11px] font-medium leading-relaxed mb-5 ${
                           subscriptionData.companySubscription.subscription.status === "pending" ? "text-amber-700/80" : "text-rose-700/80"
                         }`}>
                           {subscriptionData.companySubscription.subscription.status === "pending"
                             ? "Our administration team is currently reviewing your company credentials. This typically takes 24-48 hours."
-                            : "Your company subscription is currently inactive. You need to complete the payment to activate enterprise features for your team."}
+                            : "Your company subscription is currently inactive. You need to complete the payment to activate enterprise features."}
                         </p>
                         <button
                           onClick={() => navigate("/subscription/company/verify/status")}
-                          className={`w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                          className={`w-full py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all border ${
                             subscriptionData.companySubscription.subscription.status === "pending"
-                              ? "bg-white border-amber-200 text-amber-700 hover:bg-amber-50 shadow-sm shadow-amber-200/20"
-                              : "bg-white border-rose-200 text-rose-700 hover:bg-rose-50 shadow-sm shadow-rose-200/20"
-                          }`}
+                              ? "bg-white border-amber-200 text-amber-700 hover:bg-amber-50 shadow-sm"
+                              : "bg-white border-rose-200 text-rose-700 hover:bg-rose-50 shadow-sm"
+                          } active:scale-[0.98]`}
                         >
-                          Check Verification Status
+                          Check Status
                         </button>
                       </div>
                     )}
@@ -345,12 +345,12 @@ const SubscriptionManagement: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-[2.5rem] border border-dashed border-indigo-100 p-12 text-center h-full flex flex-col justify-center">
+              <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border-2 border-dashed border-indigo-50 p-8 md:p-12 text-center h-full flex flex-col justify-center min-h-[300px]">
                 <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Building2 className="w-8 h-8 text-indigo-100" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-400">No Company Access</h3>
-                <p className="text-sm text-gray-300 mt-2 max-w-xs mx-auto">
+                <h3 className="text-xl font-black text-gray-300">No Enterprise Plan</h3>
+                <p className="text-xs md:text-sm text-gray-300 mt-2 max-w-xs mx-auto font-medium">
                   Contact your organization administrator to get added to a company plan.
                 </p>
               </div>

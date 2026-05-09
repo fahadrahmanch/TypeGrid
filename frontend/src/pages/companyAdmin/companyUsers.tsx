@@ -6,7 +6,7 @@ const CompanyUsers: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-[#FFF8EA]">
       <CompanyAdminSidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 overflow-y-auto pt-24 md:pt-12">
         <div className="max-w-7xl mx-auto">
           <UsersTable />
         </div>

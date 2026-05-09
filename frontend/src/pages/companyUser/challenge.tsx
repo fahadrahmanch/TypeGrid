@@ -12,7 +12,7 @@ const Challenge: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FFF8EA] text-gray-800 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
       <CompanyUserNavbar />
-      <main className="pt-24 px-8 pb-12 w-full max-w-[1600px] mx-auto min-h-[calc(100vh-80px)]">
+      <main className="pt-20 md:pt-24 px-4 md:px-8 pb-12 w-full max-w-[1600px] mx-auto min-h-[calc(100vh-80px)]">
         {currentView === "arena" ? (
           <ChallengeArena setView={setCurrentView} />
         ) : (

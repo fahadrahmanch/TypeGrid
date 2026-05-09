@@ -23,7 +23,6 @@ export interface UserContestCardProps {
   difficulty: string;
   date: string;
   isGroup?: boolean;
-  tags?: { label: string; color: string }[];
   actionLabel?: string;
   reward?: RewardResponseDTO[];
 }
@@ -71,7 +70,6 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
   date,
   isGroup,
   joined,
-  tags,
   reward,
 }) => {
   const [isJoined, setIsJoined] = useState(joined);
@@ -81,19 +79,23 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
   const navigate = useNavigate();
 
   async function handleClick(contestId: string, actionLabel: string) {
-    const response = await joinOrLeaveContestApi(contestId, actionLabel);
+    try { 
+      const response = await joinOrLeaveContestApi(contestId, actionLabel);
 
-    if (response) {
-      toast.success(`${actionLabel}ed contest successfully`);
-    }
-    const contest = response.data.data;
+      if (response) {
+        toast.success(`${actionLabel}ed contest successfully`);
+      }
+      const contest = response.data.data;
+      // setParticipantList(contest.participants);
+      if (actionLabel === "join") {
+        setParticipantsCount(participantsCount + 1);
+      } else if (actionLabel === "cancel") {
+        setParticipantsCount(participantsCount - 1);
+      }
 
-    setIsJoined(contest.joined);
-    // setParticipantList(contest.participants);
-    if (actionLabel === "join") {
-      setParticipantsCount(participantsCount + 1);
-    } else if (actionLabel === "cancel") {
-      setParticipantsCount(participantsCount - 1);
+      setIsJoined(contest.joined);
+    } catch (error:any) {
+      toast.error(error.response.data.message);
     }
   }
 
@@ -101,9 +103,7 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
   const action = isJoined ? "cancel" : "join";
   return (
     <div
-      className="group bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-[0_10px_30px_rgb(236,164,104,0.04)] hover:shadow-[0_20px_50px_rgb(236,164,104,0.08)] border border-[#ECA468]/10 transition-all duration-500 relative w-full transform hover:-translate-y-1.5 overflow-hidden flex flex-col h-full"
-      // onMouseEnter={() => setIsHovered(true)}
-      // onMouseLeave={() => setIsHovered(false)}
+      className="group bg-[#fff8ea]/60 backdrop-blur-xl rounded-[1.5rem] md:rounded-[2rem] p-3 md:p-6 shadow-[0_10px_30px_rgb(236,164,104,0.04)] hover:shadow-[0_20px_50px_rgb(236,164,104,0.08)] border border-[#ECA468]/10 transition-all duration-500 relative w-full transform hover:-translate-y-1.5 overflow-hidden flex flex-col h-full"
     >
       {/* Top decorative gradient bar */}
       <div
@@ -116,60 +116,49 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
       />
 
       {/* Header Section */}
-      <div className="flex justify-between items-start mb-4 gap-3">
+      <div className="flex justify-between items-start mb-3 md:mb-4 gap-2 md:gap-3">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex flex-wrap items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
             <span
-              className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${getStatusBadgeStyle(status)}`}
+              className={`text-[8px] md:text-[10px] font-bold uppercase tracking-wider px-2 md:px-2.5 py-0.5 md:py-1 rounded-full ${getStatusBadgeStyle(status)}`}
             >
               {status}
             </span>
             {isGroup && (
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-purple-100 text-purple-700 flex items-center gap-1">
-                <Users size={10} /> Team
+              <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-wider px-2 md:px-2.5 py-0.5 md:py-1 rounded-full bg-purple-100 text-purple-700 flex items-center gap-1">
+                <Users size={8} className="md:w-[10px] md:h-[10px]" /> Team
               </span>
             )}
           </div>
-          <h3 className="text-xl font-black text-slate-800 leading-tight group-hover:text-[#ECA468] transition-colors line-clamp-2">
+          <h3 className="text-sm md:text-xl font-black text-slate-800 leading-tight group-hover:text-[#ECA468] transition-colors line-clamp-2">
             {title}
           </h3>
         </div>
         {/* Difficulty Badge */}
         <div
-          className={`flex flex-col items-center justify-center px-3 py-1.5 rounded-lg border shadow-sm ${getLevelBadgeStyle(difficulty)}`}
+          className={`flex flex-col items-center justify-center px-1.5 md:px-3 py-1 md:py-1.5 rounded-lg border shadow-sm shrink-0 ${getLevelBadgeStyle(difficulty)}`}
         >
-          <Zap className="w-3.5 h-3.5 mb-0.5" />
-          <span className="text-[11px] font-bold uppercase tracking-wider">{difficulty}</span>
+          <Zap className="w-3 md:w-3.5 h-3 md:h-3.5 mb-0.5" />
+          <span className="text-[8px] md:text-[11px] font-bold uppercase tracking-wider">{difficulty}</span>
         </div>
       </div>
 
       {/* Description */}
-      <p className="text-sm text-slate-500 font-medium mb-6 line-clamp-2 flex-grow leading-relaxed">
+      <p className="text-[11px] md:text-sm text-slate-500 font-medium mb-4 md:mb-6 line-clamp-2 flex-grow leading-relaxed">
         {description ||
           (isGroup
-            ? "An exclusive internal team competition to test your skills."
-            : "An open competition for everyone to showcase their typing speed.")}
+            ? "An exclusive internal team competition."
+            : "An open competition for everyone.")}
       </p>
-
-      {/* Tags (if any exist beyond default) */}
-      {tags && tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {tags.map((tag, index) => (
-            <span key={index} className={`text-[10px] font-semibold tracking-wide px-2 py-1 rounded-md ${tag.color}`}>
-              {tag.label}
-            </span>
-          ))}
-        </div>
-      )}
 
       {/* Prize Section (Compacted) */}
       {reward && reward.length > 0 && (
-        <div className="mb-6 bg-[#fff4ec]/60 rounded-2xl p-4 border border-[#faddb8]/40 flex flex-col gap-3">
-          <div className="flex items-center gap-1.5 text-[#D0864B] text-[10px] font-black uppercase tracking-widest mb-1">
-            <Trophy className="w-4 h-4 text-[#ECA468]" />
-            Prize Pool
+        <div className="mb-4 md:mb-6 bg-[#fff4ec]/60 rounded-xl md:rounded-2xl p-2.5 md:p-4 border border-[#faddb8]/40 flex flex-col gap-2 md:gap-3">
+          <div className="flex items-center gap-1.5 text-[#D0864B] text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-0.5">
+            <Trophy className="w-3 md:w-4 h-3 md:h-4 text-[#ECA468]" />
+            Prizes
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {reward.map((r) => {
               const getRankStr = (rank: number) => {
                 if (rank === 1) return "1st";
@@ -180,10 +169,10 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
               return (
                 <div
                   key={r.rank}
-                  className="flex items-center bg-white/40 backdrop-blur-sm rounded-xl px-3 py-2 shadow-sm border border-[#f8e8c8]/40"
+                  className="flex items-center bg-white/40 backdrop-blur-sm rounded-lg md:rounded-xl px-1.5 md:px-3 py-1 md:py-2 shadow-sm border border-[#f8e8c8]/40"
                 >
-                  <span className="text-xs font-black text-[#ECA468] mr-2">{getRankStr(r.rank)}</span>
-                  <span className="text-sm font-black text-slate-700">₹{r.prize}</span>
+                  <span className="text-[10px] md:text-xs font-black text-[#ECA468] mr-1.5">{getRankStr(r.rank)}</span>
+                  <span className="text-[10px] md:text-sm font-black text-slate-700">₹{r.prize}</span>
                 </div>
               );
             })}
@@ -192,18 +181,18 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
       )}
 
       {/* Info Grid */}
-      <div className="grid grid-cols-2 gap-y-4 gap-x-6 mb-7 pt-5 border-t border-[#f8e8c8]/40">
-        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
-          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
-            <Calendar className="w-4 h-4" />
+      <div className="grid grid-cols-2 gap-y-2 md:gap-y-4 gap-x-1 md:gap-x-6 mb-4 md:mb-7 pt-3 md:pt-5 border-t border-[#f8e8c8]/40">
+        <div className="flex items-center gap-1 md:gap-2.5 text-[9px] md:text-sm text-[#7D6B5D] font-bold">
+          <div className="p-1 md:p-2 bg-[#fff4ec]/60 rounded-lg md:rounded-xl text-[#D0864B] border border-[#faddb8]/20 shrink-0">
+            <Calendar className="w-2.5 h-2.5 md:w-4 h-4" />
           </div>
-          <span className="truncate">{date.toString().split("T")[0]}</span>
+          <span className="leading-tight">{date.toString().split("T")[0]}</span>
         </div>
-        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
-          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
-            <Clock className="w-4 h-4" />
+        <div className="flex items-center gap-1 md:gap-2.5 text-[9px] md:text-sm text-[#7D6B5D] font-bold">
+          <div className="p-1 md:p-2 bg-[#fff4ec]/60 rounded-lg md:rounded-xl text-[#D0864B] border border-[#faddb8]/20 shrink-0">
+            <Clock className="w-2.5 h-2.5 md:w-4 h-4" />
           </div>
-          <span className="truncate">
+          <span className="leading-tight">
             {new Date(startTime).toLocaleTimeString("en-US", {
               hour: "numeric",
               minute: "2-digit",
@@ -211,43 +200,43 @@ const UserContestCard: React.FC<UserContestCardProps> = ({
             })}
           </span>
         </div>
-        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
-          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
-            <Activity className="w-4 h-4" />
+        <div className="flex items-center gap-1 md:gap-2.5 text-[9px] md:text-sm text-[#7D6B5D] font-bold">
+          <div className="p-1 md:p-2 bg-[#fff4ec]/60 rounded-lg md:rounded-xl text-[#D0864B] border border-[#faddb8]/20 shrink-0">
+            <Activity className="w-2.5 h-2.5 md:w-4 h-4" />
           </div>
-          <span className="truncate">{duration} mins</span>
+          <span className="leading-tight">{duration}m</span>
         </div>
-        <div className="flex items-center gap-2.5 text-sm text-[#7D6B5D] font-bold">
-          <div className="p-2 bg-[#fff4ec]/60 rounded-xl text-[#D0864B] border border-[#faddb8]/20">
-            <Users className="w-4 h-4" />
+        <div className="flex items-center gap-1 md:gap-2.5 text-[9px] md:text-sm text-[#7D6B5D] font-bold">
+          <div className="p-1 md:p-2 bg-[#fff4ec]/60 rounded-lg md:rounded-xl text-[#D0864B] border border-[#faddb8]/20 shrink-0">
+            <Users className="w-2.5 h-2.5 md:w-4 h-4" />
           </div>
-          <span className="truncate">
-            {participantsCount}/{maxParticipants} joined
+          <span className="leading-tight">
+            {participantsCount}/{maxParticipants}
           </span>
         </div>
       </div>
 
       {/* Actions */}
-      <div className="mt-auto flex gap-3">
+      <div className="mt-auto flex flex-col xs:flex-row gap-2 md:gap-3">
         <button
           onClick={() => handleClick(_id, action)}
-          className={`flex-1 py-3 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap
+          className={`w-full py-2.5 md:py-3 px-3 md:px-4 rounded-xl font-black text-[9px] md:text-xs uppercase tracking-widest transition-all duration-300 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap
                     ${action === "join"
               ? "bg-[#ECA468] text-white hover:bg-[#D0864B] hover:shadow-lg hover:shadow-[#ECA468]/30"
               : "bg-rose-100 text-rose-600 border border-rose-200 hover:bg-rose-200"
             }
                   `}
         >
-          {action === "join" ? "Join Contest" : "Cancel"}
+          {action === "join" ? "Join" : "Cancel"}
         </button>
 
         {isJoined && (
           <button
             onClick={() => navigate(`lobby/${_id}`)}
-            className="flex-1 py-3 px-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 bg-white shadow-[0_5px_15px_rgba(236,164,104,0.1)] text-[#D0864B] border border-[#FADDB8] hover:bg-[#FFF4EC] flex items-center justify-center gap-1 group/btn whitespace-nowrap"
+            className="w-full py-2.5 md:py-3 px-3 md:px-4 rounded-xl font-black text-[9px] md:text-xs uppercase tracking-widest transition-all duration-300 bg-white shadow-[0_5px_15px_rgba(236,164,104,0.1)] text-[#D0864B] border border-[#FADDB8] hover:bg-[#FFF4EC] flex items-center justify-center gap-1 group/btn whitespace-nowrap"
           >
             Lobby
-            <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+            <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover/btn:translate-x-1 transition-transform" />
           </button>
         )}
       </div>

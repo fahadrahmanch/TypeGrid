@@ -109,68 +109,68 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, onUserAdded }) => {
       />
 
       {/* Modal Container */}
-      <div className="bg-[#FFF8EA] rounded-[2.5rem] shadow-2xl w-full max-w-2xl relative overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-300">
+      <div className="bg-[#FFF8EA] rounded-3xl md:rounded-[2.5rem] shadow-2xl w-full max-w-2xl relative overflow-hidden flex flex-col max-h-[95vh] md:max-h-[90vh] animate-in fade-in zoom-in duration-300">
         {/* Decorative Header Area */}
-        <div className="bg-gradient-to-r from-[#ECA468] to-[#D0864B] p-10 relative overflow-hidden text-start">
+        <div className="bg-gradient-to-r from-[#ECA468] to-[#D0864B] p-6 md:p-10 relative overflow-hidden text-start shrink-0">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           <div className="relative z-10">
-            <h2 className="text-3xl font-black text-white tracking-tight mb-2">Engage New Talent</h2>
-            <p className="text-white/80 font-medium tracking-tight">
+            <h2 className="text-xl md:text-3xl font-black text-white tracking-tight mb-1 md:mb-2 uppercase">Engage New Talent</h2>
+            <p className="text-[10px] md:text-sm text-white/80 font-medium tracking-tight">
               Create a new student profile and get them started on their journey.
             </p>
           </div>
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-8 right-8 p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all text-white group"
+            className="absolute top-6 md:top-8 right-6 md:right-8 p-2 bg-white/10 hover:bg-white/20 rounded-lg md:rounded-xl transition-all text-white group"
           >
-            <X size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+            <X size={18} className="group-hover:rotate-90 transition-transform duration-300" />
           </button>
         </div>
 
-        {/* Subscription Limit Banner */}
-        {subscriptionInfo && (
-          <div className="mx-8 mt-6 bg-white border border-[#ECA468]/30 rounded-2xl overflow-hidden shadow-sm">
-            {/* Banner header */}
-            <div className="bg-gradient-to-r from-[#ECA468]/10 to-[#D0864B]/5 px-5 py-2.5 border-b border-[#ECA468]/20 flex items-center gap-2">
-              <ShieldCheck size={13} className="text-[#D0864B]" />
-              <span className="text-[10px] font-black text-[#D0864B] uppercase tracking-widest">Plan Limitations</span>
-            </div>
-            {/* Stats row */}
-            <div className="flex items-center divide-x divide-[#ECA468]/15">
-              {/* Plan Name */}
-              <div className="flex-1 px-5 py-4">
-                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Active Plan</p>
-                <p className="text-sm font-black text-gray-800 truncate">{subscriptionInfo.planName}</p>
-              </div>
-              {/* User Limit */}
-              <div className="flex-1 px-5 py-4 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#ECA468]/15 flex items-center justify-center shrink-0">
-                  <Users size={15} className="text-[#D0864B]" />
-                </div>
-                <div>
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">User Limit</p>
-                  <p className="text-xl font-black text-[#D0864B] leading-none">
-                    {subscriptionInfo.userLimit}
-                    <span className="text-xs text-gray-400 font-bold ml-1">users</span>
-                  </p>
-                </div>
-              </div>
-              {/* Duration */}
-              <div className="flex-1 px-5 py-4">
-                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Duration</p>
-                <p className="text-sm font-black text-gray-800">{formatDuration(subscriptionInfo.duration)}</p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Form Body */}
-        <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="flex-1 overflow-y-auto p-6 md:p-10 custom-scrollbar space-y-6 md:space-y-8">
+          {/* Subscription Limit Banner */}
+          {subscriptionInfo && (
+            <div className="bg-white border border-[#ECA468]/30 rounded-xl md:rounded-2xl overflow-hidden shadow-sm shrink-0">
+              {/* Banner header */}
+              <div className="bg-gradient-to-r from-[#ECA468]/10 to-[#D0864B]/5 px-4 md:px-5 py-2 border-b border-[#ECA468]/20 flex items-center gap-2">
+                <ShieldCheck size={12} className="text-[#D0864B]" />
+                <span className="text-[8px] md:text-[10px] font-black text-[#D0864B] uppercase tracking-widest">Plan Limitations</span>
+              </div>
+              {/* Stats row */}
+              <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#ECA468]/15">
+                {/* Plan Name */}
+                <div className="px-4 md:px-5 py-3 md:py-4">
+                  <p className="text-[8px] md:text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Active Plan</p>
+                  <p className="text-xs md:text-sm font-black text-gray-800 truncate">{subscriptionInfo.planName}</p>
+                </div>
+                {/* User Limit */}
+                <div className="px-4 md:px-5 py-3 md:py-4 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#ECA468]/15 flex items-center justify-center shrink-0">
+                    <Users size={14} className="text-[#D0864B]" />
+                  </div>
+                  <div>
+                    <p className="text-[8px] md:text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">User Limit</p>
+                    <p className="text-lg md:text-xl font-black text-[#D0864B] leading-none">
+                      {subscriptionInfo.userLimit}
+                      <span className="text-[10px] md:text-xs text-gray-400 font-bold ml-1">users</span>
+                    </p>
+                  </div>
+                </div>
+                {/* Duration */}
+                <div className="px-4 md:px-5 py-3 md:py-4">
+                  <p className="text-[8px] md:text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Duration</p>
+                  <p className="text-xs md:text-sm font-black text-gray-800">{formatDuration(subscriptionInfo.duration)}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {/* Full Name */}
-              <div className="space-y-3">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+              <div className="space-y-2 md:space-y-3">
+                <label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
                   <User size={12} className="text-[#D0864B]" />
                   Full Name
                 </label>
@@ -181,20 +181,20 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, onUserAdded }) => {
                     value={values.name}
                     onChange={handleChange}
                     placeholder="e.g. Alexander Pierce"
-                    className={`w-full px-6 py-4 bg-white border ${error.name ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
+                    className={`w-full px-5 md:px-6 py-3 md:py-4 bg-white border ${error.name ? "border-rose-300" : "border-[#ECA468]/20"} rounded-xl md:rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-xs md:text-base text-gray-700 shadow-sm`}
                   />
                   {error.name && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-rose-500">
-                      <AlertCircle size={18} />
+                      <AlertCircle size={16} />
                     </div>
                   )}
                 </div>
-                {error.name && <p className="text-xs font-bold text-rose-500 ml-1">{error.name}</p>}
+                {error.name && <p className="text-[10px] font-bold text-rose-500 ml-1">{error.name}</p>}
               </div>
 
               {/* Email Address */}
-              <div className="space-y-3">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+              <div className="space-y-2 md:space-y-3">
+                <label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
                   <Mail size={12} className="text-[#D0864B]" />
                   Email Address
                 </label>
@@ -205,21 +205,21 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, onUserAdded }) => {
                     value={values.email}
                     onChange={handleChange}
                     placeholder="student@university.edu"
-                    className={`w-full px-6 py-4 bg-white border ${error.email ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
+                    className={`w-full px-5 md:px-6 py-3 md:py-4 bg-white border ${error.email ? "border-rose-300" : "border-[#ECA468]/20"} rounded-xl md:rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-xs md:text-base text-gray-700 shadow-sm`}
                   />
                   {error.email && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-rose-500">
-                      <AlertCircle size={18} />
+                      <AlertCircle size={16} />
                     </div>
                   )}
                 </div>
-                {error.email && <p className="text-xs font-bold text-rose-500 ml-1">{error.email}</p>}
+                {error.email && <p className="text-[10px] font-bold text-rose-500 ml-1">{error.email}</p>}
               </div>
             </div>
 
             {/* Password Section */}
-            <div className="space-y-3">
-              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+            <div className="space-y-2 md:space-y-3">
+              <label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
                 <Lock size={12} className="text-[#D0864B]" />
                 Access Password
               </label>
@@ -229,37 +229,36 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, onUserAdded }) => {
                   name="password"
                   value={values.password}
                   onChange={handleChange}
-                  className={`w-full px-6 py-4 bg-white border ${error.password ? "border-rose-300" : "border-[#ECA468]/20"} rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-gray-700 shadow-sm`}
+                  className={`w-full px-5 md:px-6 py-3 md:py-4 bg-white border ${error.password ? "border-rose-300" : "border-[#ECA468]/20"} rounded-xl md:rounded-2xl outline-none focus:ring-4 focus:ring-[#ECA468]/10 transition-all font-bold text-xs md:text-base text-gray-700 shadow-sm`}
                 />
                 <ShieldCheck size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500" />
               </div>
-              <p className="text-[10px] text-gray-400 font-medium ml-1 flex items-center gap-1.5 leading-relaxed">
+              <p className="text-[9px] md:text-[10px] text-gray-400 font-medium ml-1 flex items-center gap-1.5 leading-relaxed">
                 <AlertCircle size={10} />
-                New members will use this password for their initial login.
+                Initial password for member login.
               </p>
-              {error.password && <p className="text-xs font-bold text-rose-500 ml-1">{error.password}</p>}
+              {error.password && <p className="text-[10px] font-bold text-rose-500 ml-1">{error.password}</p>}
             </div>
 
             {/* Hint Box */}
-            <div className="bg-[#FFF8EA] border border-[#ECA468]/20 rounded-[1.5rem] p-6 flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#ECA468]/10 flex items-center justify-center text-[#D0864B] shrink-0">
-                <ShieldCheck size={20} />
+            <div className="bg-[#FFF8EA] border border-[#ECA468]/20 rounded-xl md:rounded-[1.5rem] p-4 md:p-6 flex gap-3 md:gap-4">
+              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-[#ECA468]/10 flex items-center justify-center text-[#D0864B] shrink-0">
+                <ShieldCheck size={18} className="md:w-5 md:h-5" />
               </div>
-              <p className="text-xs font-medium text-gray-500 leading-relaxed text-start">
+              <p className="text-[10px] md:text-xs font-medium text-gray-500 leading-relaxed text-start">
                 Accounts are initialized with{" "}
-                <span className="font-bold text-[#D0864B] uppercase tracking-widest">Active</span> status. Students can
-                immediately access assigned materials upon successful login.
+                <span className="font-bold text-[#D0864B] uppercase tracking-widest">Active</span> status.
               </p>
             </div>
           </form>
         </div>
 
         {/* Footer Actions */}
-        <div className="p-10 border-t border-gray-50/50 flex justify-between items-center bg-[#FFF8EA]/50">
+        <div className="p-6 md:p-10 border-t border-gray-50/50 flex flex-col-reverse md:flex-row justify-between items-stretch md:items-center bg-[#FFF8EA]/50 gap-4">
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="px-8 py-4 text-gray-400 hover:text-gray-600 font-black uppercase tracking-widest text-[10px] transition-all"
+            className="px-8 py-3 md:py-4 text-gray-400 hover:text-gray-600 font-black uppercase tracking-widest text-[9px] md:text-[10px] transition-all"
           >
             Cancel
           </button>
@@ -267,12 +266,12 @@ const AddUser: React.FC<AddUserProps> = ({ setOpen, onUserAdded }) => {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-10 py-5 bg-[#D0864B] hover:bg-[#B36E39] text-white rounded-2xl font-black shadow-lg shadow-[#D0864B]/20 transition-all uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 group"
+            className="px-8 md:px-10 py-4 md:py-5 bg-[#D0864B] hover:bg-[#B36E39] text-white rounded-xl md:rounded-2xl font-black shadow-lg shadow-[#D0864B]/20 transition-all uppercase tracking-widest text-[10px] md:text-xs disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
           >
             {isSubmitting ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              <Plus size={18} className="group-hover:scale-110 transition-transform" />
+              <Plus size={16} className="md:w-[18px] group-hover:scale-110 transition-transform" />
             )}
             Create Profile
           </button>

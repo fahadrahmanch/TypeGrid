@@ -11,6 +11,7 @@ export function difficultyValidation(difficulty: string) {
 
 export function goalValidation(goal: string) {
   if (!goal.trim()) return "goal is required";
+  if(goal.trim().length < 3) return "goal must be at least 3 characters";
   return "";
 }
 

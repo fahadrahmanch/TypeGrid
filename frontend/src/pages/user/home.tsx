@@ -63,30 +63,18 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <Navbar />
 
-      <main className="w-full px-4 md:px-8 py-6">
-        <WelcomeSection />
+      <main className="w-full px-4 md:px-8 pt-20 pb-12">
+        <div className="max-w-7xl mx-auto">
+          <WelcomeSection />
 
-        <GameModes onGameModeClick={handleGameModeClick} />
+          <GameModes onGameModeClick={handleGameModeClick} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-12">
-          {/* Left Column: Recent Matches */}
-
-          {/* <div className="lg:col-span-1">
-            <RecentMatches />
-          </div> */}
-
-          {/* Middle Column: Highscores */}
-          {/* <div className="lg:col-span-1">
-            <Highscores />
-          </div> */}
-
-          {/* Right Column: Recent Posts */}
-          {/* <div className="lg:col-span-1">
-            <RecentPosts />
-          </div> */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-12">
+            {/* Future expansion slots */}
+          </div>
         </div>
       </main>
     </div>

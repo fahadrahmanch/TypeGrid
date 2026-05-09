@@ -24,6 +24,7 @@ interface Props {
   setFinalResult: any;
   setIsfinished: React.Dispatch<React.SetStateAction<boolean>>;
   hasJoinedRef: React.MutableRefObject<boolean>;
+  isFinished: boolean;
 }
 
 export const useGroupPlaySocket = ({
@@ -44,6 +45,7 @@ export const useGroupPlaySocket = ({
   setFinalResult,
   setIsfinished,
   hasJoinedRef,
+  isFinished,
 }: Props) => {
   // leave game when component unmounts
   useEffect(() => {
@@ -165,6 +167,7 @@ export const useGroupPlaySocket = ({
 
   // send typing progress
   useEffect(() => {
+    if (isFinished) return;
     if (!gameData?._id || !currentUser) return;
     if (phase !== "PLAY") return;
 

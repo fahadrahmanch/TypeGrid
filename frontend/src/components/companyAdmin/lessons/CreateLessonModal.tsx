@@ -110,38 +110,38 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
       />
 
       {/* Modal Content */}
-      <div className="relative bg-[#FFF8EA] rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-white/50 animate-in zoom-in-95 duration-300 flex flex-col">
+      <div className="relative bg-[#FFF8EA] rounded-3xl md:rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[95vh] md:max-h-[90vh] overflow-hidden border border-white/50 animate-in zoom-in-95 duration-300 flex flex-col">
         {/* Decorative Header */}
-        <div className="h-32 bg-gradient-to-br from-[#ECA468] to-[#D0864B] relative overflow-hidden shrink-0">
+        <div className="h-24 md:h-32 bg-gradient-to-br from-[#ECA468] to-[#D0864B] relative overflow-hidden shrink-0">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,#fff_0%,transparent_50%)]" />
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
 
-          <div className="relative h-full px-10 flex items-center justify-between">
-            <div className="flex items-center gap-4 text-white">
-              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
-                <BookOpen size={28} />
+          <div className="relative h-full px-6 md:px-10 flex items-center justify-between">
+            <div className="flex items-center gap-3 md:gap-4 text-white">
+              <div className="p-2 md:p-3 bg-white/20 rounded-xl md:rounded-2xl backdrop-blur-md">
+                <BookOpen size={24} className="md:w-7 md:h-7" />
               </div>
               <div>
-                <h2 className="text-3xl font-black tracking-tight">Create Lesson</h2>
-                <p className="text-white/70 text-sm font-bold uppercase tracking-widest mt-1">Material Builder</p>
+                <h2 className="text-xl md:text-3xl font-black tracking-tight uppercase">Create Lesson</h2>
+                <p className="text-white/70 text-[10px] md:text-sm font-bold uppercase tracking-widest mt-0.5 md:mt-1">Material Builder</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-3 hover:bg-white/20 rounded-2xl transition-all text-white/80 hover:text-white"
+              className="p-2 md:p-3 hover:bg-white/20 rounded-xl md:rounded-2xl transition-all text-white/80 hover:text-white"
             >
-              <X size={24} />
+              <X size={20} className="md:w-6 md:h-6" />
             </button>
           </div>
         </div>
 
-        <div className="p-10 overflow-y-auto custom-scrollbar flex-1 bg-white/40">
-          <form onSubmit={handleSubmit} className="space-y-10">
+        <div className="p-6 md:p-10 overflow-y-auto custom-scrollbar flex-1 bg-white/40">
+          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-10">
             {/* Base Configuration */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
+              <div className="space-y-4 md:space-y-6">
                 <div>
-                  <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                  <label className="flex items-center gap-2 text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-2 md:mb-3 ml-1">
                     <Layers size={14} className="text-[#D0864B]" />
                     Lesson Title
                   </label>
@@ -151,19 +151,19 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
                     value={values.title}
                     onChange={handleInputChange}
                     placeholder="e.g. Mastering Home Row Keys"
-                    className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-gray-800 shadow-sm"
+                    className="w-full px-5 md:px-6 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-sm md:text-base text-gray-800 shadow-sm"
                   />
                   {error.title && (
                     <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
-                      <AlertCircle size={14} />
-                      <span className="text-[10px] font-black uppercase tracking-wider">{error.title}</span>
+                      <AlertCircle size={12} />
+                      <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">{error.title}</span>
                     </div>
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-4 md:gap-6">
                   <div>
-                    <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                    <label className="flex items-center gap-2 text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-2 md:mb-3 ml-1">
                       <Zap size={14} className="text-[#D0864B]" />
                       Level
                     </label>
@@ -171,23 +171,23 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
                       name="level"
                       value={values.level}
                       onChange={handleInputChange}
-                      className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-gray-700 appearance-none shadow-sm cursor-pointer"
+                      className="w-full px-4 md:px-6 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-xs md:text-sm text-gray-700 appearance-none shadow-sm cursor-pointer"
                     >
-                      <option value="">Select Level</option>
+                      <option value="">Level</option>
                       <option value="beginner">Beginner</option>
                       <option value="intermediate">Intermediate</option>
                       <option value="advanced">Advanced</option>
                     </select>
                     {error.level && (
                       <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
-                        <AlertCircle size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-wider">{error.level}</span>
+                        <AlertCircle size={12} />
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">{error.level}</span>
                       </div>
                     )}
                   </div>
 
                   <div>
-                    <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+                    <label className="flex items-center gap-2 text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-2 md:mb-3 ml-1">
                       <Type size={14} className="text-[#D0864B]" />
                       Category
                     </label>
@@ -195,16 +195,16 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
                       name="category"
                       value={values.category}
                       onChange={handleInputChange}
-                      className="w-full px-6 py-4 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-gray-700 appearance-none shadow-sm cursor-pointer"
+                      className="w-full px-4 md:px-6 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-bold text-xs md:text-sm text-gray-700 appearance-none shadow-sm cursor-pointer"
                     >
-                      <option value="">Select Category</option>
+                      <option value="">Category</option>
                       <option value="paragraph">Paragraph</option>
                       <option value="sentence">Sentence</option>
                     </select>
                     {error.category && (
                       <div className="flex items-center gap-1.5 mt-2 ml-2 text-red-500">
-                        <AlertCircle size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-wider">{error.category}</span>
+                        <AlertCircle size={12} />
+                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">{error.category}</span>
                       </div>
                     )}
                   </div>
@@ -213,18 +213,18 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
 
               {/* Performance Targets */}
               <div className="space-y-6">
-                <div className="bg-[#FFF8EA] rounded-3xl p-6 border border-[#ECA468]/20 relative overflow-hidden group">
+                <div className="bg-[#FFF8EA] rounded-2xl md:rounded-3xl p-5 md:p-6 border border-[#ECA468]/20 relative overflow-hidden group">
                   <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-[#ECA468]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
 
-                  <h4 className="text-sm font-black text-[#D0864B] uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                    <Target size={18} /> Performance Targets
+                  <h4 className="text-[10px] md:text-sm font-black text-[#D0864B] uppercase tracking-[0.2em] mb-4 md:mb-6 flex items-center gap-2">
+                    <Target size={18} className="md:w-5 md:h-5" /> Performance Targets
                   </h4>
 
-                  <div className="space-y-6">
+                  <div className="space-y-4 md:space-y-6">
                     <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Min. WPM</span>
-                        <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">
+                      <div className="flex justify-between items-center mb-1.5 md:mb-2">
+                        <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">Min. WPM</span>
+                        <span className="text-[10px] md:text-xs font-black text-[#D0864B] px-1.5 py-0.5 bg-[#D0864B]/10 rounded-md">
                           {values.wpm || 0} WPM
                         </span>
                       </div>
@@ -234,17 +234,17 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
                         value={values.wpm}
                         onChange={handleInputChange}
                         placeholder="e.g. 60"
-                        className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
+                        className="w-full px-5 md:px-6 py-2.5 md:py-3 bg-white rounded-lg md:rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-sm md:text-base text-gray-800"
                       />
-                      {error.wpm && <span className="text-[9px] font-bold text-red-500 ml-1">{error.wpm}</span>}
+                      {error.wpm && <span className="text-[8px] md:text-[9px] font-bold text-red-500 ml-1">{error.wpm}</span>}
                     </div>
 
                     <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      <div className="flex justify-between items-center mb-1.5 md:mb-2">
+                        <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">
                           Accuracy %
                         </span>
-                        <span className="text-xs font-black text-[#D0864B] px-2 py-0.5 bg-[#D0864B]/10 rounded-md">
+                        <span className="text-[10px] md:text-xs font-black text-[#D0864B] px-1.5 py-0.5 bg-[#D0864B]/10 rounded-md">
                           {values.accuracy || 0}%
                         </span>
                       </div>
@@ -254,10 +254,10 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
                         value={values.accuracy}
                         onChange={handleInputChange}
                         placeholder="e.g. 95"
-                        className="w-full px-6 py-3 bg-white rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-gray-800"
+                        className="w-full px-5 md:px-6 py-2.5 md:py-3 bg-white rounded-lg md:rounded-xl border border-gray-100 outline-none focus:border-[#D0864B] transition-all font-bold text-sm md:text-base text-gray-800"
                       />
                       {error.accuracy && (
-                        <span className="text-[9px] font-bold text-red-500 ml-1">{error.accuracy}</span>
+                        <span className="text-[8px] md:text-[9px] font-bold text-red-500 ml-1">{error.accuracy}</span>
                       )}
                     </div>
                   </div>
@@ -267,38 +267,38 @@ const CreateLessonModal: React.FC<CreateLessonModalProps> = ({ isOpen, onClose, 
 
             {/* Practice Content */}
             <div>
-              <label className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
+              <label className="flex items-center gap-2 text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest mb-2 md:mb-3 ml-1">
                 Lesson Content
               </label>
               <textarea
                 name="text"
-                rows={6}
+                rows={5}
                 value={values.text}
                 onChange={handleInputChange}
                 placeholder="Enter the practice text here..."
-                className="w-full px-8 py-6 bg-white rounded-3xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-medium text-gray-800 shadow-sm resize-none leading-relaxed"
+                className="w-full px-6 md:px-8 py-4 md:py-6 bg-white rounded-2xl md:rounded-3xl border border-gray-100 outline-none focus:ring-4 focus:ring-[#ECA468]/10 focus:border-[#ECA468] transition-all font-medium text-sm md:text-base text-gray-800 shadow-sm resize-none leading-relaxed"
               />
               {error.text && (
-                <div className="flex items-center gap-1.5 mt-3 ml-2 text-red-500">
-                  <AlertCircle size={14} />
-                  <span className="text-[10px] font-black uppercase tracking-wider">{error.text}</span>
+                <div className="flex items-center gap-1.5 mt-2 md:mt-3 ml-2 text-red-500">
+                  <AlertCircle size={12} />
+                  <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider">{error.text}</span>
                 </div>
               )}
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
+            <div className="flex flex-col-reverse md:flex-row items-stretch md:items-center gap-3 md:gap-4 pt-6 border-t border-gray-50">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 py-5 rounded-2xl font-black text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all uppercase tracking-widest text-xs"
+                className="flex-1 py-4 md:py-5 rounded-xl md:rounded-2xl font-black text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all uppercase tracking-widest text-[10px] md:text-xs"
               >
                 Discard Changes
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-[2] py-5 bg-[#D0864B] hover:bg-[#B36E39] text-white rounded-2xl font-black shadow-lg shadow-[#D0864B]/20 transition-all uppercase tracking-widest text-xs disabled:opacity-50"
+                className="flex-[2] py-4 md:py-5 bg-[#D0864B] hover:bg-[#B36E39] text-white rounded-xl md:rounded-2xl font-black shadow-lg shadow-[#D0864B]/20 transition-all uppercase tracking-widest text-[10px] md:text-xs disabled:opacity-50"
               >
                 {isSubmitting ? "Creating..." : "Launch Lesson"}
               </button>

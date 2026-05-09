@@ -11,7 +11,7 @@ import {
 } from "../../api/admin/dailyAssignChallenges";
 import DailyAssignmentModal from "../../components/common/DailyAssignmentModal";
 import CustomCalendar from "../../components/common/CustomCalendar";
-import { Plus, Edit2, Trash2 } from "lucide-react";
+import { Plus, Edit2, Trash2,Calendar } from "lucide-react";
 import ReusableTable from "../../components/common/ReusableTable";
 import { fetchChallenges } from "../../api/admin/challenges";
 import { toast } from "react-toastify";
@@ -25,32 +25,6 @@ const DailyAssignment = () => {
   const [currentEditId, setCurrentEditId] = useState<string | null>(null);
   const [challenges, setChallenges] = useState<any[]>([]);
 
-  // const stats = [
-  //   {
-  //     title: "Total Challenges",
-  //     value: "2",
-  //     subtitle: "1 active",
-  //     icon: <Trophy className="w-4 h-4" />,
-  //   },
-  //   {
-  //     title: "Total Attempts",
-  //     value: "245",
-  //     subtitle: "Across all challenges",
-  //     icon: <Users className="w-4 h-4" />,
-  //   },
-  //   {
-  //     title: "Completion Rate",
-  //     value: "36%",
-  //     subtitle: "Overall success rate",
-  //     icon: <Target className="w-4 h-4" />,
-  //   },
-  //   {
-  //     title: "Upcoming",
-  //     value: "1",
-  //     subtitle: "Scheduled challenges",
-  //     icon: <Clock className="w-4 h-4" />,
-  //   },
-  // ];
 
   const [assignChallenges, setAssignChallenges] = useState<any[]>([]);
 
@@ -132,7 +106,6 @@ const DailyAssignment = () => {
       loadDailyAssignChallenges();
       setIsModalOpen(false);
     } catch (err: any) {
-      console.error("Error submitting assignment:", err);
       toast.error(err.response?.data?.message || `Failed to ${modalMode} assignment`);
     }
   };
@@ -152,46 +125,32 @@ const DailyAssignment = () => {
       setIsDeleteModalOpen(false);
       setAssignmentToDelete(null);
     } catch (err: any) {
-      console.error("Error deleting assignment:", err);
       toast.error(err.response?.data?.message || "Failed to delete assignment");
     }
   };
 
   return (
-    <div className="md:ml-64 p-8 min-h-screen bg-[#FFF8EA] font-sans">
+    <div className="md:ml-64 p-4 md:p-8 min-h-screen bg-[#FFF8EA] font-sans pt-24 md:pt-8">
       <SideNavbar />
 
       <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header Section */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Daily Challenge Assignment</h1>
-          <p className="text-gray-500 font-medium tracking-tight">
-            Manage and schedule daily challenges to keep your users engaged.
+        <div className="mb-8 md:mb-10">
+          <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight mb-1 md:mb-2">Daily Assignment</h1>
+          <p className="text-xs md:text-sm text-gray-500 font-medium tracking-tight">
+            Schedule challenges to keep users engaged and competitive.
           </p>
         </div>
 
-        {/* Stats Grid */}
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          {stats.map((stat, index) => (
-            <StatCard
-              key={index}
-              title={stat.title}
-              value={stat.value}
-              subtitle={stat.subtitle}
-              icon={stat.icon}
-            />
-          ))}
-        </div> */}
-
         {/* Search & Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <div className="relative flex-1 min-w-[300px] max-w-md flex gap-4">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6 md:mb-8">
+          <div className="w-full md:max-w-md">
             <CustomCalendar selectedDate={selectedDate} onSelect={(date) => setSelectedDate(date)} />
           </div>
 
           <button
             onClick={handleOpenAddModal}
-            className="flex items-center gap-2 bg-[#ECA468] text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#D0864B] transition-all shadow-lg shadow-[#ECA468]/20 hover:shadow-xl hover:-translate-y-0.5"
+            className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#ECA468] text-white px-6 py-3.5 md:py-3 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest hover:bg-[#D0864B] transition-all shadow-lg shadow-[#ECA468]/20 hover:shadow-xl hover:-translate-y-0.5"
           >
             <Plus className="w-4 h-4" />
             <span>Assign Challenge</span>
@@ -199,61 +158,68 @@ const DailyAssignment = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-8">
-          {/* Center Column: Assigned Challenges Table */}
-          <div className="col-span-1">
-            <div className="bg-white/60 backdrop-blur-md rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/5 h-full min-h-[500px]">
-              <div className="flex justify-between items-center mb-8">
-                <div>
-                  <h3 className="text-lg font-black text-gray-800">Scheduled Challenges</h3>
-                  <p className="text-[#D0864B] font-bold text-sm uppercase tracking-wide">
-                    All upcoming and current challenges
-                  </p>
-                </div>
+          {/* Assigned Challenges Section */}
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2.5rem] p-4 md:p-8 shadow-sm border border-[#ECA468]/10 h-full min-h-[500px]">
+            <div className="flex justify-between items-center mb-6 md:mb-8 px-1 md:px-2">
+              <div>
+                <h3 className="text-lg md:text-xl font-black text-gray-800">Scheduled challenges</h3>
+                <p className="text-[10px] text-[#D0864B] font-bold uppercase tracking-wide mt-1">
+                  Upcoming and current assignments
+                </p>
               </div>
+            </div>
 
-                <ReusableTable
-                  columns={[
-                    {
-                      header: "Challenge",
-                      key: "challengeId.title",
-                      render: (assign) => (
-                        <span className="text-sm font-black text-gray-800 group-hover:text-[#ECA468] transition-colors">
-                          {assign.challengeId?.title}
-                        </span>
-                      ),
-                    },
-                    {
-                      header: "Date",
-                      key: "date",
-                      className: "font-bold text-gray-400 text-xs",
-                      render: (assign) => new Date(assign.date).toLocaleDateString(),
-                    },
-                    {
-                      header: "Actions",
-                      key: "actions",
-                      headerClassName: "text-right",
-                      className: "text-right",
-                      render: (assign) => (
-                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                          <button
-                            onClick={() => handleOpenEditModal(assign)}
-                            className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-100 transition-all"
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteChallenge(assign._id)}
-                            className="p-2 text-red-300 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-100 transition-all"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ),
-                    },
-                  ]}
-                  data={assignChallenges}
-                  emptyMessage="No challenges assigned"
-                />
+            {/* Scheduled Challenges Table */}
+            <div className="overflow-x-auto">
+              <ReusableTable
+                columns={[
+                  {
+                    header: "Challenge",
+                    key: "challengeId.title",
+                    render: (assign) => (
+                      <span className="flex items-center gap-2 text-sm font-black text-gray-800 group-hover:text-[#ECA468] transition-colors whitespace-nowrap">
+                        {assign.challengeId?.title}
+                      </span>
+                    ),
+                  },
+                  {
+                    header: "Date",
+                    key: "date",
+                    className: "font-bold text-gray-400 text-xs whitespace-nowrap",
+                    render: (assign) => (
+                      <div className="flex items-center gap-2 text-sm font-black text-gray-800 group-hover:text-[#ECA468] transition-colors">
+                        <Calendar className="w-3 h-3 text-[#D0864B]" /> {new Date(assign.date).toLocaleDateString()}
+                      </div>
+                    ),
+                  },
+                  {
+                    header: "Actions",
+                    key: "actions",
+                    headerClassName: "text-right",
+                    className: "text-right whitespace-nowrap",
+                    render: (assign) => (
+                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                        <button
+                          onClick={() => handleOpenEditModal(assign)}
+                          className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteChallenge(assign._id)}
+                          className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ),
+                  },
+                ]}
+                data={assignChallenges}
+                emptyMessage="No challenges assigned"
+                headerClassName="bg-[#FFF8EA] text-left"
+                columnHeaderClassName="py-4 px-6 text-[10px] font-black text-[#D0864B] uppercase tracking-widest border-b border-[#ECA468]/10"
+              />
             </div>
           </div>
         </div>

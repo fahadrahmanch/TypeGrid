@@ -1,6 +1,3 @@
-import passwordKid from "../../../assets/images/auth/password/passwordKid.png";
-import lines from "../../../assets/images/auth/login/lines.png";
-import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
 
 import { emailValidation } from "../../../validations/authValidations";
 import { useState } from "react";
@@ -9,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { forgotPasswordApi } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
+import { Mail, ArrowRight, ArrowLeft } from "lucide-react";
 
 const ForgotPassWordForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -48,45 +46,81 @@ const ForgotPassWordForm: React.FC = () => {
     }
   };
   return (
-    <>
-      {/* Container */}
-      <div className="h-screen  flex justify-center items-center flex-1 relative  sm:w-4/4 md:w-full   ">
-        <div className="w-20 mb-10 hidden sm:block">
-          <img src={lines} alt="draw" className="w-28" />
-        </div>
+    <div className="min-h-screen bg-[#FFF8EA] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Abstract Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+      </div>
 
-        <div className="bg-[#FFF5E0] p-10 rounded-xl  w-[30rem] shadow-lg z-20 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center justify-center">FORGOT PASSWORD</h2>
+      <div className="flex items-center justify-center w-full max-w-6xl relative z-10">
+        {/* Forgot Password Box */}
+        <div className="w-full max-w-md bg-white/70 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#FDE6C6] shadow-2xl shadow-[#8B7355]/5 transition-all duration-500">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2 uppercase">Forgot Password</h2>
+            <p className="text-gray-500 font-medium px-4">
+              Enter your email address and we'll send you an OTP to reset your password.
+            </p>
+          </div>
 
           {/* Form */}
-          <form className="flex flex-col gap-3  ">
-            <input
-              type="email"
-              onChange={handleChange}
-              name="email"
-              placeholder="Enter your email"
-              className="text-center appearance-none rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-            />
-            <p className=" text-left text-red-500 text-sm">{error.email}</p>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Email Address</label>
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#8B7355] transition-colors">
+                  <Mail size={18} />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={handleChange}
+                  placeholder="name@example.com"
+                  className={`w-full pl-12 pr-4 py-3.5 bg-white border rounded-2xl outline-none focus:border-[#8B7355] focus:ring-4 focus:ring-[#8B7355]/5 transition-all font-semibold text-gray-700 ${
+                    error.email ? "border-red-400" : "border-gray-100"
+                  }`}
+                />
+              </div>
+              {error.email && <p className="flex text-red-500 text-xs mt-1 ml-1 font-medium">{error.email}</p>}
+            </div>
 
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              disabled={loading}
-              className={`w-full text-white rounded-md py-2 mt-2 transition 
-    ${loading ? "bg-gray-700 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"}`}
-            >
-              {loading ? "Sending..." : "Submit"}
-            </button>
+            <div className="space-y-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className={`w-full py-4 rounded-2xl font-bold text-white shadow-xl shadow-[#8B7355]/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#8B7355] hover:bg-[#725e46] hover:shadow-2xl hover:shadow-[#8B7355]/30"
+                }`}
+              >
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Send Reset Link</span>
+                    <ArrowRight size={18} />
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate("/signin")}
+                className="w-full flex items-center justify-center gap-2 text-sm font-bold text-gray-400 hover:text-[#8B7355] transition-colors"
+              >
+                <ArrowLeft size={16} />
+                Back to Sign In
+              </button>
+            </div>
           </form>
         </div>
-
-        {/* Illustration */}
-
-        <img src={LinesRight} alt="draw" className="w-24 h-60 mb-10 relative"></img>
-        <img src={passwordKid} alt="kid" className="w-[30rem] absolute mt-28 ml-[650px]" />
       </div>
-    </>
+    </div>
   );
 };
 export default ForgotPassWordForm;

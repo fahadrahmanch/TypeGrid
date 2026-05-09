@@ -45,22 +45,22 @@ const CompanyList: React.FC = () => {
 
   return (
     <>
-      <div className="md:ml-64 p-8 min-h-screen bg-[#FFF8EA]">
+      <div className="md:ml-64 p-4 md:p-8 min-h-screen bg-[#FFF8EA] pt-24 md:pt-8">
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
-          <div className="mb-10">
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Company Management</h1>
-            <p className="text-gray-500 font-medium">Manage and verify company registrations on the platform.</p>
+          <div className="mb-6 md:mb-10">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight mb-1 md:mb-2">Company Management</h1>
+            <p className="text-xs md:text-sm text-gray-500 font-medium">Manage and verify company registrations.</p>
           </div>
 
           {/* Search & Filters */}
-          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-sm border border-[#ECA468]/10 mb-8 flex flex-wrap items-center gap-4">
-            <div className="relative flex-1 min-w-[300px]">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2rem] p-4 md:p-6 shadow-sm border border-[#ECA468]/10 mb-6 md:mb-8 flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by company name or email..."
-                className="w-full pl-12 pr-4 py-3 bg-white/70 rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium text-gray-800"
+                placeholder="Search company or email..."
+                className="w-full pl-11 md:pl-12 pr-4 py-2.5 md:py-3 bg-white/70 rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium text-sm md:text-base text-gray-800"
                 value={searchText}
                 onChange={(e) => {
                   setSearchText(e.target.value);
@@ -69,12 +69,12 @@ const CompanyList: React.FC = () => {
               />
             </div>
 
-            <div className="relative min-w-[160px]">
+            <div className="relative min-w-0 md:min-w-[160px]">
               <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D0864B]" />
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full pl-10 pr-8 py-2.5 bg-white/70 rounded-xl border border-gray-100 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] appearance-none cursor-pointer"
+                className="w-full pl-10 pr-8 py-2.5 bg-white/70 rounded-xl border border-gray-100 text-xs md:text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] appearance-none cursor-pointer"
               >
                 <option value="All">All Status</option>
                 <option value="pending">Pending</option>
@@ -86,115 +86,120 @@ const CompanyList: React.FC = () => {
             </div>
           </div>
 
-          {/* Table Section */}
-          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
-            <div className="flex justify-between items-center mb-8 px-2">
+          {/* Registrations List Section */}
+          <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2.5rem] p-4 md:p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
+            <div className="flex justify-between items-center mb-6 md:mb-8 px-1 md:px-2">
               <div>
-                <h3 className="text-xl font-black text-gray-900 leading-tight">Registrations</h3>
-                <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
-                  {company.length} total applications
+                <h3 className="text-lg md:text-xl font-black text-gray-900 leading-tight">Registrations</h3>
+                <p className="text-[10px] text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+                  {company.length} applications
                 </p>
               </div>
             </div>
 
-            <ReusableTable
-              columns={[
-                {
-                  header: (
-                    <div className="flex items-center gap-2">
-                      <Building2 className="w-3 h-3" /> Company
-                    </div>
-                  ),
-                  key: "companyName",
-                  className: "font-bold text-gray-800 text-sm",
-                },
-                {
-                  header: (
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-3 h-3" /> Contact
-                    </div>
-                  ),
-                  key: "email",
-                  className: "font-medium text-gray-500 text-xs italic",
-                },
-                {
-                  header: (
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3 h-3" /> Applied On
-                    </div>
-                  ),
-                  key: "createdAt",
-                  className: "hidden sm:table-cell text-xs font-semibold text-gray-400",
-                  render: (item) =>
-                    new Date(item.createdAt).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    }),
-                },
-                {
-                  header: "Status",
-                  headerClassName: "text-center",
-                  className: "text-center",
-                  key: "status",
-                  render: (item) => {
-                    const st = item?.status;
-                    const isActive = st === "active";
-                    const isRejected = st === "reject";
-                    const isInactive = st === "inactive";
-                    const isExpired = st === "expired";
-                    return (
-                      <span
-                        className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
-                        ${
-                          isActive
-                            ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-                            : isRejected
-                              ? "bg-red-50 text-red-600 border-red-100"
-                            : isInactive
-                                ? "bg-gray-50 text-gray-600 border-gray-100"
-                                : isExpired
-                                  ? "bg-orange-50 text-orange-600 border-orange-100"
-                                  : "bg-amber-50 text-amber-600 border-amber-100"
-                        }`}
-                      >
-                        {isActive
-                          ? "Active"
-                          : isRejected
-                            ? "Rejected"
-                            : isInactive
-                              ? "Inactive"
-                              : isExpired
-                                ? "Expired"
-                                : "Pending"}
-                      </span>
-                    );
+            {/* Registrations List Table */}
+            <div className="overflow-x-auto">
+              <ReusableTable
+                columns={[
+                  {
+                    header: (
+                      <div className="flex items-center gap-2 whitespace-nowrap">
+                        <Building2 className="w-3 h-3" /> Company
+                      </div>
+                    ),
+                    key: "companyName",
+                    className: "font-bold text-gray-800 text-sm whitespace-nowrap",
                   },
-                },
-                {
-                  header: "Actions",
-                  headerClassName: "text-right",
-                  className: "text-right",
-                  key: "actions",
-                  render: (item) => (
-                    <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                      <button
-                        onClick={() => {
-                          setSelectedCompany(item);
-                          setOpen(true);
-                        }}
-                        className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
-                        title="View Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ),
-                },
-              ]}
-              data={company}
-              emptyMessage="No company applications found"
-            />
+                  {
+                    header: (
+                      <div className="flex items-center gap-2 whitespace-nowrap">
+                        <Mail className="w-3 h-3" /> Contact
+                      </div>
+                    ),
+                    key: "email",
+                    className: "font-medium text-gray-500 text-xs italic whitespace-nowrap",
+                  },
+                  {
+                    header: (
+                      <div className="flex items-center gap-2 whitespace-nowrap">
+                        <Calendar className="w-3 h-3" /> Applied On
+                      </div>
+                    ),
+                    key: "createdAt",
+                    className: "hidden sm:table-cell text-xs font-semibold text-gray-400 whitespace-nowrap",
+                    render: (item) =>
+                      new Date(item.createdAt).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      }),
+                  },
+                  {
+                    header: "Status",
+                    headerClassName: "text-center",
+                    className: "text-center whitespace-nowrap",
+                    key: "status",
+                    render: (item) => {
+                      const st = item?.status;
+                      const isActive = st === "active";
+                      const isRejected = st === "reject";
+                      const isInactive = st === "inactive";
+                      const isExpired = st === "expired";
+                      return (
+                        <span
+                          className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg border
+                          ${
+                            isActive
+                              ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                              : isRejected
+                                ? "bg-red-50 text-red-600 border-red-100"
+                              : isInactive
+                                  ? "bg-gray-50 text-gray-600 border-gray-100"
+                                  : isExpired
+                                    ? "bg-orange-50 text-orange-600 border-orange-100"
+                                    : "bg-amber-50 text-amber-600 border-amber-100"
+                          }`}
+                        >
+                          {isActive
+                            ? "Active"
+                            : isRejected
+                              ? "Rejected"
+                              : isInactive
+                                ? "Inactive"
+                                : isExpired
+                                  ? "Expired"
+                                  : "Pending"}
+                        </span>
+                      );
+                    },
+                  },
+                  {
+                    header: "Actions",
+                    headerClassName: "text-right",
+                    className: "text-right whitespace-nowrap",
+                    key: "actions",
+                    render: (item) => (
+                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                        <button
+                          onClick={() => {
+                            setSelectedCompany(item);
+                            setOpen(true);
+                          }}
+                          className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
+                          title="View Details"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ),
+                  },
+                ]}
+                data={company}
+                emptyMessage="No company applications found"
+                headerClassName="bg-[#FFF8EA] text-left"
+                columnHeaderClassName="py-4 px-6 text-[10px] font-black text-[#D0864B] uppercase tracking-widest border-b border-[#ECA468]/10"
+              />
+            </div>
 
             <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
           </div>

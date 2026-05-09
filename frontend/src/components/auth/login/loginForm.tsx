@@ -1,8 +1,6 @@
 import { emailValidation, passwordValidation } from "../../../validations/authValidations";
 import { useEffect } from "react";
 import { useState } from "react";
-import lines from "../../../assets/images/auth/login/lines.png";
-import kid2 from "../../../assets/images/auth/login/Kid2.png";
 import { signIn } from "../../../api/auth/authServices";
 import { toast } from "react-toastify";
 import { setAccessToken } from "../../../store/slices/auth/authSlice";
@@ -10,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { useGoogleAuth } from "../../../hooks/useGoogleAuth";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 export const SignInForm: React.FC = () => {
   const [values, setValues] = useState({ email: "", password: "" });
   const [error, setError] = useState({ email: "", password: "" });
@@ -84,83 +82,126 @@ export const SignInForm: React.FC = () => {
   };
 
   return (
-    <>
-      <>
-        {/* Container */}
-        <div className="h-screen flex justify-center items-center flex-1 w-full relative  sm:w-4/4 md:w-full lg:w-full  ">
-          <div className="w-36 mt-[2rem] hidden sm:block">
-            <img src={lines} alt="draw" className="w-64 mb-10  " />
+    <div className="min-h-screen bg-[#FFF8EA] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Abstract Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+      </div>
+
+      <div className="flex items-center justify-center gap-12 w-full max-w-6xl relative z-10">
+        {/* SignIn Box */}
+        <div className="w-full max-w-md bg-white/70 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#FDE6C6] shadow-2xl shadow-[#8B7355]/5 transition-all duration-500">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Welcome Back</h2>
+            <p className="text-gray-500 font-medium">Sign in to your account to continue</p>
           </div>
-          {/* SignIn Box */}
-          <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
-            <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">Welcome back</h2>
-            <p className="text-sm pb-8">Sign in to your account to continue</p>
-            {/* Google Button */}
 
-            <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+          {/* Google Button Container */}
+          <div className="mb-8 flex justify-center">
+            <div className="w-full transform hover:scale-[1.02] transition-transform duration-200">
+              <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+            </div>
+          </div>
 
-            {/* Divider */}
-            <div className="flex items-center my-4">
-              <hr className="flex-grow border-gray-300" />
-              <span className="px-2 text-gray-500 text-sm">Or</span>
-              <hr className="flex-grow border-gray-300" />
+          {/* Divider */}
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-[1px] flex-grow bg-gray-200"></div>
+            <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">Or</span>
+            <div className="h-[1px] flex-grow bg-gray-200"></div>
+          </div>
+
+          {/* Form */}
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Email Address</label>
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#8B7355] transition-colors">
+                  <Mail size={18} />
+                </div>
+                <input
+                  type="email"
+                  placeholder="name@example.com"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  className={`w-full pl-12 pr-4 py-3.5 bg-white border rounded-2xl outline-none focus:border-[#8B7355] focus:ring-4 focus:ring-[#8B7355]/5 transition-all font-semibold text-gray-700 ${
+                    error.email ? "border-red-400" : "border-gray-100"
+                  }`}
+                />
+              </div>
+              {error.email && <p className="flex text-red-500 text-xs mt-1 ml-1 font-medium">{error.email}</p>}
             </div>
 
-            {/* Form */}
-            <form className="flex flex-col gap-3">
-              <input
-                type="email"
-                placeholder="Email"
-                name="email"
-                onChange={handleChange}
-                className=" rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-              />
-              <p className=" text-left text-red-500 text-sm">{error.email}</p>
-              <div className="relative">
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Password</label>
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#8B7355] transition-colors">
+                  <Lock size={18} />
+                </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder="••••••••"
                   name="password"
+                  value={values.password}
                   onChange={handleChange}
-                  className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
+                  className={`w-full pl-12 pr-12 py-3.5 bg-white border rounded-2xl outline-none focus:border-[#8B7355] focus:ring-4 focus:ring-[#8B7355]/5 transition-all font-semibold text-gray-700 ${
+                    error.password ? "border-red-400" : "border-gray-100"
+                  }`}
                 />
-
-                <span
+                <button
+                  type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#8B7355] transition-colors"
                 >
-                  {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-                </span>
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
-              <p className="text-left text-red-500 text-sm">{error.password}</p>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                disabled={loading}
-                className={`w-full text-white rounded-md py-2 mt-2 transition 
-               ${loading ? "bg-gray-700 cursor-not-allowed" : "bg-gray-900 hover:bg-gray-800"}`}
-              >
-                {loading ? "Signing in..." : "Sign In"}
-              </button>
-            </form>
+              <div className="flex justify-between items-center mt-1 px-1">
+                {error.password ? (
+                  <p className="text-red-500 text-xs font-medium">{error.password}</p>
+                ) : (
+                  <div></div>
+                )}
+                <a href="/forgot/password" className="text-xs font-bold text-[#8B7355] hover:underline">
+                  Forgot Password?
+                </a>
+              </div>
+            </div>
 
-            <p className="text-center text-gray-600 text-sm mt-4">
-              Don t have an account ?
-              <a href="/signup" className="text-gray-900 font-medium hover:underline">
-                Sign Up
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-4 rounded-2xl font-bold text-white shadow-xl shadow-[#8B7355]/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#8B7355] hover:bg-[#725e46] hover:shadow-2xl hover:shadow-[#8B7355]/30"
+              }`}
+            >
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span>Signing in...</span>
+                </>
+              ) : (
+                <>
+                  <span>Sign In</span>
+                  <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-8 text-center">
+            <p className="text-gray-500 text-sm font-medium">
+              Don't have an account?{" "}
+              <a href="/signup" className="text-[#8B7355] font-bold hover:underline">
+                Create Account
               </a>
             </p>
-
-            <a href="/forgot/password" className="text-gray-900 font-sans  hover:underline">
-              forgot password
-            </a>
-          </div>
-          {/* Illustration */}
-          <div className="w-48 ml-[-17px] mt-[6rem] hidden sm:block ">
-            <img src={kid2} alt="kid" className="w-60" />
           </div>
         </div>
-      </>
-    </>
+      </div>
+    </div>
   );
 };

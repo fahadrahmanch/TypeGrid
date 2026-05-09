@@ -44,6 +44,7 @@ export const useQuickPlayHandleKeyDown = ({
   const { playTyping, playTypingError } = useTypingSound();
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+
       if (!lesson || isFinished || phase !== "PLAY") return;
 
       if (e.key === "Backspace") {

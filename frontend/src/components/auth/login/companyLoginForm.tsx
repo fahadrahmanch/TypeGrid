@@ -1,5 +1,4 @@
 // import lines from "../../../assets/images/auth/login/lines.png";
-import kid2 from "../../../assets/images/auth/login/Kid2.png";
 import { emailValidation, passwordValidation } from "../../../validations/authValidations";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -7,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { companySignIn } from "../../../api/auth/authServices";
 import { setAccessToken } from "../../../store/slices/auth/authSlice";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Building2 } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
 
 import { useGoogleCompanyAuth } from "../../../hooks/useGoogleCompanyAuth";
@@ -66,61 +65,104 @@ const CompanyLoginForm: React.FC = () => {
     }
   };
   return (
-    <>
-      {/* Container */}
-      <div className="h-screen flex justify-center items-center flex-1 w-full relative sm:w-4/4 md:w-full lg:w-full  ">
-        {/* SignIn Box */}
-        <div className="bg-[#FFF5E0] p-10 rounded-xl  w-80 z-10 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 justify-center">Company Login</h2>
-          <p className="text-sm pb-8">Sign in to your account to continue</p>
-            <GoogleLogin onSuccess={handleCompanyGoogleSuccess} onError={handleCompanyGoogleError} />
+    <div className="min-h-screen bg-[#FFF8EA] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Abstract Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+      </div>
 
-          {/* Divider */}
+      <div className="flex items-center justify-center w-full max-w-6xl relative z-10">
+        {/* Company Box */}
+        <div className="w-full max-w-md bg-white/70 backdrop-blur-md p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] border border-[#FDE6C6] shadow-2xl shadow-[#8B7355]/5 transition-all duration-500">
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-4 text-[#8B7355]">
+              <Building2 size={48} strokeWidth={1.5} />
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-2 uppercase">Company Portal</h2>
+            <p className="text-gray-500 font-medium px-2 sm:px-4 text-sm sm:text-base">
+              Sign in to manage your corporate account.
+            </p>
+          </div>
 
-          {/* Form */}
-          <form className="flex flex-col gap-3">
-            <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              onChange={handleChange}
-              className=" rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-            />
-            <p className=" text-left text-red-500 text-sm">{error.email}</p>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                name="password"
-                onChange={handleChange}
-                className="rounded-md px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA] w-full"
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
-              >
-                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+          <div className="space-y-6">
+            <div className="flex justify-center">
+              <GoogleLogin onSuccess={handleCompanyGoogleSuccess} onError={handleCompanyGoogleError} />
+            </div>
+
+            <div className="relative flex items-center justify-center">
+              <div className="w-full h-px bg-gray-100"></div>
+              <span className="absolute px-4 bg-white/0 text-xs font-bold text-gray-400 uppercase tracking-widest backdrop-blur-sm">
+                Or continue with email
               </span>
             </div>
-            <p className="text-left text-red-500 text-sm">{error.password}</p>
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="w-full bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
-            >
-              Sign In
-            </button>
-          </form>
-          <a href="/company/forgot/password" className="text-gray-900 font-sans  hover:underline">
-            forgot password
-          </a>
-        </div>
-        {/* Illustration */}
-        <div className="w-38 ml-[-17px] mt-[6rem] hidden sm:block ">
-          <img src={kid2} alt="kid" className="w-40" />
+
+            {/* Form */}
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-1">Corporate Email</label>
+                <div className="relative group">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#8B7355] transition-colors">
+                    <Mail size={18} />
+                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    placeholder="corp@company.com"
+                    className={`w-full pl-12 pr-4 py-3.5 bg-white border rounded-2xl outline-none focus:border-[#8B7355] focus:ring-4 focus:ring-[#8B7355]/5 transition-all font-semibold text-gray-700 ${
+                      error.email ? "border-red-400" : "border-gray-100"
+                    }`}
+                  />
+                </div>
+                {error.email && <p className="flex text-red-500 text-xs mt-1 ml-1 font-medium">{error.email}</p>}
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-between px-1">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Password</label>
+                  <a href="/company/forgot/password" className="text-xs font-bold text-[#8B7355] hover:text-[#725e46] transition-colors">
+                    Forgot Password?
+                  </a>
+                </div>
+                <div className="relative group">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#8B7355] transition-colors">
+                    <Lock size={18} />
+                  </div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    placeholder="••••••••"
+                    className={`w-full pl-12 pr-12 py-3.5 bg-white border rounded-2xl outline-none focus:border-[#8B7355] focus:ring-4 focus:ring-[#8B7355]/5 transition-all font-semibold text-gray-700 ${
+                      error.password ? "border-red-400" : "border-gray-100"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#8B7355] transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+                {error.password && <p className="flex text-red-500 text-xs mt-1 ml-1 font-medium">{error.password}</p>}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-4 rounded-2xl font-bold text-white bg-[#8B7355] hover:bg-[#725e46] shadow-xl shadow-[#8B7355]/20 hover:shadow-2xl hover:shadow-[#8B7355]/30 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
+              >
+                <span>Sign In to Dashboard</span>
+                <ArrowRight size={18} />
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default CompanyLoginForm;

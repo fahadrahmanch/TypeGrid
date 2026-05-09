@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { socket } from "../../socket";
 import { fetchContestAreaDetails } from "../../api/companyAdmin/companyContextAPI";
 import { getMappedKey } from "../../utils/keyboardLayouts";
-import { Crown, Trophy, Users } from "lucide-react";
+import { Trophy, Users } from "lucide-react";
 import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNavbar";
 // type PlayerStatus = "PLAYING" | "DISCONNECTED" | "FINISHED" | "LEFT";
 import { useContestSocket } from "../../hooks/companyUser/useContestAreaSocket";
@@ -426,50 +426,50 @@ const ContestArea: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 min-h-0 flex-1 h-full">
+          <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 min-h-0 flex-1 h-full">
             {/* Left Column - Stats & Rankings */}
-            <div className="lg:col-span-1 flex flex-col gap-6 h-full min-h-0 overflow-y-auto custom-scrollbar-hidden pb-8">
+            <div className="lg:col-span-1 flex flex-col gap-4 md:gap-6 h-auto lg:h-full min-h-0 overflow-visible lg:overflow-y-auto custom-scrollbar-hidden pb-2 lg:pb-8 shrink-0">
               {/* Stats Panel */}
-              <div className="bg-white/40 backdrop-blur-md rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 relative overflow-hidden shrink-0 group">
-                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ECA468] to-[#8CA78A]"></div>
-                <h3 className="text-sm font-bold text-slate-500 tracking-widest uppercase mb-4 flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-[#ECA468]" />
+              <div className="bg-white/40 backdrop-blur-md rounded-xl md:rounded-[1.5rem] p-3 md:p-5 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 relative overflow-hidden shrink-0 group">
+                <div className="absolute top-0 left-0 w-full h-[2px] md:h-[3px] bg-gradient-to-r from-[#ECA468] to-[#8CA78A]"></div>
+                <h3 className="hidden md:flex text-[10px] md:text-sm font-bold text-slate-500 tracking-widest uppercase mb-4 items-center gap-2">
+                  <Trophy className="w-3 h-3 md:w-4 h-4 text-[#ECA468]" />
                   Performance
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-4 lg:grid-cols-2 gap-2 md:gap-3">
                   {/* WPM */}
-                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-[#FFF4EC] transition-colors border border-[#f8e8c8]/40 group-hover:border-[#FADDB8]">
-                    <span className="text-[10px] font-bold text-[#D0864B] uppercase tracking-widest mb-1">
-                      Speed (WPM)
+                  <div className="bg-[#f8e8c8]/20 rounded-lg md:rounded-xl p-1.5 md:p-3 flex flex-col relative overflow-hidden group-hover:bg-[#FFF4EC] transition-colors border border-[#f8e8c8]/40 group-hover:border-[#FADDB8]">
+                    <span className="text-[7px] md:text-[10px] font-bold text-[#D0864B] uppercase tracking-widest mb-0.5 md:mb-1">
+                      WPM
                     </span>
-                    <div className="flex items-baseline gap-1 relative z-10">
-                      <span className="text-2xl font-black text-slate-800">{wpm}</span>
+                    <div className="flex items-baseline gap-0.5 md:gap-1 relative z-10">
+                      <span className="text-sm md:text-2xl font-black text-slate-800">{wpm}</span>
                     </div>
                   </div>
                   {/* Accuracy */}
-                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-[#F2F7F2] transition-colors border border-[#f8e8c8]/40 group-hover:border-[#C4E0C4]">
-                    <span className="text-[10px] font-bold text-[#6D8A6B] uppercase tracking-widest mb-1">
-                      Accuracy
+                  <div className="bg-[#f8e8c8]/20 rounded-lg md:rounded-xl p-1.5 md:p-3 flex flex-col relative overflow-hidden group-hover:bg-[#F2F7F2] transition-colors border border-[#f8e8c8]/40 group-hover:border-[#C4E0C4]">
+                    <span className="text-[7px] md:text-[10px] font-bold text-[#6D8A6B] uppercase tracking-widest mb-0.5 md:mb-1">
+                      ACC
                     </span>
-                    <div className="flex items-baseline gap-1 relative z-10">
-                      <span className="text-2xl font-black text-slate-800">{accuracy ?? 100}</span>
-                      <span className="text-[10px] font-bold text-slate-400">%</span>
+                    <div className="flex items-baseline gap-0.5 md:gap-1 relative z-10">
+                      <span className="text-sm md:text-2xl font-black text-slate-800">{accuracy ?? 100}</span>
+                      <span className="text-[7px] md:text-[10px] font-bold text-slate-400">%</span>
                     </div>
                   </div>
                   {/* Errors */}
-                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-rose-50 transition-colors border border-[#f8e8c8]/40 group-hover:border-rose-200">
-                    <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">Errors</span>
-                    <div className="flex items-baseline gap-1 relative z-10">
-                      <span className="text-2xl font-black text-slate-800">{errors}</span>
+                  <div className="bg-[#f8e8c8]/20 rounded-lg md:rounded-xl p-1.5 md:p-3 flex flex-col relative overflow-hidden group-hover:bg-rose-50 transition-colors border border-[#f8e8c8]/40 group-hover:border-rose-200">
+                    <span className="text-[7px] md:text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-0.5 md:mb-1">ERR</span>
+                    <div className="flex items-baseline gap-0.5 md:gap-1 relative z-10">
+                      <span className="text-sm md:text-2xl font-black text-slate-800">{errors}</span>
                     </div>
                   </div>
                   {/* Time Left */}
-                  <div className="bg-[#f8e8c8]/20 rounded-xl p-3 flex flex-col relative overflow-hidden group-hover:bg-indigo-50 transition-colors border border-[#f8e8c8]/40 group-hover:border-indigo-200">
-                    <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1">
-                      Remaining Time
+                  <div className="bg-[#f8e8c8]/20 rounded-lg md:rounded-xl p-1.5 md:p-3 flex flex-col relative overflow-hidden group-hover:bg-indigo-50 transition-colors border border-[#f8e8c8]/40 group-hover:border-indigo-200">
+                    <span className="text-[7px] md:text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-0.5 md:mb-1">
+                      TIME
                     </span>
-                    <div className="flex items-baseline gap-1 relative z-10">
-                      <span className="text-xl font-black text-slate-800 tracking-wider">
+                    <div className="flex items-baseline gap-0.5 md:gap-1 relative z-10">
+                      <span className="text-[10px] md:text-xl font-black text-slate-800 tracking-wider">
                         {!isNaN(remainingTime) ? formatTime(remainingTime) : "00:00"}
                       </span>
                     </div>
@@ -478,144 +478,104 @@ const ContestArea: React.FC = () => {
               </div>
 
               {/* Live Leaderboard */}
-              <div className="bg-white/40 backdrop-blur-md rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 flex flex-col flex-1 min-h-[300px]">
-                <div className="flex justify-between items-center mb-4 shrink-0">
-                  <h3 className="text-sm font-bold text-slate-500 tracking-widest uppercase flex items-center gap-2">
-                    <Users className="w-4 h-4 text-[#8CA78A]" />
+              <div className="bg-white/40 backdrop-blur-md rounded-xl md:rounded-[1.5rem] p-3 md:p-5 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 flex flex-col flex-1 min-h-[120px] md:min-h-[300px]">
+                <div className="flex justify-between items-center mb-2 md:mb-4 shrink-0">
+                  <h3 className="text-[10px] md:text-sm font-bold text-slate-500 tracking-widest uppercase flex items-center gap-2">
+                    <Users className="w-3 h-3 md:w-4 h-4 text-[#8CA78A]" />
                     Live Rank
                   </h3>
-                  <span className="text-[10px] font-bold bg-[#ECA468]/10 text-[#D0864B] px-2 py-1 rounded-md border border-[#FADDB8]">
+                  <span className="text-[8px] md:text-[10px] font-bold bg-[#ECA468]/10 text-[#D0864B] px-1.5 md:px-2 py-0.5 md:py-1 rounded-md border border-[#FADDB8]">
                     {livePlayers.length} Racing
                   </span>
                 </div>
 
-                <div className="flex-1 overflow-y-auto pr-1 space-y-2 custom-scrollbar min-h-0">
-                  {livePlayers.length === 0 ? (
-                    <div className="text-center text-slate-400 text-xs font-semibold py-6">
-                      Waiting for competitors...
-                    </div>
-                  ) : (
-                    livePlayers.map((player) => {
-                      const isMe = player.userId === user?._id;
-                      const isDisconnected = player.status === "DISCONNECTED";
-                      const isLeft = player.status === "LEFT";
-                      return (
-                        <div
-                          key={player.userId}
-                          className={`flex items-center gap-3 p-3 rounded-xl transition-all shadow-sm ${isMe ? "bg-[#FFF4EC]/60 border border-[#FADDB8] ring-1 ring-[#FADDB8]" : "bg-[#FDF9F2]/40 border border-[#ECA468]/5 hover:border-[#ECA468]/20 hover:shadow-md"} ${isDisconnected || isLeft ? "opacity-40 grayscale" : ""}`}
-                        >
-                          {/* Left: Name above Avatar */}
-                          <div className="relative shrink-0 flex flex-col justify-center items-center px-1">
-                            <p
-                              className="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1.5 truncate max-w-[60px] text-center"
-                              title={player.name}
-                            >
-                              {player.name}
-                            </p>
-                            {isDisconnected && (
-                              <div className="text-[8px] text-red-400 font-bold mb-1">Disconnected</div>
-                            )}
-                            {isLeft && <div className="text-[8px] text-red-500 font-bold mb-1">Left</div>}
-                            <div className="relative">
-                              <img
-                                src={player.imageUrl}
-                                className={`w-10 h-10 rounded-full border-2 object-cover ${isMe ? "border-[#ECA468] shadow-[0_0_10px_rgba(236,164,104,0.3)] ring-2 ring-[#FADDB8]" : "border-white shadow-sm"}`}
-                                alt=""
-                              />
-                              {isMe && (
-                                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-[8px] bg-gradient-to-r from-[#D0864B] to-[#ECA468] px-1.5 py-0.5 rounded text-white font-black uppercase tracking-wider shadow-sm z-10 whitespace-nowrap">
-                                  You
-                                </div>
-                              )}
+                <div className="flex-1 overflow-y-auto lg:pr-1 space-y-2 custom-scrollbar min-h-0">
+                  <div className="grid grid-cols-3 lg:grid-cols-1 gap-2">
+                    {livePlayers.length === 0 ? (
+                      <div className="col-span-3 lg:col-span-1 text-center text-slate-400 text-[10px] font-semibold py-4">
+                        Waiting...
+                      </div>
+                    ) : (
+                      livePlayers.map((player) => {
+                        const isMe = player.userId === user?._id;
+                        const isDisconnected = player.status === "DISCONNECTED";
+                        const isLeft = player.status === "LEFT";
+                        return (
+                          <div
+                            key={player.userId}
+                            className={`flex flex-col lg:flex-row lg:items-center gap-1.5 md:gap-3 p-1.5 md:p-3 rounded-lg md:rounded-xl transition-all shadow-sm ${isMe ? "bg-[#FFF4EC]/60 border border-[#FADDB8] ring-1 ring-[#FADDB8]" : "bg-[#FDF9F2]/40 border border-[#ECA468]/5 hover:border-[#ECA468]/20 hover:shadow-md"} ${isDisconnected || isLeft ? "opacity-40 grayscale" : ""}`}
+                          >
+                            <div className="relative shrink-0 flex items-center lg:flex-col justify-between lg:justify-center px-1">
+                              <p
+                                className="text-[8px] md:text-[10px] font-black uppercase tracking-wider text-slate-500 mb-0 lg:mb-1.5 truncate max-w-[40px] md:max-w-[60px]"
+                                title={player.name}
+                              >
+                                {player.name.split(" ")[0]}
+                              </p>
+                              <div className="relative">
+                                <img
+                                  src={player.imageUrl}
+                                  className={`w-7 h-7 md:w-10 md:h-10 rounded-full border-2 object-cover ${isMe ? "border-[#ECA468] shadow-[0_0_10px_rgba(236,164,104,0.3)]" : "border-white shadow-sm"}`}
+                                  alt=""
+                                />
+                                {isMe && (
+                                  <div className="absolute -bottom-1 lg:-bottom-2 left-1/2 -translate-x-1/2 text-[6px] lg:text-[8px] bg-[#ECA468] px-1 py-0.5 rounded text-white font-black uppercase z-10 whitespace-nowrap">
+                                    Me
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
 
-                          {/* Right: Stats block */}
-                          <div className="text-right shrink-0 bg-white/80 px-2.5 py-1.5 rounded-lg border border-slate-100 shadow-sm flex items-center gap-2 xl:gap-3">
-                            <div className="flex flex-col items-center">
-                              <div
-                                className={`text-[11px] xl:text-xs font-black leading-tight ${isMe ? "text-[#D0864B]" : "text-slate-600"}`}
-                              >
-                                {player.wpm}
+                            <div className="text-right shrink-0 bg-white/80 px-1.5 md:px-2.5 py-1 md:py-1.5 rounded-md md:rounded-lg border border-slate-100 shadow-sm flex items-center justify-around lg:justify-end gap-1.5 md:gap-2 xl:gap-3">
+                              <div className="flex flex-col items-center">
+                                <div className={`text-[9px] md:text-xs font-black leading-tight ${isMe ? "text-[#D0864B]" : "text-slate-600"}`}>
+                                  {player.wpm}
+                                </div>
+                                <div className="text-[6px] md:text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">WPM</div>
                               </div>
-                              <div className="text-[8px] xl:text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
-                                WPM
-                              </div>
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <div
-                                className={`text-[11px] xl:text-xs font-black leading-tight ${isMe ? "text-[#6D8A6B]" : "text-slate-600"}`}
-                              >
-                                {player.accuracy}%
-                              </div>
-                              <div className="text-[8px] xl:text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
-                                ACC
-                              </div>
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <div
-                                className={`text-[11px] xl:text-xs font-black leading-tight ${isMe ? "text-rose-500" : "text-slate-600"}`}
-                              >
-                                {player.errors || 0}
-                              </div>
-                              <div className="text-[8px] xl:text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
-                                ERR
-                              </div>
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <div
-                                className={`text-[11px] xl:text-xs font-black leading-tight ${isMe ? "text-indigo-500" : "text-slate-600"}`}
-                              >
-                                {formatTime(player.timeTaken || 0)}
-                              </div>
-                              <div className="text-[8px] xl:text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
-                                TIME
+                              <div className="flex flex-col items-center">
+                                <div className={`text-[9px] md:text-xs font-black leading-tight ${isMe ? "text-[#6D8A6B]" : "text-slate-600"}`}>
+                                  {player.accuracy}%
+                                </div>
+                                <div className="text-[6px] md:text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">ACC</div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  )}
+                        );
+                      })
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Right Column - Typing Interface */}
-            <div className="lg:col-span-3 flex flex-col h-full min-h-0 relative">
-              {/* Visual Racing Track at the top */}
-              <div className="bg-white/40 backdrop-blur-md rounded-2xl p-4 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 mb-6 shrink-0 z-20">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-slate-500 uppercase">Your Progress</span>
-                  <span className="text-sm font-black text-[#ECA468]">{progressPercentage}%</span>
+            <div className="lg:col-span-3 flex flex-col h-full min-h-0 relative pb-4 lg:pb-0">
+              {/* Visual Racing Track */}
+              <div className="bg-white/40 backdrop-blur-md rounded-xl md:rounded-2xl p-2 md:p-4 shadow-[0_8px_30px_rgb(236,164,104,0.04)] border border-[#ECA468]/10 mb-3 md:mb-6 shrink-0 z-20">
+                <div className="flex justify-between items-center mb-1.5">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase">Progress</span>
+                  <span className="text-xs font-black text-[#ECA468]">{progressPercentage}%</span>
                 </div>
 
-                <div className="relative h-4 bg-[#f8e8c8]/30 rounded-full overflow-hidden shadow-inner flex items-center px-1">
+                <div className="relative h-2 md:h-4 bg-[#f8e8c8]/30 rounded-full flex items-center px-1">
                   {livePlayers.map((player) => {
                     const isMe = player.userId === user?._id;
-                    const isDisconnected = player.status === "DISCONNECTED";
-                    const isLeft = player.status === "LEFT";
                     const pos = Math.round((player.progress / (contestData?.contestText?.length || 0)) * 100);
                     return (
                       <div
                         key={`track-${player.userId}`}
-                        className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 z-10 ${isMe ? "z-20" : "opacity-60"} ${isDisconnected || isLeft ? "opacity-40 grayscale" : ""}`}
+                        className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 z-10 ${isMe ? "z-20" : "opacity-60"}`}
                         style={{ left: `${Math.max(2, Math.min(pos, 98))}%` }}
                       >
                         <img
-                          src={player.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${player.name}`}
-                          className={`w-6 h-6 rounded-full border-2 ${isMe ? "border-[#ECA468] ring-2 ring-[#FADDB8]" : "border-white"} shadow-md`}
+                          src={player.imageUrl}
+                          className={`w-4 h-4 md:w-6 md:h-6 rounded-full border ${isMe ? "border-[#ECA468] ring-1 ring-[#FADDB8]" : "border-white"} shadow-md`}
                           alt={player.name}
                         />
-                        {isMe && (
-                          <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#ECA468] text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                            You
-                          </div>
-                        )}
                       </div>
                     );
                   })}
-                  {/* Progress fill */}
                   <div
                     className="h-full bg-gradient-to-r from-[#ECA468]/20 to-[#ECA468]/40 absolute top-0 left-0 transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}
@@ -625,38 +585,23 @@ const ContestArea: React.FC = () => {
 
               {/* Main Typing Area */}
               <div
-                className="flex-1 bg-white/60 backdrop-blur-xl rounded-[2rem] p-6 md:p-10 shadow-[0_15px_40px_rgb(236,164,104,0.06)] border border-[#ECA468]/10 flex flex-col relative overflow-hidden group/typing cursor-text focus-within:ring-2 focus-within:ring-[#ECA468]/30 transition-all duration-300 z-10"
+                className="flex-1 bg-white/60 backdrop-blur-xl rounded-xl md:rounded-[2rem] p-4 md:p-10 shadow-[0_15px_40px_rgb(236,164,104,0.06)] border border-[#ECA468]/10 flex flex-col relative overflow-hidden group/typing z-10"
                 onClick={() => document.body.focus()}
               >
-                {/* Header Info */}
-                <div className="flex justify-between items-center mb-8 shrink-0 relative z-10 border-b border-[#f8e8c8]/40 pb-4">
+                <div className="flex justify-between items-center mb-4 md:mb-8 shrink-0 relative z-10 border-b border-[#f8e8c8]/40 pb-2 md:pb-4">
                   <div>
-                    <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight drop-shadow-sm">
+                    <h2 className="text-base md:text-2xl font-black text-slate-800 tracking-tight">
                       {contestData?.title || "Contest"}
                     </h2>
-                    <p className="text-[#8CA78A] text-xs font-semibold uppercase tracking-widest mt-1">
+                    <p className="text-[#8CA78A] text-[8px] md:text-xs font-semibold uppercase tracking-widest">
                       {contestData?.difficulty} Mode
                     </p>
                   </div>
-                  {isFinished && (
-                    <div className="flex items-center gap-3 bg-[#FFF4EC] text-[#D0864B] px-4 py-2 rounded-xl border border-[#FADDB8] shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
-                      <div className="bg-[#fff8ea]/80 p-1.5 rounded-lg shadow-sm">
-                        <Crown className="w-4 h-4 text-[#ECA468]" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-black text-sm leading-none">Race Finished!</span>
-                        <span className="text-[10px] uppercase font-bold tracking-wider opacity-80 mt-0.5">
-                          Waiting for others...
-                        </span>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                {/* Typing Text Container */}
                 <div
                   ref={snippetContainerRef}
-                  className="flex-1 font-mono text-lg md:text-xl lg:text-2xl leading-[2] tracking-[0.03em] font-medium outline-none overflow-hidden relative z-10 text-slate-500 break-words"
+                  className="flex-1 font-mono text-sm md:text-xl lg:text-2xl leading-[2] tracking-wide font-medium outline-none overflow-y-auto custom-scrollbar relative z-10 text-slate-500 break-words"
                   style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
                 >
                   {renderTextWithHighlight()}
@@ -664,20 +609,12 @@ const ContestArea: React.FC = () => {
 
                 {/* Countdown Overlay */}
                 {phase === "COUNTDOWN" && (
-                  <div className="absolute inset-0 bg-[#fff8ea]/40 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-in fade-in duration-300">
-                    |{" "}
-                    <div className="relative flex items-center justify-center group">
-                      <div className="absolute w-48 h-48 bg-[#ECA468]/10 rounded-full blur-2xl animate-pulse"></div>
-                      <div className="absolute w-32 h-32 bg-[#8CA78A]/10 rounded-full blur-xl animate-pulse delay-75"></div>
-                      <span className="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-slate-800 to-slate-500 drop-shadow-md animate-pulse relative z-10">
+                  <div className="absolute inset-0 bg-[#fff8ea]/40 backdrop-blur-sm z-30 flex flex-col items-center justify-center">
+                    <div className="relative flex items-center justify-center">
+                      <div className="absolute w-24 md:w-48 h-24 md:h-48 bg-[#ECA468]/10 rounded-full blur-2xl animate-pulse"></div>
+                      <span className="text-6xl md:text-9xl font-black text-slate-800 drop-shadow-md animate-pulse relative z-10">
                         {countdown}
                       </span>
-                    </div>
-                    <div className="mt-8 flex flex-col items-center gap-2">
-                      <p className="text-[#D0864B] font-bold uppercase tracking-[0.5em] text-sm animate-pulse">
-                        Prepare to type
-                      </p>
-                      <p className="text-slate-400 text-xs font-semibold">Place your hands on the keyboard</p>
                     </div>
                   </div>
                 )}
@@ -688,10 +625,9 @@ const ContestArea: React.FC = () => {
       </main>
 
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .custom-scrollbar-hidden::-webkit-scrollbar { display: none; }
       `}</style>
     </div>

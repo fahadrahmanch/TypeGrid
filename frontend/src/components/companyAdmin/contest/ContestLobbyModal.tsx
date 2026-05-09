@@ -9,7 +9,8 @@ interface ContestLobbyModalProps {
   onClose: () => void;
   contestId: string;
   contestTitle: string;
-  onStartContest: () => void; // Callback to update parent state if needed
+  onStartContest: () => void; 
+  fetchContests: () => void;
 }
 
 const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
@@ -18,6 +19,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
   contestId,
   contestTitle,
   // onStartContest,
+  fetchContests,
 }) => {
   const [participantsList, setParticipantsList] = useState<Array<{ name: string; email: string }>>([]);
   const [isStarting, setIsStarting] = useState(false);
@@ -51,6 +53,7 @@ const ContestLobbyModal: React.FC<ContestLobbyModalProps> = ({
           status: data.status,
         });
       }
+      fetchContests();
       onClose();
     } catch (error) {
       console.log(error);

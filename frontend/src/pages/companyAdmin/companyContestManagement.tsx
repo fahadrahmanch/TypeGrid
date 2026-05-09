@@ -10,12 +10,13 @@ const CompanyContestManagement: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [contests, setContests] = useState<ContestProps[]>([]);
 
+  const fetchContests = async () => {
+    const response = await companyContests();
+    const data = response.data.data;
+    console.log(data);
+    setContests(data);
+  };
   useEffect(() => {
-    const fetchContests = async () => {
-      const response = await companyContests();
-      const data = response.data.data;
-      setContests(data);
-    };
     fetchContests();
   }, []);
 
@@ -39,18 +40,18 @@ const CompanyContestManagement: React.FC = () => {
       <CompanyAdminSidebar />
 
       {/* Main Content Area */}
-      <main className="flex-1 ml-64 p-8">
-        <div className="max-w-6xl mx-auto">
+      <main className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 overflow-y-auto pt-24 md:pt-12">
+        <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex justify-between items-start mb-10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 md:mb-10 px-2">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-1">Contest Management</h1>
-              <p className="text-gray-500">Create, monitor, and manage typing contests</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight mb-1">Contest Management</h1>
+              <p className="text-xs md:text-base text-gray-500 font-medium">Create, monitor, and manage typing contests</p>
             </div>
 
             <button
               onClick={() => setIsCreateModalOpen(true)}
-              className="flex items-center gap-2 bg-[#ECA468] text-white px-5 py-2.5 rounded-[1.25rem] font-bold shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 uppercase text-xs tracking-widest"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#ECA468] text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 uppercase text-[10px] md:text-xs tracking-widest"
             >
               <Plus className="w-5 h-5 stroke-[2.5]" />
               Create Contest
@@ -80,6 +81,7 @@ const CompanyContestManagement: React.FC = () => {
                 id={contest._id}
                 type={contest.contestMode}
                 setContests={setContests}
+                fetchContests={fetchContests}
               />
             ))}
           </div>
@@ -88,6 +90,7 @@ const CompanyContestManagement: React.FC = () => {
         {/* Create Contest Modal */}
         <CreateContestModal
           isOpen={isCreateModalOpen}
+          fetchContests={fetchContests}
           onClose={() => setIsCreateModalOpen(false)}
           setContests={setContests}
         />

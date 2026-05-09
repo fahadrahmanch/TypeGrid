@@ -8,6 +8,7 @@ interface CreateContestModalProps {
   isOpen: boolean;
   onClose: () => void;
   setContests: React.Dispatch<React.SetStateAction<any[]>>;
+  fetchContests: () => void;
 }
 
 interface RewardRank {
@@ -17,7 +18,7 @@ interface RewardRank {
   prize: string;
 }
 
-const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose, setContests }) => {
+const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose, fetchContests }) => {
   const [contestMode, setContestMode] = useState<"group" | "open">("group");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -86,8 +87,10 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
   };
 
   const handleCreateContest = async () => {
+    try{
     if (validateForm()) {
       let data;
+
       if (contestMode === "group" && !contestText) {
         data = {
           contestMode,
@@ -163,13 +166,12 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
           { rank: 2, place: "2nd Place", type: "Money ($)", prize: "" },
           { rank: 3, place: "3rd Place", type: "Money ($)", prize: "" },
         ]);
-        setContests((prev) => [...prev, response.data.data]);
-      } else {
-        toast.error("Failed to create contest");
+        fetchContests();
+        onClose();
       }
-      onClose();
-    } else {
-      toast.error("Form has errors");
+    }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -211,11 +213,11 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm overflow-y-auto pt-2 pb-2">
-      <div className="bg-white rounded-[2.5rem] w-full max-w-7xl shadow-2xl scale-100 transition-all my-auto relative flex flex-col max-h-[98vh] border border-[#ECA468]/10 text-slate-800">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFBF7]/90 backdrop-blur-sm overflow-y-auto p-3 md:p-6">
+      <div className="bg-white rounded-3xl md:rounded-[2.5rem] w-full max-w-7xl shadow-2xl scale-100 transition-all my-auto relative flex flex-col max-h-[95vh] border border-[#ECA468]/10 text-slate-800">
         {/* Header */}
-        <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-2xl">
-          <h2 className="text-2xl font-bold text-gray-900">Create New Contest</h2>
+        <div className="flex items-center justify-between px-6 md:px-8 py-5 md:py-6 border-b border-gray-100 sticky top-0 bg-white z-10 rounded-t-3xl md:rounded-t-[2.5rem]">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900">Create New Contest</h2>
           <button
             onClick={onClose}
             className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
@@ -225,47 +227,47 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
         </div>
 
         {/* Scrollable Content */}
-        <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar flex-1">
+        <div className="p-6 md:p-8 space-y-6 md:space-y-8 overflow-y-auto custom-scrollbar flex-1">
           {/* Contest Mode Selection */}
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-gray-700 block">Contest Mode</label>
-            <div className="grid grid-cols-2 gap-4">
+            <label className="text-sm font-semibold text-gray-700 block px-1">Contest Mode</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
               <button
                 onClick={() => setContestMode("group")}
-                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${
+                className={`flex flex-col items-start p-4 rounded-2xl border-2 transition-all ${
                   contestMode === "group"
                     ? "border-[#ECA468] bg-[#FFF4EC]/50"
                     : "border-gray-100 hover:border-[#FADDB8] hover:bg-gray-50"
                 }`}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <Users className={`w-5 h-5 ${contestMode === "group" ? "text-[#ECA468]" : "text-gray-400"}`} />
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Users className={`w-4 h-4 md:w-5 md:h-5 ${contestMode === "group" ? "text-[#ECA468]" : "text-gray-400"}`} />
                   <span
-                    className={`font-black uppercase tracking-widest text-[10px] ${contestMode === "group" ? "text-[#D0864B]" : "text-gray-500"}`}
+                    className={`font-black uppercase tracking-widest text-[9px] md:text-[10px] ${contestMode === "group" ? "text-[#D0864B]" : "text-gray-500"}`}
                   >
                     Group Contest
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 text-left">Only selected groups can participate</p>
+                <p className="text-[11px] text-gray-500 text-left leading-relaxed">Only selected groups can participate</p>
               </button>
 
               <button
                 onClick={() => setContestMode("open")}
-                className={`flex flex-col items-start p-4 rounded-xl border-2 transition-all ${
+                className={`flex flex-col items-start p-4 rounded-2xl border-2 transition-all ${
                   contestMode === "open"
                     ? "border-[#ECA468] bg-[#FFF4EC]/50"
                     : "border-gray-100 hover:border-[#FADDB8] hover:bg-gray-50"
                 }`}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <Globe className={`w-5 h-5 ${contestMode === "open" ? "text-[#ECA468]" : "text-gray-400"}`} />
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Globe className={`w-4 h-4 md:w-5 md:h-5 ${contestMode === "open" ? "text-[#ECA468]" : "text-gray-400"}`} />
                   <span
-                    className={`font-black uppercase tracking-widest text-[10px] ${contestMode === "open" ? "text-[#D0864B]" : "text-gray-500"}`}
+                    className={`font-black uppercase tracking-widest text-[9px] md:text-[10px] ${contestMode === "open" ? "text-[#D0864B]" : "text-gray-500"}`}
                   >
                     Open Contest
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 text-left">First users to book can join</p>
+                <p className="text-[11px] text-gray-500 text-left leading-relaxed">First users to book can join</p>
               </button>
             </div>
           </div>
@@ -273,7 +275,7 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
           {/* Contest Name */}
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Contest Name</label>
+              <label className="text-sm font-semibold text-gray-700 px-1">Contest Name</label>
               <input
                 type="text"
                 placeholder="Enter contest name"
@@ -282,13 +284,13 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                   setTitle(e.target.value);
                   if (errors.title) setErrors({ ...errors, title: "" });
                 }}
-                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.title ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
+                className={`w-full px-4 py-3 md:py-3.5 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm ${errors.title ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
               />
-              {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
+              {errors.title && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider mt-1.5 ml-1">{errors.title}</p>}
             </div>
 
             {/* Templates */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 md:gap-2 px-1">
               {[
                 "Speed Typing Championship",
                 "Accuracy Challenge",
@@ -302,7 +304,7 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                     setTitle(tag);
                     if (errors.title) setErrors({ ...errors, title: "" });
                   }}
-                  className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="px-3 py-1.5 text-[10px] md:text-xs font-bold uppercase tracking-wider bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
                 >
                   {tag}
                 </button>
@@ -312,7 +314,7 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
 
           {/* Description */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">Description</label>
+            <label className="text-sm font-semibold text-gray-700 px-1">Description</label>
             <textarea
               placeholder="Describe the contest..."
               rows={3}
@@ -323,13 +325,13 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
               }}
               className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none ${errors.description ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
             />
-            {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
+            {errors.description && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider mt-1.5 ml-1">{errors.description}</p>}
           </div>
 
-          {/* Target Group (Only for Group Contest) */}
+          {/* Target Group */}
           {contestMode === "group" && (
             <div className="space-y-2 animate-fadeIn">
-              <label className="text-sm font-semibold text-gray-700">Target Group</label>
+              <label className="text-sm font-semibold text-gray-700 px-1">Target Group</label>
               <div className="relative">
                 <select
                   value={targetGroup}
@@ -349,27 +351,27 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                   ))}
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
                 </div>
               </div>
-              {errors.targetGroup && <p className="text-red-500 text-xs mt-1">{errors.targetGroup}</p>}
+              {errors.targetGroup && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider mt-1.5 ml-1">{errors.targetGroup}</p>}
             </div>
           )}
 
           {/* Difficulty Level */}
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">Difficulty Level</label>
-            <div className="grid grid-cols-3 gap-3">
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-gray-700 px-1">Difficulty Level</label>
+            <div className="grid grid-cols-3 gap-2 md:gap-3">
               {["easy", "medium", "hard"].map((level) => (
                 <button
                   key={level}
                   onClick={() => setDifficulty(level)}
-                  className={`py-2.5 text-sm font-medium rounded-xl border transition-all ${
+                  className={`py-2.5 md:py-3 text-[11px] md:text-sm font-bold uppercase tracking-widest rounded-xl border transition-all ${
                     difficulty === level
-                      ? "bg-[#ECA468] text-white border-[#ECA468] shadow-md shadow-[#ECA468]/20"
-                      : "bg-white text-gray-600 border-gray-100 hover:bg-gray-50"
+                      ? "bg-[#ECA468] text-white border-[#ECA468] shadow-lg shadow-[#ECA468]/20"
+                      : "bg-white text-gray-500 border-gray-100 hover:bg-gray-50"
                   }`}
                 >
                   {level}
@@ -380,11 +382,11 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
 
           {/* Text Source */}
           <div className="space-y-3">
-            <label className="text-sm font-semibold text-gray-700">Text Source</label>
-            <div className="flex items-center gap-6">
-              <label className="flex items-center gap-2 cursor-pointer group">
+            <label className="text-sm font-semibold text-gray-700 px-1">Text Source</label>
+            <div className="flex flex-wrap items-center gap-4 md:gap-8">
+              <label className="flex items-center gap-2.5 cursor-pointer group">
                 <div
-                  className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${textSource === "manual" ? "border-blue-600" : "border-gray-300 group-hover:border-blue-400"}`}
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${textSource === "manual" ? "border-[#ECA468]" : "border-gray-200 group-hover:border-[#ECA468]/50"}`}
                 >
                   {textSource === "manual" && <div className="w-2.5 h-2.5 bg-[#ECA468] rounded-full" />}
                 </div>
@@ -396,12 +398,12 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                   onChange={() => setTextSource("manual")}
                   className="hidden"
                 />
-                <span className="text-sm text-gray-700">Manual Entry</span>
+                <span className="text-xs md:text-sm font-medium text-gray-700">Manual Entry</span>
               </label>
 
-              <label className="flex items-center gap-2 cursor-pointer group">
+              <label className="flex items-center gap-2.5 cursor-pointer group">
                 <div
-                  className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${textSource === "random" ? "border-blue-600" : "border-gray-300 group-hover:border-blue-400"}`}
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${textSource === "random" ? "border-[#ECA468]" : "border-gray-200 group-hover:border-[#ECA468]/50"}`}
                 >
                   {textSource === "random" && <div className="w-2.5 h-2.5 bg-[#ECA468] rounded-full" />}
                 </div>
@@ -416,15 +418,15 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                   }}
                   className="hidden"
                 />
-                <span className="text-sm text-gray-700">Random pick</span>
+                <span className="text-xs md:text-sm font-medium text-gray-700">Random pick</span>
               </label>
             </div>
           </div>
 
-          {/* Contest Text (If Manual) */}
+          {/* Contest Text */}
           {textSource === "manual" && (
             <div className="space-y-2 animate-fadeIn">
-              <label className="text-sm font-semibold text-gray-700">Contest Text</label>
+              <label className="text-sm font-semibold text-gray-700 px-1">Contest Text</label>
               <textarea
                 placeholder="Enter the text that participants will type..."
                 rows={4}
@@ -433,16 +435,16 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                   setContestText(e.target.value);
                   if (errors.contestText) setErrors({ ...errors, contestText: "" });
                 }}
-                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none font-mono ${errors.contestText ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
+                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border focus:outline-none focus:ring-2 transition-all text-sm resize-none font-mono leading-relaxed ${errors.contestText ? "border-red-500 focus:ring-red-500/20 focus:border-red-500" : "border-gray-200 focus:ring-[#ECA468]/20 focus:border-[#ECA468]"}`}
               />
-              {errors.contestText && <p className="text-red-500 text-xs mt-1">{errors.contestText}</p>}
+              {errors.contestText && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider mt-1.5 ml-1">{errors.contestText}</p>}
             </div>
           )}
 
-          {/* Date & Duration */}
-          <div className="grid grid-cols-2 gap-6">
+          {/* Date, Duration, Start Time */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Date</label>
+              <label className="text-sm font-semibold text-gray-700 px-1">Date</label>
               <div className="relative">
                 <input
                   type="date"
@@ -455,10 +457,25 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                 />
                 <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
-              {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
+              {errors.date && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider mt-1.5 ml-1">{errors.date}</p>}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Duration (minutes)</label>
+              <label className="text-sm font-semibold text-gray-700 px-1">Start Time</label>
+              <div className="relative">
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => {
+                    setStartTime(e.target.value);
+                    if (errors.startTime) setErrors({ ...errors, startTime: "" });
+                  }}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-sm"
+                />
+                <Clock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700 px-1">Duration (min)</label>
               <div className="relative">
                 <input
                   type="number"
@@ -471,41 +488,13 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                 />
                 <Clock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
-              {errors.duration && <p className="text-red-500 text-xs mt-1">{errors.duration}</p>}
+              {errors.duration && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider mt-1.5 ml-1">{errors.duration}</p>}
             </div>
-          </div>
-
-          {/* Start Time & End Time (Placeholders for now, can be computed or inputs) */}
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">Start Time</label>
-              <input
-                type="time"
-                value={startTime}
-                onChange={(e) => {
-                  setStartTime(e.target.value);
-                  if (errors.startTime) setErrors({ ...errors, startTime: "" });
-                }}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
-              />
-            </div>
-            {/* <div className="space-y-2">
-                            <label className="text-sm font-semibold text-gray-700">End Time</label>
-                            <input
-                                type="time"
-                                value={endTime}
-                                onChange={(e) => {
-                                    setEndTime(e.target.value);
-                                    if (errors.endTime) setErrors({ ...errors, endTime: "" });
-                                }}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
-                            />
-                        </div> */}
           </div>
 
           {/* Max Participants */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700">Maximum Participants</label>
+            <label className="text-sm font-semibold text-gray-700 px-1">Maximum Participants</label>
             <div className="relative">
               <select
                 value={maxParticipants}
@@ -517,7 +506,7 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
               >
                 {[...Array(10)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
-                    {i + 1}
+                    {i + 1} Participants
                   </option>
                 ))}
               </select>
@@ -527,50 +516,50 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                 </svg>
               </div>
             </div>
-            {errors.maxParticipants && <p className="text-red-500 text-xs mt-1">{errors.maxParticipants}</p>}
+            {errors.maxParticipants && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider mt-1.5 ml-1">{errors.maxParticipants}</p>}
           </div>
 
-          {/* Reward/Point Management */}
+          {/* Reward Management */}
           <div className="space-y-4 pt-4 border-t border-gray-100">
-            <div className="flex items-center justify-between">
-              <h3 className="text-md font-bold text-gray-900">Reward /Point Management</h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+              <h3 className="text-base font-bold text-gray-900">Reward / Point Management</h3>
               <button
                 onClick={handleAddReward}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-black uppercase tracking-widest text-[#D0864B] bg-[#FFF4EC] rounded-xl hover:bg-[#FADDB8] transition-colors"
+                className="flex items-center justify-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-[#D0864B] bg-[#FFF4EC] rounded-xl hover:bg-[#FADDB8] transition-colors w-fit"
               >
                 <Plus className="w-3.5 h-3.5" />
-                Add Custom Rank
+                Add Rank
               </button>
             </div>
-            {errors.rewards && <p className="text-red-500 text-xs">{errors.rewards}</p>}
+            {errors.rewards && <p className="text-red-500 text-[11px] font-bold uppercase tracking-wider px-1">{errors.rewards}</p>}
 
             <div className="space-y-3">
               {rewards.map((reward) => (
                 <div
                   key={reward.rank}
-                  className="flex items-center gap-3 p-3 bg-gray-50/50 rounded-xl border border-gray-100 group hover:border-[#FADDB8] transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-gray-50/50 rounded-2xl border border-gray-100 group hover:border-[#FADDB8] transition-colors"
                 >
                   <div className="flex-1">
                     <input
                       type="text"
                       value={reward.place}
                       onChange={(e) => handleRewardChange(reward.rank, "place", e.target.value)}
-                      className="w-full bg-transparent text-sm font-medium text-gray-900 placeholder-gray-400 focus:outline-none"
-                      placeholder="Rank (e.g., 1st Place)"
+                      className="w-full bg-transparent text-sm font-bold text-gray-900 placeholder-gray-400 focus:outline-none"
+                      placeholder="Rank"
                     />
                   </div>
-                  <div className="w-px h-6 bg-gray-200" />
-                  <div className="w-32">
+                  <div className="hidden sm:block w-px h-6 bg-gray-200" />
+                  <div className="sm:w-32">
                     <select
                       value={reward.type}
                       onChange={(e) => handleRewardChange(reward.rank, "type", e.target.value)}
-                      className="w-full bg-transparent text-sm text-gray-600 focus:outline-none cursor-pointer"
+                      className="w-full bg-transparent text-[11px] font-bold uppercase tracking-widest text-gray-500 focus:outline-none cursor-pointer"
                     >
                       <option>Money ($)</option>
                     </select>
                   </div>
-                  <div className="w-px h-6 bg-gray-200" />
-                  <div className="flex-1">
+                  <div className="hidden sm:block w-px h-6 bg-gray-200" />
+                  <div className="flex-1 flex items-center gap-3">
                     <input
                       type="text"
                       value={reward.prize}
@@ -578,16 +567,16 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
                         handleRewardChange(reward.rank, "prize", e.target.value);
                         if (errors.rewards) setErrors({ ...errors, rewards: "" });
                       }}
-                      className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none text-right"
+                      className="flex-1 bg-transparent text-sm font-black text-[#D0864B] placeholder-gray-400 focus:outline-none sm:text-right"
                       placeholder="Value"
                     />
+                    <button
+                      onClick={() => handleRemoveReward(reward.rank)}
+                      className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+                    >
+                      <Trash className="w-4 h-4" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleRemoveReward(reward.rank)}
-                    className="p-1.5 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100"
-                  >
-                    <Trash className="w-4 h-4" />
-                  </button>
                 </div>
               ))}
             </div>
@@ -595,16 +584,16 @@ const CreateContestModal: React.FC<CreateContestModalProps> = ({ isOpen, onClose
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 px-8 py-5 border-t border-gray-100 bg-gray-50/50 sticky bottom-0 rounded-b-2xl">
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 px-6 md:px-8 py-5 border-t border-gray-100 bg-gray-50/50 sticky bottom-0 rounded-b-3xl md:rounded-b-[2.5rem]">
           <button
             onClick={onClose}
-            className="px-6 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+            className="w-full sm:w-auto px-8 py-3 text-sm font-bold text-gray-500 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleCreateContest}
-            className="px-6 py-2.5 text-sm font-black uppercase tracking-widest text-white bg-[#ECA468] rounded-[1.25rem] shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] hover:translate-y-px transition-all"
+            className="w-full sm:w-auto px-8 py-3 text-sm font-black uppercase tracking-widest text-white bg-[#ECA468] rounded-2xl shadow-lg shadow-[#ECA468]/20 hover:bg-[#D0864B] hover:translate-y-px transition-all"
           >
             Create Contest
           </button>

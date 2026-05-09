@@ -51,8 +51,8 @@ const Lessons: React.FC = () => {
 
         const groupsData = response.data.groups || response.data.data || [];
         setCompanyGroups(groupsData);
-      } catch (error) {
-        console.log(error);
+      } catch (error:any) {
+        toast.error(error?.response?.data?.message || "Error fetching groups");
       }
     }
     fetchGroups();
@@ -129,8 +129,8 @@ const Lessons: React.FC = () => {
           is_admin: true,
         }));
         setAdminLessons(adminLessonsData);
-      } catch (error) {
-        console.log(error);
+      } catch (error:any) {
+        toast.error(error?.response?.data?.message || "Error fetching lessons");
       }
     }
     fetchAdminLessons();
@@ -148,7 +148,7 @@ const Lessons: React.FC = () => {
         setLessons={setLessons}
       />
 
-      <div className="flex-1 p-8 overflow-y-auto">
+      <div className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 overflow-y-auto pt-24 md:pt-12">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">

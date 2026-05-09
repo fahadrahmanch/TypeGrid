@@ -5,25 +5,22 @@ import CompanyUserNavbar from "../../components/companyUser/layout/companyUserNa
 import { getCompanyUserDashboardStats } from "../../api/companyUser/dashboard";
 import { 
   TrendingUp, 
-  Target, 
-  CheckCircle,
-  ArrowUp,
-  ArrowDown
+  Target,
+  CheckCircle
 } from "lucide-react";
 
 interface StatCardProps {
   title: string;
   value: string | number;
   subValue?: string;
-  change?: string;
-  isPositive?: boolean;
+
   icon: React.ElementType;
   iconBgColor: string;
   iconColor: string;
 }
 
 const StatCard: React.FC<StatCardProps> = ({ 
-  title, value, subValue, change, isPositive, icon: Icon, iconBgColor, iconColor 
+  title, value, subValue,  icon: Icon, iconBgColor, iconColor 
 }) => (
   <div className="bg-[#FAF5EC] p-6 rounded-2xl shadow-sm border border-[#EFE5D5] flex-1 min-w-[240px]">
     <div className="flex items-center gap-3 mb-4">
@@ -37,10 +34,7 @@ const StatCard: React.FC<StatCardProps> = ({
       {subValue ? (
         <p className="text-sm font-semibold text-[#8B5CF6] mt-2">{subValue}</p>
       ) : (
-        <div className={`flex items-center gap-1 text-sm font-bold mt-2 ${isPositive ? "text-green-500" : "text-red-500"}`}>
-          {isPositive ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
-          {change}
-        </div>
+        null
       )}
     </div>
   </div>
@@ -74,7 +68,7 @@ const CompanyUserDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFBF4] pb-12 font-sans">
+    <div className="min-h-screen pb-12 font-sans">
       <CompanyUserNavbar />
       
       <main className="max-w-6xl mx-auto px-6 pt-24">
@@ -91,8 +85,8 @@ const CompanyUserDashboard: React.FC = () => {
           <StatCard 
             title="Current WPM"
             value={stats?.currentWpm?.value || 0}
-            change={stats?.currentWpm?.change || "0% this week"}
-            isPositive={stats?.currentWpm?.isPositive ?? true}
+            // change={stats?.currentWpm?.change || "0% this week"}
+            // isPositive={stats?.currentWpm?.isPositive ?? true}
             icon={TrendingUp}
             iconBgColor="bg-blue-100"
             iconColor="text-blue-500"
@@ -100,8 +94,8 @@ const CompanyUserDashboard: React.FC = () => {
           <StatCard 
             title="Accuracy"
             value={stats?.accuracy?.value || "0%"}
-            change={stats?.accuracy?.change || "0% improvement"}
-            isPositive={stats?.accuracy?.isPositive ?? true}
+            // change={stats?.accuracy?.change || "0% improvement"}
+            // isPositive={stats?.accuracy?.isPositive ?? true}
             icon={Target}
             iconBgColor="bg-green-100"
             iconColor="text-green-500"

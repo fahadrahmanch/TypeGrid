@@ -151,21 +151,21 @@ const EditProfileDiv1: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen transition-colors duration-300 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto pt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div className="min-h-screen transition-colors duration-300 py-6 md:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto pt-16 md:pt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           {/* LEFT COLUMN: Profile Pic & Status (4 columns) */}
-          <div className="lg:col-span-4 space-y-8">
+          <div className="lg:col-span-4 space-y-6 md:space-y-8">
             {/* Profile Picture Card */}
-            <div className="bg-[#FAF3E6] rounded-2xl p-8 shadow-sm border border-[#F5EBD8] relative overflow-hidden group">
-              <h2 className="text-xl font-bold text-[#4A4A4A] mb-6 flex items-center">
+            <div className="bg-[#FAF3E6] rounded-2xl p-6 md:p-8 shadow-sm border border-[#F5EBD8] relative overflow-hidden group">
+              <h2 className="text-lg md:text-xl font-bold text-[#4A4A4A] mb-6 flex items-center">
                 <User className="w-5 h-5 mr-2" />
                 Profile Picture
               </h2>
 
               <div className="flex flex-col items-center">
-                <div className="relative mb-8 group-hover:scale-105 transition-transform duration-300">
-                  <div className="w-40 h-40 rounded-full border-4 border-[#F0E4D4] p-1 shadow-lg">
+                <div className="relative mb-6 md:mb-8 group-hover:scale-105 transition-transform duration-300">
+                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-[#F0E4D4] p-1 shadow-lg overflow-hidden bg-white">
                     <img
                       src={user.imageUrl || "https://via.placeholder.com/150"}
                       alt="Profile"
@@ -174,15 +174,15 @@ const EditProfileDiv1: React.FC = () => {
                   </div>
                   <button
                     onClick={handleClick}
-                    className="absolute bottom-2 right-2 p-3 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-full shadow-lg transition-colors duration-200"
+                    className="absolute bottom-1 right-1 md:bottom-2 md:right-2 p-2 md:p-3 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-full shadow-lg transition-colors duration-200 border-2 border-white"
                     title="Change Photo"
                   >
-                    <Camera className="w-5 h-5" />
+                    <Camera className="w-4 h-4 md:w-5 md:h-5" />
                   </button>
                   <input name="image" type="file" ref={inputRef} onChange={handleImageChange} hidden accept="image/*" />
                 </div>
 
-                <p className="text-sm text-center text-gray-500 px-4">
+                <p className="text-[10px] md:text-xs text-center text-gray-400 px-4">
                   Allowed *.jpeg, *.jpg, *.png, *.gif
                   <br /> Max size of 3.1 MB
                 </p>
@@ -190,47 +190,47 @@ const EditProfileDiv1: React.FC = () => {
             </div>
 
             {/* Account Status Card */}
-            <div className="bg-[#FAF3E6] rounded-2xl p-8 shadow-sm border border-[#F5EBD8] relative overflow-hidden">
-              <h2 className="text-xl font-bold text-[#4A4A4A] mb-6 flex items-center">
+            <div className="bg-[#FAF3E6] rounded-2xl p-6 md:p-8 shadow-sm border border-[#F5EBD8] relative overflow-hidden">
+              <h2 className="text-lg md:text-xl font-bold text-[#4A4A4A] mb-6 flex items-center">
                 <Shield className="w-5 h-5 mr-2" />
                 Account Status
               </h2>
 
-              <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-[#F5EBD8]">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gray-100 rounded-lg">
-                    <User className="w-5 h-5 text-gray-600" />
+              <div className="flex flex-col sm:flex-row items-center justify-between bg-white p-4 rounded-xl border border-[#F5EBD8] gap-4">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="p-2 bg-gray-50 rounded-lg shrink-0">
+                    <User className="w-5 h-5 text-gray-500" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">Current Plan</p>
-                    <p className="font-bold text-[#4A4A4A]">Free User</p>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Plan</p>
+                    <p className="font-black text-gray-700">Free User</p>
                   </div>
                 </div>
 
-                <button className="flex items-center gap-2 px-4 py-2 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-lg shadow-md transition-colors text-sm font-semibold">
-                  <Zap className="w-4 h-4" />
+                <button className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-lg shadow-md transition-all text-xs font-black uppercase tracking-widest active:scale-95">
+                  <Zap className="w-3.5 h-3.5" />
                   Upgrade
                 </button>
               </div>
             </div>
 
             {/* Change Password Card */}
-            <div className="bg-[#FAF3E6] rounded-2xl p-6 shadow-sm border border-[#F5EBD8] relative overflow-hidden group hover:shadow-md transition-all duration-300">
+            <div className="bg-[#FAF3E6] rounded-2xl p-5 md:p-6 shadow-sm border border-[#F5EBD8] relative overflow-hidden group hover:shadow-md transition-all duration-300">
               <div
                 className="flex items-center justify-between cursor-pointer"
                 onClick={() => navigate("/change/password")}
               >
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-white rounded-full group-hover:bg-[#96705B]/10 transition-colors">
-                    <Lock className="w-6 h-6 text-[#96705B]" />
+                  <div className="p-3 bg-white rounded-xl group-hover:bg-[#96705B]/10 transition-colors">
+                    <Lock className="w-5 h-5 md:w-6 md:h-6 text-[#96705B]" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#4A4A4A] text-lg">Password</h3>
-                    <p className="text-sm text-gray-500">Update your security</p>
+                    <h3 className="font-bold text-[#4A4A4A] text-base md:text-lg leading-tight">Password</h3>
+                    <p className="text-xs text-gray-400 font-medium">Update your security</p>
                   </div>
                 </div>
                 <div className="p-2 bg-white rounded-full group-hover:translate-x-1 transition-transform">
-                  <ChevronRight className="w-5 h-5 text-[#96705B]" />
+                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-[#96705B]" />
                 </div>
               </div>
             </div>
@@ -238,100 +238,100 @@ const EditProfileDiv1: React.FC = () => {
 
           {/* RIGHT COLUMN: Basic Information (8 columns) */}
           <div className="lg:col-span-8">
-            <div className="bg-[#FAF3E6] rounded-2xl p-8 shadow-sm border border-[#F5EBD8] relative overflow-hidden h-full">
-              <h2 className="text-xl font-bold text-[#4A4A4A] mb-8 flex items-center border-b border-[#F5EBD8] pb-4">
+            <div className="bg-[#FAF3E6] rounded-2xl p-6 md:p-8 shadow-sm border border-[#F5EBD8] relative overflow-hidden h-full">
+              <h2 className="text-lg md:text-xl font-bold text-[#4A4A4A] mb-8 flex items-center border-b border-[#F5EBD8] pb-4">
                 <FileText className="w-5 h-5 mr-2" />
                 Basic Information
               </h2>
 
-              <div className="space-y-8">
+              <div className="space-y-6 md:space-y-8">
                 {/* Row 1: Name & Number */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-[#6B6B6B] flex items-center">
-                      <User className="w-4 h-4 mr-2" /> Full Name
+                    <label className="text-xs font-black text-[#888] uppercase tracking-widest flex items-center">
+                      <User className="w-3.5 h-3.5 mr-2" /> Full Name
                     </label>
                     <input
                       type="text"
                       name="name"
                       onChange={handleChange}
                       value={user.name}
-                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.name ? "border-red-400 ring-2 ring-red-400" : ""}`}
+                      className={`w-full bg-[#FFFBF2] border-2 border-transparent rounded-xl px-4 py-3 text-gray-700 font-bold focus:border-[#96705B] outline-none transition-all ${error.name ? "border-red-400" : ""}`}
                       placeholder="Enter your name"
                     />
-                    {error.name && <p className="text-red-500 text-xs mt-1">{error.name}</p>}
+                    {error.name && <p className="text-red-500 text-[10px] font-bold mt-1">{error.name}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-[#6B6B6B] flex items-center">
-                      <Phone className="w-4 h-4 mr-2" /> Phone Number
+                    <label className="text-xs font-black text-[#888] uppercase tracking-widest flex items-center">
+                      <Phone className="w-3.5 h-3.5 mr-2" /> Phone Number
                     </label>
                     <input
                       type="number"
                       name="number"
                       onChange={handleChange}
                       value={user.number}
-                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.number ? "border-red-400 ring-2 ring-red-400" : ""}`}
+                      className={`w-full bg-[#FFFBF2] border-2 border-transparent rounded-xl px-4 py-3 text-gray-700 font-bold focus:border-[#96705B] outline-none transition-all ${error.number ? "border-red-400" : ""}`}
                       placeholder="Enter your number"
                     />
-                    {error.number && <p className="text-red-500 text-xs mt-1">{error.number}</p>}
+                    {error.number && <p className="text-red-500 text-[10px] font-bold mt-1">{error.number}</p>}
                   </div>
                 </div>
 
                 {/* Email (Read only) */}
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-[#6B6B6B] flex items-center">
-                    <Mail className="w-4 h-4 mr-2" /> Email Address
+                  <label className="text-xs font-black text-[#888] uppercase tracking-widest flex items-center">
+                    <Mail className="w-3.5 h-3.5 mr-2" /> Email Address
                   </label>
                   <input
                     type="email"
                     value={user.email}
                     disabled
-                    className="w-full bg-white border border-[#F5EBD8] rounded-xl px-4 py-3 text-gray-500 outline-none cursor-not-allowed"
+                    className="w-full bg-white/50 border-2 border-dashed border-[#F5EBD8] rounded-xl px-4 py-3 text-gray-400 font-bold outline-none cursor-not-allowed"
                   />
                 </div>
 
                 {/* Row 2: Bio */}
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-[#6B6B6B] flex items-center">
-                    <FileText className="w-4 h-4 mr-2" /> Bio
+                  <label className="text-xs font-black text-[#888] uppercase tracking-widest flex items-center">
+                    <FileText className="w-3.5 h-3.5 mr-2" /> Bio
                   </label>
                   <textarea
                     rows={4}
                     name="bio"
                     value={user.bio || ""}
                     onChange={handleChange}
-                    className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none resize-none transition-all ${error.bio ? "border-red-400 ring-2 ring-red-400" : ""}`}
+                    className={`w-full bg-[#FFFBF2] border-2 border-transparent rounded-xl px-4 py-3 text-gray-700 font-medium focus:border-[#96705B] outline-none resize-none transition-all ${error.bio ? "border-red-400" : ""}`}
                     placeholder="Tell us a little about yourself..."
                   ></textarea>
-                  {error.bio && <p className="text-red-500 text-xs mt-1">{error.bio}</p>}
+                  {error.bio && <p className="text-red-500 text-[10px] font-bold mt-1">{error.bio}</p>}
                 </div>
 
                 {/* Row 3: Age & Gender */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-[#6B6B6B] flex items-center">
-                      <Calendar className="w-4 h-4 mr-2" /> Age
+                    <label className="text-xs font-black text-[#888] uppercase tracking-widest flex items-center">
+                      <Calendar className="w-3.5 h-3.5 mr-2" /> Age
                     </label>
                     <input
                       type="number"
                       name="age"
                       onChange={handleChange}
                       value={user.age}
-                      className={`w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none transition-all ${error.age ? "border-red-400 ring-2 ring-red-400" : ""}`}
+                      className={`w-full bg-[#FFFBF2] border-2 border-transparent rounded-xl px-4 py-3 text-gray-700 font-bold focus:border-[#96705B] outline-none transition-all ${error.age ? "border-red-400" : ""}`}
                       placeholder="Your age"
                     />
-                    {error.age && <p className="text-red-500 text-xs mt-1">{error.age}</p>}
+                    {error.age && <p className="text-red-500 text-[10px] font-bold mt-1">{error.age}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-[#6B6B6B] flex items-center">
-                      <User className="w-4 h-4 mr-2" /> Gender
+                    <label className="text-xs font-black text-[#888] uppercase tracking-widest flex items-center">
+                      <User className="w-3.5 h-3.5 mr-2" /> Gender
                     </label>
                     <div className="relative">
                       <select
                         name="gender"
-                        className="w-full bg-[#FFFBF2] border-none rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-[#96705B] outline-none appearance-none transition-all cursor-pointer"
+                        className="w-full bg-[#FFFBF2] border-2 border-transparent rounded-xl px-4 py-3 text-gray-700 font-bold focus:border-[#96705B] outline-none appearance-none transition-all cursor-pointer"
                         value={user.gender}
                         onChange={handleChange}
                       >
@@ -340,7 +340,7 @@ const EditProfileDiv1: React.FC = () => {
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                       </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                      <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
                         <ChevronRight className="w-4 h-4 rotate-90" />
                       </div>
                     </div>
@@ -349,11 +349,11 @@ const EditProfileDiv1: React.FC = () => {
               </div>
 
               {/* Actions */}
-              <div className="mt-12 flex flex-col md:flex-row items-center justify-end gap-4 border-t border-[#F5EBD8] pt-8">
+              <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-end gap-3 md:gap-4 border-t border-[#F5EBD8] pt-8">
                 <button
                   type="button"
                   onClick={() => navigate("/")}
-                  className="px-8 py-3 bg-[#E5DCD0] text-[#4A4A4A] border border-transparent rounded-xl font-semibold hover:bg-[#D6C8B8] transition w-full md:w-auto flex items-center justify-center gap-2"
+                  className="px-8 py-3 bg-[#E5DCD0] text-[#4A4A4A] rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#D6C8B8] transition-all w-full sm:w-auto flex items-center justify-center gap-2"
                 >
                   <X className="w-4 h-4" />
                   Cancel
@@ -361,11 +361,11 @@ const EditProfileDiv1: React.FC = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className={`px-8 py-3 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 w-full md:w-auto flex items-center justify-center gap-2 ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+                  className={`px-8 py-3 bg-[#96705B] hover:bg-[#7D5A46] text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-lg shadow-[#96705B]/20 transition-all active:scale-95 w-full sm:w-auto flex items-center justify-center gap-2 ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
                 >
                   {isLoading ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <div className="animate-spin rounded-full h-3.5 w-3.5 border-b-2 border-white"></div>
                       Saving...
                     </>
                   ) : (

@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { startGroupPlayAPI } from "../../../api/user/group";
 import { socket } from "../../../socket";
 import { useSelector } from "react-redux";
-import { FaWhatsapp, FaTelegram, FaShareAlt, FaTimes } from "react-icons/fa";
+import { FaWhatsapp, FaTelegram, FaShareAlt, FaTimes, } from "react-icons/fa";
+import { Crown } from "lucide-react";
 type Player = {
   userId: string;
   name: string;
@@ -235,18 +236,200 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
   return (
     <>
       <Navbar />
-      <h1>Group Lobby Page</h1>
-      <div className="mt-12 bg-[#FFF6E8] flex items-center justify-center p-10">
-        <div className="w-full max-w-[1600px] grid grid-cols-12 gap-8">
+      <main className="pt-24 px-4 md:px-8 pb-12 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* RIGHT – PLAYERS (Horizontal Row on Mobile, Sidebar on Desktop) */}
+          <div className="lg:col-span-3 order-1 lg:order-3 bg-[#FFF1D8] rounded-3xl p-4 md:p-8 shadow-lg shadow-orange-900/5 flex flex-col">
+            <h2 className="text-lg md:text-xl font-black text-gray-800 mb-4 md:mb-6 flex items-center justify-between">
+              Lobby
+              <span className="text-[9px] md:text-[10px] bg-white/50 px-2 md:px-2.5 py-1 rounded-full text-orange-700">
+                {players.length} / {group?.maximumPlayers}
+              </span>
+            </h2>
+
+            <div className="flex flex-row lg:flex-col gap-3 lg:gap-3 overflow-x-auto lg:overflow-y-auto lg:max-h-none pb-2 lg:pb-0 custom-scrollbar flex-nowrap">
+              {players.map((p, i) => (
+                <div key={i} className="min-w-[140px] lg:min-w-0 flex items-center justify-between bg-white/60 backdrop-blur-sm rounded-2xl px-3 lg:px-4 py-2 lg:py-3 border border-white transition-all hover:bg-white shrink-0">
+                  {/* LEFT SIDE */}
+                  <div className="flex items-center gap-2 lg:gap-4 flex-1 min-w-0">
+                    {/* Avatar */}
+                    <div className="relative shrink-0">
+                      <img
+                        src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
+                        className="w-8 h-8 lg:w-10 lg:h-10 rounded-xl object-cover bg-gray-100 ring-2 ring-white shadow-sm"
+                        alt={p.name}
+                      />
+                      {p.isHost && (
+                        <div className="absolute -top-1 -right-1 bg-amber-400 text-white p-0.5 rounded-lg shadow-sm border border-white">
+                          <Crown size={6} className="lg:size-3 fill-current" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Name + host */}
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-[10px] lg:text-sm font-black text-gray-800 truncate">{p.name}</span>
+                      {p.isHost && (
+                        <span className="text-[7px] lg:text-[8px] font-black text-orange-600 uppercase tracking-widest">
+                          Host
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* RIGHT SIDE */}
+                  {!p.isHost && isHost && (
+                    <button
+                      onClick={() => removePlayer(p.userId)}
+                      className="w-6 h-6 lg:w-8 lg:h-8 flex-shrink-0 rounded-lg lg:rounded-xl bg-red-50 text-red-500 text-[10px] lg:text-sm flex items-center justify-center hover:bg-red-500 hover:text-white transition-all active:scale-90"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination Decor (Desktop Only) */}
+            <div className="hidden lg:flex justify-center gap-2 mt-auto pt-6">
+              <span className="w-6 h-1.5 bg-[#7A6A5D] rounded-full" />
+              <span className="w-1.5 h-1.5 bg-gray-300 rounded-full" />
+              <span className="w-1.5 h-1.5 bg-gray-300 rounded-full" />
+            </div>
+          </div>
+
+          {/* CENTER - Invite Box */}
+          <div className="lg:col-span-6 order-2 lg:order-2 space-y-6 md:space-y-8">
+            {/* INVITE BOX */}
+            <div className="bg-[#FFF1D8] rounded-[2.5rem] p-6 md:p-10 text-center shadow-lg shadow-orange-900/5 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-300 via-white to-orange-300 opacity-30"></div>
+              
+              <div className="mb-8">
+                <h3 className="text-2xl md:text-3xl font-black text-gray-800 mb-2">Invite Squad</h3>
+                <p className="text-sm md:text-base text-gray-500 font-medium max-w-sm mx-auto">
+                  Share this magic link to bring your friends into the competition!
+                </p>
+              </div>
+
+              <div className="relative group mb-8">
+                <div
+                  className={`bg-white border-2 border-dashed border-orange-200 rounded-2xl px-6 py-4 text-sm md:text-base font-black text-gray-600 break-all transition-all duration-500
+                    ${isBlurred ? "blur-md select-none opacity-50 scale-95" : "blur-0 select-text opacity-100 scale-100"}
+                  `}
+                >
+                  {inviteLink}
+                </div>
+                {isBlurred && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <button 
+                       onClick={() => setIsBlurred(false)}
+                       className="px-4 py-1.5 bg-[#7A6A5D] text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-transform"
+                    >
+                      Reveal Link
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                {/* COPY */}
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(inviteLink);
+                    toast.success("Invite link copied!");
+                  }}
+                  className="flex-1 min-w-[120px] md:flex-none px-8 py-3.5 text-xs md:text-sm font-black rounded-xl bg-[#7A6A5D] text-white shadow-lg shadow-orange-900/10 hover:shadow-orange-900/20 active:scale-95 transition-all uppercase tracking-widest"
+                >
+                  COPY LINK
+                </button>
+
+                {/* BLUR / UNBLUR */}
+                <button
+                  onClick={() => setIsBlurred((prev) => !prev)}
+                  className="flex-1 min-w-[120px] md:flex-none px-8 py-3.5 text-xs md:text-sm font-black rounded-xl border-2 border-white bg-white text-gray-600 hover:bg-gray-50 active:scale-95 transition-all uppercase tracking-widest"
+                >
+                  {isBlurred ? "SHOW" : "HIDE"}
+                </button>
+
+                {/* SHARE BUTTON */}
+                <div className="relative flex-1 md:flex-none">
+                  <button
+                    onClick={() => setShowShareMenu(!showShareMenu)}
+                    className="w-full md:w-auto px-8 py-3.5 text-xs md:text-sm font-black rounded-xl border-2 border-white bg-white text-gray-600 flex items-center justify-center gap-2 hover:bg-gray-50 active:scale-95 transition-all uppercase tracking-widest"
+                  >
+                    <FaShareAlt />
+                    Share
+                  </button>
+
+                  {/* SHARE MENU POPUP */}
+                  {showShareMenu && (
+                    <div className="absolute bottom-full mb-4 left-1/2 transform -translate-x-1/2 bg-white border-2 border-orange-50 rounded-2xl shadow-2xl p-4 z-50 w-64 animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-200">
+                      <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                        <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest">Share via</h4>
+                        <button onClick={() => setShowShareMenu(false)} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                          <FaTimes className="text-gray-400" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-3">
+                        <button
+                          onClick={() => {
+                            const text = `Join my TypeGrid group! Link: ${inviteLink}`;
+                            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                            window.open(url, "_blank");
+                            setShowShareMenu(false);
+                          }}
+                          className="w-full px-4 py-3 rounded-xl bg-[#25D366] text-white flex items-center gap-3 hover:bg-[#128C7E] transition-all font-black text-xs uppercase tracking-widest shadow-md"
+                        >
+                          <FaWhatsapp size={18} />
+                          WhatsApp
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const text = "Join my TypeGrid group!";
+                            const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`;
+                            window.open(url, "_blank");
+                            setShowShareMenu(false);
+                          }}
+                          className="w-full px-4 py-3 rounded-xl bg-[#0088cc] text-white flex items-center gap-3 hover:bg-[#007dbb] transition-all font-black text-xs uppercase tracking-widest shadow-md"
+                        >
+                          <FaTelegram size={18} />
+                          Telegram
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {group?.currentUserId === group?.ownerId ? (
+                <button
+                  onClick={startGame}
+                  className="w-full md:w-auto px-12 py-5 rounded-2xl bg-[#7A6A5D] text-white text-lg font-black uppercase tracking-[0.2em] shadow-xl shadow-orange-900/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center md:justify-start gap-3"
+                >
+                  <span className="text-2xl">▶</span> START GAME
+                </button>
+              ) : (
+                <div className="flex items-center justify-center gap-3 px-6 py-4 bg-orange-50/50 rounded-2xl border border-orange-100">
+                   <div className="w-2 h-2 bg-orange-400 rounded-full animate-ping"></div>
+                   <p className="text-sm text-orange-800 font-bold uppercase tracking-widest italic">Waiting for host to launch…</p>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* LEFT – SETTINGS */}
-          <div className="col-span-3 bg-[#FFF1D8] rounded-2xl p-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">⚙️ Settings</h2>
+          <div className="lg:col-span-3 order-3 lg:order-1 bg-[#FFF1D8] rounded-3xl p-6 md:p-8 shadow-lg shadow-orange-900/5">
+            <h2 className="text-xl font-black text-gray-800 mb-6 flex items-center gap-2">
+              <span className="p-2 bg-white/50 rounded-xl">⚙️</span> Settings
+            </h2>
 
             {/* Difficulty */}
             <div className="mb-8">
-              <p className="text-base font-medium mb-3">Difficulty</p>
+              <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Difficulty</p>
 
-              <div className="grid grid-cols-3 gap-3 mb-3">
+              <div className="grid grid-cols-3 gap-2 md:gap-3 mb-3">
                 {["Easy", "Medium", "Hard"].map((d) => {
                   const value = d.toLowerCase();
 
@@ -265,10 +448,10 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
                         setDifficulty(value);
                         editGroup(value, undefined);
                       }}
-                      className={`text-base py-2 rounded-lg border transition
-            ${value === group?.difficulty ? "bg-[#7A6A5D] text-white" : "bg-white text-gray-700"}
-            ${!isHost ? "cursor-not-allowed opacity-50" : "hover:bg-[#7A6A5D] hover:text-white"}
-          `}
+                      className={`text-sm md:text-base py-2.5 rounded-xl border-2 transition-all font-bold
+                        ${value === group?.difficulty ? "bg-[#7A6A5D] border-[#7A6A5D] text-white shadow-md" : "bg-white border-gray-100 text-gray-700 hover:border-orange-200"}
+                        ${!isHost ? "cursor-not-allowed opacity-50" : "active:scale-95"}
+                      `}
                     >
                       {d}
                     </button>
@@ -276,14 +459,14 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
                 })}
               </div>
 
-              {!isHost && <p className="text-xs text-gray-500">Only the host can change difficulty</p>}
+              {!isHost && <p className="text-[10px] font-bold text-orange-600/70 uppercase tracking-wider">Host Only</p>}
             </div>
 
             {/* Max Players */}
             <div className="mb-8">
-              <p className="text-base font-medium mb-3">Maximum Players</p>
+              <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Max Players</p>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-2 md:gap-3">
                 {[3, 5, 7, 9, 10].map((num) => (
                   <button
                     key={num}
@@ -299,211 +482,59 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
                       setMaximumPlayes(num);
                       editGroup(undefined, num);
                     }}
-                    className={`text-base py-2 rounded-lg border transition
-          ${num === Number(group?.maximumPlayers) ? "bg-[#7A6A5D] text-white" : "bg-white"}
-          ${!isHost ? "cursor-not-allowed opacity-50" : "hover:bg-[#7A6A5D] hover:text-white"}
-        `}
+                    className={`text-sm md:text-base py-2.5 rounded-xl border-2 transition-all font-bold
+                      ${num === Number(group?.maximumPlayers) ? "bg-[#7A6A5D] border-[#7A6A5D] text-white shadow-md" : "bg-white border-gray-100 text-gray-700 hover:border-orange-200"}
+                      ${!isHost ? "cursor-not-allowed opacity-50" : "active:scale-95"}
+                    `}
                   >
                     {num}
                   </button>
                 ))}
               </div>
 
-              {!isHost && <p className="text-xs text-gray-500 mt-2">Only the host can change lobby settings</p>}
+              {!isHost && <p className="text-[10px] font-bold text-orange-600/70 uppercase tracking-wider mt-3">Host Only</p>}
             </div>
 
             {/* Start Time */}
             <div>
-              <p className="text-base font-medium mb-2">Start Time</p>
-              <p className="text-sm text-gray-500 mb-3">Time in seconds before the match starts (default: 10)</p>
+              <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Start Time</p>
+              <p className="text-[11px] text-gray-400 font-medium mb-4">Lobby delay before launch (1-60s)</p>
 
-              <input
-                type="text"
-                value={countDown}
-                disabled={!isHost}
-                onChange={(e) => {
-                  if (!isHost) return;
-                  setCountDown(e.target.value);
-                }}
-                className="w-full border rounded-lg px-4 py-3"
-              />
-
-              {!isHost && <p className="text-xs text-gray-500 mt-2">Only the host can change start time</p>}
-            </div>
-          </div>
-
-          {/* CENTER */}
-          <div className="col-span-6 space-y-8">
-            {/* INVITE BOX */}
-            <div className="bg-[#FFF1D8] rounded-2xl p-10 text-center">
-              <p className="text-base text-gray-600 mb-5">
-                Share this link to invite players.
-                <br />
-                Click the link to copy!
-              </p>
-
-              <div
-                className={`bg-white border rounded-lg px-4 py-3 text-base mb-6 break-all transition
-    ${isBlurred ? "blur-sm select-none" : "blur-0 select-text"}
-  `}
-              >
-                {inviteLink}
-              </div>
-              <div className="flex justify-center gap-4 mb-6">
-                {/* COPY */}
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(inviteLink);
-                    toast.success("Invite link copied!");
+              <div className="relative">
+                <input
+                  type="number"
+                  value={countDown}
+                  disabled={!isHost}
+                  min={1}
+                  max={60}
+                  onKeyDown={(e) => {
+                    if (["-", "e", "+"].includes(e.key)) {
+                      e.preventDefault();
+                    }
                   }}
-                  className="px-6 py-2.5 text-base rounded-lg bg-[#7A6A5D] text-white"
-                >
-                  COPY
-                </button>
-
-                {/* BLUR / UNBLUR */}
-                <button
-                  onClick={() => setIsBlurred((prev) => !prev)}
-                  className="px-6 py-2.5 text-base rounded-lg border bg-white"
-                >
-                  {isBlurred ? "SHOW" : "HIDE"}
-                </button>
-
-                {/* SHARE BUTTON */}
-                <div className="relative">
-                  <button
-                    onClick={() => setShowShareMenu(!showShareMenu)}
-                    className="px-6 py-2.5 text-base rounded-lg border bg-white flex items-center gap-2 hover:bg-gray-50 transition shadow-sm"
-                  >
-                    <FaShareAlt />
-                    Share
-                  </button>
-
-                  {/* SHARE MENU POPUP */}
-                  {showShareMenu && (
-                    <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-white border rounded-xl shadow-lg p-4 z-10 w-64 animate-fade-in-up">
-                      <div className="flex justify-between items-center mb-3 pb-2 border-b">
-                        <h4 className="text-sm font-semibold text-gray-700">Share via</h4>
-                        <button onClick={() => setShowShareMenu(false)} className="text-gray-400 hover:text-gray-600">
-                          <FaTimes />
-                        </button>
-                      </div>
-
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => {
-                            const text = `Join my TypeGrid group! Link: ${inviteLink}`;
-                            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-                            window.open(url, "_blank");
-                            setShowShareMenu(false);
-                          }}
-                          className="w-full px-4 py-2.5 rounded-lg bg-[#25D366] text-white flex items-center gap-3 hover:bg-[#128C7E] transition"
-                        >
-                          <FaWhatsapp size={20} />
-                          WhatsApp
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            const text = "Join my TypeGrid group!";
-                            const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`;
-                            window.open(url, "_blank");
-                            setShowShareMenu(false);
-                          }}
-                          className="w-full px-4 py-2.5 rounded-lg bg-[#0088cc] text-white flex items-center gap-3 hover:bg-[#007dbb] transition"
-                        >
-                          <FaTelegram size={20} />
-                          Telegram
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  onChange={(e) => {
+                    if (!isHost) return;
+                    let val = e.target.value;
+                    if (val === "") {
+                      setCountDown("");
+                      return;
+                    }
+                    let num = parseInt(val);
+                    if (num < 1) num = 1;
+                    if (num > 60) num = 60;
+                    setCountDown(num.toString());
+                  }}
+                  className="w-full bg-white border-2 border-gray-100 rounded-xl px-4 py-3 font-black text-gray-800 focus:border-[#7A6A5D] outline-none transition-all disabled:bg-gray-50 disabled:text-gray-400"
+                  placeholder="10"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-300 uppercase tracking-widest">Seconds</span>
               </div>
 
-              {group?.currentUserId === group?.ownerId ? (
-                <button
-                  onClick={startGame}
-                  className="px-8 py-3 rounded-xl bg-[#7A6A5D] text-white text-lg flex items-center gap-2 mx-auto"
-                >
-                  ▶ START GAME
-                </button>
-              ) : (
-                <p className="text-sm text-gray-500 text-center mt-4">⏳ Waiting for host to start the game…</p>
-              )}
-            </div>
-
-            {/* CHAT */}
-            {/* <div className="bg-[#FFF1D8] rounded-2xl p-8">
-              <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">💬 Chat</h3>
-
-              <div className="bg-white rounded-lg border p-4 text-base text-gray-600 mb-4 h-32">
-                <span className="text-orange-500">spider man</span> has joined the lobby.
-              </div>
-
-              <div className="flex gap-3">
-                <input placeholder="Write a message..." className="flex-1 border rounded-lg px-4 py-3 text-base" />
-                <button className="px-6 py-3 rounded-lg bg-[#7A6A5D] text-white text-base">Send</button>
-              </div>
-            </div> */}
-          </div>
-
-          {/* RIGHT – PLAYERS */}
-          <div className="col-span-3 bg-[#FFF1D8] rounded-2xl p-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">
-              Lobby ({players.length} / {group?.maximumPlayers})
-            </h2>
-
-            <div className="space-y-4">
-              {players.map((p, i) => (
-                <div key={i} className="flex items-center justify-between bg-[#FFF6E8] rounded-xl px-4 py-3">
-                  {/* LEFT SIDE */}
-                  <div className="flex items-center gap-4 flex-1 min-w-0">
-                    {/* Avatar */}
-                    {p.imageUrl ? (
-                      <img
-                        src={p.imageUrl}
-                        // alt={p.name}
-                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0" />
-                    )}
-
-                    {/* Name + host */}
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-base truncate">{p.name}</span>
-
-                      {p.isHost && (
-                        <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full flex-shrink-0">
-                          Host
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* RIGHT SIDE */}
-                  {!p.isHost && isHost && (
-                    <button
-                      onClick={() => removePlayer(p.userId)}
-                      className="w-8 h-8 flex-shrink-0 rounded-full bg-red-500 text-white text-sm flex items-center justify-center hover:bg-red-600 transition"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Pagination */}
-            <div className="flex justify-center gap-2 mt-6">
-              <span className="w-3 h-3 bg-gray-400 rounded-full" />
-              <span className="w-3 h-3 bg-gray-300 rounded-full" />
-              <span className="w-3 h-3 bg-gray-300 rounded-full" />
+              {!isHost && <p className="text-[10px] font-bold text-orange-600/70 uppercase tracking-wider mt-3">Host Only</p>}
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </>
   );
 };

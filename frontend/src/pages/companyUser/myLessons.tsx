@@ -118,149 +118,151 @@ const MyLessons: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FFF8EA] pt-20">
+    <div className="flex flex-col min-h-screen bg-[#FFF8EA] pt-16 md:pt-20">
       <CompanyUserNavbar />
 
-      <main className="flex-1 p-6 w-full">
+      <main className="flex-1 p-4 md:p-6 lg:p-8 w-full max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="flex items-start justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-6 sm:mb-8 gap-4 text-center sm:text-left pt-4 md:pt-0">
           <div>
-            <div className="flex items-center gap-3 mb-1">
-              <BookOpen className="w-6 h-6 text-gray-700" />
-              <h1 className="text-2xl font-bold text-gray-900">My Lessons</h1>
+            <div className="flex items-center justify-center sm:justify-start gap-2 md:gap-3 mb-1">
+              <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-gray-700" />
+              <h1 className="text-xl md:text-3xl font-black text-gray-900 tracking-tight">My Lessons</h1>
             </div>
-            <p className="text-sm text-gray-500 ml-9">{MyLessons?.total} lessons assigned</p>
+            <p className="text-[10px] md:text-sm text-gray-500 font-bold uppercase tracking-widest sm:ml-9 opacity-70">
+              {MyLessons?.total} lessons assigned
+            </p>
           </div>
-          {/* <button
-            onClick={() => setIsStreakModalOpen(true)}
-            className="flex items-center gap-2 bg-[#B09886] hover:bg-[#967d6c] text-white px-5 py-2.5 rounded-xl transition-colors shadow-sm"
-          >
-            <Trophy className="w-4 h-4" />
-            <span className="text-sm font-semibold">View Streak</span>
-          </button> */}
         </div>
 
         {/* Progress Bar Section */}
-        <div className="bg-[#B09886] rounded-2xl p-6 text-white mb-8 relative overflow-hidden">
-          <div className="flex justify-between items-center mb-4 relative z-10">
-            <span className="text-xs font-semibold tracking-wide opacity-90">Overall Progress</span>
-
-            <span className="text-xs font-bold opacity-90">{progressPercent} %</span>
+        <div className="bg-[#96705B] rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-8 text-white mb-6 md:mb-8 relative overflow-hidden shadow-lg shadow-[#96705B]/20 mx-1 md:mx-0">
+          <div className="flex justify-between items-center mb-3 md:mb-4 relative z-10">
+            <span className="text-[8px] md:text-xs font-black uppercase tracking-[0.2em] opacity-80">Progress</span>
+            <span className="text-xs md:text-base font-black">{progressPercent}%</span>
           </div>
 
           {/* Progress bar */}
-          <div className="h-4 bg-[#967d6c]/40 rounded-full mb-4 relative z-10 overflow-hidden">
+          <div className="h-2.5 md:h-4 bg-black/10 rounded-full mb-4 md:mb-6 relative z-10 overflow-hidden backdrop-blur-sm">
             <div
-              className="h-full bg-white/90 rounded-full transition-all duration-500"
+              className="h-full bg-white rounded-full transition-all duration-1000 ease-out shadow-[0_0_20px_rgba(255,255,255,0.4)]"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-2 text-xs relative z-10 opacity-90">
-            <span className="flex items-center gap-1">
-              <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M1 4L3.5 6.5L9 1"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {completed} completed
-            </span>
-            <span>•</span>
-            <span>{remaining} remaining</span>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 md:gap-6 text-[8px] md:text-xs relative z-10">
+            <div className="flex items-center gap-1.5 bg-white/10 px-2 md:px-3 py-1 md:py-1.5 rounded-full backdrop-blur-sm border border-white/10">
+              <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-emerald-400"></div>
+              <span className="font-black uppercase tracking-widest">{completed} done</span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-white/10 px-2 md:px-3 py-1 md:py-1.5 rounded-full backdrop-blur-sm border border-white/10">
+              <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white/40"></div>
+              <span className="font-black uppercase tracking-widest">{remaining} left</span>
+            </div>
           </div>
 
           {/* Decoration */}
-          <div className="absolute top-[40%] left-[50%] w-6 h-0.5 bg-pink-400 opacity-50"></div>
+          <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-black/5 rounded-full blur-2xl"></div>
         </div>
 
-        {/* Decorator under progress bar like in screenshot */}
-        <div className="flex justify-center mb-8">
-          <div className="w-6 h-0.5 bg-pink-500"></div>
+        {/* Decorator */}
+        <div className="flex justify-center mb-10">
+          <div className="w-12 h-1 bg-pink-500 rounded-full opacity-20"></div>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-4 mb-8">
-          {/* Level Filter */}
-          <div className="relative">
+        <div className="flex flex-row gap-2 md:gap-4 mb-6 md:mb-8 px-1 md:px-0">
+          <div className="relative flex-1">
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value as "All" | "Beginner" | "Intermediate" | "Advanced")}
-              className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
+              className="w-full bg-white border-2 border-transparent hover:border-[#96705B]/20 px-3 md:px-4 py-2.5 md:py-3 rounded-xl text-[9px] md:text-xs font-black uppercase tracking-widest text-gray-700 transition-all outline-none cursor-pointer appearance-none shadow-sm"
             >
-              <option value="All">All Levels</option>
+              <option value="All">Levels</option>
               <option value="Beginner">Beginner</option>
               <option value="Intermediate">Intermediate</option>
               <option value="Advanced">Advanced</option>
             </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <div className="w-1 h-1 border-r-2 border-b-2 border-gray-400 rotate-45"></div>
+            </div>
           </div>
 
-          {/* Status Filter */}
-          <div className="relative">
+          <div className="relative flex-1">
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value as "All" | "Completed" | "In Progress" | "Not Started")}
-              className="bg-[#FFF8EA] px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-orange-50 transition-colors outline-none cursor-pointer"
+              className="w-full bg-white border-2 border-transparent hover:border-[#96705B]/20 px-3 md:px-4 py-2.5 md:py-3 rounded-xl text-[9px] md:text-xs font-black uppercase tracking-widest text-gray-700 transition-all outline-none cursor-pointer appearance-none shadow-sm"
             >
-              <option value="All">All Status</option>
-              <option value="Completed">Completed</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Not Started">Not Started</option>
+              <option value="All">Status</option>
+              <option value="Completed">Done</option>
+              <option value="In Progress">Working</option>
+              <option value="Not Started">New</option>
             </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <div className="w-1 h-1 border-r-2 border-b-2 border-gray-400 rotate-45"></div>
+            </div>
           </div>
         </div>
 
         {/* Lessons Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6 px-1 md:px-0">
           {filteredLessons.map((lesson) => (
             <div
               onClick={() => handleLessonClick(lesson.id)}
               key={lesson.id}
-              className="bg-[#FFF3DB] rounded-2xl p-6 border border-orange-50 hover:bg-[#FFF3E0]/50 transition-all duration-300 hover:scale-105 cursor-pointer group relative"
+              className="bg-[#FFFDF9] rounded-xl md:rounded-[2rem] p-2.5 md:p-6 border border-[#F5EBD8] hover:border-[#96705B] hover:shadow-xl hover:shadow-[#96705B]/5 transition-all duration-300 group cursor-pointer relative flex flex-col h-full"
             >
-              <div className="bg-[#FEFCE8]/50 absolute inset-0 rounded-2xl -z-10"></div>
-
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-gray-900 text-lg leading-tight w-[70%]">{lesson.title}</h3>
+              <div className="flex flex-col md:flex-row justify-between items-start mb-2 md:mb-6 gap-1.5">
+                <h3 className="font-black text-gray-900 text-[10px] md:text-lg leading-tight group-hover:text-[#96705B] transition-colors line-clamp-2 pr-1">
+                  {lesson.title}
+                </h3>
                 <span
-                  className={`text-[10px] uppercase font-bold px-2 py-1 rounded-full ${getLevelColor(lesson.level)}`}
+                  className={`text-[7px] md:text-[9px] uppercase font-black tracking-widest px-1.5 md:px-2.5 py-0.5 md:py-1 rounded md:rounded-lg shrink-0 ${getLevelColor(lesson.level)}`}
                 >
-                  {lesson.level}
+                  {lesson.level.slice(0, 3)}
                 </span>
               </div>
 
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Assigned: {lesson.assignedDate}</span>
+              <div className="space-y-1.5 md:space-y-3 mb-3 md:mb-8 flex-1">
+                <div className="flex items-center gap-1.5 md:gap-3 text-[8px] md:text-xs font-bold text-gray-500">
+                  <Calendar className="w-2.5 md:w-3.5 h-2.5 md:h-3.5 text-[#96705B]" />
+                  <span className="truncate">{lesson.assignedDate}</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <Trophy className="w-3.5 h-3.5" />
-                  <span>Target: {lesson.targetWpm} WPM</span>
+                <div className="flex items-center gap-1.5 md:gap-3 text-[8px] md:text-xs font-bold text-gray-500">
+                  <Trophy className="w-2.5 md:w-3.5 h-2.5 md:h-3.5 text-[#96705B]" />
+                  <span>{lesson.targetWpm} WPM</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Time: {lesson.time}</span>
+                <div className="flex items-center gap-1.5 md:gap-3 text-[8px] md:text-xs font-bold text-gray-500">
+                  <Clock className="w-2.5 md:w-3.5 h-2.5 md:h-3.5 text-[#96705B]" />
+                  <span>{lesson.time}</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                {getStatusIcon(lesson.status)}
-                <span
-                  className={`text-xs font-semibold ${
-                    lesson.status === "Completed"
-                      ? "text-emerald-600"
-                      : lesson.status === "In Progress"
-                        ? "text-blue-600"
-                        : "text-gray-500"
-                  }`}
-                >
-                  {lesson.status}
-                </span>
+              <div className="flex items-center justify-between pt-2 md:pt-6 border-t border-[#F5EBD8]">
+                <div className="flex items-center gap-1">
+                  <div className="shrink-0">
+                    {React.cloneElement(getStatusIcon(lesson.status) as React.ReactElement<any>, {
+                      className: "w-3 h-3 md:w-5 md:h-5",
+                    })}
+                  </div>
+                  <span
+                    className={`text-[7px] md:text-[10px] font-black uppercase tracking-widest hidden xs:inline ${
+                      lesson.status === "Completed"
+                        ? "text-emerald-600"
+                        : lesson.status === "In Progress"
+                          ? "text-blue-600"
+                          : "text-gray-400"
+                    }`}
+                  >
+                    {lesson.status.split(" ")[0]}
+                  </span>
+                </div>
+                <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-[#FAF3E6] flex items-center justify-center group-hover:bg-[#96705B] transition-colors group-hover:translate-x-0.5 transition-transform duration-300">
+                  <PlayCircle className={`w-3 h-3 md:w-4 md:h-4 ${lesson.status === "Not Started" ? "text-gray-400" : "text-[#96705B]"} group-hover:text-white`} />
+                </div>
               </div>
             </div>
           ))}

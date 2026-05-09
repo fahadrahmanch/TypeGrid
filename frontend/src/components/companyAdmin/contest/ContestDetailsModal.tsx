@@ -24,9 +24,10 @@ interface ContestDetailsModalProps {
     status: string;
   };
   setContests: React.Dispatch<React.SetStateAction<ContestProps[]>>;
+  fetchContests: () => void;
 }
 
-const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({ isOpen, onClose, contestData, setContests }) => {
+const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({ isOpen, onClose, contestData, setContests, fetchContests }) => {
   const [participantsList, setParticipantsList] = useState<Array<{ name: string; email: string }>>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   useEffect(() => {
@@ -198,6 +199,7 @@ const ContestDetailsModal: React.FC<ContestDetailsModalProps> = ({ isOpen, onClo
           onClose(); // Close the details modal to reflect changes when reopened, or just let it be.
         }}
         setContests={setContests}
+        fetchContests={fetchContests}
       />
     </div>,
     document.body

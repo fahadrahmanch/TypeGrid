@@ -181,170 +181,174 @@ const TypingPracticeArea = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF6E8] font-sans selection:bg-orange-200 selection:text-orange-900">
+    <div className="min-h-screen bg-[#FFF8EA] font-sans selection:bg-orange-200 selection:text-orange-900 flex flex-col overflow-x-hidden">
       <Navbar />
 
-      <div className="pt-24 px-4 md:px-8 pb-12 max-w-[1600px] mx-auto min-h-screen flex flex-col">
+      <div className="flex-1 pt-24 px-4 md:px-8 pb-12 max-w-[1600px] mx-auto w-full flex flex-col">
         {/* Header / Breadcrumb */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-6 shrink-0">
           <button
             onClick={() => navigate(-1)}
-            className="group flex items-center gap-2 text-gray-400 hover:text-orange-600 transition-colors"
+            className="group flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors"
           >
-            <div className="w-8 h-8 rounded-full bg-white border border-orange-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
+            <div className="w-8 h-8 rounded-xl bg-white border border-orange-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all">
               <ArrowLeft className="w-4 h-4" />
             </div>
-            <span className="font-bold text-sm tracking-wide uppercase">Back to Menu</span>
+            <span className="font-black text-[10px] md:text-xs tracking-widest uppercase">Practice Menu</span>
           </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 items-start flex-1">
           {/* LEFT COLUMN - Stats */}
-          <div className="flex flex-col gap-6 sticky top-24">
-            {/* Lesson Info Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-xl shadow-orange-100/50 border border-orange-100">
-              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
-                <div className="p-2.5 bg-orange-50 rounded-xl">
-                  <Layout className="w-5 h-5 text-orange-500" />
-                </div>
-                <div>
-                  <h3 className="font-extrabold text-lg text-gray-800 leading-tight">Practice</h3>
-                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Session Info</p>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Difficulty</span>
-                  <span
-                    className={`
-                                px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border
-                                ${Content?.level === "beginner"
-                        ? "bg-green-50 text-green-600 border-green-100"
-                        : Content?.level === "intermediate"
-                          ? "bg-amber-50 text-amber-600 border-amber-100"
-                          : "bg-red-50 text-red-600 border-red-100"
-                      }
-                             `}
-                  >
-                    {Content?.level || "Loading..."}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Category</span>
-                  <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100 uppercase tracking-wide">
-                    {Content?.category || "Types"}
-                  </span>
-                </div>
-              </div>
-
-              <button
-                onClick={handleReset}
-                className="w-full mt-6 py-3 rounded-xl bg-orange-50 text-orange-600 font-bold text-sm flex items-center justify-center gap-2 hover:bg-orange-100 hover:scale-[1.02] transition-all active:scale-95"
-              >
-                <RotateCcw className="w-4 h-4" /> Reset Lesson
-              </button>
-            </div>
-
+          <div className="flex flex-col gap-6 lg:sticky lg:top-24 order-2 lg:order-1">
             {/* Stats Card */}
-            <div className="bg-white rounded-3xl p-6 shadow-xl shadow-orange-100/50 border border-orange-100">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2.5 bg-emerald-50 rounded-xl">
-                  <BarChart3 className="w-5 h-5 text-emerald-500" />
+            <div className="bg-[#FFF8EA] rounded-[2rem] p-6 shadow-xl shadow-orange-900/5 border border-orange-100 relative overflow-hidden group">
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-50 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+              
+              <div className="flex items-center gap-3 mb-8 relative">
+                <div className="p-2.5 bg-white rounded-xl shadow-sm border border-orange-50">
+                  <BarChart3 className="w-5 h-5 text-orange-500" />
                 </div>
-                <h3 className="font-extrabold text-lg text-gray-800">Live Stats</h3>
+                <h3 className="font-black text-lg text-gray-800 tracking-tight">Performance</h3>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                      <Clock className="w-3.5 h-3.5" /> Time
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      <Clock className="w-3.5 h-3.5" /> Elapsed Time
                     </span>
-                    <span className="font-mono font-bold text-2xl text-gray-800">
+                    <span className="font-mono font-black text-2xl text-gray-800">
                       {time}
-                      <span className="text-sm text-gray-400 ml-1">s</span>
+                      <span className="text-xs text-gray-300 ml-1">s</span>
                     </span>
+                  </div>
+                  <div className="h-1.5 w-full bg-white rounded-full overflow-hidden border border-orange-50">
+                     <div className="h-full bg-gray-200 w-full opacity-20"></div>
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                      <Zap className="w-3.5 h-3.5 text-orange-400" /> WPM
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      <Zap className="w-3.5 h-3.5 text-orange-400" /> Typing Speed
                     </span>
-                    <span className="font-bold text-xl text-gray-800">{wpm}</span>
+                    <span className="font-black text-2xl text-gray-800">{wpm}<span className="text-[10px] ml-1 opacity-30">WPM</span></span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-white rounded-full h-2 overflow-hidden border border-orange-50">
                     <div
-                      className="bg-gradient-to-r from-orange-400 to-amber-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(251,146,60,0.3)]"
+                      className="bg-gradient-to-r from-orange-400 to-amber-400 h-full rounded-full transition-all duration-500"
                       style={{ width: `${Math.min(wpm, 100)}%` }}
                     ></div>
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
                       <Target className="w-3.5 h-3.5 text-emerald-400" /> Accuracy
                     </span>
-                    <span className="font-bold text-xl text-gray-800">{accuracy}%</span>
+                    <span className="font-black text-2xl text-gray-800">{accuracy}%</span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div className="w-full bg-white rounded-full h-2 overflow-hidden border border-orange-50">
                     <div
-                      className="bg-gradient-to-r from-emerald-400 to-teal-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(52,211,153,0.3)]"
+                      className="bg-gradient-to-r from-emerald-400 to-teal-400 h-full rounded-full transition-all duration-500"
                       style={{ width: `${accuracy}%` }}
                     ></div>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-dashed border-gray-100 flex justify-between items-center">
-                  <span className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    <AlertCircle className="w-3.5 h-3.5 text-red-400" /> Errors
+                <div className="pt-6 border-t border-orange-100 flex justify-between items-center">
+                  <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <AlertCircle className="w-3.5 h-3.5 text-red-400" /> Mistakes
                   </span>
-                  <span className="font-mono font-bold text-xl text-gray-800">{errors}</span>
+                  <span className="font-mono font-black text-xl text-red-500">{errors}</span>
                 </div>
               </div>
+            </div>
+
+            {/* Reset / Lesson Info */}
+            <div className="bg-white rounded-[2rem] p-6 shadow-xl shadow-orange-900/5 border border-orange-100">
+               <div className="flex items-center gap-3 mb-6">
+                 <div className="p-2.5 bg-orange-50 rounded-xl">
+                   <Layout className="w-5 h-5 text-orange-500" />
+                 </div>
+                 <div>
+                   <h4 className="font-black text-gray-800 text-sm leading-none">{Content?.category || "Practice"}</h4>
+                   <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">Difficulty: {Content?.level || "..."}</p>
+                 </div>
+               </div>
+               
+               <button
+                onClick={handleReset}
+                className="w-full py-4 rounded-2xl bg-[#7A6A5D] text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 active:scale-95"
+              >
+                <RotateCcw className="w-4 h-4" /> Reset Lesson
+              </button>
             </div>
           </div>
 
           {/* RIGHT COLUMN - Typing Area */}
-          <div className="bg-white rounded-3xl p-8 shadow-2xl shadow-orange-100/50 border border-orange-100 flex flex-col min-h-[600px]">
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex items-baseline gap-3">
-                <h2 className="text-3xl font-extrabold text-gray-800 tracking-tight">Typing Practice</h2>
-                {!isFinished && !countDown && (
-                  <span className="text-xs font-bold text-orange-500 uppercase tracking-wide animate-pulse">
-                    Waiting to start...
-                  </span>
-                )}
-                {countDown && !isFinished && (
-                  <span className="bg-green-100 text-green-700 text-[10px] uppercase font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span> Live
-                  </span>
-                )}
+          <div className="bg-[#FFF8EA] rounded-[2.5rem] p-6 md:p-12 shadow-xl shadow-orange-900/5 border border-orange-100 flex flex-col min-h-[500px] lg:min-h-[700px] order-1 lg:order-2 overflow-hidden relative">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gray-100/50 overflow-hidden">
+               <div 
+                 className="h-full bg-orange-500 transition-all duration-300"
+                 style={{ width: `${(typedText.length / (Content?.text.length || 1)) * 100}%` }}
+               ></div>
+            </div>
+
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 shrink-0">
+              <div className="flex items-center gap-4">
+                <div className="w-2 h-8 bg-orange-500 rounded-full"></div>
+                <h2 className="text-2xl md:text-4xl font-black text-gray-800 tracking-tight">Active Session</h2>
               </div>
+              
+              {!isFinished && !countDown && (
+                <div className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-xl border border-orange-100">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                  <span className="text-[10px] font-black text-orange-700 uppercase tracking-widest">
+                    Awaiting input...
+                  </span>
+                </div>
+              )}
+              {countDown && !isFinished && (
+                <div className="flex items-center gap-2 bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <span className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">
+                    Timer Running
+                  </span>
+                </div>
+              )}
             </div>
 
             <div
               ref={snippetContainerRef}
-              className="bg-[#F8F9FA] p-8 md:p-10 rounded-2xl flex-1 overflow-y-auto custom-scrollbar border-2 border-transparent focus-within:border-orange-200 focus-within:bg-white transition-colors duration-300 shadow-inner relative scroll-smooth"
+              className="flex-1 overflow-y-auto custom-scrollbar pr-4 relative"
               onClick={() => document.body.focus()}
             >
               <div
-                className="font-mono leading-relaxed tracking-wide select-none break-words whitespace-pre-wrap outline-none"
+                className="font-mono leading-relaxed md:leading-loose select-none break-words whitespace-pre-wrap outline-none text-xl md:text-3xl text-gray-400"
                 style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}
               >
                 {renderTextWithHighlight()}
               </div>
             </div>
 
-            <div className="mt-6 flex justify-between items-center text-xs text-gray-400 font-bold uppercase tracking-wider">
-              <span>Press any key to start</span>
+            <div className="mt-8 pt-8 border-t border-orange-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-400 font-black uppercase tracking-[0.2em]">
               <span className="flex items-center gap-2">
-                <span className="px-1.5 py-0.5 border border-gray-200 rounded bg-white shadow-sm">Tab</span> to reset
-                focus
+                <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                Start typing to begin
               </span>
+              <div className="flex items-center gap-4">
+                {/* <span className="flex items-center gap-2">
+                   <kbd className="px-2 py-1 bg-white border border-gray-200 rounded-lg text-gray-800 font-mono shadow-sm">Tab</kbd>
+                   to Reset
+                </span>
+                <span className="flex items-center gap-2">
+                   <kbd className="px-2 py-1 bg-white border border-gray-200 rounded-lg text-gray-800 font-mono shadow-sm">Backspace</kbd>
+                   to Edit
+                </span> */}
+              </div>
             </div>
           </div>
         </div>
@@ -352,53 +356,55 @@ const TypingPracticeArea = () => {
 
       {/* Results Modal */}
       {isFinished && (
-        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in p-4">
-          <div className="bg-white rounded-3xl p-8 w-full max-w-lg shadow-2xl transform transition-all scale-100 border-4 border-[#FFF6E8]">
-            <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-amber-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+        <div className="fixed inset-0 bg-orange-900/20 backdrop-blur-md flex items-center justify-center z-[100] animate-fade-in p-4">
+          <div className="bg-[#FFF8EA] rounded-[2.5rem] p-6 md:p-10 w-full max-w-xl shadow-2xl border border-orange-100 animate-zoom-in relative overflow-hidden">
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-orange-50 rounded-full blur-3xl opacity-60"></div>
+            
+            <div className="text-center mb-10 relative z-10">
+              <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-orange-900/5 border border-orange-50">
                 {accuracy > 90 ? (
-                  <Trophy className="w-10 h-10 text-orange-500" />
+                  <Trophy className="w-10 h-10 md:w-12 md:h-12 text-orange-500" />
                 ) : (
-                  <CheckCircle className="w-10 h-10 text-emerald-500" />
+                  <CheckCircle className="w-10 h-10 md:w-12 md:h-12 text-emerald-500" />
                 )}
               </div>
-              <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Session Complete!</h2>
-              <p className="text-gray-500 font-medium">Great work keeping up the pace.</p>
+              <h2 className="text-3xl md:text-4xl font-black text-gray-800 mb-2 tracking-tight">Practice Complete!</h2>
+              <p className="text-gray-400 font-black text-xs uppercase tracking-widest">Excellent progress on this lesson</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              <div className="bg-orange-50/50 p-4 rounded-2xl border border-orange-100 text-center">
-                <p className="text-xs text-orange-600 font-bold uppercase tracking-wider mb-1">Speed</p>
-                <p className="text-3xl font-black text-gray-800">
-                  {wpm} <span className="text-sm font-bold text-gray-400">WPM</span>
+            <div className="grid grid-cols-2 gap-4 mb-10 relative z-10">
+              <div className="bg-white p-5 rounded-[1.5rem] border border-orange-100 text-center shadow-sm">
+                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Final Speed</p>
+                <p className="text-4xl font-black text-gray-800 leading-none">
+                  {wpm}<span className="text-xs ml-1 opacity-30">WPM</span>
                 </p>
               </div>
-              <div className="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100 text-center">
-                <p className="text-xs text-emerald-600 font-bold uppercase tracking-wider mb-1">Accuracy</p>
-                <p className="text-3xl font-black text-gray-800">{accuracy}%</p>
+              <div className="bg-white p-5 rounded-[1.5rem] border border-orange-100 text-center shadow-sm">
+                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Precision</p>
+                <p className="text-4xl font-black text-gray-800 leading-none">{accuracy}<span className="text-xs ml-1 opacity-30">%</span></p>
               </div>
-              <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Time</p>
-                <p className="text-xl font-bold text-gray-800">{time}s</p>
+              <div className="bg-white p-5 rounded-[1.5rem] border border-orange-100 text-center shadow-sm">
+                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Duration</p>
+                <p className="text-2xl font-black text-gray-800 leading-none">{time}<span className="text-xs ml-1 opacity-30">SEC</span></p>
               </div>
-              <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Errors</p>
-                <p className="text-xl font-bold text-gray-800">{errors}</p>
+              <div className="bg-white p-5 rounded-[1.5rem] border border-orange-100 text-center shadow-sm">
+                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Misses</p>
+                <p className="text-2xl font-black text-red-500 leading-none">{errors}</p>
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 relative z-10">
               <button
                 onClick={() => window.location.reload()}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-200 transition-all transform hover:-translate-y-0.5"
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-2xl shadow-xl shadow-orange-200 transition-all active:scale-95 uppercase tracking-widest text-xs"
               >
                 Retry Lesson
               </button>
               <button
                 onClick={() => navigate(-1)}
-                className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-bold py-3.5 rounded-xl border-2 border-gray-100 transition-all"
+                className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-black py-4 rounded-2xl border-2 border-orange-100 transition-all active:scale-95 uppercase tracking-widest text-xs"
               >
-                Back to Menu
+                Practice Menu
               </button>
             </div>
           </div>

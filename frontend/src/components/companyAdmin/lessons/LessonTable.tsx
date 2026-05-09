@@ -55,75 +55,79 @@ const LessonTable: React.FC<{
   }
 
   return (
-    <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
-      <div className="flex justify-between items-center mb-8 px-2">
+    <div className="bg-white/60 backdrop-blur-xl rounded-3xl md:rounded-[2.5rem] p-4 md:p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
+      <div className="flex justify-between items-center mb-6 md:mb-8 px-2">
         <div>
-          <h3 className="text-xl font-black text-gray-900 leading-tight">All Lessons</h3>
-          <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+          <h3 className="text-lg md:text-xl font-black text-gray-900 leading-tight uppercase">All Lessons</h3>
+          <p className="text-[10px] text-[#D0864B] font-bold uppercase tracking-widest mt-1">
             {lessons.length} total lessons available
           </p>
         </div>
       </div>
 
-      <ReusableTable
-        columns={[
-          {
-            header: "Lesson Details",
-            key: "title",
-            className: "py-5 px-6 font-bold text-gray-800 text-sm flex",
-          },
-          {
-            header: "Difficulty",
-            key: "level",
-            headerClassName: "text-center",
-            className: "py-5 px-4 text-center",
-            render: (lesson) => (
-              <span
-                className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${getDifficultyColor(lesson?.level || "")}`}
-              >
-                {lesson?.level}
-              </span>
-            ),
-          },
-          {
-            header: "Assigned",
-            key: "assigned",
-            headerClassName: "text-center",
-            className: "py-5 px-4 text-center font-bold text-gray-600 text-sm",
-            render: (lesson) => lesson.assigned || 0,
-          },
-          {
-            header: "Actions",
-            key: "actions",
-            headerClassName: "text-right",
-            className: "py-5 px-4",
-            render: (lesson) => (
-              <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                <button
-                  onClick={() => {
-                    setSelectedLessonId(lesson.id as string);
-                    setOpenEditModal(true);
-                  }}
-                  className="p-2 text-gray-400 hover:text-[#D0864B] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#ECA468]/30 transition-all"
-                  title="Edit Lesson"
+      <div className="overflow-x-auto custom-scrollbar">
+        <ReusableTable
+          columns={[
+            {
+              header: "Lesson Details",
+              key: "title",
+              className: "py-4 md:py-5 px-4 md:px-6 font-bold text-gray-800 text-xs md:text-sm flex min-w-[200px]",
+            },
+            {
+              header: "Difficulty",
+              key: "level",
+              headerClassName: "text-center",
+              className: "py-4 md:py-5 px-3 md:px-4 text-center",
+              render: (lesson) => (
+                <span
+                  className={`px-2 md:px-3 py-1 rounded-lg text-[8px] md:text-[10px] font-black uppercase tracking-wider border ${getDifficultyColor(lesson?.level || "")}`}
                 >
-                  <Edit3 size={16} />
-                </button>
-                <button
-                  onClick={() => handleDeleteLesson(lesson.id as string)}
-                  className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
-                  title="Delete Lesson"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ),
-          },
-        ]}
-        data={filteredLessons}
-      />
+                  {lesson?.level}
+                </span>
+              ),
+            },
+            {
+              header: "Assigned",
+              key: "assigned",
+              headerClassName: "text-center",
+              className: "py-4 md:py-5 px-3 md:px-4 text-center font-bold text-gray-600 text-xs md:text-sm",
+              render: (lesson) => lesson.assigned || 0,
+            },
+            {
+              header: "Actions",
+              key: "actions",
+              headerClassName: "text-right",
+              className: "py-4 md:py-5 px-3 md:px-4",
+              render: (lesson) => (
+                <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-x-0 transition-all">
+                  <button
+                    onClick={() => {
+                      setSelectedLessonId(lesson.id as string);
+                      setOpenEditModal(true);
+                    }}
+                    className="p-1.5 md:p-2 text-gray-400 hover:text-[#D0864B] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#ECA468]/30 transition-all"
+                    title="Edit Lesson"
+                  >
+                    <Edit3 size={14} className="md:w-4 md:h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteLesson(lesson.id as string)}
+                    className="p-1.5 md:p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
+                    title="Delete Lesson"
+                  >
+                    <Trash2 size={14} className="md:w-4 md:h-4" />
+                  </button>
+                </div>
+              ),
+            },
+          ]}
+          data={filteredLessons}
+        />
+      </div>
 
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      <div className="mt-6">
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      </div>
       {/* )} */}
 
       <EditLessonModal

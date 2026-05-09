@@ -162,6 +162,7 @@ export const API_ROUTES = {
     },
   },
   GET_COMPANY_USER_PROFILE: (userId: string) => `/profile/${userId}`,
+  UPDATE_COMPANY_USER_PROFILE: (userId: string) => `/profile/update/${userId}`,
   UPDATE_COMPANY_PASSWORD: (userId: string) => `/profile/${userId}/password`,
   COMPANY_USERS_WITH_STATUS: "/users/company-users-with-status",
   //notification

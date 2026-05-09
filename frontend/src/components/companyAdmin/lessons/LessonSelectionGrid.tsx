@@ -55,7 +55,7 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-left">
+      <div className="grid grid-cols-4 gap-2 md:gap-4 text-left">
         {filteredLessons.map((lesson) => {
           const lessonId = (lesson._id || lesson.id || "") as string;
           const isSelected = selectedLessons.includes(lessonId);
@@ -64,7 +64,7 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
             <button
               key={lessonId}
               onClick={() => onToggleLesson(lessonId)}
-              className={`relative p-5 rounded-2xl border transition-all duration-300 text-left group overflow-hidden ${
+              className={`relative p-2.5 md:p-5 rounded-xl md:rounded-2xl border transition-all duration-300 text-left group overflow-hidden ${
                 isSelected
                   ? "bg-[#D0864B] border-[#D0864B] shadow-lg shadow-[#D0864B]/20"
                   : "bg-white border-gray-100 hover:border-[#ECA468] hover:shadow-md"
@@ -79,22 +79,22 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
               )}
 
               <div
-                className={`p-2.5 rounded-xl inline-block mb-4 transition-colors ${
+                className={`p-1.5 md:p-2.5 rounded-lg md:rounded-xl inline-block mb-2 md:mb-4 transition-colors ${
                   isSelected ? "bg-white/20 text-white" : "bg-[#ECA468]/10 text-[#D0864B]"
                 }`}
               >
-                <BookOpen size={18} />
+                <BookOpen size={14} className="md:w-[18px] md:h-[18px]" />
               </div>
 
               <h4
-                className={`font-black text-sm mb-2 transition-colors ${isSelected ? "text-white" : "text-gray-800"}`}
+                className={`font-black text-[9px] md:text-sm mb-1.5 md:mb-2 transition-colors line-clamp-2 min-h-[2.25rem] md:min-h-0 ${isSelected ? "text-white" : "text-gray-800"}`}
               >
                 {lesson.title}
               </h4>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1 md:gap-2 mt-auto">
                 <span
-                  className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                  className={`text-[7px] md:text-[10px] font-black uppercase tracking-widest px-1 md:px-2 py-0.5 rounded ${
                     isSelected ? "bg-white/20 text-white" : "bg-gray-50 text-gray-400 border border-gray-100"
                   }`}
                 >
@@ -102,11 +102,11 @@ const LessonSelectionGrid: React.FC<LessonSelectionGridProps> = ({
                 </span>
                 {lesson.is_admin && (
                   <span
-                    className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                    className={`text-[7px] md:text-[10px] font-black uppercase tracking-widest px-1 md:px-2 py-0.5 rounded ${
                       isSelected ? "bg-rose-100/20 text-white" : "bg-rose-50 text-rose-500 border border-rose-100"
                     }`}
                   >
-                    Library
+                    Lib
                   </span>
                 )}
               </div>

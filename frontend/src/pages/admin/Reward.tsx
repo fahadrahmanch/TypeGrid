@@ -128,8 +128,8 @@ const Reward: React.FC = () => {
         setSelectedRewardId(_id);
         setEditOpen(true);
       }
-    } catch (err) {
-      toast.error("Failed to fetch reward details");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to fetch reward details");
     }
   };
 
@@ -145,8 +145,8 @@ const Reward: React.FC = () => {
       setRewards((prev) => prev.filter((reward) => reward._id !== rewardToDelete));
       toast.success("Reward deleted successfully");
       loadRewards();
-    } catch (err) {
-      toast.error("Failed to delete reward");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to delete reward");
     } finally {
       setDeleteConfirmOpen(false);
       setRewardToDelete(null);
@@ -168,76 +168,86 @@ const Reward: React.FC = () => {
   };
 
   return (
-    <div className="md:ml-64 p-8 min-h-screen bg-[#FFF8EA] font-sans">
+    <div className="md:ml-64 p-4 md:p-8 min-h-screen bg-[#FFF8EA] font-sans pt-24 md:pt-8">
       <SideNavbar />
 
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="mb-10 flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Rewards</h1>
-            <p className="text-gray-500 font-medium">Manage rewards for your typing challenges</p>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight mb-1 md:mb-2">Rewards Management</h1>
+            <p className="text-xs md:text-sm text-gray-500 font-medium">Manage XP rewards for platform engagement.</p>
           </div>
           <button
             onClick={() => setCreateOpen(true)}
-            className="flex items-center gap-2 bg-[#A68F7A] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#8D7763] transition-all shadow-md active:scale-95"
+            className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#ECA468] text-white px-6 py-3 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest hover:bg-[#D0864B] transition-all shadow-lg shadow-[#ECA468]/20 hover:shadow-xl hover:-translate-y-0.5"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4 md:w-5 md:h-5" />
             <span>Create Reward</span>
           </button>
         </div>
 
-        {/* Search & Content Bar */}
-        <div className="bg-[#FFFDF9] rounded-[2rem] p-8 shadow-sm border border-[#ECA468]/5 mb-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div className="relative max-w-md flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search rewards..."
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="w-full pl-12 pr-6 py-3 bg-white rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/10 focus:border-[#ECA468]/30 transition-all placeholder:text-gray-400 font-medium text-gray-800"
-              />
-            </div>
-            <div className="text-right">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Rewards</p>
-              <p className="text-xl font-black text-gray-900">{totalRewards}</p>
+        {/* Search & Statistics */}
+        <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2rem] p-4 md:p-8 shadow-sm border border-[#ECA468]/10 mb-6 md:mb-8 flex flex-col md:flex-row items-stretch md:items-center gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search rewards..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="w-full pl-11 md:pl-14 pr-4 py-2.5 md:py-3 bg-white/70 rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium text-sm md:text-base text-gray-800"
+            />
+          </div>
+          <div className="flex justify-between md:block px-1">
+            <p className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Rewards</p>
+            <p className="text-lg md:text-xl font-black text-gray-900">{totalRewards}</p>
+          </div>
+        </div>
+
+        {/* Rewards List Section */}
+        <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2.5rem] p-4 md:p-8 shadow-sm border border-[#ECA468]/10 overflow-hidden">
+          <div className="flex justify-between items-center mb-6 md:mb-8 px-1 md:px-2">
+            <div>
+              <h3 className="text-lg md:text-xl font-black text-gray-900 leading-tight">Reward Inventory</h3>
+              <p className="text-[10px] text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+                {rewards.length} configurations available
+              </p>
             </div>
           </div>
 
+          {/* Rewards List Table */}
+          <div className="overflow-x-auto">
             <ReusableTable
               columns={[
                 {
                   header: "XP Points",
                   key: "xp",
-                  className: "py-4 px-6 font-bold text-gray-700",
+                  className: "py-4 px-6 font-bold text-gray-800 whitespace-nowrap",
                 },
                 {
                   header: "Description",
                   key: "description",
-                  className: "py-4 px-6 text-gray-600 font-medium",
+                  className: "py-4 px-6 text-gray-500 italic text-sm whitespace-nowrap",
                 },
                 {
                   header: "Actions",
                   key: "actions",
                   headerClassName: "text-right",
-                  className: "py-4 px-6",
+                  className: "py-4 px-6 whitespace-nowrap",
                   render: (reward) => (
-                    <div className="flex justify-end gap-3">
+                    <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                       <button
                         onClick={() => handleEdit(reward._id)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-[#F3F4F6] text-[#4B5563] rounded-lg font-bold text-xs hover:bg-gray-200 transition-colors"
+                        className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
                       >
                         <Edit2 className="w-4 h-4" />
-                        Edit
                       </button>
                       <button
                         onClick={() => handleDelete(reward._id)}
-                        className="flex items-center gap-1.5 px-4 py-2 bg-[#EF4444] text-white rounded-lg font-bold text-xs hover:bg-red-600 transition-colors"
+                        className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-50 hover:border-red-100 transition-all"
                       >
                         <Trash2 className="w-4 h-4" />
-                        Delete
                       </button>
                     </div>
                   ),
@@ -247,68 +257,78 @@ const Reward: React.FC = () => {
               isLoading={loading}
               emptyMessage="No rewards found"
               headerClassName="bg-[#FFF8EA] text-left"
-              columnHeaderClassName="py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-widest"
+              columnHeaderClassName="py-4 px-6 text-[10px] font-black text-[#D0864B] uppercase tracking-widest border-b border-[#ECA468]/10"
             />
+          </div>
 
-            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-          {/* )} */}
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       </div>
 
       {/* Modal - Matching Screenshot Styling */}
       {(isCreateOpen || isEditOpen) &&
         createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 backdrop-blur-sm animate-in fade-in duration-200 p-4">
-            <div className="relative w-full max-w-lg bg-[#FFF8EA] rounded-3xl shadow-xl overflow-hidden flex flex-col max-h-[95vh] animate-in zoom-in-95 duration-200">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-300 p-4">
+            <div className="relative w-full max-w-md bg-[#FFF8EA] rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] md:max-h-[90vh] animate-in zoom-in-95 duration-300">
               {/* Header */}
-              <div className="px-8 py-6 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-800">{isEditOpen ? "Edit Reward" : "Create Reward"}</h2>
-                <button onClick={closeModals} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
-                  <X className="w-6 h-6" />
+              <div className="px-5 md:px-10 py-4 md:py-8 border-b border-[#ECA468]/10 bg-white/40 flex justify-between items-center">
+                <div>
+                  <h2 className="text-lg md:text-2xl font-black text-gray-900 leading-tight">
+                    {isEditOpen ? "Update Reward" : "New Reward"}
+                  </h2>
+                  <p className="text-[8px] md:text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-0.5">
+                    {isEditOpen ? "Modify reward details" : "Configure XP reward"}
+                  </p>
+                </div>
+                <button 
+                  onClick={closeModals} 
+                  className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-white rounded-lg transition-all"
+                >
+                  <X className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-5 custom-scrollbar">
+              <div className="flex-1 overflow-y-auto px-5 md:px-10 py-5 md:py-8 space-y-4 md:space-y-6 custom-scrollbar bg-white/20">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">XP Points</label>
+                  <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">XP Points</label>
                   <input
                     type="text"
                     name="xp"
                     value={values.xp}
                     onChange={handleInputChange}
                     placeholder="e.g. 100"
-                    className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
+                    className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 placeholder:text-gray-300 font-bold text-xs md:text-base shadow-sm"
                   />
-                  {formErrors.xp && <p className="text-red-400 text-xs px-1">{formErrors.xp}</p>}
+                  {formErrors.xp && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.xp}</p>}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">Description</label>
+                  <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Description</label>
                   <textarea
                     name="description"
                     value={values.description}
                     onChange={handleInputChange}
                     rows={4}
-                    placeholder="Reward description"
-                    className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 resize-none placeholder:text-gray-300 font-medium leading-relaxed"
+                    placeholder="Briefly explain the reward..."
+                    className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 resize-none placeholder:text-gray-300 font-bold text-xs md:text-base leading-relaxed shadow-sm"
                   />
-                  {formErrors.description && <p className="text-red-400 text-xs px-1">{formErrors.description}</p>}
+                  {formErrors.description && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.description}</p>}
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="flex justify-end gap-3 pt-4">
+                <div className="flex flex-row justify-end gap-2 md:gap-3 pt-4 md:pt-10 border-t border-[#ECA468]/5">
                   <button
                     onClick={closeModals}
-                    className="px-6 py-2.5 rounded-lg bg-[#E5E7EB] text-gray-700 font-bold text-sm hover:bg-gray-300 transition-colors"
+                    className="px-4 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl bg-white text-gray-500 font-black text-[8px] md:text-xs uppercase tracking-widest border border-gray-100 hover:bg-gray-50 transition-all shadow-sm"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="px-6 py-2.5 rounded-lg bg-[#A68F7A] text-white font-bold text-sm hover:bg-[#8D7763] transition-colors shadow-sm"
+                    className="px-5 md:px-10 py-2 md:py-4 rounded-xl md:rounded-2xl bg-[#ECA468] text-white font-black text-[8px] md:text-xs uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 active:scale-95 hover:-translate-y-0.5"
                   >
-                    {isEditOpen ? "Edit" : "Create"}
+                    {isEditOpen ? "Update" : "Create"}
                   </button>
                 </div>
               </div>

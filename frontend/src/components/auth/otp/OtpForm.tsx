@@ -1,11 +1,9 @@
-import OtpKid from "../../../assets/images/auth/otp/otp-kid.png";
-import lines from "../../../assets/images/auth/login/lines.png";
-import LinesRight from "../../../assets/images/auth/otp/linesRightOtp.png";
 import { verifyOtp, resendOtp } from "../../../api/auth/authServices";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ShieldCheck, ArrowRight, RefreshCw } from "lucide-react";
 const OtpForm: React.FC = () => {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [otp, setOtp] = useState<string>("");
@@ -80,61 +78,93 @@ const OtpForm: React.FC = () => {
   }
 
   return (
-    <>
-      {/* Container */}
-      <div className="h-screen flex justify-center items-center flex-1 w-full relative  sm:w-4/4 md:w-full lg:w-full  ">
-        <div className="w-26 mb-10 hidden sm:block">
-          <img src={lines} alt="draw" className="w-28" />
-        </div>
+    <div className="min-h-screen bg-[#FFF8EA] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Abstract Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-[#8B7355]/10 rounded-full blur-[100px]"></div>
+      </div>
 
-        <div className="bg-[#FFF5E0] p-10 rounded-xl  w-150 z-10 ">
-          <h2 className="flex text-2xl font-semibold text-gray-800 mb-5 text-center justify-center">Verify Otp</h2>
-          <p className="flex pb-8">Enter the 6 digit code that you will receive in your registered email</p>
+      <div className="flex items-center justify-center w-full max-w-6xl relative z-10">
+        {/* OTP Box */}
+        <div className="w-full max-w-md bg-white/70 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#FDE6C6] shadow-2xl shadow-[#8B7355]/5 transition-all duration-500">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Verify OTP</h2>
+            <p className="text-gray-500 font-medium px-4">
+              Enter the 6-digit code sent to your registered email address.
+            </p>
+          </div>
 
           {/* Form */}
-          <form className="flex flex-col gap-3 ">
-            <input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={6}
-              value={otp}
-              name="otp"
-              placeholder="Enter your 6 digits OTP"
-              onInput={(e) => {
-                const input = e.target as HTMLInputElement;
-                input.value = input.value.replace(/[^0-9]/g, "");
-              }}
-              onChange={(e) => handleChange(e)}
-              className="text-center appearance-none rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-[#FFF8EA]"
-            />
-            <button
-              type="submit"
-              className={`w-full ${otp.length !== 6 || expire == 0 ? "bg-gray-200" : "bg-gray-900"} text-white rounded-md py-2 mt-2`}
-              onClick={handleSubmit}
-              disabled={otp.length !== 6 || expire == 0}
-            >
-              Confirm
-            </button>
-            <div className="flex justify-between g">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-2 text-center">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Verification Code</label>
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#8B7355] transition-colors">
+                  <ShieldCheck size={20} />
+                </div>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={6}
+                  value={otp}
+                  name="otp"
+                  placeholder="000000"
+                  onInput={(e) => {
+                    const input = e.target as HTMLInputElement;
+                    input.value = input.value.replace(/[^0-9]/g, "");
+                  }}
+                  onChange={handleChange}
+                  className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl outline-none focus:border-[#8B7355] focus:ring-4 focus:ring-[#8B7355]/5 transition-all font-bold text-2xl text-center tracking-[0.5em] text-gray-700 placeholder:text-gray-200 placeholder:tracking-normal"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
               <button
-                className="w-full bg-gray-900 text-white rounded-md py-2 mt-2 hover:bg-gray-800 transition"
-                disabled={expire > 0}
-                onClick={otpResent}
+                type="submit"
+                disabled={otp.length !== 6 || expire === 0}
+                className={`w-full py-4 rounded-2xl font-bold text-white shadow-xl transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 ${
+                  otp.length !== 6 || expire === 0
+                    ? "bg-gray-300 cursor-not-allowed shadow-none"
+                    : "bg-[#8B7355] hover:bg-[#725e46] shadow-[#8B7355]/20 hover:shadow-2xl hover:shadow-[#8B7355]/30"
+                }`}
               >
-                {expire == 0 ? "Resent otp" : `expire after ${expire} s`}
+                <span>Verify Code</span>
+                <ArrowRight size={18} />
               </button>
+
+              <div className="flex flex-col items-center gap-4 pt-4 border-t border-gray-100">
+                <div className="text-sm font-semibold text-gray-400">
+                  {expire > 0 ? (
+                    <span className="flex items-center gap-2">
+                      OTP expires in <span className="text-[#8B7355] font-bold tabular-nums w-8 inline-block">{expire}s</span>
+                    </span>
+                  ) : (
+                    <span className="text-red-400">OTP has expired</span>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  disabled={expire > 0}
+                  onClick={otpResent}
+                  className={`flex items-center gap-2 text-sm font-bold transition-colors ${
+                    expire > 0
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-[#8B7355] hover:text-[#725e46]"
+                  }`}
+                >
+                  <RefreshCw size={16} className={expire === 0 ? "animate-pulse" : ""} />
+                  Resend Code
+                </button>
+              </div>
             </div>
           </form>
         </div>
-
-        {/* Illustration */}
-        <div className="w-36 mt-12 relative">
-          <img src={OtpKid} alt="kid" className="w-36 absolute mt-28" />
-          <img src={LinesRight} alt="draw" className="w-24 mb-10"></img>
-        </div>
       </div>
-    </>
+    </div>
   );
 };
 export default OtpForm;

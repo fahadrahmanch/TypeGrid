@@ -156,8 +156,8 @@ const Challenges: React.FC = () => {
         setSelectedChallengeId(id);
         setEditOpen(true);
       }
-    } catch (err) {
-      toast.error("Failed to fetch challenge details");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to fetch challenge details");
     }
   };
 
@@ -174,8 +174,8 @@ const Challenges: React.FC = () => {
       loadChallenges();
       setIsDeleteModalOpen(false);
       setChallengeToDelete(null);
-    } catch (err) {
-      toast.error("Failed to delete challenge");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to delete challenge");
     }
   };
 
@@ -218,91 +218,74 @@ const Challenges: React.FC = () => {
     getRewards();
   }, []);
   return (
-    <div className="md:ml-64 p-8 min-h-screen bg-[#FFF8EA] font-sans">
+    <div className="md:ml-64 p-4 md:p-8 min-h-screen bg-[#FFF8EA] font-sans pt-24 md:pt-8">
       <SideNavbar />
 
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Challenges Management</h1>
-          <p className="text-gray-500 font-medium">
-            Design, deploy, and manage typing challenges to drive user engagement and performance excellence.
-          </p>
-        </div>
-
-        {/* Search & Filters Pill Bar */}
-        <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2rem] p-6 shadow-sm border border-[#ECA468]/10 mb-8 flex flex-wrap items-center gap-4">
-          <div className="relative flex-1 min-w-[300px]">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search the challenge directory..."
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              className="w-full pl-14 pr-6 py-3 bg-white/70 rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium text-gray-800"
-            />
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight mb-1 md:mb-2 text-left">Challenges Hub</h1>
+            <p className="text-xs md:text-sm text-gray-500 font-medium text-left">
+              Design and manage high-engagement typing modules.
+            </p>
           </div>
-
-          {/* <div className="relative min-w-[160px]">
-                        <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D0864B]" />
-                        <select
-                            value={filter}
-                            onChange={(e) => setFilter(e.target.value)}
-                            className="w-full pl-10 pr-8 py-2.5 bg-white/70 rounded-xl border border-gray-100 text-sm font-bold text-gray-700 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] appearance-none cursor-pointer"
-                        >
-                            <option value="">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div> */}
 
           <button
             onClick={() => setCreateOpen(true)}
-            className="flex items-center gap-2 bg-[#ECA468] text-white px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#D0864B] transition-all shadow-lg shadow-[#ECA468]/20 hover:shadow-xl hover:-translate-y-0.5"
+            className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#ECA468] text-white px-6 py-3 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-widest hover:bg-[#D0864B] transition-all shadow-lg shadow-[#ECA468]/20 hover:shadow-xl hover:-translate-y-0.5"
           >
             <Plus className="w-4 h-4" />
             <span>Create New</span>
           </button>
         </div>
 
-        {/* Table Section Card */}
-        <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-[2.5rem] p-10 shadow-sm border border-[#ECA468]/10 overflow-hidden">
-          <div className="flex justify-between items-center mb-10 px-2">
+        {/* Search & Filters */}
+        <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2rem] p-4 md:p-6 shadow-sm border border-[#ECA468]/10 mb-6 md:mb-8 flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search challenges..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="w-full pl-11 md:pl-14 pr-4 py-2.5 md:py-3 bg-white/70 rounded-xl md:rounded-2xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all placeholder:text-gray-400 font-medium text-sm md:text-base text-gray-800"
+            />
+          </div>
+        </div>
+
+        {/* Challenges List Section */}
+        <div className="bg-[#fff8ea]/60 backdrop-blur-xl rounded-2xl md:rounded-[2.5rem] p-4 md:p-10 shadow-sm border border-[#ECA468]/10 overflow-hidden">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-10 px-1 md:px-2 gap-4">
             <div>
-              <h3 className="text-2xl font-black text-gray-900 leading-tight">Active Challenges</h3>
-              <p className="text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-1">
-                {challenges.length} total modules available
+              <h3 className="text-lg md:text-2xl font-black text-gray-900 leading-tight">Active Challenges</h3>
+              <p className="text-[10px] text-[#D0864B] font-bold uppercase tracking-widest mt-1">
+                {challenges.length} modules available
               </p>
             </div>
 
-            <div className="flex gap-8">
+            <div className="flex gap-6">
               <div className="text-center">
-                {/* <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                  Live
-                </p> */}
-                {/* <p className="text-xl font-black text-[#BCA38E]">
-                  {challenges.filter((c) => c.isActive).length}
-                </p> */}
-              </div>
-              <div className="text-center">
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total</p>
-                <p className="text-xl font-black text-gray-900">{challenges.length}</p>
+                <p className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total</p>
+                <p className="text-lg md:text-xl font-black text-gray-900">{challenges.length}</p>
               </div>
             </div>
           </div>
 
+          {/* Challenges List Table */}
+          <div className="overflow-x-auto">
             <ReusableTable
               columns={[
                 {
                   header: "Challenge Designation",
                   key: "title",
-                  className: "py-6 px-4 align-top",
+                  className: "py-6 px-4 align-top whitespace-nowrap",
                   render: (challenge) => (
                     <div className="flex flex-col items-start text-left">
                       <span className="text-base font-black text-gray-800 group-hover:text-[#ECA468] transition-colors leading-tight text-left">
                         {challenge.title}
                       </span>
-                      <span className="text-[10px] text-gray-400 font-medium mt-1 truncate max-w-[300px]">
+                      <span className="text-[10px] text-gray-400 font-medium mt-1 truncate max-w-[200px] md:max-w-[300px]">
                         {challenge.description}
                       </span>
                     </div>
@@ -312,7 +295,7 @@ const Challenges: React.FC = () => {
                   header: "Complexity",
                   key: "difficulty",
                   headerClassName: "text-center",
-                  className: "py-6 px-4 text-center",
+                  className: "py-6 px-4 text-center whitespace-nowrap",
                   render: (challenge) => (
                     <span
                       className={`px-3 py-1 text-[9px] font-black uppercase tracking-wider rounded-lg border
@@ -332,9 +315,9 @@ const Challenges: React.FC = () => {
                   header: "Actions",
                   key: "actions",
                   headerClassName: "text-right",
-                  className: "py-6 px-4 text-right",
+                  className: "py-6 px-4 text-right whitespace-nowrap",
                   render: (challenge) => (
-                    <div className="flex justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                    <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                       <button
                         onClick={() => handleEdit(challenge._id)}
                         className="p-2.5 text-gray-400 hover:text-[#ECA468] bg-white rounded-xl shadow-sm border border-gray-100 hover:border-[#FADDB8] transition-all"
@@ -354,10 +337,12 @@ const Challenges: React.FC = () => {
               data={challenges}
               isLoading={loading}
               emptyMessage="Repository Empty"
+              headerClassName="bg-[#FFF8EA] text-left"
+              columnHeaderClassName="py-4 px-6 text-[10px] font-black text-[#D0864B] uppercase tracking-widest border-b border-[#ECA468]/10"
             />
+          </div>
 
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-          {/* )} */}
         </div>
       </div>
 
@@ -399,164 +384,160 @@ const Challenges: React.FC = () => {
 
       {(isCreateOpen || isEditOpen) &&
         createPortal(
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 backdrop-blur-sm animate-in fade-in duration-200 p-4">
-            <div className="relative w-full max-w-lg bg-[#FFF8EA] rounded-3xl shadow-xl overflow-hidden flex flex-col max-h-[95vh] animate-in zoom-in-95 duration-200">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-300 p-4">
+            <div className="relative w-full max-w-md md:max-w-2xl bg-[#FFF8EA] rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] md:max-h-[90vh] animate-in zoom-in-95 duration-300">
               {/* Header */}
-              <div className="px-8 py-6 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-800">
-                  {isEditOpen ? "Edit Challenge" : "Create Challenge"}
-                </h2>
-                <button onClick={closeModals} className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
-                  <X className="w-6 h-6" />
+              <div className="px-5 md:px-10 py-4 md:py-8 flex justify-between items-center border-b border-[#ECA468]/10 bg-white/40">
+                <div>
+                  <h2 className="text-lg md:text-2xl font-black text-gray-900 tracking-tight leading-tight">
+                    {isEditOpen ? "Update Challenge" : "New Challenge"}
+                  </h2>
+                  <p className="text-[8px] md:text-xs text-[#D0864B] font-bold uppercase tracking-widest mt-0.5">
+                    {isEditOpen ? "Modify task parameters" : "Configure new module"}
+                  </p>
+                </div>
+                <button 
+                  onClick={closeModals} 
+                  className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-white rounded-lg transition-all"
+                >
+                  <X className="w-4 h-4 md:w-6 md:h-6" />
                 </button>
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-5 custom-scrollbar">
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={values.title}
-                    onChange={handleInputChange}
-                    placeholder="Challenge title"
-                    className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white focus:ring-1 focus:ring-[#ECA468]/30 outline-none transition-all text-gray-800 placeholder:text-gray-300 font-medium"
-                  />
-                  {formErrors.title && <p className="text-red-400 text-xs px-1">{formErrors.title}</p>}
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">Difficulty</label>
-                  <div className="relative">
-                    <select
-                      name="difficulty"
-                      value={values.difficulty}
+              <div className="flex-1 overflow-y-auto px-5 md:px-10 py-5 md:py-8 space-y-4 md:space-y-6 custom-scrollbar bg-white/20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  <div className="space-y-1 md:space-y-2">
+                    <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Challenge Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={values.title}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 appearance-none cursor-pointer font-medium"
-                    >
-                      <option value="">Select Difficulty</option>
-                      <option value="easy">Easy</option>
-                      <option value="medium">Medium</option>
-                      <option value="hard">Hard</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
+                      placeholder="e.g. Master the Rows"
+                      className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 placeholder:text-gray-300 font-bold text-xs md:text-base shadow-sm"
+                    />
+                    {formErrors.title && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.title}</p>}
                   </div>
-                  {formErrors.difficulty && <p className="text-red-400 text-xs px-1">{formErrors.difficulty}</p>}
+
+                  <div className="space-y-1 md:space-y-2">
+                    <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Difficulty Tier</label>
+                    <div className="relative">
+                      <select
+                        name="difficulty"
+                        value={values.difficulty}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 appearance-none cursor-pointer font-bold text-xs md:text-base shadow-sm"
+                      >
+                        <option value="">Select Tier</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                    {formErrors.difficulty && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.difficulty}</p>}
+                  </div>
+
+                  <div className="space-y-1 md:space-y-2">
+                    <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Target Goal</label>
+                    <div className="relative">
+                      <select
+                        name="goal"
+                        value={values.goal}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 appearance-none cursor-pointer font-bold text-xs md:text-base shadow-sm"
+                      >
+                        <option value="">Select Goal</option>
+                        {goals.map((goal) => (
+                          <option key={goal._id} value={goal._id}>{goal.title}</option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                    {formErrors.goal && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.goal}</p>}
+                  </div>
+
+                  <div className="space-y-1 md:space-y-2">
+                    <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Completion Reward</label>
+                    <div className="relative">
+                      <select
+                        name="reward"
+                        value={values.reward}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 appearance-none cursor-pointer font-bold text-xs md:text-base shadow-sm"
+                      >
+                        <option value="">Select Reward</option>
+                        {rewards.map((reward) => (
+                          <option key={reward._id} value={reward._id}>{reward.xp} XP</option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                    {formErrors.reward && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.reward}</p>}
+                  </div>
+
+                  <div className="space-y-1 md:space-y-2">
+                    <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Time Limit (Sec)</label>
+                    <div className="relative">
+                      <select
+                        name="duration"
+                        value={values.duration}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 appearance-none cursor-pointer font-bold text-xs md:text-base shadow-sm"
+                      >
+                        <option value="">Select Time</option>
+                        <option value="60">60s</option>
+                        <option value="120">120s</option>
+                        <option value="180">180s</option>
+                        <option value="300">300s</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                    {formErrors.duration && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.duration}</p>}
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">Goal</label>
-                  <div className="relative">
-                    <select
-                      name="goal"
-                      value={values.goal}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 appearance-none cursor-pointer font-medium"
-                    >
-                      <option value="">Select a Goal</option>
-                      {goals.map((goal) => (
-                        <option key={goal._id} value={goal._id}>
-                          {goal.title}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                  {formErrors.goal && <p className="text-red-400 text-xs px-1">{formErrors.goal}</p>}
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">Reward</label>
-                  <div className="relative">
-                    <select
-                      name="reward"
-                      value={values.reward}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 appearance-none cursor-pointer font-medium"
-                    >
-                      <option value="">Select a Reward</option>
-                      {rewards.map((reward) => (
-                        <option key={reward._id} value={reward._id}>
-                          {reward.xp} xp
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                  {formErrors.reward && <p className="text-red-400 text-xs px-1">{formErrors.reward}</p>}
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">duration time (sec)</label>
-                  <div className="relative">
-                    <select
-                      name="duration"
-                      value={values.duration}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 appearance-none cursor-pointer font-medium"
-                    >
-                      <option value="">Time</option>
-                      <option value="60">60</option>
-                      <option value="120">120</option>
-                      <option value="180">180</option>
-                      <option value="300">300</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                  {formErrors.duration && <p className="text-red-400 text-xs px-1">{formErrors.duration}</p>}
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-gray-600">Description</label>
+                <div className="space-y-1 md:space-y-2">
+                  <label className="text-[8px] md:text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Instructional Description</label>
                   <textarea
                     name="description"
                     value={values.description}
                     onChange={handleInputChange}
-                    rows={4}
-                    placeholder="Challenge description"
-                    className="w-full px-4 py-3 bg-white/60 rounded-xl border-transparent focus:bg-white outline-none transition-all text-gray-800 resize-none placeholder:text-gray-300 font-medium leading-relaxed"
+                    rows={3}
+                    placeholder="Briefly explain the challenge goals..."
+                    className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 resize-none placeholder:text-gray-300 font-bold text-xs md:text-base leading-relaxed shadow-sm"
                   />
-                  {formErrors.description && <p className="text-red-400 text-xs px-1">{formErrors.description}</p>}
-                </div>
-
-                <div className="flex items-center gap-3 py-2">
-                  {/* <div 
-                                    onClick={() => setValues(v => ({ ...v, isActive: !v.isActive }))}
-                                    className={`w-11 h-6 rounded-full relative transition-all duration-300 cursor-pointer ${values.isActive ? 'bg-[#A68F7A]' : 'bg-gray-300'}`}
-                                >
-                                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 transform ${values.isActive ? 'translate-x-6' : 'translate-x-1'}`} />
-                                </div> */}
-                  {/* <span className="text-sm font-semibold text-gray-600">Active</span> */}
+                  {formErrors.description && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.description}</p>}
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="flex justify-end gap-3 pt-4">
+                <div className="flex flex-row justify-end gap-2 md:gap-3 pt-4 md:pt-10 border-t border-[#ECA468]/5">
                   <button
                     onClick={closeModals}
-                    className="px-6 py-2.5 rounded-lg bg-[#E5E7EB] text-gray-700 font-bold text-sm hover:bg-gray-300 transition-colors"
+                    className="px-4 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl bg-white text-gray-500 font-black text-[8px] md:text-xs uppercase tracking-widest border border-gray-100 hover:bg-gray-50 transition-all shadow-sm"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="px-6 py-2.5 rounded-lg bg-[#A68F7A] text-white font-bold text-sm hover:bg-[#8D7763] transition-colors shadow-sm"
+                    className="px-5 md:px-10 py-2 md:py-4 rounded-xl md:rounded-2xl bg-[#ECA468] text-white font-black text-[8px] md:text-xs uppercase tracking-widest hover:bg-[#D0864B] shadow-lg shadow-[#ECA468]/20 active:scale-95 hover:-translate-y-0.5"
                   >
                     {isEditOpen ? "Update" : "Create"}
                   </button>
