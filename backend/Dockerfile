@@ -4,10 +4,12 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install && npm install -g nodemon ts-node typescript
+RUN npm install
 
 COPY . .
 
+RUN npm run build
+
 EXPOSE 5000
 
-CMD ["npm", "run", "dev"]
+CMD ["node", "dist/server.js"]

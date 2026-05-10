@@ -1,10 +1,27 @@
-services:
-  app:
-    build: .
-    container_name: typegrid_backend
-    ports:
-      - "5000:5000"
-    env_file:
-      - .env
+name: Backend Deploy
 
-    command: npm run dev
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Backend
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/TypeGrid/backend
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
