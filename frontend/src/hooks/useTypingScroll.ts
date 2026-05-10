@@ -13,14 +13,16 @@ export const useTypingScroll = ({ activeCharRef, snippetContainerRef, typedText 
     const container = snippetContainerRef.current;
     const element = activeCharRef.current;
 
-    const containerRect = container.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
+    const containerHeight = container.offsetHeight;
+    const elementTop = element.offsetTop;
+    const elementHeight = element.offsetHeight;
 
-    const relativeTop = elementRect.top - containerRect.top;
-    const relativeBottom = elementRect.bottom - containerRect.top;
+    // Calculate target scroll position to center the current line
+    const targetScrollTop = elementTop - (containerHeight / 2) + (elementHeight / 2);
 
-    if (relativeBottom > containerRect.height / 2 || relativeTop < containerRect.height / 3) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+    container.scrollTo({
+      top: targetScrollTop,
+      behavior: "smooth",
+    });
   }, [typedText]);
 };

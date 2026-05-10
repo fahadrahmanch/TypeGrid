@@ -31,16 +31,16 @@ const SoloPlay: React.FC = () => {
   useEffect(() => {
     window.history.replaceState(null, "", window.location.pathname);
   }, []);
-// useEffect(() => {
-//   const unlock = () => {
-//     const audio = new Audio("https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/sound/click1/click1_1.wav");
-//     audio.play().catch(() => {});
-//   };
+  // useEffect(() => {
+  //   const unlock = () => {
+  //     const audio = new Audio("https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/sound/click1/click1_1.wav");
+  //     audio.play().catch(() => {});
+  //   };
 
-//   window.addEventListener("click", unlock, { once: true });
+  //   window.addEventListener("click", unlock, { once: true });
 
-//   return () => window.removeEventListener("click", unlock);
-// }, []);
+  //   return () => window.removeEventListener("click", unlock);
+  // }, []);
   let timeDisplay: string;
   let timeLabel: string;
 
@@ -202,7 +202,7 @@ const SoloPlay: React.FC = () => {
         throw new Error("Solo room ID missing");
       }
       const solo = response.data.data;
-      console.log("solor",solo);
+      console.log("solor", solo);
       if (response) {
         navigate(`/solo-play/${solo._id}`, {
           state: { gameData: solo },
@@ -307,19 +307,19 @@ const SoloPlay: React.FC = () => {
             <div className="w-full max-w-4xl h-2 bg-[#9b8a7a] rounded-full my-8" />
 
             {/* Typing Box */}
-            <div className="w-full bg-[#fffaf0] border border-orange-100 rounded-3xl p-5 shadow-lg shadow-orange-900/5 flex flex-col min-h-0 flex-1 mb-2">
+            <div className="w-full bg-[#fffaf0] border border-orange-100 rounded-3xl p-5 shadow-lg shadow-orange-900/5 flex flex-col h-[350px] md:h-[600px] mb-2 overflow-hidden">
               <div className="flex items-center justify-between mb-4 shrink-0">
-                <h3 className="font-black text-gray-800 text-lg tracking-tight">Typing Test</h3>
+                <h3 className="font-black text-gray-800 text-base md:text-xl tracking-tight">Typing Test</h3>
                 <div className="flex items-center gap-2">
-                   <div className="px-3 py-1 rounded-full bg-orange-50 border border-orange-100 text-[10px] font-bold text-orange-600 uppercase tracking-widest">
-                     Solo Mode
-                   </div>
+                  <span className="px-2 py-1 rounded-lg text-[9px] font-black bg-orange-100 text-orange-700 uppercase tracking-widest border border-orange-200">
+                    Solo Mode
+                  </span>
                 </div>
               </div>
 
               <div
                 ref={snippetContainerRef}
-                className="flex-1 overflow-y-auto custom-scrollbar border-2 border-dashed border-orange-100 rounded-2xl p-6 text-left"
+                className="flex-1 overflow-hidden border-2 border-dashed border-orange-100 rounded-2xl p-6 text-left font-mono text-base md:text-xl leading-relaxed md:leading-[1.6]"
               >
                 {renderTextWithHighlight()}
               </div>

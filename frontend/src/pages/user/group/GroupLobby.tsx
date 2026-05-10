@@ -38,7 +38,7 @@ const GroupLobby: React.FC = () => {
   const [difficulty, setDifficulty] = useState<string>();
   const [maximumPlayers, setMaximumPlayes] = useState<number>();
   const isHost = group?.currentUserId === group?.ownerId;
-const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
+  const inviteLink = `https://www.typegrid.in/group-play/group/${group?.joinLink}`;
   const [isBlurred, setIsBlurred] = useState(true);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const { user } = useSelector((state: any) => state.auth);
@@ -75,10 +75,10 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
       setGroup((prev) =>
         prev
           ? {
-              ...prev,
-              ownerId: newHostId,
-              members: updatedMembers,
-            }
+            ...prev,
+            ownerId: newHostId,
+            members: updatedMembers,
+          }
           : prev
       );
     };
@@ -116,10 +116,10 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
       setGroup((prev) =>
         prev
           ? {
-              ...prev,
-              difficulty: data.difficulty,
-              maximumPlayers: data.maximumPlayers,
-            }
+            ...prev,
+            difficulty: data.difficulty,
+            maximumPlayers: data.maximumPlayers,
+          }
           : prev
       );
     };
@@ -239,7 +239,7 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
       <main className="pt-24 px-4 md:px-8 pb-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* RIGHT – PLAYERS (Horizontal Row on Mobile, Sidebar on Desktop) */}
-          <div className="lg:col-span-3 order-1 lg:order-3 bg-[#FFF1D8] rounded-3xl p-4 md:p-8 shadow-lg shadow-orange-900/5 flex flex-col">
+          <div className="lg:col-span-3 order-1 lg:order-3 bg-[#FFF1D8] rounded-3xl p-4 md:p-8 shadow-lg shadow-orange-900/5 flex flex-col ">
             <h2 className="text-lg md:text-xl font-black text-gray-800 mb-4 md:mb-6 flex items-center justify-between">
               Lobby
               <span className="text-[9px] md:text-[10px] bg-white/50 px-2 md:px-2.5 py-1 rounded-full text-orange-700">
@@ -299,11 +299,11 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
           </div>
 
           {/* CENTER - Invite Box */}
-          <div className="lg:col-span-6 order-2 lg:order-2 space-y-6 md:space-y-8">
+          <div className="lg:col-span-6 order-2 lg:order-2 space-y-6 md:space-y-8 ">
             {/* INVITE BOX */}
-            <div className="bg-[#FFF1D8] rounded-[2.5rem] p-6 md:p-10 text-center shadow-lg shadow-orange-900/5 relative overflow-hidden">
+            <div className="bg-[#FFF1D8]  rounded-[2.5rem] p-6 md:p-10 text-center shadow-lg shadow-orange-900/5 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-300 via-white to-orange-300 opacity-30"></div>
-              
+
               <div className="mb-8">
                 <h3 className="text-2xl md:text-3xl font-black text-gray-800 mb-2">Invite Squad</h3>
                 <p className="text-sm md:text-base text-gray-500 font-medium max-w-sm mx-auto">
@@ -321,9 +321,9 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
                 </div>
                 {isBlurred && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <button 
-                       onClick={() => setIsBlurred(false)}
-                       className="px-4 py-1.5 bg-[#7A6A5D] text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-transform"
+                    <button
+                      onClick={() => setIsBlurred(false)}
+                      className="px-4 py-1.5 bg-[#7A6A5D] text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-transform"
                     >
                       Reveal Link
                     </button>
@@ -412,8 +412,8 @@ const inviteLink =`https://www.typegrid.in/group-play/group/${group?.joinLink}`;
                 </button>
               ) : (
                 <div className="flex items-center justify-center gap-3 px-6 py-4 bg-orange-50/50 rounded-2xl border border-orange-100">
-                   <div className="w-2 h-2 bg-orange-400 rounded-full animate-ping"></div>
-                   <p className="text-sm text-orange-800 font-bold uppercase tracking-widest italic">Waiting for host to launch…</p>
+                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-ping"></div>
+                  <p className="text-sm text-orange-800 font-bold uppercase tracking-widest italic">Waiting for host to launch…</p>
                 </div>
               )}
             </div>

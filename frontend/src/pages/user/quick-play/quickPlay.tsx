@@ -278,8 +278,8 @@ const QuickPlay: React.FC = () => {
             Active Racers
           </h2>
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-full border border-orange-100">
-             <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-             <span className="text-[10px] font-black text-orange-700 uppercase tracking-widest">Live Match</span>
+            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+            <span className="text-[10px] font-black text-orange-700 uppercase tracking-widest">Live Match</span>
           </div>
         </div>
 
@@ -301,16 +301,16 @@ const QuickPlay: React.FC = () => {
                     />
                     {player.rank === 1 && (
                       <div className="absolute -top-1 -right-1 bg-amber-400 text-white p-0.5 rounded-lg shadow-lg border border-white">
-                         <Crown size={6} className="fill-current" />
+                        <Crown size={6} className="fill-current" />
                       </div>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="font-black text-[10px] md:text-sm text-gray-800 truncate">{player.name}</div>
                     <div className="flex items-center gap-1.5 md:gap-2 mt-0.5">
-                       <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Racing</span>
-                       <span className="hidden md:block text-[10px] font-black text-gray-400">|</span>
-                       <span className="text-[9px] md:text-[10px] font-black text-gray-800">{player.wpm || 0} <span className="text-[7px] md:text-[8px] opacity-40 uppercase">WPM</span></span>
+                      <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Racing</span>
+                      <span className="hidden md:block text-[10px] font-black text-gray-400">|</span>
+                      <span className="text-[9px] md:text-[10px] font-black text-gray-800">{player.wpm || 0} <span className="text-[7px] md:text-[8px] opacity-40 uppercase">WPM</span></span>
                     </div>
                   </div>
                 </div>
@@ -336,77 +336,77 @@ const QuickPlay: React.FC = () => {
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
           {/* Stats Column */}
           <div className="flex flex-col gap-4 order-2 lg:order-1">
-            <div className="bg-[#FFF8EA] border border-orange-100 rounded-[2.5rem] p-6 md:p-8 flex flex-col items-center justify-center text-center gap-6 shadow-xl shadow-orange-900/5 relative overflow-hidden group">
+            <div className="bg-[#FFF8EA] border border-orange-100 rounded-[2.5rem] p-6 md:p-8 flex flex-col items-center justify-center text-center gap-4 md:gap-6 shadow-xl shadow-orange-900/5 relative overflow-hidden group">
               <div className="absolute -top-20 -left-20 w-40 h-40 bg-orange-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
 
-              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-1 shadow-inner group-hover:scale-110 transition-transform ${remainingTime <= 10 ? "bg-red-50 text-red-500" : "bg-orange-50 text-orange-500"
+              <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform ${remainingTime <= 10 ? "bg-red-50 text-red-500" : "bg-orange-50 text-orange-500"
                 }`}>
-                <Clock className="w-8 h-8" />
+                <Clock className="w-6 h-6 md:w-8 md:h-8" />
               </div>
 
               <div className="space-y-1 relative z-10">
-                <div className={`text-4xl md:text-5xl font-black font-mono tracking-tighter ${remainingTime <= 10 ? "text-red-500 animate-pulse" : "text-gray-800"}`}>
+                <div className={`text-3xl md:text-5xl font-black font-mono tracking-tighter ${remainingTime <= 10 ? "text-red-500 animate-pulse" : "text-gray-800"}`}>
                   {phase === "COUNTDOWN" ? countdown : formatTime(remainingTime)}
                 </div>
-                <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.3em] opacity-60">
+                <p className="text-[8px] md:text-[10px] text-gray-400 font-black uppercase tracking-[0.3em] opacity-60">
                   {phase === "COUNTDOWN" ? "Prepare to Launch" : "Seconds Remaining"}
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3 w-full">
-                 <div className="flex items-center justify-between bg-white border border-gray-100 p-4 rounded-2xl shadow-sm">
-                    <div className="flex items-center gap-3">
-                      <Zap className="w-5 h-5 text-orange-500" />
-                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Speed</span>
-                    </div>
-                    <div className="text-xl font-black text-gray-800">{wpm}<span className="text-[10px] ml-1 opacity-30 uppercase">WPM</span></div>
-                 </div>
-                 <div className="flex items-center justify-between bg-white border border-gray-100 p-4 rounded-2xl shadow-sm">
-                    <div className="flex items-center gap-3">
-                      <Target className="w-5 h-5 text-emerald-500" />
-                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Accuracy</span>
-                    </div>
-                    <div className="text-xl font-black text-gray-800">{accuracy || 0}<span className="text-[10px] ml-1 opacity-30">%</span></div>
-                 </div>
+              <div className="flex flex-col gap-2 md:gap-3 w-full">
+                <div className="flex items-center justify-between bg-white border border-gray-100 px-4 py-3 md:p-4 rounded-xl md:rounded-2xl shadow-sm">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <Zap className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
+                    <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">Speed</span>
+                  </div>
+                  <div className="text-base md:text-xl font-black text-gray-800">{wpm}<span className="text-[9px] md:text-[10px] ml-1 opacity-30 uppercase">WPM</span></div>
+                </div>
+                <div className="flex items-center justify-between bg-white border border-gray-100 px-4 py-3 md:p-4 rounded-xl md:rounded-2xl shadow-sm">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <Target className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
+                    <span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest">Accuracy</span>
+                  </div>
+                  <div className="text-base md:text-xl font-black text-gray-800">{accuracy || 0}<span className="text-[9px] md:text-[10px] ml-1 opacity-30">%</span></div>
+                </div>
               </div>
             </div>
 
             <div className="hidden lg:block bg-gradient-to-br from-[#7A6A5D] to-gray-800 p-6 rounded-[2rem] text-white relative overflow-hidden">
-               <Trophy className="absolute -bottom-4 -right-4 w-24 h-24 opacity-10" />
-               <h4 className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">Match Note</h4>
-               <p className="text-xs font-bold leading-relaxed relative z-10">
-                 Quick Play mode ranks you against live typists globally. Stay focused!
-               </p>
+              <Trophy className="absolute -bottom-4 -right-4 w-24 h-24 opacity-10" />
+              <h4 className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">Match Note</h4>
+              <p className="text-xs font-bold leading-relaxed relative z-10">
+                Quick Play mode ranks you against live typists globally. Stay focused!
+              </p>
             </div>
           </div>
 
           {/* Typing Area */}
-          <div className="bg-[#FFF8EA] rounded-[2.5rem] relative p-6 md:p-12 border border-orange-100 shadow-xl shadow-orange-900/5 flex flex-col min-h-[400px] lg:min-h-0 overflow-hidden order-1 lg:order-2"
+          <div className="bg-[#FFF8EA] rounded-[2.5rem] relative p-6 md:p-12 shadow-xl shadow-orange-900/5 border border-orange-100 flex flex-col h-[350px] md:h-[600px] overflow-hidden order-1 lg:order-2"
             onPaste={(e) => e.preventDefault()}
             onContextMenu={(e) => e.preventDefault()}
           >
             <div className="absolute top-0 left-0 w-full h-1.5 bg-gray-50 overflow-hidden">
-               <div 
-                 className="h-full bg-gradient-to-r from-orange-400 to-emerald-400 transition-all duration-300"
-                 style={{ width: `${(typedText.length / (lesson?.length || 1)) * 100}%` }}
-               ></div>
+              <div
+                className="h-full bg-gradient-to-r from-orange-400 to-emerald-400 transition-all duration-300"
+                style={{ width: `${(typedText.length / (lesson?.length || 1)) * 100}%` }}
+              ></div>
             </div>
 
-            <div className="flex justify-between items-center mb-10 shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-6 bg-orange-500 rounded-full"></div>
-                <h3 className="text-xl md:text-2xl font-black text-gray-800 tracking-tight">Challenge Snippet</h3>
+            <div className="flex justify-between items-center mb-6 md:mb-10 shrink-0">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="w-1.5 md:w-2 h-5 md:h-6 bg-orange-500 rounded-full"></div>
+                <h3 className="text-base md:text-xl font-black text-gray-800 tracking-tight">Challenge Snippet</h3>
               </div>
               <div className="flex items-center gap-2">
-                 <span className="bg-orange-100 text-orange-700 text-[10px] font-black px-4 py-1.5 rounded-xl uppercase tracking-widest border border-orange-200">
-                   Level {gameData?.lesson?.level || 1}
-                 </span>
+                <span className="px-2 md:px-3 py-1 rounded-lg md:rounded-xl text-[8px] md:text-[10px] font-black bg-orange-50 text-orange-700 uppercase tracking-widest border border-orange-100">
+                  Level {lesson?.level || "Beginner"}
+                </span>
               </div>
             </div>
 
             <div
               ref={snippetContainerRef}
-              className="font-mono text-gray-400 leading-relaxed md:leading-loose text-xl md:text-3xl flex-1 pt-2 custom-scrollbar overflow-y-auto select-none outline-none"
+              className="relative font-mono text-base md:text-xl leading-relaxed md:leading-[1.6] tracking-wide text-gray-400 select-none outline-none overflow-hidden flex-1 pt-4 md:pt-6 text-left"
             >
               {renderTextWithHighlight()}
             </div>
@@ -443,7 +443,7 @@ const QuickPlay: React.FC = () => {
               </div>
               <div className="bg-white p-2 md:p-3 rounded-xl md:rounded-2xl shadow-sm border border-orange-100 flex items-center gap-2 md:gap-3 px-3 md:px-5 relative z-10">
                 <div className="w-8 h-8 md:w-10 md:h-10 bg-amber-100 rounded-lg md:rounded-xl flex items-center justify-center">
-                   <Crown className="w-4 h-4 md:w-6 md:h-6 text-amber-500 fill-amber-500" />
+                  <Crown className="w-4 h-4 md:w-6 md:h-6 text-amber-500 fill-amber-500" />
                 </div>
                 <div className="text-right">
                   <div className="text-[8px] md:text-[9px] text-gray-400 font-black uppercase tracking-widest leading-none">Best</div>

@@ -4,6 +4,7 @@ import Navbar from "../../../components/user/Navbar";
 import { useTypingStats } from "../../../hooks/useTypingStats";
 import { challengeFinished } from "../../../api/user/dailyChallenge";
 import { ChallengeStatistics } from "../../../api/user/dailyChallenge";
+import { useTypingScroll } from "../../../hooks/useTypingScroll";
 import { ChevronLeft, ChevronRight, Trophy, Activity, Lock } from "lucide-react";
 
 interface IDailyChallenge {
@@ -67,6 +68,9 @@ const DailyChallengeArea: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const activeCharRef = useRef<HTMLSpanElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const snippetContainerRef = useRef<HTMLDivElement>(null);
+
+  useTypingScroll({ activeCharRef, snippetContainerRef, typedText });
 
   // Performance Metrics Logic
 
@@ -225,7 +229,7 @@ const DailyChallengeArea: React.FC = () => {
         <span
           key={index}
           ref={isCurrentChar ? activeCharRef : null}
-          className={`${cursorClass} ${className} inline-flex items-center justify-center h-[32px] min-w-[12px] transition-colors duration-75 font-mono text-lg md:text-xl`}
+          className={`${cursorClass} ${className} inline-flex items-center justify-center h-[32px] min-w-[12px] transition-colors duration-75 font-mono text-base md:text-xl`}
         >
           {char === " " ? "\u00A0" : char}
         </span>
@@ -367,7 +371,7 @@ const DailyChallengeArea: React.FC = () => {
             </div>
 
             {/* Typing Area */}
-            <div className="bg-white/40 backdrop-blur-md rounded-[1.5rem] border border-orange-100/50 p-5 shadow-sm relative grow flex flex-col overflow-hidden">
+            <div className="bg-white/40 backdrop-blur-md rounded-[1.5rem] border border-orange-100/50 p-5 shadow-sm relative h-[350px] md:h-[600px] flex flex-col overflow-hidden">
               <h3 className="text-[9px] font-black text-gray-800 uppercase tracking-widest mb-2 opacity-60">
                 Challenge Input
               </h3>
@@ -404,7 +408,10 @@ const DailyChallengeArea: React.FC = () => {
                   </div>
                 )}
 
-                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar text-lg font-mono leading-relaxed tracking-wider select-none relative z-10 break-words whitespace-pre-wrap">
+                <div
+                  ref={snippetContainerRef}
+                  className="flex-1 overflow-hidden pr-2 text-base md:text-xl font-mono leading-relaxed tracking-wider select-none relative z-10 break-words whitespace-pre-wrap text-left"
+                >
                   {renderTextWithHighlight()}
                 </div>
                 <input

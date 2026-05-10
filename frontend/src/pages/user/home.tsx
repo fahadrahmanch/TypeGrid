@@ -63,7 +63,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#FFF8EA]">
       <Navbar />
 
       <main className="w-full px-4 md:px-8 pt-20 pb-12">
@@ -72,7 +72,7 @@ const Home: React.FC = () => {
 
           <GameModes onGameModeClick={handleGameModeClick} />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-12">
             {/* Future expansion slots */}
           </div>
         </div>

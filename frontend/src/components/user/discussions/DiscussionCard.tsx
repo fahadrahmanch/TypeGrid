@@ -21,7 +21,7 @@ const DiscussionCard: React.FC<DiscussionCardProps> = ({ post, onClick }) => {
   return (
     <div 
       onClick={() => onClick(post.id)}
-      className="group relative w-full bg-white/30 backdrop-blur-sm rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-6 mb-4 border border-white/40 hover:bg-white/60 hover:shadow-2xl hover:shadow-[#D0864B]/5 transition-all duration-500 cursor-pointer overflow-hidden shadow-sm"
+      className="group relative w-full bg-white/30 backdrop-blur-sm rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-6  mb-4 border border-white/40 hover:bg-white/60 hover:shadow-2xl hover:shadow-[#D0864B]/5 transition-all duration-500 cursor-pointer overflow-hidden shadow-sm"
     >
       {/* Subtle Glow Effect */}
       <div className="absolute -inset-1 bg-gradient-to-r from-[#D0864B]/0 via-[#D0864B]/5 to-[#D0864B]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl" />

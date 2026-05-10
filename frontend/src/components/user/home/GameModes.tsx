@@ -18,21 +18,22 @@ const GameModeCard: React.FC<GameModeProps> = ({ title, description, image, mode
   <div
     onClick={() => onClick(mode)}
     className={
-      "p-6 rounded-3xl bg-[#FFF5E0] hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-[180px] relative overflow-hidden"
+      "p-3 md:p-6 rounded-2xl md:rounded-3xl bg-[#FFF5E0] hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-row items-center justify-between h-[100px] md:h-[180px] relative overflow-hidden"
     }
   >
-    <div className="z-10 relative">
-      <div className="flex items-center gap-2 mb-1">
-        <h3 className="text-lg font-bold text-gray-900 group-hover:no-underline font-serif">{title}</h3>
-        <ArrowRight size={20} className="text-gray-900 group-hover:translate-x-1 transition-transform" />
+    <div className="z-10 flex-1 pr-2">
+      <div className="flex items-center gap-1.5 mb-1">
+        <h3 className="text-[11px] md:text-lg font-bold text-gray-900 group-hover:no-underline font-serif leading-none flex items-center gap-1">
+          {title} <ArrowRight size={12} className="text-gray-900 group-hover:translate-x-1 transition-transform md:w-5 md:h-5" />
+        </h3>
       </div>
-      <p className="text-xs text-gray-800 text-start font-medium font-serif">{description}</p>
+      <p className="text-[8px] md:text-xs text-gray-800 text-start font-medium font-serif leading-tight opacity-80">{description}</p>
     </div>
-    <div className="absolute bottom-0 right-0 w-32 h-32 md:w-36 md:h-36">
+    <div className="w-14 h-14 md:w-36 md:h-36 shrink-0">
       <img
         src={image}
         alt={title}
-        className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300 drop-shadow-sm origin-bottom-right"
+        className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300 drop-shadow-sm"
       />
     </div>
   </div>
@@ -71,7 +72,7 @@ const GameModes: React.FC<{ onGameModeClick: (mode: string) => void }> = ({ onGa
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+    <div className="grid grid-cols-2 gap-6 mb-12">
       {modes.map((mode, index) => (
         <GameModeCard key={index} {...mode} onClick={onGameModeClick} />
       ))}

@@ -447,8 +447,8 @@ const GroupPlay: React.FC = () => {
             </div>
 
             {/* 2. TYPING AREA - Middle (order-2) */}
-            <div className="flex flex-col min-h-[400px] md:min-h-[450px] lg:h-full order-2">
-              <div className="relative bg-[#FFF8EA] rounded-[2.5rem] p-1 shadow-xl shadow-orange-900/5 flex-1 flex flex-col border border-orange-100">
+            <div className="flex flex-col h-[350px] md:h-[600px] order-2 overflow-hidden">
+              <div className="relative bg-[#FFF8EA] rounded-[2.5rem] p-1 shadow-xl shadow-orange-900/5 flex-1 flex flex-col border border-orange-100 overflow-hidden">
                 <div className="absolute top-0 left-8 right-8 h-1.5 bg-gray-100 rounded-b-full overflow-hidden z-10">
                   <div
                     className="h-full bg-gradient-to-r from-orange-400 to-pink-500 transition-all duration-300 ease-out"
@@ -459,9 +459,9 @@ const GroupPlay: React.FC = () => {
                 </div>
 
                 <div className="bg-[#FFF8EA] rounded-[2rem] p-6 md:p-10 flex-1 relative overflow-hidden flex flex-col">
-                  <div className="flex justify-between items-center mb-8 border-b border-orange-100/30 pb-6 shrink-0">
-                    <h3 className="text-xl font-black text-gray-800 flex items-center gap-3">
-                      <span className="w-2 h-6 bg-orange-500 rounded-full block"></span>
+                  <div className="flex justify-between items-center mb-6 md:mb-8 border-b border-orange-100/30 pb-4 md:pb-6 shrink-0">
+                    <h3 className="text-base md:text-xl font-black text-gray-800 flex items-center gap-3">
+                      <span className="w-1.5 md:w-2 h-5 md:h-6 bg-orange-500 rounded-full block"></span>
                       {gameData?.mode || "Classic Race"}
                     </h3>
                     <div className="flex items-center gap-3">
@@ -473,7 +473,7 @@ const GroupPlay: React.FC = () => {
 
                   <div
                     ref={snippetContainerRef}
-                    className="relative font-mono text-xl md:text-3xl leading-relaxed md:leading-[1.8] tracking-wide text-gray-400 select-none outline-none overflow-y-auto custom-scrollbar flex-1 pt-4 md:pt-8"
+                    className="relative font-mono text-base md:text-xl leading-relaxed md:leading-[1.6] tracking-wide text-gray-400 select-none outline-none overflow-hidden flex-1 pt-4 md:pt-6 text-left"
                     style={{ whiteSpace: "pre-wrap" }}
                     onClick={() => document.body.focus()}
                     onPaste={(e) => e.preventDefault()}

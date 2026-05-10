@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Navbar from "../../../components/user/Navbar";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTypingSound } from "../../../hooks/useTypingSound";
+import { useTypingScroll } from "../../../hooks/useTypingScroll";
 import { getTypiingPracticeLessonById } from "../../../api/user/typingPracticeService";
 import { Zap, Target, Clock, AlertCircle, RotateCcw, Trophy, ArrowLeft, Layout, BarChart3, CheckCircle } from "lucide-react";
 
@@ -20,6 +21,8 @@ const TypingPracticeArea = () => {
 
   const snippetContainerRef = useRef<HTMLDivElement>(null);
   const activeCharRef = useRef<HTMLSpanElement>(null);
+
+  useTypingScroll({ activeCharRef, snippetContainerRef, typedText });
 
   useEffect(() => {
     async function fetchLessonById() {
@@ -72,24 +75,7 @@ const TypingPracticeArea = () => {
     setAccuracy(calculatedAccuracy);
   }, [typedText]);
 
-  // Auto-scroll effect
-  useEffect(() => {
-    if (activeCharRef.current && snippetContainerRef.current) {
-      const container = snippetContainerRef.current;
-      const element = activeCharRef.current;
 
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-
-      const relativeTop = elementRect.top - containerRect.top;
-      const relativeBottom = elementRect.bottom - containerRect.top;
-
-      // Keep cursor in middle-ish of view
-      if (relativeBottom > containerRect.height / 2 || relativeTop < containerRect.height / 3) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }
-  }, [typedText]);
 
   const renderTextWithHighlight = () => {
     if (!Content) return null;
@@ -119,7 +105,7 @@ const TypingPracticeArea = () => {
                     inline-flex items-center justify-center
                     h-[32px] min-w-[12px]
                     transition-colors duration-75
-                    font-mono text-lg md:text-xl
+                    font-mono text-base md:text-xl
                 `}
         >
           {char === " " ? "\u00A0" : char}
@@ -289,7 +275,7 @@ const TypingPracticeArea = () => {
           </div>
 
           {/* RIGHT COLUMN - Typing Area */}
-          <div className="bg-[#FFF8EA] rounded-[2.5rem] p-6 md:p-12 shadow-xl shadow-orange-900/5 border border-orange-100 flex flex-col min-h-[500px] lg:min-h-[700px] order-1 lg:order-2 overflow-hidden relative">
+          <div className="bg-[#FFF8EA] rounded-[2.5rem] p-6 md:p-12 shadow-xl shadow-orange-900/5 border border-orange-100 flex flex-col h-[350px] md:h-[600px] order-1 lg:order-2 overflow-hidden relative">
             <div className="absolute top-0 left-0 w-full h-1 bg-gray-100/50 overflow-hidden">
                <div 
                  className="h-full bg-orange-500 transition-all duration-300"
@@ -323,11 +309,11 @@ const TypingPracticeArea = () => {
 
             <div
               ref={snippetContainerRef}
-              className="flex-1 overflow-y-auto custom-scrollbar pr-4 relative"
+              className="flex-1 overflow-hidden pr-4 relative"
               onClick={() => document.body.focus()}
             >
               <div
-                className="font-mono leading-relaxed md:leading-loose select-none break-words whitespace-pre-wrap outline-none text-xl md:text-3xl text-gray-400"
+                className="font-mono leading-relaxed md:leading-[1.6] select-none break-words whitespace-pre-wrap outline-none text-base md:text-xl text-gray-400 text-left"
                 style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}
               >
                 {renderTextWithHighlight()}
