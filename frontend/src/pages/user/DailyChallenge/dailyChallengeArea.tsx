@@ -6,7 +6,7 @@ import { challengeFinished } from "../../../api/user/dailyChallenge";
 import { ChallengeStatistics } from "../../../api/user/dailyChallenge";
 import { useTypingScroll } from "../../../hooks/useTypingScroll";
 import { ChevronLeft, ChevronRight, Trophy, Activity, Lock } from "lucide-react";
-
+import {useTypingSound} from "../../../hooks/useTypingSound";
 interface IDailyChallenge {
   _id: string;
   challengeId: {
@@ -69,7 +69,7 @@ const DailyChallengeArea: React.FC = () => {
   const activeCharRef = useRef<HTMLSpanElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const snippetContainerRef = useRef<HTMLDivElement>(null);
-
+  const { playTyping , playTypingError} = useTypingSound();
   useTypingScroll({ activeCharRef, snippetContainerRef, typedText });
 
   // Performance Metrics Logic
@@ -187,7 +187,11 @@ const DailyChallengeArea: React.FC = () => {
         }
 
         setTypedText((prev) => prev + e.key);
-
+        if(e.key === lesson[typedText.length]){
+          playTyping()
+        }else{
+          playTypingError()
+        }
         if (typedText.length + 1 === lesson.length) {
           setPhase("FINISHED");
           setIsFinished(true);

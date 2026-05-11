@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { createSoloRoom } from "../../api/user/solo";
 import { createQuick } from "../../api/user/quick";
 
+
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
@@ -69,6 +70,7 @@ const Home: React.FC = () => {
       <main className="w-full px-4 md:px-8 pt-20 pb-12">
         <div className="max-w-7xl mx-auto">
           <WelcomeSection />
+
 
           <GameModes onGameModeClick={handleGameModeClick} />
 
