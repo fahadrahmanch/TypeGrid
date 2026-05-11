@@ -20,7 +20,7 @@ export const useTypingSound = () => {
   const lastPlayRef = useRef(0);
 
   const playSafe = (fn: () => void) => {
-    console.log("playSafe called");
+    alert("playSafe called");
     const now = Date.now();
     if (now - lastPlayRef.current > 30) {
       fn();

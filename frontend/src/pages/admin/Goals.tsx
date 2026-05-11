@@ -6,7 +6,7 @@ import { Search, Plus, Edit2, Trash2, X, Target, Zap, CheckCircle } from "lucide
 import ReusableTable from "../../components/common/ReusableTable";
 import Pagination from "../../components/common/Pagination";
 import { goalValidation } from "../../validations/challengeValidation";
-import { WpmValidation, accuracyValidation } from "../../validations/lessonValidation";
+import { WpmValidation, accuracyValidation, DescriptionValidation } from "../../validations/lessonValidation";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import { fetchGoals, createGoal, updateGoal, deleteGoal, fetchGoalById } from "../../api/admin/goals";
 
@@ -39,6 +39,7 @@ const Goals: React.FC = () => {
     title: "",
     wpm: "",
     accuracy: "",
+    description: "",
   });
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -82,7 +83,7 @@ const Goals: React.FC = () => {
     if (name === "title") err = goalValidation(value);
     if (name === "targetWpm") err = WpmValidation(value);
     if (name === "targetAccuracy") err = accuracyValidation(value);
-
+    if (name === "description") err = DescriptionValidation(value);
     setFormErrors((prev) => ({ ...prev, [name]: err }));
   };
 
@@ -91,6 +92,7 @@ const Goals: React.FC = () => {
       title: goalValidation(values.title),
       wpm: WpmValidation(values.wpm),
       accuracy: accuracyValidation(values.accuracy),
+      description: DescriptionValidation(values.description),
     };
 
     setFormErrors(errors);
@@ -174,6 +176,7 @@ const Goals: React.FC = () => {
       title: "",
       wpm: "",
       accuracy: "",
+      description: "",
     });
   };
 
@@ -404,6 +407,8 @@ const Goals: React.FC = () => {
                     placeholder="Briefly explain the goal..."
                     className="w-full px-4 py-2.5 md:py-4 bg-white rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-[#ECA468]/20 focus:border-[#ECA468] transition-all text-gray-800 resize-none placeholder:text-gray-300 font-bold text-xs md:text-base leading-relaxed shadow-sm"
                   />
+                                      {formErrors.description && <p className="text-red-500 text-[8px] md:text-[10px] font-bold mt-1 ml-1">{formErrors.description}</p>}
+
                 </div>
 
                 {/* Footer Buttons */}
