@@ -49,7 +49,7 @@ export class StartGameGroupPlayGroupUseCase implements IStartGameGroupPlayGroupU
       textId: selectedLesson.id,
       participants: group.getMembers(),
       groupId: group.getId()!,
-      duration: 300,
+      duration: 400,
       status: "ongoing",
       countDown,
     });
