@@ -65,7 +65,7 @@ const CompanyContestManagement: React.FC = () => {
 
           {/* Contest Cards List */}
           <div className="flex flex-col gap-6">
-            {contests.map((contest: any) => (
+            {contests.sort((a:any,b:any)=>new Date(b.startTime).getTime() - new Date(a.startTime).getTime()).map((contest: any) => (
               <ContestCard
                 key={contest._id}
                 title={contest.title}

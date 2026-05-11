@@ -6,7 +6,7 @@ import {
   allNotification,
   getNotificationHistory,
 } from "../../api/companyAdmin/notification";
-import { Send, Users, UsersRound, Bell, LayoutGrid, Eye, Search, ChevronDown, Info, Clock, X, ChevronRight } from "lucide-react";
+import { Send, Users, UsersRound, Bell, LayoutGrid, Search, ChevronDown, Info, Clock, X, ChevronRight } from "lucide-react";
 import { fetchCompanyUsers } from "../../api/companyAdmin/companyAdminService";
 import { getCompanyGroups } from "../../api/companyAdmin/companyGroup";
 import { GroupMember, Group } from "../../types/group";
@@ -19,7 +19,7 @@ interface NotificationHistoryItem {
   title: string;
   message: string;
   target: string;
-  timestamp: string;
+  createdAt: string;
 }
 
 const NotificationPage: React.FC = () => {
@@ -423,16 +423,14 @@ const NotificationPage: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-wider">
                           <Clock className="w-3.5 h-3.5" />
-                          <span>{new Date(item.timestamp).toLocaleDateString()}</span>
+                          <span>{new Date(item.createdAt).toLocaleDateString()}</span>
                         </div>
                         <div className="w-1 h-1 bg-gray-200 rounded-full" />
                         <div className="flex items-center gap-1 text-[10px] font-black text-[#B99F8D] uppercase tracking-wider bg-[#B99F8D]/5 px-2 py-0.5 rounded-md">
                           <span>{item.target}</span>
                         </div>
                       </div>
-                      <button className="p-2 text-gray-300 hover:text-[#B99F8D] hover:bg-[#B99F8D]/5 rounded-xl transition-all">
-                        <Eye className="w-4 h-4" />
-                      </button>
+                      
                     </div>
                   </div>
                 </div>
