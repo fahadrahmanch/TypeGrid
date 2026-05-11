@@ -30,6 +30,9 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
       status: "pending",
       $expr: { $lt: [{ $size: "$participants" }, 5] },
       participants: { $ne: userId },
+       startedAt: {
+    $gte: new Date(Date.now() - 10 * 1000) 
+  }
     });
 
     if (competition) {
@@ -87,6 +90,7 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
       participants: [userId],
       textId: selectedLesson._id?.toString(),
     });
+    
 
     const createdCompetition = await this._competitionRepository.create(competitionEntity.toObject());
 
