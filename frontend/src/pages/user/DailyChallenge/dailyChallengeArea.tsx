@@ -188,9 +188,9 @@ const DailyChallengeArea: React.FC = () => {
 
         setTypedText((prev) => prev + e.key);
         if(e.key === lesson[typedText.length]){
-          playTyping()
+          playTyping();
         }else{
-          playTypingError()
+          playTypingError();
         }
         if (typedText.length + 1 === lesson.length) {
           setPhase("FINISHED");
