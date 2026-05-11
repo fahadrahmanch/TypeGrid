@@ -23,6 +23,5 @@ jobs:
           script: |
             cd /home/ubuntu/TypeGrid/backend
             git pull origin main
-            npm install
-            npm run build
-            pm2 restart all
+            docker compose down
+            docker compose up -d --build
