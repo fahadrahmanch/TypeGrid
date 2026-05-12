@@ -30,6 +30,10 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
    * @returns
    */
   async execute(data: CreateContestDTO, userId: string): Promise<CreateContestDTO> {
+    console.log("change 1")
+    console.log("change 1")
+    console.log("change 1")
+    
     const user = await this._userRepository.findById(userId);
 
     if (!user) {
@@ -42,6 +46,11 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
 
     if (!data.date || !data.startTime) {
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.DATE_OR_START_TIME_REQUIRED);
+    }
+
+    const constests=await this._contestRepository.find({status:"upcoming",CompanyId:user.CompanyId});
+    if(constests.length>2){
+      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.MAX_UPCOMING_CONTESTS_REACHED);
     }
 
     if (data.textSource === "random") {
