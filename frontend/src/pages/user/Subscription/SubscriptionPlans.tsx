@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Check, Lock,
   //  Star, Zap,
-    Users, ArrowRight } from "lucide-react";
+    Users, ArrowRight, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/user/Navbar";
 import { getSubscriptionPlans } from "../../../api/user/subcription";
@@ -103,6 +103,16 @@ const SubscriptionPlans: React.FC = () => {
 
       <div className="max-w-5xl mx-auto">
    
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => navigate("/subscription/manage")}
+            className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-all shadow-sm hover:shadow active:scale-95"
+          >
+            <Settings className="w-4 h-4" />
+            Manage Subscription
+          </button>
+        </div>
+
         <div className="text-center mb-8 md:mb-12">
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight">Unlock Your Typing Potential!</h1>
           <p className="text-base md:text-lg text-gray-600 font-medium">Upgrade to Premium for an Enhanced Experience</p>

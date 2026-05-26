@@ -4,7 +4,7 @@ import { logout } from "../../store/slices/auth/authSlice";
 import Logo from "../../assets/Icon/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutApi } from "../../api/auth/authServices";
-import { Home, MessageSquare, Award, Trophy, Target, LogOut, Menu, X } from "lucide-react";
+import { Home, MessageSquare, Award, Trophy, Target, LogOut, Menu, X, CreditCard } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const { user, accessToken } = useSelector((state: any) => state.auth);
@@ -23,6 +23,7 @@ const Navbar: React.FC = () => {
     { name: "Discuss", icon: MessageSquare, path: "/discussions" },
     { name: "Badges", icon: Award, path: "/badges" },
     { name: "Highscores", icon: Trophy, path: "/highscores" },
+    { name: "Subscription", icon: CreditCard, path: "/subscription" },
   ];
 
   return (

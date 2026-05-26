@@ -244,6 +244,13 @@ const SubscriptionManagement: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                    <button
+                      onClick={() => navigate("/subscription/company")}
+                      className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-xs font-black uppercase tracking-widest rounded-xl border border-indigo-100 transition-all"
+                    >
+                      Change
+                      <ArrowUpCircle className="w-4 h-4" />
+                    </button>
                   </div>
 
                   <div className="space-y-6">

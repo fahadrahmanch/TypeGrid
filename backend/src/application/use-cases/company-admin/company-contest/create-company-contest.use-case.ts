@@ -30,16 +30,13 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
    * @returns
    */
   async execute(data: CreateContestDTO, userId: string): Promise<CreateContestDTO> {
-    console.log("change 1")
-    console.log("change 1")
-    console.log("change 1")
-    
+  
     const user = await this._userRepository.findById(userId);
 
     if (!user) {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.AUTH_USER_NOT_FOUND);
     }
-
+    
     if (!user.CompanyId) {
       throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_NO_COMPANY_ASSIGNED);
     }
@@ -48,10 +45,6 @@ export class CreateCompanyContestUseCase implements ICreateCompanyContestUseCase
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.DATE_OR_START_TIME_REQUIRED);
     }
 
-    const constests=await this._contestRepository.find({status:"upcoming",CompanyId:user.CompanyId});
-    if(constests.length>2){
-      throw new CustomError(HttpStatusCodes.BAD_REQUEST, MESSAGES.MAX_UPCOMING_CONTESTS_REACHED);
-    }
 
     if (data.textSource === "random") {
       const difficulty = this.mapDifficulty(data.difficulty);
