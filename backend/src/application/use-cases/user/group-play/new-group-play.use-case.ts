@@ -67,7 +67,7 @@ export class NewGroupPlayUseCase implements INewGroupPlayUseCase {
       textId: selectedLesson.id!.toString(),
       participants: users,
       groupId,
-      duration: 100,
+      duration: 300,
       status: "ongoing",
       countDown: competition.getCountDown() ?? 10,
     });
