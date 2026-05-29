@@ -2,8 +2,7 @@ services:
   app:
     build: .
     container_name: typegrid_backend
-    ports:
-      - "5000:5000"
+    network_mode: host
     env_file:
       - .env
     restart: always
