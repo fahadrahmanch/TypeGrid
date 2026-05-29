@@ -84,7 +84,7 @@ export class StartQuickPlayUseCase implements IStartQuickPlayUseCase {
     const competitionEntity = new CompetitionEntity({
       type: "quick",
       mode: "global",
-      duration: 300,
+      duration: 400,
       countDown: 10,
       status: "pending",
       participants: [userId],
