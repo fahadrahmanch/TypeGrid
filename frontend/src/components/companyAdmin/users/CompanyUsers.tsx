@@ -162,7 +162,7 @@ const UsersTable: React.FC = () => {
                   headerClassName: "text-right",
                   className: "text-right px-4",
                   render: (member) => (
-                    <div className="flex justify-end md:opacity-0 group-hover:opacity-100 md:translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                    <div className="flex justify-end  group-hover:opacity-100 md:translate-x-4 group-hover:translate-x-0 transition-all duration-300">
                       <button
                         onClick={() => {
                           setSelectedUserId(member._id);

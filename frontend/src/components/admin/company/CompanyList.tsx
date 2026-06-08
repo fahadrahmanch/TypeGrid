@@ -179,7 +179,7 @@ const CompanyList: React.FC = () => {
                     className: "text-right whitespace-nowrap",
                     key: "actions",
                     render: (item) => (
-                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                      <div className="flex justify-end gap-2 md:translate-x-2  group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                         <button
                           onClick={() => {
                             setSelectedCompany(item);

@@ -380,7 +380,7 @@ const QuickPlay: React.FC = () => {
             </div>
           </div>
 
-          {/* Typing Area */}
+        {/* Typing Area */}
           <div className="bg-[#FFF8EA] rounded-[2.5rem] relative p-6 md:p-12 shadow-xl shadow-orange-900/5 border border-orange-100 flex flex-col h-[350px] md:h-[600px] overflow-hidden order-1 lg:order-2"
             onPaste={(e) => e.preventDefault()}
             onContextMenu={(e) => e.preventDefault()}

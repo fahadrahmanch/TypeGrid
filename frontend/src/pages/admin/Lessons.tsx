@@ -366,7 +366,7 @@ const Lessons: React.FC = () => {
                     headerClassName: "text-right",
                     className: "text-right",
                     render: (lesson) => (
-                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all whitespace-nowrap">
+                      <div className="flex justify-end gap-2 md:translate-x-2  group-hover:opacity-100 group-hover:translate-x-0 transition-all whitespace-nowrap">
                         <button
                           onClick={() => fetch(lesson.id)}
                           className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"

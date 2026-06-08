@@ -317,7 +317,7 @@ const Challenges: React.FC = () => {
                   headerClassName: "text-right",
                   className: "py-6 px-4 text-right whitespace-nowrap",
                   render: (challenge) => (
-                    <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                    <div className="flex justify-end gap-2 md:translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                       <button
                         onClick={() => handleEdit(challenge._id)}
                         className="p-2.5 text-gray-400 hover:text-[#ECA468] bg-white rounded-xl shadow-sm border border-gray-100 hover:border-[#FADDB8] transition-all"

@@ -170,7 +170,7 @@ const UserList: React.FC = () => {
                     render: (user) => {
                       const isActive = user.status === "active";
                       return (
-                        <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                        <div className="flex justify-end gap-2 md:translate-x-2 group-hover:translate-x-0 transition-all">
                           <button
                             onClick={() => openConfirmModal(user)}
                             className={`p-2 rounded-lg shadow-sm border transition-all ${
@@ -179,7 +179,7 @@ const UserList: React.FC = () => {
                                 : "text-gray-400 hover:text-emerald-500 bg-white border-gray-50 hover:border-emerald-100"
                             }`}
                             title={isActive ? "Block User" : "Unblock User"}
-                          >
+                        >
                             {isActive ? <ShieldOff className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
                           </button>
                         </div>

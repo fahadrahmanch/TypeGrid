@@ -372,7 +372,7 @@ const SubscriptionPlans: React.FC = () => {
                     headerClassName: "text-right",
                     className: "py-5 px-6 text-right whitespace-nowrap",
                     render: (plan) => (
-                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                      <div className="flex justify-end gap-2 md:translate-x-2  group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                         <button
                           onClick={() => openEdit(plan as ISubscriptionPlan)}
                           className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"
@@ -444,7 +444,7 @@ const SubscriptionPlans: React.FC = () => {
                     headerClassName: "text-right",
                     className: "py-5 px-6 text-right whitespace-nowrap",
                     render: (plan) => (
-                      <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                      <div className="flex justify-end gap-2 md:translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
                         <button
                           onClick={() => openEdit(plan as ISubscriptionPlan)}
                           className="p-2 text-gray-400 hover:text-[#ECA468] bg-white rounded-lg shadow-sm border border-gray-50 hover:border-[#FADDB8] transition-all"

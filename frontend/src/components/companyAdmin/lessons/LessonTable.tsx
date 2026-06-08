@@ -99,7 +99,7 @@ const LessonTable: React.FC<{
               headerClassName: "text-right",
               className: "py-4 md:py-5 px-3 md:px-4",
               render: (lesson) => (
-                <div className="flex justify-end gap-2 md:translate-x-2 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-x-0 transition-all">
+                <div className="flex justify-end gap-2 md:translate-x-2  md:group-hover:opacity-100 md:group-hover:translate-x-0 transition-all">
                   <button
                     onClick={() => {
                       setSelectedLessonId(lesson.id as string);
