@@ -14,7 +14,8 @@ export class LLMService implements ILlmService {
 
   async generateText(prompt: string): Promise<string> {
     const response = await this.client.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+      // model: "llama-3.1-8b-instant",
+      model: "openai/gpt-oss-20b",
       messages: [
         {
           role: "user",
