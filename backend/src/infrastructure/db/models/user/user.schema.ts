@@ -22,7 +22,7 @@ const userSchema: mongoose.Schema = new Schema({
   CompanyRole: { type: String, required: false, default: null },
   gender: { type: String, required: false, default: null },
   KeyBoardLayout: { type: String, required: true, default: "QWERTY" },
-  status: { type: String, required: false, default: "active" },
+  status: { type: String, required: false, default: "active" }, 
   googleId: { type: String, required: false, default: null },
   role: { type: String, required: true, default: "user" },
 }, { timestamps: true });

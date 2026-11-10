@@ -42,7 +42,7 @@ export class UserRoutes {
     this.router.put(
       Routes.USERS.UPDATE_PROFILE,
       checkRoleBasedMiddleware(["user", "companyAdmin"]),
-      validate(updateProfileValidation),
+      // validate(updateProfileValidation),
       asyncHandler(injectUserController.updateProfile)
     );
     this.router.put(

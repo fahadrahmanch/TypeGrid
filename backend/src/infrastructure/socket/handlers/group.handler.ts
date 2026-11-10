@@ -5,10 +5,16 @@ import { checkGameEndService } from "../../../application/services/game-result.s
 import logger from "../../../utils/logger";
 export const groupHandlers = (socket: Socket, io: Server) => {
   /* ===================== GROUP PLAY ===================== */
-  socket.on("join-room", ({ groupId, userId }: { groupId: string; userId: string }) => {
+  socket.on("join-room", ({ groupId, userId, userName, avatar }: { groupId: string; userId: string; userName?: string; avatar?: string }) => {
     socket.join(groupId);
     socket.data.groupId = groupId;
     socket.data.userId = userId;
+    if (userName) socket.data.userName = userName;
+    if (avatar) socket.data.avatar = avatar;
+  });
+
+  socket.on("send-group-message", ({ groupId, message }: { groupId: string; message: any }) => {
+    io.to(groupId).emit("receive-group-message", message);
   });
 
   socket.on("group-play", async (Competition: { gameId: string; userId: string }) => {

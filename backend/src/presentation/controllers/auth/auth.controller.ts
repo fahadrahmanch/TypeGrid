@@ -20,7 +20,7 @@ import { CustomError } from "../../../domain/entities/custom-error.entity";
 import { ICompanyGoogleAuthUseCase } from "../../../application/use-cases/interfaces/auth/company-google-auth.interface";
 export class AuthController {
   constructor(
-    private _registerUserUseCase: IAuthUseCase,
+    private _registerUserUseCase: IAuthUseCase, 
     private _completeSignupUseCase: ICompleteSignupUseCase,
     private _resentOtpUseCase: IResentOtpUseCase,
     private _loginUseCase: ILoginUseCase,

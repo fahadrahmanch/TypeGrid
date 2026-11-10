@@ -43,7 +43,11 @@ export const RealtimeProvider = ({ children }: any) => {
   useEffect(() => {
     if (!companyUser?._id) return;
 
-    socket.emit("register-user", companyUser._id);
+    socket.emit("register-user", {
+      userId: companyUser._id,
+      name: companyUser.name,
+      avatar: companyUser.imageUrl,
+    });
   }, [companyUser]);
   useEffect(() => {
     socket.on("start-match", ({ challengeId }) => {

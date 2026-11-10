@@ -11,8 +11,19 @@ import { useNavigate } from "react-router-dom";
 import { startGroupPlayAPI } from "../../../api/user/group";
 import { socket } from "../../../socket";
 import { useSelector } from "react-redux";
-import { FaWhatsapp, FaTelegram, FaShareAlt, FaTimes, } from "react-icons/fa";
-import { Crown } from "lucide-react";
+import { FaWhatsapp, FaTelegram, FaShareAlt, FaTimes } from "react-icons/fa";
+import { Crown, MessageSquare, Send, Sparkles } from "lucide-react";
+
+type ChatMessage = {
+  id: string;
+  senderId: string;
+  senderName: string;
+  isHost?: boolean;
+  avatar?: string;
+  text: string;
+  timestamp: string;
+  isSelf: boolean;
+};
 type Player = {
   userId: string;
   name: string;
@@ -45,13 +56,48 @@ const GroupLobby: React.FC = () => {
   const [countDown, setCountDown] = useState<string>();
   const isStartingGameRef = useRef(false);
 
+  // Small Chat UI State
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+   
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const chatMessagesEndRef = useRef<HTMLDivElement>(null);
+  const quickReactions = ["👋", "🔥", "⚡", "🏎️", "👑", "😎"];
+
+const handleSendMessage = (textToSend?: string) => {
+  const content = (textToSend ?? chatInput).trim();
+
+  if (!content || !group?.id) return;
+
+  // Send message to backend with sender info
+  socket.emit("send-message", {
+    groupId: group.id,
+    content,
+    sender: {
+      id: user?._id,
+      name: user?.name || "Player",
+      avatar: user?.imageUrl,
+    },
+  });
+
+  // Clear input
+  if (!textToSend) {
+    setChatInput("");
+  }
+};
+  useEffect(() => {
+    chatMessagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!group?.id) return;
 
     socket.emit("join-room", {
       groupId: group.id,
-      userId: user._id,
+      userId: user?._id,
+      userName: user?.name,
+      avatar: user?.imageUrl,
     });
 
     return () => {
@@ -231,70 +277,265 @@ const GroupLobby: React.FC = () => {
     }
   }
 
+
+//chat section 
+
+useEffect(() => {
+  if (!group?.id) return;
+
+  const groupId = group.id;
+
+  const formatMessage = (message: any): ChatMessage => ({
+    id: message.id,
+    senderId: message.senderId,
+    senderName: message.senderName || "Player",
+    isHost: Boolean(group?.ownerId && String(message.senderId) === String(group.ownerId)),
+    avatar: message.avatar,
+    text: message.content,
+    timestamp: message.timestamp
+      ? new Date(message.timestamp).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+    isSelf: Boolean(user?._id && String(message.senderId) === String(user._id)),
+  });
+
+  // Join chat room
+  const joinChatRoom = () => {
+    socket.emit("join-chat-room", {
+      groupId,
+      user: {
+        id: user?._id,
+        name: user?.name,
+        avatar: user?.imageUrl,
+      },
+    });
+  };
+
+  // Receive chat history
+  const handleChatHistory = (messages: any[]) => {
+    setChatMessages((prev) => {
+      const history = (messages || []).map(formatMessage);
+      const historyIds = new Set(history.map((msg) => msg.id));
+
+      const newMessages = prev.filter(
+        (msg) => !historyIds.has(msg.id)
+      );
+
+      return [...history, ...newMessages];
+    });
+  };
+
+  // Receive new messages
+  const handleNewMessage = (message: any) => {
+    const formattedMessage = formatMessage(message);
+
+    setChatMessages((prev) => {
+      if (prev.some((msg) => msg.id === formattedMessage.id)) {
+        return prev;
+      }
+
+      return [...prev, formattedMessage];
+    });
+  };
+
+  socket.on("chat-history", handleChatHistory);
+  socket.on("new-message", handleNewMessage);
+  socket.on("connect", joinChatRoom);
+
+  if (socket.connected) {
+    joinChatRoom();
+  }
+
+  return () => {
+    socket.emit("leave-chat-room", { groupId });
+
+    socket.off("chat-history", handleChatHistory);
+    socket.off("new-message", handleNewMessage);
+    socket.off("connect", joinChatRoom);
+  };
+}, [group?.id, group?.ownerId, user?._id, user?.name, user?.imageUrl]);
+
+
+
   if (loading) return <LoadingPage />;
 
   return (
     <>
       <Navbar />
       <main className="pt-24 px-4 md:px-8 pb-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          {/* RIGHT – PLAYERS (Horizontal Row on Mobile, Sidebar on Desktop) */}
-          <div className="lg:col-span-3 order-1 lg:order-3 bg-[#FFF1D8] rounded-3xl p-4 md:p-8 shadow-lg shadow-orange-900/5 flex flex-col ">
-            <h2 className="text-lg md:text-xl font-black text-gray-800 mb-4 md:mb-6 flex items-center justify-between">
-              Lobby
-              <span className="text-[9px] md:text-[10px] bg-white/50 px-2 md:px-2.5 py-1 rounded-full text-orange-700">
-                {players.length} / {group?.maximumPlayers}
-              </span>
-            </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          {/* RIGHT – LOBBY & SQUAD CHAT */}
+          <div className="lg:col-span-3 order-1 lg:order-3 bg-[#FFF1D8] rounded-3xl p-4 md:p-6 shadow-lg shadow-orange-900/5 flex flex-col justify-between">
+            {/* LOBBY PLAYERS */}
+            <div>
+              <h2 className="text-base md:text-lg font-black text-gray-800 mb-3 flex items-center justify-between">
+                <span>Lobby</span>
+                <span className="text-[9px] md:text-[10px] bg-white/60 px-2.5 py-0.5 rounded-full text-orange-700 font-bold border border-white">
+                  {players.length} / {group?.maximumPlayers}
+                </span>
+              </h2>
 
-            <div className="flex flex-row lg:flex-col gap-3 lg:gap-3 overflow-x-auto lg:overflow-y-auto lg:max-h-none pb-2 lg:pb-0 custom-scrollbar flex-nowrap">
-              {players.map((p, i) => (
-                <div key={i} className="min-w-[140px] lg:min-w-0 flex items-center justify-between bg-white/60 backdrop-blur-sm rounded-2xl px-3 lg:px-4 py-2 lg:py-3 border border-white transition-all hover:bg-white shrink-0">
-                  {/* LEFT SIDE */}
-                  <div className="flex items-center gap-2 lg:gap-4 flex-1 min-w-0">
-                    {/* Avatar */}
-                    <div className="relative shrink-0">
-                      <img
-                        src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
-                        className="w-8 h-8 lg:w-10 lg:h-10 rounded-xl object-cover bg-gray-100 ring-2 ring-white shadow-sm"
-                        alt={p.name}
-                      />
-                      {p.isHost && (
-                        <div className="absolute -top-1 -right-1 bg-amber-400 text-white p-0.5 rounded-lg shadow-sm border border-white">
-                          <Crown size={6} className="lg:size-3 fill-current" />
-                        </div>
-                      )}
+              <div className="flex flex-row lg:flex-col gap-2.5 overflow-x-auto lg:overflow-y-auto max-h-36 custom-scrollbar pb-1 lg:pb-0 flex-nowrap">
+                {players.map((p, i) => (
+                  <div key={i} className="min-w-[130px] lg:min-w-0 flex items-center justify-between bg-white/60 backdrop-blur-sm rounded-2xl px-3 py-2 border border-white transition-all hover:bg-white shrink-0">
+                    {/* LEFT SIDE */}
+                    <div className="flex items-center gap-2 lg:gap-3 flex-1 min-w-0">
+                      {/* Avatar */}
+                      <div className="relative shrink-0">
+                        <img
+                          src={p.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${p.name}`}
+                          className="w-7 h-7 lg:w-8 lg:h-8 rounded-xl object-cover bg-gray-100 ring-2 ring-white shadow-xs"
+                          alt={p.name}
+                        />
+                        {p.isHost && (
+                          <div className="absolute -top-1 -right-1 bg-amber-400 text-white p-0.5 rounded-md shadow-xs border border-white">
+                            <Crown size={5} className="lg:size-2.5 fill-current" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Name + host */}
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[10px] lg:text-xs font-black text-gray-800 truncate">{p.name}</span>
+                        {p.isHost && (
+                          <span className="text-[7px] font-black text-orange-600 uppercase tracking-widest">
+                            Host
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Name + host */}
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-[10px] lg:text-sm font-black text-gray-800 truncate">{p.name}</span>
-                      {p.isHost && (
-                        <span className="text-[7px] lg:text-[8px] font-black text-orange-600 uppercase tracking-widest">
-                          Host
-                        </span>
-                      )}
-                    </div>
+                    {/* RIGHT SIDE */}
+                    {!p.isHost && isHost && (
+                      <button
+                        onClick={() => removePlayer(p.userId)}
+                        className="w-5 h-5 lg:w-6 lg:h-6 flex-shrink-0 rounded-lg bg-red-50 text-red-500 text-[10px] flex items-center justify-center hover:bg-red-500 hover:text-white transition-all active:scale-90"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
-
-                  {/* RIGHT SIDE */}
-                  {!p.isHost && isHost && (
-                    <button
-                      onClick={() => removePlayer(p.userId)}
-                      className="w-6 h-6 lg:w-8 lg:h-8 flex-shrink-0 rounded-lg lg:rounded-xl bg-red-50 text-red-500 text-[10px] lg:text-sm flex items-center justify-center hover:bg-red-500 hover:text-white transition-all active:scale-90"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            {/* Pagination Decor (Desktop Only) */}
-            <div className="hidden lg:flex justify-center gap-2 mt-auto pt-6">
-              <span className="w-6 h-1.5 bg-[#7A6A5D] rounded-full" />
-              <span className="w-1.5 h-1.5 bg-gray-300 rounded-full" />
-              <span className="w-1.5 h-1.5 bg-gray-300 rounded-full" />
+            {/* SMALL CHAT UI (In the empty space of Lobby Card) */}
+            <div className="mt-4 pt-3 border-t border-orange-200/50 flex flex-col flex-1 min-h-[220px]">
+              {/* Chat Header */}
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-black text-gray-800 flex items-center gap-1.5 uppercase tracking-wider">
+                  <MessageSquare size={13} className="text-[#7A6A5D]" /> Squad Chat
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                </span>
+                <span className="text-[8px] bg-white/70 px-2 py-0.5 rounded-full text-orange-800 font-bold uppercase tracking-wider border border-white">
+                  Live
+                </span>
+              </div>
+
+              {/* Chat Messages Feed */}
+              <div className="flex-1 max-h-36 overflow-y-auto space-y-2 pr-1 custom-scrollbar mb-2 text-xs">
+                {chatMessages.map((msg) => {
+                  if (msg.senderId === "system") {
+                    return (
+                      <div key={msg.id} className="flex justify-center my-0.5">
+                        <span className="bg-white/60 text-gray-500 rounded-full px-2.5 py-0.5 text-[9px] font-bold text-center border border-orange-100">
+                          {msg.text}
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div
+                      key={msg.id}
+                      className={`flex items-end gap-1.5 ${msg.isSelf ? "justify-end" : "justify-start"}`}
+                    >
+                      {!msg.isSelf && (
+                        <img
+                          src={msg.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.senderName}`}
+                          alt={msg.senderName}
+                          className="w-5 h-5 rounded-lg object-cover bg-white ring-1 ring-white shadow-xs shrink-0 mb-0.5"
+                        />
+                      )}
+
+                      <div className={`flex flex-col max-w-[85%] ${msg.isSelf ? "items-end" : "items-start"}`}>
+                        {!msg.isSelf && (
+                          <div className="flex items-center gap-1 pl-1 mb-0.5">
+                            <span className="text-[9px] font-black text-gray-700">
+                              {msg.senderName}
+                            </span>
+                            {msg.isHost && (
+                              <span className="text-[7px] font-black bg-amber-100 text-amber-700 px-1 py-0.2 rounded border border-amber-200">
+                                Host
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        <div
+                          className={`px-2.5 py-1.5 rounded-xl text-[11px] font-semibold break-words leading-tight shadow-xs ${
+                            msg.isSelf
+                              ? "bg-[#7A6A5D] text-white rounded-br-xs"
+                              : "bg-white text-gray-800 rounded-tl-xs border border-white/80"
+                          }`}
+                        >
+                          {msg.text}
+                        </div>
+                        <span className="text-[7px] text-gray-400 mt-0.5 px-0.5">
+                          {msg.timestamp}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div ref={chatMessagesEndRef} />
+              </div>
+
+              {/* Quick Reactions */}
+              <div className="flex items-center gap-1 overflow-x-auto pb-1.5 custom-scrollbar mb-1.5">
+                <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest shrink-0 mr-0.5 flex items-center gap-0.5">
+                  <Sparkles size={8} className="text-amber-500" />
+                </span>
+                {quickReactions.map((emoji) => (
+                  <button
+                    key={emoji}
+                    type="button"
+                    onClick={() => handleSendMessage(emoji)}
+                    className="shrink-0 bg-white/70 hover:bg-white text-xs px-1.5 py-0.5 rounded-lg border border-white/80 active:scale-90 transition-transform shadow-xs"
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+
+              {/* Chat Input Form */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage();
+                }}
+                className="flex items-center gap-1.5"
+              >
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder="Chat..."
+                  className="w-full bg-white border border-white rounded-xl px-2.5 py-1.5 text-xs font-bold text-gray-800 placeholder:text-gray-400 focus:border-[#7A6A5D] outline-none shadow-xs transition-all"
+                />
+                <button
+                  type="submit"
+                  disabled={!chatInput.trim()}
+                  className="p-2 rounded-xl bg-[#7A6A5D] text-white hover:bg-[#68594d] active:scale-95 transition-all shadow-xs disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                  title="Send"
+                >
+                  <Send size={11} />
+                </button>
+              </form>
             </div>
           </div>
 

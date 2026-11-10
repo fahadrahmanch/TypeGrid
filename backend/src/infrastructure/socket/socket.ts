@@ -5,7 +5,7 @@ import { groupHandlers } from "./handlers/group.handler";
 import { quickplayHandlers } from "./handlers/quickplay.handler";
 import { contestHandlers } from "./handlers/contest.handler";
 import { challengeHandlers } from "./handlers/challenge.handler";
-
+import { registerChatHandler } from "./handlers/chat-handler";
 let io: Server;
 
 export const initSocket = (server: any) => {
@@ -19,8 +19,14 @@ export const initSocket = (server: any) => {
 
   io.on("connection", (socket: Socket) => {
     /* ===================== USER CONNECTION ===================== */
-    socket.on("register-user", async (userId: string) => {
+    socket.on("register-user", async (data: string | { userId: string; name?: string; avatar?: string; imageUrl?: string }) => {
+      const userId = typeof data === "string" ? data : data?.userId;
+      if (!userId) return;
       socket.data.userId = userId;
+      if (typeof data === "object" && data !== null) {
+        if (data.name) socket.data.userName = data.name;
+        if (data.avatar || data.imageUrl) socket.data.avatar = data.avatar || data.imageUrl;
+      }
       socket.join(`user:${userId}`);
       await redis.sadd("online:users", userId);
       io.emit("user-status-changed", {
@@ -40,7 +46,7 @@ export const initSocket = (server: any) => {
     quickplayHandlers(socket, io);
     contestHandlers(socket, io);
     challengeHandlers(socket, io);
-
+    registerChatHandler(socket, io);
     /* ===================== DISCONNECT ===================== */
     socket.on("disconnect", async () => {
       if (socket.data.userId) {
